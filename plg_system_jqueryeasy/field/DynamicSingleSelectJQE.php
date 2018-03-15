@@ -4,13 +4,15 @@
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
 */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
 
-class JFormFieldDynamicSingleSelectJQE extends JFormField {
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
 
+class DynamicSingleSelectJQE extends FormField 
+{
 	public $type = 'DynamicSingleSelectJQE';
 
 	protected $noelement;
@@ -26,14 +28,14 @@ class JFormFieldDynamicSingleSelectJQE extends JFormField {
 	 */
 	protected function getInput()
 	{
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
-		JHtml::_('bootstrap.tooltip');
+		\JHtml::_('bootstrap.tooltip');
 
 		// build the script
 
-		JFactory::getDocument()->addScriptDeclaration("
+		Factory::getDocument()->addScriptDeclaration("
 			jQuery(document).ready(function () {
 				jQuery('#".$this->id."_elements .element.enabled').each(function() {
 					if (jQuery(this).attr('data-option') == '".$this->value."') {
@@ -50,7 +52,7 @@ class JFormFieldDynamicSingleSelectJQE extends JFormField {
 
 		// add the styles
 
-		JFactory::getDocument()->addStyleDeclaration("
+		Factory::getDocument()->addStyleDeclaration("
 			#".$this->id."_elements { display: -webkit-box; display: -ms-flexbox; display: -webkit-flex; display: flex; overflow-x: auto; }
 			#".$this->id."_elements .element { display: inline-block; position: relative; vertical-align: top; relative; margin: 0 5px 5px 5px; padding: 15px; background-color: #f4f4f4; border: 7px solid #fff; text-align: center; cursor: pointer; }
 			#".$this->id."_elements .element:first-child { margin-left: 0 }
@@ -66,7 +68,7 @@ class JFormFieldDynamicSingleSelectJQE extends JFormField {
 		$options = array();
 
 		if ($this->noelement) {
-			$options[] = array('', JText::_('JNONE'), '');
+			$options[] = array('', \JText::_('JNONE'), '');
 		}
 
 		$options = array_merge($options, $this->getOptions());
@@ -86,12 +88,12 @@ class JFormFieldDynamicSingleSelectJQE extends JFormField {
 			if (isset($option[5]) && $option[5] == 'disabled') {
 				$class_disabled = ' disabled';
 				if (!empty($this->disabledtitle)) {
-					$title_attribute = ' title="'.JText::_($this->disabledtitle).'"';
+					$title_attribute = ' title="'.\JText::_($this->disabledtitle).'"';
 					$class_hastooltip = ' hasTooltip';
 				}
 			} else {
 				$class_disabled = ' enabled';
-				$title_attribute = ' title="'.JText::_('JSELECT').'"';
+				$title_attribute = ' title="'.\JText::_('JSELECT').'"';
 				$class_hastooltip = ' hasTooltip';
 			}
 			
@@ -133,7 +135,7 @@ class JFormFieldDynamicSingleSelectJQE extends JFormField {
 		return $options;
 	}
 
-	public function setup(SimpleXMLElement $element, $value, $group = null)
+	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
 

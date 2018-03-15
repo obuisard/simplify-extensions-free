@@ -4,16 +4,18 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
+namespace SYW\Plugin\System\JqueryEasy\Field;
+
 defined('_JEXEC') or die;
 
-jimport('joomla.form.formfield');
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
 
-class JFormFieldMigrateversion extends JFormField {
-		
+class MigrateversionField extends FormField 
+{		
 	public $type = 'Migrateversion';
 	
-	static $versions = array('3.0' => 'none', '3.1' => 'none', '3.2' => '1.2.1', '3.3' => '1.2.1', '3.4' => '1.2.1', '3.5' => '1.2.1', '3.6' => '1.4.1', '3.7' => '1.4.1', '3.8' => '1.4.1');
+	static $versions = array('3.0' => 'none', '3.1' => 'none', '3.2' => '1.2.1', '3.3' => '1.2.1', '3.4' => '1.2.1', '3.5' => '1.2.1', '3.6' => '1.4.1', '3.7' => '1.4.1', '3.8' => '1.4.1', '3.9' => '1.4.1', '4.0' => '1.4.1');
 
 	protected function getLabel() 
 	{		
@@ -24,7 +26,7 @@ class JFormFieldMigrateversion extends JFormField {
 	{
 		$html = '';
 		
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
 		$version = 'undefined';
@@ -51,11 +53,11 @@ class JFormFieldMigrateversion extends JFormField {
 		
 		$html .= '<div class="migrateversion alert alert-info" style="margin-bottom: 0">';		
 		if ($version == 'undefined') {
-			$html .= '  <span>'.JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_UNDETERMINEDVERSION_LABEL', 'Migrate').'</span>';
+			$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_UNDETERMINEDVERSION_LABEL', 'Migrate').'</span>';
 		} else if ($version == 'none') {
-			$html .= '  <span>'.JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISNOTPACKAGEDWITH_LABEL', 'Migrate').'</span>';
+			$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISNOTPACKAGEDWITH_LABEL', 'Migrate').'</span>';
 		} else {
-			$html .= '  <span>'.JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Migrate '.$version).'</span>';
+			$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Migrate '.$version).'</span>';
 		}
 		$html .= '</div>';
 		

@@ -4,12 +4,14 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
 
-class JFormFieldExtensionLink extends JFormField 
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
+
+class ExtensionLinkField extends FormField 
 {		
 	public $type = 'ExtensionLink';
 
@@ -20,10 +22,10 @@ class JFormFieldExtensionLink extends JFormField
 	{
 		$html = '';
 		
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy', JPATH_SITE);
 		
-		JHtml::_('bootstrap.tooltip');
+		\JHtml::_('bootstrap.tooltip');
 		
 		switch ($this->link_type) {
 			case 'forum': $image = 'chat.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_FORUM_LABEL'; break;
@@ -39,12 +41,12 @@ class JFormFieldExtensionLink extends JFormField
 			default: $image = ''; $title = '';
 		}
 		
-		$html .= '<span class="label">';
+		$html .= '<span class="badge badge-secondary">';
 		if (!empty($image)) {
-			$html .= '<img src="'.JURI::root().'plugins/system/jqueryeasy/images/'.$image.'" style="margin-right: 5px;">';
-			$html .= '<span style="vertical-align: middle">'.JText::_($title).'</span>';
+			$html .= '<img src="'.\JURI::root().'plugins/system/jqueryeasy/images/'.$image.'" style="margin-right: 5px;">';
+			$html .= '<span style="vertical-align: middle">'.\JText::_($title).'</span>';
 		} else {
-			$html .= JText::_($title);
+			$html .= \JText::_($title);
 		}
 		$html .= '</span>';
 		
@@ -53,16 +55,16 @@ class JFormFieldExtensionLink extends JFormField
 
 	protected function getInput() 
 	{
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy', JPATH_SITE);
 		
 		$html = '<div class="syw_info" style="padding-top: 5px; overflow: inherit">';
 					
 		if ($this->description) {
 			if ($this->link) {
-				$html .= JText::sprintf($this->description, $this->link);
+				$html .= \JText::sprintf($this->description, $this->link);
 			} else {
-				$html .= JText::_($this->description);
+				$html .= \JText::_($this->description);
 			}
 		} else {
 			
@@ -82,9 +84,9 @@ class JFormFieldExtensionLink extends JFormField
 			
 			if ($desc) {
 				if ($this->link) {
-					$html .= JText::sprintf($desc, $this->link);
+					$html .= \JText::sprintf($desc, $this->link);
 				} else {
-					$html .= JText::_($desc);
+					$html .= \JText::_($desc);
 				}
 			}
 		}
@@ -104,7 +106,7 @@ class JFormFieldExtensionLink extends JFormField
 		return $html;
 	}
 
-	public function setup(SimpleXMLElement $element, $value, $group = null)
+	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
 		

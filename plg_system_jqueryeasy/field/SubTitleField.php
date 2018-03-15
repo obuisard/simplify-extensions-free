@@ -4,12 +4,13 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
 */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
 
-class JFormFieldSubtitle extends JFormField
+use Joomla\CMS\Form\FormField;
+
+class SubTitleField extends FormField
 {
 	public $type = 'Subtitle';
 	
@@ -25,8 +26,8 @@ class JFormFieldSubtitle extends JFormField
 	{
 		$html = '';
 		
-		JHtml::_('script', 'syw_jqueryeasy/fields.js', false, true);
-		JHtml::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
+		\JHtml::_('script', 'syw_jqueryeasy/fields.js', false, true);
+		\JHtml::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
 
 		$inline_style = array();
 
@@ -53,7 +54,7 @@ class JFormFieldSubtitle extends JFormField
 			$inline_style[] = 'left: 20px; ';
 			$inline_style[] = 'top: -6px; ';
 				
-			$html .= '<div style=\''.implode($inline_style).'\'>'.JText::_($this->title).'</div>';
+			$html .= '<div style=\''.implode($inline_style).'\'>'.\JText::_($this->title).'</div>';
 		}
 
 		$html .= '</div>';
@@ -61,7 +62,7 @@ class JFormFieldSubtitle extends JFormField
 		return $html;
 	}
 	
-	public function setup(SimpleXMLElement $element, $value, $group = null)
+	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
 		

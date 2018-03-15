@@ -4,12 +4,13 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
 
-class JFormFieldLink extends JFormField 
+use Joomla\CMS\Form\FormField;
+
+class LinkField extends FormField 
 {
 	public $type = 'Link';
 	
@@ -23,15 +24,15 @@ class JFormFieldLink extends JFormField
 	{		
 		$html = '';
 		
-		JHtml::_('bootstrap.tooltip');
+		\JHtml::_('bootstrap.tooltip');
 		
 		$html .= '<div>';
 		
-		$html .= '<a href="'.$this->link.'" target="_blank" class="hasTooltip" title="'.JText::_($this->title).'">';
+		$html .= '<a href="'.$this->link.'" target="_blank" class="hasTooltip" title="'.\JText::_($this->title).'">';
 		if ($this->image_src) {
-			$html .= '<img src="'.$this->image_src.'" alt="'.JText::_($this->title).'">';
+			$html .= '<img src="'.$this->image_src.'" alt="'.\JText::_($this->title).'">';
 		} else {
-			$html .= JText::_($this->title);
+			$html .= \JText::_($this->title);
 		}
 		$html .= '</a>';
 		
@@ -47,11 +48,11 @@ class JFormFieldLink extends JFormField
 		$html .= '<div style="padding-top: 5px">';
 			
 		if ($this->titleintext) {
-			$html .= '<strong>'.JText::_($this->title).'</strong>: ';
+			$html .= '<strong>'.\JText::_($this->title).'</strong>: ';
 		}
 				
 		if ($this->text) {
-			$html .= JText::sprintf($this->text, $this->link);
+			$html .= \JText::sprintf($this->text, $this->link);
 		}
 		
 		$html .= '</div>';
@@ -59,7 +60,7 @@ class JFormFieldLink extends JFormField
 		return $html;
 	}
 	
-	public function setup(SimpleXMLElement $element, $value, $group = null)
+	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
 		

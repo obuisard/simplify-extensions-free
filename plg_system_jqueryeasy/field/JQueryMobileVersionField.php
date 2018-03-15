@@ -4,13 +4,15 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
+namespace SYW\Plugin\System\JqueryEasy\Field;
+
 defined('_JEXEC') or die;
 
-jimport('joomla.form.formfield');
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
 
-class JFormFieldJqueryMobileversion extends JFormField {
-		
+class JQueryMobileVersionField extends FormField 
+{		
 	public $type = 'Jquerymobileversion';
 	
 	protected function getLabel() 
@@ -22,11 +24,11 @@ class JFormFieldJqueryMobileversion extends JFormField {
 	{
 		$html = '';
 		
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 				
 		$html .= '<div class="migrateversion alert alert-info" style="margin-bottom: 0">';		
-		$html .= '  <span>'.JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISNOTPACKAGEDWITH_LABEL', 'jQuery Mobile').'</span>';		
+		$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISNOTPACKAGEDWITH_LABEL', 'jQuery Mobile').'</span>';		
 		$html .= '</div>';
 		
 		return $html;

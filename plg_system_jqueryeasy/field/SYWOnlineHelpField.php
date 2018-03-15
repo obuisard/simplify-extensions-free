@@ -4,12 +4,13 @@
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
 */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
 
-class JFormFieldSYWOnlineHelp extends JFormField
+use Joomla\CMS\Form\FormField;
+
+class SYWOnlineHelpField extends FormField
 {
 	protected $type = 'SYWOnlineHelp';
 
@@ -25,18 +26,18 @@ class JFormFieldSYWOnlineHelp extends JFormField
 	
 	protected function getInput()
 	{
-		JHtml::_('script', 'syw_jqueryeasy/fields.js', false, true);
-		JHtml::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
+		\JHtml::_('script', 'syw_jqueryeasy/fields.js', false, true);
+		\JHtml::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
 
 		$html = array();
 
-		$html[] = !empty($this->title) ? '<'.$this->heading.'>'.JText::_($this->title).'</'.$this->heading.'>' : '';
+		$html[] = !empty($this->title) ? '<'.$this->heading.'>'.\JText::_($this->title).'</'.$this->heading.'>' : '';
 
 		$html[] = '<table style="width: 100%"><tr>';
-		$html[] = !empty($this->description) ? '<td style="background-color: transparent">'.JText::_($this->description).'</td>' : '';
+		$html[] = !empty($this->description) ? '<td style="background-color: transparent">'.\JText::_($this->description).'</td>' : '';
 		if ($this->url) {
 			$html[] = '<td style="text-align: right; background-color: transparent">';
-			$html[] = '<a href="'.$this->url.'" target="_blank" class="btn btn-info btn-small"><img src="'.JURI::root().'plugins/system/jqueryeasy/images/local-library.png"> <span>'.JText::_('JHELP').'</span></a>';
+			$html[] = '<a href="'.$this->url.'" target="_blank" class="btn btn-info btn-sm"><img src="'.\JURI::root().'plugins/system/jqueryeasy/images/local-library.png"> <span>'.\JText::_('JHELP').'</span></a>';
 			$html[] = '</td>';
 		}
 		$html[] = '</tr></table>';
@@ -44,7 +45,7 @@ class JFormFieldSYWOnlineHelp extends JFormField
 		return '<div class="syw_help'.$this->layer_class.'" style="margin-bottom: 0">'.implode($html).'</div>';
 	}
 
-	public function setup(SimpleXMLElement $element, $value, $group = null)
+	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
 		

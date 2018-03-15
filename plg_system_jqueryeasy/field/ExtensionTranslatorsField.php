@@ -4,25 +4,27 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
 
-class JFormFieldExtensionTranslators extends JFormField 
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
+
+class ExtensionTranslatorsField extends FormField 
 {
 	public $type = 'ExtensionTranslators';
 	
 	protected function getLabel() 
 	{		
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
 		$html = '';
 		
 		$html .= '<div style="clear: both;">';
 		if (!empty($this->translators)) {
-			$html .= JText::_('PLG_SYSTEM_JQUERYEASY_TRANSLATORS_LABEL');
+			$html .= \JText::_('PLG_SYSTEM_JQUERYEASY_TRANSLATORS_LABEL');
 		}
 		$html .= '</div>';
 		
@@ -42,12 +44,12 @@ class JFormFieldExtensionTranslators extends JFormField
 		return $html;
 	}
 	
-	public function setup(SimpleXMLElement $element, $value, $group = null)
+	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
 	
 		if ($return) {
-			$this->translators = isset($this->element['translators']) ? JText::_($this->element['translators']) : NULL;
+			$this->translators = isset($this->element['translators']) ? \JText::_($this->element['translators']) : NULL;
 		}
 	
 		return $return;

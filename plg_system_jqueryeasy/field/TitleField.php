@@ -4,12 +4,13 @@
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
 */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
 
-class JFormFieldTitle extends JFormField
+use Joomla\CMS\Form\FormField;
+
+class TitleField extends FormField
 {
 	public $type = 'Title';
 
@@ -26,8 +27,8 @@ class JFormFieldTitle extends JFormField
 	{
 		$html = '';
 		
-		JHtml::_('script', 'syw_jqueryeasy/fields.js', false, true);
-		JHtml::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
+		\JHtml::_('script', 'syw_jqueryeasy/fields.js', false, true);
+		\JHtml::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
 
 		$inline_style = array();
 		
@@ -44,11 +45,11 @@ class JFormFieldTitle extends JFormField
 		$html .= '<div class="syw_header" style=\''.implode($inline_style).'\'>';
 
 		if ($this->image_src) {
-			$html .= '<img style="margin: -1px 4px 0 0; float: left; padding: 0px; width: 16px; height: 16px" src="'.$this->image_src.'">';
+			$html .= '<img style="margin: -1px 4px 0 0; padding: 0px; width: 16px; height: 16px" src="'.$this->image_src.'">';
 		} 
 
 		if ($this->title) {
-			$html .= JText::_($this->title);
+			$html .= \JText::_($this->title);
 		}
 
 		$html .= '</div>';
@@ -56,7 +57,7 @@ class JFormFieldTitle extends JFormField
 		return $html;
 	}
 	
-	public function setup(SimpleXMLElement $element, $value, $group = null)
+	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
 		

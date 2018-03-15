@@ -4,16 +4,19 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
+namespace SYW\Plugin\System\JqueryEasy\Field;
+
 defined('_JEXEC') or die;
 
-jimport('joomla.form.formfield');
+use Joomla\CMS\Form\FormField;
 
-class JFormFieldJqueryversion extends JFormField {
-		
+use Joomla\CMS\Factory;
+
+class JQueryVersionField extends FormField 
+{		
 	public $type = 'Jqueryversion';
 	
-	static $versions = array('3.0' => '1.8.1', '3.1' => '1.8.3', '3.2' => '1.11.0', '3.3' => '1.11.1', '3.4' => '1.11.3', '3.5' => '1.11.3', '3.6' => '1.12.4', '3.7' => '1.12.4', '3.8' => '1.12.4');
+	static $versions = array('4.0' => '3.2.1');
 
 	protected function getLabel() 
 	{		
@@ -24,7 +27,7 @@ class JFormFieldJqueryversion extends JFormField {
 	{
 		$html = '';
 		
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
 		$version = 'undefined';
@@ -39,15 +42,15 @@ class JFormFieldJqueryversion extends JFormField {
 // 		$html .= '<script type="text/javascript">';
 // 		$html .= '  jQuery(document).ready(function($) {';
 // 		$html .= '    var version = $.fn.jquery ? $.fn.jquery : "'.$version.'";';		
-// 		$html .= '    if (version != "undefined") { $(".jqueryversion span").replaceWith("'.JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL').' <span class=\'label\'>jQuery " + version + "</span>"); }';
+// 		$html .= '    if (version != "undefined") { $(".jqueryversion span").replaceWith("'.\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL').' <span class=\'label\'>jQuery " + version + "</span>"); }';
 // 		$html .= '  });';
 // 		$html .= '</script>';
 		
 		$html .= '<div class="jqueryversion alert alert-info" style="margin-bottom: 0">';		
 		if ($version == 'undefined') {
-			$html .= '  <span>'.JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_UNDETERMINEDVERSION_LABEL', 'jQuery').'</span>';
+			$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_UNDETERMINEDVERSION_LABEL', 'jQuery').'</span>';
 		} else {
-			$html .= '  <span>'.JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'jQuery '.$version).'</span>';
+			$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'jQuery '.$version).'</span>';
 		}
 		$html .= '</div>';
 		

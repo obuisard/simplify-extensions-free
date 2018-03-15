@@ -4,16 +4,20 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Plugin\PluginHelper;
 
 /*
  * Checks if the plugin is enabled and report on the position used
  */
-class JFormFieldJCHOptimizetest extends JFormField {
-	
+class JCHOptimizeTestField extends FormField 
+{	
 	public $type = 'JCHOptimizetest';
 	
 	protected function getLabel()
@@ -22,25 +26,24 @@ class JFormFieldJCHOptimizetest extends JFormField {
 	}
 	
 	protected function getInput()
-	{
-		
+	{		
 		$html = '';
 		
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
-		if (JPluginHelper::isEnabled('system', 'jch_optimize')) {
+		if (PluginHelper::isEnabled('system', 'jch_optimize')) {
 			
-			$plugin = JPluginHelper::getPlugin('system', 'jch_optimize');
+			$plugin = PluginHelper::getPlugin('system', 'jch_optimize');
 			
-			$registry = new JRegistry;
+			$registry = new Registry;
 			$registry->loadString($plugin->params);
 			
 			$use_file_combination = $registry->get('combine_files_enable', true);
 			
 			$html .= '<div class="alert alert-warning" style="margin-bottom: 0">';
 			if ($use_file_combination) {
-				$html .= '<span>'.JText::_('PLG_SYSTEM_JQUERYEASY_WARNING_JCHOPTIMIZEENABLED').'</span><br />';
+				$html .= '<span>'.\JText::_('PLG_SYSTEM_JQUERYEASY_WARNING_JCHOPTIMIZEENABLED').'</span><br />';
 			}
 			$html .= '</div>';
 		} 

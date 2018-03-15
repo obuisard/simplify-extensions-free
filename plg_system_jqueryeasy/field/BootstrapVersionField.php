@@ -4,14 +4,18 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
+namespace SYW\Plugin\System\JqueryEasy\Field;
+
 defined('_JEXEC') or die;
 
-jimport('joomla.form.formfield');
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
 
-class JFormFieldBootstrapversion extends JFormField {
-		
+class BootstrapVersionField extends FormField 
+{		
 	public $type = 'Bootstrapversion';
+	
+	static $versions = array('4.0' => '4.0.0');
 	
 	protected function getLabel() 
 	{
@@ -22,10 +26,17 @@ class JFormFieldBootstrapversion extends JFormField {
 	{
 		$html = '';
 		
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
-		$version = '2.3.2';
+		$version = 'undefined';
+		
+		$numbers = explode('.', JVERSION);
+		$joomla_release = $numbers[0].'.'.$numbers[1];
+		
+		if (isset(self::$versions[$joomla_release])) {
+			$version = self::$versions[$joomla_release];
+		}
 		
 // 		$html .= '<script type="text/javascript">';
 // 		$html .= '  jQuery(document).ready(function($) {';
@@ -37,7 +48,7 @@ class JFormFieldBootstrapversion extends JFormField {
 // 		$html .= '</script>';
 		
 		$html .= '<div class="bootstrapversion alert alert-info" style="margin-bottom: 0">';
-		$html .= '  <span>'.JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Bootstrap '.$version).'</span>';
+		$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Bootstrap '.$version).'</span>';
 		$html .= '</div>';
 		
 		return $html;

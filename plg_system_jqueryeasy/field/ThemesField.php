@@ -4,12 +4,13 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
 
-class JFormFieldThemes extends JFormField {
+use Joomla\CMS\Form\FormField;
+
+class ThemesField extends FormField {
 		
 	public $type = 'Themes';
 
@@ -23,8 +24,8 @@ class JFormFieldThemes extends JFormField {
 		$html = '';
 		
 		// Add the script to the document head.
-		$doc = JFactory::getDocument();
-		$doc->addStylesheet(JURI::root(true).'/plugins/system/jqueryeasy/fields/themes/css/themes.css');
+		$doc = \JFactory::getDocument();
+		$doc->addStylesheet(\JURI::root(true).'/plugins/system/jqueryeasy/fields/themes/css/themes.css');
 		
 		$type = strtolower($this->type);
 		

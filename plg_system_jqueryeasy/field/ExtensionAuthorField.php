@@ -4,23 +4,25 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
 
-class JFormFieldExtensionAuthor extends JFormField 
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
+
+class ExtensionAuthorField extends FormField 
 {
 	public $type = 'ExtensionAuthor';
 	
 	protected function getLabel() 
 	{		
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
 		$html = '';
 		
-		$html .= '<div style="clear: both;">'.JText::_('PLG_SYSTEM_JQUERYEASY_AUTHOR_LABEL').'</div>';
+		$html .= '<div style="clear: both;">'.\JText::_('PLG_SYSTEM_JQUERYEASY_AUTHOR_LABEL').'</div>';
 		
 		return $html;
 	}
@@ -30,7 +32,7 @@ class JFormFieldExtensionAuthor extends JFormField
 		$html = '<div style="padding-top: 5px; overflow: inherit">';
 		
 		$html .= 'Olivier Buisard @ <a href="http://www.simplifyyourweb.com" target="_blank">';
-		$html .= '<img alt="Simplify Your Web" src="'.JURI::root().'plugins/system/jqueryeasy/images/SimplifyYourWeb_24.png">';
+		$html .= '<img alt="Simplify Your Web" src="'.\JURI::root().'plugins/system/jqueryeasy/images/SimplifyYourWeb_24.png">';
 		$html .= '</a>';
 		
 		$html .= '</div>';

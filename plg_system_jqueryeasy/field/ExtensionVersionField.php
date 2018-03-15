@@ -4,12 +4,14 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
 
-class JFormFieldExtensionVersion extends JFormField 
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
+
+class ExtensionVersionField extends FormField 
 {		
 	public $type = 'ExtensionVersion';
 	
@@ -17,12 +19,12 @@ class JFormFieldExtensionVersion extends JFormField
 
 	protected function getLabel() 
 	{		
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
 		$html = '';
 		
-		$html .= '<div style="clear: both;">'.JText::_('PLG_SYSTEM_JQUERYEASY_VERSION_LABEL').'</div>';
+		$html .= '<div style="clear: both;">'.\JText::_('PLG_SYSTEM_JQUERYEASY_VERSION_LABEL').'</div>';
 		
 		return $html;
 	}
@@ -38,7 +40,7 @@ class JFormFieldExtensionVersion extends JFormField
 		return $html;
 	}
 	
-	public function setup(SimpleXMLElement $element, $value, $group = null)
+	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
 	

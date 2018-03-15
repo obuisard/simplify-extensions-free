@@ -4,12 +4,14 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
-defined('_JEXEC') or die ;
+namespace SYW\Plugin\System\JqueryEasy\Field;
 
-jimport('joomla.form.formfield');
+defined('_JEXEC') or die;
 
-class JFormFieldCDNLinks extends JFormField
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
+
+class CDNLinksField extends FormField
 {
 	public $type = 'CDNLinks';
 	
@@ -76,10 +78,10 @@ class JFormFieldCDNLinks extends JFormField
 	{
 		$html = '';
 		
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
-		JHtml::_('bootstrap.tooltip');
+		\JHtml::_('bootstrap.tooltip');
 		
 		if (!empty($this->library)) {
 			
@@ -101,24 +103,24 @@ class JFormFieldCDNLinks extends JFormField
 			
 			$cdns = $libraries[$this->library];
 			
-			$html .= '<img src="'.JURI::root().'plugins/system/jqueryeasy/images/network.png" style="margin-right: 5px;">';
+			$html .= '<img src="'.\JURI::root().'plugins/system/jqueryeasy/images/network.png" style="margin-right: 5px;">';
 			
 			foreach ($cdns as $cdn => $link) {
 				
-				$label_style = ' label-info';
+				$label_style = ' badge-info';
 				$title = '';
 				$class = '';
 				if ($cdn == $chosen_cdn) {
-					$label_style = ' label-default';
-					$title = ' title="'.JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_SELECTEDCDN').'"';
+					$label_style = ' badge-success';
+					$title = ' title="'.\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_SELECTEDCDN').'"';
 					$class = ' class="hasTooltip"';
 				}
 				
 				if (!empty($link)) {
 					$html .= '<a href="'.$link.'" target="_blank" style="color: #fff"'.$class.$title.'>';
-					$html .= '<span class="label'.$label_style.'">';
+					$html .= '<span class="badge'.$label_style.'">';
 				} else {
-					$html .= '<span class="label" style="background-color: transparent; color: #999; text-shadow: none">';
+					$html .= '<span class="badge" style="background-color: transparent; color: #999; text-shadow: none">';
 				}
 				
 				if ($cdn == 'jquery') {
@@ -140,7 +142,7 @@ class JFormFieldCDNLinks extends JFormField
 		return $html;
 	}
 	
-	public function setup(SimpleXMLElement $element, $value, $group = null)
+	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
 		
