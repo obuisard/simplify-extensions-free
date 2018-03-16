@@ -213,7 +213,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			// jQuery path
 			
 			if ($jQueryVersion == 'joomla') {
-				$this->_jqpath = URI::root(true).'/media/jui/js/jquery'.$compressed.'.js';
+				$this->_jqpath = URI::root(true).'/media/vendor/jquery/js/jquery'.$compressed.'.js';
 			} else {
 				if ($jQueryVersion == 'local') {
 					$localVersionPath = trim($this->params->get('localversion'.$suffix, ''));
@@ -268,7 +268,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				
 				if (!$migrate_is_unnecessary) {
 					if ($migrateVersion == 'joomla') {
-						$this->_jqmigratepath = URI::root(true).'/media/jui/js/jquery-migrate'.$compressed.'.js';
+						$this->_jqmigratepath = URI::root(true).'/media/vendor/jquery/js/jquery-migrate'.$compressed.'.js';
 					} else {
 						if ($migrateVersion == 'local') {
 							$localPathMigrate = trim($this->params->get('localpathmigrate'.$suffix, ''));
@@ -327,7 +327,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			} else if ($addjQueryNoConflict == 2) {
 				$doc->addScript('JQEASY_JQNOCONFLICT');
 				if ($jQueryVersion == 'joomla') {
-					$this->_jqnoconflictpath = URI::root(true).'/media/jui/js/jquery-noconflict.js';
+					$this->_jqnoconflictpath = URI::root(true).'/media/system/js/jquery-noconflict.js';
 				} else {
 					$this->_jqnoconflictpath = URI::root(true).'/plugins/system/jqueryeasy/jquerynoconflict.js';
 				}
@@ -355,7 +355,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				// jQuery UI path
 				
 				if ($jQueryUIVersion == 'joomla') {
-					$this->_jquipath = URI::root(true).'/media/jui/js/jquery.ui.core'.$compressed.'.js';
+					$this->_jquipath = URI::root(true).'/media/vendor/jquery-ui/js/jquery.ui.core'.$compressed.'.js';
 				} else {
 					if ($jQueryUIVersion == 'local') {
 						$localVersionPath = trim($this->params->get('localuiversion'.$suffix, ''));
@@ -436,9 +436,9 @@ class plgSystemJQueryEasy extends CMSPlugin
 			$headerdata = $doc->getHeadData();
 			$scripts = $headerdata['scripts'];
 			
-			$jquery_quoted_path = preg_quote('media/jui/js/jquery', '/');
-			$jqueryui_quoted_path = preg_quote('media/jui/js/jquery.ui', '/');
-			$bootstrap_quoted_path = preg_quote('media/jui/js/bootstrap', '/');
+			$jquery_quoted_path = preg_quote('media/vendor/jquery/js/jquery', '/');
+			$jqueryui_quoted_path = preg_quote('media/vendor/jquery-ui/js/jquery.ui', '/');
+			$bootstrap_quoted_path = preg_quote('media/vendor/bootstrap/js/bootstrap', '/');
 			
 			$jquery_loaded_by_template = false;
 			$jqueryui_loaded_by_template = false;
@@ -514,13 +514,13 @@ class plgSystemJQueryEasy extends CMSPlugin
 			
 			// make sure we follow with all media/jui/js scripts
 			
-			$quoted_path = preg_quote('media/jui/js/', '/');
-			foreach ($scripts as $url => $type) {
-				if (preg_match('#'.$quoted_path.'#s', $url)) {
-					$headerdata['scripts'][$url] = $type;
-					unset($scripts[$url]);
-				}
-			}
+// 			$quoted_path = preg_quote('media/jui/js/', '/');
+// 			foreach ($scripts as $url => $type) {
+// 				if (preg_match('#'.$quoted_path.'#s', $url)) {
+// 					$headerdata['scripts'][$url] = $type;
+// 					unset($scripts[$url]);
+// 				}
+// 			}
 			
 			// remaining scripts
 			
@@ -649,7 +649,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				
 				// remove potential jquery-noconflict.js (different combinations)
 				
-				$regexp = 'src="([\\\/a-zA-Z0-9_:\.~-]*)jquery[.-]*no[.-]*[cC]onflict\.js(.*?)"';
+				$regexp = 'src="([\\\/a-zA-Z0-9_:\.~-]*)jquery[.-]*no[.-]*[cC]onflict([0-9\.-]|min)*?.js(.*?)"';
 				
 				$count = 0;
 				$body = preg_replace('#'.$regexp.'#', 'GARBAGE', $body, -1, $count);

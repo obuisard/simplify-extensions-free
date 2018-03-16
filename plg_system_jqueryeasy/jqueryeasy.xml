@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<media folder="media" destination="syw_jqueryeasy">
 		<filename>index.html</filename>
@@ -55,7 +55,7 @@
 		
 			<fieldset name="basic" label="PLG_SYSTEM_JQUERYEASY_INFORMATION_LABEL">
 				
-				<field type="extensionversion" version="3.0.0" />
+				<field type="extensionversion" version="3.0.1" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_JQUERYEASY_TRANSLATORS" />
@@ -66,7 +66,7 @@
 <!-- 				<field type="extensionlink" linktype="report" link="http://www.simplifyyourweb.com/support" />	 -->
 				<field type="extensionlink" linktype="review" link="http://extensions.joomla.org/extensions/extension/core-enhancements/performance/jquery-easy" />
 				<field type="extensionlink" linktype="donate" link="https://simplifyyourweb.com/downloads/jquery-easy" />			
-				<field type="extensionlink" linktype="upgrade" link="https://simplifyyourweb.com/downloads/jquery-easy-profiles" description="PLG_SYSTEM_JQUERYEASY_LINK_JQUERYEASYPROFILES" />				
+				<field type="extensionlink" linktype="upgrade" link="https://simplifyyourweb.com/downloads/jquery-easy-profiles" sywdescription="PLG_SYSTEM_JQUERYEASY_LINK_JQUERYEASYPROFILES" />				
 	            			            		
 <!-- 				<field type="spacer" name="spacer_basic_1" hr="true" /> -->
 				
@@ -76,7 +76,7 @@
 			<fieldset name="general" label="PLG_SYSTEM_JQUERYEASY_GENERALOPTIONS_LABEL">
 				
 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/jquery-easy/general-options" class="alert alert-info"
-					description="PLG_SYSTEM_JQUERYEASY_GENERALOPTIONS_DESC" />
+					sywdescription="PLG_SYSTEM_JQUERYEASY_GENERALOPTIONS_DESC" />
 				
 				<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="fieldwarning" 
 					label="PLG_SYSTEM_JQUERYEASY_FIELD_CDNCHOICE_LABEL"
@@ -126,7 +126,7 @@
 			<fieldset name="narrowed_selection" label="PLG_SYSTEM_JQUERYEASY_NARROWEDSELECTION_LABEL">
 	            		         
 	            <field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/jquery-easy/narrow-selection" class="alert alert-info"
-					description="PLG_SYSTEM_JQUERYEASY_NARROWEDSELECTION_DESC" />
+					sywdescription="PLG_SYSTEM_JQUERYEASY_NARROWEDSELECTION_DESC" />
 	            
 	            <field name="templateid" type="templates" multiple="true" size="5" default="none" 
 					label="PLG_SYSTEM_JQUERYEASY_FIELD_DISABLEINTEMPLATE_LABEL" 
@@ -158,7 +158,7 @@
 			<fieldset name="jquery_options" label="PLG_SYSTEM_JQUERYEASY_JQUERYOPTIONS_LABEL"> 
 							
 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/jquery-easy/jquery-options" class="alert alert-info"
-					description="PLG_SYSTEM_JQUERYEASY_JQUERYOPTIONS_DESC" />
+					sywdescription="PLG_SYSTEM_JQUERYEASY_JQUERYOPTIONS_DESC" />
 							
 				<field name="jqueryinfrontend" type="jqueryselect" default="0" selectedcolor="#26a69a" disabledtitle="PLG_SYSTEM_JQUERYEASY_MESSAGE_OPTIONONLYAVAILABLEINCOMMERCIALVERSION"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYINFRONTEND_LABEL" 
@@ -339,7 +339,7 @@
 	                <option value="1">JYES</option>
 	            </field>
 	            
-	            <field name="ignorescriptsfrontend" type="textarea" cols="40" rows="2" default="media/jui/js/chosen.jquery.min.js" filter="raw"
+	            <field name="ignorescriptsfrontend" type="textarea" cols="40" rows="2" default="" filter="raw"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_IGNORESCRIPTS_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_IGNORESCRIPTS_DESC" /> 
 	            
@@ -384,7 +384,7 @@
 			<fieldset name="bootstrap_options" label="PLG_SYSTEM_JQUERYEASY_BOOTSTRAPOPTIONS_LABEL">
 			
 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/jquery-easy/bootstrap-options" class="alert alert-info"
-					description="PLG_SYSTEM_JQUERYEASY_BOOTSTRAPOPTIONS_DESC" />					
+					sywdescription="PLG_SYSTEM_JQUERYEASY_BOOTSTRAPOPTIONS_DESC" />					
 					
 				<field name="bootstrapinpage" type="bootstrapselect" default="0" selectedcolor="#26a69a" disabledtitle="PLG_SYSTEM_JQUERYEASY_MESSAGE_OPTIONONLYAVAILABLEINCOMMERCIALVERSION"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_BOOTSTRAPINPAGE_LABEL" 
@@ -426,7 +426,7 @@
 <!-- 			<fieldset name="mootools_options" label="PLG_SYSTEM_JQUERYEASY_MOOTOOLSOPTIONS_LABEL"> -->
 			
 <!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/jquery-easy/mootools-options" class="alert alert-info" -->
-<!-- 					description="PLG_SYSTEM_JQUERYEASY_MOOTOOLSOPTIONS_DESC" /> -->
+<!-- 					sywdescription="PLG_SYSTEM_JQUERYEASY_MOOTOOLSOPTIONS_DESC" /> -->
 				
 <!-- 				<field type="title" title="PLG_SYSTEM_JQUERYEASY_FIELD_MOOTOOLS_LABEL" imagesrc="../plugins/system/jqueryeasy/images/mootools_core.png" color="#26a69a" /> -->
 					
@@ -449,7 +449,7 @@
 			<fieldset name="scripts" label="PLG_SYSTEM_JQUERYEASY_SCRIPTS_LABEL">
 			
 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/jquery-easy/scripts-options" class="alert alert-info"
-					description="PLG_SYSTEM_JQUERYEASY_SCRIPTS_DESC" />
+					sywdescription="PLG_SYSTEM_JQUERYEASY_SCRIPTS_DESC" />
 					
 				<field name="stripremainingscriptsfrontend" type="textarea" cols="40" rows="2" default="" filter="raw"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_CLEANREMAININGSCRIPTS_LABEL" 
@@ -489,7 +489,7 @@
 			<fieldset name="styles" label="PLG_SYSTEM_JQUERYEASY_STYLES_LABEL">
            		
            		<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/jquery-easy/styles-options" class="alert alert-info"
-					description="PLG_SYSTEM_JQUERYEASY_STYLES_DESC" />
+					sywdescription="PLG_SYSTEM_JQUERYEASY_STYLES_DESC" />
 				
 	            <field name="stripremainingcssfrontend" type="textarea" cols="40" rows="2" default="" filter="raw"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_CLEANREMAININGCSS_LABEL" 
@@ -516,7 +516,7 @@
 			<fieldset name="regexp" label="PLG_SYSTEM_JQUERYEASY_REGEXP_LABEL">
 			
 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/jquery-easy/regular-expressions" class="alert alert-info"
-					description="PLG_SYSTEM_JQUERYEASY_REGEXP_DESC" />
+					sywdescription="PLG_SYSTEM_JQUERYEASY_REGEXP_DESC" />
 					
 				<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="warning" />
 			</fieldset>
@@ -580,12 +580,12 @@
 	            	link="http://getbootstrap.com/" 
 	            	imagesrc="../plugins/system/jqueryeasy/images/bootstrap_text.png" />
 	            	
-	            <field type="title" title="PLG_SYSTEM_JQUERYEASY_HELP_LIENSMOOTOOLSUTILES" color="#26a69a" />
+<!-- 	            <field type="title" title="PLG_SYSTEM_JQUERYEASY_HELP_LIENSMOOTOOLSUTILES" color="#26a69a" /> -->
 	            
-	            <field type="link" title="MooTools"  
-	            	text="PLG_SYSTEM_JQUERYEASY_LINK_MOOTOOLS" 
-	            	link="https://mootools.net/" 
-	            	imagesrc="../plugins/system/jqueryeasy/images/mootools_text.png" />
+<!-- 	            <field type="link" title="MooTools"   -->
+<!-- 	            	text="PLG_SYSTEM_JQUERYEASY_LINK_MOOTOOLS"  -->
+<!-- 	            	link="https://mootools.net/"  -->
+<!-- 	            	imagesrc="../plugins/system/jqueryeasy/images/mootools_text.png" /> -->
 			</fieldset>
    		</fields>
    </config>
