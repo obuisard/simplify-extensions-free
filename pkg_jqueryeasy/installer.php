@@ -16,9 +16,9 @@ use Joomla\CMS\Factory;
  */
 class pkg_jqueryeasyInstallerScript
 {		
-	static $version = '3.0.0';
+	static $version = '3.0.1';
 	static $available_languages = array('de-DE', 'en-GB', 'en-US', 'es-CO', 'es-ES', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sv-SE', 'tr-TR', 'uk-UA');
-	static $changelog_link = '';
+	static $changelog_link = 'https://simplifyyourweb.com/downloads/jquery-easy/file/314-jquery-easy';
 	static $transifex_link = 'https://www.transifex.com/opentranslators/jquery-easy';
 	
 	/**
@@ -50,8 +50,6 @@ class pkg_jqueryeasyInstallerScript
  		if (!in_array($current_language, self::$available_languages)) {
  			Factory::getApplication()->enqueueMessage(\JText::sprintf('PKG_JQUERYEASY_INFO_LANGUAGETRANSLATE', Factory::getLanguage()->getName()), 'notice');
  		}
- 		
- 		
 		
 		if ($type == 'update') {
 			
