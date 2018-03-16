@@ -25,7 +25,7 @@ class ThemesField extends FormField {
 		
 		// Add the script to the document head.
 		$doc = \JFactory::getDocument();
-		$doc->addStylesheet(\JURI::root(true).'/plugins/system/jqueryeasy/fields/themes/css/themes.css');
+		$doc->addStylesheet(\JURI::root(true).'/plugins/system/jqueryeasy/field/themes/css/themes.css');
 		
 		$type = strtolower($this->type);
 		

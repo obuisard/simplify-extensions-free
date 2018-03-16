@@ -17,6 +17,7 @@ class ExtensionLinkField extends FormField
 
 	protected $link_type;
 	protected $link;
+	protected $syw_description;
 
 	protected function getLabel() 
 	{
@@ -60,11 +61,11 @@ class ExtensionLinkField extends FormField
 		
 		$html = '<div class="syw_info" style="padding-top: 5px; overflow: inherit">';
 					
-		if ($this->description) {
+		if ($this->syw_description) {
 			if ($this->link) {
-				$html .= \JText::sprintf($this->description, $this->link);
+				$html .= \JText::sprintf($this->syw_description, $this->link);
 			} else {
-				$html .= \JText::_($this->description);
+				$html .= \JText::_($this->syw_description);
 			}
 		} else {
 			
@@ -113,6 +114,7 @@ class ExtensionLinkField extends FormField
 		if ($return) {
 			$this->link_type = $this->element['linktype'];
 			$this->link = isset($this->element['link']) ? $this->element['link'] : '';
+			$this->syw_description= isset($this->element['sywdescription']) ? $this->element['sywdescription'] : '';
 		}
 		
 		return $return;

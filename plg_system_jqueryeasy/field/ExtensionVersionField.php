@@ -33,7 +33,7 @@ class ExtensionVersionField extends FormField
 	{
 		$html = '<div style="padding-top: 5px; overflow: inherit">';
 		
-		$html .= '<span class="label">'.$this->version.'</span>';
+		$html .= '<span class="badge badge-secondary">'.$this->version.'</span>';
 		
 		$html .= '</div>';
 		
