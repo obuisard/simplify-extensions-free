@@ -10,6 +10,7 @@ defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
 
 class ExtensionAuthorField extends FormField 
 {		
@@ -32,7 +33,7 @@ class ExtensionAuthorField extends FormField
 		$html = '<div style="padding-top: 5px; overflow: inherit">';
 		
 		$html .= 'Olivier Buisard @ <a href="http://www.simplifyyourweb.com" target="_blank">';
-			$html .= '<img alt="Simplify Your Web" src="'.\JURI::root(true).'/media/syw/images/SimplifyYourWeb_24.png">';
+			$html .= '<img alt="Simplify Your Web" src="'.URI::root(true).'/media/syw/images/SimplifyYourWeb_24.png">';
 		$html .= '</a>';
 		
 		$html .= '</div>';

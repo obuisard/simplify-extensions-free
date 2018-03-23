@@ -9,6 +9,7 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormHelper;
 
 FormHelper::loadFieldClass('list');
 
