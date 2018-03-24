@@ -20,7 +20,14 @@
  *
  * @version 2.8.31
  */
-class SYW_Mobile_Detect
+
+namespace SYW\Library\Vendor;
+
+defined('_JEXEC') or die;
+
+use BadMethodCallException;
+
+class MobileDetect
 {
 	/**
 	 * Mobile detection type.
