@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension version="4.0" type="package" method="upgrade">
+	<name>PKG_SYWLIBRARY</name>
+	<author>Olivier Buisard</author>
+	<creationDate>01/21/2018</creationDate>
+	<packagename>sywlibrary</packagename>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<url>http://www.simplifyyourweb.com/</url>
+	<packager>Olivier Buisard</packager>
+ 	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
+	<version>2.0.0</version>
+	<description>PKG_SYWLIBRARY_XML_DESCRIPTION</description> 
+	<scriptfile>installer.php</scriptfile>
+	<languages>		
+<!-- 		<language tag="cs-CZ">language/cs-CZ/cs-CZ.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="da-DK">language/da-DK/da-DK.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="de-DE">language/de-DE/de-DE.pkg_sywlibrary.sys.ini</language> -->
+		<language tag="en-GB">language/en-GB/en-GB.pkg_sywlibrary.sys.ini</language>
+<!-- 		<language tag="en-US">language/en-US/en-US.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="es-ES">language/es-ES/es-ES.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="fa-IR">language/fa-IR/fa-IR.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="fi-FI">language/fi-FI/fi-FI.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="fr-FR">language/fr-FR/fr-FR.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="it-IT">language/it-IT/it-IT.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="nl-NL">language/nl-NL/nl-NL.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="pt-BR">language/pt-BR/pt-BR.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="ru-RU">language/ru-RU/ru-RU.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="sl-SI">language/sl-SI/sl-SI.pkg_sywlibrary.sys.ini</language> -->
+<!-- 		<language tag="tr-TR">language/tr-TR/tr-TR.pkg_sywlibrary.sys.ini</language> -->
+	</languages>
+ 	<files folder="packages">
+		<file type="library" id="sywlibrary">lib_syw.zip</file>
+	</files>
+	<updateservers>
+		<server type="extension" priority="1" name="SimplifyYourWeb Extensions Library updater">http://www.barejoomlatemplates.com/autoupdates/sywlibrary/sywlibrary-v2-update.xml</server>
+	</updateservers>
+</extension>
