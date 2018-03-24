@@ -4,8 +4,9 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-// no direct access
 defined('_JEXEC') or die;
 
-require(JModuleHelper::getLayoutPath('mod_library_test', $params->get('layout', 'default')));
+use Joomla\CMS\Helper\ModuleHelper;
+
+require(ModuleHelper::getLayoutPath('mod_library_test', $params->get('layout', 'default')));
 ?>

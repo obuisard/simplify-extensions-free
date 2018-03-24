@@ -4,8 +4,13 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
  
-// no direct access
 defined('_JEXEC') or die;
 
-$urlPath = JURI::base()."modules/mod_library_test/";
+use SYW\Library\Version as SYWVersion;
+
+if (!SYWVersion::isCompatible('2.0.0')) {
+	echo 'incompatible';
+} else {
+	echo 'compatible';
+}
 ?>
