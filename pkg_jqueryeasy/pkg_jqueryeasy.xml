@@ -9,7 +9,7 @@
 	<url>http://www.simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
-	<version>3.0.1</version>
+	<version>3.1.0</version>
 	<description>PKG_JQUERYEASY_XML_DESCRIPTION</description> 
 	<scriptfile>installer.php</scriptfile>
 	<languages>		

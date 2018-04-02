@@ -16,7 +16,7 @@ use Joomla\CMS\Factory;
  */
 class pkg_jqueryeasyInstallerScript
 {		
-	static $version = '3.0.1';
+	static $version = '3.1.0';
 	static $available_languages = array('de-DE', 'en-GB', 'en-US', 'es-CO', 'es-ES', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sv-SE', 'tr-TR', 'uk-UA');
 	static $changelog_link = 'https://simplifyyourweb.com/downloads/jquery-easy/file/314-jquery-easy';
 	static $transifex_link = 'https://www.transifex.com/opentranslators/jquery-easy';
@@ -55,7 +55,7 @@ class pkg_jqueryeasyInstallerScript
 			
 			// delete unnecessary files
 				
-			$files = array();
+			$files = array('/plugins/system/jqueryeasy/jquerynoconflict.js');
 			
 			$folders = array();
 			
