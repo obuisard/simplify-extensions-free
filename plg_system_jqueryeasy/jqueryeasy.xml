@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>3.0.1</version>
+	<version>3.1.0</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<media folder="media" destination="syw_jqueryeasy">
 		<filename>index.html</filename>
@@ -16,7 +16,6 @@
 	</media>
 	<files>
 		<filename plugin="jqueryeasy">jqueryeasy.php</filename>
-		<filename>jquerynoconflict.js</filename>
 		<filename>index.html</filename>
 		<filename>license.txt</filename>
 		<folder>field</folder>
@@ -55,7 +54,7 @@
 		
 			<fieldset name="basic" label="PLG_SYSTEM_JQUERYEASY_INFORMATION_LABEL">
 				
-				<field type="extensionversion" version="3.0.1" />
+				<field type="extensionversion" version="3.1.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_JQUERYEASY_TRANSLATORS" />
@@ -110,6 +109,13 @@
 	                <option value="uncompressed">PLG_SYSTEM_JQUERYEASY_VALUE_UNCOMPRESSED</option>
 	                <option value="compressed">PLG_SYSTEM_JQUERYEASY_VALUE_COMPRESSED</option>
 	            </field>
+	            
+	            <field name="versioning" type="radio" default="0" class="switcher"
+	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_VERSIONING_LABEL" 
+	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_VERSIONING_DESC">
+	                <option value="0">JNO</option>
+	                <option value="1">JYES</option>
+	            </field>
 				
 				<field type="subtitle" title="PLG_SYSTEM_JQUERYEASY_REPORT_LABEL" color="#26a69a" />	
 
@@ -142,13 +148,13 @@
 				
 				<field type="spacer" name="spacer_selection_2" hr="true" />
 	            	
-	            <field name="enableonlyinfrontend" type="textarea" cols="40" rows="2" default="" filter="raw" 
+	            <field name="enableonlyinfrontend" type="textarea" cols="40" rows="6" default="" filter="raw" class="input-xxlarge"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_ENABLEONLYIN_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_ENABLEONLYIN_DESC" />	
 	            
 	            <field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_ENABLEIN" label="PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLES_LABEL" />
 	            
-	            <field name="disableinfrontend" type="textarea" cols="40" rows="2" default="" filter="raw" 
+	            <field name="disableinfrontend" type="textarea" cols="40" rows="6" default="" filter="raw" class="input-xxlarge"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_DISABLEIN_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_DISABLEIN_DESC" />		            
 	            
@@ -210,7 +216,7 @@
 				<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY2" showon="jqueryversionfrontend:2.0,2.1,2.2,3.0,3.1,3.2,3.3" />
 				<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY3" showon="jqueryversionfrontend:3.0,3.1,3.2,3.3" />
 					
-				<field name="localversionfrontend" type="text" default="" size="50" showon="jqueryversionfrontend:local" 
+				<field name="localversionfrontend" type="text" default="" size="50" showon="jqueryversionfrontend:local" class="input-xxlarge" 
 					label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALVERSION_LABEL" 
 					description="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALVERSION_DESC" />
 					
@@ -242,7 +248,7 @@
 				
 				<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERYMIGRATE3" showon="migrateversionfrontend:3.0.0" />
 					
-				<field name="localpathmigratefrontend" type="text" default="" size="50" showon="migrateversionfrontend:local" 
+				<field name="localpathmigratefrontend" type="text" default="" size="50" showon="migrateversionfrontend:local" class="input-xxlarge" 
 					label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALPATHMIGRATE_LABEL" 
 					description="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALPATHMIGRATE_DESC" />
 					
@@ -271,7 +277,7 @@
 					
 				<field type="cdnlinks" library="jqueryui" showon="jqueryuiversionfrontend:1.7,1.8,1.9,1.10,1.11,1.12" />
 				
-	            <field name="localuiversionfrontend" type="text" default="" size="50" showon="jqueryuiversionfrontend:local" 
+	            <field name="localuiversionfrontend" type="text" default="" size="50" showon="jqueryuiversionfrontend:local" class="input-xxlarge" 
 					label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALUIVERSION_LABEL" 
 					description="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALUIVERSION_DESC" />
 					
@@ -309,7 +315,7 @@
 	                <option value="vader">Vader</option>
 	            </field>
 	            
-	            <field name="jqueryuithemecustomfrontend" type="text" default="" size="50" showon="jqueryuithemefrontend:custom" 
+	            <field name="jqueryuithemecustomfrontend" type="text" default="" size="50" showon="jqueryuithemefrontend:custom" class="input-xxlarge" 
 					label="PLG_SYSTEM_JQUERYEASY_FIELD_CUSTOMTHEME_LABEL" 
 					description="PLG_SYSTEM_JQUERYEASY_FIELD_CUSTOMTHEME_DESC" />
 					
@@ -339,7 +345,7 @@
 	                <option value="1">JYES</option>
 	            </field>
 	            
-	            <field name="ignorescriptsfrontend" type="textarea" cols="40" rows="2" default="" filter="raw"
+	            <field name="ignorescriptsfrontend" type="textarea" cols="40" rows="6" default="" filter="raw" class="input-xxlarge"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_IGNORESCRIPTS_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_IGNORESCRIPTS_DESC" /> 
 	            
@@ -398,6 +404,14 @@
 	           	
 	           	<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="warning" />	           	
 	           	
+	           	<field type="title" title="PLG_SYSTEM_JQUERYEASY_ADDITIONNALMODIFICATIONS_LABEL" color="#26a69a" />
+				
+				<field type="message" style="info" text="PLG_SYSTEM_JQUERYEASY_INFO_DEPENDENT" />
+	            
+	            <field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="fieldwarning" 
+	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_IGNORESCRIPTS_LABEL" 
+	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_IGNORESCRIPTS_DESC" />
+	            	
 				<field type="title" title="PLG_SYSTEM_JQUERYEASY_ADDITIONNALMODIFICATIONS_LABEL" color="#26a69a" />
 				
 				<field type="message" style="info" text="PLG_SYSTEM_JQUERYEASY_INFO_INDEPENDENT" />
@@ -439,7 +453,7 @@
 <!-- 	                <option value="1">JYES</option> -->
 <!-- 	            </field> -->
 	            
-<!-- 	            <field name="keepmootoolsin" type="textarea" cols="40" rows="2" default="" filter="raw"  -->
+<!-- 	            <field name="keepmootoolsin" type="textarea" cols="40" rows="6" default="" filter="raw"  -->
 <!-- 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_KEEPMOOTOOLSIN_LABEL"  -->
 <!-- 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_KEEPMOOTOOLSIN_DESC" /> -->
 	            
@@ -451,7 +465,7 @@
 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/jquery-easy/scripts-options" class="alert alert-info"
 					sywdescription="PLG_SYSTEM_JQUERYEASY_SCRIPTS_DESC" />
 					
-				<field name="stripremainingscriptsfrontend" type="textarea" cols="40" rows="2" default="" filter="raw"
+				<field name="stripremainingscriptsfrontend" type="textarea" cols="40" rows="6" default="" filter="raw" class="input-xxlarge"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_CLEANREMAININGSCRIPTS_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_CLEANREMAININGSCRIPTS_DESC" /> 
 	            
@@ -459,13 +473,13 @@
 	            
 	            <field type="title" title="PLG_SYSTEM_JQUERYEASY_HEADER_LABEL" color="#26a69a" />
 	            
-	            <field name="addjavascriptfrontend" type="textarea" cols="40" rows="2" default="" filter="raw" 
+	            <field name="addjavascriptfrontend" type="textarea" cols="40" rows="6" default="" filter="raw" class="input-xxlarge"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_ADDJAVASCRIPT_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_ADDJAVASCRIPT_DESC" />
 	            
 	            <field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_ADDJS" label="PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL" />
 	            
-	            <field name="addjavascriptdeclarationfrontend" type="textarea" cols="40" rows="2" default="" filter="raw" 
+	            <field name="addjavascriptdeclarationfrontend" type="textarea" cols="40" rows="6" default="" filter="raw" class="input-xxlarge"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_ADDJAVASCRIPTDECLARATION_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_ADDJAVASCRIPTDECLARATION_DESC" />
 	            
@@ -491,7 +505,7 @@
            		<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/jquery-easy/styles-options" class="alert alert-info"
 					sywdescription="PLG_SYSTEM_JQUERYEASY_STYLES_DESC" />
 				
-	            <field name="stripremainingcssfrontend" type="textarea" cols="40" rows="2" default="" filter="raw"
+	            <field name="stripremainingcssfrontend" type="textarea" cols="40" rows="6" default="" filter="raw" class="input-xxlarge"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_CLEANREMAININGCSS_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_CLEANREMAININGCSS_DESC" />
 	            
@@ -499,13 +513,13 @@
 	            	            	
 				<field type="title" title="PLG_SYSTEM_JQUERYEASY_HEADER_LABEL" color="#26a69a" />
 				
-	            <field name="addcssfrontend" type="textarea" cols="40" rows="2" default="" filter="raw" 
+	            <field name="addcssfrontend" type="textarea" cols="40" rows="6" default="" filter="raw" class="input-xxlarge"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_ADDCSS_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_ADDCSS_DESC" />	
 	            
 	            <field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_ADDCSS" label="PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL" />	
 	            	            
-	            <field name="addcssdeclarationfrontend" type="textarea" cols="40" rows="2" default="" filter="raw" 
+	            <field name="addcssdeclarationfrontend" type="textarea" cols="40" rows="6" default="" filter="raw" class="input-xxlarge"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_ADDCSSDECLARATION_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_ADDCSSDECLARATION_DESC" />
 	            	

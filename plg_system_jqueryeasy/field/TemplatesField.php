@@ -41,7 +41,7 @@ class TemplatesField extends \JFormFieldList
 		$templates = array();
 		try {
 			$templates = $db->loadObjectList();
-		} catch (RuntimeException $e) {
+		} catch (\RuntimeException $e) {
 			Factory::getApplication()->enqueueMessage(\JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 		}		
 	
