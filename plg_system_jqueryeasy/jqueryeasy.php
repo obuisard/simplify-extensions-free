@@ -9,6 +9,7 @@ defined( '_JEXEC' ) or die;
 \JLoader::import('joomla.filesystem.file');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Plugin\CMSPlugin;
 
@@ -18,6 +19,8 @@ class plgSystemJQueryEasy extends CMSPlugin
 	
 	protected $autoloadLanguage = true;
 	
+	static protected $loaded = [];
+	
 	public function __construct(&$subject, $config)
 	{
 		parent::__construct($subject, $config);
@@ -26,60 +29,52 @@ class plgSystemJQueryEasy extends CMSPlugin
 			$this->app = Factory::getApplication();
 		}
 		
-		$this->_enabled = true;
+		$this->_enabled = false;
 		
-		$this->_versioning = $this->params->get('versioning', false);
-		
-		$this->_supplement_scripts = array();
-		$this->_supplement_stylesheets = array();
-		
-		$this->_showreport = false;
-		$this->_verbose_array = array();
-		
-		$this->_usejQuery = false;
-		$this->_usejQueryUI = false;
-		
-		$this->_jqpath = '';
-		$this->_jquipath = '';
-		$this->_jquicsspath = '';
-		$this->_jqnoconflictpath = '';
-		
-		$this->_jqmigratepath = '';
-		
-		$this->_timeafterroute = 0;
-		$this->_timebeforerender = 0;
-		$this->_timeafterrender = 0;
-		
-		$this->_back_compat_path = false;
+		if (!$this->app->isAdmin()) {
+			$this->_enabled = $this->allowedOnPage();
+			
+			$this->_versioning = $this->params->get('versioning', false);
+			
+			$this->_supplement_scripts = array();
+			$this->_supplement_stylesheets = array();
+			
+			//$this->_showreport = false;
+			
+			$this->_showreport = $this->params->get('showreport', 0);
+			
+			if ($this->_showreport == 2) { // only show report when Super User is logged in
+				$user = Factory::getUser();
+				$this->_showreport = $user->authorise('core.admin') ? true : false;
+			}
+			
+			$this->_verbose_array = array();
+			
+			$this->_usejQuery = false;
+			$this->_usejQueryUI = false;
+			
+			$this->_jqpath = '';
+			$this->_jquipath = '';
+			$this->_jquicsspath = '';
+			$this->_jqnoconflictpath = '';
+			
+			$this->_jqmigratepath = '';
+			
+			$this->_timeafterroute = 0;
+			$this->_timebeforerender = 0;
+			$this->_timeafterrender = 0;
+		}
 	}
 	
-	function onAfterRoute()
-	{
-		if ($this->app->isAdmin()) {
-			return;
-		}
-		
-		$doc = Factory::getDocument();
-		
-		if ($doc->getType() !== 'html') {
-			// put here so Factory::getDocument() does not break feeds (will break if used in any function before onAfterRoute)
-			// https://groups.google.com/forum/?fromgroups#!topic/joomla-dev-general/S0GYKhLm92A
-			$this->_enabled = false;
-			return;
-		}
-		
-		$this->loadLanguage();
-		
-		$time_start = microtime(true);
-		
-		$this->_showreport = $this->params->get('showreport', 0);
-		
-		if ($this->_showreport == 2) { // only show report when Super User is logged in
-			$user = Factory::getUser();
-			$this->_showreport = $user->authorise('core.admin') ? true : false;
-		}
+	protected function allowedOnPage()
+	{		
+		$allowed = true;
 		
 		$suffix = 'frontend';
+		
+		if (Factory::getDocument()->getType() !== 'html') {
+			return false;
+		}
 		
 		// disable plugin in selected templates
 		
@@ -97,8 +92,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				$current_template_id = $this->app->getTemplate(true)->id;
 				foreach ($array_of_template_values as $key => $value) {
 					if ($current_template_id == $key) {
-						$this->_enabled = false;
-						return;
+						return false;
 					}
 				}
 			}
@@ -110,21 +104,15 @@ class plgSystemJQueryEasy extends CMSPlugin
 			$paths = array_map('trim', (array) explode("\n", $includedPaths));
 			$current_uri_string = URI::getInstance()->toString();
 			
-			//if ($this->_showreport) {
-			//	$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ENABLEPLUGININPAGES');
-			//	$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_CURRENTURI', $current_uri_string);
-			//}
-			
 			$found = false;
 			foreach ($paths as $path) {
-				$paths_compare = self::path_compare($current_uri_string, $path, $this->_back_compat_path);
+				$paths_compare = self::path_compare($current_uri_string, $path);
 				if ($paths_compare) {
 					$found = true;
 				}
 			}
 			if (!$found) {
-				$this->_enabled = false;
-				return;
+				return false;
 			}
 		} else {
 			// disable plugin in the listed pages
@@ -133,20 +121,149 @@ class plgSystemJQueryEasy extends CMSPlugin
 				$paths = array_map('trim', (array) explode("\n", $excludedPaths));
 				$current_uri_string = URI::getInstance()->toString();
 				
+				foreach ($paths as $path) {
+					$paths_compare = self::path_compare($current_uri_string, $path);
+					if ($paths_compare) {
+						return false;
+					}
+				}
+			}
+		}		
+		
+		return $allowed;
+	}
+	
+	function onAfterInitialise()
+	{
+		if (!$this->app->isClient('site')) {
+			return;
+		}
+		
+		if (!$this->_enabled) {
+			return;
+		}
+		
+		$this->loadLanguage();
+		
+		if ($this->params->get('disablecaptions', 0)) { // never add caption scripts to the site (libraries/cms/html/behavior)
+			
+			$caption = function()
+			{
+				if (isset(self::$loaded['behavior.caption'])) {
+					return;
+				}
+				
+				// do nothing
+				
+				self::$loaded['behavior.caption'] = true;
+			};
+			
+			HTMLHelper::register('jhtml.behavior.caption', $caption);
+			
+			if ($this->_showreport) {
+				$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
+			}
+		}
+	}
+	
+	function onAfterRoute()
+	{
+		if ($this->app->isAdmin()) {
+			return;
+		}
+		
+		//$doc = Factory::getDocument();
+		
+		// 		if (Factory::getDocument()->getType() !== 'html') {
+			// put here so Factory::getDocument() does not break feeds (will break if used in any function before onAfterRoute)
+			// https://groups.google.com/forum/?fromgroups#!topic/joomla-dev-general/S0GYKhLm92A
+// 			$this->_enabled = false;
+// 			return;
+// 		}
+		
+		if (!$this->_enabled) {
+			return;
+		}
+		
+		$this->loadLanguage();
+		
+		$time_start = microtime(true);
+		
+// 		$this->_showreport = $this->params->get('showreport', 0);
+		
+// 		if ($this->_showreport == 2) { // only show report when Super User is logged in
+// 			$user = Factory::getUser();
+// 			$this->_showreport = $user->authorise('core.admin') ? true : false;
+// 		}
+		
+		$suffix = 'frontend';
+		
+		// disable plugin in selected templates
+		
+// 		$templates_array = $this->params->get('templateid', array('none'));
+		
+// 		if (!is_array($templates_array)) { // before the plugin is saved, the value is the string 'none'
+// 			$templates_array = explode(' ', $templates_array);
+// 		}
+		
+// 		$array_of_template_values = array_count_values($templates_array);
+// 		if (isset($array_of_template_values['none']) && $array_of_template_values['none'] > 0) { // 'none' was selected
+// 			// keep the plugin enabled
+// 		} else {
+// 			if (!empty($this->app->getTemplate(true)->id)) {
+// 				$current_template_id = $this->app->getTemplate(true)->id;
+// 				foreach ($array_of_template_values as $key => $value) {
+// 					if ($current_template_id == $key) {
+// 						$this->_enabled = false;
+// 						return;
+// 					}
+// 				}
+// 			}
+// 		}
+		
+		// enable plugin only on the allowed pages
+// 		$includedPaths = trim( (string) $this->params->get('enableonlyin'.$suffix, ''));
+// 		if ($includedPaths) {
+// 			$paths = array_map('trim', (array) explode("\n", $includedPaths));
+// 			$current_uri_string = URI::getInstance()->toString();
+			
+			//if ($this->_showreport) {
+			//	$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ENABLEPLUGININPAGES');
+			//	$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_CURRENTURI', $current_uri_string);
+			//}
+			
+// 			$found = false;
+// 			foreach ($paths as $path) {
+// 				$paths_compare = self::path_compare($current_uri_string, $path);
+// 				if ($paths_compare) {
+// 					$found = true;
+// 				}
+// 			}
+// 			if (!$found) {
+// 				$this->_enabled = false;
+// 				return;
+// 			}
+// 		} else {
+			// disable plugin in the listed pages
+// 			$excludedPaths = trim( (string) $this->params->get('disablein'.$suffix, ''));
+// 			if ($excludedPaths) {
+// 				$paths = array_map('trim', (array) explode("\n", $excludedPaths));
+// 				$current_uri_string = URI::getInstance()->toString();
+				
 				//if ($this->_showreport) {
 				//	$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_DISABLEPLUGININPAGES');
 				//	$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_CURRENTURI', $current_uri_string);
 				//}
 				
-				foreach ($paths as $path) {
-					$paths_compare = self::path_compare($current_uri_string, $path, $this->_back_compat_path);
-					if ($paths_compare) {
-						$this->_enabled = false;
-						return;
-					}
-				}
-			}
-		}
+// 				foreach ($paths as $path) {
+// 					$paths_compare = self::path_compare($current_uri_string, $path);
+// 					if ($paths_compare) {
+// 						$this->_enabled = false;
+// 						return;
+// 					}
+// 				}
+// 			}
+// 		}
 		
 		// BEGIN prepare spaces to fill with script
 		
@@ -154,10 +271,10 @@ class plgSystemJQueryEasy extends CMSPlugin
 		if (!empty($javascript)) {
 			$this->_supplement_scripts = array_map('trim', (array) explode("\n", $javascript));
 			foreach($this->_supplement_scripts as $i => $path) {
-				if (Uri::isInternal($path)) {
-					$this->addScript($i.'ADD_SCRIPT_HERE', $this->_versioning);
+				if (Uri::isInternal(Uri::base().$path) || Uri::isInternal($path)) {
+					self::addScript($i.'ADD_SCRIPT_HERE', $this->_versioning);
 				} else {
-					$this->addScript($i.'ADD_SCRIPT_HERE');
+					self::addScript($i.'ADD_SCRIPT_HERE');
 				}
 			}
 		}
@@ -168,7 +285,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 		
 		$javascript_declaration = trim( (string) $this->params->get('addjavascriptdeclaration'.$suffix, ''));
 		if (!empty($javascript_declaration)) {
-			$doc->addScriptDeclaration('ADD_SCRIPT_DECLARATION_HERE');
+			Factory::getDocument()->addScriptDeclaration('ADD_SCRIPT_DECLARATION_HERE');
 		}
 		
 		// END prepare spaces to fill with scripts declarations
@@ -179,17 +296,17 @@ class plgSystemJQueryEasy extends CMSPlugin
 		if (!empty($css)) {
 			$this->_supplement_stylesheets = array_map('trim', (array) explode("\n", $css));
 			foreach($this->_supplement_stylesheets as $i => $path) {
-				if (Uri::isInternal($path)) {
-					$this->addStyleSheet($i.'ADD_STYLESHEET_HERE', $this->_versioning);
+				if (Uri::isInternal(Uri::base().$path) || Uri::isInternal($path)) {
+					self::addStyleSheet($i.'ADD_STYLESHEET_HERE', $this->_versioning);
 				} else {
-					$this->addStyleSheet($i.'ADD_STYLESHEET_HERE');
+					self::addStyleSheet($i.'ADD_STYLESHEET_HERE');
 				}
 			}
 		}
 		
 		$css_declaration = trim( (string) $this->params->get('addcssdeclaration'.$suffix, ''));
 		if (!empty($css_declaration)) {
-			$doc->addStyleDeclaration('ADD_STYLESHEET_DECLARATION_HERE');
+			Factory::getDocument()->addStyleDeclaration('ADD_STYLESHEET_DECLARATION_HERE');
 		}
 		
 		// END prepare spaces to fill with stylesheets and stylesheets declarations
@@ -259,9 +376,9 @@ class plgSystemJQueryEasy extends CMSPlugin
 			
 			if (!empty($this->_jqpath)) {
 				if ($jQueryVersion == 'joomla' || $jQueryVersion == 'local') {
-					$this->addScript('JQEASY_JQLIB', $this->_versioning);
+					self::addScript('JQEASY_JQLIB', $this->_versioning);
 				} else {
-					$this->addScript('JQEASY_JQLIB');
+					self::addScript('JQEASY_JQLIB');
 				}
 			}
 			
@@ -270,13 +387,8 @@ class plgSystemJQueryEasy extends CMSPlugin
 			$migrateVersion = $this->params->get('migrateversion'.$suffix, 'none');
 			if ($migrateVersion != 'none') {
 				
-				$migrate_is_unnecessary = false;
-				
-				if ($jQueryVersion == 'joomla') {
-					if (version_compare(JVERSION, '3.2', 'lt')) {
-						$migrate_is_unnecessary = true;
-					}
-				} else if ($jQueryVersion == '1.3' || $jQueryVersion == '1.4' || $jQueryVersion == '1.5' || $jQueryVersion == '1.6' || $jQueryVersion == '1.7' || $jQueryVersion == '1.8') {
+				$migrate_is_unnecessary = false;				
+				if ($jQueryVersion == '1.3' || $jQueryVersion == '1.4' || $jQueryVersion == '1.5' || $jQueryVersion == '1.6' || $jQueryVersion == '1.7' || $jQueryVersion == '1.8') {
 					$migrate_is_unnecessary = true;
 				}
 				
@@ -330,9 +442,9 @@ class plgSystemJQueryEasy extends CMSPlugin
 				
 				if (!empty($this->_jqmigratepath)) {
 					if ($migrateVersion == 'joomla' || $migrateVersion == 'local') {
-						$this->addScript('JQEASY_JQMIGRATELIB', $this->_versioning);
+						self::addScript('JQEASY_JQMIGRATELIB', $this->_versioning);
 					} else {
-						$this->addScript('JQEASY_JQMIGRATELIB');
+						self::addScript('JQEASY_JQMIGRATELIB');
 					}
 				}
 			}
@@ -341,14 +453,17 @@ class plgSystemJQueryEasy extends CMSPlugin
 			
 			$addjQueryNoConflict = $this->params->get('addnoconflict'.$suffix, 2);
 			if ($addjQueryNoConflict == 1) {
-				$doc->addScriptDeclaration('JQEASY_JQNOCONFLICT');
+				Factory::getDocument()->addScriptDeclaration('JQEASY_JQNOCONFLICT');
 			} else if ($addjQueryNoConflict == 2) {
-				$this->addScript('JQEASY_JQNOCONFLICT', $this->_versioning);
-				if ($jQueryVersion == 'joomla') {
-					$this->_jqnoconflictpath = URI::root(true).'/media/system/js/jquery-noconflict.js';
-				} else {
+				self::addScript('JQEASY_JQNOCONFLICT', $this->_versioning);
+				
+				// media/system/js/jquery-noconflict.js contains var $=jQuery.noConflict();
+				
+				//if ($jQueryVersion == 'joomla') {
+					//$this->_jqnoconflictpath = URI::root(true).'/media/system/js/jquery-noconflict.js';
+				//} else {
 					$this->_jqnoconflictpath = URI::root(true).'/media/syw_jqueryeasy/js/jquerynoconflict.js';
-				}
+				//}
 			}
 			
 			// jQuery UI
@@ -397,9 +512,9 @@ class plgSystemJQueryEasy extends CMSPlugin
 				
 				if (!empty($this->_jquipath)) {
 					if ($jQueryUIVersion == 'joomla' || $jQueryUIVersion == 'local') {
-						$this->addScript('JQEASY_JQUILIB', $this->_versioning);
+						self::addScript('JQEASY_JQUILIB', $this->_versioning);
 					} else {
-						$this->addScript('JQEASY_JQUILIB');
+						self::addScript('JQEASY_JQUILIB');
 					}
 				}
 				
@@ -427,9 +542,9 @@ class plgSystemJQueryEasy extends CMSPlugin
 					
 					if (!empty($this->_jquicsspath)) {
 						if ($jQueryUITheme == 'custom' || $jQueryUIVersion == 'joomla' || $jQueryUIVersion == 'local') {
-							$this->addStyleSheet('JQEASY_JQUICSS', $this->_versioning);
+							self::addStyleSheet('JQEASY_JQUICSS', $this->_versioning);
 						} else {
-							$this->addStyleSheet('JQEASY_JQUICSS');
+							self::addStyleSheet('JQEASY_JQUICSS');
 						}
 					}
 				}
@@ -500,7 +615,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 		
 		$headerdata = $doc->getHeadData();
 		
-		$ignore_caption = $this->params->get('disablecaptions', 0);
+		//$ignore_caption = $this->params->get('disablecaptions', 0);
 		
 		// make sure we start with all jQuery Easy scripts
 		
@@ -528,11 +643,11 @@ class plgSystemJQueryEasy extends CMSPlugin
 			foreach ($scripts as $url => $type) {
 				if (preg_match('#'.$quoted_path.'#s', $url)) {
 					
-					if ($ignore_caption && preg_match('#'.$quoted_path.'legacy/caption#s', $url)) {
-						$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
-					} else {
+					//if ($ignore_caption && preg_match('#'.$quoted_path.'legacy/caption#s', $url)) {
+						//$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
+					//} else {
 						$headerdata['scripts'][$url] = $type;
-					}
+					//}
 					
 					unset($scripts[$url]);
 				}
@@ -557,36 +672,36 @@ class plgSystemJQueryEasy extends CMSPlugin
 			if ($this->_showreport) {
 				$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REORDEREDLIBRARIES');
 			}
-		} else {
-			$quoted_path = preg_quote('media/system/js/', '/');
+		} //else {
+// 			$quoted_path = preg_quote('media/system/js/', '/');
 			
-			foreach ($headerdata['scripts'] as $url => $type) {
-				if ($ignore_caption && preg_match('#'.$quoted_path.'caption#s', $url)) {
-					unset($headerdata['scripts'][$url]);
-					$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
-					break;
-				}
-			}
-		}
+// 			foreach ($headerdata['scripts'] as $url => $type) {
+// 				if ($ignore_caption && preg_match('#'.$quoted_path.'legacy/caption#s', $url)) {
+// 					unset($headerdata['scripts'][$url]);
+// 					$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
+// 					break;
+// 				}
+// 			}
+// 		}
 		
 		// also we have script declarations loaded alongside MooTools libraries
 		// if getting rid of libraries, also need to get rid of script declarations associated to them
 		// NOTE: JCaption is now called with jQuery (from Joomla 3.2), not MooTools anymore
 		
-		if ($ignore_caption) {
+// 		if ($ignore_caption) {
 			
-			$regexp = '([\s\w();,\':\.-]*)JCaption([\s\w();,\':\.-]*)';
+// 			$regexp = '([\s\w();,\':\.-]*)JCaption([\s\w();,\':\.-]*)';
 			
-			if ($this->_showreport) {
-				$count = 0;
-				$headerdata['script'] = preg_replace('#'.$regexp.'#', '', $headerdata['script'], -1, $count);
-				if ($count > 0) {
-					$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVECAPTION');
-				}
-			} else { // faster
-				$headerdata['script'] = preg_replace('#'.$regexp.'#', '', $headerdata['script'], 1);
-			}
-		}
+// 			if ($this->_showreport) {
+// 				$count = 0;
+// 				$headerdata['script'] = preg_replace('#'.$regexp.'#', '', $headerdata['script'], -1, $count);
+// 				if ($count > 0) {
+// 					$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVECAPTION');
+// 				}
+// 			} else { // faster
+// 				$headerdata['script'] = preg_replace('#'.$regexp.'#', '', $headerdata['script'], 1);
+// 			}
+// 		}
 		
 		$doc->setHeadData($headerdata);
 		
@@ -986,29 +1101,17 @@ class plgSystemJQueryEasy extends CMSPlugin
 		
 		// TODO should this be done at the same time as the removal of JCaption?
 		// remove newly empty script left after removal of new JCaption('img.caption');
-		if ($this->params->get('disablecaptions', 0)) {
-			if ($this->_showreport) {
-				$count = 0;
-				if (version_compare(JVERSION, '3.2.0', 'ge')) {
-					$body = preg_replace('#(jQuery|\$)\(window\).on\(\'load\',[\s]*?function\(\)[\s]*?{[\s]*?}\);#', '', $body, -1, $count);
-				} else {
-					$body = preg_replace('#window.addEvent\(\'load\', function\(\) {[\s]*?}\);#', '', $body, -1, $count);
-				}
-				if ($count > 0) {
-					if (version_compare(JVERSION, '3.2.0', 'ge')) {
-						$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYSCRIPTJQUERYON');
-					} else {
-						$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYSCRIPTWINDOWADDEVENT');
-					}
-				}
-			} else { // faster
-				if (version_compare(JVERSION, '3.2.0', 'ge')) {
-					$body = preg_replace('#(jQuery|\$)\(window\).on\(\'load\',[\s]*?function\(\)[\s]*?{[\s]*?}\);#', '', $body, 1);
-				} else {
-					$body = preg_replace('#window.addEvent\(\'load\', function\(\) {[\s]*?}\);#', '', $body, 1);
-				}
-			}
-		}
+// 		if ($this->params->get('disablecaptions', 0)) {
+// 			if ($this->_showreport) {
+// 				$count = 0;
+// 				$body = preg_replace('#(jQuery|\$)\(window\).on\(\'load\',[\s]*?function\(\)[\s]*?{[\s]*?}\);#', '', $body, -1, $count);
+// 				if ($count > 0) {
+// 					$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYSCRIPTJQUERYON');
+// 				}
+// 			} else { // faster
+// 				$body = preg_replace('#(jQuery|\$)\(window\).on\(\'load\',[\s]*?function\(\)[\s]*?{[\s]*?}\);#', '', $body, 1);
+// 			}
+// 		}
 		
 		// all scripts and stylesheets are added here instead of earlier so they don't get checked by the plugin
 		
@@ -1062,7 +1165,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 		// show the report
 		
 		if ($this->_showreport) {
-			$body = $this->addReport($body, $this->_verbose_array, $this->_timeafterroute + $this->_timebeforerender + $this->_timeafterrender);
+			$body = self::addReport($body, $this->_verbose_array, $this->_timeafterroute + $this->_timebeforerender + $this->_timeafterrender);
 		}
 		
 		$this->app->setBody($body);
@@ -1076,7 +1179,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 		
 		$replacement[] = '<style type="text/css">#jqueryeasy_report code { white-space: normal; word-break: break-all; }</style>'.chr(13);
 		
-		$replacement[] = '<div id="jqueryeasy_report" style="z-index: 10000; display: block; overflow: hidden; position: fixed; top: 10px; bottom: 10px; left: 5%; right: 5%; width: 90%; max-width: 90%; margin: 0; padding: 8px; box-sizing: border-box; font-family: sans-serif; font-size: 12px; line-height: 20px">';
+		$replacement[] = '<div id="jqueryeasy_report" style="z-index: 10000; display: block; overflow: hidden; position: fixed; top: 10px; left: 0; right: 0; width: 90%; max-width: 976px; margin: 0 auto; padding: 8px; box-sizing: border-box;">';
 		
 		$replacement[] = '<div style="position: relative; overflow: hidden; max-width: 960px; margin: 0 auto; border-radius: 4px; box-shadow: 0px 0px 8px #000; background: #fff; background: rgba(255, 255, 255, .9);">';
 		
@@ -1084,9 +1187,9 @@ class plgSystemJQueryEasy extends CMSPlugin
 		
 		$replacement[] = '<div style="position: relative; display: table; width: 100%; background-color: #d1ecf1; border-bottom: 1px dashed #0c5460;">';
 		
-		$replacement[] = '<span style="display: table-cell; padding: 5px 10px; color: #0c5460; font-weight: bold;">'.\JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_JQUERYEASY').'</span>';
+		$replacement[] = '<span style="display: table-cell; padding: 5px 10px; color: #0c5460; font-weight: bold; font-size: 12px;">'.\JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_JQUERYEASY').'</span>';
 		
-		$replacement[] = '<a href="" onclick="document.getElementById(\'jqueryeasy_report\').style.display = \'none\'; return false;" style="display: table-cell; text-align: right; padding: 5px 10px">'.\JText::_('JCANCEL').'</a>';
+		$replacement[] = '<a href="" onclick="document.getElementById(\'jqueryeasy_report\').style.display = \'none\'; return false;" style="display: table-cell; text-align: right; font-size: 12px; padding: 5px 10px;">'.\JText::_('JCANCEL').'</a>';
 		
 		$replacement[] = '</div>';
 		
@@ -1119,7 +1222,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 		
 		$replacement[] = '<div style="position: relative; display: table; width: 100%; background-color: #d1ecf1; border-top: 1px dashed #0c5460;">';
 		
-		$replacement[] = '<span style="display: table-cell; padding: 5px 10px; color: #0c5460">'.\JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_EXECUTIONTIME').': '.number_format($execution_time, 4).'</span>';
+		$replacement[] = '<span style="display: table-cell; padding: 5px 10px; color: #0c5460; font-size: 12px;">'.\JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_EXECUTIONTIME').': '.number_format($execution_time, 4).'</span>';
 		
 		$replacement[] = '</div>';
 		
@@ -1166,7 +1269,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 		Factory::getDocument()->addStyleSheet($url, $options, $attributes);
 	}
 	
-	static protected function path_compare($uri, $path, $use_backward_compatibility)
+	static protected function path_compare($uri, $path, $use_backward_compatibility = false)
 	{
 		$first_pos = (strpos($path, '*') === 0) ? true: false;
 		$last_pos = (strrpos($path, '*') === (strlen($path) - 1)) ? true: false;
