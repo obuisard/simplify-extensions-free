@@ -38,7 +38,7 @@ class K2TagsField extends \JFormFieldList
 			$lang = Factory::getLanguage();
 			$lang->load('lib_syw.sys', JPATH_SITE);
 			
-			$html .= '<div style="margin-bottom:0" class="alert alert-error">';
+			$html .= '<div style="margin-bottom:0" class="alert alert-danger">';
 				$html .= '<span>'.\JText::_('LIB_SYW_K2TAGS_MISSING').'</span>';
 			$html .= '</div>';
 		}

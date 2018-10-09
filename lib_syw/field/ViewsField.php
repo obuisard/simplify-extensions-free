@@ -35,7 +35,15 @@ class ViewsField extends \JFormFieldList
 		$query->select('DISTINCT a.id AS value, CONCAT(a.title, " (", a.alias, ")"'.$additional_tag.') AS text, a.alias, a.level, a.menutype, a.type, a.template_style_id, a.checked_out');
 		$query->from('#__menu AS a');
 		$query->join('LEFT', $db->quoteName('#__menu') . ' AS b ON a.lft > b.lft AND a.rgt < b.rgt');
-		$query->where('a.link like '.$db->quote('%option='.$this->extension_option.'&view='.$this->extension_view.'%'));
+		
+		$extension_views = explode(",", $this->extension_view);
+		$views_sql = '';
+		foreach ($extension_views as $extension_view) {
+		    $views_sql .= 'a.link LIKE '.$db->quote('%option='.$this->extension_option.'&view='.$extension_view.'%').' OR ';
+		}
+		
+		$query->where(substr($views_sql, 0, -4));
+		
 		$query->where('a.published = 1');
 		
 		// 		if (JLanguageMultilang::isEnabled()) {

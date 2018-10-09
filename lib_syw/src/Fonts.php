@@ -13,29 +13,37 @@ use Joomla\CMS\Uri\Uri;
 
 class Fonts 
 {	
-	static $iconfontLoaded = false;
-	static $googlefontLoaded = array();
+	//protected static $iconfontLoaded = false;
+	protected static $googlefontLoaded = array();
 		
 	/**
 	 * Load the icon font if needed
 	 */
-	static function loadIconFont($include_icomoon = false, $debug = false)
+	static function loadIconFont($syw_font = true, $icomoon_font = false, $debug = false)
 	{	
-		if (self::$iconfontLoaded) {
-			return;
-		}
+// 		if (self::$iconfontLoaded) {
+// 			return;
+// 		}
 		
-		if ($debug) {
-			Factory::getDocument()->addStyleSheet(URI::base(true).'/media/syw/css/fonts.css');
-		} else {
-			Factory::getDocument()->addStyleSheet(URI::base(true).'/media/syw/css/fonts-min.css');
-		}	
+	    if ($syw_font) {
+    		if ($debug) {
+    		    //Factory::getDocument()->addStyleSheet(URI::base(true).'/media/syw/css/fonts.css');
+    		    JHtml::_('stylesheet', 'syw/fonts.css', array('version' => 'auto', 'relative' => true));
+    		} else {
+    		    //Factory::getDocument()->addStyleSheet(URI::base(true).'/media/syw/css/fonts-min.css');
+    		    JHtml::_('stylesheet', 'syw/fonts-min.css', array('version' => 'auto', 'relative' => true));
+    		}
+	    }
 		
-		if ($include_icomoon) {
-			Factory::getDocument()->addStyleSheet(URI::base(true).'/media/jui/css/icomoon.css');
+	    // TODO Beware! not used in Joomla 4 anymore (add font-awesome)
+	    // offer old icomoon css for backward compatibility
+	    
+	    if ($icomoon_font) {
+	        //Factory::getDocument()->addStyleSheet(URI::base(true).'/media/jui/css/icomoon.css');
+	        JHtml::_('stylesheet', 'jui/icomoon.css', array('version' => 'auto', 'relative' => true));
 		}
 						
-		self::$iconfontLoaded = true;
+		//self::$iconfontLoaded = true;
 	}
 	
 	/**

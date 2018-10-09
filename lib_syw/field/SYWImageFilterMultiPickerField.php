@@ -14,7 +14,7 @@ use Joomla\CMS\Uri\Uri;
 
 FormHelper::loadFieldClass('dynamicmultipleselect');
 
-class SYWImageFilterMultiPickerField extends DynamicMultipleSelectField
+class SYWImageFilterMultiPickerField extends DynamicMultipleSelect
 {
 	public $type = 'SYWImageFilterMultiPicker';
 	

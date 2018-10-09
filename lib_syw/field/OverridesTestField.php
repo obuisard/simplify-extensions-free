@@ -8,11 +8,10 @@ namespace SYW\Library\Field;
 
 defined('_JEXEC') or die ;
 
-\JLoader::import('joomla.filesystem.folder');
-
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
+//use Joomla\Filesystem\Folder;
 
 class OverridesTestField extends FormField 
 {		
@@ -120,18 +119,31 @@ class OverridesTestField extends FormField
 				$html .= \JText::_('LIB_SYW_CANNOTDETERMINELAYOUTOVERRIDES');
 			} else {		
 				if (!is_null($this->extension) && \JFolder::exists($overrides_path.'layouts/'.$this->extension)) {
-					$files = \JFolder::files($overrides_path.'layouts/'.$this->extension, '.php');
-					if (!empty($files)) {
+				    $files = \JFolder::files($overrides_path.'layouts/'.$this->extension, '.php');
+				    $folders = \JFolder::folders($overrides_path.'layouts/'.$this->extension);					
+				    if (!empty($files) || !empty($folders)) {
 						$html .= \JText::sprintf('LIB_SYW_LAYOUTSOVERRIDEN', $this->extension);
 						foreach ($files as $file) {
 							$html .= ' <code>'.$file.'</code>';
+						}
+						foreach ($folders as $folder) {
+						    $subfiles = \JFolder::files($overrides_path.'layouts/'.$this->extension.'/'.$folder, '.php');
+						    if (!empty($subfiles)) {
+						        $html .= '<br /><code>'.$folder.'/</code><br />';
+						        foreach ($subfiles as $file) {
+						            $html .= ' <code>'.$file.'</code>';
+						        }
+						    } else {
+						        $html .= '<br />'.\JText::sprintf('LIB_SYW_EMPTYFOLDER', '/templates/'.$defaultemplate.'/html/layouts/'.$this->extension.'/'.$folder);
+						    }
 						}
 					} else {
 						$html .= \JText::sprintf('LIB_SYW_EMPTYFOLDER', '/templates/'.$defaultemplate.'/html/layouts/'.$this->extension);
 					}
 				} else if (!is_null($this->parent_extension) && \JFolder::exists($overrides_path.'layouts/'.$this->parent_extension)) {
-					$files = \JFolder::files($overrides_path.'layouts/'.$this->parent_extension, '.php');
-					if (!empty($files)) {
+				    $files = \JFolder::files($overrides_path.'layouts/'.$this->parent_extension, '.php');
+				    $folders = \JFolder::folders($overrides_path.'layouts/'.$this->extension);
+				    if (!empty($files) || !empty($folders)) {
 	// 					$html .= JText::sprintf('LIB_SYW_LAYOUTSOVERRIDEN', $this->parent_extension);
 	// 					foreach ($files as $file) {
 	// 						$html .= '<br /><code>'.$file.'</code>';

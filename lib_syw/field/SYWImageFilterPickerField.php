@@ -14,7 +14,7 @@ use Joomla\CMS\Uri\Uri;
 
 FormHelper::loadFieldClass('dynamicsingleselect');
 
-class SYWImageFilterPickerField extends DynamicSingleSelectField
+class SYWImageFilterPickerField extends DynamicSingleSelect
 {
 	public $type = 'SYWImageFilterPicker';
 	

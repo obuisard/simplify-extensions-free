@@ -167,7 +167,7 @@ class Libraries
 		self::$jqctransitLoaded = true;
 	}
 	
-	static function triggerLazysizes($jQuery_path = 'img') 
+	static function triggerLazysizes($jQuery_path = 'img', $lazyload = false, $lazyload_image = '')
 	{		
 		if (in_array($jQuery_path, self::$jqhighres)) {
 			return;
@@ -175,25 +175,26 @@ class Libraries
 		
 		$javascript = 'jQuery(document).ready(function() { ';
 			$javascript .= 'if (window.devicePixelRatio > 1) { '; // undefined > 1 results in false (IE < 11 do not support the property)
-				$javascript .= 'jQuery("'.$jQuery_path.'[data-src]").each(function() { ';
-					//$javascript .= 'var lowres = jQuery(this).attr("src"); ';
-					//$javascript .= 'var highres = lowres.replace(".", "@2x."); ';
-					//$javascript .= 'jQuery(this).attr("src", highres); ';
+				$javascript .= 'jQuery("'.$jQuery_path.'[data-src]").each(function() { ';					
 					$javascript .= 'jQuery(this).addClass("lazyload"); ';
-				$javascript .= '});';				
-						
-				//$javascript .= 'jQuery("'.$jQuery_path.'").on("load", function() { alert("tada");';
-					//$javascript .= 'var lowres = $(this).attr("src").replace(".", "@2x."); ';
-					//$javascript .= 'var highres = lowres.replace(".", "@2x."); ';
-					//$javascript .= 'alert(lowres);  ';
-					//$javascript .= 'if (jQuery(this).attr("src").indexOf("@2x.") == -1) { ';
-						//$javascript .= 'jQuery(this).attr("src", jQuery(this).attr("src").replace(".", "@2x.") + "?" + new Date().getTime()); ';						
-						//$javascript .= 'jQuery(this).load(function() {}); ';
-					//$javascript .= '}';
-				//$javascript .= '});';	
-			
-			
+					if ($lazyload && $lazyload_image) {
+					    $javascript .= 'jQuery(this).attr("src", "'.$lazyload_image.'"); ';
+					}
+				$javascript .= '});';
 			$javascript .= '}';
+			
+		if ($lazyload && $lazyload_image) {
+			$javascript .= ' else {';
+			    
+				$javascript .= 'jQuery("'.$jQuery_path.'[data-src]").each(function() { ';
+					$javascript .= 'jQuery(this).addClass("lazyload"); ';
+					$javascript .= 'jQuery(this).attr("data-src", jQuery(this).attr("src")); ';
+					$javascript .= 'jQuery(this).attr("src", "'.$lazyload_image.'"); ';
+				$javascript .= '});';
+			    
+			$javascript .= '}';
+			}
+			
 		$javascript .= '});';
 				
 		Factory::getDocument()->addScriptDeclaration($javascript);

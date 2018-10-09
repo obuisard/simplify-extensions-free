@@ -23,11 +23,8 @@ class SYWTransitionPickerField extends FormField
 	protected $help;
 	protected $sampleimage;
 	protected $sampleicon;
-	
-	static $transitiongrouplist = array('2d', 'background');	
-	static $li_transitions = '';
 		
-	static function getTransitionGroup($transitiongroup, $image, $icon) 
+	protected function getTransitionGroup($transitiongroup, $image, $icon) 
 	{
 		$transitions = array();
 		
@@ -92,20 +89,20 @@ class SYWTransitionPickerField extends FormField
 		return $transitionlist;
 	}
 	
-	static function getTransitions($image, $icon) 
+	protected function getTransitions($image, $icon) 
 	{		
-		if (empty(self::$li_transitions)) {
+	    $li_transitions = '';
+	    
+	    $transitiongrouplist = array('2d', 'background');
 			
-			$i = 0;
-			foreach (self::$transitiongrouplist as $transitiongrouplist_item) {
-				self::$li_transitions .= self::getTransitionGroup($transitiongrouplist_item, $image, $icon);
-				if ($i < count(self::$transitiongrouplist) - 1) {
-					self::$li_transitions .= '<li class="divider" style="clear: both; width: auto;"></li>';
-				}
+	    foreach ($transitiongrouplist as $i => $transitiongrouplist_item) {
+			$li_transitions .= self::getTransitionGroup($transitiongrouplist_item, $image, $icon);
+			if ($i < count($transitiongrouplist) - 1) {
+				$li_transitions .= '<li class="divider" style="clear: both; width: auto;"></li>';
 			}
 		}
 		
-		return self::$li_transitions;
+		return $li_transitions;
 	}
 	
 	protected function getInput() 
@@ -118,8 +115,12 @@ class SYWTransitionPickerField extends FormField
 		\JHtml::_('bootstrap.tooltip');
 		
 		\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true);
-		\JHtml::_('stylesheet', 'syw/2d-transitions-min.css', false, true);
-		\JHtml::_('stylesheet', 'syw/bg-transitions-min.css', false, true);
+		if (isset($this->transitions) || (isset($this->transitiongroups) && strpos($this->transitiongroups, '2d') !== false) || (!isset($this->transitions) && !isset($this->transitiongroups))) {
+		    \JHtml::_('stylesheet', 'syw/2d-transitions-min.css', false, true);
+		}
+		if (isset($this->transitions) || (isset($this->transitiongroups) && strpos($this->transitiongroups, 'background') !== false) || (!isset($this->transitions) && !isset($this->transitiongroups))) {
+		    \JHtml::_('stylesheet', 'syw/bg-transitions-min.css', false, true);
+		}
 		
 		$script = 'jQuery(document).ready(function () {';
 		
@@ -221,13 +222,11 @@ class SYWTransitionPickerField extends FormField
 			}			
 		} else if (isset($this->transitiongroups)) {
 			$transitiongroups = explode(",", $this->transitiongroups);
-			$i = 0;
-			foreach ($transitiongroups as $transitiongroup_item) {
+			foreach ($transitiongroups as $i => $transitiongroup_item) {
 				$html .= self::getTransitionGroup($transitiongroup_item, $this->sampleimage, $this->sampleicon);
 				if ($i < count($transitiongroups) - 1) {
 					$html .= '<li class="divider" style="clear: both; width: auto;"></li>';
 				}
-				$i++;
 			}
 		} else {
 			$html .= self::getTransitions($this->sampleimage, $this->sampleicon); // TODO use jQuery append

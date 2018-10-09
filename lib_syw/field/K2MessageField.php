@@ -13,7 +13,7 @@ use SYW\Library\K2 as SYWK2;
 /**
  * Shows messages when K2 is installed or missing
  */
-class K2MessageField extends \SYW\Library\Field\Message 
+class K2MessageField extends MessageField
 {		
 	public $type = 'K2Message';
 	

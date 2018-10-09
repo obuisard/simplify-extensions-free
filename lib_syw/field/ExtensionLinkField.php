@@ -97,7 +97,11 @@ class ExtensionLinkField extends FormField
 			
 			if ($desc) {
 				if ($this->link) {
-					$html .= \JText::sprintf($desc, $this->link);
+				    if ($this->link_type == 'translate') {
+				        $html .= \JText::sprintf($desc, 'https://simplifyyourweb.com/translators');
+				    } else {
+				        $html .= \JText::sprintf($desc, $this->link);
+				    }
 				} else {
 					$html .= \JText::_($desc);
 				}

@@ -39,7 +39,13 @@ class SYWColorPickerField extends FormField
 			$color = '#'.$color;
 		}
 		
-		\JHtml::_('behavior.colorpicker');
+		$direction = $lang->isRtl() ? ' dir="ltr" style="text-align:right"' : '';
+		
+		\JHtml::_('jquery.framework');
+		\JHtml::_('script', 'system/html5fallback.js', array('version' => 'auto', 'relative' => true, 'conditional' => 'lt IE 9'));
+		\JHtml::_('script', 'jui/jquery.minicolors.min.js', array('version' => 'auto', 'relative' => true));
+		\JHtml::_('stylesheet', 'jui/jquery.minicolors.css', array('version' => 'auto', 'relative' => true));
+		\JHtml::_('script', 'system/color-field-adv-init.min.js', array('version' => 'auto', 'relative' => true));
 		
 		$icon = isset($this->icon) ? $this->icon : '';
 		if (!empty($icon)) {
@@ -58,7 +64,7 @@ class SYWColorPickerField extends FormField
 		}	
 
 		if (!$this->allow_transparency && !$this->use_global) {
-			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="minicolors" />';
+			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="minicolors"'.$direction.' />';
 		} else {
 			$disabled = '';
 			if (empty($this->value) && $this->use_global) {
@@ -66,7 +72,7 @@ class SYWColorPickerField extends FormField
 			}
 			
 			$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" />';
-			$html .= '<input style="height:auto" type="text" name="visible_'.$this->name.'" id="visible_'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="minicolors"'.$disabled.' />';
+			$html .= '<input style="height:auto" type="text" name="visible_'.$this->name.'" id="visible_'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="minicolors"'.$direction.$disabled.' />';
 		}
 		
 		if ($this->use_global) {

@@ -8,12 +8,11 @@ namespace SYW\Library\Field;
 
 defined('_JEXEC') or die ;
 
-\JLoader::import('joomla.filesystem.folder');
-
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
+//use Joomla\Filesystem\Folder;
 
-class DemotestTest extends FormField 
+class DemoTestField extends FormField 
 {		
 	public $type = 'Demotest';
 	
