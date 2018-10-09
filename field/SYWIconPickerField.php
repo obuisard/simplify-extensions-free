@@ -23,11 +23,8 @@ class SYWIconPickerField extends FormField
 	protected $help;
 	protected $icomoon;
 	protected $editable;
-	
-	static $icongrouplist = array('communications', 'equipment', 'transportation', 'location', 'social', 'agenda', 'finances', 'files', 'systems', 'accessibility', 'media', 'other');	
-	static $li_icons = '';
 		
-	static function getIconGroup($icongroup) 
+	protected function getIconGroup($icongroup) 
 	{
 		$icons = array();
 		
@@ -511,21 +508,21 @@ class SYWIconPickerField extends FormField
 		return $iconlist;
 	}
 	
-	static function getIcons($use_icomoon = false) 
-	{		
-		if (empty(self::$li_icons)) {
+	protected function getIcons() 
+	{
+	    $iconlist = '';
+	    
+	    $icongrouplist = array('communications', 'equipment', 'transportation', 'location', 'social', 'agenda', 'finances', 'files', 'systems', 'accessibility', 'media', 'other');
+	    if ($this->icomoon) {
+	        $icongrouplist[] = 'icomoon';
+	    }
 			
-			if ($use_icomoon) {
-				self::$icongrouplist[] = 'icomoon';
-			}
-			
-			foreach (self::$icongrouplist as $icongrouplist_item) {
-				self::$li_icons .= '<li class="divider" style="clear: both; width: auto; height: auto; padding: 3px; text-align: center; color: #797878 border: none;"><span>'.\JText::_('LIB_SYW_ICONPICKER_ICONGROUP_'.strtoupper($icongrouplist_item)).'</span></li>';
-				self::$li_icons .= self::getIconGroup($icongrouplist_item);
-			}
+		foreach ($icongrouplist as $icongrouplist_item) {
+		    $iconlist .= '<li class="divider" style="clear: both; width: auto; height: auto; padding: 3px; text-align: center; color: #797878 border: none;"><span>'.\JText::_('LIB_SYW_ICONPICKER_ICONGROUP_'.strtoupper($icongrouplist_item)).'</span></li>';
+		    $iconlist .= self::getIconGroup($icongrouplist_item);
 		}
 		
-		return self::$li_icons;
+		return $iconlist;
 	}
 	
 	protected function getInput() 
@@ -587,6 +584,13 @@ class SYWIconPickerField extends FormField
 		
 			$script .= 'jQuery("#'.$this->id.'").change(function() { ';
 				$script .= 'jQuery(\'#' . $this->id . '_icon\').attr(\'class\', \'SYWicon-\' + jQuery("#'.$this->id.'").val()); ';
+				
+				$script .= 'jQuery("#'.$this->id.'_select li a").each(function() { ';
+				    $script .= 'jQuery(this).removeClass("label-success"); ';
+				    $script .= 'if (jQuery(this).parent().attr(\'data-SYWicon\') == jQuery(\'#' . $this->id . '\').val()) { ';
+				        $script .= 'jQuery(this).addClass("label-success"); ';
+				    $script .= '} ';
+				$script .= '}); ';
 			$script .= '}); ';
 		
 		$script .= '}); ';
@@ -632,7 +636,7 @@ class SYWIconPickerField extends FormField
 				$html .= self::getIconGroup($icongroup_item);
 			}
 		} else {
-			$html .= self::getIcons($this->icomoon); 
+			$html .= self::getIcons(); 
 		}		
 		
 		$html .= '</ul>';
@@ -677,8 +681,8 @@ class SYWIconPickerField extends FormField
 			
 			$this->icomoon = isset($this->element['icomoon']) ? filter_var($this->element['icomoon'], FILTER_VALIDATE_BOOLEAN) : false;
 			$this->editable = isset($this->element['editable']) ? filter_var($this->element['editable'], FILTER_VALIDATE_BOOLEAN) : false;
-			$this->buttonrole = isset($this->element['buttonrole']) ? JText::_($this->element['buttonrole']) : 'default';
-			$this->buttonlabel = isset($this->element['buttonlabel']) ? JText::_($this->element['buttonlabel']) : ($this->buttonrole == 'clear' ? \JText::_('JCLEAR') : \JText::_('JDEFAULT'));
+			$this->buttonrole = isset($this->element['buttonrole']) ? \JText::_($this->element['buttonrole']) : 'default';
+			$this->buttonlabel = isset($this->element['buttonlabel']) ? \JText::_($this->element['buttonlabel']) : ($this->buttonrole == 'clear' ? \JText::_('JCLEAR') : \JText::_('JDEFAULT'));
 			$this->emptyicon = isset($this->element['emptyicon']) ? $this->element['emptyicon'] : ($this->buttonrole == 'default' ? 'question' : '');
 		}
 

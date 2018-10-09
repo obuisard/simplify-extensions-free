@@ -80,10 +80,11 @@ class Image
 		
 		Log::addLogger(array('text_file' => 'syw.errors.php'), Log::ALL, array('syw'));
 				
-		if ($from_path && $width > 0 && $height > 0) {
-			// create image with the required dimensions
+		if ($from_path && $width > 0 && $height > 0) { // create image with the required dimensions
 			
 			// test removed to allow image file names with spaces
+			
+		    $from_path = str_replace('%20', ' ', $from_path);
 			
 			//if (substr_count($from_path, 'http') <= 0 && !file_exists($from_path)) { // check local image file
 				//$this->image =  null;
@@ -152,6 +153,10 @@ class Image
 								$this->image = imagecreatetruecolor($width, $height);
 								if (!$this->image) {
 									$this->image = null;
+								
+									if (is_resource($original_image)) {
+										imagedestroy($original_image);
+									}
 								} else {
 									$this->image_width = $width;
 									$this->image_height = $height;
@@ -173,19 +178,22 @@ class Image
 								
 										imagecopyresampled($this->image, $original_image, 0, 0, $x, $y, $width, $height, $w, $h);
 									}
+							
+									unset($original_image);
 								}
-							}		
+							}
 						}	
 					}			
 				}
 			//}
 			
-		} elseif ($from_path) {
-			// create image with dimensions of imported picture
+		} elseif ($from_path) { // create image with dimensions of imported picture
 			
 			//$from_path = str_replace(' ', '%20', $from_path); // replaces spaces - does not work with file_exists
 		
 			// test removed to allow image file names with spaces
+			
+		    $from_path = str_replace('%20', ' ', $from_path);
 			
 			//if (substr_count($from_path, 'http') <= 0 && !file_exists($from_path)) { // check local image file
 				//$this->image =  null;
@@ -219,7 +227,7 @@ class Image
 							case 'image/gif': $this->image = imagecreatefromgif($from_path); break;
 							case 'image/jpeg': $this->image = imagecreatefromjpeg($from_path); break;
 							case 'image/png': $this->image = imagecreatefrompng($from_path); break;
-							default: $this->image = null; break; // unsupported type
+							default: $this->image = null; // unsupported type
 						}
 						
 						if (!$this->image) {
@@ -492,6 +500,7 @@ class Image
 								} else {
 									imagefilter($thumbnail, $type, $arg1, $arg2, $arg3, $arg4);
 								}
+								unset($arg1); unset($arg2); unset($arg3); unset($arg4);
 							} else {
 								imagefilter($thumbnail, $f);
 							}
@@ -511,6 +520,12 @@ class Image
 						$creation_high_res_success = imagegif($this->thumbnail_high_res, $to_path_high_res); 
 						$this->thumbnail = imagecreatetruecolor($thumbnail_width / 2, $thumbnail_height / 2);	
 						if ($this->thumbnail == false) {
+							
+							if (is_resource($this->thumbnail_high_res)) {
+								imagedestroy($this->thumbnail_high_res);
+							}
+							unset($thumbnail);
+							
 							return $creation_success;
 						}						
 						
@@ -539,6 +554,12 @@ class Image
 						$creation_high_res_success = imagejpeg($this->thumbnail_high_res, $to_path_high_res, $quality); 
 						$this->thumbnail = imagecreatetruecolor($thumbnail_width / 2, $thumbnail_height / 2);	
 						if ($this->thumbnail == false) {
+							
+							if (is_resource($this->thumbnail_high_res)) {
+								imagedestroy($this->thumbnail_high_res);
+							}
+							unset($thumbnail);
+							
 							return $creation_success;
 						}	
 						if (!imagecopyresampled($this->thumbnail, $this->thumbnail_high_res, 0, 0, 0, 0, $thumbnail_width / 2, $thumbnail_height / 2, $thumbnail_width, $thumbnail_height)) {
@@ -560,6 +581,12 @@ class Image
 						$creation_high_res_success = imagepng($this->thumbnail_high_res, $to_path_high_res, $quality); 
 						$this->thumbnail = imagecreatetruecolor($thumbnail_width / 2, $thumbnail_height / 2);
 						if ($this->thumbnail == false) {
+							
+							if (is_resource($this->thumbnail_high_res)) {
+								imagedestroy($this->thumbnail_high_res);
+							}
+							unset($thumbnail);
+							
 							return $creation_success;
 						}	
 						
@@ -581,7 +608,9 @@ class Image
 						$creation_success = imagepng($this->thumbnail, $to_path, $quality);
 					}
 					break;
-				default: return $creation_success;
+				default: 
+					unset($thumbnail);
+					return $creation_success;
 			}
 		}
 		
@@ -598,9 +627,7 @@ class Image
 			}
 		}
 		
-		if (is_resource($thumbnail)) {
-			imagedestroy($thumbnail);
-		}
+		unset($thumbnail);
 		
 		return $creation_success;
 	}

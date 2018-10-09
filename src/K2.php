@@ -24,18 +24,24 @@ class K2
 		self::$k2_exists = true;
 		
 		$db = Factory::getDbo();
+		
 		$query = $db->getQuery(true);
+		
 		$query->select('extension_id AS id, element AS "option", params, enabled');
 		$query->from('#__extensions');
 		$query->where($query->qn('type') . ' = ' . $db->quote('component'));
 		$query->where($query->qn('element') . ' = ' . $db->quote('com_k2'));
+		
 		$db->setQuery($query);
 		
-		$cache = Factory::getCache('_system', 'callback');
+		try {
+			$cache = Factory::getCache('_system', 'callback');			
+			$k2_component = $cache->get(array($db, 'loadObject'), null, 'com_k2', false);
+		} catch (\RuntimeException $e) {
+			self::$k2_exists = false;
+		}
 		
-		$k2_component = $cache->get(array($db, 'loadObject'), null, 'com_k2', false);
-		
-		if ($error = $db->getErrorMsg() || empty($k2_component)) {
+		if (empty($k2_component)) {
 			self::$k2_exists = false;
 		}
 		

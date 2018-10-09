@@ -12,7 +12,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Filesystem\File;
-use Joomla\Filesystem\Folder;
+//use Joomla\Filesystem\Folder;
 
 class Cache 
 {			
@@ -160,8 +160,8 @@ class Cache
 		
 		foreach ($folders as $folder) {
 			$path .= '/'.$folder;
-			if (!Folder::exists($path)) {					
-				if (Folder::create($path)) {						
+			if (!\JFolder::exists($path)) {					
+				if (\JFolder::create($path)) {						
 					if ($include_index) {
 						$src = JPATH_ROOT.'/libraries/syw/index.html';
 						$dest = $path.'/index.html';

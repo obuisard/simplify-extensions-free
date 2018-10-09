@@ -19,7 +19,20 @@ jQuery(document).ready(function($) {
 	
 	if ($('.syw_info').length) {
 		$('.syw_info').each(function() {
-			$(this).closest('.control-group').addClass('control-group-info');
+			var closest = $(this).closest('.control-group');
+			closest.addClass('control-group-info');			
+			if ($(this).hasClass('info')) {
+				closest.addClass('alert alert-info');
+			}
+			if ($(this).hasClass('success')) {
+				closest.addClass('alert alert-success');
+			}		
+			if ($(this).hasClass('warning')) {
+				closest.addClass('alert alert-warning');
+			}			
+			if ($(this).hasClass('error')) {
+				closest.addClass('alert alert-error');
+			}			
 		});
 	}
 	

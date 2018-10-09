@@ -13,7 +13,7 @@ use Joomla\CMS\Form\FormHelper;
 
 FormHelper::loadFieldClass('list');
 
-class DynamicMultipleSelectField extends \JFormFieldList
+class DynamicMultipleSelect extends \JFormFieldList
 {
 	public $type = 'DynamicMultipleSelect';
 	
@@ -114,7 +114,7 @@ class DynamicMultipleSelectField extends \JFormFieldList
 			#".$this->id."_elements .element { display: inline-block; position: relative; vertical-align: top; relative; margin: 0 5px 5px 5px; padding: 15px;".(!empty($this->maxwidth) ? " max-width: ".$this->maxwidth."px;" : "")." background-color: #f4f4f4; border: 7px solid #fff; text-align: center; cursor: pointer; }
 			#".$this->id."_elements .element.global { background-color: #2a6496; color: #fff }
 			#".$this->id."_elements .element:first-child { margin-left: 0 }
-			#".$this->id."_elements .element.disabled { opacity: 0.65; filter: alpha(opacity=65); }
+			#".$this->id."_elements .element.disabled { opacity: 0.65; filter: alpha(opacity=65); cursor: default; }
 			#".$this->id."_elements .element.selected { border: 7px dashed ".$this->selectedcolor."; }
 			#".$this->id."_elements .images-container { display: inline-block; position: relative; width: ".$this->width."px; height: ".$this->height."px; margin-bottom: 5px; }
 			#".$this->id."_elements .element img { display: block; position: absolute; left: 50%; transform: translateX(-50%); -webkit-transition: opacity .4s ease; transition: opacity .4s ease; max-width: ".$this->width."px; max-height: ".$this->height."px; }
@@ -141,7 +141,7 @@ class DynamicMultipleSelectField extends \JFormFieldList
 			$class_hastooltip = '';
 			$title_attribute = '';
 			
-			if (isset($option[5]) && $option[5] == 'disabled') {
+			if (isset($option[5]) && ($option[5] == 'disabled' || $option[5] == true)) {
 				$class_disabled = ' disabled';
 				if (!empty($this->disabledtitle)) {
 					$title_attribute = ' title="'.\JText::_($this->disabledtitle).'"';
@@ -189,11 +189,18 @@ class DynamicMultipleSelectField extends \JFormFieldList
 	
 	protected function getOptions()
 	{
-		$options = array();
+	    $xml_options = parent::getOptions();
+	    $options = array();
+	    
+	    foreach ($xml_options as $option) {
+	        $options[] = array($option->value, $option->text, '', '', '', $option->disable);
+	    }
+	    
+	    // TODO problem 'none' has no value, like global value
 		
-		$options[] = array('option1', 'Option 1', 'Description 1', 'option1/option1.png', 'option1/option1_hover.png');
-		$options[] = array('option2', 'Option 2', 'Description 2', 'option2/option2.png', 'option2/option2_hover.png');
-		$options[] = array('option3', 'Option 3', 'Description 3', 'option3/option3.png', 'option3/option3_hover.png', 'disabled');
+//		$options[] = array('option1', 'Option 1', 'Description 1', 'option1/option1.png', 'option1/option1_hover.png');
+//		$options[] = array('option2', 'Option 2', 'Description 2', 'option2/option2.png', 'option2/option2_hover.png');
+//		$options[] = array('option3', 'Option 3', 'Description 3', 'option3/option3.png', 'option3/option3_hover.png', 'disabled');
 		
 		return $options;
 	}

@@ -8,7 +8,7 @@ namespace SYW\Library\Field;
 
 defined( '_JEXEC' ) or die;
 
-use Joomla\Filesystem\Folder;
+//use Joomla\Filesystem\Folder;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
@@ -47,7 +47,7 @@ class CustomFieldsListField extends \JFormFieldList
 
 		// get Joomla! fields
 		// test the fields folder first to avoid message warning that the component is missing
-		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams(explode('.', $this->context)[0])->get('custom_fields_enable', '1')) {
+		if (\JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams(explode('.', $this->context)[0])->get('custom_fields_enable', '1')) {
 
 			$fields = self::getCoreFields($this->context);
 			

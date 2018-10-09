@@ -8,8 +8,9 @@ namespace SYW\Library\Field;
 
 defined( '_JEXEC' ) or die;
 
-use Joomla\Filesystem\Folder;
+//use Joomla\Filesystem\Folder;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Component\ComponentHelper;
 
 FormHelper::loadFieldClass('list');
@@ -43,7 +44,7 @@ class CustomFieldGroupsListField extends \JFormFieldList
 			try {
 				$results = $db->loadObjectList();
 			} catch (\RuntimeException $e) {
-				Factory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+				Factory::getApplication()->enqueueMessage(\JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 			}
 			
 			self::$core_fieldgroups[$usable_context] = $results;
@@ -61,7 +62,7 @@ class CustomFieldGroupsListField extends \JFormFieldList
 
 		// get Joomla! field groups
 		// test the fields folder first to avoid message warning that the component is missing
-		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams(explode('.', $this->context)[0])->get('custom_fields_enable', '1')) {
+		if (\JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams(explode('.', $this->context)[0])->get('custom_fields_enable', '1')) {
 
 			$groups = self::getCoreFieldGroups($this->context);
 

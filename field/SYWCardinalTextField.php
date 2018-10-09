@@ -188,10 +188,10 @@ class SYWCardinalTextField extends \JFormFieldList
 				$tooltips[] = $tooltips[0];
 				$tooltips[] = $tooltips[0];
 			}
-			$this->tooltips['top'] = empty($tooltips[0]) ? '' : JText::_($tooltips[0]); 
-			$this->tooltips['right'] = empty($tooltips[1]) ? '' : JText::_($tooltips[1]); 
-			$this->tooltips['bottom'] = empty($tooltips[2]) ? '' : JText::_($tooltips[2]); 
-			$this->tooltips['left'] = empty($tooltips[3]) ? '' : JText::_($tooltips[3]); 
+			$this->tooltips['top'] = empty($tooltips[0]) ? '' : \JText::_($tooltips[0]); 
+			$this->tooltips['right'] = empty($tooltips[1]) ? '' : \JText::_($tooltips[1]); 
+			$this->tooltips['bottom'] = empty($tooltips[2]) ? '' : \JText::_($tooltips[2]); 
+			$this->tooltips['left'] = empty($tooltips[3]) ? '' : \JText::_($tooltips[3]); 
 			
 			$this->maxLength = isset($this->element['maxlength']) ? ' maxlength="'.$this->maxLength.'"' : '';
 			
