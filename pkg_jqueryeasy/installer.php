@@ -6,8 +6,8 @@
 
 defined('_JEXEC') or die;
 
-\JLoader::import('joomla.filesystem.folder');
 \JLoader::import('joomla.filesystem.file');
+\JLoader::import('joomla.filesystem.folder');
 
 use Joomla\CMS\Factory;
 
@@ -16,10 +16,10 @@ use Joomla\CMS\Factory;
  */
 class pkg_jqueryeasyInstallerScript
 {		
-	static $version = '3.1.0';
+	static $version = '3.2.0';
 	static $available_languages = array('de-DE', 'en-GB', 'en-US', 'es-CO', 'es-ES', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sv-SE', 'tr-TR', 'uk-UA');
 	static $changelog_link = 'https://simplifyyourweb.com/downloads/jquery-easy/file/314-jquery-easy';
-	static $transifex_link = 'https://www.transifex.com/opentranslators/jquery-easy';
+	static $transifex_link = 'https://simplifyyourweb.com/translators';
 	
 	/**
 	 * Called before an install/update method
@@ -55,7 +55,10 @@ class pkg_jqueryeasyInstallerScript
 			
 			// delete unnecessary files
 				
-			$files = array('/plugins/system/jqueryeasy/jquerynoconflict.js');
+		    $files = array(
+		        '/plugins/system/jqueryeasy/jquerynoconflict.js',
+		        '/plugins/system/jqueryeasy/images/SimplifyYourWeb_24.png'
+		    );
 			
 			$folders = array();
 			
