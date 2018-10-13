@@ -1,27 +1,26 @@
 <?php
 /**
  * @copyright	Copyright (C) 2011 Simplify Your Web, Inc. All rights reserved.
- * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
 */
-
-namespace SYW\Plugin\System\JqueryEasy\Field;
 
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
 
-class SubTitleField extends FormField
+class JFormFieldTitle extends FormField
 {
-	public $type = 'Subtitle';
-	
+	public $type = 'Title';
+
 	protected $title;
+	protected $image_src;
 	protected $color;
 	
 	protected function getLabel()
 	{
 		return '';
 	}
-
+	
 	protected function getInput()
 	{
 		$html = '';
@@ -30,31 +29,25 @@ class SubTitleField extends FormField
 		\JHtml::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
 
 		$inline_style = array();
-
-		$inline_style[] = 'display: inherit; ';
-		$inline_style[] = 'position: relative; ';
+		
 		$inline_style[] = 'background: '.$this->color.'; background: linear-gradient(to right, '.$this->color.' 0%, #fff 100%); ';
-		$inline_style[] = 'height: 5px; ';
+		$inline_style[] = 'color: #fff; ';
+		$inline_style[] = 'text-transform: uppercase; ';
+		$inline_style[] = 'letter-spacing: 3px; ';
+		$inline_style[] = 'font-family: "Courier New", Courier, monospace; ';
+		$inline_style[] = 'font-weight: bold; ';
 		$inline_style[] = 'margin: 15px 0; ';
+		$inline_style[] = 'padding: 15px; ';
+		$inline_style[] = '-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; ';
 
-		$html .= '<div class="syw_header" style="'.implode($inline_style).'">';
+		$html .= '<div class="syw_header" style=\''.implode($inline_style).'\'>';
+
+		if ($this->image_src) {
+			$html .= '<img style="margin: -1px 4px 0 0; padding: 0px; width: 16px; height: 16px" src="'.$this->image_src.'">';
+		} 
 
 		if ($this->title) {
-				
-			$inline_style = array();
-
-			$inline_style[] = 'font-family: "Courier New", Courier, monospace; ';
-			$inline_style[] = 'font-size: 10px; ';
-			//$inline_style[] = 'font-weight: bold; ';
-			$inline_style[] = 'letter-spacing: 2px; ';
-			$inline_style[] = 'background-color: #fff; ';
-			$inline_style[] = 'color: '.$this->color.'; ';
-			$inline_style[] = 'padding: 0 8px 0 10px; ';
-			$inline_style[] = 'position: absolute; ';
-			$inline_style[] = 'left: 20px; ';
-			$inline_style[] = 'top: -6px; ';
-				
-			$html .= '<div style=\''.implode($inline_style).'\'>'.\JText::_($this->title).'</div>';
+			$html .= \JText::_($this->title);
 		}
 
 		$html .= '</div>';
@@ -68,6 +61,7 @@ class SubTitleField extends FormField
 		
 		if ($return) {
 			$this->title = isset($this->element['title']) ? trim($this->element['title']) : '';
+			$this->image_src = isset($this->element['imagesrc']) ? $this->element['imagesrc'] : ''; // ex: ../modules/mod_latestnews/images/icon.png (16x16)
 			$this->color = '#6f6f6f'; // isset($this->element['color']) ? $this->element['color'] : '#6f6f6f';
 		}
 		

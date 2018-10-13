@@ -4,17 +4,17 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-namespace SYW\Plugin\System\JqueryEasy\Field;
-
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 
-class ExtensionTranslatorsField extends FormField 
-{
-	public $type = 'ExtensionTranslators';
+class JFormFieldExtensionVersion extends FormField 
+{		
+	public $type = 'ExtensionVersion';
 	
+	protected $version;
+
 	protected function getLabel() 
 	{		
 		$lang = Factory::getLanguage();
@@ -22,24 +22,18 @@ class ExtensionTranslatorsField extends FormField
 		
 		$html = '';
 		
-		$html .= '<div style="clear: both;">';
-		if (!empty($this->translators)) {
-			$html .= \JText::_('PLG_SYSTEM_JQUERYEASY_TRANSLATORS_LABEL');
-		}
-		$html .= '</div>';
+		$html .= '<div style="clear: both;">'.\JText::_('PLG_SYSTEM_JQUERYEASY_VERSION_LABEL').'</div>';
 		
 		return $html;
 	}
 
 	protected function getInput() 
-	{		
-		$html = '';
+	{
+		$html = '<div style="padding-top: 5px; overflow: inherit">';
 		
-		if (!empty($this->translators)) {
-			$html .= '<div style="padding-top: 5px; overflow: inherit">';
-			$html .= $this->translators;
-			$html .= '</div>';
-		}
+		$html .= '<span class="badge badge-secondary">'.$this->version.'</span>';
+		
+		$html .= '</div>';
 		
 		return $html;
 	}
@@ -49,7 +43,7 @@ class ExtensionTranslatorsField extends FormField
 		$return = parent::setup($element, $value, $group);
 	
 		if ($return) {
-			$this->translators = isset($this->element['translators']) ? \JText::_($this->element['translators']) : NULL;
+			$this->version = isset($this->element['version']) ? $this->element['version'] : '';
 		}
 	
 		return $return;

@@ -4,14 +4,12 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-namespace SYW\Plugin\System\JqueryEasy\Field;
-
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 
-class BootstrapVersionField extends FormField 
+class JFormFieldBootstrapVersion extends FormField 
 {		
 	public $type = 'Bootstrapversion';
 	
@@ -50,6 +48,16 @@ class BootstrapVersionField extends FormField
 		$html .= '<div class="bootstrapversion alert alert-info" style="margin-bottom: 0">';
 		$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Bootstrap '.$version).'</span>';
 		$html .= '</div>';
+		
+		Factory::getDocument()->addScriptDeclaration("
+			jQuery(document).ready(function ($){
+				$.getJSON('https://api.cdnjs.com/libraries/twitter-bootstrap?fields=version', function(data) {
+                    if (data != undefined && data.version != undefined) {
+                        $('.bootstrapversion').append('<br />".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL')." <span class=\'label\'>' + data.version + '</span> (".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL')." Cloudflare)');
+                    }
+                });
+			});
+		");
 		
 		return $html;
 	}

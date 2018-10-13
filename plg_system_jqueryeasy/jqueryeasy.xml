@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>3.1.0</version>
+	<version>3.2.0</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<media folder="media" destination="syw_jqueryeasy">
 		<filename>index.html</filename>
@@ -54,18 +54,20 @@
 		
 			<fieldset name="basic" label="PLG_SYSTEM_JQUERYEASY_INFORMATION_LABEL">
 				
-				<field type="extensionversion" version="3.1.0" />
+				<field type="extensionversion" version="3.2.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_JQUERYEASY_TRANSLATORS" />
-				<field type="extensionlink" linktype="translate" link="https://www.transifex.com/opentranslators/jquery-easy/" />	            		
+				<field type="extensionlink" linktype="translate" link="https://www.transifex.com/simplify-your-web/jquery-easy/" />	            		
 <!-- 	            <field type="extensionlink" linktype="onlinedoc" link="http://www.simplifyyourweb.com/documentation/jquery-easy" /> -->
 <!-- 				<field type="extensionlink" linktype="forum" link="http://www.simplifyyourweb.com/index.php/forum/19-jquery-easy" />	            	 -->
 <!-- 	            <field type="extensionlink" linktype="support" link="http://www.simplifyyourweb.com/support" /> -->
 <!-- 				<field type="extensionlink" linktype="report" link="http://www.simplifyyourweb.com/support" />	 -->
 				<field type="extensionlink" linktype="review" link="http://extensions.joomla.org/extensions/extension/core-enhancements/performance/jquery-easy" />
 				<field type="extensionlink" linktype="donate" link="https://simplifyyourweb.com/downloads/jquery-easy" />			
-				<field type="extensionlink" linktype="upgrade" link="https://simplifyyourweb.com/downloads/jquery-easy-profiles" sywdescription="PLG_SYSTEM_JQUERYEASY_LINK_JQUERYEASYPROFILES" />				
+<!--				<field type="extensionlink" linktype="upgrade" link="https://simplifyyourweb.com/downloads/jquery-easy-profiles" sywdescription="PLG_SYSTEM_JQUERYEASY_LINK_JQUERYEASYPROFILES" /> -->
+	            		
+	            <!-- TODO get jQuery Easy Profiles -->		
 	            			            		
 <!-- 				<field type="spacer" name="spacer_basic_1" hr="true" /> -->
 				
@@ -373,7 +375,7 @@
 	                <option value="1">JYES</option>
 	            </field>
 	            
-	            <field type="title" title="PLG_SYSTEM_JQUERYEASY_ADDITIONNALMODIFICATIONS_LABEL" color="#26a69a" />
+	            <field type="title" title="PLG_SYSTEM_JQUERYEASY_INDEPENDENTMODIFICATIONS_LABEL" color="#26a69a" />
 	            
 	            <field type="message" style="info" text="PLG_SYSTEM_JQUERYEASY_INFO_INDEPENDENT" />
 					            
@@ -412,7 +414,7 @@
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_IGNORESCRIPTS_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_IGNORESCRIPTS_DESC" />
 	            	
-				<field type="title" title="PLG_SYSTEM_JQUERYEASY_ADDITIONNALMODIFICATIONS_LABEL" color="#26a69a" />
+				<field type="title" title="PLG_SYSTEM_JQUERYEASY_INDEPENDENTMODIFICATIONS_LABEL" color="#26a69a" />
 				
 				<field type="message" style="info" text="PLG_SYSTEM_JQUERYEASY_INFO_INDEPENDENT" />
 				
@@ -479,7 +481,7 @@
 	            
 	            <field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_ADDJS" label="PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL" />
 	            
-	            <field name="addjavascriptdeclarationfrontend" type="textarea" cols="40" rows="6" default="" filter="raw" class="input-xxlarge"
+	            <field name="addjavascriptdeclarationfrontend" type="editor" rows="10" default="" editor="codemirror|none" filter="raw" buttons="false" syntax="js"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_ADDJAVASCRIPTDECLARATION_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_ADDJAVASCRIPTDECLARATION_DESC" />
 	            
@@ -519,7 +521,7 @@
 	            
 	            <field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_ADDCSS" label="PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL" />	
 	            	            
-	            <field name="addcssdeclarationfrontend" type="textarea" cols="40" rows="6" default="" filter="raw" class="input-xxlarge"
+	            <field name="addcssdeclarationfrontend" type="editor" rows="10" default="" editor="codemirror|none" filter="raw" buttons="false" syntax="css"
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_ADDCSSDECLARATION_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_ADDCSSDECLARATION_DESC" />
 	            	

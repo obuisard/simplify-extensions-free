@@ -4,8 +4,6 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
 */
 
-namespace SYW\Plugin\System\JqueryEasy\Field;
-
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormHelper;
@@ -13,7 +11,7 @@ use Joomla\CMS\Factory;
 
 FormHelper::loadFieldClass('list');
 
-class MigrateSelectField extends \JFormFieldList
+class JFormFieldMigrateSelect extends \JFormFieldList
 {
 	public $type = 'MigrateSelect';
 

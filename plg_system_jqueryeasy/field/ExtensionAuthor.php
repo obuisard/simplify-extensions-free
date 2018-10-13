@@ -4,14 +4,12 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-namespace SYW\Plugin\System\JqueryEasy\Field;
-
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 
-class ExtensionAuthorField extends FormField 
+class JFormFieldExtensionAuthor extends FormField 
 {
 	public $type = 'ExtensionAuthor';
 	
@@ -32,7 +30,7 @@ class ExtensionAuthorField extends FormField
 		$html = '<div style="padding-top: 5px; overflow: inherit">';
 		
 		$html .= 'Olivier Buisard @ <a href="http://www.simplifyyourweb.com" target="_blank">';
-		$html .= '<img alt="Simplify Your Web" src="'.\JURI::root().'plugins/system/jqueryeasy/images/SimplifyYourWeb_24.png">';
+		$html .= '<img alt="Simplify Your Web" src="'.\JURI::root().'plugins/system/jqueryeasy/images/simplifyyourweb.png">';
 		$html .= '</a>';
 		
 		$html .= '</div>';

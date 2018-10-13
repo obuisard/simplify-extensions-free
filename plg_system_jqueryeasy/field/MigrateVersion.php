@@ -4,14 +4,12 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-namespace SYW\Plugin\System\JqueryEasy\Field;
-
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 
-class MigrateversionField extends FormField 
+class JFormFieldMigrateversion extends FormField 
 {		
 	public $type = 'Migrateversion';
 	
@@ -60,6 +58,16 @@ class MigrateversionField extends FormField
 			$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Migrate '.$version).'</span>';
 		}
 		$html .= '</div>';
+		
+		Factory::getDocument()->addScriptDeclaration("
+			jQuery(document).ready(function ($){
+				$.getJSON('https://api.cdnjs.com/libraries/jquery-migrate?fields=version', function(data) {
+                    if (data != undefined && data.version != undefined) {
+                        $('.migrateversion').append('<br />".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL')." <span class=\'label\'>' + data.version + '</span> (".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL')." Cloudflare)');
+                    }
+                });
+			});
+		");
 		
 		return $html;
 	}

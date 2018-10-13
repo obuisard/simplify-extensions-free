@@ -29,6 +29,8 @@ class plgSystemJQueryEasy extends CMSPlugin
 			$this->app = Factory::getApplication();
 		}
 		
+	    //\JLoader::registerNamespace('SYW\\Plugin\\System\\JqueryEasy\\Field', JPATH_ROOT.'/plugins/system/jqueryeasy/field', false, false, 'psr4');
+		
 		$this->_enabled = false;
 		
 		if (!$this->app->isAdmin()) {

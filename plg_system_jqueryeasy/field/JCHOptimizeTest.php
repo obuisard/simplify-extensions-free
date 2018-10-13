@@ -4,8 +4,6 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-namespace SYW\Plugin\System\JqueryEasy\Field;
-
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
@@ -16,7 +14,7 @@ use Joomla\CMS\Plugin\PluginHelper;
 /*
  * Checks if the plugin is enabled and report on the position used
  */
-class JCHOptimizeTestField extends FormField 
+class JFormFieldJCHOptimizeTest extends FormField 
 {	
 	public $type = 'JCHOptimizetest';
 	

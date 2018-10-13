@@ -4,13 +4,11 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-namespace SYW\Plugin\System\JqueryEasy\Field;
-
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
 
-class LinkField extends FormField 
+class JFormFieldLink extends FormField 
 {
 	public $type = 'Link';
 	

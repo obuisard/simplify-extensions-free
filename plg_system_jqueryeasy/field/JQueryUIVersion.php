@@ -4,14 +4,12 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-namespace SYW\Plugin\System\JqueryEasy\Field;
-
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 
-class JQueryUIVersionField extends FormField 
+class JFormFieldJQueryUIVersion extends FormField 
 {		
 	public $type = 'Jqueryuiversion';
 	
@@ -64,6 +62,16 @@ class JQueryUIVersionField extends FormField
 			$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'jQuery UI '.$version).'</span>';
 		}
 		$html .= '</div>';
+		
+		Factory::getDocument()->addScriptDeclaration("
+			jQuery(document).ready(function ($){
+				$.getJSON('https://api.cdnjs.com/libraries/jqueryui?fields=version', function(data) {
+                    if (data != undefined && data.version != undefined) {
+                        $('.jqueryuiversion').append('<br />".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL')." <span class=\'label\'>' + data.version + '</span> (".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL')." Cloudflare)');
+                    }
+                });
+			});
+		");
 		
 		return $html;
 	}

@@ -4,14 +4,12 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-namespace SYW\Plugin\System\JqueryEasy\Field;
-
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 
-class ExtensionConnectField extends FormField
+class JFormFieldExtensionConnect extends FormField
 {
 	public $type = 'ExtensionConnect';
 	

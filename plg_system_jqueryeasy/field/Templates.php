@@ -4,8 +4,6 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-namespace SYW\Plugin\System\JqueryEasy\Field;
-
 defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Application\ApplicationHelper;
@@ -14,7 +12,7 @@ use Joomla\CMS\Factory;
 
 FormHelper::loadFieldClass('list');
 
-class TemplatesField extends \JFormFieldList
+class JFormFieldTemplates extends \JFormFieldList
 {
 	public $type = 'Templates';
 		
