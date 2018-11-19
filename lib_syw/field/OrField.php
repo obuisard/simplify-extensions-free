@@ -9,6 +9,7 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class OrField extends FormField 
@@ -27,7 +28,7 @@ class OrField extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 		
-		$html .= \JText::_('LIB_SYW_OR_OR');
+		$html .= Text::_('LIB_SYW_OR_OR');
 			
 		return $html;
 	}

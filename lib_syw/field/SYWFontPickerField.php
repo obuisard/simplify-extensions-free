@@ -9,6 +9,8 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class SYWFontPickerField extends FormField 
@@ -17,7 +19,7 @@ class SYWFontPickerField extends FormField
 	
 	protected function getFontTag($fontfamily) 
 	{		
-		return '<li><a class="standardfont_'.$this->id.'" href="#" onclick="return false;">'.$fontfamily.'</a></li>';
+		return '<li class="dropdown-item"><a class="standardfont_'.$this->id.'" style="font-family: '.htmlspecialchars($fontfamily).'" href="#" onclick="return false;">'.$fontfamily.'</a></li>';
 	}
 	
 	protected function getSerifFontFamilies() 
@@ -89,9 +91,9 @@ class SYWFontPickerField extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 		
-		\JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip');
 		
-		\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true);		
+		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);		
 
 		$script = 'jQuery(document).ready(function () {';
 			$script .= 'jQuery(\'.standardfont_'.$this->id.'\').click(function() { ';
@@ -111,17 +113,17 @@ class SYWFontPickerField extends FormField
 		
 		Factory::getDocument()->addScriptDeclaration($script);
 			
-		$html = '<div class="input-prepend input-append">';
+		$html = '<div class="input-group">';
             
-			$html .= '<div class="add-on"><i class="SYWicon-font"></i></div>';
+			$html .= '<div class="input-group-prepend"><span class="input-group-text"><i class="SYWicon-font"></i></span></div>';
             
-			$html .= '<input id="'.$this->id.'" name="'.$this->name.'" class="input-medium" type="text" value="'.htmlspecialchars($this->value).'" style="font-family:'.htmlspecialchars($this->value).'" />';
+			$html .= '<input id="'.$this->id.'" name="'.$this->name.'" class="form-control" type="text" value="'.htmlspecialchars($this->value).'" style="font-family:'.htmlspecialchars($this->value).'" />';
             
 			$html .= '<div class="btn-group" style="display:inline-block;vertical-align:middle">';
-				$html .= '<button style="border-radius:0;margin-left:-1px;min-width:auto" class="btn dropdown-toggle hasTooltip" data-toggle="dropdown" title="' . \JText::_('LIB_SYW_FONTPICKER_SELECTFONT') . '">';            
-					$html .= '<span class="caret" style="margin-bottom:auto"></span>';
+				$html .= '<button style="border-radius:0;margin-left:-1px;min-width:auto" class="btn dropdown-toggle hasTooltip" data-toggle="dropdown" title="' . Text::_('LIB_SYW_FONTPICKER_SELECTFONT') . '">';            
+					//$html .= '<span class="caret" style="margin-bottom:auto"></span>';
 				$html .= '</button>';
-				$html .= '<ul class="dropdown-menu">';
+				$html .= '<ul class="dropdown-menu" style="max-height: 200px; overflow-x: hidden; overflow-y: auto;">';
     
 		// if use global
 		//$html .= '<li><a href="#" onclick="';
@@ -130,29 +132,31 @@ class SYWFontPickerField extends FormField
 		//$html .= '        return false;';
 		//$html .= '">'.JText::_('JGLOBAL_USE_GLOBAL').'</a></li>';
             
-					$html .= '<li><a class="googlefont_'.$this->id.'" href="#" onclick="return false;">"Google font", fallback, fonts</a></li>';
+					$html .= '<li class="dropdown-item"><a class="googlefont_'.$this->id.'" href="#" onclick="return false;">"Google font", fallback, fonts</a></li>';
 			            
-					$html .= '<li class="nav-header">Serif</li>';            
+					$html .= '<li class="dropdown-header">Serif</li>';            
 					$html .= self::getSerifFontFamilies();
 			                
-					$html .= '<li class="nav-header">Sans-Serif</li>'; 
+					$html .= '<li class="dropdown-header">Sans-Serif</li>'; 
 					$html .= self::getSansSerifFontFamilies();                
 			            
-					$html .= '<li class="nav-header">Cursive</li>'; 
+					$html .= '<li class="dropdown-header">Cursive</li>'; 
 					$html .= self::getCursiveFontFamilies();
 			            
-					$html .= '<li class="nav-header">Fantasy</li>'; 
+					$html .= '<li class="dropdown-header">Fantasy</li>'; 
 					$html .= self::getFantasyFontFamilies();
 			            
-					$html .= '<li class="nav-header">Monospace</li>'; 
+					$html .= '<li class="dropdown-header">Monospace</li>'; 
 					$html .= self::getMonospaceFontFamilies();           
                 
 				$html .= '</ul>';
 			$html .= '</div>';
-			$html .= '<a class="btn hasTooltip" href="http://www.google.com/webfonts" target="_blank" title="'.\JText::_('LIB_SYW_FONTPICKER_GOOGLEFONTLINK').'"><i class="SYWicon-google"></i></a>';            
-			$html .= '<a class="btn hasTooltip clear_'.$this->id.'" title="' . \JText::_('JLIB_FORM_BUTTON_CLEAR') . '"' . ' href="#" onclick="return false;"><i class="icon-remove"></i></a>';			
-		$html .= '</div>';			
-		$html .= '<span class="help-block">'.\JText::_('LIB_SYW_FONTPICKER_GOOGLEFONTLINKHELP').'</span>';
+			$html .= '<div class="input-group-append">';			            
+			     $html .= '<button type="button" class="btn btn-secondary hasTooltip clear_'.$this->id.'" title="' . Text::_('JLIB_FORM_BUTTON_CLEAR') . '"' . '><i class="icon-remove"></i></button>';			
+		    $html .= '</div>';		
+		$html .= '</div>';
+		$html .= '<span class="help-block">'.Text::_('LIB_SYW_FONTPICKER_GOOGLEFONTLINKHELP').'</span><br />';
+		$html .= '<a href="http://www.google.com/webfonts" target="_blank">'.Text::_('LIB_SYW_FONTPICKER_GOOGLEFONTLINK').'</a>';     
        		
 		return $html;
 	}

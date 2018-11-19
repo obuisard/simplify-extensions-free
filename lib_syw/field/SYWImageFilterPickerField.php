@@ -9,6 +9,7 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 
@@ -30,14 +31,14 @@ class SYWImageFilterPickerField extends DynamicSingleSelect
 		$path = URI::root(true).'/media/syw/images/filters/';
 		
 		if ($this->use_global) {
-			$options[] = array('', \JText::_('JGLOBAL_USE_GLOBAL'), '('.\JText::_('LIB_SYW_GLOBAL_UNKNOWN').')', $path.'global.jpg');
+			$options[] = array('', Text::_('JGLOBAL_USE_GLOBAL'), '('.Text::_('LIB_SYW_GLOBAL_UNKNOWN').')', $path.'global.jpg');
 		}
 		
-		$options[] = array('none', \JText::_('LIB_SYW_IMAGEFILTERPICKER_ORIGINAL'), '', $path.'original.jpg');
+		$options[] = array('none', Text::_('LIB_SYW_IMAGEFILTERPICKER_ORIGINAL'), '', $path.'original.jpg');
 		
 		$filters = explode(',', $this->filters);
 		foreach ($filters as $filter) {
-			$options[] = array($filter, \JText::_('LIB_SYW_IMAGEFILTERPICKER_'.strtoupper($filter)), '', $path.$filter.'.jpg');
+			$options[] = array($filter, Text::_('LIB_SYW_IMAGEFILTERPICKER_'.strtoupper($filter)), '', $path.$filter.'.jpg');
 		}
 
 		return $options;

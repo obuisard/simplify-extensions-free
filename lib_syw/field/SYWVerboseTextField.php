@@ -9,6 +9,8 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class SYWVerboseTextField extends FormField 
@@ -32,8 +34,8 @@ class SYWVerboseTextField extends FormField
 		$size = !empty($this->size) ? ' size="' . $this->size . '"' : '';		
 		$style = empty($size) ? '' : ' style="width:auto"';
 		
-		$min = isset($this->min) ? \JText::_('LIB_SYW_SYWVERBOSETEXT_MIN').': '.$this->min : '';
-		$max = isset($this->max) ? \JText::_('LIB_SYW_SYWVERBOSETEXT_MAX').': '.$this->max : '';
+		$min = isset($this->min) ? Text::_('LIB_SYW_SYWVERBOSETEXT_MIN').': '.$this->min : '';
+		$max = isset($this->max) ? Text::_('LIB_SYW_SYWVERBOSETEXT_MAX').': '.$this->max : '';
 
 		$range = (!empty($min) && !empty($max)) ? $min.' - '.$max : '';
 		if (empty($range)) {
@@ -43,7 +45,7 @@ class SYWVerboseTextField extends FormField
 			$range = !empty($max) ? $max : '';
 		}
 
-		$hint = $this->translateHint ? \JText::_($this->hint) : $this->hint;
+		$hint = $this->translateHint ? Text::_($this->hint) : $this->hint;
 		$hint = $hint ? ' placeholder="'.$hint.'"' : (!empty($range) ? ' placeholder="'.$range.'"' : '');
 				
 		$class = !empty($this->class) ? 'class="form-control '.$this->class.'"' : 'class="form-control"';
@@ -51,20 +53,20 @@ class SYWVerboseTextField extends FormField
 		$html .= '<div class="input-group">';
 		
 		if ($this->icon) {
-			\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true);
-			$html .= '<span class="input-group-addon"><i class="'.$this->icon.'"></i></span>';
+		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+			$html .= '<div class="input-group-prepend"><span class="input-group-text"><i class="'.$this->icon.'"></i></span></div>';
 		}
 		
 		$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'"'.$class.$style.$size.$this->maxLength.$hint.' />';
 		
 		if ($this->unit) {
-			$html .= '<span class="input-group-addon">'.$this->unit.'</span>';
+			$html .= '<div class="input-group-append"><span class="input-group-text">'.$this->unit.'</span></div>';
 		}
 		
 		$html .= '</div>';
 		
 		if ($this->help) {
-			$html .= '<span class="help-block">'.\JText::_($this->help).'</span>';
+			$html .= '<span class="help-block">'.Text::_($this->help).'</span>';
 		}
 		
 		return $html;

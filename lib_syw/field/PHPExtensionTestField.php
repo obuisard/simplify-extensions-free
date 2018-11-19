@@ -9,6 +9,7 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class PHPExtensionTestField extends FormField 
@@ -33,11 +34,11 @@ class PHPExtensionTestField extends FormField
 		
 		if (!in_array($this->extension, $extensions)) {
 			$html .= '<div style="margin-bottom:0" class="alert alert-error">';			
-				$html .= '<span>'.\JText::sprintf('LIB_SYW_PHPEXTENSION_NOTINSTALLED', $this->extension).'</span>';
+				$html .= '<span>'.Text::sprintf('LIB_SYW_PHPEXTENSION_NOTINSTALLED', $this->extension).'</span>';
 			$html .= '</div>';
 		} else {
 			$html .= '<div style="margin-bottom:0" class="alert alert-success">';
-				$html .= '<span>'.\JText::sprintf('LIB_SYW_PHPEXTENSION_INSTALLED', $this->extension).'</span>';
+				$html .= '<span>'.Text::sprintf('LIB_SYW_PHPEXTENSION_INSTALLED', $this->extension).'</span>';
 			$html .= '</div>';
 		}
 		

@@ -9,6 +9,8 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 
 class TitleField extends FormField
 {
@@ -28,8 +30,8 @@ class TitleField extends FormField
 	{
 		$html = '';
 		
-		\JHtml::_('script', 'syw/fields.js', false, true);
-		\JHtml::_('stylesheet', 'syw/fields.css', false, true);
+		HTMLHelper::_('script', 'syw/fields.js', ['version' => 'auto', 'relative' => true]);
+		HTMLHelper::_('stylesheet', 'syw/fields.css', ['version' => 'auto', 'relative' => true]);
 
 		$inline_style = array();
 		
@@ -42,12 +44,12 @@ class TitleField extends FormField
 		if ($this->image_src) {
 			$html .= '<img style="margin-right: 6px; float: left; padding: 0; width: 16px; height: 16px" src="'.$this->image_src.'">';
 		} else if ($this->icon) {
-			\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true);
+		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
 			$html .= '<i style="margin-right: 6px; font-size: inherit; vertical-align: baseline" class="SYWicon-'.$this->icon.'"></i>';
 		}
 
 		if ($this->title) {
-			$html .= \JText::_($this->title);
+			$html .= Text::_($this->title);
 		}
 
 		$html .= '</div>';

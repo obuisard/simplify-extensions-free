@@ -9,6 +9,7 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 
@@ -52,7 +53,7 @@ class SYWImagePreviewField extends FormField
 			}
 		} else {
 			// no preview available
-			$html .= '<span>'.\JText::_('LIB_SYW_IMAGEPREVIEW_NOPREVIEW').'</span>';
+			$html .= '<span>'.Text::_('LIB_SYW_IMAGEPREVIEW_NOPREVIEW').'</span>';
 		}
 		
 		$html .= '</div>';

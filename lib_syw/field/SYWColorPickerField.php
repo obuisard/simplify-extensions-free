@@ -9,6 +9,8 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class SYWColorPickerField extends FormField 
@@ -27,7 +29,7 @@ class SYWColorPickerField extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 		
-		\JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip');
 					
 		$html = '';
 			
@@ -41,30 +43,28 @@ class SYWColorPickerField extends FormField
 		
 		$direction = $lang->isRtl() ? ' dir="ltr" style="text-align:right"' : '';
 		
-		\JHtml::_('jquery.framework');
-		\JHtml::_('script', 'system/html5fallback.js', array('version' => 'auto', 'relative' => true, 'conditional' => 'lt IE 9'));
-		\JHtml::_('script', 'jui/jquery.minicolors.min.js', array('version' => 'auto', 'relative' => true));
-		\JHtml::_('stylesheet', 'jui/jquery.minicolors.css', array('version' => 'auto', 'relative' => true));
-		\JHtml::_('script', 'system/color-field-adv-init.min.js', array('version' => 'auto', 'relative' => true));
+		HTMLHelper::_('jquery.framework');
+		HTMLHelper::_('script', 'vendor/minicolors/jquery.minicolors.min.js', ['version' => 'auto', 'relative' => true]);
+		HTMLHelper::_('stylesheet', 'vendor/minicolors/jquery.minicolors.css', ['version' => 'auto', 'relative' => true]);
+		HTMLHelper::_('script', 'system/fields/color-field-adv-init.min.js', ['version' => 'auto', 'relative' => true]);
 		
 		$icon = isset($this->icon) ? $this->icon : '';
 		if (!empty($icon)) {
-			\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true);
+		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
 		}
 		
-		$overall_class = empty($icon) ? '' : 'input-prepend';
-		$overall_class .= ($this->allow_transparency || $this->use_global) ? ' input-append' : '';
-		$overall_class = trim($overall_class);
-		$overall_class = empty($overall_class) ? '' : ' class="'.$overall_class.'"';
-			
-		$html .= '<div'.$overall_class.'>';	
+		if ($icon || $this->allow_transparency || $this->use_global) {
+		    $html .= '<div class="input-group">';	
+		} else {
+		    $html .= '<div>';
+		}
 		
 		if (!empty($icon)) {
-			$html .= '<div class="add-on"><i class="'.$icon.'"></i></div>';
+			$html .= '<div class="input-group-prepend"><span class="input-group-text"><i class="'.$icon.'"></i></span></div>';
 		}	
 
 		if (!$this->allow_transparency && !$this->use_global) {
-			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="minicolors"'.$direction.' />';
+			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="form-control minicolors"'.$direction.' />';
 		} else {
 			$disabled = '';
 			if (empty($this->value) && $this->use_global) {
@@ -72,7 +72,11 @@ class SYWColorPickerField extends FormField
 			}
 			
 			$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" />';
-			$html .= '<input style="height:auto" type="text" name="visible_'.$this->name.'" id="visible_'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="minicolors"'.$direction.$disabled.' />';
+			$html .= '<input style="height:auto" type="text" name="visible_'.$this->name.'" id="visible_'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="form-control minicolors"'.$direction.$disabled.' />';
+		}
+		
+		if ($this->use_global || $this->allow_transparency) {
+		    $html .= '<div class="input-group-append">';
 		}
 		
 		if ($this->use_global) {
@@ -80,21 +84,21 @@ class SYWColorPickerField extends FormField
 			if (empty($this->value)) {
 				$class .= ' btn-primary active';
 			}
-			$html .= '<a id="global_'.$this->id.'" class="'.$class.'" title="'.\JText::_('JGLOBAL_USE_GLOBAL').'" href="#" onclick="return false;">';
-			$html .= '<span>'.\JText::_('JGLOBAL_USE_GLOBAL').'</span>';
-			$html .= '</a>';
+			$html .= '<button type="button" id="global_'.$this->id.'" class="'.$class.'" title="'.Text::_('JGLOBAL_USE_GLOBAL').'><span>'.Text::_('JGLOBAL_USE_GLOBAL').'</span></button>';
 		}
 			
 		if ($this->allow_transparency) {
-			$html .= '<a id="a_'.$this->id.'" class="btn hasTooltip" title="'.\JText::_('JLIB_FORM_BUTTON_CLEAR').'" href="#" onclick="return false;">';
-			$html .= '<i class="icon-remove"></i>';
-			$html .= '</a>';
+			$html .= '<button type="button" id="a_'.$this->id.'" class="btn btn-secondary hasTooltip" title="'.Text::_('JLIB_FORM_BUTTON_CLEAR').'"><i class="icon-remove"></i></button>';
+		}
+		
+		if ($this->use_global || $this->allow_transparency) {
+		    $html .= '</div>';
 		}
 		
 		$html .= '</div>';
 		
 		if ($this->help) {
-			$html .= '<span class="help-block">'.\JText::_($this->help).'</span>';
+			$html .= '<span class="help-block">'.Text::_($this->help).'</span>';
 		}
 			
 		if ($this->allow_transparency || $this->use_global) {

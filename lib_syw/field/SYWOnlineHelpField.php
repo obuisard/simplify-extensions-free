@@ -6,9 +6,11 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die ;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 
 class SYWOnlineHelpField extends FormField
 {
@@ -27,19 +29,19 @@ class SYWOnlineHelpField extends FormField
 
 	protected function getInput()
 	{
-		\JHtml::_('script', 'syw/fields.js', false, true);
-		\JHtml::_('stylesheet', 'syw/fields.css', false, true);
-		\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true);
+	    HTMLHelper::_('script', 'syw/fields.js', ['version' => 'auto', 'relative' => true]);
+	    HTMLHelper::_('stylesheet', 'syw/fields.css', ['version' => 'auto', 'relative' => true]);
+	    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
 
 		$html = array();
 
-		$html[] = !empty($this->title) ? '<'.$this->heading.'>'.\JText::_($this->title).'</'.$this->heading.'>' : '';
+		$html[] = !empty($this->title) ? '<'.$this->heading.'>'.Text::_($this->title).'</'.$this->heading.'>' : '';
 
 		$html[] = '<table style="width: 100%"><tr>';
-		$html[] = !empty($this->syw_description) ? '<td style="background-color: transparent">'.\JText::_($this->syw_description).'</td>' : '';
+		$html[] = !empty($this->syw_description) ? '<td style="background-color: transparent">'.Text::_($this->syw_description).'</td>' : '';
 		if ($this->url) {
 			$html[] = '<td style="text-align: right; background-color: transparent">';
-			$html[] = '<a href="'.$this->url.'" target="_blank" class="btn btn-info btn-sm"><i class="SYWicon-local-library"></i> <span>'.\JText::_('JHELP').'</span></a>';
+			$html[] = '<a href="'.$this->url.'" target="_blank" class="btn btn-info btn-sm"><i class="SYWicon-local-library"></i> <span>'.Text::_('JHELP').'</span></a>';
 			$html[] = '</td>';
 		}
 		$html[] = '</tr></table>';

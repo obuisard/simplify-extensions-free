@@ -9,6 +9,7 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\SubformField;
 use Joomla\CMS\Factory;
 
 FormHelper::loadFieldClass('subform');

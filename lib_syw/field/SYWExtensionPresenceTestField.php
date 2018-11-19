@@ -8,12 +8,14 @@ namespace SYW\Library\Field;
 
 defined('_JEXEC') or die ;
 
+use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
-//jimport('joomla.filesystem.folder');
 
 /*
  * Checks if an extension is installed
@@ -37,15 +39,15 @@ class SYWExtensionPresenceTestField extends FormField
 	{
 	    $html = '';
 	    
-	    \JHtml::_('bootstrap.tooltip');
+	    HTMLHelper::_('bootstrap.tooltip');
 	    
 	    $html .= '<div>';
 	    
-	    $html .= '<a href="'.$this->downloadlink.'" target="_blank" class="hasTooltip" title="'.JText::_($this->title).'">';
+	    $html .= '<a href="'.$this->downloadlink.'" target="_blank" class="hasTooltip" title="'.Text::_($this->title).'">';
 	    if ($this->imagesrc) {
-	        $html .= '<img src="'.URI::root().$this->imagesrc.'" alt="'.\JText::_($this->title).'" style="border: 3px solid #fff">';
+	        $html .= '<img src="'.URI::root().$this->imagesrc.'" alt="'.Text::_($this->title).'" style="border: 3px solid #fff">';
 	    } else {
-	        $html .= \JText::_($this->title);
+	        $html .= Text::_($this->title);
 	    }
 	    $html .= '</a>';
 	    
@@ -61,33 +63,33 @@ class SYWExtensionPresenceTestField extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 		
-		$html .= '<span style="display: inline-block; padding-bottom: 10px">'.\JText::_($this->description).'</span><br />';
+		$html .= '<span style="display: inline-block; padding-bottom: 10px">'.Text::_($this->description).'</span><br />';
 		
 		$missing_extension = false;
 		$alert = '';
 		
 		if ($this->extensiontype == 'plugin') {
-		    if (!\JFolder::exists(JPATH_ROOT.'/plugins/'.$this->extensionfolder.'/'.$this->extensionelement)) {
+		    if (!Folder::exists(JPATH_ROOT.'/plugins/'.$this->extensionfolder.'/'.$this->extensionelement)) {
 		        $missing_extension = true;
 		    } else {		    
 		        if (PluginHelper::isEnabled((string)$this->extensionfolder, (string)$this->extensionelement)) {
 		            $alert = ' success';
     		        //$html .= '<span class="icon-publish"></span> <span>'.JText::_('JENABLED').'</span> <a class="btn btn-mini" href="index.php?option=com_plugins&view=plugins&filter_folder='.$this->extensionfolder.'&filter_enabled=1">'.JText::_('LIB_SYW_SYWEXTENSIONTEST_DISABLEPLUGIN').'</a>';
-    		        $html .= '<span class="label label-success">'.\JText::_('JENABLED').'</span> <a class="btn btn-mini" href="index.php?option=com_plugins&view=plugins&filter_folder='.$this->extensionfolder.'&filter_enabled=1">'.\JText::_('LIB_SYW_SYWEXTENSIONTEST_DISABLEPLUGIN').'</a>';
+    		        $html .= '<span class="label label-success">'.Text::_('JENABLED').'</span> <a class="btn btn-mini" href="index.php?option=com_plugins&view=plugins&filter_folder='.$this->extensionfolder.'&filter_enabled=1">'.Text::_('LIB_SYW_SYWEXTENSIONTEST_DISABLEPLUGIN').'</a>';
     		    } else {
     		        $alert = ' '.$this->alertlevel;
     		        //$html .= '<span class="icon-unpublish"></span> <span>'.JText::_('JDISABLED').'</span> <a class="btn btn-mini" href="index.php?option=com_plugins&view=plugins&filter_folder='.$this->extensionfolder.'&filter_enabled=0">'.JText::_('LIB_SYW_SYWEXTENSIONTEST_ENABLEPLUGIN').'</a>';
-    		        $html .= '<span class="label label-important">'.\JText::_('JDISABLED').'</span> <a class="btn btn-mini" href="index.php?option=com_plugins&view=plugins&filter_folder='.$this->extensionfolder.'&filter_enabled=0">'.\JText::_('LIB_SYW_SYWEXTENSIONTEST_ENABLEPLUGIN').'</a>';
+    		        $html .= '<span class="label label-important">'.Text::_('JDISABLED').'</span> <a class="btn btn-mini" href="index.php?option=com_plugins&view=plugins&filter_folder='.$this->extensionfolder.'&filter_enabled=0">'.Text::_('LIB_SYW_SYWEXTENSIONTEST_ENABLEPLUGIN').'</a>';
     		    }
 		    }
 		} else if ($this->extensiontype == 'component') {
-		    if (\JFolder::exists(JPATH_ADMINISTRATOR . '/components/'.$this->extensionelement)) {
+		    if (Folder::exists(JPATH_ADMINISTRATOR . '/components/'.$this->extensionelement)) {
 		        if (ComponentHelper::isEnabled((string)$this->extensionelement)) {
 		            $alert = ' success';
-		            $html .= '<span class="label label-success">'.\JText::_('JENABLED').'</span>'; // index.php?option=com_installer&view=manage&filter_status=1&filter_type=component
+		            $html .= '<span class="label label-success">'.Text::_('JENABLED').'</span>'; // index.php?option=com_installer&view=manage&filter_status=1&filter_type=component
 		        } else {
 		            $alert = ' '.$this->alertlevel;
-		            $html .= '<span class="label label-important">'.\JText::_('JDISABLED').'</span>'; // index.php?option=com_installer&view=manage&filter_status=0&filter_type=component
+		            $html .= '<span class="label label-important">'.Text::_('JDISABLED').'</span>'; // index.php?option=com_installer&view=manage&filter_status=0&filter_type=component
 		        }
 		    } else {
 		        $missing_extension = true;
@@ -96,7 +98,7 @@ class SYWExtensionPresenceTestField extends FormField
 		
 		if ($missing_extension) {
 		    $alert = ' '.$this->alertlevel;
-		    $html .= '<a href="'.$this->downloadlink.'" target="_blank">'.\JText::_($this->downloadtext).'</a>';
+		    $html .= '<a href="'.$this->downloadlink.'" target="_blank">'.Text::_($this->downloadtext).'</a>';
 		}
 		
 		return '<div class="syw_info'.$alert.'" style="padding-top: 5px; overflow: inherit">'.$html.'</div>';

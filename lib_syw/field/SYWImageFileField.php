@@ -6,9 +6,10 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die ;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 
@@ -32,7 +33,7 @@ class JFormFieldSYWImageFile extends FormField
 		$accept = $this->element['accept'] ? ' accept="' . (string) $this->element['accept'] . '"' : ' accept=".gif,.jpg,.png"';
 		$size = $this->element['size'] ? ' size="' . (int) $this->element['size'] . '"' : '';
 		$maxLength = $this->element['maxlength'] ? ' maxlength="' . (int) $this->element['maxlength'] . '"' : '';
-		$class = $this->element['class'] ? ' class="' . (string) $this->element['class'] . '"' : '';
+		$class = $this->element['class'] ? 'class="form-control ' . (string) $this->element['class'] . '"' : 'class="form-control"';
 		$disabled = ((string) $this->element['disabled'] == 'true') ? ' disabled="disabled"' : '';
 
 		// Initialize JavaScript field attributes.
@@ -62,14 +63,14 @@ class JFormFieldSYWImageFile extends FormField
 				}
 			} else {
 				// no preview available
-				$html .= '<span>'.\JText::_('LIB_SYW_IMAGEPREVIEW_NOPREVIEW').'</span>';
+				$html .= '<span>'.Text::_('LIB_SYW_IMAGEPREVIEW_NOPREVIEW').'</span>';
 			}
 			
 			$html .= '</div>';
 		} else {
 			if ($this->show_name) {
 				$parts = explode('/', htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8'));
-				$html .= '<br /><br /><input class="image_file" type="text" disabled="disabled" value="'.end($parts).'" />';
+				$html .= '<br /><br /><input class="image_file form-control" type="text" disabled="disabled" value="'.end($parts).'" />';
 			}
 		}
 			

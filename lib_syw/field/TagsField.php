@@ -6,15 +6,18 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die ;
+defined('_JEXEC') or die;
 
-//use Joomla\Filesystem\Folder;
+use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 FormHelper::loadFieldClass('list');
 
-class TagsField extends \JFormFieldList
+class TagsField extends ListField
 {
 	public $type = 'Tags';
 	
@@ -23,11 +26,11 @@ class TagsField extends \JFormFieldList
 		$options = array();
 		
 		if (isset($this->element['show_root']))	{
-			array_unshift($options, \JHtml::_('select.option', '0', \JText::_('JGLOBAL_ROOT')));
+			array_unshift($options, HTMLHelper::_('select.option', '0', Text::_('JGLOBAL_ROOT')));
 		}
 		
 		$folder = JPATH_ROOT.'/components/com_tags';
-		if (\JFolder::exists($folder)) {
+		if (Folder::exists($folder)) {
 			
 			$content_type = $this->element['contenttype'];
 		

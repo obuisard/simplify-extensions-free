@@ -9,12 +9,15 @@ namespace SYW\Library\Field;
 defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use SYW\Library\K2 as SYWK2;
 
 FormHelper::loadFieldClass('list');
 
-class K2CategoryField extends \JFormFieldList
+class K2CategoryField extends ListField
 {
 	public $type = 'K2Category';
 	
@@ -39,7 +42,7 @@ class K2CategoryField extends \JFormFieldList
 			$lang->load('lib_syw.sys', JPATH_SITE);
 						
 			$html .= '<div style="margin-bottom:0" class="alert alert-danger">';			
-				$html .= '<span>'.\JText::_('LIB_SYW_K2CATEGORY_MISSING').'</span>';
+				$html .= '<span>'.Text::_('LIB_SYW_K2CATEGORY_MISSING').'</span>';
 			$html .= '</div>';
 		}
 		
@@ -51,7 +54,7 @@ class K2CategoryField extends \JFormFieldList
 		$options = array();
 		
 		if (isset($this->element['show_root']))	{
-			array_unshift($options, \JHtml::_('select.option', '0', \JText::_('JGLOBAL_ROOT')));
+			array_unshift($options, HTMLHelper::_('select.option', '0', Text::_('JGLOBAL_ROOT')));
 		}
 		
 		if (SYWK2::exists()) {
@@ -82,10 +85,10 @@ class K2CategoryField extends \JFormFieldList
 							$children[$parent] = $list;
 						}
 					}
-					$list = \JHTML::_('menu.treerecurse', 0, '', array(), $children, 9999, 0, 0);
+					$list = HTMLHelper::_('menu.treerecurse', 0, '', array(), $children, 9999, 0, 0);
 					
 					foreach ($list as $item) {
-						$options[] = \JHTML::_('select.option', $item->id, $item->treename);
+						$options[] = HTMLHelper::_('select.option', $item->id, $item->treename);
 					}
 				}
 			} catch (\RuntimeException $e) {

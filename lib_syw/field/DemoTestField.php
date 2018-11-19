@@ -8,9 +8,10 @@ namespace SYW\Library\Field;
 
 defined('_JEXEC') or die ;
 
+use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
-//use Joomla\Filesystem\Folder;
 
 class DemoTestField extends FormField 
 {		
@@ -30,9 +31,9 @@ class DemoTestField extends FormField
 		
 		$html = '';
 		
-		if (\JFolder::exists($this->demo_folder)) {
+		if (Folder::exists($this->demo_folder)) {
 			$html .= '<div style="margin-bottom:0" class="alert alert-warning">';			
-				$html .= '<span style="text-transform: uppercase;">'.\JText::_('LIB_SYW_DEMOTEST_THISISADEMO').'</span>';
+				$html .= '<span style="text-transform: uppercase;">'.Text::_('LIB_SYW_DEMOTEST_THISISADEMO').'</span>';
 			$html .= '</div>';
 		} 
 		
@@ -41,7 +42,7 @@ class DemoTestField extends FormField
 	
 	public function renderField($options = array())
 	{
-		if (\JFolder::exists($this->demo_folder)) {
+		if (Folder::exists($this->demo_folder)) {
 			return parent::renderField();
 		} 
 		

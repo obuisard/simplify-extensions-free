@@ -6,9 +6,10 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die ;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class GDTestField extends FormField 
@@ -33,32 +34,32 @@ class GDTestField extends FormField
 		
 		if( !in_array( 'gd', $extensions ) ) {			
 			$html .= '<div style="margin-bottom:0" class="alert alert-error">';			
-				$html .= '<span>'.\JText::_('LIB_SYW_GDTEST_NOTLOADED').'</span>';
+				$html .= '<span>'.Text::_('LIB_SYW_GDTEST_NOTLOADED').'</span>';
 			$html .= '</div>';
 			
 			return $html;
 		} else {
 			$html .= '<div style="margin-bottom:0" class="alert alert-success">';			
-				$html .= '<span>'.\JText::_('LIB_SYW_GDTEST_LOADED').' ('.GD_VERSION.')'.'</span><br />';
+				$html .= '<span>'.Text::_('LIB_SYW_GDTEST_LOADED').' ('.GD_VERSION.')'.'</span><br />';
 			
 			if ($this->show_gif) {
 				if (imagetypes() & IMG_GIF) {
-					$html .= '<span class="label label-success">GIF '.lcfirst(\JText::_('JENABLED')).'</span> ';
+					$html .= '<span class="label label-success">GIF '.lcfirst(Text::_('JENABLED')).'</span> ';
 				} else {
-					$html .= '<span class="label label-warning">GIF '.lcfirst(\JText::_('JDISABLED')).'</span> ';
+					$html .= '<span class="label label-warning">GIF '.lcfirst(Text::_('JDISABLED')).'</span> ';
 				}
 			}
 			
 			if (imagetypes() & IMG_JPG) {
-				$html .= '<span class="label label-success">JPG '.lcfirst(\JText::_('JENABLED')).'</span> ';
+				$html .= '<span class="label label-success">JPG '.lcfirst(Text::_('JENABLED')).'</span> ';
 			} else {
-				$html .= '<span class="label label-warning">JPG '.lcfirst(\JText::_('JDISABLED')).'</span> ';
+				$html .= '<span class="label label-warning">JPG '.lcfirst(Text::_('JDISABLED')).'</span> ';
 			}
 			
 			if (imagetypes() & IMG_PNG) {
-				$html .= '<span class="label label-success">PNG '.lcfirst(\JText::_('JENABLED')).'</span>';
+				$html .= '<span class="label label-success">PNG '.lcfirst(Text::_('JENABLED')).'</span>';
 			} else {
-				$html .= '<span class="label label-warning">PNG '.lcfirst(\JText::_('JDISABLED')).'</span>';
+				$html .= '<span class="label label-warning">PNG '.lcfirst(Text::_('JDISABLED')).'</span>';
 			}
 			
 			$html .= '</div>';
