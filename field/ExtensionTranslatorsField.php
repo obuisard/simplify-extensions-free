@@ -9,6 +9,7 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class ExtensionTranslatorsField extends FormField 
@@ -24,7 +25,7 @@ class ExtensionTranslatorsField extends FormField
 		
 		$html .= '<div style="clear: both;">';
 		if (!empty($this->translators)) {
-			$html .= \JText::_('LIB_SYW_EXTENSIONTRANSLATORS_TRANSLATORS_LABEL');
+			$html .= Text::_('LIB_SYW_EXTENSIONTRANSLATORS_TRANSLATORS_LABEL');
 		}
 		$html .= '</div>';
 		
@@ -49,7 +50,7 @@ class ExtensionTranslatorsField extends FormField
 		$return = parent::setup($element, $value, $group);
 	
 		if ($return) {
-			$this->translators = isset($this->element['translators']) ? \JText::_($this->element['translators']) : NULL;
+			$this->translators = isset($this->element['translators']) ? Text::_($this->element['translators']) : NULL;
 		}
 	
 		return $return;

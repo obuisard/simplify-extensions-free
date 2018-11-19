@@ -9,6 +9,8 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class SYWPrefixedTextField extends FormField
@@ -31,7 +33,7 @@ class SYWPrefixedTextField extends FormField
 		$size = !empty($this->size) ? ' size="' . $this->size . '"' : '';
 		$style = empty($size) ? '' : ' style="width:auto"';
 		
-		$hint = $this->translateHint ? \JText::_($this->hint) : $this->hint;
+		$hint = $this->translateHint ? Text::_($this->hint) : $this->hint;
 		$hint = $hint ? ' placeholder="'.$hint.'"' : '';
 		
 		$class = !empty($this->class) ? 'class="form-control '.$this->class.'"' : 'class="form-control"';
@@ -39,25 +41,31 @@ class SYWPrefixedTextField extends FormField
 		$html .= '<div class="input-group">';
 		
 		if ($this->prefix) {
+		    
+		    $html .= '<div class="input-group-prepend">';
 			
 			if ($this->icon) {
-				\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true);
-				$html .= '<span class="input-group-addon"><i class="'.$this->icon.'"></i></span>';
+			    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+				$html .= '<span class="input-group-text"><i class="'.$this->icon.'"></i></span>';
 			}
 			
-			$html .= '<span class="input-group-addon">'.$this->prefix.'</span>';
+			$html .= '<span class="input-group-text">'.$this->prefix.'</span>';
+			
+			$html .= '</div>';
 		}
 		
 		$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'"'.$class.$style.$size.$this->maxLength.$hint.' />';
 		
 		if ($this->postfix) {
-			$html .= '<div class="input-group-addon">'.$this->postfix.'</div>';
+		    $html .= '<div class="input-group-append">';
+			$html .= '<div class="input-group-text">'.$this->postfix.'</div>';
+			$html .= '</div>';
 		}
 		
 		$html .= '</div>';
 		
 		if ($this->help) {
-			$html .= '<span class="help-block">'.\JText::_($this->help).'</span>';
+			$html .= '<span class="help-block">'.Text::_($this->help).'</span>';
 		}
 		
 		return $html;

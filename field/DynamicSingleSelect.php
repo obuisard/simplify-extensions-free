@@ -10,10 +10,13 @@ defined('_JEXEC') or die ;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 
 FormHelper::loadFieldClass('list');
 
-class DynamicSingleSelect extends \JFormFieldList
+class DynamicSingleSelect extends ListField
 {
 	public $type = 'DynamicSingleSelect';
 	
@@ -35,7 +38,7 @@ class DynamicSingleSelect extends \JFormFieldList
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 		
-		\JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip');
 
 		// build the script
 
@@ -74,7 +77,7 @@ class DynamicSingleSelect extends \JFormFieldList
 		$options = array();
 
 		if ($this->noelement) {
-			$options[] = array('', \JText::_('JNONE'), '');
+			$options[] = array('', Text::_('JNONE'), '');
 		}
 
 		$options = array_merge($options, $this->getOptions());
@@ -96,12 +99,12 @@ class DynamicSingleSelect extends \JFormFieldList
 			if (isset($option[5]) && ($option[5] == 'disabled' || $option[5] == true)) {
 				$class_disabled = ' disabled';
 				if (!empty($this->disabledtitle)) {
-					$title_attribute = ' title="'.\JText::_($this->disabledtitle).'"';
+					$title_attribute = ' title="'.Text::_($this->disabledtitle).'"';
 					$class_hastooltip = ' hasTooltip';
 				}
 			} else {
 				$class_disabled = ' enabled';
-				$title_attribute = ' title="'.\JText::_('JSELECT').'"';
+				$title_attribute = ' title="'.Text::_('JSELECT').'"';
 				$class_hastooltip = ' hasTooltip';
 			}
 			

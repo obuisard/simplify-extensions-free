@@ -6,9 +6,11 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die ;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class ExtensionLinkField extends FormField 
@@ -26,8 +28,8 @@ class ExtensionLinkField extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 		
-		\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true);
-		\JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+		HTMLHelper::_('bootstrap.tooltip');
 			
 		switch ($this->link_type) {
 			case 'forum': $icon="SYWicon-chat"; $title = 'LIB_SYW_EXTENSIONLINK_FORUM_LABEL'; break;
@@ -48,9 +50,9 @@ class ExtensionLinkField extends FormField
 		}
 		
 		if ($this->link) {
-			$html .= '<a class="btn btn-sm hasTooltip" title="'.\JText::_($title).'" href="'.$this->link.'" target="_blank">';
+			$html .= '<a class="btn btn-dark btn-sm hasTooltip" title="'.Text::_($title).'" href="'.$this->link.'" target="_blank">';
 		} else {
-			$html .= '<span class="badge badge-secondary hasTooltip" title="'.\JText::_($title).'">';
+			$html .= '<span class="badge badge-secondary hasTooltip" title="'.Text::_($title).'">';
 		}
 		$html .= '<i class="'.$icon.'" style="font-size: 2em; vertical-align: middle"></i>';
 		if ($this->link) {
@@ -71,9 +73,9 @@ class ExtensionLinkField extends FormField
 			
 		if ($this->syw_description) {
 			if ($this->link) {
-				$html .= \JText::sprintf($this->syw_description, $this->link);
+				$html .= Text::sprintf($this->syw_description, $this->link);
 			} else {
-				$html .= \JText::_($this->syw_description);
+				$html .= Text::_($this->syw_description);
 			}
 		} else {
 			
@@ -98,12 +100,12 @@ class ExtensionLinkField extends FormField
 			if ($desc) {
 				if ($this->link) {
 				    if ($this->link_type == 'translate') {
-				        $html .= \JText::sprintf($desc, 'https://simplifyyourweb.com/translators');
+				        $html .= Text::sprintf($desc, 'https://simplifyyourweb.com/translators');
 				    } else {
-				        $html .= \JText::sprintf($desc, $this->link);
+				        $html .= Text::sprintf($desc, $this->link);
 				    }
 				} else {
-					$html .= \JText::_($desc);
+					$html .= Text::_($desc);
 				}
 			}
 		}	

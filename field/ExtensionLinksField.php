@@ -6,12 +6,14 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die ;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
-class ExtensionLinkFields extends FormField 
+class ExtensionLinksField extends FormField 
 {		
 	public $type = 'ExtensionLinks';
 	
@@ -36,7 +38,7 @@ class ExtensionLinkFields extends FormField
 	{
 	    $output = '';
 	    
-	    $output .= '<a class="btn hasTooltip" style="margin: 0 10px 10px 0" title="'.\JHtml::_('tooltipText', \JText::_($label), rtrim(\JText::_($description), '.'), 0).'" href="'.$link.'" target="_blank">';
+	    $output .= '<a class="btn btn-dark hasTooltip" style="margin: 0 10px 10px 0" title="'.HTMLHelper::_('tooltipText', Text::_($label), rtrim(Text::_($description), '.'), 0).'" href="'.$link.'" target="_blank">';
 	    $output .= '<i class="'.$icon.'" style="font-size: 2em; padding: 5px; vertical-align: middle"></i>';
 	    $output .= '</a>';
 	    
@@ -88,7 +90,7 @@ class ExtensionLinkFields extends FormField
 		
 		if ($this->review) {
 		    
-		    $description = rtrim(\JText::_('LIB_SYW_EXTENSIONLINK_REVIEW_DESC'), '.');
+		    $description = rtrim(Text::_('LIB_SYW_EXTENSIONLINK_REVIEW_DESC'), '.');
 		    $description .= ' <i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
 		    $description .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
 		    $description .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';

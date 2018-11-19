@@ -9,11 +9,14 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 FormHelper::loadFieldClass('list');
 
-class SYWCardinalTextField extends \JFormFieldList 
+class SYWCardinalTextField extends ListField 
 {
 	protected $type = 'SYWCardinalText';
 	
@@ -35,13 +38,13 @@ class SYWCardinalTextField extends \JFormFieldList
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 		
-		\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true); // TODO if icons to show	
-		\JHtml::_('bootstrap.tooltip'); // TODO if tooltips to show	
+		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]); // TODO if icons to show	
+		HTMLHelper::_('bootstrap.tooltip'); // TODO if tooltips to show	
 		
 		$size = !empty($this->size) ? ' size="' . $this->size . '"' : '';		
 		$style = empty($size) ? '' : ' style="width:auto"';
 		
-		$hint = $this->translateHint ? \JText::_($this->hint) : $this->hint;
+		$hint = $this->translateHint ? Text::_($this->hint) : $this->hint;
 		$hint = $hint ? ' placeholder="'.$hint.'"' : '';
 		
 		$default_top = null;
@@ -157,7 +160,7 @@ class SYWCardinalTextField extends \JFormFieldList
 		$html .= '</table>';
 		
 		if ($this->help) {
-			$html .= '<span class="help-block">'.\JText::_($this->help).'</span>';
+			$html .= '<span class="help-block">'.Text::_($this->help).'</span>';
 		}
 		
 		return $html;
@@ -188,10 +191,10 @@ class SYWCardinalTextField extends \JFormFieldList
 				$tooltips[] = $tooltips[0];
 				$tooltips[] = $tooltips[0];
 			}
-			$this->tooltips['top'] = empty($tooltips[0]) ? '' : \JText::_($tooltips[0]); 
-			$this->tooltips['right'] = empty($tooltips[1]) ? '' : \JText::_($tooltips[1]); 
-			$this->tooltips['bottom'] = empty($tooltips[2]) ? '' : \JText::_($tooltips[2]); 
-			$this->tooltips['left'] = empty($tooltips[3]) ? '' : \JText::_($tooltips[3]); 
+			$this->tooltips['top'] = empty($tooltips[0]) ? '' : Text::_($tooltips[0]); 
+			$this->tooltips['right'] = empty($tooltips[1]) ? '' : Text::_($tooltips[1]); 
+			$this->tooltips['bottom'] = empty($tooltips[2]) ? '' : Text::_($tooltips[2]); 
+			$this->tooltips['left'] = empty($tooltips[3]) ? '' : Text::_($tooltips[3]); 
 			
 			$this->maxLength = isset($this->element['maxlength']) ? ' maxlength="'.$this->maxLength.'"' : '';
 			

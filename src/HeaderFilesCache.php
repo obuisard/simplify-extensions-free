@@ -9,7 +9,9 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Log\Log;
-use Joomla\Filesystem\File;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Uri\Uri;
+
 use SYW\Library\Cache as SYWCache;
 
 /**
@@ -98,7 +100,7 @@ abstract class HeaderFilesCache
 		
 		// check if footprint of file online is the same
 		if (File::exists($cache_path.'/'.$output_file)) {
-			$content = @file_get_contents(JURI::base().'cache/'.$this->extension.'/'.$output_file);
+			$content = @file_get_contents(URI::base().'cache/'.$this->extension.'/'.$output_file);
 			if ($content === false) {
 				if (defined('JDEBUG') && \JDEBUG) {
 					Log::add('SYWHeaderFilesCache:cache() - Warning with file_get_contents - Cannot check content footprint', Log::WARNING, 'syw');

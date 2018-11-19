@@ -6,14 +6,17 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die ;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 FormHelper::loadFieldClass('list');
 
-class SYWVerboseTextUnitsField extends \JFormFieldList
+class SYWVerboseTextUnitsField extends ListField
 {
 	protected $type = 'SYWVerboseTextUnits';
 	
@@ -39,8 +42,8 @@ class SYWVerboseTextUnitsField extends \JFormFieldList
 		$size = !empty($this->size) ? ' size="' . $this->size . '"' : '';
 		$style = empty($size) ? '' : ' style="width:auto"';
 		
-		$min = isset($this->min) ? \JText::_('LIB_SYW_SYWVERBOSETEXT_MIN').': '.$this->min : '';
-		$max = isset($this->max) ? \JText::_('LIB_SYW_SYWVERBOSETEXT_MAX').': '.$this->max : '';
+		$min = isset($this->min) ? Text::_('LIB_SYW_SYWVERBOSETEXT_MIN').': '.$this->min : '';
+		$max = isset($this->max) ? Text::_('LIB_SYW_SYWVERBOSETEXT_MAX').': '.$this->max : '';
 		
 		$range = (!empty($min) && !empty($max)) ? $min.' - '.$max : '';
 		if (empty($range)) {
@@ -50,7 +53,7 @@ class SYWVerboseTextUnitsField extends \JFormFieldList
 			$range = !empty($max) ? $max : '';
 		}
 		
-		$hint = $this->translateHint ? \JText::_($this->hint) : $this->hint;
+		$hint = $this->translateHint ? Text::_($this->hint) : $this->hint;
 		$hint = $hint ? ' placeholder="'.$hint.'"' : (!empty($range) ? ' placeholder="'.$range.'"' : '');
 		
 		$overall_class = empty($this->icon) ? '' : 'input-prepend';
@@ -61,7 +64,7 @@ class SYWVerboseTextUnitsField extends \JFormFieldList
 		$html .= '<div'.$overall_class.'>';
 		
 		if ($this->icon) {
-			\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true);
+		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
 			$html .= '<div class="add-on"><i class="'.$this->icon.'"></i></div>';
 		}
 		
@@ -81,7 +84,7 @@ class SYWVerboseTextUnitsField extends \JFormFieldList
 				$html .= '<div class="add-on">'.$this->units.'</div>';
 			} else {
 				
-				\JHtml::_('bootstrap.tooltip');
+				HTMLHelper::_('bootstrap.tooltip');
 				
 				$this->values['unit'] = $this->default_unit;
 				if (is_array($this->value)) {
@@ -101,7 +104,7 @@ class SYWVerboseTextUnitsField extends \JFormFieldList
 				$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'_unit" value="'.$this->values['unit'].'" size="3" />';
 				
 				$html .= '<div class="btn-group">';
-				$html .= '<button class="btn dropdown-toggle hasTooltip" data-toggle="dropdown" title="'.\JText::_('LIB_SYW_VERBOSETEXT_UNIT').'">';
+				$html .= '<button class="btn dropdown-toggle hasTooltip" data-toggle="dropdown" title="'.Text::_('LIB_SYW_VERBOSETEXT_UNIT').'">';
 				$html .= '<span id="'.$this->id.'_unit_text">'.$this->values['unit'].'</span>&nbsp;';
 				$html .= '<span class="caret" style="margin-bottom:auto"></span>';
 				$html .= '</button>';
@@ -117,7 +120,7 @@ class SYWVerboseTextUnitsField extends \JFormFieldList
 		$html .= '</div>';
 		
 		if ($this->help) {
-			$html .= '<span class="help-block">'.\JText::_($this->help).'</span>';
+			$html .= '<span class="help-block">'.Text::_($this->help).'</span>';
 		}
 		
 		return $html;

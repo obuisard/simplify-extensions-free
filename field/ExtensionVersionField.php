@@ -6,9 +6,10 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die ;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class ExtensionVersionField extends FormField 
@@ -24,7 +25,7 @@ class ExtensionVersionField extends FormField
 		
 		$html = '';
 		
-		$html .= '<div style="clear: both;">'.\JText::_('LIB_SYW_EXTENSIONVERSION_VERSION_LABEL').'</div>';
+		$html .= '<div style="clear: both;">'.Text::_('LIB_SYW_EXTENSIONVERSION_VERSION_LABEL').'</div>';
 		
 		return $html;
 	}

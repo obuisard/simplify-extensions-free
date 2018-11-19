@@ -6,9 +6,11 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die ;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
 class ImageRadioField extends FormField
@@ -21,20 +23,21 @@ class ImageRadioField extends FormField
 		$html = array();
 			
 		// Initialize some field attributes.
-		$class     = !empty($this->class) ? ' class="radio ' . $this->class . '"' : ' class="radio"';
+		$class     = !empty($this->class) ? ' class="form-group ' . $this->class . '"' : ' class="form-group"';
 		$required  = $this->required ? ' required aria-required="true"' : '';
 		$autofocus = $this->autofocus ? ' autofocus' : '';
 		$disabled  = $this->disabled ? ' disabled' : '';
 		$readonly  = $this->readonly;
 
 		// Start the radio field output.
-		$html[] = '<fieldset id="' . $this->id . '"' . $class . $required . $autofocus . $disabled . ' >';
+		$html[] = '<fieldset id="' . $this->id . '">';
+		$html[] = '<div' . $class . $required . $autofocus . $disabled . '>';		
 
 		// Get the field options.
 		$options = $this->getOptions();
 		
-		\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true);
-		\JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+		HTMLHelper::_('bootstrap.tooltip');
 
 		// Build the radio field output.
 		foreach ($options as $i => $option) {
@@ -55,7 +58,7 @@ class ImageRadioField extends FormField
 					. htmlspecialchars($option->value, ENT_COMPAT, 'UTF-8') . '"' . $checked . $class_attribute . $required . $onclick
 				. $onchange . $disabled . ' />';
 	
-			$title =  \JText::alt($option->text, preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname));
+			$title =  Text::alt($option->text, preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname));
 			$html[] = '<label title="'. $title .'" for="' . $this->id . $i . '" class="hasTooltip'.$class.'">';
 			if (!empty($option->image)) {
 				$html[] = '<img style="margin-top: 0" src="'.URI::root().$option->image.'" alt="'. $title .'" />';
@@ -69,7 +72,7 @@ class ImageRadioField extends FormField
 			$required = '';
 		}
 	
-		// End the radio field output.
+		$html[] = '</div>';
 		$html[] = '</fieldset>';
 	
 		return implode($html);
@@ -91,7 +94,7 @@ class ImageRadioField extends FormField
 			$disabled = ($disabled == 'true' || $disabled == 'disabled' || $disabled == '1');
 
 			// Create a new option object based on the <option /> element.
-			$tmp = \JHtml::_('select.option', (string) $option['value'], trim((string) $option), 'value', 'text', $disabled);
+			$tmp = HTMLHelper::_('select.option', (string) $option['value'], trim((string) $option), 'value', 'text', $disabled);
 
 			// Set some option attributes.
 			$tmp->class = (string) $option['class'];

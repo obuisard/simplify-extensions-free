@@ -9,10 +9,12 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Uri\Uri;
-use Joomla\Filesystem\File;
-//use Joomla\Filesystem\Folder;
 
 class Cache 
 {			
@@ -65,7 +67,7 @@ class Cache
 	
 				$file_array = explode('?', $file);
 				
-				Factory::getApplication()->enqueueMessage(\JText::sprintf('LIB_SYW_ERROR_403', $file_array[0]), 'error');
+				Factory::getApplication()->enqueueMessage(Text::sprintf('LIB_SYW_ERROR_403', $file_array[0]), 'error');
 				Log::add('SYWCache:getFileContent() - Error 403 in content - No access permissions for file '.$file_array[0], Log::ERROR, 'syw');
 			} else { // log the error
 				Log::add('SYWCache:getFileContent() - Error in content', Log::ERROR, 'syw');
@@ -160,8 +162,8 @@ class Cache
 		
 		foreach ($folders as $folder) {
 			$path .= '/'.$folder;
-			if (!\JFolder::exists($path)) {					
-				if (\JFolder::create($path)) {						
+			if (!Folder::exists($path)) {					
+				if (Folder::create($path)) {						
 					if ($include_index) {
 						$src = JPATH_ROOT.'/libraries/syw/index.html';
 						$dest = $path.'/index.html';
@@ -193,7 +195,7 @@ class Cache
 			} else {
 				$lang = Factory::getLanguage();
 				$lang->load('lib_syw.sys', JPATH_SITE);
-				$app->enqueueMessage(\JText::sprintf('LIB_SYW_WARNING_COULDNOTCREATETMPFOLDERUSINGDEFAULT', $images_path.'/'.$sub_directory), 'warning');
+				$app->enqueueMessage(Text::sprintf('LIB_SYW_WARNING_COULDNOTCREATETMPFOLDERUSINGDEFAULT', $images_path.'/'.$sub_directory), 'warning');
 			}
 		} else if ($tmp_path_param == 'cache') {
 			if (self::isFolderReady(JPATH_CACHE, $sub_directory)) {

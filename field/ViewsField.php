@@ -9,11 +9,13 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Factory;
 
 FormHelper::loadFieldClass('list');
 
-class ViewsField extends \JFormFieldList
+class ViewsField extends ListField
 {
 	public $type = 'Views';
 	
@@ -28,7 +30,7 @@ class ViewsField extends \JFormFieldList
 		$query = $db->getQuery(true);
 		
 		$additional_tag = '';
-		if (\JLanguageMultilang::isEnabled()) {
+		if (Multilanguage::isEnabled()) {
 			$additional_tag = ', " (", a.language, ")"';
 		}
 		

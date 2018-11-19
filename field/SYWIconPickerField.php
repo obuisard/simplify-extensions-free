@@ -6,9 +6,11 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die ;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class SYWIconPickerField extends FormField 
@@ -497,11 +499,11 @@ class SYWIconPickerField extends FormField
 		foreach ($icons as $index => $icon_item) {
 			
 			if ($index == count($icons) - 1) {
-				$iconlist .= '<li style="width: auto; float: left; margin: 2px 2px 10px 2px;" data-SYWicon="'.$icon_item.'">';
+				$iconlist .= '<li class="dropdown-item" style="width: auto; display: inline-block; border: none; margin: 2px 2px 10px 2px;" data-SYWicon="'.$icon_item.'">';
 			} else {
-				$iconlist .= '<li style="width: auto; float: left; margin: 2px;" data-SYWicon="'.$icon_item.'">';
+				$iconlist .= '<li class="dropdown-item" style="width: auto; display: inline-block; border: none; margin: 2px;" data-SYWicon="'.$icon_item.'">';
 			}
-			$iconlist .= '<a href="#" class="label hvr-grow hasTooltip" style="padding: 8px; color: #fff; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a>';
+			$iconlist .= '<a href="#" class="label hvr-grow hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a>';
 			$iconlist .= '</li>';
 		}
 		
@@ -518,7 +520,7 @@ class SYWIconPickerField extends FormField
 	    }
 			
 		foreach ($icongrouplist as $icongrouplist_item) {
-		    $iconlist .= '<li class="divider" style="clear: both; width: auto; height: auto; padding: 3px; text-align: center; color: #797878 border: none;"><span>'.\JText::_('LIB_SYW_ICONPICKER_ICONGROUP_'.strtoupper($icongrouplist_item)).'</span></li>';
+		    $iconlist .= '<li class="dropdown-header"><span>'.Text::_('LIB_SYW_ICONPICKER_ICONGROUP_'.strtoupper($icongrouplist_item)).'</span></li>';
 		    $iconlist .= self::getIconGroup($icongrouplist_item);
 		}
 		
@@ -532,14 +534,17 @@ class SYWIconPickerField extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 		
-		\JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip');
 
-		\JHtml::_('stylesheet', 'syw/fonts-min.css', false, true);		
-		\JHtml::_('stylesheet', 'syw/2d-transitions-min.css', false, true);
+		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);		
+		//HTMLHelper::_('stylesheet', 'syw/2d-transitions-min.css', ['version' => 'auto', 'relative' => true]);
+		
+		// TODO icomoon removed from Joomla 4
+		// replaced by Font Awesome
 		
 		if ($this->icomoon) {
-			\JHtml::_('stylesheet', 'jui/icomoon.css', false, true); // make sure icomoon font is loaded
-			\JHtml::_('stylesheet', 'syw/fonts-icomoon-min.css', false, true);
+		    HTMLHelper::_('stylesheet', 'jui/icomoon.css', ['version' => 'auto', 'relative' => true]); // make sure icomoon font is loaded
+		    HTMLHelper::_('stylesheet', 'syw/fonts-icomoon-min.css', ['version' => 'auto', 'relative' => true]);
 		}
 		
 		$script = 'jQuery(document).ready(function () { ';	
@@ -548,7 +553,7 @@ class SYWIconPickerField extends FormField
 			$script .= 'if (jQuery(\'#' . $this->id . '\').val() != "") { ';
 				$script .= 'jQuery("#'.$this->id.'_select li a").each(function() { ';
 					$script .= 'if (jQuery(this).parent().attr(\'data-SYWicon\') == jQuery(\'#' . $this->id . '\').val()) { ';
-						$script .= 'jQuery(this).addClass("label-success"); ';
+						$script .= 'jQuery(this).addClass("badge-primary"); ';
 					$script .= '} ';
 				$script .= '}); ';
 			$script .= '} ';
@@ -556,15 +561,15 @@ class SYWIconPickerField extends FormField
 			$script .= 'jQuery("#'.$this->id.'_select li").click(function() { ';
 				// de-select the previous value
 				$script .= 'jQuery("#'.$this->id.'_select li a").each(function() { ';
-					$script .= 'jQuery(this).removeClass("label-success"); ';
+					$script .= 'jQuery(this).removeClass("badge-primary"); ';
 				$script .= '}); ';
 				//
 				$script .= 'jQuery(\'#' . $this->id . '\').val(jQuery(this).attr(\'data-SYWicon\')); ';
 				$script .= 'jQuery(\'#' . $this->id . '_icon\').attr(\'class\', \'SYWicon-\' + jQuery(this).attr(\'data-SYWicon\')); ';
-				if ($this->buttonrole == 'default') {
-					$script .= 'jQuery("#'.$this->id.'_default").removeClass("btn-primary"); ';
-				}
-				$script .= 'jQuery(this).children(":first").addClass("label-success"); ';
+				//if ($this->buttonrole == 'default') {
+					//$script .= 'jQuery("#'.$this->id.'_default").removeClass("btn-primary"); ';
+				//}
+				$script .= 'jQuery(this).children(":first").addClass("badge-primary"); ';
 			$script .= '}); ';
 			
 			$script .= 'jQuery("#'.$this->id.'_default").click(function() { ';
@@ -576,19 +581,19 @@ class SYWIconPickerField extends FormField
 					$script .= 'jQuery(\'#' . $this->id . '\').val(\''.$this->default.'\'); ';
 					$script .= 'jQuery(\'#' . $this->id . '_icon\').attr(\'class\', \'SYWicon-'.$this->default.'\'); ';
 				}
-				if ($this->buttonrole == 'default') {
-					$script .= 'jQuery("#'.$this->id.'_default").addClass("btn-primary"); ';
-				}
-				$script .= 'jQuery("#'.$this->id.'_select li a").removeClass("label-success"); ';
+				//if ($this->buttonrole == 'default') {
+					//$script .= 'jQuery("#'.$this->id.'_default").addClass("btn-primary"); ';
+				//}
+				$script .= 'jQuery("#'.$this->id.'_select li a").removeClass("badge-primary"); ';
 			$script .= '}); ';
 		
 			$script .= 'jQuery("#'.$this->id.'").change(function() { ';
 				$script .= 'jQuery(\'#' . $this->id . '_icon\').attr(\'class\', \'SYWicon-\' + jQuery("#'.$this->id.'").val()); ';
 				
 				$script .= 'jQuery("#'.$this->id.'_select li a").each(function() { ';
-				    $script .= 'jQuery(this).removeClass("label-success"); ';
+				    $script .= 'jQuery(this).removeClass("badge-primary"); ';
 				    $script .= 'if (jQuery(this).parent().attr(\'data-SYWicon\') == jQuery(\'#' . $this->id . '\').val()) { ';
-				        $script .= 'jQuery(this).addClass("label-success"); ';
+				        $script .= 'jQuery(this).addClass("badge-primary"); ';
 				    $script .= '} ';
 				$script .= '}); ';
 			$script .= '}); ';
@@ -599,40 +604,40 @@ class SYWIconPickerField extends FormField
 					
 		$html = '';
 			
-		$html .= '<div class="input-prepend input-append">';	
+		$html .= '<div class="input-group">';	
 		
  		if (!empty($this->value)) {
- 			$html .= '<div class="add-on"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->value.'"></i></div>';
+ 			$html .= '<div class="input-group-prepend"><span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->value.'"></i></span></div>';
  		} else {
 			if (empty($this->default)) {
-				$html .= '<div class="add-on"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->emptyicon.'"></i></div>';
+				$html .= '<div class="input-group-prepend"><span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->emptyicon.'"></i></span></div>';
 			} else {
-				$html .= '<div class="add-on"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->default.'"></i></div>';
+				$html .= '<div class="input-group-prepend"><span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->default.'"></i></span></div>';
 			}
  		}	
 
  		if ($this->editable) {
-			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" class="input-small" />';
+			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" class="form-control" />';
 		} else {
 			//$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" />';
-			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" readonly="readonly" class="input-small" />';
+			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" readonly="readonly" class="form-control" />';
 		}
 		
 		$html .= '<div class="btn-group" style="display:inline-block;vertical-align:middle">';
-			$html .= '<button id="'.$this->id.'_caret"'.($this->disabled ? ' disabled="disabled"' : '').' style="border-radius:0;margin-left:-1px;min-width:auto" class="btn dropdown-toggle hasTooltip" data-toggle="dropdown" title="' . \JText::_('LIB_SYW_ICONPICKER_SELECTICON') . '">';
-				$html .= '<span class="caret" style="margin-bottom:auto"></span>';
+			$html .= '<button id="'.$this->id.'_caret"'.($this->disabled ? ' disabled="disabled"' : '').' style="border-radius:0;margin-left:-1px;min-width:auto" class="btn dropdown-toggle hasTooltip" data-toggle="dropdown" title="' . Text::_('LIB_SYW_ICONPICKER_SELECTICON') . '">';
+				//$html .= '<span class="caret" style="margin-bottom:auto"></span>';
 			$html .= '</button>';
-			$html .= '<ul id="'.$this->id.'_select" class="dropdown-menu" style="min-width: 250px; max-height: 200px; overflow: auto">';
+			$html .= '<ul id="'.$this->id.'_select" class="dropdown-menu" style="min-width: 220px; max-height: 200px; overflow: auto;">';
 						
 		if (isset($this->icons)) {			
 			$icons = explode(",", $this->icons);
 			foreach ($icons as $icon_item) {
-				$html .= '<li style="width: auto; float: left; margin: 2px;" data-SYWicon="'.$icon_item.'"><a href="#" class="label hvr-grow hasTooltip" style="padding: 8px; color: #fff; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a></li>';
+				$html .= '<li class="dropdown-item" style="width: auto; display: inline-block; border: none; margin: 2px;" data-SYWicon="'.$icon_item.'"><a href="#" class="label hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a></li>';
 			}
 		} else if (isset($this->icongroups)) {
 			$icongroups = explode(",", $this->icongroups);
 			foreach ($icongroups as $icongroup_item) {
-				$html .= '<li class="divider" style="clear: both; width: auto; height: auto; padding: 3px; text-align: center; color: #797878; border: none;"><span>'.\JText::_('LIB_SYW_ICONPICKER_ICONGROUP_'.strtoupper($icongroup_item)).'</span></li>';
+				$html .= '<li class="dropdown-header"><span>'.Text::_('LIB_SYW_ICONPICKER_ICONGROUP_'.strtoupper($icongroup_item)).'</span></li>';
 				$html .= self::getIconGroup($icongroup_item);
 			}
 		} else {
@@ -642,24 +647,33 @@ class SYWIconPickerField extends FormField
 		$html .= '</ul>';
 		$html .= '</div>';
 		
+		$html .= '<div class="input-group-append">';
+		
 		$default_class_extra = '';
-		if (empty($this->value) || (!empty($this->default) && $this->default == $this->value)) {
+		//if (empty($this->value) || (!empty($this->default) && $this->default == $this->value)) {
 			if ($this->buttonrole == 'default') {
 				$default_class_extra = ' btn-primary';
 			}
+		//}
+		
+		if ($this->buttonrole == 'clear') {
+		    $default_class_extra = ' btn-secondary';
 		}
-		$html .= '<a id="'.$this->id.'_default"'.($this->disabled ? ' disabled="disabled"' : '').' class="btn'.$default_class_extra.' hasTooltip" title="'.htmlspecialchars($this->buttonlabel, ENT_COMPAT, 'UTF-8').'" href="#" onclick="return false;">';
+		
+		$html .= '<button type="button" id="'.$this->id.'_default"'.($this->disabled ? ' disabled="disabled"' : '').' class="btn'.$default_class_extra.' hasTooltip" title="'.htmlspecialchars($this->buttonlabel, ENT_COMPAT, 'UTF-8').'">';
 		if ($this->buttonrole == 'clear') {
 			$html .= '<i class="icon-remove"></i>';
 		} else {
 			$html .= $this->buttonlabel;
 		}		
 		$html .= '</a>';
+		
+		$html .= '</div>';
 				
 		$html .= '</div>';
 		
 		if ($this->help) {
-			$html .= '<span class="help-block">'.\JText::_($this->help).'</span>';
+			$html .= '<span class="help-block">'.Text::_($this->help).'</span>';
 		}
 		
 		return $html;
@@ -675,14 +689,14 @@ class SYWIconPickerField extends FormField
 			
 			$this->help = isset($this->element['help']) ? $this->element['help'] : '';
 			if (strpos($this->id, 'X__') !== false) { // this happens if included in subform
-				$this->help = \JText::_('LIB_SYW_GLOBAL_UNSELECTABLE');
+				$this->help = Text::_('LIB_SYW_GLOBAL_UNSELECTABLE');
 				$this->disabled = true;
 			}
 			
 			$this->icomoon = isset($this->element['icomoon']) ? filter_var($this->element['icomoon'], FILTER_VALIDATE_BOOLEAN) : false;
 			$this->editable = isset($this->element['editable']) ? filter_var($this->element['editable'], FILTER_VALIDATE_BOOLEAN) : false;
-			$this->buttonrole = isset($this->element['buttonrole']) ? \JText::_($this->element['buttonrole']) : 'default';
-			$this->buttonlabel = isset($this->element['buttonlabel']) ? \JText::_($this->element['buttonlabel']) : ($this->buttonrole == 'clear' ? \JText::_('JCLEAR') : \JText::_('JDEFAULT'));
+			$this->buttonrole = isset($this->element['buttonrole']) ? Text::_($this->element['buttonrole']) : 'default';
+			$this->buttonlabel = isset($this->element['buttonlabel']) ? Text::_($this->element['buttonlabel']) : ($this->buttonrole == 'clear' ? Text::_('JCLEAR') : Text::_('JDEFAULT'));
 			$this->emptyicon = isset($this->element['emptyicon']) ? $this->element['emptyicon'] : ($this->buttonrole == 'default' ? 'question' : '');
 		}
 

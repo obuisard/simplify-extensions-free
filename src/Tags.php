@@ -9,6 +9,8 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Language\Multilanguage;
 use Joomla\Utilities\ArrayHelper;
 
 class Tags 
@@ -56,8 +58,8 @@ class Tags
 		$query->where('a.access IN (' . $groups . ')');
 	
 		// language
-		if (\JLanguageMultilang::isEnabled()) {
-			$language = \JHelperContent::getCurrentLanguage();
+		if (Multilanguage::isEnabled()) {
+		    $language = ContentHelper::getCurrentLanguage();
 			$query->where($db->quoteName('a.language').' IN ('.$db->quote($language).', '.$db->quote('*').')');
 		}
 	

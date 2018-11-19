@@ -9,6 +9,7 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class MessageField extends FormField
@@ -23,7 +24,7 @@ class MessageField extends FormField
 		$lang->load('lib_syw.sys', JPATH_SITE);
 		
 		if ($this->message_type == 'example') {				
-			$html .= '<label style="visibility: hidden; margin: 0">'.\JText::_('LIB_SYW_MESSAGE_EXAMPLE').'</label>';
+			$html .= '<label style="visibility: hidden; margin: 0">'.Text::_('LIB_SYW_MESSAGE_EXAMPLE').'</label>';
 		} else if ($this->message_type == 'fieldwarning' || $this->message_type == 'fielderror' || $this->message_type == 'fieldinfo') {
 			return parent::getLabel();
 		} 
@@ -40,7 +41,7 @@ class MessageField extends FormField
 		
 		$message_label = '';
 		if ($this->element['label']) {
-			$message_label = $this->translateLabel ? \JText::_(trim($this->element['label'])) : trim($this->element['label']);
+			$message_label = $this->translateLabel ? Text::_(trim($this->element['label'])) : trim($this->element['label']);
 		}
 			
 		if ($this->message_type == 'example') {
@@ -48,12 +49,12 @@ class MessageField extends FormField
 			if ($message_label) {
 				$html .= '<span class="badge badge-dark">'.$message_label.'</span>&nbsp;';
 			} else {
-				$html .= '<span class="badge badge-dark">'.\JText::_('LIB_SYW_MESSAGE_EXAMPLE').'</span>&nbsp;';
+				$html .= '<span class="badge badge-dark">'.Text::_('LIB_SYW_MESSAGE_EXAMPLE').'</span>&nbsp;';
 			}
 			$html .= '<span class="muted" style="font-size: 0.8em;">';
 			
 			if ($this->message) {
-				$html .= \JText::_($this->message);
+				$html .= Text::_($this->message);
 			}
 			$html .= '</span>';		
 			
@@ -73,7 +74,7 @@ class MessageField extends FormField
 			
 			$html .= '<span>';
 			if ($this->message) {
-				$html .= \JText::_($this->message);
+				$html .= Text::_($this->message);
 			}
 			$html .= '</span>';
 			$html .= '</div>';

@@ -8,14 +8,19 @@ namespace SYW\Library\Field;
 
 defined( '_JEXEC' ) or die;
 
-//use Joomla\Filesystem\Folder;
+use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+
 FormHelper::loadFieldClass('list');
 
-class CustomFieldsListField extends \JFormFieldList
+class CustomFieldsListField extends ListField
 {
 	public $type = 'CustomFieldsList';
 
@@ -31,8 +36,7 @@ class CustomFieldsListField extends \JFormFieldList
 		$usable_context = str_replace('.', '_', $context);
 		
 		if (!isset(self::$core_fields[$usable_context])) {
-			\JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');
-			self::$core_fields[$usable_context] = \FieldsHelper::getFields($context);
+			self::$core_fields[$usable_context] = FieldsHelper::getFields($context);
 		}
 
 		return self::$core_fields[$usable_context];
@@ -47,7 +51,7 @@ class CustomFieldsListField extends \JFormFieldList
 
 		// get Joomla! fields
 		// test the fields folder first to avoid message warning that the component is missing
-		if (\JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams(explode('.', $this->context)[0])->get('custom_fields_enable', '1')) {
+		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams(explode('.', $this->context)[0])->get('custom_fields_enable', '1')) {
 
 			$fields = self::getCoreFields($this->context);
 			
@@ -58,7 +62,7 @@ class CustomFieldsListField extends \JFormFieldList
 			);
 				
 			$groupTitles = array(
-				0 => \JText::_('LIB_SYW_VALUE_NOGROUPFIELD')
+				0 => Text::_('LIB_SYW_VALUE_NOGROUPFIELD')
 			);
 				
 			foreach ($fields as $field) {
@@ -95,9 +99,9 @@ class CustomFieldsListField extends \JFormFieldList
 					
 				foreach ($groupFields as $field) {
 					if ($this->show_group) {
-						$options[] = \JHTML::_('select.option', $field->id, $groupTitles[$group_id].': '.$field->title);
+						$options[] = HTMLHelper::_('select.option', $field->id, $groupTitles[$group_id].': '.$field->title);
 					} else {
-						$options[] = \JHTML::_('select.option', $field->id, $field->title);
+						$options[] = HTMLHelper::_('select.option', $field->id, $field->title);
 					}
 				}
 					

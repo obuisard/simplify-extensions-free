@@ -9,6 +9,8 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 
 class SubTitleField extends FormField
 {
@@ -26,8 +28,8 @@ class SubTitleField extends FormField
 	{
 		$html = '';
 		
-		\JHtml::_('script', 'syw/fields.js', false, true);
-		\JHtml::_('stylesheet', 'syw/fields.css', false, true);
+		HTMLHelper::_('script', 'syw/fields.js', ['version' => 'auto', 'relative' => true]);
+		HTMLHelper::_('stylesheet', 'syw/fields.css', ['version' => 'auto', 'relative' => true]);
 		
 		$inline_style = array();
 		
@@ -43,7 +45,7 @@ class SubTitleField extends FormField
 			$inline_style[] = 'background-color: #fff; ';
 			$inline_style[] = 'color: '.$this->color.'; ';
 			
-			$html .= '<div class="syw_subtitle_text" style=\''.implode($inline_style).'\'>'.\JText::_($this->title).'</div>';
+			$html .= '<div class="syw_subtitle_text" style=\''.implode($inline_style).'\'>'.Text::_($this->title).'</div>';
 		}
 		
 		$html .= '</div>';

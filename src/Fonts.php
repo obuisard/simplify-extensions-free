@@ -9,7 +9,7 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
 
 class Fonts 
 {	
@@ -28,10 +28,10 @@ class Fonts
 	    if ($syw_font) {
     		if ($debug) {
     		    //Factory::getDocument()->addStyleSheet(URI::base(true).'/media/syw/css/fonts.css');
-    		    JHtml::_('stylesheet', 'syw/fonts.css', array('version' => 'auto', 'relative' => true));
+    		    HTMLHelper::_('stylesheet', 'syw/fonts.css', ['version' => 'auto', 'relative' => true]);
     		} else {
     		    //Factory::getDocument()->addStyleSheet(URI::base(true).'/media/syw/css/fonts-min.css');
-    		    JHtml::_('stylesheet', 'syw/fonts-min.css', array('version' => 'auto', 'relative' => true));
+    		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
     		}
 	    }
 		
@@ -40,7 +40,7 @@ class Fonts
 	    
 	    if ($icomoon_font) {
 	        //Factory::getDocument()->addStyleSheet(URI::base(true).'/media/jui/css/icomoon.css');
-	        JHtml::_('stylesheet', 'jui/icomoon.css', array('version' => 'auto', 'relative' => true));
+	        HTMLHelper::_('stylesheet', 'jui/icomoon.css', ['version' => 'auto', 'relative' => true]);
 		}
 						
 		//self::$iconfontLoaded = true;

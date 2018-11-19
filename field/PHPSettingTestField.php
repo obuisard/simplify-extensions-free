@@ -9,6 +9,7 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class PHPSettingTestField extends FormField 
@@ -31,11 +32,11 @@ class PHPSettingTestField extends FormField
 		
 		if (!ini_get($this->setting)) {
 			$html .= '<div style="margin-bottom:0" class="alert alert-error">';			
-				$html .= '<span>'.\JText::sprintf('LIB_SYW_PHPSETTING_DISABLED', $this->setting).'</span>';
+				$html .= '<span>'.Text::sprintf('LIB_SYW_PHPSETTING_DISABLED', $this->setting).'</span>';
 			$html .= '</div>';
 		} else {
 			$html .= '<div style="margin-bottom:0" class="alert alert-success">';			
-				$html .= '<span>'.\JText::sprintf('LIB_SYW_PHPSETTING_ENABLED', $this->setting).'</span>';
+				$html .= '<span>'.Text::sprintf('LIB_SYW_PHPSETTING_ENABLED', $this->setting).'</span>';
 			$html .= '</div>';
 		}
 		

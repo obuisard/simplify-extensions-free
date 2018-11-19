@@ -9,12 +9,15 @@ namespace SYW\Library\Field;
 defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use SYW\Library\K2 as SYWK2;
 
 FormHelper::loadFieldClass('list');
 
-class K2TagsField extends \JFormFieldList
+class K2TagsField extends ListField
 {
 	public $type = 'K2Tags';
 	
@@ -39,7 +42,7 @@ class K2TagsField extends \JFormFieldList
 			$lang->load('lib_syw.sys', JPATH_SITE);
 			
 			$html .= '<div style="margin-bottom:0" class="alert alert-danger">';
-				$html .= '<span>'.\JText::_('LIB_SYW_K2TAGS_MISSING').'</span>';
+				$html .= '<span>'.Text::_('LIB_SYW_K2TAGS_MISSING').'</span>';
 			$html .= '</div>';
 		}
 		
@@ -65,7 +68,7 @@ class K2TagsField extends \JFormFieldList
 				$items = $db->loadObjectList();
 				
 				foreach ($items as $item) {
-					$options[] = \JHTML::_('select.option', $item->id, $item->name);
+					$options[] = HTMLHelper::_('select.option', $item->id, $item->name);
 				}
 			} catch (\RuntimeException $e) {
 				//return false;
