@@ -8,11 +8,14 @@ defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 FormHelper::loadFieldClass('list');
 
-class JFormFieldTemplates extends \JFormFieldList
+class JFormFieldTemplates extends ListField
 {
 	public $type = 'Templates';
 		
@@ -40,11 +43,11 @@ class JFormFieldTemplates extends \JFormFieldList
 		try {
 			$templates = $db->loadObjectList();
 		} catch (\RuntimeException $e) {
-			Factory::getApplication()->enqueueMessage(\JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 		}		
 	
 		foreach ($templates as $item) {
-			$options[] = \JHTML::_('select.option', $item->id, $item->title);
+			$options[] = HTMLHelper::_('select.option', $item->id, $item->title);
 		}	
 
 		// Merge any additional options in the XML definition.

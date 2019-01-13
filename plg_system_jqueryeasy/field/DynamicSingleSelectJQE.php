@@ -7,6 +7,8 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class DynamicSingleSelectJQE extends FormField 
@@ -29,7 +31,7 @@ class DynamicSingleSelectJQE extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
-		\JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip');
 
 		// build the script
 
@@ -66,7 +68,7 @@ class DynamicSingleSelectJQE extends FormField
 		$options = array();
 
 		if ($this->noelement) {
-			$options[] = array('', \JText::_('JNONE'), '');
+			$options[] = array('', Text::_('JNONE'), '');
 		}
 
 		$options = array_merge($options, $this->getOptions());
@@ -86,12 +88,12 @@ class DynamicSingleSelectJQE extends FormField
 			if (isset($option[5]) && $option[5] == 'disabled') {
 				$class_disabled = ' disabled';
 				if (!empty($this->disabledtitle)) {
-					$title_attribute = ' title="'.\JText::_($this->disabledtitle).'"';
+					$title_attribute = ' title="'.Text::_($this->disabledtitle).'"';
 					$class_hastooltip = ' hasTooltip';
 				}
 			} else {
 				$class_disabled = ' enabled';
-				$title_attribute = ' title="'.\JText::_('JSELECT').'"';
+				$title_attribute = ' title="'.Text::_('JSELECT').'"';
 				$class_hastooltip = ' hasTooltip';
 			}
 			

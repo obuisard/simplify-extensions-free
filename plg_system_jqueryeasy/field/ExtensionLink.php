@@ -7,6 +7,9 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 
 class JFormFieldExtensionLink extends FormField 
@@ -24,7 +27,7 @@ class JFormFieldExtensionLink extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy', JPATH_SITE);
 		
-		\JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip');
 		
 		switch ($this->link_type) {
 			case 'forum': $image = 'chat.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_FORUM_LABEL'; break;
@@ -42,10 +45,10 @@ class JFormFieldExtensionLink extends FormField
 		
 		$html .= '<span class="badge badge-secondary">';
 		if (!empty($image)) {
-			$html .= '<img src="'.\JURI::root().'plugins/system/jqueryeasy/images/'.$image.'" style="margin-right: 5px;">';
-			$html .= '<span style="vertical-align: middle">'.\JText::_($title).'</span>';
+			$html .= '<img src="'.Uri::root().'plugins/system/jqueryeasy/images/'.$image.'" style="margin-right: 5px;">';
+			$html .= '<span style="vertical-align: middle">'.Text::_($title).'</span>';
 		} else {
-			$html .= \JText::_($title);
+			$html .= Text::_($title);
 		}
 		$html .= '</span>';
 		
@@ -61,9 +64,9 @@ class JFormFieldExtensionLink extends FormField
 					
 		if ($this->syw_description) {
 			if ($this->link) {
-				$html .= \JText::sprintf($this->syw_description, $this->link);
+				$html .= Text::sprintf($this->syw_description, $this->link);
 			} else {
-				$html .= \JText::_($this->syw_description);
+				$html .= Text::_($this->syw_description);
 			}
 		} else {
 			
@@ -83,9 +86,9 @@ class JFormFieldExtensionLink extends FormField
 			
 			if ($desc) {
 				if ($this->link) {
-					$html .= \JText::sprintf($desc, $this->link);
+					$html .= Text::sprintf($desc, $this->link);
 				} else {
-					$html .= \JText::_($desc);
+					$html .= Text::_($desc);
 				}
 			}
 		}

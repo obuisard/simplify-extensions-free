@@ -7,7 +7,9 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
 
 FormHelper::loadFieldClass('dynamicsingleselectjqe');
 
@@ -24,8 +26,8 @@ class JFormFieldBootstrapSelect extends DynamicSingleSelectJQE
 		
 		$path = '/plugins/system/jqueryeasy';
 	
-		$options[] = array(0, \JText::_('JNO'), '', \JURI::root(true).$path.'/images/select_no.png');
-		$options[] = array(1, \JText::_('PLG_SYSTEM_JQUERYEASY_VALUE_BOOTSTRAP'), '', \JURI::root(true).$path.'/images/select_bootstrap.png', '', 'disabled');
+		$options[] = array(0, Text::_('JNO'), '', URI::root(true).$path.'/images/select_no.png');
+		$options[] = array(1, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_BOOTSTRAP'), '', URI::root(true).$path.'/images/select_bootstrap.png', '', 'disabled');
 		
 		return $options;
 	}

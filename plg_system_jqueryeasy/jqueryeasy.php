@@ -6,10 +6,10 @@
 
 defined( '_JEXEC' ) or die;
 
-\JLoader::import('joomla.filesystem.file');
-
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Plugin\CMSPlugin;
 
@@ -35,33 +35,33 @@ class plgSystemJQueryEasy extends CMSPlugin
 		
 		if (!$this->app->isAdmin()) {
 			$this->_enabled = $this->allowedOnPage();
-			
+
 			$this->_versioning = $this->params->get('versioning', false);
-			
+
 			$this->_supplement_scripts = array();
 			$this->_supplement_stylesheets = array();
-			
+
 			//$this->_showreport = false;
-			
+
 			$this->_showreport = $this->params->get('showreport', 0);
-			
+
 			if ($this->_showreport == 2) { // only show report when Super User is logged in
 				$user = Factory::getUser();
 				$this->_showreport = $user->authorise('core.admin') ? true : false;
 			}
-			
+
 			$this->_verbose_array = array();
-			
+
 			$this->_usejQuery = false;
 			$this->_usejQueryUI = false;
-			
+
 			$this->_jqpath = '';
 			$this->_jquipath = '';
 			$this->_jquicsspath = '';
 			$this->_jqnoconflictpath = '';
-			
+
 			$this->_jqmigratepath = '';
-			
+
 			$this->_timeafterroute = 0;
 			$this->_timebeforerender = 0;
 			$this->_timeafterrender = 0;
@@ -69,23 +69,23 @@ class plgSystemJQueryEasy extends CMSPlugin
 	}
 	
 	protected function allowedOnPage()
-	{		
+	{
 		$allowed = true;
-		
+
 		$suffix = 'frontend';
-		
+
 		if (Factory::getDocument()->getType() !== 'html') {
 			return false;
 		}
-		
+
 		// disable plugin in selected templates
-		
+
 		$templates_array = $this->params->get('templateid', array('none'));
-		
+
 		if (!is_array($templates_array)) { // before the plugin is saved, the value is the string 'none'
 			$templates_array = explode(' ', $templates_array);
 		}
-		
+
 		$array_of_template_values = array_count_values($templates_array);
 		if (isset($array_of_template_values['none']) && $array_of_template_values['none'] > 0) { // 'none' was selected
 			// keep the plugin enabled
@@ -163,7 +163,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			HTMLHelper::register('jhtml.behavior.caption', $caption);
 			
 			if ($this->_showreport) {
-				$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
+				$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
 			}
 		}
 	}
@@ -230,8 +230,8 @@ class plgSystemJQueryEasy extends CMSPlugin
 // 			$current_uri_string = URI::getInstance()->toString();
 			
 			//if ($this->_showreport) {
-			//	$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ENABLEPLUGININPAGES');
-			//	$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_CURRENTURI', $current_uri_string);
+			//	$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ENABLEPLUGININPAGES');
+			//	$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_CURRENTURI', $current_uri_string);
 			//}
 			
 // 			$found = false;
@@ -253,8 +253,8 @@ class plgSystemJQueryEasy extends CMSPlugin
 // 				$current_uri_string = URI::getInstance()->toString();
 				
 				//if ($this->_showreport) {
-				//	$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_DISABLEPLUGININPAGES');
-				//	$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_CURRENTURI', $current_uri_string);
+				//	$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_DISABLEPLUGININPAGES');
+				//	$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_CURRENTURI', $current_uri_string);
 				//}
 				
 // 				foreach ($paths as $path) {
@@ -293,7 +293,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 		// END prepare spaces to fill with scripts declarations
 		
 		// BEGIN prepare spaces to fill with stylesheets and stylesheets declarations
-		
+
 		$css = trim( (string) $this->params->get('addcss'.$suffix, ''));
 		if (!empty($css)) {
 			$this->_supplement_stylesheets = array_map('trim', (array) explode("\n", $css));
@@ -347,31 +347,31 @@ class plgSystemJQueryEasy extends CMSPlugin
 				if ($jQueryVersion == 'local') {
 					$localVersionPath = trim($this->params->get('localversion'.$suffix, ''));
 					if ($localVersionPath) {
-						if (\JFile::exists(JPATH_ROOT.$localVersionPath)) {
+						if (File::exists(JPATH_ROOT.$localVersionPath)) {
 							$this->_jqpath = URI::root(true).$localVersionPath;
 						} else {
 							if ($this->_showreport) {
-								$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
+								$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
 							}
 						}
 					} else {
 						if ($this->_showreport) {
-							$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_EMPTYLOCALFILE', 'jQuery');
+							$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_EMPTYLOCALFILE', 'jQuery');
 						}
 					}
 				} else {
-					
+
 					$jQuerySubversion = trim($this->params->get('jquerysubversion'.$suffix, ''));
-					
+
 					$values_that_do_not_need_subversion = array('1.3', '1.4', '1.5', '1.6', '1.7', '1.8');
 					if ($jQuerySubversion == '' && !in_array($jQueryVersion, $values_that_do_not_need_subversion)) {
 						$jQuerySubversion = '0';
 					}
-					
+
 					if ($jQuerySubversion != '') {
 						$jQuerySubversion = '.'.$jQuerySubversion;
 					}
-					
+
 					$this->_jqpath = $protocole.'//ajax.googleapis.com/ajax/libs/jquery/'.$jQueryVersion.$jQuerySubversion.'/jquery'.$compressed.'.js';
 				}
 			}
@@ -388,12 +388,12 @@ class plgSystemJQueryEasy extends CMSPlugin
 			
 			$migrateVersion = $this->params->get('migrateversion'.$suffix, 'none');
 			if ($migrateVersion != 'none') {
-				
-				$migrate_is_unnecessary = false;				
+
+				$migrate_is_unnecessary = false;
 				if ($jQueryVersion == '1.3' || $jQueryVersion == '1.4' || $jQueryVersion == '1.5' || $jQueryVersion == '1.6' || $jQueryVersion == '1.7' || $jQueryVersion == '1.8') {
 					$migrate_is_unnecessary = true;
 				}
-				
+
 				if (!$migrate_is_unnecessary) {
 					if ($migrateVersion == 'joomla') {
 						$this->_jqmigratepath = URI::root(true).'/media/vendor/jquery/js/jquery-migrate'.$compressed.'.js';
@@ -401,44 +401,44 @@ class plgSystemJQueryEasy extends CMSPlugin
 						if ($migrateVersion == 'local') {
 							$localPathMigrate = trim($this->params->get('localpathmigrate'.$suffix, ''));
 							if ($localPathMigrate) {
-								if (\JFile::exists(JPATH_ROOT.$localPathMigrate)) {
+								if (File::exists(JPATH_ROOT.$localPathMigrate)) {
 									$this->_jqmigratepath = URI::root(true).$localPathMigrate;
 								} else {
 									if ($this->_showreport) {
-										$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localPathMigrate);
+										$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localPathMigrate);
 									}
 								}
 							} else {
 								if ($this->_showreport) {
-									$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_EMPTYLOCALFILE', 'Migrate');
+									$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_EMPTYLOCALFILE', 'Migrate');
 								}
 							}
 						} else {
-							
+
 							if ($migrateVersion == '3.0.0') { // for backward compatibility
 								$migrateVersion = '3.0';
 							}
-							
+
 							$migrateSubversion = trim($this->params->get('migratesubversion'.$suffix, ''));
-							
+
 							$values_that_do_not_need_subversion = array('1.2.1', '1.3.0', '1.4.1');
-							
+
 							if (in_array($migrateVersion, $values_that_do_not_need_subversion)) {
 								$migrateSubversion = '';
 							} else if ($migrateSubversion == '') { // missing sub-version
 								$migrateSubversion = '0';
 							}
-							
+
 							if ($migrateSubversion != '') {
 								$migrateSubversion = '.'.$migrateSubversion;
 							}
-							
+
 							$this->_jqmigratepath = $protocole.'//code.jquery.com/jquery-migrate-'.$migrateVersion.$migrateSubversion.$compressed.'.js';
 						}
 					}
 				} else {
 					if ($this->_showreport) {
-						$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_MIGRATEUNNECESSARY');
+						$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_MIGRATEUNNECESSARY');
 					}
 				}
 				
@@ -450,17 +450,17 @@ class plgSystemJQueryEasy extends CMSPlugin
 					}
 				}
 			}
-			
+
 			// no conflict path
-			
+
 			$addjQueryNoConflict = $this->params->get('addnoconflict'.$suffix, 2);
 			if ($addjQueryNoConflict == 1) {
 				Factory::getDocument()->addScriptDeclaration('JQEASY_JQNOCONFLICT');
 			} else if ($addjQueryNoConflict == 2) {
 				self::addScript('JQEASY_JQNOCONFLICT', $this->_versioning);
-				
+
 				// media/system/js/jquery-noconflict.js contains var $=jQuery.noConflict();
-				
+
 				//if ($jQueryVersion == 'joomla') {
 					//$this->_jqnoconflictpath = URI::root(true).'/media/system/js/jquery-noconflict.js';
 				//} else {
@@ -469,7 +469,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			}
 			
 			// jQuery UI
-			
+
 			if ($this->_usejQueryUI)
 			{
 				$jQueryUIVersion = $this->params->get('jqueryuiversion'.$suffix, '1.9');
@@ -480,7 +480,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				if ($jQueryUISubversion == '' && !in_array($jQueryUIVersion, $values_that_do_not_need_subversion)) {
 					$jQueryUISubversion = '0';
 				}
-				
+
 				if ($jQueryUISubversion != '') {
 					$jQueryUISubversion = '.'.$jQueryUISubversion;
 				}
@@ -495,16 +495,16 @@ class plgSystemJQueryEasy extends CMSPlugin
 					if ($jQueryUIVersion == 'local') {
 						$localVersionPath = trim($this->params->get('localuiversion'.$suffix, ''));
 						if ($localVersionPath) {
-							if (\JFile::exists(JPATH_ROOT.$localVersionPath)) {
+							if (File::exists(JPATH_ROOT.$localVersionPath)) {
 								$this->_jquipath = URI::root(true).$localVersionPath;
 							} else {
 								if ($this->_showreport) {
-									$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
+									$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
 								}
 							}
 						} else {
 							if ($this->_showreport) {
-								$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_EMPTYLOCALFILE', 'jQuery UI');
+								$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_EMPTYLOCALFILE', 'jQuery UI');
 							}
 						}
 					} else {
@@ -526,16 +526,16 @@ class plgSystemJQueryEasy extends CMSPlugin
 					if ($jQueryUITheme == 'custom' || $jQueryUIVersion == 'joomla' || $jQueryUIVersion == 'local') {
 						$localVersionPath = trim($this->params->get('jqueryuithemecustom'.$suffix, ''));
 						if ($localVersionPath) {
-							if (\JFile::exists(JPATH_ROOT.$localVersionPath)) {
+							if (File::exists(JPATH_ROOT.$localVersionPath)) {
 								$this->_jquicsspath = URI::root(true).$localVersionPath;
 							} else {
 								if ($this->_showreport) {
-									$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
+									$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
 								}
 							}
 						} else {
 							if ($this->_showreport) {
-								$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_EMPTYLOCALCSSFILE');
+								$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_EMPTYLOCALCSSFILE');
 							}
 						}
 					} else {
@@ -552,7 +552,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				}
 			} // END jQuery UI
 		} // END jQuery
-		
+
 		$time_end = microtime(true);
 		$this->_timeafterroute = $time_end - $time_start;
 	}
@@ -568,16 +568,20 @@ class plgSystemJQueryEasy extends CMSPlugin
 		}
 		
 		$doc = Factory::getDocument();
-		
+
 		$this->loadLanguage();
 		
 		$time_start = microtime(true);
 		
+		$headerdata = $doc->getHeadData();	
+		$scripts = (isset($headerdata['scripts']) && is_array($headerdata['scripts'])) ? $headerdata['scripts'] : array(); // could be empty string
+		$headerdata['scripts'] = array();
+				
 		// check if jQuery and Bootstrap are used in the template (nothing in $headerdata before 'onBeforeRender' other than what has been added in the plugin)
 		if ($this->_showreport) {
-			
-			$headerdata = $doc->getHeadData();
-			$scripts = $headerdata['scripts'];
+
+			//$headerdata = $doc->getHeadData();
+			//$scripts = $headerdata['scripts'];
 			
 			$jquery_quoted_path = preg_quote('media/vendor/jquery/js/jquery', '/');
 			$jqueryui_quoted_path = preg_quote('media/vendor/jquery-ui/js/jquery.ui', '/');
@@ -590,50 +594,50 @@ class plgSystemJQueryEasy extends CMSPlugin
 			foreach ($scripts as $url => $type) {
 				if (preg_match('#'.$jquery_quoted_path.'#s', $url)) {
 					if (!$jquery_loaded_by_template) {
-						$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_JQUERYLOADEDBYTEMPLATE');
+						$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_JQUERYLOADEDBYTEMPLATE');
 						$jquery_loaded_by_template = true;
 					}
 				}
 				
 				if (preg_match('#'.$jqueryui_quoted_path.'#s', $url)) {
 					if (!$jqueryui_loaded_by_template) {
-						$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_JQUERYUILOADEDBYTEMPLATE');
+						$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_JQUERYUILOADEDBYTEMPLATE');
 						$jqueryui_loaded_by_template = true;
 					}
 				}
 				
 				if (preg_match('#'.$bootstrap_quoted_path.'#s', $url)) {
 					if (!$bootstrap_loaded_by_template) {
-						$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_BOOTSTRAPLOADEDBYTEMPLATE');
+						$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_BOOTSTRAPLOADEDBYTEMPLATE');
 						$bootstrap_loaded_by_template = true;
 					}
 				}
 			}
 		}
-		
+
 		// at this point, jQuery and MooTools libraries are loaded in the wrong order, if jQuery is enabled
 		// we have jQuery, MooTools and other libraries loaded in that order
 		// take all 'media/system/js' libraries and put them in front of all others
 		
-		$headerdata = $doc->getHeadData();
-		
+		//$headerdata = $doc->getHeadData();
+
 		//$ignore_caption = $this->params->get('disablecaptions', 0);
 		
 		// make sure we start with all jQuery Easy scripts
 		
 		$scripts_jqeasy = array();
 		
-		foreach ($headerdata['scripts'] as $url => $type) {
+		foreach (/*$headerdata['scripts']*/$scripts as $url => $type) {
 			if (preg_match('#JQEASY_#s', $url)) {
 				$scripts_jqeasy[$url] = $type;
 			}
 		}
 		
 		if (!empty($scripts_jqeasy)) {
-			
-			$scripts = $headerdata['scripts'];
-			$headerdata['scripts'] = array();
-			
+
+			//$scripts = $headerdata['scripts'];
+			//$headerdata['scripts'] = array();
+
 			foreach ($scripts_jqeasy as $url_jqeasy => $type_jqeasy) {
 				$headerdata['scripts'][$url_jqeasy] = $type_jqeasy;
 				unset($scripts[$url_jqeasy]);
@@ -646,7 +650,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				if (preg_match('#'.$quoted_path.'#s', $url)) {
 					
 					//if ($ignore_caption && preg_match('#'.$quoted_path.'legacy/caption#s', $url)) {
-						//$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
+						//$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
 					//} else {
 						$headerdata['scripts'][$url] = $type;
 					//}
@@ -672,7 +676,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			}
 			
 			if ($this->_showreport) {
-				$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REORDEREDLIBRARIES');
+				$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REORDEREDLIBRARIES');
 			}
 		} //else {
 // 			$quoted_path = preg_quote('media/system/js/', '/');
@@ -680,7 +684,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 // 			foreach ($headerdata['scripts'] as $url => $type) {
 // 				if ($ignore_caption && preg_match('#'.$quoted_path.'legacy/caption#s', $url)) {
 // 					unset($headerdata['scripts'][$url]);
-// 					$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
+// 					$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
 // 					break;
 // 				}
 // 			}
@@ -698,7 +702,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 // 				$count = 0;
 // 				$headerdata['script'] = preg_replace('#'.$regexp.'#', '', $headerdata['script'], -1, $count);
 // 				if ($count > 0) {
-// 					$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVECAPTION');
+// 					$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVECAPTION');
 // 				}
 // 			} else { // faster
 // 				$headerdata['script'] = preg_replace('#'.$regexp.'#', '', $headerdata['script'], 1);
@@ -740,7 +744,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				$count = 0;
 				$body = preg_replace('#<script[^>]*'.$quoted_script.'[^>]*></script>#', '', $body, -1, $count);
 				if ($count > 0 && $this->_showreport) {
-					$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGSCRIPT', $script, $count);
+					$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGSCRIPT', $script, $count);
 				}
 			}
 		}
@@ -753,7 +757,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				$count = 0;
 				$body = preg_replace('#<link[^>]*'.$quoted_stylesheet.'[^>]*/>#', '', $body, -1, $count);
 				if ($count > 0 && $this->_showreport) {
-					$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGCSS', $stylesheet, $count);
+					$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGCSS', $stylesheet, $count);
 				}
 			}
 		}
@@ -769,7 +773,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				
 				$matches = array();
 				if (preg_match_all('#'.$regexp.'#', $body, $matches, PREG_SET_ORDER) > 0) {
-					
+
 					$quoted_javascript = preg_quote('<script type="text/javascript">', '/');
 					
 					foreach ($matches as $match) {
@@ -778,15 +782,15 @@ class plgSystemJQueryEasy extends CMSPlugin
 						if (preg_match('#('.$quoted_javascript.'[\S\s]*?'.$quoted_match.')#', $body)) { // makes sure we are in a javascript tag with anything in between the script tag and the noConflict code
 							$body = preg_replace('#'.$quoted_match.'#', '', $body, 1);
 							if ($this->_showreport) {
-								$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDNOCONFLICTSCRIPTDECLARATIONS', $match[0]);
+								$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDNOCONFLICTSCRIPTDECLARATIONS', $match[0]);
 							}
 						}
 					}
-					
+
 					$count = 0;
 					$body = preg_replace('#<script type="text/javascript">[\s]*?</script>#', '', $body, -1, $count); // remove newly empty scripts, if any
 					if ($count > 0 && $this->_showreport) {
-						$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYSCRIPTTAGS', $count);
+						$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYSCRIPTTAGS', $count);
 					}
 				}
 				
@@ -799,17 +803,17 @@ class plgSystemJQueryEasy extends CMSPlugin
 				if ($count > 0) {
 					$remove_empty_scripts = true;
 					if ($this->_showreport) {
-						$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDNOCONFLICTSCRIPTS', $count);
+						$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDNOCONFLICTSCRIPTS', $count);
 					}
 				}
 			}
 			
 			$do_not_add_libraries = false;
 			$move_unique_library = false;
-			
+
 			$replace_when_unique = $this->params->get('replacewhenunique'.$suffix, 1);
 			$add_when_missing = $this->params->get('addwhenmissing'.$suffix, 1);
-			
+
 			// remove all other references to jQuery library except some
 			$ignoreScripts = trim( (string) $this->params->get('ignorescripts'.$suffix, ''));
 			if ($ignoreScripts) {
@@ -817,32 +821,32 @@ class plgSystemJQueryEasy extends CMSPlugin
 			}
 			
 			$regexp = 'src="([\\\/a-zA-Z0-9_:\.~-]*)jquery([0-9\.-]|latest|core|min|pack)*?.js(.*?)"';
-			
+
 			if (empty($ignoreScripts) && $add_when_missing && $replace_when_unique) { // faster this way
 				$count = 0;
 				$body = preg_replace('#'.$regexp.'#', 'GARBAGE', $body, -1, $count); // find jQuery versions
 				if ($count > 0) {
 					$remove_empty_scripts = true;
 					if ($this->_showreport) {
-						$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERY', $count);
+						$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERY', $count);
 					}
 				}
 			} else {
 				$matches = array();
 				if (preg_match_all('#'.$regexp.'#', $body, $matches, PREG_SET_ORDER) >= 0) {
-					
+
 					$nbr_of_matches = sizeof($matches);
 					if ($nbr_of_matches == 0 && !$add_when_missing) {
 						$do_not_add_libraries = true;
 						if ($this->_showreport) {
-							$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_NOJQUERYLIBRARIESADDED');
+							$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_NOJQUERYLIBRARIESADDED');
 						}
 					} elseif ($nbr_of_matches == 1 && !$replace_when_unique) {
 						foreach ($matches as $match) {
 							$this->_jqpath = rtrim(substr($match[0], 5), '"');
 							$move_unique_library = true;
 							if ($this->_showreport) {
-								$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUELIBRARY', $this->_jqpath);
+								$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUELIBRARY', $this->_jqpath);
 							}
 						}
 					}
@@ -855,7 +859,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 								if (stripos($match[0], $script) !== false) { // library needs to be ignored for removal
 									$ignore = true;
 									if ($this->_showreport) {
-										$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_IGNORESCRIPT', $script);
+										$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_IGNORESCRIPT', $script);
 									}
 								}
 							}
@@ -867,14 +871,14 @@ class plgSystemJQueryEasy extends CMSPlugin
 								if ($nbr_of_matches == 1 && !$replace_when_unique) {
 									// do not show any message
 								} else {
-									$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYLIBRARY', rtrim(substr($match[0], 5), '"'));
+									$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYLIBRARY', rtrim(substr($match[0], 5), '"'));
 								}
 							}
 						}
 					}
 				}
 			}
-			
+
 			// use jQuery version set in the plugin
 			if (!empty($this->_jqpath)) {
 				if ($do_not_add_libraries) {
@@ -884,15 +888,15 @@ class plgSystemJQueryEasy extends CMSPlugin
 					$body = preg_replace('#([\\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQLIB#', $this->_jqpath, $body, 1);
 					if ($this->_showreport) {
 						if ($move_unique_library) {
-							$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERY', $this->_jqpath);
+							$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERY', $this->_jqpath);
 						} else {
-							$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERY', '<a href="'.$this->_jqpath.'" target="_blank">'.$this->_jqpath.'</a>');
+							$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERY', '<a href="'.$this->_jqpath.'" target="_blank">'.$this->_jqpath.'</a>');
 						}
 					}
 				}
 			} else {
 				if ($this->_showreport) {
-					$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERY');
+					$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERY');
 				}
 			}
 			
@@ -905,7 +909,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			if ($count > 0) {
 				$remove_empty_scripts = true;
 				if ($this->_showreport) {
-					$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDMIGRATE', $count);
+					$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDMIGRATE', $count);
 				}
 			}
 			
@@ -913,7 +917,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			if (!empty($this->_jqmigratepath)) {
 				$body = preg_replace('#([\\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQMIGRATELIB#', $this->_jqmigratepath, $body, 1);
 				if ($this->_showreport) {
-					$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYMIGRATE', '<a href="'.$this->_jqmigratepath.'" target="_blank">'.$this->_jqmigratepath.'</a>');
+					$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYMIGRATE', '<a href="'.$this->_jqmigratepath.'" target="_blank">'.$this->_jqmigratepath.'</a>');
 				}
 			}
 			
@@ -925,7 +929,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				} else {
 					$body = preg_replace('#JQEASY_JQNOCONFLICT#', 'jQuery.noConflict();', $body, 1); // add unique jQuery.noConflict();
 					if ($this->_showreport) {
-						$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDNOCONFLICTDECLARATION');
+						$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDNOCONFLICTDECLARATION');
 					}
 				}
 			} elseif ($addjQueryNoConflict == 2) {
@@ -935,7 +939,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				} else {
 					$body = preg_replace('#([\\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQNOCONFLICT#', $this->_jqnoconflictpath, $body, 1); // add jquerynoconflict.js
 					if ($this->_showreport) {
-						$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDNOCONFLICTSCRIPT', $this->_jqnoconflictpath);
+						$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDNOCONFLICTSCRIPT', $this->_jqnoconflictpath);
 					}
 				}
 			}
@@ -945,7 +949,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				$count = 0;
 				$body = preg_replace('#\$\(document\).ready\(function\([$]?\)#s', 'jQuery(document).ready(function($)', $body, -1, $count);
 				if ($count > 0 && $this->_showreport) {
-					$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REPLACEDDOCUMENTREADY', $count);
+					$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REPLACEDDOCUMENTREADY', $count);
 				}
 			}
 			
@@ -970,7 +974,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 								$remove_empty_scripts = true;
 								$move_unique_libraryui = true;
 								if ($this->_showreport) {
-									$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUELIBRARYUI', $this->_jquipath);
+									$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUELIBRARYUI', $this->_jquipath);
 								}
 							}
 						} else {
@@ -979,7 +983,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 								$body = preg_replace('#'.$quoted_match.'#', 'GARBAGE', $body, 1);
 								$remove_empty_scripts = true;
 								if ($this->_showreport) {
-									$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUILIBRARY', rtrim(substr($match[0], 5), '"'));
+									$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUILIBRARY', rtrim(substr($match[0], 5), '"'));
 								}
 							}
 						}
@@ -990,7 +994,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 					if ($count > 0) {
 						$remove_empty_scripts = true;
 						if ($this->_showreport) {
-							$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUI', $count);
+							$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUI', $count);
 						}
 					}
 				}
@@ -1004,18 +1008,18 @@ class plgSystemJQueryEasy extends CMSPlugin
 						$body = preg_replace('#([\\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQUILIB#', $this->_jquipath, $body, 1);
 						if ($this->_showreport) {
 							if ($move_unique_libraryui) {
-								$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERYUI', $this->_jquipath);
+								$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERYUI', $this->_jquipath);
 							} else {
-								$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYUI', '<a href="'.$this->_jquipath.'" target="_blank">'.$this->_jquipath.'</a>');
+								$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYUI', '<a href="'.$this->_jquipath.'" target="_blank">'.$this->_jquipath.'</a>');
 							}
 						}
 					}
 				} else {
 					if ($this->_showreport) {
-						$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERYUI');
+						$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERYUI');
 					}
 				}
-				
+
 				// remove all other references to jQuery UI stylesheets
 				
 				$regexp = 'href="([\\\/a-zA-Z0-9_:\.~-]*)jquery[.-]*ui([0-9\.-]|latest|core|custom|min|pack)*?.css(.*?)"';
@@ -1023,7 +1027,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				if (!$replace_when_unique) {
 					$matches = array();
 					if (preg_match_all('#'.$regexp.'#', $body, $matches, PREG_SET_ORDER) > 0) {
-						
+
 						$nbr_of_matches = sizeof($matches);
 						if ($nbr_of_matches == 1) {
 							foreach ($matches as $match) {
@@ -1033,7 +1037,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 								$remove_empty_links = true;
 								$move_unique_cssui = true;
 								if ($this->_showreport) {
-									$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUECSSUI', $this->_jquicsspath);
+									$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUECSSUI', $this->_jquicsspath);
 								}
 							}
 						} else {
@@ -1042,7 +1046,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 								$body = preg_replace('#'.$quoted_match.'#', 'GARBAGE', $body, 1);
 								$remove_empty_links = true;
 								if ($this->_showreport) {
-									$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUICSSLINK', rtrim(substr($match[0], 5), '"'));
+									$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUICSSLINK', rtrim(substr($match[0], 5), '"'));
 								}
 							}
 						}
@@ -1053,7 +1057,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 					if ($count > 0) {
 						$remove_empty_links = true;
 						if ($this->_showreport) {
-							$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUICSS', $count);
+							$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUICSS', $count);
 						}
 					}
 				}
@@ -1067,28 +1071,28 @@ class plgSystemJQueryEasy extends CMSPlugin
 						$body = preg_replace('#([\\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQUICSS#', $this->_jquicsspath, $body, 1);
 						if ($this->_showreport) {
 							if ($move_unique_cssui) {
-								$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERYUICSS', $this->_jquicsspath);
+								$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERYUICSS', $this->_jquicsspath);
 							} else {
-								$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYUICSS', '<a href="'.$this->_jquicsspath.'" target="_blank">'.$this->_jquicsspath.'</a>');
+								$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYUICSS', '<a href="'.$this->_jquicsspath.'" target="_blank">'.$this->_jquicsspath.'</a>');
 							}
 						}
 					}
 				} else {
 					if ($this->_showreport) {
 						if ($this->params->get('jqueryuitheme'.$suffix, 'none') != 'none') {
-							$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERYUICSS');
+							$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERYUICSS');
 						}
 					}
 				}
 			}
 		} // END if $this->jQuery
-		
+
 		// remove all obsolete script tags
 		if ($remove_empty_scripts) {
 			$count = 0;
 			$body = preg_replace('#<script[^>]*GARBAGE[^>]*></script>#', '', $body, -1, $count); // remove newly empty scripts
 			if ($count > 0 && $this->_showreport) {
-				$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYSCRIPTTAGS', $count);
+				$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYSCRIPTTAGS', $count);
 			}
 		}
 		
@@ -1097,7 +1101,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			$count = 0;
 			$body = preg_replace('#<link[^>]*GARBAGE[^>]*/>#', '', $body, -1, $count); // remove newly empty stylesheets
 			if ($count > 0 && $this->_showreport) {
-				$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYLINKTAGS', $count);
+				$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYLINKTAGS', $count);
 			}
 		}
 		
@@ -1108,7 +1112,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 // 				$count = 0;
 // 				$body = preg_replace('#(jQuery|\$)\(window\).on\(\'load\',[\s]*?function\(\)[\s]*?{[\s]*?}\);#', '', $body, -1, $count);
 // 				if ($count > 0) {
-// 					$this->_verbose_array[] = \JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYSCRIPTJQUERYON');
+// 					$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYSCRIPTJQUERYON');
 // 				}
 // 			} else { // faster
 // 				$body = preg_replace('#(jQuery|\$)\(window\).on\(\'load\',[\s]*?function\(\)[\s]*?{[\s]*?}\);#', '', $body, 1);
@@ -1121,7 +1125,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			foreach($this->_supplement_scripts as $path) {
 				$body = preg_replace('#([\\\/a-zA-Z0-9_:\.~-]*)ADD_SCRIPT_HERE#', $path, $body, 1);
 				if ($this->_showreport) {
-					$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSCRIPT', $path);
+					$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSCRIPT', $path);
 				}
 			}
 		}
@@ -1131,7 +1135,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			$body = preg_replace('#ADD_SCRIPT_DECLARATION_HERE#', $javascript_declaration, $body, 1);
 			if ($this->_showreport) {
 				$lines = array_map('trim', (array) explode("\n", $javascript_declaration));
-				$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSCRIPTDECLARATION', $lines[0]);
+				$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSCRIPTDECLARATION', $lines[0]);
 			}
 		}
 		
@@ -1139,7 +1143,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			foreach($this->_supplement_stylesheets as $path) {
 				$body = preg_replace('#([\\\/a-zA-Z0-9_:\.~-]*)ADD_STYLESHEET_HERE#', $path, $body, 1);
 				if ($this->_showreport) {
-					$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSTYLESHEET', $path);
+					$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSTYLESHEET', $path);
 				}
 			}
 		}
@@ -1149,7 +1153,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 			$body = preg_replace('#ADD_STYLESHEET_DECLARATION_HERE#', $css_declaration, $body, 1);
 			if ($this->_showreport) {
 				$lines = array_map('trim', (array) explode("\n", $css_declaration));
-				$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSTYLESHEETDECLARATION', $lines[0]);
+				$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSTYLESHEETDECLARATION', $lines[0]);
 			}
 		}
 		
@@ -1157,21 +1161,21 @@ class plgSystemJQueryEasy extends CMSPlugin
 			$count = 0;
 			$body = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $body, -1, $count); // gets all of the empty lines in the source and replaces them with a simple carriage return to preserve the content structure.
 			if ($count > 0 && $this->_showreport) {
-				$this->_verbose_array[] = \JText::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEBLANKLINES', $count);
+				$this->_verbose_array[] = Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEBLANKLINES', $count);
 			}
 		}
-		
+
 		$time_end = microtime(true);
 		$this->_timeafterrender = $time_end - $time_start;
-		
+
 		// show the report
-		
+
 		if ($this->_showreport) {
 			$body = self::addReport($body, $this->_verbose_array, $this->_timeafterroute + $this->_timebeforerender + $this->_timeafterrender);
 		}
-		
+
 		$this->app->setBody($body);
-		
+
 		return true;
 	}
 	
@@ -1189,9 +1193,9 @@ class plgSystemJQueryEasy extends CMSPlugin
 		
 		$replacement[] = '<div style="position: relative; display: table; width: 100%; background-color: #d1ecf1; border-bottom: 1px dashed #0c5460;">';
 		
-		$replacement[] = '<span style="display: table-cell; padding: 5px 10px; color: #0c5460; font-weight: bold; font-size: 12px;">'.\JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_JQUERYEASY').'</span>';
+		$replacement[] = '<span style="display: table-cell; padding: 5px 10px; color: #0c5460; font-weight: bold; font-size: 12px;">'.Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_JQUERYEASY').'</span>';
 		
-		$replacement[] = '<a href="" onclick="document.getElementById(\'jqueryeasy_report\').style.display = \'none\'; return false;" style="display: table-cell; text-align: right; font-size: 12px; padding: 5px 10px;">'.\JText::_('JCANCEL').'</a>';
+		$replacement[] = '<a href="" onclick="document.getElementById(\'jqueryeasy_report\').style.display = \'none\'; return false;" style="display: table-cell; text-align: right; font-size: 12px; padding: 5px 10px;">'.Text::_('JCANCEL').'</a>';
 		
 		$replacement[] = '</div>';
 		
@@ -1199,7 +1203,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 		
 		$replacement[] = '<dl style="padding: 0; margin: 15px; overflow: auto; max-height: 200px; max-height: 50vh">';
 		
-		$replacement[] = '<dt style="position: absolute; top: -9999px; left: -9999px;">'.\JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_JQUERYEASY').'</dt>';
+		$replacement[] = '<dt style="position: absolute; top: -9999px; left: -9999px;">'.Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_JQUERYEASY').'</dt>';
 		
 		if (!empty($comments)) {
 			foreach ($comments as $comment) {
@@ -1215,7 +1219,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				$replacement[] = '<dd style="color: '.$color.'; margin-bottom: 6px;">'.$label.substr($comment, 4).'</dd>';
 			}
 		} else {
-			$replacement[] = '<dd>'.\JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_NOCHANGESMADE').'</dd>';
+			$replacement[] = '<dd>'.Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_NOCHANGESMADE').'</dd>';
 		}
 		
 		$replacement[] = '</dl>';
@@ -1224,7 +1228,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 		
 		$replacement[] = '<div style="position: relative; display: table; width: 100%; background-color: #d1ecf1; border-top: 1px dashed #0c5460;">';
 		
-		$replacement[] = '<span style="display: table-cell; padding: 5px 10px; color: #0c5460; font-size: 12px;">'.\JText::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_EXECUTIONTIME').': '.number_format($execution_time, 4).'</span>';
+		$replacement[] = '<span style="display: table-cell; padding: 5px 10px; color: #0c5460; font-size: 12px;">'.Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_EXECUTIONTIME').': '.number_format($execution_time, 4).'</span>';
 		
 		$replacement[] = '</div>';
 		
@@ -1241,15 +1245,15 @@ class plgSystemJQueryEasy extends CMSPlugin
 	{
 		$options = array();
 		$attributes = array();
-		
+
 		if ($useversion) {
 			$options['version'] = 'auto';
 		}
-		
+
 		$attributes['defer'] = $defer;
 		$attributes['async'] = $async;
 		$attributes['type'] = $type;
-		
+
 		Factory::getDocument()->addScript($url, $options, $attributes);
 	}
 	
@@ -1257,17 +1261,17 @@ class plgSystemJQueryEasy extends CMSPlugin
 	{
 		$options = array();
 		$attributes = array();
-		
+
 		if ($useversion) {
 			$options['version'] = 'auto';
 		}
-		
+
 		$attributes['type'] = $type;
 		if (isset($media)) {
 			$attributes['media'] = $media;
 		}
 		$attributes = array_replace($attributes, $attribs);
-		
+
 		Factory::getDocument()->addStyleSheet($url, $options, $attributes);
 	}
 	

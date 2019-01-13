@@ -7,6 +7,9 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 
 class JFormFieldSYWOnlineHelp extends FormField
 {
@@ -25,18 +28,18 @@ class JFormFieldSYWOnlineHelp extends FormField
 	
 	protected function getInput()
 	{
-		\JHtml::_('script', 'syw_jqueryeasy/fields.js', false, true);
-		\JHtml::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
+		HTMLHelper::_('script', 'syw_jqueryeasy/fields.js', false, true);
+		HTMLHelper::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
 
 		$html = array();
 
-		$html[] = !empty($this->title) ? '<'.$this->heading.'>'.\JText::_($this->title).'</'.$this->heading.'>' : '';
+		$html[] = !empty($this->title) ? '<'.$this->heading.'>'.Text::_($this->title).'</'.$this->heading.'>' : '';
 
 		$html[] = '<table style="width: 100%"><tr>';
-		$html[] = !empty($this->syw_description) ? '<td style="background-color: transparent">'.\JText::_($this->syw_description).'</td>' : '';
+		$html[] = !empty($this->syw_description) ? '<td style="background-color: transparent">'.Text::_($this->syw_description).'</td>' : '';
 		if ($this->url) {
 			$html[] = '<td style="text-align: right; background-color: transparent">';
-			$html[] = '<a href="'.$this->url.'" target="_blank" class="btn btn-info btn-sm"><img src="'.\JURI::root().'plugins/system/jqueryeasy/images/local-library.png"> <span>'.\JText::_('JHELP').'</span></a>';
+			$html[] = '<a href="'.$this->url.'" target="_blank" class="btn btn-info btn-sm"><img src="'.Uri::root().'plugins/system/jqueryeasy/images/local-library.png"> <span>'.Text::_('JHELP').'</span></a>';
 			$html[] = '</td>';
 		}
 		$html[] = '</tr></table>';

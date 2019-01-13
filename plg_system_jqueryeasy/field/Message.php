@@ -7,6 +7,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class JFormFieldMessage extends FormField
@@ -21,7 +22,7 @@ class JFormFieldMessage extends FormField
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 
 		if ($this->message_type == 'example') {
-			$html .= '<label style="visibility: hidden; margin: 0">'.\JText::_('PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL').'</label>';
+			$html .= '<label style="visibility: hidden; margin: 0">'.Text::_('PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL').'</label>';
 		} else if ($this->message_type == 'fieldwarning' || $this->message_type == 'fielderror' || $this->message_type == 'fieldinfo') {
 			return parent::getLabel();
 		} 
@@ -38,7 +39,7 @@ class JFormFieldMessage extends FormField
 
 		$message_label = '';
 		if ($this->element['label']) {
-			$message_label = $this->translateLabel ? \JText::_(trim($this->element['label'])) : trim($this->element['label']);
+			$message_label = $this->translateLabel ? Text::_(trim($this->element['label'])) : trim($this->element['label']);
 		}
 			
 		if ($this->message_type == 'example') {
@@ -46,12 +47,12 @@ class JFormFieldMessage extends FormField
 			if ($message_label) {
 				$html .= '<span class="badge badge-dark">'.$message_label.'</span>&nbsp;';
 			} else {
-				$html .= '<span class="badge badge-dark">'.\JText::_('PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL').'</span>&nbsp;';
+				$html .= '<span class="badge badge-dark">'.Text::_('PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL').'</span>&nbsp;';
 			}
 			$html .= '<span class="muted" style="font-size: 0.8em;">';
 				
 			if ($this->message) {
-				$html .= \JText::_($this->message);
+				$html .= Text::_($this->message);
 			}
 			$html .= '</span>';
 				
@@ -71,7 +72,7 @@ class JFormFieldMessage extends FormField
 				
 			$html .= '<span>';
 			if ($this->message) {
-				$html .= \JText::_($this->message);
+				$html .= Text::_($this->message);
 			}
 			$html .= '</span>';
 			$html .= '</div>';

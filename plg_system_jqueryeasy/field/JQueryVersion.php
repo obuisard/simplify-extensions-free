@@ -7,6 +7,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 
 use Joomla\CMS\Factory;
 
@@ -40,15 +41,15 @@ class JFormFieldJQueryVersion extends FormField
 // 		$html .= '<script type="text/javascript">';
 // 		$html .= '  jQuery(document).ready(function($) {';
 // 		$html .= '    var version = $.fn.jquery ? $.fn.jquery : "'.$version.'";';		
-// 		$html .= '    if (version != "undefined") { $(".jqueryversion span").replaceWith("'.\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL').' <span class=\'label\'>jQuery " + version + "</span>"); }';
+// 		$html .= '    if (version != "undefined") { $(".jqueryversion span").replaceWith("'.Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL').' <span class=\'label\'>jQuery " + version + "</span>"); }';
 // 		$html .= '  });';
 // 		$html .= '</script>';
 		
 		$html .= '<div class="jqueryversion alert alert-info" style="margin-bottom: 0">';		
 		if ($version == 'undefined') {
-			$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_UNDETERMINEDVERSION_LABEL', 'jQuery').'</span>';
+			$html .= '  <span>'.Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_UNDETERMINEDVERSION_LABEL', 'jQuery').'</span>';
 		} else {
-			$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'jQuery '.$version).'</span>';
+			$html .= '  <span>'.Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'jQuery '.$version).'</span>';
 		}
 		$html .= '</div>';
 		
@@ -56,7 +57,7 @@ class JFormFieldJQueryVersion extends FormField
 			jQuery(document).ready(function ($){
 				$.getJSON('https://api.cdnjs.com/libraries/jquery?fields=version', function(data) {
                     if (data != undefined && data.version != undefined) {
-                        $('.jqueryversion').append('<br />".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL')." <span class=\'label\'>' + data.version + '</span> (".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL')." Cloudflare)');
+                        $('.jqueryversion').append('<br />".Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL')." <span class=\'label\'>' + data.version + '</span> (".Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL')." Cloudflare)');
                     }
                 });
 			});

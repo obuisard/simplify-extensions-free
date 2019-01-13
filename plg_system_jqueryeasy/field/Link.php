@@ -7,6 +7,8 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 
 class JFormFieldLink extends FormField 
 {
@@ -22,15 +24,15 @@ class JFormFieldLink extends FormField
 	{		
 		$html = '';
 		
-		\JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip');
 		
 		$html .= '<div>';
 		
-		$html .= '<a href="'.$this->link.'" target="_blank" class="hasTooltip" title="'.\JText::_($this->title).'">';
+		$html .= '<a href="'.$this->link.'" target="_blank" class="hasTooltip" title="'.Text::_($this->title).'">';
 		if ($this->image_src) {
-			$html .= '<img src="'.$this->image_src.'" alt="'.\JText::_($this->title).'">';
+			$html .= '<img src="'.$this->image_src.'" alt="'.Text::_($this->title).'">';
 		} else {
-			$html .= \JText::_($this->title);
+			$html .= Text::_($this->title);
 		}
 		$html .= '</a>';
 		
@@ -46,11 +48,11 @@ class JFormFieldLink extends FormField
 		$html .= '<div style="padding-top: 5px">';
 			
 		if ($this->titleintext) {
-			$html .= '<strong>'.\JText::_($this->title).'</strong>: ';
+			$html .= '<strong>'.Text::_($this->title).'</strong>: ';
 		}
 				
 		if ($this->text) {
-			$html .= \JText::sprintf($this->text, $this->link);
+			$html .= Text::sprintf($this->text, $this->link);
 		}
 		
 		$html .= '</div>';

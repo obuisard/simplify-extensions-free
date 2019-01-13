@@ -7,6 +7,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 
 class JFormFieldExtensionConnect extends FormField
@@ -27,7 +28,7 @@ class JFormFieldExtensionConnect extends FormField
 	
 	protected function getInput()
 	{
-		\JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip');
 		
 		$html = '<div style="padding-top: 5px; overflow: inherit">';
 		

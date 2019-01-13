@@ -7,6 +7,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class JFormFieldExtensionVersion extends FormField 
@@ -22,7 +23,7 @@ class JFormFieldExtensionVersion extends FormField
 		
 		$html = '';
 		
-		$html .= '<div style="clear: both;">'.\JText::_('PLG_SYSTEM_JQUERYEASY_VERSION_LABEL').'</div>';
+		$html .= '<div style="clear: both;">'.Text::_('PLG_SYSTEM_JQUERYEASY_VERSION_LABEL').'</div>';
 		
 		return $html;
 	}

@@ -7,6 +7,8 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 
 class JFormFieldTitle extends FormField
 {
@@ -25,8 +27,8 @@ class JFormFieldTitle extends FormField
 	{
 		$html = '';
 		
-		\JHtml::_('script', 'syw_jqueryeasy/fields.js', false, true);
-		\JHtml::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
+		HTMLHelper::_('script', 'syw_jqueryeasy/fields.js', false, true);
+		HTMLHelper::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
 
 		$inline_style = array();
 		
@@ -47,7 +49,7 @@ class JFormFieldTitle extends FormField
 		} 
 
 		if ($this->title) {
-			$html .= \JText::_($this->title);
+			$html .= Text::_($this->title);
 		}
 
 		$html .= '</div>';

@@ -7,6 +7,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class JFormFieldBootstrapVersion extends FormField 
@@ -46,14 +47,14 @@ class JFormFieldBootstrapVersion extends FormField
 // 		$html .= '</script>';
 		
 		$html .= '<div class="bootstrapversion alert alert-info" style="margin-bottom: 0">';
-		$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Bootstrap '.$version).'</span>';
+		$html .= '  <span>'.Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Bootstrap '.$version).'</span>';
 		$html .= '</div>';
 		
 		Factory::getDocument()->addScriptDeclaration("
 			jQuery(document).ready(function ($){
 				$.getJSON('https://api.cdnjs.com/libraries/twitter-bootstrap?fields=version', function(data) {
                     if (data != undefined && data.version != undefined) {
-                        $('.bootstrapversion').append('<br />".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL')." <span class=\'label\'>' + data.version + '</span> (".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL')." Cloudflare)');
+                        $('.bootstrapversion').append('<br />".Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL')." <span class=\'label\'>' + data.version + '</span> (".Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL')." Cloudflare)');
                     }
                 });
 			});

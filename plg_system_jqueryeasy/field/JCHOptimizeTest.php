@@ -9,6 +9,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 
 /*
@@ -41,7 +42,7 @@ class JFormFieldJCHOptimizeTest extends FormField
 			
 			$html .= '<div class="alert alert-warning" style="margin-bottom: 0">';
 			if ($use_file_combination) {
-				$html .= '<span>'.\JText::_('PLG_SYSTEM_JQUERYEASY_WARNING_JCHOPTIMIZEENABLED').'</span><br />';
+				$html .= '<span>'.Text::_('PLG_SYSTEM_JQUERYEASY_WARNING_JCHOPTIMIZEENABLED').'</span><br />';
 			}
 			$html .= '</div>';
 		} 

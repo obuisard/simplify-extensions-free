@@ -8,6 +8,9 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 
 class JFormFieldCDNLinks extends FormField
 {
@@ -79,7 +82,7 @@ class JFormFieldCDNLinks extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
-		\JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip');
 		
 		if (!empty($this->library)) {
 			
@@ -101,7 +104,7 @@ class JFormFieldCDNLinks extends FormField
 			
 			$cdns = $libraries[$this->library];
 			
-			$html .= '<img src="'.\JURI::root().'plugins/system/jqueryeasy/images/network.png" style="margin-right: 5px;">';
+			$html .= '<img src="'.URI::root().'plugins/system/jqueryeasy/images/network.png" style="margin-right: 5px;">';
 			
 			foreach ($cdns as $cdn => $link) {
 				
@@ -110,7 +113,7 @@ class JFormFieldCDNLinks extends FormField
 				$class = '';
 				if ($cdn == $chosen_cdn) {
 					$label_style = ' badge-success';
-					$title = ' title="'.\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_SELECTEDCDN').'"';
+					$title = ' title="'.Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_SELECTEDCDN').'"';
 					$class = ' class="hasTooltip"';
 				}
 				

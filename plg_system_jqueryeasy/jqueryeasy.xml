@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>3.2.0</version>
+	<version>3.2.1</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<media folder="media" destination="syw_jqueryeasy">
 		<filename>index.html</filename>
@@ -54,7 +54,7 @@
 		
 			<fieldset name="basic" label="PLG_SYSTEM_JQUERYEASY_INFORMATION_LABEL">
 				
-				<field type="extensionversion" version="3.2.0" />
+				<field type="extensionversion" version="3.2.1" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_JQUERYEASY_TRANSLATORS" />
@@ -285,36 +285,36 @@
 					
 				<field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_JQUERYUIPATH" label="PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL" showon="jqueryuiversionfrontend:local" />
 					
-	            <field name="jqueryuithemefrontend" type="list" default="none" 
+	            <field name="jqueryuithemefrontend" type="jqueryuithemeselect" default="none" 
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUITHEME_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUITHEME_DESC">
-	            	<option value="none">JNONE</option>
-	            	<option value="custom">PLG_SYSTEM_JQUERYEASY_VALUE_CUSTOMLOCAL</option>
-	                <option value="base">Base</option>
-	                <option value="black-tie">Black Tie</option>
-	                <option value="blitzer">Blitzer</option>
-	                <option value="cupertino">Cupertino</option>
-	                <option value="dark-hive">Dark Hive</option>
-	                <option value="dot-luv">Dot Luv</option>
-	                <option value="eggplant">Eggplant</option>
-	                <option value="excite-bike">Excite Bike</option>
-	                <option value="flick">Flick</option>
-	                <option value="hot-sneaks">Hot Sneaks</option>
-	                <option value="humanity">Humanity</option>
-	                <option value="le-frog">Le Frog</option>
-	                <option value="mint-choc">Mint Choc</option>
-	                <option value="overcast">Overcast</option>
-	                <option value="pepper-grinder">Pepper Grinder</option>
-	                <option value="redmond">Redmond</option>
-	                <option value="smoothness">Smoothness</option>
-	                <option value="south-street">South Street</option>
-	                <option value="start">Start</option>
-	                <option value="sunny">Sunny</option>
-	                <option value="swanky-purse">Swanky Purse</option>
-	                <option value="trontastic">Trontastic</option>
-	                <option value="ui-darkness">UI Darkness</option>
-	                <option value="ui-lightness">UI Lightness</option>
-	                <option value="vader">Vader</option>
+<!-- 	            	<option value="none">JNONE</option> -->
+<!-- 	            	<option value="custom">PLG_SYSTEM_JQUERYEASY_VALUE_CUSTOMLOCAL</option> -->
+<!-- 	                <option value="base">Base</option> -->
+<!-- 	                <option value="black-tie">Black Tie</option> -->
+<!-- 	                <option value="blitzer">Blitzer</option> -->
+<!-- 	                <option value="cupertino">Cupertino</option> -->
+<!-- 	                <option value="dark-hive">Dark Hive</option> -->
+<!-- 	                <option value="dot-luv">Dot Luv</option> -->
+<!-- 	                <option value="eggplant">Eggplant</option> -->
+<!-- 	                <option value="excite-bike">Excite Bike</option> -->
+<!-- 	                <option value="flick">Flick</option> -->
+<!-- 	                <option value="hot-sneaks">Hot Sneaks</option> -->
+<!-- 	                <option value="humanity">Humanity</option> -->
+<!-- 	                <option value="le-frog">Le Frog</option> -->
+<!-- 	                <option value="mint-choc">Mint Choc</option> -->
+<!-- 	                <option value="overcast">Overcast</option> -->
+<!-- 	                <option value="pepper-grinder">Pepper Grinder</option> -->
+<!-- 	                <option value="redmond">Redmond</option> -->
+<!-- 	                <option value="smoothness">Smoothness</option> -->
+<!-- 	                <option value="south-street">South Street</option> -->
+<!-- 	                <option value="start">Start</option> -->
+<!-- 	                <option value="sunny">Sunny</option> -->
+<!-- 	                <option value="swanky-purse">Swanky Purse</option> -->
+<!-- 	                <option value="trontastic">Trontastic</option> -->
+<!-- 	                <option value="ui-darkness">UI Darkness</option> -->
+<!-- 	                <option value="ui-lightness">UI Lightness</option> -->
+<!-- 	                <option value="vader">Vader</option> -->
 	            </field>
 	            
 	            <field name="jqueryuithemecustomfrontend" type="text" default="" size="50" showon="jqueryuithemefrontend:custom" class="input-xxlarge" 

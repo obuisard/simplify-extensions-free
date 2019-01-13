@@ -6,7 +6,9 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Uri\Uri;
 
 class JFormFieldThemes extends FormField 
 {		
@@ -22,8 +24,8 @@ class JFormFieldThemes extends FormField
 		$html = '';
 		
 		// Add the script to the document head.
-		$doc = \JFactory::getDocument();
-		$doc->addStylesheet(\JURI::root(true).'/plugins/system/jqueryeasy/field/themes/css/themes.css');
+		$doc = Factory::getDocument();
+		$doc->addStylesheet(Uri::root(true).'/plugins/system/jqueryeasy/field/themes/css/themes.css');
 		
 		$type = strtolower($this->type);
 		

@@ -7,6 +7,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class JFormFieldJQueryUIVersion extends FormField 
@@ -44,12 +45,12 @@ class JFormFieldJQueryUIVersion extends FormField
 // 		$html .= '    if ($.ui) {';
 // 		$html .= '      var version = $.ui.version ? $.ui.version : "'.$version.'";';
 // 		$html .= '      if (version != "undefined") { ';
-// 		$html .= '        $(".jqueryuiversion span").replaceWith("<span>" + "'.\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL').' <span class=\'label\'>jQuery UI " + version + "</span>");';
+// 		$html .= '        $(".jqueryuiversion span").replaceWith("<span>" + "'.Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL').' <span class=\'label\'>jQuery UI " + version + "</span>");';
 // 		$html .= '      }';
 // 		$html .= '    } else {';
 // 		$html .= '      var version = "'.$version.'";';
 // 		$html .= '      if (version != "undefined") { ';
-// 		$html .= '        $(".jqueryuiversion span").replaceWith("<span>" + "'.\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL').' <span class=\'label\'>jQuery UI " + version + "</span>");';
+// 		$html .= '        $(".jqueryuiversion span").replaceWith("<span>" + "'.Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL').' <span class=\'label\'>jQuery UI " + version + "</span>");';
 // 		$html .= '      }';
 // 		$html .= '    }';
 // 		$html .= '  });';
@@ -57,9 +58,9 @@ class JFormFieldJQueryUIVersion extends FormField
 		
 		$html .= '<div class="jqueryuiversion alert alert-info" style="margin-bottom: 0">';		
 		if ($version == 'undefined') {
-			$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_UNDETERMINEDVERSION_LABEL', 'jQuery UI').'</span>';		
+			$html .= '  <span>'.Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_UNDETERMINEDVERSION_LABEL', 'jQuery UI').'</span>';		
 		} else {
-			$html .= '  <span>'.\JText::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'jQuery UI '.$version).'</span>';
+			$html .= '  <span>'.Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'jQuery UI '.$version).'</span>';
 		}
 		$html .= '</div>';
 		
@@ -67,7 +68,7 @@ class JFormFieldJQueryUIVersion extends FormField
 			jQuery(document).ready(function ($){
 				$.getJSON('https://api.cdnjs.com/libraries/jqueryui?fields=version', function(data) {
                     if (data != undefined && data.version != undefined) {
-                        $('.jqueryuiversion').append('<br />".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL')." <span class=\'label\'>' + data.version + '</span> (".\JText::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL')." Cloudflare)');
+                        $('.jqueryuiversion').append('<br />".Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL')." <span class=\'label\'>' + data.version + '</span> (".Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL')." Cloudflare)');
                     }
                 });
 			});

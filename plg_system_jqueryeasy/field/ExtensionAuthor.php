@@ -7,6 +7,8 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 
 class JFormFieldExtensionAuthor extends FormField 
@@ -20,7 +22,7 @@ class JFormFieldExtensionAuthor extends FormField
 		
 		$html = '';
 		
-		$html .= '<div style="clear: both;">'.\JText::_('PLG_SYSTEM_JQUERYEASY_AUTHOR_LABEL').'</div>';
+		$html .= '<div style="clear: both;">'.Text::_('PLG_SYSTEM_JQUERYEASY_AUTHOR_LABEL').'</div>';
 		
 		return $html;
 	}
@@ -30,7 +32,7 @@ class JFormFieldExtensionAuthor extends FormField
 		$html = '<div style="padding-top: 5px; overflow: inherit">';
 		
 		$html .= 'Olivier Buisard @ <a href="http://www.simplifyyourweb.com" target="_blank">';
-		$html .= '<img alt="Simplify Your Web" src="'.\JURI::root().'plugins/system/jqueryeasy/images/simplifyyourweb.png">';
+		$html .= '<img alt="Simplify Your Web" src="'.Uri::root().'plugins/system/jqueryeasy/images/simplifyyourweb.png">';
 		$html .= '</a>';
 		
 		$html .= '</div>';

@@ -7,6 +7,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
 class JFormFieldExtensionTranslators extends FormField 
@@ -22,7 +23,7 @@ class JFormFieldExtensionTranslators extends FormField
 		
 		$html .= '<div style="clear: both;">';
 		if (!empty($this->translators)) {
-			$html .= \JText::_('PLG_SYSTEM_JQUERYEASY_TRANSLATORS_LABEL');
+			$html .= Text::_('PLG_SYSTEM_JQUERYEASY_TRANSLATORS_LABEL');
 		}
 		$html .= '</div>';
 		
@@ -47,7 +48,7 @@ class JFormFieldExtensionTranslators extends FormField
 		$return = parent::setup($element, $value, $group);
 	
 		if ($return) {
-			$this->translators = isset($this->element['translators']) ? \JText::_($this->element['translators']) : NULL;
+			$this->translators = isset($this->element['translators']) ? Text::_($this->element['translators']) : NULL;
 		}
 	
 		return $return;
