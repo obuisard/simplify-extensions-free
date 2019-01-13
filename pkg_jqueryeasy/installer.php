@@ -6,17 +6,17 @@
 
 defined('_JEXEC') or die;
 
-\JLoader::import('joomla.filesystem.file');
-\JLoader::import('joomla.filesystem.folder');
-
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Language\Text;
 
 /**
  * Script file for the jQuery Easy package
  */
 class pkg_jqueryeasyInstallerScript
 {		
-	static $version = '3.2.0';
+	static $version = '3.2.1';
 	static $available_languages = array('de-DE', 'en-GB', 'en-US', 'es-CO', 'es-ES', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sv-SE', 'tr-TR', 'uk-UA');
 	static $changelog_link = 'https://simplifyyourweb.com/downloads/jquery-easy/file/314-jquery-easy';
 	static $transifex_link = 'https://simplifyyourweb.com/translators';
@@ -40,7 +40,7 @@ class pkg_jqueryeasyInstallerScript
 	{				
 		echo '<p style="margin: 10px 0 20px 0">';
 		echo '<img src="../plugins/system/jqueryeasy/images/logo.png" />';
-		echo '<br /><br /><span class="label">'.\JText::sprintf('PKG_JQUERYEASY_VERSION', self::$version).'</span>';
+		echo '<br /><br /><span class="label">'.Text::sprintf('PKG_JQUERYEASY_VERSION', self::$version).'</span>';
 		echo '<br /><br />Olivier Buisard @ <a href="http://www.simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
 		echo '</p>';
 		
@@ -48,7 +48,7 @@ class pkg_jqueryeasyInstallerScript
  		
  		$current_language = Factory::getLanguage()->getTag();
  		if (!in_array($current_language, self::$available_languages)) {
- 			Factory::getApplication()->enqueueMessage(\JText::sprintf('PKG_JQUERYEASY_INFO_LANGUAGETRANSLATE', Factory::getLanguage()->getName()), 'notice');
+ 			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_JQUERYEASY_INFO_LANGUAGETRANSLATE', Factory::getLanguage()->getName()), 'notice');
  		}
 		
 		if ($type == 'update') {
@@ -63,20 +63,20 @@ class pkg_jqueryeasyInstallerScript
 			$folders = array();
 			
 			foreach ($files as $file) {
-				if (\JFile::exists(JPATH_ROOT.$file) && !\JFile::delete(JPATH_ROOT.$file)) {
-					Factory::getApplication()->enqueueMessage(\JText::sprintf('FILES_JOOMLA_ERROR_FILE_FOLDER', $file), 'warning');
+				if (File::exists(JPATH_ROOT.$file) && !File::delete(JPATH_ROOT.$file)) {
+					Factory::getApplication()->enqueueMessage(Text::sprintf('FILES_JOOMLA_ERROR_FILE_FOLDER', $file), 'warning');
 				}
 			}
 			
 			foreach ($folders as $folder) {
-				if (\JFolder::exists(JPATH_ROOT.$folder) && !\JFolder::delete(JPATH_ROOT.$folder)) {
-					Factory::getApplication()->enqueueMessage(\JText::sprintf('FILES_JOOMLA_ERROR_FILE_FOLDER', $folder), 'warning');
+				if (Folder::exists(JPATH_ROOT.$folder) && !Folder::delete(JPATH_ROOT.$folder)) {
+					Factory::getApplication()->enqueueMessage(Text::sprintf('FILES_JOOMLA_ERROR_FILE_FOLDER', $folder), 'warning');
 				}
 			}
 			
 			// update warning
 			
-			Factory::getApplication()->enqueueMessage(\JText::sprintf('PLG_SYSTEM_JQUERYEASY_WARNING_RELEASENOTES', self::$changelog_link), 'warning');
+			Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_JQUERYEASY_WARNING_RELEASENOTES', self::$changelog_link), 'warning');
 		}
 		
 		return true;
