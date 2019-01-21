@@ -685,14 +685,8 @@ class SYWIconPickerField extends FormField
 
 		if ($return) {
 			$this->icons = isset($this->element['icons']) ? $this->element['icons'] : null;
-			$this->icongroups = isset($this->element['icongroups']) ? $this->element['icongroups'] : null;
-			
-			$this->help = isset($this->element['help']) ? $this->element['help'] : '';
-			if (strpos($this->id, 'X__') !== false) { // this happens if included in subform
-				$this->help = Text::_('LIB_SYW_GLOBAL_UNSELECTABLE');
-				$this->disabled = true;
-			}
-			
+			$this->icongroups = isset($this->element['icongroups']) ? $this->element['icongroups'] : null;			
+			$this->help = isset($this->element['help']) ? $this->element['help'] : '';			
 			$this->icomoon = isset($this->element['icomoon']) ? filter_var($this->element['icomoon'], FILTER_VALIDATE_BOOLEAN) : false;
 			$this->editable = isset($this->element['editable']) ? filter_var($this->element['editable'], FILTER_VALIDATE_BOOLEAN) : false;
 			$this->buttonrole = isset($this->element['buttonrole']) ? Text::_($this->element['buttonrole']) : 'default';

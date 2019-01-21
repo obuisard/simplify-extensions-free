@@ -12,7 +12,7 @@ use Joomla\CMS\Environment\Browser;
 use SYW\Library\Vendor\MobileDetect;
 
 class Utilities 
-{	
+{
 	static $isMobile = null;
 	
 	/*
@@ -23,10 +23,10 @@ class Utilities
 		if (!isset(self::$isMobile)) {
 			
 			if ($use_joomla_library) {				
-				$browser = Browser::getInstance();				
+				$browser = Browser::getInstance();
 				self::$isMobile = $browser->isMobile();
 			} else {				
-				$detect = new MobileDetect;				
+				$detect = new MobileDetect;
 				self::$isMobile = $detect->isMobile();
 			}
 		}
@@ -109,6 +109,201 @@ class Utilities
 	    
 	    return $returnAsString ? implode($seperator, $rgbArray) : $rgbArray; // returns the rgb string or the associative array
 	} 
+	
+	/*
+	 * Bootstrap conversion function (handles Bootstrap 2,3 and 4)
+	 */
+	static function getBootstrapProperty($property, $bootstrap_version = '2')
+	{
+	    $bootstrap_version = strval($bootstrap_version);
+	    switch ($property) {
+	        
+	        // buttons
+	        
+	        case 'btn': return 'btn'; break; // exists for all versions
+	        
+	        case 'btn-default': // no default in B2 nor B4
+	            if ($bootstrap_version == '3') { return 'btn-default'; }
+	            break;
+	        case 'btn-primary': return 'btn-primary'; break;
+	        case 'btn-secondary': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'btn-secondary'; }
+	            break;
+	        case 'btn-info': return 'btn-info'; break;
+	        case 'btn-warning': return 'btn-warning'; break;
+	        case 'btn-danger': return 'btn-danger'; break;
+	        case 'btn-success': return 'btn-success'; break;
+	        case 'btn-link': return 'btn-link'; break;
+	        case 'btn-inverse': // no inverse for B3 and B4
+	            if ($bootstrap_version == '2') { return 'btn-inverse'; }
+	            if ($bootstrap_version == '4') { return 'btn-dark'; }
+	            break;
+	        case 'btn-light': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'btn-light'; }
+	            break;
+	        case 'btn-dark': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'btn-dark'; }
+	            break;
+	        case 'btn-block': return 'btn-block'; break;
+	        case 'btn-large':
+	            if ($bootstrap_version == '2') { return 'btn-large'; }
+	            return 'btn-lg';
+	            break;
+	        case 'btn-small':
+	            if ($bootstrap_version == '2') { return 'btn-small'; }
+	            return 'btn-sm';
+	            break;
+	        case 'btn-mini': // no xs in B4
+	            if ($bootstrap_version == '2') { return 'btn-mini'; }
+	            if ($bootstrap_version == '3') { return 'btn-xs'; }
+	            return 'btn-sm';
+	            break;
+	            
+	            // labels
+	            
+	        case 'label':
+	            if ($bootstrap_version == '2' || $bootstrap_version == '3') { return 'label'; }
+	            return 'badge';
+	            break;
+	        case 'label-default': // no default in B2 nor B4
+	            if ($bootstrap_version == '3') { return 'label-default'; }
+	            break;
+	        case 'label-primary': // no primary in B2
+	            if ($bootstrap_version == '3') { return 'label-primary'; }
+	            if ($bootstrap_version == '4') { return 'badge-primary'; }
+	            break;
+	        case 'label-secondary': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'badge-secondary'; }
+	            break;
+	        case 'label-info':
+	            if ($bootstrap_version == '2' || $bootstrap_version == '3') { return 'label-info'; }
+	            return 'badge-info';
+	            break;
+	        case 'label-warning':
+	            if ($bootstrap_version == '2' || $bootstrap_version == '3') { return 'label-warning'; }
+	            return 'badge-warning';
+	            break;
+	        case 'label-important':
+	            if ($bootstrap_version == '2') { return 'label-important'; }
+	            if ($bootstrap_version == '3') { return 'label-danger'; }
+	            return 'badge-danger';
+	            break;
+	        case 'label-success':
+	            if ($bootstrap_version == '2' || $bootstrap_version == '3') { return 'label-success'; }
+	            return 'badge-success';
+	            break;
+	        case 'label-inverse': // no inverse for B3 and B4
+	            if ($bootstrap_version == '2') { return 'label-inverse'; }
+	            if ($bootstrap_version == '4') { return 'badge-dark'; }
+	            break;
+	        case 'label-light': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'badge-light'; }
+	            break;
+	        case 'label-dark': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'badge-dark'; }
+	            break;
+	            
+	            // badges-pills
+	            
+	        case 'badge':
+	            if ($bootstrap_version == '2' || $bootstrap_version == '3') { return 'badge'; }
+	            return 'badge badge-pill';
+	            break;
+	        case 'badge-default': break; // no default in B2, B3 nor B4
+	        case 'badge-primary': // no primary in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'badge-primary'; }
+	            break;
+	        case 'badge-secondary': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'badge-secondary'; }
+	            break;
+	        case 'badge-info': // not in B3
+	            if ($bootstrap_version == '2' || $bootstrap_version == '4') { return 'badge-info'; }
+	            break;
+	        case 'badge-warning': // not in B3
+	            if ($bootstrap_version == '2' || $bootstrap_version == '4') { return 'badge-warning'; }
+	            break;
+	        case 'badge-important': // not in B3
+	            if ($bootstrap_version == '2') { return 'badge-important'; }
+	            if ($bootstrap_version == '4') { return 'badge-danger'; }
+	            break;
+	        case 'badge-success': // not in B3
+	            if ($bootstrap_version == '2' || $bootstrap_version == '4') { return 'badge-success'; }
+	            break;
+	        case 'badge-inverse': // no inverse for B3 and B4
+	            if ($bootstrap_version == '2') { return 'badge-inverse'; }
+	            if ($bootstrap_version == '4') { return 'badge-dark'; }
+	            break;
+	        case 'badge-light': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'badge-light'; }
+	            break;
+	        case 'badge-dark': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'badge-dark'; }
+	            break;
+	            
+	            // alerts
+	            
+	        case 'alert': return 'alert'; break; // exists for all versions
+	        
+	        case 'alert-primary': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'alert-primary'; }
+	            break;
+	        case 'alert-secondary': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'alert-secondary'; }
+	            break;
+	        case 'alert-info': return 'alert-info'; break;
+	        case 'alert-success': return 'alert-success'; break;
+	        case 'alert-warning': // no B2
+	            if ($bootstrap_version == '3' || $bootstrap_version == '4') { return 'alert-warning'; }
+	            break;
+	        case 'alert-error':
+	            if ($bootstrap_version == '2') { return 'alert-error'; }
+	            return 'alert-danger';
+	            break;
+	        case 'alert-light': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'alert-light'; }
+	            break;
+	        case 'alert-dark': // not in B2 nor B3
+	            if ($bootstrap_version == '4') { return 'alert-dark'; }
+	            break;
+	            
+	            // pagination
+	            
+	        case 'pagination': return 'pagination'; break; // exists for all versions
+	        
+	        case 'pagination-large':
+	            if ($bootstrap_version == '2') { return 'pagination-large'; }
+	            return 'pagination-lg';
+	            break;
+	        case 'pagination-small':
+	            if ($bootstrap_version == '2') { return 'pagination-small'; }
+	            return 'btn-sm';
+	            break;
+	        case 'pagination-mini': // no xs in B4
+	            if ($bootstrap_version == '2') { return 'pagination-mini'; }
+	            return 'pagination-sm';
+	            break;
+	            
+	            // align
+	            
+	        case 'float-right':
+	            if ($bootstrap_version == '4') { return 'float-right'; }
+	            return 'pull-right';
+	            break;
+	            
+	        case 'float-left':
+	            if ($bootstrap_version == '4') { return 'float-left'; }
+	            return 'pull-left';
+	            break;
+	            
+	        case 'float-none':
+	            if ($bootstrap_version == '4') { return 'float-none'; }
+	            break;
+	            
+	            // clearfix exists for all versions
+	    }
+	    
+	    return '';
+	}
 	
 }
 ?>
