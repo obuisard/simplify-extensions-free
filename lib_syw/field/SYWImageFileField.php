@@ -13,7 +13,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 
-class JFormFieldSYWImageFile extends FormField
+class SYWImageFileField extends FormField
 {
 	public $type = 'SYWImageFile';
 	
@@ -33,7 +33,7 @@ class JFormFieldSYWImageFile extends FormField
 		$accept = $this->element['accept'] ? ' accept="' . (string) $this->element['accept'] . '"' : ' accept=".gif,.jpg,.png"';
 		$size = $this->element['size'] ? ' size="' . (int) $this->element['size'] . '"' : '';
 		$maxLength = $this->element['maxlength'] ? ' maxlength="' . (int) $this->element['maxlength'] . '"' : '';
-		$class = $this->element['class'] ? 'class="form-control ' . (string) $this->element['class'] . '"' : 'class="form-control"';
+		$class = $this->element['class'] ? 'class="form-control-file ' . (string) $this->element['class'] . '"' : 'class="form-control-file"';
 		$disabled = ((string) $this->element['disabled'] == 'true') ? ' disabled="disabled"' : '';
 
 		// Initialize JavaScript field attributes.

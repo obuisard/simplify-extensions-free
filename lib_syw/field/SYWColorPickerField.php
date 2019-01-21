@@ -21,6 +21,7 @@ class SYWColorPickerField extends FormField
 	protected $allow_transparency;
 	protected $icon;
 	protected $help;
+	protected $rgba;
 	
 	protected function getInput() 
 	{		
@@ -37,7 +38,7 @@ class SYWColorPickerField extends FormField
 			
 		if (!$color || in_array($color, array('none', 'transparent'))) {
 			$color = '';
-		} elseif ($color['0'] != '#') {
+		} elseif (!$this->rgba && $color['0'] != '#') {
 			$color = '#'.$color;
 		}
 		
@@ -61,10 +62,15 @@ class SYWColorPickerField extends FormField
 		
 		if (!empty($icon)) {
 			$html .= '<div class="input-group-prepend"><span class="input-group-text"><i class="'.$icon.'"></i></span></div>';
-		}	
+		}
+		
+		$data_rgba = '';
+		if ($this->rgba) {
+		    $data_rgba = ' data-format="rgba" style="width: auto"';
+		}
 
 		if (!$this->allow_transparency && !$this->use_global) {
-			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="form-control minicolors"'.$direction.' />';
+		    $html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="form-control minicolors"'.$direction.$data_rgba.' />';
 		} else {
 			$disabled = '';
 			if (empty($this->value) && $this->use_global) {
@@ -72,9 +78,9 @@ class SYWColorPickerField extends FormField
 			}
 			
 			$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" />';
-			$html .= '<input style="height:auto" type="text" name="visible_'.$this->name.'" id="visible_'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="form-control minicolors"'.$direction.$disabled.' />';
+			$html .= '<input style="height:auto" type="text" name="visible_'.$this->name.'" id="visible_'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="form-control minicolors"'.$direction.$data_rgba.$disabled.' />';
 		}
-		
+
 		if ($this->use_global || $this->allow_transparency) {
 		    $html .= '<div class="input-group-append">';
 		}
@@ -90,7 +96,7 @@ class SYWColorPickerField extends FormField
 		if ($this->allow_transparency) {
 			$html .= '<button type="button" id="a_'.$this->id.'" class="btn btn-secondary hasTooltip" title="'.Text::_('JLIB_FORM_BUTTON_CLEAR').'"><i class="icon-remove"></i></button>';
 		}
-		
+
 		if ($this->use_global || $this->allow_transparency) {
 		    $html .= '</div>';
 		}
@@ -145,6 +151,7 @@ class SYWColorPickerField extends FormField
 			$this->allow_transparency = isset($this->element['transparency']) ? filter_var($this->element['transparency'], FILTER_VALIDATE_BOOLEAN) : false;
 			$this->icon = isset($this->element['icon']) ? $this->element['icon'] : null;			
 			$this->help = isset($this->element['help']) ? $this->element['help'] : '';
+			$this->rgba = ($this->element['rgba'] == "true") ? true : false;
 		}
 
 		return $return;
