@@ -28,6 +28,13 @@ class pkg_jqueryeasyInstallerScript
 	 */
 	public function preflight($type, $parent) 
 	{
+	    // make sure we are under Joomla 4.0 or over
+	    
+	    if (version_compare(JVERSION, '3.15.0', 'lt')) {
+	        JFactory::getApplication()->enqueueMessage(JText::sprintf('JOOMLA_REQUIRED_VERSION', '4'), 'error');
+	        return false;
+	    }	
+	    
 		return true;
 	}
 	
