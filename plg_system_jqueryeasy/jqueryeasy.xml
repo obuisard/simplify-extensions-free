@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>3.2.1</version>
+	<version>3.2.2</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<media folder="media" destination="syw_jqueryeasy">
 		<filename>index.html</filename>
@@ -54,7 +54,7 @@
 		
 			<fieldset name="basic" label="PLG_SYSTEM_JQUERYEASY_INFORMATION_LABEL">
 				
-				<field type="extensionversion" version="3.2.1" />
+				<field type="extensionversion" version="3.2.2" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_JQUERYEASY_TRANSLATORS" />
