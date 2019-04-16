@@ -16,7 +16,7 @@ use Joomla\CMS\Language\Text;
  */
 class pkg_jqueryeasyInstallerScript
 {
-	static $version = '3.2.2';
+	static $version = '3.2.3';
 	static $available_languages = array('de-DE', 'en-GB', 'en-US', 'es-CO', 'es-ES', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sv-SE', 'tr-TR', 'uk-UA');
 	static $changelog_link = 'https://simplifyyourweb.com/downloads/jquery-easy/file/314-jquery-easy';
 	static $transifex_link = 'https://simplifyyourweb.com/translators';
@@ -81,6 +81,10 @@ class pkg_jqueryeasyInstallerScript
 				}
 			}
 
+			// remove the old update site
+
+			$this->removeUpdateSite('package', 'pkg_jqueryeasy', '', 'http://www.barejoomlatemplates.com/autoupdates/jqueryeasy/jqueryeasy-v3-update.xml');
+
 			// update warning
 
 			Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_JQUERYEASY_WARNING_RELEASENOTES', self::$changelog_link), 'warning');
@@ -107,6 +111,93 @@ class pkg_jqueryeasyInstallerScript
 	 * Called on uninstallation
 	 */
 	public function uninstall($parent) { }
+
+	private function removeUpdateSite($type, $element, $folder = '', $location = '')
+	{
+	    $db = JFactory::getDBO();
+
+	    $query = $db->getQuery(true);
+
+	    $query->select('extension_id');
+	    $query->from('#__extensions');
+	    $query->where($db->quoteName('type').'='.$db->quote($type));
+	    $query->where($db->quoteName('element').'='.$db->quote($element));
+	    if ($folder) {
+	        $query->where($db->quoteName('folder').'='.$db->quote($folder));
+	    }
+
+	    $db->setQuery($query);
+
+	    $extension_id = '';
+	    try {
+	        $extension_id = $db->loadResult();
+	    } catch (RuntimeException $e) {
+	        JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	        return false;
+	    }
+
+	    if ($extension_id) {
+
+	        $query->clear();
+
+	        $query->select('update_site_id');
+	        $query->from('#__update_sites_extensions');
+	        $query->where($db->quoteName('extension_id').'='.$db->quote($extension_id));
+
+	        $db->setQuery($query);
+
+	        $updatesite_id = array(); // can have several results
+	        try {
+	            $updatesite_id = $db->loadColumn();
+	        } catch (RuntimeException $e) {
+	            JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	            return false;
+	        }
+
+	        if (empty($updatesite_id)) {
+	            return false;
+	        } else if (count($updatesite_id) == 1) {
+
+	            $query->clear();
+
+	            $query->delete($db->quoteName('#__update_sites'));
+	            $query->where($db->quoteName('update_site_id').' = '.$db->quote($updatesite_id[0]));
+
+	            $db->setQuery($query);
+
+	            try {
+	                $db->execute();
+	            } catch (RuntimeException $e) {
+	                JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	                return false;
+	            }
+	        } else { // several update sites exist for the same extension therefore we need to specify which to delete
+
+	            if ($location) {
+	                $query->clear();
+
+	                $query->delete($db->quoteName('#__update_sites'));
+	                $query->where($db->quoteName('update_site_id').' IN ('.implode(',', $updatesite_id).')');
+	                $query->where($db->quoteName('location').' = '.$db->quote($location));
+
+	                $db->setQuery($query);
+
+	                try {
+	                    $db->execute();
+	                } catch (RuntimeException $e) {
+	                    JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	                    return false;
+	                }
+	            } else {
+	                return false;
+	            }
+	        }
+	    } else {
+	        return false;
+	    }
+
+	    return true;
+	}
 
 }
 ?>
