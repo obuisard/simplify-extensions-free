@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>3.2.2</version>
+	<version>3.2.3</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<media folder="media" destination="syw_jqueryeasy">
 		<filename>index.html</filename>
@@ -54,7 +54,7 @@
 		
 			<fieldset name="basic" label="PLG_SYSTEM_JQUERYEASY_INFORMATION_LABEL">
 				
-				<field type="extensionversion" version="3.2.2" />
+				<field type="extensionversion" version="3.2.3" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_JQUERYEASY_TRANSLATORS" />
@@ -184,6 +184,8 @@
 				<field name="jqueryversionfrontend" type="list" default="1.8" 
 	            	label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYVERSION_LABEL" 
 	            	description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYVERSION_DESC">
+	            	<option value="3.4#slim" disabled="true">3.4.x slim</option>
+	            	<option value="3.4">3.4.x</option>
 	            	<option value="3.3#slim" disabled="true">3.3.x slim</option>
 	            	<option value="3.3">3.3.x</option>
 	            	<option value="3.2#slim" disabled="true">3.2.x slim</option>
@@ -209,14 +211,14 @@
 	                <option value="joomla">PLG_SYSTEM_JQUERYEASY_VALUE_JOOMLA</option>
 	            </field>
 	            
-	            <field name="jquerysubversionfrontend" type="text" default="" size="2" showon="jqueryversionfrontend:1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,2.0,2.1,2.2,3.0,3.1,3.2,3.3" 
+	            <field name="jquerysubversionfrontend" type="text" default="" size="2" showon="jqueryversionfrontend:1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,2.0,2.1,2.2,3.0,3.1,3.2,3.3,3.4" 
 					label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYSUBVERSION_LABEL" 
 					description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYSUBVERSION_DESC" />
 					
-				<field type="cdnlinks" library="jquery" showon="jqueryversionfrontend:1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,2.0,2.1,2.2,3.0,3.1,3.2,3.3" />
+				<field type="cdnlinks" library="jquery" showon="jqueryversionfrontend:1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,2.0,2.1,2.2,3.0,3.1,3.2,3.3,3.4" />
 								
-				<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY2" showon="jqueryversionfrontend:2.0,2.1,2.2,3.0,3.1,3.2,3.3" />
-				<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY3" showon="jqueryversionfrontend:3.0,3.1,3.2,3.3" />
+				<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY2" showon="jqueryversionfrontend:2.0,2.1,2.2,3.0,3.1,3.2,3.3,3.4" />
+				<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY3" showon="jqueryversionfrontend:3.0,3.1,3.2,3.3,3.4" />
 					
 				<field name="localversionfrontend" type="text" default="" size="50" showon="jqueryversionfrontend:local" class="input-xxlarge" 
 					label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALVERSION_LABEL" 
