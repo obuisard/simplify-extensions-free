@@ -10,8 +10,8 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Uri\Uri;
 
 class plgSystemJQueryEasy extends CMSPlugin
 {
@@ -557,7 +557,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 		$this->_timeafterroute = $time_end - $time_start;
 	}
 
-	function onBeforeRender()
+	function onBeforeCompileHead()
 	{
 	    if (!$this->app->isClient('site')) {
 			return;
@@ -573,15 +573,15 @@ class plgSystemJQueryEasy extends CMSPlugin
 
 		$time_start = microtime(true);
 
-		$headerdata = $doc->getHeadData();
-		$scripts = (isset($headerdata['scripts']) && is_array($headerdata['scripts'])) ? $headerdata['scripts'] : array(); // could be empty string
+        //$headerdata = $doc->getHeadData();
+        //$scripts = (isset($headerdata['scripts']) && is_array($headerdata['scripts'])) ? $headerdata['scripts'] : array(); // could be empty string
+
+        $scripts = $doc->_scripts;
+
 		$headerdata['scripts'] = array();
 
 		// check if jQuery and Bootstrap are used in the template (nothing in $headerdata before 'onBeforeRender' other than what has been added in the plugin)
 		if ($this->_showreport) {
-
-			//$headerdata = $doc->getHeadData();
-			//$scripts = $headerdata['scripts'];
 
 			$jquery_quoted_path = preg_quote('media/vendor/jquery/js/jquery', '/');
 			$jqueryui_quoted_path = preg_quote('media/vendor/jquery-ui/js/jquery.ui', '/');
@@ -614,15 +614,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 				}
 			}
 		}
-
-		// at this point, jQuery and MooTools libraries are loaded in the wrong order, if jQuery is enabled
-		// we have jQuery, MooTools and other libraries loaded in that order
-		// take all 'media/system/js' libraries and put them in front of all others
-
-		//$headerdata = $doc->getHeadData();
-
-		//$ignore_caption = $this->params->get('disablecaptions', 0);
-
+		
 		// make sure we start with all jQuery Easy scripts
 
 		$scripts_jqeasy = array();
@@ -635,39 +627,21 @@ class plgSystemJQueryEasy extends CMSPlugin
 
 		if (!empty($scripts_jqeasy)) {
 
-			//$scripts = $headerdata['scripts'];
-			//$headerdata['scripts'] = array();
-
 			foreach ($scripts_jqeasy as $url_jqeasy => $type_jqeasy) {
 				$headerdata['scripts'][$url_jqeasy] = $type_jqeasy;
 				unset($scripts[$url_jqeasy]);
 			}
 
-			// then with MooTools and all system scripts
+			// then with all system scripts
 
 			$quoted_path = preg_quote('media/system/js/', '/');
 			foreach ($scripts as $url => $type) {
 				if (preg_match('#'.$quoted_path.'#s', $url)) {
-
-					//if ($ignore_caption && preg_match('#'.$quoted_path.'legacy/caption#s', $url)) {
-						//$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
-					//} else {
-						$headerdata['scripts'][$url] = $type;
-					//}
+					$headerdata['scripts'][$url] = $type;
 
 					unset($scripts[$url]);
 				}
 			}
-
-			// make sure we follow with all media/jui/js scripts
-
-			// 			$quoted_path = preg_quote('media/jui/js/', '/');
-			// 			foreach ($scripts as $url => $type) {
-			// 				if (preg_match('#'.$quoted_path.'#s', $url)) {
-			// 					$headerdata['scripts'][$url] = $type;
-			// 					unset($scripts[$url]);
-			// 				}
-			// 			}
 
 			// remaining scripts
 
@@ -678,38 +652,9 @@ class plgSystemJQueryEasy extends CMSPlugin
 			if ($this->_showreport) {
 				$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REORDEREDLIBRARIES');
 			}
-		} //else {
-// 			$quoted_path = preg_quote('media/system/js/', '/');
+		} 
 
-// 			foreach ($headerdata['scripts'] as $url => $type) {
-// 				if ($ignore_caption && preg_match('#'.$quoted_path.'legacy/caption#s', $url)) {
-// 					unset($headerdata['scripts'][$url]);
-// 					$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDCAPTIONLIBRARY');
-// 					break;
-// 				}
-// 			}
-// 		}
-
-		// also we have script declarations loaded alongside MooTools libraries
-		// if getting rid of libraries, also need to get rid of script declarations associated to them
-		// NOTE: JCaption is now called with jQuery (from Joomla 3.2), not MooTools anymore
-
-// 		if ($ignore_caption) {
-
-// 			$regexp = '([\s\w();,\':\.-]*)JCaption([\s\w();,\':\.-]*)';
-
-// 			if ($this->_showreport) {
-// 				$count = 0;
-// 				$headerdata['script'] = preg_replace('#'.$regexp.'#', '', $headerdata['script'], -1, $count);
-// 				if ($count > 0) {
-// 					$this->_verbose_array[] = Text::_('PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVECAPTION');
-// 				}
-// 			} else { // faster
-// 				$headerdata['script'] = preg_replace('#'.$regexp.'#', '', $headerdata['script'], 1);
-// 			}
-// 		}
-
-		$doc->setHeadData($headerdata);
+        $doc->_scripts = $headerdata['scripts'];
 
 		$time_end = microtime(true);
 		$this->_timebeforerender = $time_end - $time_start;

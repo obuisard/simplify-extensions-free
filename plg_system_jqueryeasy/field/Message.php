@@ -21,11 +21,12 @@ class JFormFieldMessage extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 
-		if ($this->message_type == 'example') {
-			$html .= '<label style="visibility: hidden; margin: 0">'.Text::_('PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL').'</label>';
-		} else if ($this->message_type == 'fieldwarning' || $this->message_type == 'fielderror' || $this->message_type == 'fieldinfo') {
+// 		if ($this->message_type == 'example') {
+// 			$html .= '<label style="visibility: hidden; margin: 0">'.Text::_('PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL').'</label>';
+// 		} else
+		if ($this->message_type == 'example' || $this->message_type == 'fieldwarning' || $this->message_type == 'fielderror' || $this->message_type == 'fieldinfo') {
 			return parent::getLabel();
-		} 
+		}
 
 		return $html;
 	}
@@ -41,21 +42,21 @@ class JFormFieldMessage extends FormField
 		if ($this->element['label']) {
 			$message_label = $this->translateLabel ? Text::_(trim($this->element['label'])) : trim($this->element['label']);
 		}
-			
+
 		if ($this->message_type == 'example') {
-				
-			if ($message_label) {
-				$html .= '<span class="badge badge-dark">'.$message_label.'</span>&nbsp;';
-			} else {
-				$html .= '<span class="badge badge-dark">'.Text::_('PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL').'</span>&nbsp;';
-			}
+
+// 			if ($message_label) {
+// 				$html .= '<span class="badge badge-dark">'.$message_label.'</span>&nbsp;';
+// 			} else {
+// 				$html .= '<span class="badge badge-dark">'.Text::_('PLG_SYSTEM_JQUERYEASY_EXAMPLE_EXAMPLE_LABEL').'</span>&nbsp;';
+// 			}
 			$html .= '<span class="muted" style="font-size: 0.8em;">';
-				
+
 			if ($this->message) {
 				$html .= Text::_($this->message);
 			}
 			$html .= '</span>';
-				
+
 		} else {
 			$style = '';
 			switch ($this->message_type) {
@@ -64,12 +65,12 @@ class JFormFieldMessage extends FormField
 				case 'info': case 'fieldinfo': $style = 'info'; break;
 				default: $style = 'success'; /* message, success */
 			}
-				
+
 			$html .= '<div style="margin-bottom:0" class="alert alert-'.$style.'">';
 			if ($message_label && $this->message_type != 'fieldwarning' && $this->message_type != 'fielderror' && $this->message_type != 'fieldinfo') {
 				$html .= '<span class="badge badge-'.$style.'">'.$message_label.'</span>&nbsp;';
 			}
-				
+
 			$html .= '<span>';
 			if ($this->message) {
 				$html .= Text::_($this->message);
