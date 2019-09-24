@@ -16,7 +16,7 @@ use Joomla\CMS\Language\Text;
  */
 class pkg_jqueryeasyInstallerScript
 {
-	static $version = '3.2.3';
+	static $version = '3.2.4';
 	static $available_languages = array('de-DE', 'en-GB', 'en-US', 'es-CO', 'es-ES', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sv-SE', 'tr-TR', 'uk-UA');
 	static $changelog_link = 'https://simplifyyourweb.com/downloads/jquery-easy/file/314-jquery-easy';
 	static $transifex_link = 'https://simplifyyourweb.com/translators';
