@@ -55,7 +55,7 @@ class K2
 	 *
 	 * @return array of tag objects (false if error)
 	 */
-	static function getTags($whole = false, $tag_ids = array(), $include = true)
+	static function getTags($whole = false, $tag_ids = array(), $include = true, $order = 'name', $order_dir = 'ASC')
 	{
 		$tags = array();
 		
@@ -95,7 +95,7 @@ class K2
 		}
 		
 		//$query->order('xref.id ASC');
-		$query->order('tag.name ASC');
+		$query->order('tag.'.$order.' '.$order_dir);
 		
 		$db->setQuery($query);
 		

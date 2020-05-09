@@ -1,6 +1,6 @@
 /*!
  * Hover.css (http://ianlunn.github.io/Hover/)
- * Version: 2.0.2
+ * Version: 2.3.1
  * Author: Ian Lunn @IanLunn
  * Author URL: http://ianlunn.co.uk/
  * Github: https://github.com/IanLunn/Hover
@@ -8,18 +8,14 @@
  * Made available under a MIT License:
  * http://www.opensource.org/licenses/mit-license.php
 
- * Hover.css Copyright Ian Lunn 2014. Generated with Sass.
+ * Hover.css Copyright Ian Lunn 2017. Generated with Sass.
  */
  
- /* BACKGROUND TRANSITIONS */
 /* Fade */
 .hvr-fade {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
   -webkit-transition-duration: 0.3s;
   transition-duration: 0.3s;
@@ -27,7 +23,7 @@
   transition-property: color, background-color;
 }
 .hvr-fade:hover, .hvr-fade:focus, .hvr-fade:active {
-  background-color: #2098d1;
+  background-color: #2098D1;
   color: white;
 }
 
@@ -45,12 +41,9 @@
 }
 
 .hvr-back-pulse {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
   -webkit-transition-duration: 0.5s;
   transition-duration: 0.5s;
@@ -68,19 +61,15 @@
   animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
   animation-iteration-count: infinite;
-  background-color: #2098d1;
-  background-color: #2098d1;
+  background-color: #2098D1;
   color: white;
 }
 
 /* Sweep To Right */
 .hvr-sweep-to-right {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   -webkit-transition-property: color;
   transition-property: color;
@@ -95,7 +84,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transform: scaleX(0);
   transform: scaleX(0);
   -webkit-transform-origin: 0 50%;
@@ -117,12 +106,9 @@
 
 /* Sweep To Left */
 .hvr-sweep-to-left {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   -webkit-transition-property: color;
   transition-property: color;
@@ -137,7 +123,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transform: scaleX(0);
   transform: scaleX(0);
   -webkit-transform-origin: 100% 50%;
@@ -159,12 +145,9 @@
 
 /* Sweep To Bottom */
 .hvr-sweep-to-bottom {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   -webkit-transition-property: color;
   transition-property: color;
@@ -179,7 +162,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transform: scaleY(0);
   transform: scaleY(0);
   -webkit-transform-origin: 50% 0;
@@ -201,12 +184,9 @@
 
 /* Sweep To Top */
 .hvr-sweep-to-top {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   -webkit-transition-property: color;
   transition-property: color;
@@ -221,7 +201,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transform: scaleY(0);
   transform: scaleY(0);
   -webkit-transform-origin: 50% 100%;
@@ -243,12 +223,9 @@
 
 /* Bounce To Right */
 .hvr-bounce-to-right {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   -webkit-transition-property: color;
   transition-property: color;
@@ -263,7 +240,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transform: scaleX(0);
   transform: scaleX(0);
   -webkit-transform-origin: 0 50%;
@@ -287,12 +264,9 @@
 
 /* Bounce To Left */
 .hvr-bounce-to-left {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   -webkit-transition-property: color;
   transition-property: color;
@@ -307,7 +281,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transform: scaleX(0);
   transform: scaleX(0);
   -webkit-transform-origin: 100% 50%;
@@ -331,12 +305,9 @@
 
 /* Bounce To Bottom */
 .hvr-bounce-to-bottom {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   -webkit-transition-property: color;
   transition-property: color;
@@ -351,7 +322,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transform: scaleY(0);
   transform: scaleY(0);
   -webkit-transform-origin: 50% 0;
@@ -375,12 +346,9 @@
 
 /* Bounce To Top */
 .hvr-bounce-to-top {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   -webkit-transition-property: color;
   transition-property: color;
@@ -395,7 +363,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transform: scaleY(0);
   transform: scaleY(0);
   -webkit-transform-origin: 50% 100%;
@@ -419,12 +387,9 @@
 
 /* Radial Out */
 .hvr-radial-out {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   overflow: hidden;
   background: #e1e1e1;
@@ -441,7 +406,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2098d1;
+  background: #2098D1;
   border-radius: 100%;
   -webkit-transform: scale(0);
   transform: scale(0);
@@ -462,15 +427,12 @@
 
 /* Radial In */
 .hvr-radial-in {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   overflow: hidden;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transition-property: color;
   transition-property: color;
   -webkit-transition-duration: 0.3s;
@@ -505,14 +467,11 @@
 
 /* Rectangle In */
 .hvr-rectangle-in {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transition-property: color;
   transition-property: color;
   -webkit-transition-duration: 0.3s;
@@ -546,12 +505,9 @@
 
 /* Rectangle Out */
 .hvr-rectangle-out {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   background: #e1e1e1;
   -webkit-transition-property: color;
@@ -567,7 +523,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transform: scale(0);
   transform: scale(0);
   -webkit-transition-property: transform;
@@ -587,14 +543,11 @@
 
 /* Shutter In Horizontal */
 .hvr-shutter-in-horizontal {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transition-property: color;
   transition-property: color;
   -webkit-transition-duration: 0.3s;
@@ -630,12 +583,9 @@
 
 /* Shutter Out Horizontal */
 .hvr-shutter-out-horizontal {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   background: #e1e1e1;
   -webkit-transition-property: color;
@@ -651,7 +601,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transform: scaleX(0);
   transform: scaleX(0);
   -webkit-transform-origin: 50%;
@@ -673,14 +623,11 @@
 
 /* Shutter In Vertical */
 .hvr-shutter-in-vertical {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transition-property: color;
   transition-property: color;
   -webkit-transition-duration: 0.3s;
@@ -716,12 +663,9 @@
 
 /* Shutter Out Vertical */
 .hvr-shutter-out-vertical {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
   position: relative;
   background: #e1e1e1;
   -webkit-transition-property: color;
@@ -737,7 +681,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #2098d1;
+  background: #2098D1;
   -webkit-transform: scaleY(0);
   transform: scaleY(0);
   -webkit-transform-origin: 50%;

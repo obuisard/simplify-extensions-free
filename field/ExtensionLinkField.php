@@ -33,6 +33,7 @@ class ExtensionLinkField extends FormField
 			
 		switch ($this->link_type) {
 			case 'forum': $icon="SYWicon-chat"; $title = 'LIB_SYW_EXTENSIONLINK_FORUM_LABEL'; break;
+			case 'forumbeta': $icon="SYWicon-chat"; $title = 'LIB_SYW_EXTENSIONLINK_FORUMBETA_LABEL'; $class = 'btn-inverse'; break;
 			case 'demo': $icon="SYWicon-visibility"; $title = 'LIB_SYW_EXTENSIONLINK_DEMO_LABEL'; break;
 			case 'review': $icon="SYWicon-thumb-up"; $title = 'LIB_SYW_EXTENSIONLINK_REVIEW_LABEL'; break;
 			case 'donate': $icon="SYWicon-paypal"; $title = 'LIB_SYW_EXTENSIONLINK_DONATE_LABEL'; break;
@@ -81,6 +82,7 @@ class ExtensionLinkField extends FormField
 			
 			switch ($this->link_type) {
 				case 'forum': $desc = 'LIB_SYW_EXTENSIONLINK_FORUM_DESC'; break;
+				case 'forumbeta': $desc = 'LIB_SYW_EXTENSIONLINK_FORUMBETA_DESC'; break;
 				case 'demo': $desc = 'LIB_SYW_EXTENSIONLINK_DEMO_DESC'; break;
 				case 'review': $desc = 'LIB_SYW_EXTENSIONLINK_REVIEW_DESC'; break;
 				case 'donate': $desc = 'LIB_SYW_EXTENSIONLINK_DONATE_DESC'; break;
@@ -132,7 +134,7 @@ class ExtensionLinkField extends FormField
 		if ($return) {
 			$this->link_type = $this->element['linktype'];
 			$this->link = isset($this->element['link']) ? $this->element['link'] : '';
-			$this->syw_description= isset($this->element['sywdescription']) ? $this->element['sywdescription'] : '';
+			$this->syw_description = isset($this->element['sywdescription']) ? $this->element['sywdescription'] : '';
 		}
 		
 		return $return;

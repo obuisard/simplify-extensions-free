@@ -170,15 +170,22 @@ abstract class HeaderFilesCache
 	
 	/**
 	 * Remove empty characters and comments
+	 * params are setup this way for backward compatibility
 	 * 
-	 * @param unknown $buffer
+	 * @param mixed $buffer
+	 * @param boolean $remove_comments
+	 * @param string $type (css|js)
 	 * @return mixed
 	 */
-	protected function compress($buffer, $remove_comments = true) {
+	protected function compress($buffer, $remove_comments = true, $type = 'css') {
 		
-		// remove comments (for CSS)
+		// remove comments
 		if ($remove_comments) {
-			$buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer);
+			if ($type == 'css') {
+				$buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer);
+			} else if ($type == 'js') {
+				$buffer = preg_replace('!\/\*[\s\S]*?\*\/|\/\/.*!', '', $buffer);
+			}
 		}
 		
 		// remove tabs, spaces, newlines, etc...
