@@ -35,15 +35,4 @@ jQuery(document).ready(function($) {
 			}			
 		});
 	}
-	
-//	if ($('.syw_empty').length) {
-//		$('.syw_empty').each(function() {
-//			$(this).closest('.control-group').addClass('control-group-empty');
-//		});
-//	}
-	
-	//$('.tab-pane[id|=\'attrib\'] .control-label label[class=\'hasPopover\']').each(function() {
-	//$('.tab-pane .control-label label[class=\'hasPopover\']').each(function() {
-		//$(this).prepend('<i class="icon-info"></i>');
-	//});
 });

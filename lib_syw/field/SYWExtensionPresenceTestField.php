@@ -43,9 +43,9 @@ class SYWExtensionPresenceTestField extends FormField
 	    
 	    $html .= '<div>';
 	    
-	    $html .= '<a href="'.$this->downloadlink.'" target="_blank" class="hasTooltip" title="'.Text::_($this->title).'">';
+	    $html .= '<a class="btn hasTooltip" href="'.$this->downloadlink.'" target="_blank" title="'.Text::_($this->title).'">';
 	    if ($this->imagesrc) {
-	        $html .= '<img src="'.URI::root().$this->imagesrc.'" alt="'.Text::_($this->title).'" style="border: 3px solid #fff">';
+	        $html .= '<img src="'.URI::root().$this->imagesrc.'" alt="'.Text::_($this->title).'">';
 	    } else {
 	        $html .= Text::_($this->title);
 	    }
@@ -98,7 +98,7 @@ class SYWExtensionPresenceTestField extends FormField
 		
 		if ($missing_extension) {
 		    $alert = ' '.$this->alertlevel;
-		    $html .= '<a href="'.$this->downloadlink.'" target="_blank">'.Text::_($this->downloadtext).'</a>';
+		    $html .= '<a class="btn btn-' . $this->alertlevel . '" href="'.$this->downloadlink.'" target="_blank">'.Text::_($this->downloadtext).'</a>';
 		}
 		
 		return '<div class="syw_info'.$alert.'" style="padding-top: 5px; overflow: inherit">'.$html.'</div>';

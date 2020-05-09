@@ -52,6 +52,8 @@ class OverridesTestField extends FormField
 		
 		$overrides_path = JPATH_ROOT.'/templates/'.$defaultemplate.'/html/';
 		
+		$overrides_do_exist = false;
+
 		$html .= '<div class="alert alert-info" style="margin-bottom: 0">';
 		
 		// overrides extension
@@ -68,6 +70,8 @@ class OverridesTestField extends FormField
 			} else {
 				$html .= Text::sprintf('LIB_SYW_EMPTYFOLDER', '/templates/'.$defaultemplate.'/html/'.$this->extension.$this->view);
 			}
+
+			$overrides_do_exist = true;
 		} else {
 			$html .= Text::sprintf('LIB_SYW_NOOVERRIDES', $this->extension.$this->view);
 		}
@@ -105,6 +109,8 @@ class OverridesTestField extends FormField
 						}
 						
 						$html .= '</span><br />';
+
+						$overrides_do_exist = true;
 					}
 				}
 			}
@@ -141,6 +147,8 @@ class OverridesTestField extends FormField
 					} else {
 						$html .= Text::sprintf('LIB_SYW_EMPTYFOLDER', '/templates/'.$defaultemplate.'/html/layouts/'.$this->extension);
 					}
+					
+					$overrides_do_exist = true;
 				} else if (!is_null($this->parent_extension) && Folder::exists($overrides_path.'layouts/'.$this->parent_extension)) {
 				    $files = Folder::files($overrides_path.'layouts/'.$this->parent_extension, '.php');
 				    $folders = Folder::folders($overrides_path.'layouts/'.$this->parent_extension);
@@ -153,6 +161,8 @@ class OverridesTestField extends FormField
 					} else {
 						$html .= Text::sprintf('LIB_SYW_EMPTYFOLDER', '/templates/'.$defaultemplate.'/html/layouts/'.$this->parent_extension);
 					}
+
+					$overrides_do_exist = true;
 				} else {
 					$html .= Text::sprintf('LIB_SYW_NOLAYOUTOVERRIDES', $this->extension);
 				}
@@ -163,6 +173,10 @@ class OverridesTestField extends FormField
 		
 		$html .= '</div>';
 		
+		if (!$overrides_do_exist) {
+			return '';
+		}
+
 		return $html;
 	}
 	

@@ -34,25 +34,25 @@ class TitleField extends FormField
 		HTMLHelper::_('stylesheet', 'syw/fields.css', ['version' => 'auto', 'relative' => true]);
 
 		$inline_style = array();
-		
-		$inline_style[] = 'background: '.$this->color.'; background: linear-gradient(to right, '.$this->color.' 0%, #fff 100%); ';
-		$inline_style[] = 'color: #fff; ';
-		$inline_style[] = 'padding: 15px; ';
 
-		$html .= '<div class="syw_header syw_title" style=\''.implode($inline_style).'\'>';
+		$html .= '<h2 class="syw_header syw_title" style="'.implode($inline_style).'">';
 
 		if ($this->image_src) {
-			$html .= '<img style="margin-right: 6px; float: left; padding: 0; width: 16px; height: 16px" src="'.$this->image_src.'">';
+			$alt_attribute = '';
+			if ($this->title) {
+				$alt_attribute = ' alt="' . Text::_($this->title) . '"';
+			}
+			$html .= '<img style="margin: -1px 4px 0 0; padding: 0; width: 24px; height: 24px" src="'.$this->image_src.'"' . $alt_attribute . '>';
 		} else if ($this->icon) {
 		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
-			$html .= '<i style="margin-right: 6px; font-size: inherit; vertical-align: baseline" class="SYWicon-'.$this->icon.'"></i>';
+			$html .= '<i style="margin: -1px 4px 0 0; font-size: inherit; vertical-align: baseline" class="SYWicon-'.$this->icon.'" aria-hidden="true"></i>';
 		}
 
 		if ($this->title) {
-			$html .= Text::_($this->title);
+			$html .= '<span>'.Text::_($this->title).'</span>';
 		}
 
-		$html .= '</div>';
+		$html .= '</h2>';
 
 		return $html;
 	}

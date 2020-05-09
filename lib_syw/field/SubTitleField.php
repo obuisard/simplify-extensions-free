@@ -33,22 +33,16 @@ class SubTitleField extends FormField
 		
 		$inline_style = array();
 		
-		$inline_style[] = 'background: '.$this->color.'; background: linear-gradient(to right, '.$this->color.' 0%, #fff 100%); ';
-		$inline_style[] = 'height: 5px; ';
-		
-		$html .= '<div class="syw_header syw_subtitle" style="'.implode($inline_style).'">';
+		$html .= '<h3 class="syw_header syw_subtitle" style="'.implode($inline_style).'">';
 		
 		if ($this->title) {
 			
 			$inline_style = array();
 			
-			$inline_style[] = 'background-color: #fff; ';
-			$inline_style[] = 'color: '.$this->color.'; ';
-			
-			$html .= '<div class="syw_subtitle_text" style=\''.implode($inline_style).'\'>'.Text::_($this->title).'</div>';
+			$html .= '<span style=\''.implode($inline_style).'\'>'.Text::_($this->title).'</span>';
 		}
 		
-		$html .= '</div>';
+		$html .= '</h3>';
 		
 		return $html;
 	}

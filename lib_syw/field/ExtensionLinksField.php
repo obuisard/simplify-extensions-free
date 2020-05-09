@@ -34,11 +34,11 @@ class ExtensionLinksField extends FormField
 		return '';
 	}
 	
-	protected function getButton($link, $icon, $label, $description = '')
+	protected function getButton($link, $icon, $label, $description = '', $class = '')
 	{
 	    $output = '';
 	    
-	    $output .= '<a class="btn btn-dark hasTooltip" style="margin: 0 10px 10px 0" title="'.HTMLHelper::_('tooltipText', Text::_($label), rtrim(Text::_($description), '.'), 0).'" href="'.$link.'" target="_blank">';
+	    $output .= '<a class="btn btn-dark hasTooltip' . ($class == '' ? '' : ' ' . $class) . '" style="margin: 0 10px 10px 0" title="'.HTMLHelper::_('tooltipText', Text::_($label), rtrim(Text::_($description), '.'), 0).'" href="'.$link.'" target="_blank">';
 	    $output .= '<i class="'.$icon.'" style="font-size: 2em; padding: 5px; vertical-align: middle"></i>';
 	    $output .= '</a>';
 	    
@@ -76,6 +76,10 @@ class ExtensionLinksField extends FormField
 		    $html .= self::getButton($this->forum, 'SYWicon-chat', 'LIB_SYW_EXTENSIONLINK_FORUM_LABEL', 'LIB_SYW_EXTENSIONLINK_FORUM_DESC');
 		}
 		
+		if ($this->forumbeta) {
+		    $html .= self::getButton($this->forumbeta, 'SYWicon-chat', 'LIB_SYW_EXTENSIONLINK_FORUMBETA_LABEL', 'LIB_SYW_EXTENSIONLINK_FORUMBETA_DESC', 'btn-inverse');
+		}
+
 		if ($this->support) {
 		    $html .= self::getButton($this->support, 'SYWicon-lifebuoy', 'LIB_SYW_EXTENSIONLINK_SUPPORT_LABEL', 'LIB_SYW_EXTENSIONLINK_SUPPORT_DESC');
 		}

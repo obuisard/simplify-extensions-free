@@ -20,7 +20,7 @@ class Tags
 	*
 	* @return array of tag objects (false if error)
 	*/
-	static function getTags($content_type = '', $whole = false, $tag_ids = array(), $include = true)
+    static function getTags($content_type = '', $whole = false, $tag_ids = array(), $include = true, $order = 'lft', $order_dir = 'ASC')
 	{
 		$tags = array();
 	
@@ -64,7 +64,7 @@ class Tags
 		}
 	
 		$query->group('a.id, a.title, a.level, a.lft, a.rgt, a.parent_id, a.path');
-		$query->order('a.lft ASC');
+		$query->order('a.'.$order.' '.$order_dir);
 			
 		$db->setQuery($query);
 			

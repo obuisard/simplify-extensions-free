@@ -11,54 +11,54 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 
-class Fonts 
-{	
+class Fonts
+{
 	//protected static $iconfontLoaded = false;
 	protected static $googlefontLoaded = array();
-		
+
 	/**
 	 * Load the icon font if needed
 	 */
 	static function loadIconFont($syw_font = true, $icomoon_font = false, $debug = false)
-	{	
+	{
 // 		if (self::$iconfontLoaded) {
 // 			return;
 // 		}
-		
+
 	    if ($syw_font) {
-    		if ($debug) {
-    		    //Factory::getDocument()->addStyleSheet(URI::base(true).'/media/syw/css/fonts.css');
-    		    HTMLHelper::_('stylesheet', 'syw/fonts.css', ['version' => 'auto', 'relative' => true]);
-    		} else {
-    		    //Factory::getDocument()->addStyleSheet(URI::base(true).'/media/syw/css/fonts-min.css');
-    		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
-    		}
+	    	$minified = (JDEBUG) ? '' : '-min';
+    		//Factory::getDocument()->addStyleSheet(URI::base(true).'/media/syw/css/fonts.css');
+	    	HTMLHelper::stylesheet('syw/fonts' . $minified . '.css', array('relative' => true, 'version' => 'auto'));
 	    }
-		
+
 	    // TODO Beware! not used in Joomla 4 anymore (add font-awesome)
 	    // offer old icomoon css for backward compatibility
-	    
+
 	    if ($icomoon_font) {
 	        //Factory::getDocument()->addStyleSheet(URI::base(true).'/media/jui/css/icomoon.css');
-	        HTMLHelper::_('stylesheet', 'jui/icomoon.css', ['version' => 'auto', 'relative' => true]);
+	    	HTMLHelper::stylesheet('jui/icomoon.css', array('relative' => true, 'version' => 'auto'));
 		}
-						
+
 		//self::$iconfontLoaded = true;
 	}
-	
+
 	/**
 	 * Load the Google font if needed
+	 * $font can be "Google Font" or Google+Font
+	 *
 	 */
-	static function loadGoogleFont($safefont)
+	static function loadGoogleFont($font)
 	{
+		$safefont = str_replace(' ', '+', trim($font, '"')); // replace spaces by + and removes quotes
+
 		if (isset(self::$googlefontLoaded[$safefont]) && self::$googlefontLoaded[$safefont]) {
 			return;
 		}
-		
+
 		Factory::getDocument()->addStyleSheet('https://fonts.googleapis.com/css?family='.$safefont);
-		
+
 		self::$googlefontLoaded[$safefont] = true;
 	}
-	
+
 }
 ?>

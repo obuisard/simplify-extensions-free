@@ -15,6 +15,11 @@ use Joomla\CMS\Factory;
 class MessageField extends FormField
 {		
 	public $type = 'Message';
+	
+	protected $message_type;
+	protected $message;
+	protected $badge_type;
+	protected $badge;
 
 	protected function getLabel() 
 	{				
@@ -23,11 +28,13 @@ class MessageField extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 		
-		if ($this->message_type == 'example') {				
-			$html .= '<label style="visibility: hidden; margin: 0">'.Text::_('LIB_SYW_MESSAGE_EXAMPLE').'</label>';
-		} else if ($this->message_type == 'fieldwarning' || $this->message_type == 'fielderror' || $this->message_type == 'fieldinfo') {
-			return parent::getLabel();
-		} 
+		if ($this->message_type == 'example' || $this->message_type == 'fieldneutral' || $this->message_type == 'fieldwarning' || $this->message_type == 'fielderror' || $this->message_type == 'fieldinfo') {
+			if ($this->badge) {
+				return '<span class="badge badge-' . $this->badge_type . '">' . $this->badge . '</span><br />' . parent::getLabel();
+			} else {
+				return parent::getLabel();
+			} 
+		}
 		
 		return $html;
 	}
@@ -46,37 +53,48 @@ class MessageField extends FormField
 			
 		if ($this->message_type == 'example') {
 			
-			if ($message_label) {
-				$html .= '<span class="badge badge-dark">'.$message_label.'</span>&nbsp;';
-			} else {
-				$html .= '<span class="badge badge-dark">'.Text::_('LIB_SYW_MESSAGE_EXAMPLE').'</span>&nbsp;';
-			}
-			$html .= '<span class="muted" style="font-size: 0.8em;">';
-			
 			if ($this->message) {
-				$html .= Text::_($this->message);
+				$html .= '<span class="muted" style="font-size: 0.8em;">' . Text::_($this->message) . '</span>';
 			}
-			$html .= '</span>';		
 			
 		} else {
 			$style = '';
+			$style_label = '';
 			switch ($this->message_type) {
-				case 'warning': case 'fieldwarning': $style = 'warning'; break;
-				case 'error': case 'fielderror': $style = 'danger'; break;
-				case 'info': case 'fieldinfo': $style = 'info'; break;
-				default: $style = 'success'; /* message, success */
+				case 'warning': case 'fieldwarning': $style = 'warning'; $style_label = 'warning'; break;
+				case 'error': case 'fielderror': $style = 'danger'; $style_label = 'danger'; break;
+				case 'info': case 'fieldinfo': $style = 'info'; $style_label = 'info'; break;
+				case 'neutral': case 'fieldneutral': break;
+				default: $style = 'success'; $style_label = 'success'; /* message, success */
 			}
 			
-			$html .= '<div style="margin-bottom:0" class="alert alert-'.$style.'">';
-			if ($message_label && $this->message_type != 'fieldwarning' && $this->message_type != 'fielderror' && $this->message_type != 'fieldinfo') {
-				$html .= '<span class="badge badge-'.$style.'">'.$message_label.'</span>&nbsp;';
+			$class = '';
+			if ($style) {
+				$class = ' alert-' . $style;
 			}
 			
-			$html .= '<span>';
+			$html .= '<div style="margin-bottom:0" class="alert' . $class . '">';
+			if ($message_label && $this->message_type != 'fieldneutral' && $this->message_type != 'fieldwarning' && $this->message_type != 'fielderror' && $this->message_type != 'fieldinfo') {
+
+			    if ($message_label == 'Pro') {
+			        $style_label = 'danger';
+			    }
+
+			    if ($style_label) {
+			        $style_label = ' badge-'.$style_label;
+			    }
+
+			    $html .= '<span class="badge' . $style_label . '">' . $message_label . '</span>&nbsp;';
+			}
+			
 			if ($this->message) {
-				$html .= Text::_($this->message);
+			    $style_attribute = '';
+			    if ((isset($message_label) && $message_label == 'Pro') || $this->badge == 'Pro') {
+			        $style_attribute = ' style="font-style: italic"';
+			    }
+			    $html .= '<span' . $style_attribute . '>' . Text::_($this->message) . '</span>';
 			}
-			$html .= '</span>';
+
 			$html .= '</div>';
 		}
 		
@@ -90,6 +108,8 @@ class MessageField extends FormField
 		if ($return) {
 			$this->message_type = isset($this->element['style']) ? trim($this->element['style']) : 'info';
 			$this->message = isset($this->element['text']) ? trim($this->element['text']) : '';
+			$this->badge_type = isset($this->element['badgetype']) ? trim($this->element['badgetype']) : 'danger';
+			$this->badge = isset($this->element['badge']) ? trim($this->element['badge']) : '';
 		}
 	
 		return $return;
