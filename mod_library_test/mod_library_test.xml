@@ -22,16 +22,64 @@
 	<config>
 		<fields name="params" addfieldprefix="SYW\Library\Field">
 			<fieldset name="basic">
+			
+				<!-- ExtensionAuthor -->
+				<field type="extensionauthor" />
+				
+				<!-- ExtensionConnect -->
+				<field type="extensionconnect" />
+				
+				<!-- ExtensionLink -->
+				<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation" />
+				<field type="extensionlinks" onlinedoc="https://simplifyyourweb.com/documentation" translate="https://simplifyyourweb.com/documentation" />
+				
+				<!-- ExtensionTranslators -->
+				<field type="extensiontranslators" translators="MOD_LIBRARY_TEST_TRANSLATORS" />
+				
+				<!-- ExtensionVersion -->
+				<field type="extensionversion" version="1.0.0" />
+			</fieldset>
+			
+			<!-- Info -->
+			<fieldset name="info" label="MOD_LIBRARY_TEST_INFO_FIELDSET_LABEL">				
+								
+				<!-- SYWOnlineHelp -->
+				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation" class="alert alert-info"
+					sywdescription="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+								
+				<!-- ImageLink -->
+				<field type="imagelink" title="joomla"  
+	            	text="MOD_LIBRARY_TEST_XML_DESCRIPTION" 
+	            	link="https://joomla.org" 
+	            	imagesrc="images/joomla_black.png" />
+				
+				<!-- Message -->
+				<field type="message" text="MOD_LIBRARY_TEST_XML_DESCRIPTION" style="example" />
+				
+				<!-- Or -->
+				<field type="or" />
+				
+				<!-- Title -->
+				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" />
+				
+				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" icon="help" />
+				
+				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" imagesrc="../plugins/system/jqueryeasy/images/jquery.png" />
+				
+				<!-- SubTitle -->	
+				<field type="subtitle" color="#fc930a" title="MOD_LIBRARY_TEST" />
+				
+				<field type="subtitle" color="#fc930a" />
 	            	
 				<!-- ImageRadio -->
-				<field name="imageradio" type="imageradio" default="ltc" class="btn-group" 
+				<field name="imageradio" type="imageradio" default="value1" 
 					label="Image Radio" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
 					<option value="value1" imagesrc="images/joomla_black.png">MOD_LIBRARY_TEST_VALUE1</option>
 					<option value="value2" imagesrc="images/joomla_black.png">MOD_LIBRARY_TEST_VALUE2</option>
 				</field>
 				
-				<field name="iconradio" type="imageradio" default="ltc" class="btn-group" 
+				<field name="iconradio" type="imageradio" default="value1" 
 					label="Icon Radio" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
 					<option value="value1" icon="SYWicon-help">MOD_LIBRARY_TEST_VALUE1</option>
@@ -43,6 +91,11 @@
 				<field name="image" type="sywimagefile" accept=".gif,.jpg,.png" showpreview="true" showname="true" 
 					label="Image File" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
+				<!-- SYWImageFilePreview -->
+				<field name="image2" id="image2" type="sywimagefilepreview" accept=".gif,.jpg,.png" showpreview="true" showname="true" 
+					label="Image File Preview" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />				
 				
 				<!-- SYWImagePreview -->
 				<field name="preview" id="preview" type="sywimagepreview" path="images/joomla_black.png" relativepath="false" showname="true" 
@@ -68,64 +121,11 @@
 				</field>
 				
 				<!-- Views -->	
-				<field name="views" type="views" option="com_trombinoscopeextended" view="trombinoscope" multiple="false" size="1" default="auto" 
+				<field name="views" type="views" option="com_content" view="article" multiple="false" size="1" default="auto" 
 					label="Views" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
 					<option value="auto">JGLOBAL_AUTO</option>
 				</field>			
-				
-			</fieldset>
-			
-			<!-- Info -->
-			<fieldset name="info" label="MOD_LIBRARY_TEST_INFO_FIELDSET_LABEL">
-				
-				<!-- ExtensionAuthor -->
-				<field type="extensionauthor" />
-				
-				<!-- ExtensionConnect -->
-				<field type="extensionconnect" />
-				
-				<!-- ExtensionLink -->
-				<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation" />
-				
-				<!-- ExtensionTranslators -->
-				<field type="extensiontranslators" translators="MOD_LIBRARY_TEST_TRANSLATORS" />
-				
-				<!-- ExtensionVersion -->
-				<field type="extensionversion" version="1.0.0" />
-								
-				<!-- ImageLink -->
-				<field type="imagelink" title="joomla"  
-	            	text="MOD_LIBRARY_TEST_XML_DESCRIPTION" 
-	            	link="https://joomla.org" 
-	            	imagesrc="images/joomla_black.png" />
-				
-				<!-- Message -->
-				<field type="message" text="MOD_LIBRARY_TEST_XML_DESCRIPTION" style="example" />
-				
-				<!-- Or -->
-				<field type="or" />
-				
-				<!-- SubTitle -->	
-				<field type="subtitle" color="#fc930a" title="MOD_LIBRARY_TEST" />
-				
-				<field type="subtitle" color="#fc930a" />				
-									
-				<!-- SYWGroup --> <!-- KEEP? -->
-				<field type="sywgroup" section="begin" />
-				<field type="sywgroup" section="end" />
-				
-				<!-- SYWOnlineHelp -->
-				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation" class="alert alert-info"
-					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
-				
-				<!-- Title -->
-				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" />
-				
-				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" icon="help" />
-				
-				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" imagesrc="../plugins/system/jqueryeasy/images/jquery.png" />
-			
 			</fieldset>
 			
 			<!-- Pickers -->
@@ -168,7 +168,15 @@
 				<field name="hovereffect" type="sywtransitionpicker" default="none" transitiongroups="2d" icon="SYWicon-layers" 
 					label="Effect" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
-			
+					
+				<field name="hovereffect2" type="sywtransitionpicker" default="none" icon="SYWicon-layers" sampleicon="SYWicon-layers"
+					label="Effect" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />			
+					
+				<!-- SYWLoaderPicker -->
+				<field name="loader" type="sywloaderpicker" default="" 
+					label="Loader" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
 			</fieldset>
 			
 			<!-- Tests -->
@@ -192,12 +200,17 @@
 			</fieldset>
 			
 			<!-- DynamicSingleSelect -->
-			<fieldset name="dynamicsingleselect" label="MOD_LIBRARY_TEST_DYNAMICSINGLESELECT_FIELDSET_LABEL">
+			<fieldset name="dynamicselect" label="MOD_LIBRARY_TEST_DYNAMICSELECT_FIELDSET_LABEL">
 			
 				<!-- SYWImageFilterPicker -->
 				<field name="filter" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a"
 					label="Image Filter" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWImageFilterMultiPicker -->
+				<field name="filter" type="sywimagefiltermultipicker" default="none" selectionmax="2" filters="blur,sharpen,duotone,sepia,grayscale,sketch,pixelate,negate,emboss,edgedetect" selectedcolor="#fc930a" 
+					label="Image Filter (2 choices)" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
 			
 			</fieldset>
 			
