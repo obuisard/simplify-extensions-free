@@ -12,56 +12,64 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 
-class JFormFieldExtensionLink extends FormField 
-{		
+class JFormFieldExtensionLink extends FormField
+{
 	public $type = 'ExtensionLink';
 
 	protected $link_type;
 	protected $link;
 	protected $syw_description;
 
-	protected function getLabel() 
+	protected function getLabel()
 	{
 		$html = '';
-		
+
 		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy', JPATH_SITE);
-		
+
 		HTMLHelper::_('bootstrap.tooltip');
-		
+
 		switch ($this->link_type) {
-			case 'forum': $image = 'chat.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_FORUM_LABEL'; break;
-			case 'demo': $image = 'visibility.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_DEMO_LABEL'; break;
-			case 'review': $image = 'thumb-up.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_REVIEW_LABEL'; break;
+			case 'forum': $image = 'forum.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_FORUM_LABEL'; break;
+			case 'demo': $image = 'demo.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_DEMO_LABEL'; break;
+			case 'review': $image = 'review.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_REVIEW_LABEL'; break;
 			case 'donate': $image = 'paypal.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_DONATE_LABEL'; break;
-			case 'upgrade': $image = 'wallet-membership.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_UPGRADE_LABEL'; break;
-			case 'doc': $image = 'local-library.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_DOC_LABEL'; break;
-			case 'onlinedoc': $image = 'local-library.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_ONLINEDOC_LABEL'; break;
+			case 'upgrade': $image = 'upgrade.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_UPGRADE_LABEL'; break;
+			case 'doc': $image = 'documentation.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_DOC_LABEL'; break;
+			case 'onlinedoc': $image = 'documentation.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_ONLINEDOC_LABEL'; break;
 			case 'report': $image = 'bug-report.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_BUGREPORT_LABEL'; break;
-			case 'support': $image = 'lifebuoy.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_SUPPORT_LABEL'; break;
+			case 'support': $image = 'support.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_SUPPORT_LABEL'; break;
 			case 'translate': $image = 'translate.png'; $title = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_TRANSLATE_LABEL'; break;
 			default: $image = ''; $title = '';
 		}
-		
-		$html .= '<span class="badge badge-secondary">';
+
+		if ($this->link) {
+		    $html .= '<a class="btn btn-dark btn-sm hasTooltip" title="'.Text::_($title).'" href="'.$this->link.'" target="_blank">';
+		} else {
+		    $html .= '<span class="badge badge-secondary hasTooltip" title="'.Text::_($title).'">';
+		}
 		if (!empty($image)) {
-			$html .= '<img src="'.Uri::root().'plugins/system/jqueryeasy/images/'.$image.'" style="margin-right: 5px;">';
+			$html .= '<img src="'.Uri::root().'plugins/system/jqueryeasy/images/'.$image.'">';
 			$html .= '<span style="vertical-align: middle">'.Text::_($title).'</span>';
 		} else {
 			$html .= Text::_($title);
 		}
-		$html .= '</span>';
-		
+		if ($this->link) {
+		    $html .= '</a>';
+		} else {
+		    $html .= '</span>';
+		}
+
 		return $html;
 	}
 
-	protected function getInput() 
+	protected function getInput()
 	{
 		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy', JPATH_SITE);
-		
+
 		$html = '<div class="syw_info" style="padding-top: 5px; overflow: inherit">';
-					
+
 		if ($this->syw_description) {
 			if ($this->link) {
 				$html .= Text::sprintf($this->syw_description, $this->link);
@@ -69,7 +77,7 @@ class JFormFieldExtensionLink extends FormField
 				$html .= Text::_($this->syw_description);
 			}
 		} else {
-			
+
 			switch ($this->link_type) {
 				case 'forum': $image = true; $desc = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_FORUM_DESC'; break;
 				case 'demo': $image = true; $desc = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_DEMO_DESC'; break;
@@ -83,7 +91,7 @@ class JFormFieldExtensionLink extends FormField
 				case 'translate': $image = true; $desc = 'PLG_SYSTEM_JQUERYEASY_EXTENSIONLINK_TRANSLATE_DESC'; break;
 				default: $desc = '';
 			}
-			
+
 			if ($desc) {
 				if ($this->link) {
 					$html .= Text::sprintf($desc, $this->link);
@@ -92,7 +100,7 @@ class JFormFieldExtensionLink extends FormField
 				}
 			}
 		}
-		
+
 		if ($this->link_type == 'review') {
 			$html = rtrim($html, '.');
 			$html .= ' <a href="'.$this->link.'" target="_blank" style="text-decoration: none; vertical-align: text-bottom">';
@@ -102,7 +110,7 @@ class JFormFieldExtensionLink extends FormField
 			$html .= '<span class="icon-star" style="color: #fcac0a; margin: 0; vertical-align: middle"></span>';
 			$html .= '<span class="icon-star" style="color: #fcac0a; margin: 0; vertical-align: middle"></span></a> .';
 		}
-		
+
 		$html .= '</div>';
 
 		return $html;
@@ -111,13 +119,13 @@ class JFormFieldExtensionLink extends FormField
 	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
-		
+
 		if ($return) {
 			$this->link_type = $this->element['linktype'];
 			$this->link = isset($this->element['link']) ? $this->element['link'] : '';
 			$this->syw_description= isset($this->element['sywdescription']) ? $this->element['sywdescription'] : '';
 		}
-		
+
 		return $return;
 	}
 

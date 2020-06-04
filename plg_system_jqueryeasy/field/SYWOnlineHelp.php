@@ -20,12 +20,12 @@ class JFormFieldSYWOnlineHelp extends FormField
 	protected $heading;
 	protected $layer_class;
 	protected $url;
-		
+
 	protected function getLabel()
 	{
 		return '';
 	}
-	
+
 	protected function getInput()
 	{
 		HTMLHelper::_('script', 'syw_jqueryeasy/fields.js', false, true);
@@ -39,7 +39,7 @@ class JFormFieldSYWOnlineHelp extends FormField
 		$html[] = !empty($this->syw_description) ? '<td style="background-color: transparent">'.Text::_($this->syw_description).'</td>' : '';
 		if ($this->url) {
 			$html[] = '<td style="text-align: right; background-color: transparent">';
-			$html[] = '<a href="'.$this->url.'" target="_blank" class="btn btn-info btn-sm"><img src="'.Uri::root().'plugins/system/jqueryeasy/images/local-library.png"> <span>'.Text::_('JHELP').'</span></a>';
+			$html[] = '<a href="'.$this->url.'" target="_blank" class="btn btn-info btn-sm"><img src="'.Uri::root().'plugins/system/jqueryeasy/images/documentation-help.png"> <span>'.Text::_('JHELP').'</span></a>';
 			$html[] = '</td>';
 		}
 		$html[] = '</tr></table>';
@@ -50,7 +50,7 @@ class JFormFieldSYWOnlineHelp extends FormField
 	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
-		
+
 		if ($return) {
 			$this->title = !empty($this->element['label']) ? $this->element['label'] : (isset($this->element['title']) ? $this->element['title'] : '');
 			$this->syw_description= isset($this->element['sywdescription']) ? $this->element['sywdescription'] : '';
@@ -58,7 +58,7 @@ class JFormFieldSYWOnlineHelp extends FormField
 			$this->layer_class = isset($this->class) ? ' '.$this->class : (isset($this->element['class']) ? ' '.$this->element['class']: '');
 			$this->url = isset($this->element['url']) ? $this->element['url'] : '';
 		}
-		
+
 		return $return;
 	}
 

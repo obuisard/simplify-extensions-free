@@ -31,33 +31,16 @@ class JFormFieldSubTitle extends FormField
 
 		$inline_style = array();
 
-		$inline_style[] = 'display: inherit; ';
-		$inline_style[] = 'position: relative; ';
-		$inline_style[] = 'background: '.$this->color.'; background: linear-gradient(to right, '.$this->color.' 0%, #fff 100%); ';
-		$inline_style[] = 'height: 5px; ';
-		$inline_style[] = 'margin: 15px 0; ';
-
-		$html .= '<div class="syw_header" style="'.implode($inline_style).'">';
+		$html .= '<h3 class="syw_header syw_subtitle" style="'.implode($inline_style).'">';
 
 		if ($this->title) {
 				
 			$inline_style = array();
-
-			$inline_style[] = 'font-family: "Courier New", Courier, monospace; ';
-			$inline_style[] = 'font-size: 10px; ';
-			//$inline_style[] = 'font-weight: bold; ';
-			$inline_style[] = 'letter-spacing: 2px; ';
-			$inline_style[] = 'background-color: #fff; ';
-			$inline_style[] = 'color: '.$this->color.'; ';
-			$inline_style[] = 'padding: 0 8px 0 10px; ';
-			$inline_style[] = 'position: absolute; ';
-			$inline_style[] = 'left: 20px; ';
-			$inline_style[] = 'top: -6px; ';
 				
-			$html .= '<div style=\''.implode($inline_style).'\'>'.Text::_($this->title).'</div>';
+			$html .= '<span style=\''.implode($inline_style).'\'>'.Text::_($this->title).'</span>';
 		}
 
-		$html .= '</div>';
+		$html .= '</h3>';
 
 		return $html;
 	}

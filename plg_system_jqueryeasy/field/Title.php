@@ -31,28 +31,22 @@ class JFormFieldTitle extends FormField
 		HTMLHelper::_('stylesheet', 'syw_jqueryeasy/fields.css', false, true);
 
 		$inline_style = array();
-		
-		$inline_style[] = 'background: '.$this->color.'; background: linear-gradient(to right, '.$this->color.' 0%, #fff 100%); ';
-		$inline_style[] = 'color: #fff; ';
-		$inline_style[] = 'text-transform: uppercase; ';
-		$inline_style[] = 'letter-spacing: 3px; ';
-		$inline_style[] = 'font-family: "Courier New", Courier, monospace; ';
-		$inline_style[] = 'font-weight: bold; ';
-		$inline_style[] = 'margin: 15px 0; ';
-		$inline_style[] = 'padding: 15px; ';
-		$inline_style[] = '-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; ';
 
-		$html .= '<div class="syw_header" style=\''.implode($inline_style).'\'>';
+		$html .= '<h2 class="syw_header syw_title" style="'.implode($inline_style).'">';
 
 		if ($this->image_src) {
-			$html .= '<img style="margin: -1px 4px 0 0; padding: 0px; width: 16px; height: 16px" src="'.$this->image_src.'">';
+		    $alt_attribute = '';
+		    if ($this->title) {
+		        $alt_attribute = ' alt="' . Text::_($this->title) . '"';
+		    }
+			$html .= '<img style="margin: -1px 4px 0 0; padding: 0; width: 24px; height: 24px" src="'.$this->image_src.'"' . $alt_attribute . '>';
 		} 
 
 		if ($this->title) {
-			$html .= Text::_($this->title);
+		    $html .= '<span>'.Text::_($this->title).'</span>';
 		}
 
-		$html .= '</div>';
+		$html .= '</h2>';
 
 		return $html;
 	}

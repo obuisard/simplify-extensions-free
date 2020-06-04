@@ -22,9 +22,4 @@ jQuery(document).ready(function($) {
 			$(this).closest('.control-group').addClass('control-group-info');
 		});
 	}
-	
-	//$('.tab-pane[id|=\'attrib\'] .control-label label[class=\'hasPopover\']').each(function() {
-	//$('.tab-pane .control-label label[class=\'hasPopover\']').each(function() {
-		//$(this).prepend('<i class="icon-info"></i>');
-	//});
 });
