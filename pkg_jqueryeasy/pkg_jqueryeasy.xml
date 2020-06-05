@@ -9,10 +9,11 @@
 	<url>http://www.simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
-	<version>3.2.4</version>
+	<version>4.0.2</version>
 	<description>PKG_JQUERYEASY_XML_DESCRIPTION</description> 
 	<scriptfile>installer.php</scriptfile>
 	<languages>		
+		<language tag="bg-BG">language/bg-BG/bg-BG.pkg_jqueryeasy.sys.ini</language>
 	  	<language tag="de-DE">language/de-DE/de-DE.pkg_jqueryeasy.sys.ini</language>
 	   	<language tag="en-GB">language/en-GB/en-GB.pkg_jqueryeasy.sys.ini</language>
 	   	<language tag="en-US">language/en-US/en-US.pkg_jqueryeasy.sys.ini</language>
@@ -30,7 +31,7 @@
  	<files folder="packages">
 		<file type="plugin" id="jqueryeasy" group="system">plg_system_jqueryeasy.zip</file>
 	</files>	
-   <updateservers>
-		<server type="extension" priority="1" name="jQuery Easy updater">https://updates.simplifyyourweb.com/free/jqueryeasy/jqueryeasy-v3-update.xml</server>
+	<updateservers>
+		<server type="extension" priority="1" name="jQuery Easy updater">https://updates.simplifyyourweb.com/free/jqueryeasy/jqueryeasy-pkg-update.xml</server>
 	</updateservers>
 </extension>

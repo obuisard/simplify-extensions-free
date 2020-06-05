@@ -16,10 +16,10 @@ use Joomla\CMS\Language\Text;
  */
 class pkg_jqueryeasyInstallerScript
 {
-	static $version = '3.2.4';
-	static $available_languages = array('de-DE', 'en-GB', 'en-US', 'es-CO', 'es-ES', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sv-SE', 'tr-TR', 'uk-UA');
+	static $version = '4.0.2';
+	static $available_languages = array('bg-BG', 'de-DE', 'en-GB', 'en-US', 'es-CO', 'es-ES', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sv-SE', 'tr-TR', 'uk-UA');
 	static $changelog_link = 'https://simplifyyourweb.com/downloads/jquery-easy/file/314-jquery-easy';
-	static $transifex_link = 'https://simplifyyourweb.com/translators';
+	static $translation_link = 'https://simplifyyourweb.com/translators';
 
 	/**
 	 * Called before an install/update method
@@ -31,7 +31,7 @@ class pkg_jqueryeasyInstallerScript
 	    // make sure we are under Joomla 4.0 or over
 
 	    if (version_compare(JVERSION, '3.15.0', 'lt')) {
-	        JFactory::getApplication()->enqueueMessage(JText::sprintf('JOOMLA_REQUIRED_VERSION', '4'), 'error');
+	        Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', '4'), 'error');
 	        return false;
 	    }
 
@@ -55,7 +55,7 @@ class pkg_jqueryeasyInstallerScript
 
  		$current_language = Factory::getLanguage()->getTag();
  		if (!in_array($current_language, self::$available_languages)) {
- 			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_JQUERYEASY_INFO_LANGUAGETRANSLATE', Factory::getLanguage()->getName()), 'notice');
+ 			Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this plugin.<br /><a href="' . self::$translation_link . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
  		}
 
 		if ($type == 'update') {
@@ -64,6 +64,12 @@ class pkg_jqueryeasyInstallerScript
 
 		    $files = array(
 		        '/plugins/system/jqueryeasy/jquerynoconflict.js',
+		        '/plugins/system/jqueryeasy/images/chat.png',
+		        '/plugins/system/jqueryeasy/images/visibility.png',
+		        '/plugins/system/jqueryeasy/images/thumb-up.png',
+		        '/plugins/system/jqueryeasy/images/wallet-membership.png',
+		        '/plugins/system/jqueryeasy/images/local-library.png',
+		        '/plugins/system/jqueryeasy/images/lifebuoy.png',
 		        '/plugins/system/jqueryeasy/images/SimplifyYourWeb_24.png'
 		    );
 
@@ -84,6 +90,7 @@ class pkg_jqueryeasyInstallerScript
 			// remove the old update site
 
 			$this->removeUpdateSite('package', 'pkg_jqueryeasy', '', 'http://www.barejoomlatemplates.com/autoupdates/jqueryeasy/jqueryeasy-v3-update.xml');
+			$this->removeUpdateSite('package', 'pkg_jqueryeasy', '', 'https://updates.simplifyyourweb.com/free/jqueryeasy/jqueryeasy-v3-update.xml');
 
 			// update warning
 
@@ -114,7 +121,7 @@ class pkg_jqueryeasyInstallerScript
 
 	private function removeUpdateSite($type, $element, $folder = '', $location = '')
 	{
-	    $db = JFactory::getDBO();
+	    $db = Factory::getDBO();
 
 	    $query = $db->getQuery(true);
 
@@ -131,8 +138,8 @@ class pkg_jqueryeasyInstallerScript
 	    $extension_id = '';
 	    try {
 	        $extension_id = $db->loadResult();
-	    } catch (RuntimeException $e) {
-	        JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	    } catch (\RuntimeException $e) {
+	        Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 	        return false;
 	    }
 
@@ -149,8 +156,8 @@ class pkg_jqueryeasyInstallerScript
 	        $updatesite_id = array(); // can have several results
 	        try {
 	            $updatesite_id = $db->loadColumn();
-	        } catch (RuntimeException $e) {
-	            JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	        } catch (\RuntimeException $e) {
+	            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 	            return false;
 	        }
 
@@ -167,8 +174,8 @@ class pkg_jqueryeasyInstallerScript
 
 	            try {
 	                $db->execute();
-	            } catch (RuntimeException $e) {
-	                JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	            } catch (\RuntimeException $e) {
+	                Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 	                return false;
 	            }
 	        } else { // several update sites exist for the same extension therefore we need to specify which to delete
@@ -184,8 +191,8 @@ class pkg_jqueryeasyInstallerScript
 
 	                try {
 	                    $db->execute();
-	                } catch (RuntimeException $e) {
-	                    JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	                } catch (\RuntimeException $e) {
+	                    Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 	                    return false;
 	                }
 	            } else {
