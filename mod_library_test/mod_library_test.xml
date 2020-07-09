@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="4.0" client="site" method="upgrade">
+<extension type="module" client="site" method="upgrade">
 	<name>MOD_LIBRARY_TEST</name>
 	<author>Olivier Buisard</author>
 	<creationDate>03/16/2018</creationDate>
@@ -114,7 +114,7 @@
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
 				<!-- Tags -->
-				<field name="tags" type="tags" multiple="true" size="5" default="" 
+				<field name="tags" type="tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select"
 					label="Tags" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
 					<option value="all">JALL</option>
@@ -150,6 +150,23 @@
 					label="Color" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
+					
+					
+					
+					
+				<field name="colorpickerjoomla" type="color" default="transparent" 
+					keywords="transparent" preview="true" 
+					label="Color Joomla" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<field name="colorpickerjoomla2" type="color" default="hsl(214,63%,20%)" 
+					keywords="transparent" preview="true" control="slider" format="hue" saveFormat="hsl"
+					label="Color Joomla" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+					
+					
+					
 				<!-- SYWFontPicker -->
 				<field name="font" type="sywfontpicker" default=""
                     label="Font"
@@ -172,11 +189,6 @@
 				<field name="hovereffect2" type="sywtransitionpicker" default="none" icon="SYWicon-layers" sampleicon="SYWicon-layers"
 					label="Effect" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />			
-					
-				<!-- SYWLoaderPicker -->
-				<field name="loader" type="sywloaderpicker" default="" 
-					label="Loader" 
-					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
 			</fieldset>
 			
 			<!-- Tests -->
@@ -202,13 +214,18 @@
 			<!-- DynamicSingleSelect -->
 			<fieldset name="dynamicselect" label="MOD_LIBRARY_TEST_DYNAMICSELECT_FIELDSET_LABEL">
 			
+				<!-- SYWLoaderPicker -->
+				<field name="loader" type="sywloaderpicker" default="default" 
+					label="Loader" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
+			
 				<!-- SYWImageFilterPicker -->
 				<field name="filter" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a"
 					label="Image Filter" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
 				<!-- SYWImageFilterMultiPicker -->
-				<field name="filter" type="sywimagefiltermultipicker" default="none" selectionmax="2" filters="blur,sharpen,duotone,sepia,grayscale,sketch,pixelate,negate,emboss,edgedetect" selectedcolor="#fc930a" 
+				<field name="filter2" type="sywimagefiltermultipicker" default="none" selectionmax="2" filters="blur,sharpen,duotone,sepia,grayscale,sketch,pixelate,negate,emboss,edgedetect" selectedcolor="#fc930a" 
 					label="Image Filter (2 choices)" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
 			
