@@ -1,0 +1,1858 @@
+<?php
+/**
+ * @copyright	Copyright (C) 2011 Simplify Your Web, Inc. All rights reserved.
+ * @license		GNU General Public License version 3 or later; see LICENSE.txt
+ */
+
+namespace SYW\Plugin\Content\ArticleDetails\Helper;
+
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Component\Content\Site\Helper\RouteHelper;
+use Joomla\Registry\Registry;
+use SYW\Library\Fonts;
+use SYW\Library\Utilities;
+
+class Helper
+{
+	static $contacts = array();
+
+	static function date_to_counter($date, $date_in_future = false) {
+
+		$date_origin = new Date($date);
+		$now = new Date(); // now
+
+		if ($date_in_future) {
+			$difference = $date_origin->toUnix() - $now->toUnix();
+		} else {
+			$difference = $now->toUnix() - $date_origin->toUnix();
+		}
+
+		//$difference = $date_origin->diff($now); // object PHP 5.3 [y] => 0 [m] => 0 [d] => 26 [h] => 23 [i] => 11 [s] => 32 [invert] => 0 [days] => 26
+
+		$nbr_days = 0;
+		$nbr_hours = 0;
+		$nbr_mins = 0;
+		$nbr_secs = 0;
+
+		if ($difference < 60) { // less than 1 minute
+			$nbr_secs = $difference;
+		} else if ($difference < 3600) { // less than 1 hour
+			$nbr_mins = $difference / 60;
+			$nbr_secs = $difference % 60;
+		} else if ($difference < 86400) { // less than 1 day
+			$nbr_hours = $difference / 3600;
+			$nbr_mins = ($difference % 3600) / 60;
+			$nbr_secs = $difference % 60;
+		} else { // 1 day or more
+			$nbr_days = $difference / 86400;
+			$nbr_hours = ($difference % 86400) / 3600;
+			$nbr_mins = ($difference % 3600) / 60;
+			$nbr_secs = $difference % 60;
+		}
+
+		return array('days' => $nbr_days, 'hours' => $nbr_hours, 'mins' => $nbr_mins, 'secs' => $nbr_secs);
+	}
+
+	/**
+	 * Create the first part of the <a> tag for links a, b and c
+	 */
+	static function getATagLinks($url, $urltext, $target, $tooltip = true, $popup_width = '600', $popup_height = '500', $css_classes = '')
+	{
+		// do not add tooltips in case links are internal
+
+		switch ($target) {
+			case 1:	// open in a new window
+				return '<a class="'.$css_classes.'" href="'.htmlspecialchars($url).'" target="_blank">';
+				break;
+			case 2: case 3:	// open in a popup window
+				$attribs = 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width='.$popup_width.',height='.$popup_height;
+				return '<a class="'.$css_classes.'" href="'.$url.'" onclick="window.open(this.href, \'targetWindow\', \''.$attribs.'\'); return false;">';
+				break;
+			default: // open in parent window
+				return '<a class="'.$css_classes.'" href="'.htmlspecialchars($url).'">';
+		}
+	}
+
+	/**
+	 * Get detail parameters
+	 *
+	 * @return array
+	 */
+	private static function getDetails($params, $view, $prefix = '', $subform = '') {
+
+		$infos = array();
+
+		$user = Factory::getUser();
+		$groups	= $user->getAuthorisedViewLevels();
+
+		// get data from subform items
+
+		$information_blocs = $params->get($prefix.$subform); // array of objects
+		if (!empty($information_blocs) && is_object($information_blocs)) {
+			foreach ($information_blocs as $information_bloc) {
+				if ($information_bloc->info != 'none' && in_array($information_bloc->access, $groups)) {
+
+					if ((($information_bloc->showing_in == '' || $information_bloc->showing_in == 2) && $view == 'article')
+							|| (($information_bloc->showing_in == '' || $information_bloc->showing_in == 1) && $view != 'article')) {
+
+								$details = array();
+								$details['info'] = $information_bloc->info;
+								$details['prepend'] = $information_bloc->prepend;
+								$details['show_icon'] = $information_bloc->show_icons == 1 ? true : false;
+								$details['icon'] = '';
+								$details['extra_classes'] = isset($information_bloc->extra_classes) ? $information_bloc->extra_classes : '';
+
+								$infos[] = $details;
+
+								if ($information_bloc->new_line == 1) {
+									$infos[] = array('info' => 'newline', 'prepend' => '', 'show_icon' => false, 'extra_classes' => '');
+								}
+							}
+				}
+			}
+		}
+
+		return $infos;
+	}
+
+	/**
+	 * Get icon and label pre-data, if any
+	 */
+	static function getPreData($label, $default_label, $show_icon, $default_icon, $icon = "") {
+
+		$html = "";
+
+		if ($show_icon && Factory::getDocument()->getDirection() != 'rtl') {
+			$icon = empty($icon) ? $default_icon : $icon;
+			$html .= '<i class="SYWicon-'.$icon.'"></i>';
+		}
+
+		$prepend = !empty($default_label) ? $default_label : $label;
+		if (!empty($prepend) && Factory::getDocument()->getDirection() != 'rtl') {
+			$html .= '<span class="detail_label">'.$prepend.'</span>';
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Get icon and label post-data, if any
+	 */
+	static function getPostData($label, $default_label, $show_icon, $default_icon, $icon = "") {
+
+		$html = "";
+
+		$prepend = !empty($default_label) ? $default_label : $label;
+		if (!empty($prepend) && Factory::getDocument()->getDirection() == 'rtl') {
+			$html .= '<span class="detail_label">'.$prepend.'</span>';
+		}
+
+		if ($show_icon && Factory::getDocument()->getDirection() == 'rtl') {
+			$icon = empty($icon) ? $default_icon : $icon;
+			$html .= '<i class="SYWicon-'.$icon.'"></i>';
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Get block information
+	 */
+	static function getInfoBlock($params, $item, $item_params, $view, $position) {
+
+		$info_block = '';
+
+		$infos = self::getDetails($params, $view, $position . '_', 'information_blocks');
+
+		if (empty($infos)) {
+			return $info_block;
+		}
+
+		$bootstrap_version = $params->get('bootstrap_version', 'joomla');
+		$load_bootstrap = false;
+		if ($bootstrap_version === 'joomla') {
+			$bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 4;
+			$load_bootstrap = true;
+		} else {
+			$bootstrap_version = intval($bootstrap_version);
+		}
+
+		if ($bootstrap_version > 0) {
+			HTMLHelper::_('bootstrap.tooltip');
+		}
+
+		$db = Factory::getDbo();
+		$app = Factory::getApplication();
+
+		$show_date = $params->get('show_d', 'date');
+
+		$date_format = Text::_('PLG_CONTENT_ARTICLEDETAILS_FORMAT_DATE');
+		if (empty($date_format)) {
+			$date_format = $params->get('d_format', 'd F Y');
+		}
+
+		$time_format = Text::_('PLG_CONTENT_ARTICLEDETAILS_FORMAT_TIME');
+		if (empty($time_format)) {
+			$time_format = $params->get('t_format', 'H:i');
+		}
+
+		$separator = htmlspecialchars($params->get('separator', ''));
+		$separator = empty($separator) ? ' ' : $separator;
+
+		$info_block .= '<dt>'.Text::_('PLG_CONTENT_ARTICLEDETAILS_INFORMATION_LABEL').'</dt>';
+
+		$info_block .= '<dd class="details">';
+		$has_info_from_previous_detail = false;
+
+		foreach ($infos as $key => $value) {
+
+			$extraclasses = $value['extra_classes'] ? ' ' . $value['extra_classes'] : '';
+
+			switch ($value['info']) {
+				case 'newline':
+					$info_block .= '</dd><dd class="details">';
+					$has_info_from_previous_detail = false;
+				break;
+
+				case 'hits':
+
+					// TODO instead? if (isset($item->hits)) {
+					if ($item_params->get('show_hits')) {
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_hits' . $extraclasses . '">';
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_HITS'), $value['show_icon'], 'eye', $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_HITS', $item->hits);
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_HITS'), $value['show_icon'], 'eye', $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'rating':
+
+					// TODO instead? if (isset($item->rating)) {
+					if ($item_params->get('ad_show_vote')) {
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_rating' . $extraclasses . '">';
+
+						$icon_default = 'star-outline';
+						if (!empty($item->rating)) {
+							if (intval($item->rating) == 5) {
+								$icon_default = 'star';
+							} else {
+								$icon_default = 'star-half';
+							}
+						}
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_RATING'), $value['show_icon'], $icon_default, $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						if (!empty($item->rating)) {
+							if ($params->get('show_rating') == 'text') {
+								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_RATING', $item->rating).' ';
+								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_FROMUSERS', $item->rating_count);
+							} else { // use stars
+
+								$whole = intval($item->rating);
+
+								$stars = '';
+								for ($i = 0; $i < $whole; $i++) {
+									$stars .= '<i class="SYWicon-star" aria-hidden="true"></i>';
+								}
+
+								if ($whole < 5) { // Joomla rounds the rating, therefore there will never be a fraction
+
+									// get fraction
+
+									$fraction = $item->rating - $whole;
+									if ($fraction > .4) {
+										$stars .= '<i class="SYWicon-star-half" aria-hidden="true"></i>';
+									} else {
+										$stars .= '<i class="SYWicon-star-outline" aria-hidden="true"></i>';
+									}
+
+									for ($i = $whole + 1; $i < 5; $i++) {
+										$stars .= '<i class="SYWicon-star-outline" aria-hidden="true"></i>';
+									}
+								}
+
+								$info_block .= $stars;
+							}
+						} else {
+							$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_NORATING');
+						}
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_RATING'), $value['show_icon'], $icon_default, $value['icon']);
+
+						$info_block .= '</span>';
+
+						if ($view == 'article' && $item->state == 1 && !$app->input->getBool('print')) {
+							$uri = Uri::getInstance();
+							$uri->setQuery($uri->getQuery() . '&hitcount=0');
+
+							HTMLHelper::_('formbehavior.chosen', 'select');
+
+							$options = array();
+							$options[] = HTMLHelper::_('select.option', 5, Text::_('PLG_CONTENT_ARTICLEDETAILS_VOTE5'));
+							for ($i = 4; $i > 0; $i--) {
+							    $options[] = HTMLHelper::_('select.option', $i, Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_VOTE', $i));
+							}
+
+							// voting form (cannot have a form inside a paragraph)
+							$info_block .= '</dd>';
+							$info_block .= '<form method="post" action="' . htmlspecialchars($uri->toString()) . '" class="form-inline">';
+							$info_block .= '<span class="article_vote">';
+							$info_block .= HTMLHelper::_('select.genericlist', $options, 'user_rating', null, 'value', 'text', '5', 'article_vote_' . $item->id);
+							$info_block .= '&#160;<input class="btn btn-mini" type="submit" name="submit_vote" value="' . Text::_('PLG_CONTENT_ARTICLEDETAILS_RATE') . '" />';
+							$info_block .= '<input type="hidden" name="task" value="article.vote" />';
+							$info_block .= '<input type="hidden" name="hitcount" value="0" />';
+							$info_block .= '<input type="hidden" name="url" value="' . htmlspecialchars($uri->toString()) . '" />';
+							$info_block .= HTMLHelper::_('form.token');
+							$info_block .= '</span>';
+							$info_block .= '</form>';
+							$info_block .= '<dd class="details">'; // force new line after the form
+						}
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'author':
+				case 'authorcb':
+
+					// TODO instead? if (isset($item->author)) {
+					if ($item_params->get('show_author')) {
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_author' . $extraclasses . '">';
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_AUTHOR'), $value['show_icon'], 'user', $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						$author = $item->created_by_alias ? $item->created_by_alias : $item->author;
+
+						if ($value['info'] == 'author') {
+							if (isset($item->contact_link) && !empty($item->contact_link) && $item_params->get('link_author') && !$app->input->getBool('print')) { // 'contact_link' comes from contact plugin
+								$info_block .= HTMLHelper::_('link', $item->contact_link, $author);
+							} else {
+								$info_block .= $author;
+							}
+						} else { // author links to Community Builder
+							if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler') && ComponentHelper::isEnabled('com_comprofiler')) {
+							    if ($item_params->get('link_author') && Factory::getUser()->id != 0 && !$app->input->getBool('print')) {
+									$info_block .= HTMLHelper::_('link', 'index.php?option=com_comprofiler&task=userprofile&user='.$item->created_by, $author);
+								} else {
+									$info_block .= $author;
+								}
+							} else {
+								$info_block .= $author;
+							}
+						}
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_AUTHOR'), $value['show_icon'], 'user', $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+					break;
+
+				case 'keywords':
+				case 'keywordssearch':
+				case 'keywordsfinder':
+
+					$keywords = preg_split ('/[\s]*[,][\s]*/', $item->metakey, -1, PREG_SPLIT_NO_EMPTY); // deals with "key1  ,key2,   key3  "
+					// empty($keyword) in the following code should be unnecessary since we used PREG_SPLIT_NO_EMPTY
+
+					if (!empty($keywords)) {
+
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						if ($params->get('distinct_keywords', 0)) { // keywords as distinct entities
+
+							$info_block .= '<span class="detail detail_keywords' . $extraclasses . '">';
+
+							$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_KEYWORDS'), $value['show_icon'], 'tag', $value['icon']);
+
+							$info_block .= '<span class="detail_multi_data">';
+
+							foreach ($keywords as $i => $keyword) {
+								if (!empty($keyword)) {
+
+									$info_block .= '<span class="distinct">';
+
+									$info_block .= self::getPreData($params->get('prepend_keywords', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_KEYWORD'), $params->get('show_icon_keywords', 0), 'tag', $params->get('icon_keywords', ''));
+
+									if ($value['info'] == 'keywordssearch' && !$app->input->getBool('print')) {
+
+										// Find the menu item for the search
+										$menu  = $app->getMenu();
+										$items = $menu->getItems('link', 'index.php?option=com_search&view=search');
+										$searchUriAddition = '';
+										if (isset($items[0])) {
+											$searchUriAddition = '&Itemid='.$items[0]->id;
+										}
+
+										$info_block .= '<a class="detail_data" href="'.Route::_(Uri::base().'index.php?option=com_search&searchword='.$keyword.'&searchphrase=all'.$searchUriAddition).'">'.$keyword.'</a>';
+
+									} else if ($value['info'] == 'keywordsfinder' && !$app->input->getBool('print')) {
+
+										// Find the menu item for the search
+										$menu  = $app->getMenu();
+										$items = $menu->getItems('link', 'index.php?option=com_finder&view=search');
+										$searchUriAddition = '';
+										if (isset($items[0])) {
+											$searchUriAddition = '&Itemid='.$items[0]->id;
+										}
+
+										$info_block .= '<a class="detail_data" href="'.Route::_(Uri::base().'index.php?option=com_finder&q='.$keyword.$searchUriAddition).'">'.$keyword.'</a>';
+									} else {
+										$info_block .= '<span class="detail_data">'.$keyword.'</span>';
+									}
+
+									$info_block .= self::getPostData($params->get('prepend_keywords', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_KEYWORD'), $params->get('show_icon_keywords', 0), 'tag', $params->get('icon_keywords', ''));
+
+									$info_block .= '</span>';
+								}
+
+								if ($i < count($keywords) - 1) {
+									if (!empty($keyword)) {
+										$info_block .= '<span class="delimiter"> </span>';
+									}
+								}
+
+								$info_block .= '</span>';
+
+								$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_KEYWORDS'), $value['show_icon'], 'tag', $value['icon']);
+
+								$info_block .= '</span>';
+
+								$has_info_from_previous_detail = true;
+							}
+
+						} else { // keywords as list of items
+
+							$info_block .= '<span class="detail detail_keywords' . $extraclasses . '">';
+
+							$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_KEYWORDS'), $value['show_icon'], 'tag', $value['icon']);
+
+							$info_block .= '<span class="detail_data">';
+
+							// clean the keyword's list
+							foreach ($keywords as $i => $keyword) {
+								if (!empty($keyword)) {
+
+									if ($value['info'] == 'keywordssearch' && !$app->input->getBool('print')) {
+
+										// Find the menu item for the search
+										$menu  = $app->getMenu();
+										$items = $menu->getItems('link', 'index.php?option=com_search&view=search');
+										$searchUriAddition = '';
+										if (isset($items[0])) {
+											$searchUriAddition = '&Itemid='.$items[0]->id;
+										}
+
+										$keyword = '<a href="'.Route::_(Uri::base().'index.php?option=com_search&searchword='.$keyword.'&searchphrase=all'.$searchUriAddition).'">'.$keyword.'</a>';
+
+									} else if ($value['info'] == 'keywordsfinder' && !$app->input->getBool('print')) {
+
+										// Find the menu item for the search
+										$menu  = $app->getMenu();
+										$items = $menu->getItems('link', 'index.php?option=com_finder&view=search');
+										$searchUriAddition = '';
+										if (isset($items[0])) {
+											$searchUriAddition = '&Itemid='.$items[0]->id;
+										}
+
+										$keyword = '<a href="'.Route::_(Uri::base().'index.php?option=com_finder&q='.$keyword.$searchUriAddition).'">'.$keyword.'</a>';
+									}
+
+									$info_block .= $keyword;
+								}
+
+								if ($i < count($keywords) - 1) {
+									if (!empty($keyword)) {
+										$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_KEYWORDSSSEPARATOR');
+									}
+								}
+							}
+
+							$info_block .= '</span>';
+
+							$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_KEYWORDS'), $value['show_icon'], 'tag', $value['icon']);
+
+							$info_block .= '</span>';
+
+							$has_info_from_previous_detail = true;
+						}
+					}
+				break;
+
+				case 'parentcategory':
+					// TODO instead? if (isset($item->parent_title) && $item->parent_id != 1) {
+					if ($item_params->get('show_parent_category') && $item->parent_id != 1) { // do not show any parent info if the parent is root
+
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_parentcategory' . $extraclasses . '">';
+
+						if ($item_params->get('link_parent_category')) {
+							$icon_default = 'folder-open';
+						} else {
+							$icon_default = 'folder';
+						}
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_PARENTCATEGORY'), $value['show_icon'], $icon_default, $value['icon']);
+
+						if ($item_params->get('link_parent_category') && !$app->input->getBool('print')) {
+							if ($view == 'article') {
+								if (!empty($item->parent_slug)) {
+									$info_block .= '<a class="detail_data" href="'.Route::_(RouteHelper::getCategoryRoute($item->parent_slug)).'">'.$item->parent_title.'</a>';
+								} else {
+									$info_block .= '<span class="detail_data">'.$item->parent_title.'</span>';
+								}
+							} else {
+
+								// No linking if the parent category is the one the view is in
+
+								$cat_link = Route::_(RouteHelper::getCategoryRoute($item->parent_id));
+								$current_link = Uri::current();
+								if (substr( $current_link, strlen( $current_link ) - strlen( $cat_link ) ) != $cat_link) { // the current links does not end with the parent category link
+									$info_block .= '<a class="detail_data" href="'.Route::_(RouteHelper::getCategoryRoute($item->parent_id)).'">'.$item->parent_title.'</a>';
+								} else {
+									$info_block .= '<span class="detail_data">'.$item->parent_title.'</span>';
+								}
+							}
+						} else {
+							$info_block .= '<span class="detail_data">'.$item->parent_title.'</span>';
+						}
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_PARENTCATEGORY'), $value['show_icon'], $icon_default, $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'category':
+					// TODO instead? if (isset($item->category_title)) {
+					if ($item_params->get('show_category')) {
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_category' . $extraclasses . '">';
+
+						if ($item_params->get('link_category')) {
+							$icon_default = 'folder-open';
+						} else {
+							$icon_default = 'folder';
+						}
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_CATEGORY'), $value['show_icon'], $icon_default, $value['icon']);
+
+						if ($item_params->get('link_category') && !$app->input->getBool('print')) {
+							if ($view == 'article') {
+								if (!empty($item->catslug)) {
+									$info_block .= '<a class="detail_data" href="'.Route::_(RouteHelper::getCategoryRoute($item->catslug)).'">'.$item->category_title.'</a>';
+								} else {
+									$info_block .= '<span class="detail_data">'.$item->category_title.'</span>';
+								}
+							} else {
+
+								// No linking if the category is the one the view is in
+
+								$cat_link = Route::_(RouteHelper::getCategoryRoute($item->catid));
+								$current_link = Uri::current();
+								if (substr( $current_link, strlen( $current_link ) - strlen( $cat_link ) ) != $cat_link) { // the current links does not end with the category link
+									$info_block .= '<a class="detail_data" href="'.Route::_(RouteHelper::getCategoryRoute($item->catid)).'">'.$item->category_title.'</a>'; // keep linking in category view because of sub-categories
+								} else {
+									$info_block .= '<span class="detail_data">'.$item->category_title.'</span>';
+								}
+							}
+						} else {
+							$info_block .= '<span class="detail_data">'.$item->category_title.'</span>';
+						}
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_CATEGORY'), $value['show_icon'], $icon_default, $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'combocategories':
+					if ($item_params->get('show_category')) {
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_categories' . $extraclasses . '">';
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_COMBOCATEGORIES'), $value['show_icon'], 'folder-open', $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						if ($item_params->get('show_parent_category') && $item->parent_id != 1) { // do not show any parent info if the parent is root
+							if ($item_params->get('link_parent_category') && !$app->input->getBool('print')) {
+								if ($view == 'article') {
+									if (!empty($item->parent_slug)) {
+										$info_block .= '<a href="'.Route::_(RouteHelper::getCategoryRoute($item->parent_slug)).'">'.$item->parent_title.'</a>';
+										$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_COMBOCATEGORIESSEPARATOR');
+									} else {
+										$info_block .= $item->parent_title;
+										$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_COMBOCATEGORIESSEPARATOR');
+									}
+								} else {
+
+									// No linking if the parent category is the one the view is in
+
+									$cat_link = Route::_(RouteHelper::getCategoryRoute($item->parent_id));
+									$current_link = Uri::current();
+									if (substr( $current_link, strlen( $current_link ) - strlen( $cat_link ) ) != $cat_link) { // the current links does not end with the parent category link
+										$info_block .= '<a href="'.Route::_(RouteHelper::getCategoryRoute($item->parent_id)).'">'.$item->parent_title.'</a>';
+										$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_COMBOCATEGORIESSEPARATOR');
+									} else {
+										$info_block .= $item->parent_title;
+										$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_COMBOCATEGORIESSEPARATOR');
+									}
+								}
+							} else {
+								$info_block .= $item->parent_title;
+								$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_COMBOCATEGORIESSEPARATOR');
+							}
+						}
+
+						//if ($item_params->get('show_category')) {
+						if ($item_params->get('link_category') && !$app->input->getBool('print')) {
+							if ($view == 'article') {
+								if (!empty($item->catslug)) {
+									$info_block .= '<a href="'.Route::_(RouteHelper::getCategoryRoute($item->catslug)).'">'.$item->category_title.'</a>';
+								} else {
+									$info_block .= $item->category_title;
+								}
+							} else {
+
+								// No linking if the category is the one the view is in
+
+								$cat_link = Route::_(RouteHelper::getCategoryRoute($item->catid));
+								$current_link = Uri::current();
+								if (substr( $current_link, strlen( $current_link ) - strlen( $cat_link ) ) != $cat_link) { // the current links does not end with the category link
+									$info_block .= '<a href="'.Route::_(RouteHelper::getCategoryRoute($item->catid)).'">'.$item->category_title.'</a>'; // keep linking in category view because of sub-categories
+								} else {
+									$info_block .= $item->category_title;
+								}
+							}
+						} else {
+							$info_block .= $item->category_title;
+						}
+						//}
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_COMBOCATEGORIES'), $value['show_icon'], 'folder-open', $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'created':
+				case 'modified':
+				case 'published':
+
+					$date = $item->publish_up;
+					if ($value['info'] == 'created') {
+						$date = $item->created;
+					} else if ($value['info'] == 'modified') {
+						$date = $item->modified;
+					}
+
+					if ($date == $db->getNullDate() || empty($date)) {
+						//$info_block .= '<span class="detail detail_date"><span class="article_nodate"></span></span>';
+					} else {
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_date' . $extraclasses . '">';
+
+						$label_default = Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_PUBLISHED');
+						if ($value['info'] == 'created') {
+							$label_default = Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_CREATED');
+						} else if ($value['info'] == 'modified') {
+							$label_default = Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_MODIFIED');
+						}
+
+						$info_block .= self::getPreData($value['prepend'], $label_default, $value['show_icon'], 'calendar', $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						$nbr_seconds = -1;
+						$nbr_minutes = -1;
+						$nbr_hours = -1;
+						$nbr_days = -1;
+
+						if ($show_date == 'ago' || $show_date == 'agomhd' || $show_date == 'agohm') {
+							if (!empty($date)) {
+								$details = self::date_to_counter($date, false);
+
+								$nbr_seconds  = intval($details['secs']);
+								$nbr_minutes  = intval($details['mins']);
+								$nbr_hours = intval($details['hours']);
+								$nbr_days = intval($details['days']);
+							}
+						}
+
+						if ($show_date == 'date') {
+							$info_block .= HTMLHelper::_('date', $date, $date_format);
+						} else if ($show_date == 'ago') {
+							if ($nbr_days == 0) {
+								$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_TODAY');
+							} else if ($nbr_days == 1) {
+								$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_YESTERDAY');
+							} else {
+								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_DAYSAGO', $nbr_days);
+							}
+						} else if ($show_date == 'agomhd') {
+							if ($nbr_days > 0) {
+								if ($nbr_days == 1) {
+									$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_DAYAGO');
+								} else {
+									$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_DAYSAGO', $nbr_days);
+								}
+							} else if ($nbr_hours > 0) {
+								if ($nbr_hours == 1) {
+									$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_HOURAGO');
+								} else {
+									$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_HOURSAGO', $nbr_hours);
+								}
+							} else {
+								if ($nbr_minutes == 1) {
+									$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_MINUTEAGO');
+								} else {
+									$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_MINUTESAGO', $nbr_minutes);
+								}
+							}
+						} else {
+							if ($nbr_days > 0) {
+								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_DAYSHOURSMINUTESAGO', $nbr_days, $nbr_hours, $nbr_minutes);
+							} else if ($nbr_hours > 0) {
+								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_HOURSMINUTESAGO', $nbr_hours, $nbr_minutes);
+							} else {
+								if ($nbr_minutes == 1) {
+									$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_MINUTEAGO');
+								} else {
+									$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_MINUTESAGO', $nbr_minutes);
+								}
+							}
+						}
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], $label_default, $value['show_icon'], 'calendar', $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'finished':
+
+					if ($item->publish_down == $db->getNullDate() || empty($item->publish_down)) {
+						//$info_block .= '<span class="detail detail_date"><span class="article_nodate"></span></span>';
+					} else {
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_date' . $extraclasses . '">';
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_FINISHED'), $value['show_icon'], 'calendar', $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						$nbr_seconds = -1;
+						$nbr_minutes = -1;
+						$nbr_hours = -1;
+						$nbr_days = -1;
+
+						if ($show_date == 'ago' || $show_date == 'agomhd' || $show_date == 'agohm') {
+							if (!empty($item->publish_down)) {
+								$details = self::date_to_counter($item->publish_down, true);
+
+								$nbr_seconds = intval($details['secs']);
+								$nbr_minutes = intval($details['mins']);
+								$nbr_hours = intval($details['hours']);
+								$nbr_days = intval($details['days']);
+							}
+						}
+
+						if ($show_date == 'date') {
+							$info_block .= HTMLHelper::_('date', $item->publish_down, $date_format);
+						} else if ($show_date == 'ago') {
+							if ($nbr_days == 0) {
+								$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_TODAY');
+							} else if ($nbr_days == 1) {
+								$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_TOMORROW');
+							} else {
+								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_INDAYSONLY', $nbr_days);
+							}
+						} else if ($show_date == 'agomhd') {
+							if ($nbr_days > 0) {
+								if ($nbr_days == 1) {
+									$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_INADAY');
+								} else {
+									$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_INDAYSONLY', $nbr_days);
+								}
+							} else if ($nbr_hours > 0) {
+								if ($nbr_hours == 1) {
+									$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_INANHOUR');
+								} else {
+									$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_INHOURS', $nbr_hours);
+								}
+							} else {
+								if ($nbr_minutes == 1) {
+									$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_INAMINUTE');
+								} else {
+									$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_INMINUTES', $nbr_minutes);
+								}
+							}
+						} else {
+							if ($nbr_days > 0) {
+								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_INDAYSHOURSMINUTES', $nbr_days, $nbr_hours, $nbr_minutes);
+							} else if ($nbr_hours > 0) {
+								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_INHOURSMINUTES', $nbr_hours, $nbr_minutes);
+							} else {
+								if ($nbr_minutes == 1) {
+									$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_INAMINUTE');
+								} else {
+									$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_INMINUTES', $nbr_minutes);
+								}
+							}
+						}
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_FINISHED'), $value['show_icon'], 'calendar', $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'createdtime':
+				case 'modifiedtime':
+				case 'publishedtime':
+				case 'finishedtime':
+
+					$date = $item->publish_up;
+					if ($value['info'] == 'createdtime') {
+						$date = $item->created;
+					} else if ($value['info'] == 'modifiedtime') {
+						$date = $item->modified;
+					} else if ($value['info'] == 'finishedtime') {
+						$date = $item->publish_down;
+					}
+
+					if ($date == $db->getNullDate() || empty($date)) {
+						//$info_block .= '<span class="detail detail_time"><span class="article_notime"></span></span>';
+					} else {
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_time' . $extraclasses . '">';
+
+						$label_default = Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_PUBLISHEDTIME');
+						if ($value['info'] == 'createdtime') {
+							$label_default = Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_CREATEDTIME');
+						} else if ($value['info'] == 'modifiedtime') {
+							$label_default = Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_MODIFIEDTIME');
+						} else if ($value['info'] == 'finishedtime') {
+							$label_default = Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_FINISHEDTIME');
+						}
+
+						$info_block .= self::getPreData($value['prepend'], $label_default, $value['show_icon'], 'clock', $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						$info_block .= HTMLHelper::_('date', $date, $time_format);
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], $label_default, $value['show_icon'], 'clock', $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'linka':
+				case 'linkb':
+				case 'linkc':
+				case 'links':
+				case 'linksnl':
+
+					if (isset($item->urls)) {
+
+						$urls = json_decode($item->urls);
+
+						if ($urls && (!empty($urls->urla) || !empty($urls->urlb) || !empty($urls->urlc))) {
+
+							$globalparams = ComponentHelper::getParams('com_content');
+
+							$targeta = $globalparams->get('targeta', 0);
+							if (!empty($urls->targeta)) {
+								$targeta = $urls->targeta;
+							}
+
+							$targetb = $globalparams->get('targetb', 0);
+							if (!empty($urls->targetb)) {
+								$targetb = $urls->targetb;
+							}
+
+							$targetc = $globalparams->get('targetc', 0);
+							if (!empty($urls->targetc)) {
+								$targetc = $urls->targetc;
+							}
+
+							if ($has_info_from_previous_detail) {
+								$info_block .= '<span class="delimiter">'.$separator.'</span>';
+							}
+
+							// if all links a b c
+							if ($value['info'] == 'links' || $value['info'] == 'linksnl') {
+
+								$info_block .= '<span class="detail detail_links' . $extraclasses . '">';
+
+								$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINKS'), $value['show_icon'], 'link', $value['icon']);
+
+								$info_block .= '<span class="detail_multi_data">';
+
+								if (!empty($urls->urla)) {
+
+									$info_block .= '<span class="distinct distinct_linka">';
+
+									$info_block .= self::getPreData($params->get('prepend_links', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $params->get('show_icon_links', 0), 'link', $params->get('icon_links', ''));
+
+									if (!$app->input->getBool('print')) {
+										$info_block .= self::getATagLinks($urls->urla, $urls->urlatext, $targeta, false, '600', '500', 'detail_data');
+									} else {
+										$info_block .= '<span class="detail_data">';
+									}
+
+									if (!empty($urls->urlatext)) {
+										$info_block .= $urls->urlatext;
+									} else {
+										if (!$params->get('protocol', 1)) {
+											$info_block .= self::remove_protocol($urls->urla);
+										} else {
+											$info_block .= $urls->urla;
+										}
+									}
+
+									if (!$app->input->getBool('print')) {
+										$info_block .= '</a>';
+									} else {
+										$info_block .= '</span>';
+									}
+
+									$info_block .= self::getPostData($params->get('prepend_links', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $params->get('show_icon_links', 0), 'link', $params->get('icon_links', ''));
+
+									$info_block .= '</span>';
+
+									if ($value['info'] == 'linksnl' && (!empty($urls->urlb) || !empty($urls->urlc))) {
+										$info_block .= '<br />';
+									} else if ($value['info'] == 'links' && (!empty($urls->urlb) || !empty($urls->urlc))) {
+										//$info_block .= '<span class="delimiter"> </span>';
+										$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_LINKSSEPARATOR');
+									}
+								}
+
+								if (!empty($urls->urlb)) {
+
+									$info_block .= '<span class="distinct distinct_linkb">';
+
+									$info_block .= self::getPreData($params->get('prepend_links', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $params->get('show_icon_links', 0), 'link', $params->get('icon_links', ''));
+
+									if (!$app->input->getBool('print')) {
+										$info_block .= self::getATagLinks($urls->urlb, $urls->urlbtext, $targetb, false, '600', '500', 'detail_data');
+									} else {
+										$info_block .= '<span class="detail_data">';
+									}
+
+									if (!empty($urls->urlbtext)) {
+										$info_block .= $urls->urlbtext;
+									} else {
+										if (!$params->get('protocol', 1)) {
+											$info_block .= self::remove_protocol($urls->urlb);
+										} else {
+											$info_block .= $urls->urlb;
+										}
+									}
+
+									if (!$app->input->getBool('print')) {
+										$info_block .= '</a>';
+									} else {
+										$info_block .= '</span>';
+									}
+
+									$info_block .= self::getPostData($params->get('prepend_links', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $params->get('show_icon_links', 0), 'link', $params->get('icon_links', ''));
+
+									$info_block .= '</span>';
+
+									if ($value['info'] == 'linksnl' && !empty($urls->urlc)) {
+										$info_block .= '<br />';
+									} else if ($value['info'] == 'links' && !empty($urls->urlc)) {
+										//$info_block .= '<span class="delimiter"> </span>';
+										$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_LINKSSEPARATOR');
+									}
+								}
+
+								if (!empty($urls->urlc)) {
+
+									$info_block .= '<span class="distinct distinct_linkc">';
+
+									$info_block .= self::getPreData($params->get('prepend_links', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $params->get('show_icon_links', 0), 'link', $params->get('icon_links', ''));
+
+									if (!$app->input->getBool('print')) {
+										$info_block .= self::getATagLinks($urls->urlc, $urls->urlctext, $targetc, false, '600', '500', 'detail_data');
+									} else {
+										$info_block .= '<span class="detail_data">';
+									}
+
+									if (!empty($urls->urlctext)) {
+										$info_block .= $urls->urlctext;
+									} else {
+										if (!$params->get('protocol', 1)) {
+											$info_block .= self::remove_protocol($urls->urlc);
+										} else {
+											$info_block .= $urls->urlc;
+										}
+									}
+
+									if (!$app->input->getBool('print')) {
+										$info_block .= '</a>';
+									} else {
+										$info_block .= '</span>';
+									}
+
+									$info_block .= self::getPostData($params->get('prepend_links', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $params->get('show_icon_links', 0), 'link', $params->get('icon_links', ''));
+
+									$info_block .= '</span>';
+								}
+
+								$info_block .= '</span>';
+
+								$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINKS'), $value['show_icon'], 'link', $value['icon']);
+
+								$info_block .= '</span>';
+
+								$has_info_from_previous_detail = true;
+							} // end all links a b c
+
+							// link a
+							if ($value['info'] == 'linka' && !empty($urls->urla)) {
+
+								$info_block .= '<span class="detail detail_link detail_linka' . $extraclasses . '">';
+
+								$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $value['show_icon'], 'link', $value['icon']);
+
+								if (!$app->input->getBool('print')) {
+									$info_block .= self::getATagLinks($urls->urla, $urls->urlatext, $targeta, false, '600', '500', 'detail_data');
+								} else {
+									$info_block .= '<span class="detail_data">';
+								}
+
+								if (!empty($urls->urlatext)) {
+									$info_block .= $urls->urlatext;
+								} else {
+									if (!$params->get('protocol', 1)) {
+										$info_block .= self::remove_protocol($urls->urla);
+									} else {
+										$info_block .= $urls->urla;
+									}
+								}
+
+								if (!$app->input->getBool('print')) {
+									$info_block .= '</a>';
+								} else {
+									$info_block .= '</span>';
+								}
+
+								$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $value['show_icon'], 'link', $value['icon']);
+
+								$info_block .= '</span>';
+
+								$has_info_from_previous_detail = true;
+							}
+
+							// link b
+							if ($value['info'] == 'linkb' && !empty($urls->urlb)) {
+
+								$info_block .= '<span class="detail detail_link detail_linkb' . $extraclasses . '">';
+
+								$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $value['show_icon'], 'link', $value['icon']);
+
+								if (!$app->input->getBool('print')) {
+									$info_block .= self::getATagLinks($urls->urlb, $urls->urlbtext, $targetb, false, '600', '500', 'detail_data');
+								} else {
+									$info_block .= '<span class="detail_data">';
+								}
+
+								if (!empty($urls->urlbtext)) {
+									$info_block .= $urls->urlbtext;
+								} else {
+									if (!$params->get('protocol', 1)) {
+										$info_block .= self::remove_protocol($urls->urlb);
+									} else {
+										$info_block .= $urls->urlb;
+									}
+								}
+
+								if (!$app->input->getBool('print')) {
+									$info_block .= '</a>';
+								} else {
+									$info_block .= '</span>';
+								}
+
+								$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $value['show_icon'], 'link', $value['icon']);
+
+								$info_block .= '</span>';
+
+								$has_info_from_previous_detail = true;
+							}
+
+							if ($value['info'] == 'linkc' && !empty($urls->urlc)) {
+
+								$info_block .= '<span class="detail detail_link detail_linkc' . $extraclasses . '">';
+
+								$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $value['show_icon'], 'link', $value['icon']);
+
+								if (!$app->input->getBool('print')) {
+									$info_block .= self::getATagLinks($urls->urlc, $urls->urlctext, $targetc, false, '600', '500', 'detail_data');
+								} else {
+									$info_block .= '<span class="detail_data">';
+								}
+
+								if (!empty($urls->urlctext)) {
+									$info_block .= $urls->urlctext;
+								} else {
+									if (!$params->get('protocol', 1)) {
+										$info_block .= self::remove_protocol($urls->urlc);
+									} else {
+										$info_block .= $urls->urlc;
+									}
+								}
+
+								if (!$app->input->getBool('print')) {
+									$info_block .= '</a>';
+								} else {
+									$info_block .= '</span>';
+								}
+
+								$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $value['show_icon'], 'link', $value['icon']);
+
+								$info_block .= '</span>';
+
+								$has_info_from_previous_detail = true;
+							}
+						}
+					}
+				break;
+
+				case 'tags':
+				case 'linkedtags':
+
+					if ($item_params->get('ad_show_tags') && isset($item->tags) && !empty($item->tags->itemTags)) {
+
+						$item_tags = $item->tags->itemTags;
+
+						// remove tags to hide
+						$tags_to_hide = $params->get('hide_tags');
+						if (!empty($tags_to_hide)) {
+							foreach ($item_tags as $key => $item_tag) {
+								if (in_array($item_tag->id, $tags_to_hide)) {
+									unset($item_tags[$key]);
+								}
+							}
+						}
+
+						if (!empty($item_tags)) {
+
+							// order tags
+
+							switch ($params->get('order_tags', 'none')) {
+								case 'console': usort($item_tags, "Helper::compare_tags_by_console"); break;
+								case 'alpha': usort($item_tags, "Helper::compare_tags_by_name"); break;
+							}
+
+							if ($value['info'] == 'linkedtags') {
+								JLoader::register('TagsHelperRoute', JPATH_BASE . '/components/com_tags/helpers/route.php');
+							}
+
+							if ($has_info_from_previous_detail) {
+								$info_block .= '<span class="delimiter">'.$separator.'</span>';
+							}
+
+							if ($params->get('distinct_tags', 0)) {  // tags as distinct entities
+
+								$info_block .= '<span class="detail detail_tags' . $extraclasses . '">';
+
+								$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_TAGS'), $value['show_icon'], 'tags', $value['icon']);
+
+								$info_block .= '<span class="detail_multi_data">';
+
+								foreach ($item_tags as $i => $tag) {
+
+									if (Factory::getLanguage()->hasKey($tag->title)) {
+										$tag->title = Text::_($tag->title);
+									}
+
+									$info_block .= '<span class="distinct distinct_tag tag_'.$tag->id.'">';
+
+									$info_block .= self::getPreData($params->get('prepend_tags', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_TAG'), $params->get('show_icon_tags', 0), 'tag2', $params->get('icon_tags', ''));
+
+									$info_block .= '<span class="detail_data">';
+
+									$tag_class_attribute = '';
+									if ($params->get('bootstrap_tags', 0)) { // in fact, get classes per tag from the console
+										$tagParams = new Registry($tag->params);
+										$tag_class_attribute = ' '.$tagParams->get('tag_link_class', SYWUtilities::getBootstrapProperty('label', $bootstrap_version) . ' ' . SYWUtilities::getBootstrapProperty('label-info', $bootstrap_version));
+									} else if (trim($params->get('tag_classes', ''))) {
+										$tag_class_attribute = ' '.trim($params->get('tag_classes'));
+									}
+
+									if ($value['info'] == 'linkedtags' && !$app->input->getBool('print')) {
+										$info_block .= '<a href="'.Route::_(TagsHelperRoute::getTagRoute($tag->id . ':' . $tag->alias)).'" class="detail_data'.$tag_class_attribute.'">'.$tag->title.'</a>';
+									} else {
+										$info_block .= '<span class="detail_data'.$tag_class_attribute.'">'.$tag->title.'</span>';
+									}
+
+									$info_block .= '</span>';
+
+									$info_block .= self::getPostData($params->get('prepend_tags', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_TAG'), $params->get('show_icon_tags', 0), 'tag2', $params->get('icon_tags', ''));
+
+									$info_block .= '</span>';
+
+									if ($i < count($item_tags) - 1) {
+										$info_block .= '<span class="delimiter"> </span>';
+									}
+								}
+
+								$info_block .= '</span>';
+
+								$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_TAGS'), $value['show_icon'], 'tags', $value['icon']);
+
+								$info_block .= '</span>';
+
+								$has_info_from_previous_detail = true;
+
+							} else {  // tags as list of items
+
+								$info_block .= '<span class="detail detail_tags' . $extraclasses . '">';
+
+								$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_TAGS'), $value['show_icon'], 'tags', $value['icon']);
+
+								$info_block .= '<span class="detail_data">';
+
+								foreach ($item_tags as $i => $tag) {
+
+									if (Factory::getLanguage()->hasKey($tag->title)) {
+										$tag->title = Text::_($tag->title);
+									}
+
+									if ($value['info'] == 'tags') {
+										$info_block .= $tag->title;
+									} else {
+										if (!$app->input->getBool('print')) {
+											$info_block .= '<a href="'.Route::_(TagsHelperRoute::getTagRoute($tag->id . ':' . $tag->alias)).'">';
+											$info_block .= $tag->title;
+											$info_block .= '</a>';
+										} else {
+											$info_block .= $tag->title;
+										}
+									}
+
+									if ($i < count($item_tags) - 1) {
+										$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_TAGSSEPARATOR');
+									}
+								}
+
+								$info_block .= '</span>';
+
+								$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_TAGS'), $value['show_icon'], 'tags', $value['icon']);
+
+								$info_block .= '</span>';
+
+								$has_info_from_previous_detail = true;
+							}
+						} // end not empty tags
+					}
+				break;
+
+				case 'share':
+					if (!empty($item->link) && !$app->input->getBool('print')) {
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_social' . $extraclasses . '">';
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_SHARE'), $value['show_icon'], 'share2', $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						$root_path = rtrim(Uri::root(), "/");
+
+						$url = str_replace(array("tmpl=component", "print=1"), "", $item->link);
+						$url = rtrim($url, "?&amp;");
+
+						$base_path = Uri::base(true);
+
+						// remove base path from item link if it is already there
+						if ($base_path && strpos($url, $base_path) === 0) {
+							$url = substr($url, strlen($base_path));
+						}
+
+						// backward compatibility
+
+						$icons_to_show = array('none');
+						if ($params->get('share_email', 0)) {
+							$icons_to_show[] = 'email';
+						}
+						if ($params->get('share_facebook', 0)) {
+							$icons_to_show[] = 'facebook';
+						}
+						if ($params->get('share_google', 0)) {
+							$icons_to_show[] = 'google';
+						}
+						if ($params->get('share_twitter', 0)) {
+							$icons_to_show[] = 'twitter';
+						}
+						if ($params->get('share_linkedin', 0)) {
+							$icons_to_show[] = 'linkedin';
+						}
+						if ($params->get('share_stumbleupon', 0)) {
+							$icons_to_show[] = 'stumbleupon';
+						}
+
+						// end backward compatibility
+
+						for ($i = 1; $i < 7; $i++) {
+
+							$icon_to_show = $params->get('share_pos_'.$i, 'none');
+
+							if (isset($icons_to_show[$i])) {
+								$icon_to_show = $icons_to_show[$i];
+							}
+
+							$share_classes = trim($params->get('share_classes', ''));
+							$share_classes = empty($share_classes) ? '' : ' '.$share_classes;
+
+							switch ($icon_to_show) {
+								case 'email':
+									if ($item_params->get('show_email_icon')) {
+										$info_block .= self::sendToFriendIcon($root_path.$url, $share_classes);
+									}
+									break;
+								case 'facebook': $info_block .= self::getFacebookButton(htmlspecialchars($item->title), $root_path.$url, $share_classes); break;
+								case 'google': $info_block .= self::getGoogleButton($root_path.$url, $share_classes); break;
+								case 'twitter': $info_block .= self::getTwitterButton(htmlspecialchars($item->title), $root_path.$url, $share_classes); break;
+								case 'linkedin': $info_block .= self::getLinkedInButton(htmlspecialchars($item->title), $root_path.$url, $share_classes); break;
+								case 'stumbleupon': $info_block .= self::getStumbleuponButton(htmlspecialchars($item->title), $root_path.$url, $share_classes); break;
+							}
+						}
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_SHARE'), $value['show_icon'], 'share2', $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'jcommentscount':
+				case 'linkedjcommentscount':
+					if (file_exists(JPATH_ROOT . '/components/com_jcomments/jcomments.php')) {
+
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_jcommentscount' . $extraclasses . '">';
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_COMMENTS'), $value['show_icon'], 'comment', $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						require_once(JPATH_ROOT . '/components/com_jcomments/jcomments.php');
+
+						$comments_count = JComments::getCommentsCount($item->id, 'com_content');
+
+						if ($value['info'] == 'linkedjcommentscount' && isset($item->link) && !empty($item->link)) {
+
+							$link_to_comments = '#addcomments';
+							if ($view != 'article') {
+								$link_to_comments = $item->link.'#addcomments';
+							}
+
+							$info_block .= '<a href="'.$link_to_comments.'" class="hasTooltip" title="'.Text::_('PLG_CONTENT_ARTICLEDETAILS_GOTOCOMMENTS').'">'.Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_COMMENTS', $comments_count).'</a>';
+						} else {
+							if ($comments_count > 0) {
+								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_COMMENTS', $comments_count);
+							} else {
+								$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_NOCOMMENT');
+							}
+						}
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_COMMENTS'), $value['show_icon'], 'comment', $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'email':
+					if ($item_params->get('show_email_icon') && !empty($item->link) && !$app->input->getBool('print')) {
+
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_email' . $extraclasses . '">';
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_EMAIL'), $value['show_icon'], 'email', $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
+
+						$link = str_replace(array("tmpl=component", "print=1"), "", $item->link);
+						$link = rtrim($link, "?&amp;");
+						$link = rawurldecode(rtrim(Uri::root(), "/").$link);
+
+						$template = $app->getTemplate();
+						$url = 'index.php?option=com_mailto&tmpl=component&template='.$template.'&link='.MailToHelper::addLink($link);
+
+						$status = 'width=400,height=350,menubar=yes,resizable=yes';
+
+						$attribs = array(
+							'title'   => Text::_('JGLOBAL_EMAIL'),
+							'class' => 'hasTooltip',
+							'onclick' => "window.open(this.href,'win2','".$status."'); return false;"
+						);
+
+						$text = '<i class="SYWicon-email"></i><span>'.Text::_('JGLOBAL_EMAIL').'</span>';
+
+						$info_block .= HTMLHelper::_('link', $url, $text, $attribs);
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_EMAIL'), $value['show_icon'], 'email', $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'print':
+					if ($item_params->get('show_print_icon') && isset($item->slug) && !$app->input->getBool('print')) {
+						// only article and blog views get slug property
+
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_print' . $extraclasses . '">';
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_PRINT'), $value['show_icon'], 'print', $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						if (isset($item->language)) {
+							$url  = RouteHelper::getArticleRoute($item->slug, $item->catid, $item->language);
+						} else {
+							$url  = RouteHelper::getArticleRoute($item->slug, $item->catid);
+						}
+						$url .= '&tmpl=component&print=1&layout=default&page=' . @ $app->input->request->limitstart;
+
+						$status = 'status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no';
+
+						$attribs = array(
+							'title'   => Text::_('JGLOBAL_PRINT'),
+							'class' => 'hasTooltip',
+							'onclick' => "window.open(this.href,'win2','".$status."'); return false;",
+							'rel'     => 'nofollow'
+						);
+
+						$text = '<i class="SYWicon-print"></i><span>'.Text::_('JGLOBAL_PRINT').'</span>';
+
+						$info_block .= HTMLHelper::_('link', $url, $text, $attribs);
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_PRINT'), $value['show_icon'], 'print', $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+
+				case 'associations':
+
+					if (isset($item->associations) && !empty($item->associations) && $item_params->get('show_associations')) {
+						if ($has_info_from_previous_detail) {
+							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+						}
+
+						$info_block .= '<span class="detail detail_associations' . $extraclasses . '">';
+
+						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_ASSOCIATIONS'), $value['show_icon'], 'language', $value['icon']);
+
+						$info_block .= '<span class="detail_data">';
+
+						foreach ($item->associations as $association) {
+							if ($item_params->get('flags', 1) && $association['language']->image) {
+								$flag = HTMLHelper::_('image', 'mod_languages/' . $association['language']->image . '.gif', $association['language']->title_native, array('class' => 'hasTooltip', 'title' => $association['language']->title_native), true);
+								$info_block .= '&nbsp;<a href="'.Route::_($association['item']).'">'.$flag.'</a>&nbsp;';
+							} else {
+								$class = 'label label-association label-' . $association['language']->sef;
+								$info_block .= '&nbsp;<a class="'.$class.'" href="'.Route::_($association['item']).'">'.strtoupper($association['language']->sef).'</a>&nbsp;';
+							}
+						}
+
+						$info_block .= '</span>';
+
+						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_ASSOCIATIONS'), $value['show_icon'], 'language', $value['icon']);
+
+						$info_block .= '</span>';
+
+						$has_info_from_previous_detail = true;
+					}
+				break;
+			}
+		}
+
+		$info_block .= '</dd>';
+
+		// when using the vote form, potential delimiter if the next info is on the same line
+		// we should never have a delimiter at the start of the line
+		if (!empty($separator)) {
+			 $info_block = str_replace('<dd class="details"><span class="delimiter">'.$separator.'</span>', '<dd class="details">', $info_block);
+		} else {
+			 $info_block = str_replace('<dd class="details"><span class="delimiter"> </span>', '<dd class="details">', $info_block);
+		}
+
+		// remove potential <dd class="details"></dd> when no data is available
+		$info_block = str_replace('<dd class="details"></dd>', '', $info_block);
+
+		return $info_block;
+	}
+
+	/**
+	 *
+	 * Generate a link that displays a popup with e-mail form.
+	 * The form can be used to send page to friends
+	 *
+	 * @param string $link
+	 *
+	 * @return string
+	 */
+	public static function sendToFriendIcon($link, $classes = '')
+	{
+		JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
+
+		$link = rawurldecode($link);
+
+		$template = Factory::getApplication()->getTemplate();
+		$url = 'index.php?option=com_mailto&tmpl=component&template='.$template.'&link='.MailToHelper::addLink($link);
+
+		$status = 'width=400,height=350,menubar=yes,resizable=yes';
+
+		$attribs = array(
+			'title' => Text::_('JGLOBAL_EMAIL'),
+			'class' => 'hasTooltip sendtofriend'.$classes,
+			'onclick' => "window.open(this.href,'win2','".$status."'); return false;",
+		    'aria-label' => Text::_('JGLOBAL_EMAIL')
+		);
+
+		$text = '<i class="SYWicon-email" aria-hidden="true"></i>';
+
+		$output = HTMLHelper::_('link', $url, $text, $attribs);
+
+		return $output;
+	}
+
+	public static function getFacebookButton($title, $link, $classes = '')
+	{
+		$html = '';
+
+		$html .= '<a class="hasTooltip facebook'.$classes.'" href="http://www.facebook.com/sharer.php?u='.$link.'&amp;t='.urlencode($title).'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Facebook").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Facebook").'" target="_blank" >';
+			$html .= '<i class="SYWicon-facebook" aria-hidden="true"></i>';
+		$html .= '</a>';
+
+		return $html;
+	}
+
+	/*
+	 * deprecated
+	 */
+	public static function getGoogleButton($link, $classes = '')
+	{
+		$html = '';
+
+		$html .= '<a class="hasTooltip googleplus'.$classes.'" href="https://plus.google.com/share?url='.$link.'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Google Plus").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Google Plus").'" target="_blank" >';
+			$html .= '<i class="SYWicon-googleplus" aria-hidden="true"></i>';
+		$html .= '</a>';
+
+		return $html;
+	}
+
+	/*
+	 * deprecated
+	 */
+	public static function getStumbleuponButton($title, $link, $classes = '')
+	{
+		$html = '';
+
+		$html .= '<a class="hasTooltip stumbleupon'.$classes.'" href="http://www.stumbleupon.com/submit?url='.$link.'&amp;title='.urlencode($title).'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Stumbleupon").'" title="' . Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Stumbleupon").'" target="_blank" >';
+			$html .= '<i class="SYWicon-stumbleupon" aria-hidden="true"></i>';
+		$html .= '</a>';
+
+		return $html;
+	}
+
+	public static function getTwitterButton($title, $link, $classes = '')
+	{
+		$html = '';
+
+		$html .= '<a class="hasTooltip twitter'.$classes.'" href="https://twitter.com/intent/tweet?text='.urlencode($title)."&amp;url=".$link.'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Twitter").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Twitter").'" target="_blank" >';
+			$html .= '<i class="SYWicon-twitter" aria-hidden="true"></i>';
+		$html .= '</a>';
+
+		return $html;
+	}
+
+	public static function getLinkedInButton($title, $link, $classes = '')
+	{
+		$html = '';
+
+		$html .= '<a class="hasTooltip linkedin'.$classes.'" href="http://www.linkedin.com/shareArticle?mini=true&amp;url='.$link.'&amp;title='.urlencode($title).'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "LinkedIn").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "LinkedIn").'" target="_blank" >';
+			$html .= '<i class="SYWicon-linkedin" aria-hidden="true"></i>';
+		$html .= '</a>';
+
+		return $html;
+	}
+
+	// TODO add Pinterest support
+
+	static function remove_protocol($url)
+	{
+		$disallowed = array('http://', 'https://');
+		foreach($disallowed as $d) {
+			if(strpos($url, $d) === 0) {
+				return str_replace($d, '', $url);
+			}
+		}
+		return $url;
+	}
+
+	static function getInlineStyles($params)
+	{
+		$_style = '';
+
+		// additional user styles
+		$_user_style = trim($params->get('style_overrides', ''));
+		if (!empty($_user_style)) {
+			$_style .= $_user_style.' ';
+		}
+
+		// font details
+
+		$font_details = $params->get('fontdetails', '');
+		if (!empty($font_details)) {
+			$font_details = str_replace('\'', '"', $font_details); // " lost, replaced by '
+
+			$google_font = Utilities::getGoogleFont($font_details); // get Google font, if any
+			if ($google_font) {
+				Fonts::loadGoogleFont($google_font);
+			}
+
+			$_style .= '.articledetails .info .details {';
+			$_style .= 'font-family: '.$font_details;
+			$_style .= '} ';
+		}
+
+		// get elements to override
+
+		if (!$params->get('autohide_title', 0)) {
+			$title_element = trim($params->get('title_element', ''));
+			if (!empty($title_element)) {
+				$elements = explode(',', $title_element);
+				foreach ($elements as $element) {
+					$_style .= $element.',';
+				}
+				$_style = rtrim($_style, ',');
+				$_style .= ' { display:none; } ';
+			}
+		}
+
+		$info_element = trim($params->get('info_element', '.article-info'));
+		if (!empty($info_element)) {
+			$elements = explode(',', $info_element);
+			foreach ($elements as $element) {
+				$_style .= $element.',';
+			}
+			$_style = rtrim($_style, ',');
+			$_style .= ' { display:none; } ';
+		}
+
+		$links_element = trim($params->get('links_element', ''));
+		if (!empty($links_element)) {
+			$elements = explode(',', $links_element);
+			foreach ($elements as $element) {
+				$_style .= $element.',';
+			}
+			$_style = rtrim($_style, ',');
+			$_style .= ' { display:none; } ';
+		}
+
+		if (!$params->get('autohide_tags', 0)) {
+			$tags_element = trim($params->get('tags_element', ''));
+			if (!empty($tags_element)) {
+				$elements = explode(',', $tags_element);
+				foreach ($elements as $element) {
+					$_style .= $element.',';
+				}
+				$_style = rtrim($_style, ',');
+				$_style .= ' { display:none; } ';
+			}
+		}
+
+		$icons_element = trim($params->get('icons_element', ''));
+		if (!empty($icons_element)) {
+			$elements = explode(',', $icons_element);
+			foreach ($elements as $element) {
+				$_style .= $element.',';
+			}
+			$_style = rtrim($_style, ',');
+			$_style .= ' { display:none; } ';
+		}
+
+		$fields_element = trim($params->get('fields_element', ''));
+		if (!empty($fields_element)) {
+			$elements = explode(',', $fields_element);
+			foreach ($elements as $element) {
+				$_style .= $element.',';
+			}
+			$_style = rtrim($_style, ',');
+			$_style .= ' { display:none; } ';
+		}
+
+		$images_element = trim($params->get('images_element', ''));
+		if (!empty($images_element)) {
+			$elements = explode(',', $images_element);
+			foreach ($elements as $element) {
+				$_style .= $element.',';
+			}
+			$_style = rtrim($_style, ',');
+			$_style .= ' { display:none; } ';
+		}
+
+		return $_style;
+	}
+
+	static function compare_tags_by_name($tag1, $tag2)
+	{
+		return strcmp($tag1->title, $tag2->title);
+	}
+
+	static function compare_tags_by_console($tag1, $tag2)
+	{
+		return (intval($tag1->lft) > intval($tag2->lft) ) ? 1 : -1;
+	}
+
+	static function getContact($author_id)
+	{
+		if (isset($contacts[$author_id])) {
+			return $contacts[$author_id];
+		}
+
+		$db = Factory::getDbo();
+
+		$query = $db->getQuery(true);
+
+		$query->select('MAX(id) AS contactid, alias, catid, webpage, email_to AS email');
+		$query->from($db->quoteName('#__contact_details'));
+		$query->where($db->quoteName('published').' = 1');
+		$query->where($db->quoteName('user_id').' = '.$author_id);
+		if (Multilanguage::isEnabled()) {
+			$query->where('language IN (' . $db->quote(Factory::getLanguage()->getTag()).','.$db->quote('*').') OR language IS NULL');
+		}
+
+		$db->setQuery($query);
+
+		try {
+			$contacts[$author_id] = $db->loadObject();
+		} catch (RuntimeException $e) {
+			//Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+			return null;
+		}
+
+		return $contacts[$author_id];
+	}
+
+}
+?>
