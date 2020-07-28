@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="system" method="upgrade">
+	<name>PLG_SYSTEM_SYWAUTORESET</name>
+	<author>Olivier Buisard</author>
+	<creationDate>04/13/2018</creationDate>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
+	<authorUrl>www.simplifyyourweb.com</authorUrl>
+	<version>1.4.0</version>
+	<changelogurl>https://updates.simplifyyourweb.com/free/sywautoreset/changelog.xml</changelogurl>
+	<description>PLG_SYSTEM_SYWAUTORESET_XML_DESCRIPTION</description>
+	<scriptfile>installer.php</scriptfile>
+	<media folder="media" destination="plg_system_sywautoreset">
+		<filename>index.html</filename>
+		<folder>images</folder>
+	</media>
+	<files>
+		<filename plugin="sywautoreset">sywautoreset.php</filename>
+		<filename>index.html</filename>
+		<filename>license.txt</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB/en-GB.plg_system_sywautoreset.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.plg_system_sywautoreset.sys.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.plg_system_sywautoreset.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.plg_system_sywautoreset.sys.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.plg_system_sywautoreset.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.plg_system_sywautoreset.sys.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.plg_system_sywautoreset.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.plg_system_sywautoreset.sys.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.plg_system_sywautoreset.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.plg_system_sywautoreset.sys.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.plg_system_sywautoreset.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.plg_system_sywautoreset.sys.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.plg_system_sywautoreset.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.plg_system_sywautoreset.sys.ini</language>
+	</languages>	
+	<config>
+		<fields name="params">
+			<fieldset name="basic" addfieldprefix="SYW\Library\Field">				
+				<field type="extensionversion" version="1.4.0" />
+				<field type="extensionauthor" />
+				<field type="extensionconnect" />
+				<field type="extensiontranslators" translators="PLG_SYSTEM_SYWAUTORESET_TRANSLATORS" />
+				<field type="extensionlink" linktype="translate" link="https://simplifyyourweb.com/translators" />
+<!-- 				<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/" /> -->
+				
+				<field name="spacer" type="spacer" hr="true" />
+				
+				<field name="verbose" type="list" default="0" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_VERBOSE_LABEL"
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_VERBOSE_DESC">
+					<option value="0">JNO</option>
+					<option value="2">PLG_SYSTEM_SYWAUTORESET_VALUE_ADMIN</option>
+					<option value="3">PLG_SYSTEM_SYWAUTORESET_VALUE_SITE</option>
+					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_BOTH</option>
+				</field>
+			</fieldset>
+			
+			<fieldset name="articles" label="PLG_SYSTEM_SYWAUTORESET_ARTICLES_FIELDSET_LABEL" description="PLG_SYSTEM_SYWAUTORESET_INFO_ARTICLESUSEWITH">
+
+				<field name="article_cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_LABEL"
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_DESC">
+					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_INCLUDE</option>
+					<option value="0">PLG_SYSTEM_SYWAUTORESET_VALUE_EXCLUDE</option>
+				</field>
+				<field name="article_cat" type="category" extension="com_content" multiple="true" size="5" default="none" layout="joomla.form.field.list-fancy-select"
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_LABEL" 
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_DESC">
+					<option value="none">JNONE</option>
+					<option value="all">JALL</option>
+				</field>
+				<field name="article_subcat" type="list" default="no" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORIES_LABEL" 
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORIES_DESC">					
+					<option value="no">JNO</option>
+					<option value="level">PLG_SYSTEM_SYWAUTORESET_VALUE_LEVEL</option>
+					<option value="all">JALL</option>
+				</field>
+				<field name="article_levelsubcat" type="sywverbosetext" default="1" filter="integer" size="4" showon="article_subcat:level" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORYLEVELS_LABEL" 
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORYLEVELS_DESC" />
+			</fieldset>
+			
+			<fieldset name="k2items" label="PLG_SYSTEM_SYWAUTORESET_K2ITEMS_FIELDSET_LABEL" description="PLG_SYSTEM_SYWAUTORESET_INFO_K2ITEMSUSEWITH">
+			
+				<field name="k2_cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_LABEL"
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_DESC">
+					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_INCLUDE</option>
+					<option value="0">PLG_SYSTEM_SYWAUTORESET_VALUE_EXCLUDE</option>
+				</field>
+				<field name="k2_cat" type="k2category" multiple="true" size="5" default="none" layout="joomla.form.field.list-fancy-select"
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_LABEL" 
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_DESC">
+					<option value="none">JNONE</option>
+					<option value="all">JALL</option>
+				</field>
+				<field name="k2_subcat" type="list" default="no" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORIES_LABEL" 
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORIES_DESC">					
+					<option value="no">JNO</option>
+					<option value="level">PLG_SYSTEM_SYWAUTORESET_VALUE_ONELEVEL</option>
+					<option value="all">JALL</option>
+				</field>
+			</fieldset>
+			
+			<fieldset name="contacts" label="PLG_SYSTEM_SYWAUTORESET_CONTACTS_FIELDSET_LABEL" description="PLG_SYSTEM_SYWAUTORESET_INFO_CONTACTSUSEWITH">
+
+				<field name="contact_cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_LABEL"
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_DESC">
+					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_INCLUDE</option>
+					<option value="0">PLG_SYSTEM_SYWAUTORESET_VALUE_EXCLUDE</option>
+				</field>
+				<field name="contact_cat" type="category" extension="com_contact" multiple="true" size="5" default="none" layout="joomla.form.field.list-fancy-select"
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_LABEL" 
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_DESC">
+					<option value="none">JNONE</option>
+					<option value="all">JALL</option>
+				</field>
+				<field name="contact_subcat" type="list" default="no" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORIES_LABEL" 
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORIES_DESC">					
+					<option value="no">JNO</option>
+					<option value="level">PLG_SYSTEM_SYWAUTORESET_VALUE_LEVEL</option>
+					<option value="all">JALL</option>
+				</field>
+				<field name="contact_levelsubcat" type="sywverbosetext" default="1" filter="integer" size="4" showon="contact_subcat:level" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORYLEVELS_LABEL" 
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORYLEVELS_DESC" />
+			</fieldset>
+			
+			<fieldset name="weblinks" label="PLG_SYSTEM_SYWAUTORESET_WEBLINKS_FIELDSET_LABEL" description="PLG_SYSTEM_SYWAUTORESET_INFO_WEBLINKSUSEWITH">
+
+				<field name="weblink_cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_LABEL"
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_DESC">
+					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_INCLUDE</option>
+					<option value="0">PLG_SYSTEM_SYWAUTORESET_VALUE_EXCLUDE</option>
+				</field>
+				<field name="weblink_cat" type="category" extension="com_weblinks" multiple="true" size="5" default="none" layout="joomla.form.field.list-fancy-select"
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_LABEL" 
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_DESC">
+					<option value="none">JNONE</option>
+					<option value="all">JALL</option>
+				</field>
+				<field name="weblink_subcat" type="list" default="no" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORIES_LABEL" 
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORIES_DESC">					
+					<option value="no">JNO</option>
+					<option value="level">PLG_SYSTEM_SYWAUTORESET_VALUE_LEVEL</option>
+					<option value="all">JALL</option>
+				</field>
+				<field name="weblink_levelsubcat" type="sywverbosetext" default="1" filter="integer" size="4" showon="weblink_subcat:level" 
+					label="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORYLEVELS_LABEL" 
+					description="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORYLEVELS_DESC" />
+			</fieldset>
+		</fields>
+	</config>
+	<updateservers>
+		<server type="extension" priority="1" name="Auto Reset for Simplify Your Web extensions auto updater">https://updates.simplifyyourweb.com/free/sywautoreset/sywautoreset-update.xml</server>
+	</updateservers>	
+</extension>
