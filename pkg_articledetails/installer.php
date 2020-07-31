@@ -13,6 +13,7 @@ use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Installer\Installer;
+use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
  * Script file of the Article Details package
@@ -46,7 +47,7 @@ class pkg_articledetailsInstallerScript
 
 		// check if syw library is present
 
-		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw') || !SYW\Library\Version::isCompatible(self::$minimum_needed_library_version)) {
+		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw') || !PluginHelper::isEnabled('system', 'syw') || !SYW\Library\Version::isCompatible(self::$minimum_needed_library_version)) {
 
 			if (!$this->installOrUpdatePackage($parent, 'lib_syw')) {
 				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.self::$download_link.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
@@ -66,19 +67,19 @@ class pkg_articledetailsInstallerScript
 
 		return true;
 	}
-	
+
 	/**
 	 * Called on installation
 	 *
 	 * @return boolean True on success
 	 */
 	public function install($parent) {}
-	
+
 	/**
 	 * Called on uninstallation
 	 */
 	public function uninstall($parent) {}
-	
+
 	/**
 	 * Called on update
 	 *
@@ -322,7 +323,7 @@ class pkg_articledetailsInstallerScript
 
 					try {
 						$db->execute();
-					} catch (RuntimeException $e) {
+					} catch (ExecutionFailureException $e) {
 						Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 						return false;
 					}
@@ -352,7 +353,7 @@ class pkg_articledetailsInstallerScript
 		$extension_id = '';
 		try {
 			$extension_id = $db->loadResult();
-		} catch (RuntimeException $e) {
+		} catch (ExecutionFailureException $e) {
 			Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 			return false;
 		}
@@ -370,7 +371,7 @@ class pkg_articledetailsInstallerScript
 			$updatesite_id = array(); // can have several results
 			try {
 				$updatesite_id = $db->loadColumn();
-			} catch (RuntimeException $e) {
+			} catch (ExecutionFailureException $e) {
 				Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 				return false;
 			}
@@ -388,7 +389,7 @@ class pkg_articledetailsInstallerScript
 
 				try {
 					$db->execute();
-				} catch (RuntimeException $e) {
+				} catch (ExecutionFailureException $e) {
 					Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 					return false;
 				}
@@ -405,7 +406,7 @@ class pkg_articledetailsInstallerScript
 
 					try {
 						$db->execute();
-					} catch (RuntimeException $e) {
+					} catch (ExecutionFailureException $e) {
 						Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 						return false;
 					}
@@ -461,7 +462,7 @@ class pkg_articledetailsInstallerScript
 
 		try {
 			$db->execute();
-		} catch (RuntimeException $e) {
+		} catch (ExecutionFailureException $e) {
 			//JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 			return false;
 		}
