@@ -18,6 +18,7 @@ use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
+use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
 use SYW\Library\Fonts;
 use SYW\Library\Utilities;
@@ -1612,7 +1613,7 @@ class Helper
 	 */
 	public static function sendToFriendIcon($link, $classes = '')
 	{
-		JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
+		\JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
 
 		$link = rawurldecode($link);
 
@@ -1846,7 +1847,7 @@ class Helper
 
 		try {
 			$contacts[$author_id] = $db->loadObject();
-		} catch (RuntimeException $e) {
+		} catch (ExecutionFailureException $e) {
 			//Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 			return null;
 		}

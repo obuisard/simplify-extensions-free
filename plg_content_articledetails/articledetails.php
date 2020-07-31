@@ -253,7 +253,7 @@ class plgContentArticleDetails extends CMSPlugin
 					Factory::getDocument()->addStyleSheet($cache_css->getCacheURL() . '/plg_content_articledetails/style_'.$view.'.css');
 				}
 
-				$cache_css_print = new CSSPrintFile('plg_content_articledetails', $this->params);
+				$cache_css_print = new CSSPrintFileCache('plg_content_articledetails', $this->params);
 				$result = $cache_css_print->cache('print_'.$view.'.css', $clear_header_files_cache);
 
 				if ($result) {

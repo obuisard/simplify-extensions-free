@@ -13,6 +13,7 @@
 	<media folder="media" destination="plg_content_articledetails">
 		<filename>index.html</filename>
 		<folder>images</folder>
+		<folder>styles</folder>
 	</media>
 	<files>
 		<filename plugin="articledetails">articledetails.php</filename>
@@ -20,7 +21,6 @@
 		<filename>license.txt</filename>
 		<folder>forms</folder>
 		<folder>src</folder>
-		<folder>styles</folder>
 	</files>
 	<languages>
 	   <language tag="de-DE">language/de-DE/de-DE.plg_content_articledetails.ini</language>
@@ -124,7 +124,7 @@
 						<option value="none">JNONE</option>
 					</field>
 					
-					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_MOREELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" showon="disable_in_list_views:0" />
+<!-- 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_MOREELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" showon="disable_in_list_views:0" /> -->
 					
 					<field name="lists_head_w" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="lists_head_type:calendar[AND]disable_in_list_views:0" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEAD_WIDTH_LABEL" 
@@ -170,7 +170,7 @@
 						<option value="none">JNONE</option>
 					</field>
 					
-					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_MOREELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" />
+<!-- 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_MOREELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
 					
 					<field name="head_w" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="head_type:calendar" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEAD_WIDTH_LABEL" 
@@ -209,7 +209,7 @@
 						<option value="none">JNONE</option>
 					</field>
 					
-					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_MOREELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" />
+<!-- 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_MOREELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
 					
 					<field name="layoutspacer4" type="spacer" hr="true" />
 					

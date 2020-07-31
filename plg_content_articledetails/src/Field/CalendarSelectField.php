@@ -27,7 +27,8 @@ class CalendarSelectField extends DynamicSingleSelect
 		$lang = Factory::getLanguage();
 		$lang->load('plg_content_articledetails');
 
-		$path = '/plugins/content/articledetails/styles/calendar';
+		$path = '/media/plg_content_articledetails/styles/calendars';
+		$imagepath = '/media/plg_content_articledetails/images/calendars';
 
 		$optionsArray = Folder::folders(JPATH_SITE.$path);
 
@@ -48,14 +49,14 @@ class CalendarSelectField extends DynamicSingleSelect
 			}
 
 			$image_hover = '';
-			if (File::exists(JPATH_ROOT.$path.'/'.$option.'/'.$option.'_hover.png')) {
-				$image_hover = Uri::root(true).$path.'/'.$option.'/'.$option.'_hover.png';
+			if (File::exists(JPATH_ROOT . $imagepath . '/' . $option . '_hover.png')) {
+				$image_hover = Uri::root(true) . $imagepath . '/' . $option . '_hover.png';
 			}
 
 			if (File::exists(JPATH_ROOT.$path.'/'.$option.'/style.css.php')) {
-				$options[] = array($option, $translated_option, $description, Uri::root(true).$path.'/'.$option.'/'.$option.'.png', $image_hover);
+				$options[] = array($option, $translated_option, $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover);
 			} else {
-				$options_disabled[] = array($option, $translated_option . ' (Pro)', $description, Uri::root(true).$path.'/'.$option.'/'.$option.'.png', $image_hover, 'disabled');
+				$options_disabled[] = array($option, $translated_option . ' (Pro)', $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover, 'disabled');
 			}
 		}
 
