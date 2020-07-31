@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+<!-- 	<field type="subtitle" title="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_LABEL" /> -->
+				
+	<field name="show_icons" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="info!:none"
+		label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWICONS_LABEL" 
+		description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWICONS_DESC">
+		<option value="0">JNO</option>	
+		<option value="1">JYES</option>
+	</field>
+	
+	<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="info!:none[AND]show_icons:1" 
+		label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ICONFIELD_LABEL" 
+		description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ICONFIELD_DESC" />
+	
+	<field name="icon" type="hidden" default="" />	
+		
+	<field name="prepend" type="text" default="" showon="info!:none"
+		label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PREPEND_LABEL" 
+		description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PREPEND_DESC" />
+		
+	<field name="info" type="detailselect" default="none"
+		label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INFO_LABEL" 
+		description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INFO_DESC">
+		<option value="none">JNONE</option>
+	</field>
+	
+	<field name="extra_classes" type="text" default="" showon="info!:none"
+		label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXTRACLASSES_LABEL" 
+		description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXTRACLASSES_DESC" />
+	
+	<field name="new_line" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="info!:none"
+		label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_NEWLINE_LABEL" 
+		description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_NEWLINE_DESC">
+		<option value="0">JNO</option>	
+		<option value="1">JYES</option>
+	</field>
+	
+	<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="info!:none" 
+		label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ACCESSFIELD_LABEL" 
+		description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ACCESSFIELD_DESC" />
+	
+	<field name="access" type="hidden" default="1" />
+</form>
