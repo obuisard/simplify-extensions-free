@@ -52,7 +52,7 @@ class BGImageSelectField extends ListField
 						$field_category_title = Text::_('MOD_TROMBINOSCOPE_VALUE_NOGROUPFIELD');
 					}
 
-					$options[] = HTMLHelper::_('select.option', $field->id, $field_category_title.': '.$field->title, 'value', 'text', $disable = true);
+					$options[] = HTMLHelper::_('select.option', $field->id, $field_category_title.': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
 				}
 			}
 		}

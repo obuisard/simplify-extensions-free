@@ -257,26 +257,32 @@ abstract class Helper
 
 		$fields_to_fetch = array();
 
-		for ($i = 1; $i < 8; $i++) {
-		    if ($params->get('f' . $i, 'none') != 'none') {
-		        $core_fields = self::getSelectedCoreFields($params, $params->get('f' . $i, 'none'));
-		        if (is_array($core_fields)) {
-		            $fields_to_fetch = array_merge($fields_to_fetch, $core_fields);
-		        } else if (!empty($core_fields)) {
-		            $fields_to_fetch[] = $core_fields;
-		        }
-		    }
+		$detail_blocs = $params->get('detail_blocks'); // array of objects
+		if (!empty($detail_blocs) && is_object($detail_blocs)) {
+		    foreach ($detail_blocs as $i => $detail_bloc) {
+		        if ($detail_bloc->f != 'none') {
+	                $core_fields = self::getSelectedCoreFields($params, $detail_bloc->f);
+		        	if (is_array($core_fields)) {
+		            	$fields_to_fetch = array_merge($fields_to_fetch, $core_fields);
+		        	} else if (!empty($core_fields)) {
+		            	$fields_to_fetch[] = $core_fields;
+		        	}
+		    	}
+			}
 		}
 
-		for ($i = 1; $i < 6; $i++) {
-		    if ($params->get('lf' . $i, 'none') != 'none') {
-		        $core_fields = self::getSelectedCoreFields($params, $params->get('lf' . $i, 'none'));
-		        if (is_array($core_fields)) {
-		            $fields_to_fetch = array_merge($fields_to_fetch, $core_fields);
-		        } else if (!empty($core_fields)) {
-		            $fields_to_fetch[] = $core_fields;
-		        }
-		    }
+		$detaillink_blocs = $params->get('detaillink_blocks'); // array of objects
+		if (!empty($detaillink_blocs) && is_object($detaillink_blocs)) {
+		    foreach ($detaillink_blocs as $i => $detaillink_bloc) {
+		        if ($detaillink_bloc->lf != 'none') {
+		            $core_fields = self::getSelectedCoreFields($params, $detaillink_bloc->lf);
+		        	if (is_array($core_fields)) {
+		            	$fields_to_fetch = array_merge($fields_to_fetch, $core_fields);
+		        	} else if (!empty($core_fields)) {
+		            	$fields_to_fetch[] = $core_fields;
+		        	}
+		    	}
+			}
 		}
 
 		$query->select($db->quoteName(array('cd.id', 'cd.catid', 'cd.name', 'cc.title', 'cc.lft', 'cd.user_id', 'cd.featured', 'cd.image', 'cd.params'), array('id', 'catid', 'name', 'category', 'c_order', 'user_id', 'featured', 'image', 'params')));
@@ -1013,27 +1019,32 @@ abstract class Helper
 	    return $html;
 	}
 
-	static function getRequestedLinks($params, $prefix = '')
+	static function getRequestedLinks($params, $prefix = '', $subform = '')
 	{
 		$links = array();
 
 		$user = Factory::getUser();
 		$groups	= $user->getAuthorisedViewLevels();
 
-		for ($j = 1; $j < 6; $j++) {
+		// get data from subform items
 
-			$fieldaccess = $params->get($prefix . 'lf' . $j . '_access', 1);
-			if ($params->get($prefix . 'lf' . $j, 'none') != 'none' && in_array($fieldaccess, $groups)) {
+		$detail_blocs = $params->get($prefix . ($subform ? $subform : 'detaillink_blocks')); // array of objects
+		if (!empty($detail_blocs) && is_object($detail_blocs)) {
+			$j = 0;
+			foreach ($detail_blocs as $i => $detail_bloc) {
+				$j++;
+				if ($detail_bloc->lf != 'none' && in_array($detail_bloc->lf_access, $groups)) {
 
-				$info_details = array();
+					$info_details = array();
 
-				$info_details['name'] = $params->get($prefix . 'lf'. $j);
-				$info_details['show_what'] = 2;
-				$info_details['label'] = '';
-				$info_details['icon'] = $params->get($prefix . 'lf' . $j . '_icon', '');
-				$info_details['show_tooltip'] = true;
+					$info_details['name'] = $detail_bloc->lf; // name
+					$info_details['show_what'] = 2;
+					$info_details['label'] = '';
+					$info_details['icon'] = $detail_bloc->lf_icon;
+					$info_details['show_tooltip'] = true;
 
-				$links[$j] = $info_details;
+					$links[$j] = $info_details;
+				}
 			}
 		}
 
@@ -1045,28 +1056,33 @@ abstract class Helper
 	    return self::getFieldOutput($index, $requested_link, $params, $item, $extraclass, true);
 	}
 
-	static function getRequestedInfos($params, $prefix = '')
+	static function getRequestedInfos($params, $prefix = '', $subform = '')
 	{
 		$infos = array();
 
 		$user = Factory::getUser();
 		$groups	= $user->getAuthorisedViewLevels();
 
-		for ($j = 1; $j < 8; $j++) {
+		// get data from subform items
 
-			$fieldaccess = $params->get($prefix . 'f' . $j . '_access', 1);
-			if ($params->get($prefix . 'f'.$j, 'none') != 'none' && in_array($fieldaccess, $groups)) {
+		$detail_blocs = $params->get($prefix . ($subform ? $subform : 'detail_blocks')); // array of objects
+		if (!empty($detail_blocs) && is_object($detail_blocs)) {
+			$j = 0;
+			foreach ($detail_blocs as $i => $detail_bloc) {
+				$j++;
+				if ($detail_bloc->f != 'none' && in_array($detail_bloc->f_access, $groups)) {
 
-				$info_details = array();
+					$info_details = array();
 
-				$info_details['name'] = $params->get($prefix . 'f' . $j);
-				$info_details['show_what'] = $params->get($prefix . 's_f' . $j . '_lbl', 0);
-				$info_details['label'] = $params->get($prefix . 'f' . $j . '_lbl');
-				$info_details['icon'] = $params->get($prefix . 'f' . $j . '_icon', '');
-				$info_details['show_tooltip'] = $params->get($prefix . 'f' . $j . '_tooltip', 1) == 1 ? true : false;
-				$info_details['one_line'] = $params->get($prefix . 'f' . $j . '_one_line', 1) == 1 ? true : false;
+					$info_details['name'] = $detail_bloc->f; // name
+					$info_details['show_what'] = $detail_bloc->s_f_lbl;
+					$info_details['label'] = $detail_bloc->f_lbl;
+					$info_details['icon'] = $detail_bloc->f_icon;
+					$info_details['show_tooltip'] = $detail_bloc->f_tooltip == 1 ? true : false;
+					$info_details['one_line'] = (!isset($detail_bloc->f_one_line) || (isset($detail_bloc->f_one_line) && $detail_bloc->f_one_line == 1)) ? true : false;
 
-				$infos[$j] = $info_details;
+					$infos[$j] = $info_details;
+				}
 			}
 		}
 
@@ -2384,7 +2400,7 @@ abstract class Helper
 
 		$minified = (JDEBUG) ? '' : '-min';
 
-		Factory::getDocument()->addStyleSheet(Uri::base(true).'/modules/mod_trombinoscope/themes/common_styles' . $minified . '.css');
+		Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_trombinoscope/styles/common_styles' . $minified . '.css');
 
 		self::$commonStylesLoaded = true;
 	}
@@ -2406,10 +2422,10 @@ abstract class Helper
 			$prefix = 'substitute';
 		}
 
-		if (!File::exists(JPATH_ROOT.'/modules/mod_trombinoscope/themes/' . $prefix . '_styles-min.css')) {
-			$doc->addStyleSheet(Uri::base(true).'/modules/mod_trombinoscope/themes/' . $prefix . '_styles.css');
+		if (!File::exists(JPATH_ROOT.'/media/mod_trombinoscope/styles/' . $prefix . '_styles-min.css')) {
+			$doc->addStyleSheet(Uri::base(true).'/media/mod_trombinoscope/styles/' . $prefix . '_styles.css');
 		} else {
-			$doc->addStyleSheet(Uri::base(true).'/modules/mod_trombinoscope/themes/' . $prefix . '_styles-min.css');
+			$doc->addStyleSheet(Uri::base(true).'/media/mod_trombinoscope/styles/' . $prefix . '_styles-min.css');
 		}
 
 		self::$userStylesLoaded = true;
