@@ -1,0 +1,348 @@
+<?php
+/**
+ * @copyright	Copyright (C) 2011 Simplify Your Web, Inc. All rights reserved.
+ * @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
+
+// no direct access
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Helper\ModuleHelper;
+use Joomla\CMS\Uri\Uri;
+use SYW\Library\Cache as SYWCache;
+use SYW\Library\Fonts as SYWFonts;
+use SYW\Library\Libraries as SYWLibraries;
+use SYW\Library\Stylesheets as SYWStylesheets;
+use SYW\Library\Utilities as SYWUtilities;
+use SYW\Module\WeblinkLogos\Site\Cache\CSSFileCache;
+use SYW\Module\WeblinkLogos\Site\Cache\JSAnimationFileCache;
+use SYW\Module\WeblinkLogos\Site\Helper\Helper;
+
+$list = Helper::getList($params);
+
+if (empty($list)) {
+	return;
+}
+
+$isMobile = SYWUtilities::isMobile();
+
+$show_on_mobile = $params->get('show_on_mobile', 1);
+if (($isMobile && $show_on_mobile == 0) || (!$isMobile && $show_on_mobile == 2)) {
+	return;
+}
+
+$class_suffix = $module->id;
+$params->set('suffix', $class_suffix);
+
+$urlPath = Uri::base().'modules/mod_weblinklogo/'; // use Uri::base(true) when caching
+$doc = Factory::getDocument();
+$app = Factory::getApplication();
+
+$bootstrap_version = $params->get('bootstrap_version', 'joomla');
+$load_bootstrap = false;
+if ($bootstrap_version === 'joomla') {
+    $bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 4;
+    $load_bootstrap = true;
+} else {
+	$bootstrap_version = intval($bootstrap_version);
+}
+
+$params->set('bootstrap_version', $bootstrap_version); // for use in js and css cached files
+
+$general_errors = array();
+$show_errors = $params->get('show_errors', 0);
+if ($params->get('site_mode', 'adv') == 'dev') {
+	$show_errors = 1;
+} else if ($params->get('site_mode', 'adv') == 'prod') {
+	$show_errors = 0;
+}
+
+$remove_whitespaces = $params->get('remove_whitespaces', 0);
+if ($params->get('site_mode', 'adv') == 'dev') {
+	$remove_whitespaces = 0;
+} else if ($params->get('site_mode', 'adv') == 'prod') {
+	$remove_whitespaces = 1;
+}
+
+// logos
+
+$width = $params->get('width', 120);
+$height = $params->get('height', 40);
+
+$restrict_width = $params->get('restrict_width', 0);
+$center_vertically = $params->get('center_vertically', 0);
+
+$quality_jpg = $params->get('quality_jpg', 100);
+$quality_png = $params->get('quality_png', 0);
+$filter = $params->get('filter', 'none');
+$filter_hover = $params->get('filter_hover', 'none');
+
+if ($quality_jpg > 100) {
+	$quality_jpg = 100;
+}
+if ($quality_jpg < 0) {
+	$quality_jpg = 0;
+}
+
+if ($quality_png > 9) {
+	$quality_png = 9;
+}
+if ($quality_png < 0) {
+	$quality_png = 0;
+}
+
+$image_qualities = array('jpg' => $quality_jpg, 'png' => $quality_png);
+
+$hover_type = $params->get('hover_type', 'none'); // hover animation
+if ($hover_type != 'none') {
+	$hover_type = 'hvr-'.$hover_type;
+	//SYWStylesheets::load2DTransitions();
+	$transition_method = SYWStylesheets::getTransitionMethod($hover_type);
+	SYWStylesheets::$transition_method();
+} else {
+	$hover_type = 'smooth';
+}
+
+$subdirectory = 'thumbnails/wl';
+
+$thumb_path = $params->get('thumb_path', 'images');
+
+if ($thumb_path == 'cache') {
+	$subdirectory = 'mod_weblinklogos';
+}
+$tmp_path = SYWCache::getTmpPath($thumb_path, $subdirectory);
+
+$unique_filename_extra = '';
+$unique_files = $params->get('unique_files', 1);
+if ($unique_files) {
+	$unique_filename_extra = $module->id;
+}
+
+$clear_cache = $params->get('clear_cache', 1);
+if ($params->get('site_mode', 'adv') == 'dev') {
+	$clear_cache = 1;
+} else if ($params->get('site_mode', 'adv') == 'prod') {
+	$clear_cache = 0;
+}
+
+if ($clear_cache) {
+	Helper::clearThumbnails($tmp_path, $unique_filename_extra);
+}
+
+// links
+
+$popup_width = $params->get('popup_x', 600);
+$popup_height = $params->get('popup_y', 500);
+
+// configuration
+
+$configuration = $params->get('logos_layout', 'grid');
+
+// $overall_width = $params->get('overall_width', '');
+
+// $margin_top = $params->get('margin_top', 5);
+// $margin_right = $params->get('margin_right', 5);
+// $margin_bottom = $params->get('margin_bottom', 5);
+// $margin_left = $params->get('margin_left', 5);
+
+$title_html_tag = $params->get('title_tag', '4');
+$description_html_tag = $params->get('description_tag', 'none');
+if ($description_html_tag == 'none') {
+	$description_html_tag = '';
+}
+
+// keep to make sure overrides still work after update
+
+$letter_count = trim($params->get('l_count', ''));
+if (empty($letter_count)) {
+	$letter_count = -1;
+} else {
+	$letter_count = (int)($letter_count);
+}
+
+$strip_tags = $params->get('strip_tags', 1);
+$keep_tags = trim($params->get('keep_tags'));
+$trigger_events = $params->get('trigger_events', false);
+
+// END keep to make sure overrides still work after update
+
+$caption_classes = trim($params->get('caption_classes', ''));
+if ($caption_classes) {
+	$caption_classes = ' '.$caption_classes;
+}
+
+$hits_classes = trim($params->get('hits_classes', ''));
+if ($hits_classes) {
+	$hits_classes = ' '.$hits_classes;
+}
+
+$clear_header_files_cache = $params->get('clear_header_files_cache', 1);
+if ($params->get('site_mode', 'adv') == 'dev') {
+	$clear_header_files_cache = 1;
+} else if ($params->get('site_mode', 'adv') == 'prod') {
+	$clear_header_files_cache = 0;
+}
+
+$generate_inline_scripts = $params->get('inline_scripts', 0);
+$load_remotely = $params->get('remote_libraries', 0);
+
+// carousel
+
+$arrow_class = '';
+$show_arrows = false;
+$show_pages = false;
+
+$arrow_prev_left = false;
+$arrow_next_right = false;
+$arrow_prev_top = false;
+$arrow_next_bottom = false;
+$arrow_prevnext_bottom = false;
+
+if ($params->get('hit_feedback', 0)) {
+	//HtmlHelper::_('jquery.framework');
+	Helper::loadClickedScript($class_suffix);
+}
+
+$rtl_suffix = (Factory::getDocument()->getDirection() == 'rtl') ? '_rtl' : '';
+
+$carousel_configuration = $params->get('carousel_config', 'none');
+if ($carousel_configuration != 'none') {
+
+    jimport('syw.libraries', JPATH_LIBRARIES);
+
+	//HtmlHelper::_('jquery.framework');
+
+	//SYWLibraries::loadCarousel();
+    SYWLibraries::loadTinySlider($load_remotely);
+
+	switch ($params->get('arrows', 'none')) {
+		case 'around':
+			$show_arrows = true;
+			if ($carousel_configuration == 'h') {
+				$arrow_class = ' side_navigation';
+				$arrow_prev_left = true;
+				$arrow_next_right = true;
+			} else {
+				$arrow_class = ' above_navigation';
+				$arrow_prev_top = true;
+				$arrow_next_bottom = true;
+			}
+			break;
+		case 'under':
+			$arrow_class = ' under_navigation';
+			$show_arrows = true;
+			$arrow_prevnext_bottom = true;
+			break;
+		case 'title':
+			$show_arrows = true;
+			break;
+	}
+
+	if ($show_arrows) {
+		SYWFonts::loadIconFont();
+	}
+
+	$show_pages = $params->get('includepages', 0);
+
+	$extra_pagination_classes = '';
+	$extra_pagination_ul_class_attribute = '';
+	$extra_pagination_li_class_attribute = '';
+	$extra_pagination_a_classes = '';
+
+	$pagination_style = $params->get('arrowstyle', '');
+	if ($pagination_style && $bootstrap_version > 0) { // Bootstrap is selected
+	    $pagination_size = $params->get('arrowsize_bootstrap', '');
+	    $pagination_align = SYWUtilities::getBootstrapProperty('pagination-center', $bootstrap_version);
+	    if ($bootstrap_version == 2) {
+	        $extra_pagination_classes = ' pagination';
+	        if ($pagination_size) {
+	            $extra_pagination_classes .= ' '.SYWUtilities::getBootstrapProperty('pagination-'.$pagination_size, $bootstrap_version);
+	        }
+	    }
+	    if ($bootstrap_version == 3 || $bootstrap_version == 4) {
+	        $extra_pagination_ul_class_attribute = ' class="pagination';
+	        if ($pagination_size) {
+	            $extra_pagination_ul_class_attribute .= ' '.SYWUtilities::getBootstrapProperty('pagination-'.$pagination_size, $bootstrap_version);
+	        }
+	        if ($pagination_align) {
+	            $extra_pagination_ul_class_attribute .= ' '.$pagination_align;
+	        }
+	        $extra_pagination_ul_class_attribute .= '"';
+	        if ($bootstrap_version == 4) {
+	            $extra_pagination_li_class_attribute = ' class="page-item"';
+	            $extra_pagination_a_classes = ' page-link';
+	        }
+	    }
+	}
+
+	$cache_anim_js = new JSAnimationFileCache('mod_weblinklogos', $params);
+
+	if ($generate_inline_scripts) {
+
+		$doc->addScriptDeclaration($cache_anim_js->getBuffer());
+
+	} else {
+
+		$result = $cache_anim_js->cache('animation_' . $module->id . $rtl_suffix . '.js', $clear_header_files_cache);
+
+		if ($result) {
+			$doc->addScript(Uri::base(true).'/media/cache/mod_weblinklogos/animation_' . $module->id . $rtl_suffix . '.js');
+		}
+	}
+} else {
+	// remove animation.js if it exists
+	if (File::exists(JPATH_SITE . '/media/cache/mod_weblinklogos/animation_' . $module->id . $rtl_suffix . '.js')) {
+		File::delete(JPATH_SITE . '/media/cache/mod_weblinklogos/animation_' . $module->id . $rtl_suffix . '.js');
+	}
+}
+
+// style
+
+if (File::exists(JPATH_ROOT.'/media/mod_weblinklogo/css/substitute_styles.css') || File::exists(JPATH_ROOT.'/media/mod_weblinklogo/css/substitute_styles-min.css')) {
+	Helper::loadUserStylesheet(true);
+
+	// remove style.css if it exists
+	if (File::exists(JPATH_SITE . '/media/cache/mod_weblinklogos/style_'.$module->id.'.css')) {
+		File::delete(JPATH_SITE . '/media/cache/mod_weblinklogos/style_'.$module->id.'.css');
+	}
+} else {
+
+	// add specific styles
+	$user_styles = trim($params->get('styles', ''));
+	if (!empty($user_styles)) {
+		$user_styles = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $user_styles); // minify the CSS code
+	}
+
+	$cache_css = new CSSFileCache('mod_weblinklogos', $params);
+	$cache_css->addDeclaration($user_styles);
+
+	$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
+
+	if ($result) {
+		$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_weblinklogos/style_'.$module->id.'.css');
+	}
+
+	Helper::loadCommonStylesheet();
+
+	if (File::exists(JPATH_ROOT.'/media/mod_weblinklogo/css/common_user_styles.css') || File::exists(JPATH_ROOT.'/media/mod_weblinklogo/css/common_user_styles-min.css')) {
+		Helper::loadUserStylesheet();
+	}
+}
+
+// handle high resolution images
+$create_highres_images = $params->get('create_highres', false);
+if ($create_highres_images) {
+	//HTMLHelper::_('jquery.framework');
+	SYWLibraries::loadLazysizes($load_remotely);
+	//SYWLibraries::triggerLazysizes('.weblinklogos .weblink_item img'); // use .weblinklogos to handle all instances of the module at once
+}
+
+// load icon font
+// $load_icon_font = $params->get('load_icon_font', 1);
+// if ($load_icon_font) {
+// 	SYWFonts::loadIconFont();
+// }
+
+require ModuleHelper::getLayoutPath('mod_weblinklogo', $params->get('layout', 'default'));
