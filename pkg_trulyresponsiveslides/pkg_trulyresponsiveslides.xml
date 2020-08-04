@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="package" method="upgrade">
+	<name>PKG_TRULYRESPONSIVESLIDES</name>
+	<author>Olivier Buisard</author>
+	<creationDate>11/08/2016</creationDate>
+	<packagename>trulyresponsiveslides</packagename>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<url>http://www.simplifyyourweb.com/</url>
+	<packager>Olivier Buisard</packager>
+ 	<packagerurl>https://simplifyyourweb.com/</packagerurl>
+	<version>1.14.0</version>
+	<changelogurl>https://updates.simplifyyourweb.com/free/trulyresponsiveslides/changelog.xml</changelogurl>
+	<description>PKG_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description> 
+	<scriptfile>installer.php</scriptfile>
+	<languages>
+		<language tag="en-GB">language/en-GB/en-GB.pkg_trulyresponsiveslides.sys.ini</language>
+		<language tag="fa-IR">language/fa-IR/fa-IR.pkg_trulyresponsiveslides.sys.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.pkg_trulyresponsiveslides.sys.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.pkg_trulyresponsiveslides.sys.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.pkg_trulyresponsiveslides.sys.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.pkg_trulyresponsiveslides.sys.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.pkg_trulyresponsiveslides.sys.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.pkg_trulyresponsiveslides.sys.ini</language>
+	</languages>
+ 	<files folder="packages">
+		<file type="module" id="trulyresponsiveslides" client="site">mod_trulyresponsiveslides.zip</file>
+	</files>
+	<updateservers>
+		<server type="extension" priority="1" name="Truly Responsive Slides auto updater">https://updates.simplifyyourweb.com/free/trulyresponsiveslides/trulyresponsiveslides-pkg-update.xml</server>
+	</updateservers>
+</extension>
