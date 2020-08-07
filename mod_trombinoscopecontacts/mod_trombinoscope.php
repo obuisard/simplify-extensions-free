@@ -427,14 +427,14 @@ if ($carousel_configuration != 'none') {
 		$result = $cache_anim_js->cache('animation_' . $module->id . $rtl_suffix . '.js', $clear_header_files_cache);
 
 		if ($result) {
-			$doc->addScript(Uri::base(true) . '/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js');
+			$doc->addScript(Uri::base(true) . '/media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js');
 		}
 	}
 
 } else {
 	// remove animation.js if it exists
-	if (File::exists(JPATH_CACHE.'/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js')) {
-		File::delete(JPATH_CACHE.'/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js');
+	if (File::exists(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js')) {
+		File::delete(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js');
 	}
 }
 
@@ -445,19 +445,19 @@ if ($show_picture && $photo_align != 't' && $min_card_flip_width) {
 	$doc->addScriptDeclaration($cache_js->getBuffer());
 } else {
 	// remove style.js if it exists
-	if (File::exists(JPATH_CACHE.'/mod_trombinoscopecontacts/style_'.$module->id.'.js')) {
-		File::delete(JPATH_CACHE.'/mod_trombinoscopecontacts/style_'.$module->id.'.js');
+	if (File::exists(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/style_'.$module->id.'.js')) {
+		File::delete(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/style_'.$module->id.'.js');
 	}
 }
 
 // styles
 
-if (File::exists(JPATH_ROOT.'/media/mod_trombinoscope/styles/substitute_styles.css') || File::exists(JPATH_ROOT.'/media/mod_trombinoscope/styles/substitute_styles-min.css')) {
+if (File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/substitute_styles.css') || File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/substitute_styles-min.css')) {
 	Helper::loadUserStylesheet(true);
 
 	// remove style.css if it exists
-	if (File::exists(JPATH_CACHE.'/mod_trombinoscopecontacts/style_'.$module->id.'.css')) {
-		File::delete(JPATH_CACHE.'/mod_trombinoscopecontacts/style_'.$module->id.'.css');
+	if (File::exists(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/style_'.$module->id.'.css')) {
+		File::delete(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/style_'.$module->id.'.css');
 	}
 } else {
 
@@ -487,12 +487,12 @@ if (File::exists(JPATH_ROOT.'/media/mod_trombinoscope/styles/substitute_styles.c
 	$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
 
 	if ($result) {
-		$doc->addStyleSheet(Uri::base(true).'/cache/mod_trombinoscopecontacts/style_'.$module->id.'.css');
+		$doc->addStyleSheet(Uri::base(true) . '/media/cache/mod_trombinoscopecontacts/style_' . $module->id . '.css');
 	}
 
 	Helper::loadCommonStylesheet();
 
-	if (File::exists(JPATH_ROOT.'/media/mod_trombinoscope/styles/common_user_styles.css') || File::exists(JPATH_ROOT.'/media/mod_trombinoscope/styles/common_user_styles-min.css')) {
+	if (File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/common_user_styles.css') || File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/common_user_styles-min.css')) {
 		Helper::loadUserStylesheet();
 	}
 }

@@ -2384,7 +2384,7 @@ abstract class Helper
 
 		$minified = (JDEBUG) ? '' : '.min';
 
-		Factory::getDocument()->addScript(Uri::base(true).'/media/syw_trombinoscopecontacts/js/flipcards' . $minified . '.js');
+		Factory::getDocument()->addScript(Uri::base(true) . '/media/mod_trombinoscopecontacts/js/flipcards' . $minified . '.js');
 
 		self::$flipScriptLoaded = true;
 	}
@@ -2400,7 +2400,7 @@ abstract class Helper
 
 		$minified = (JDEBUG) ? '' : '-min';
 
-		Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_trombinoscope/styles/common_styles' . $minified . '.css');
+		Factory::getDocument()->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscope/css/common_styles' . $minified . '.css');
 
 		self::$commonStylesLoaded = true;
 	}
@@ -2422,10 +2422,10 @@ abstract class Helper
 			$prefix = 'substitute';
 		}
 
-		if (!File::exists(JPATH_ROOT.'/media/mod_trombinoscope/styles/' . $prefix . '_styles-min.css')) {
-			$doc->addStyleSheet(Uri::base(true).'/media/mod_trombinoscope/styles/' . $prefix . '_styles.css');
+		if (!File::exists(JPATH_ROOT . '/media/mod_trombinoscope/css/' . $prefix . '_styles-min.css')) {
+			$doc->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscope/css/' . $prefix . '_styles.css');
 		} else {
-			$doc->addStyleSheet(Uri::base(true).'/media/mod_trombinoscope/styles/' . $prefix . '_styles-min.css');
+			$doc->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscope/css/' . $prefix . '_styles-min.css');
 		}
 
 		self::$userStylesLoaded = true;

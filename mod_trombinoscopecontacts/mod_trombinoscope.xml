@@ -11,8 +11,9 @@
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
-	<media folder="media" destination="mod_trombinoscope">
-		<filename>index.html</filename>
+	<media folder="media" destination="mod_trombinoscopecontacts">
+		<filename>index.html</filename>		
+		<folder>css</folder>
 		<folder>images</folder>
 		<folder>js</folder>
 		<folder>styles</folder>
@@ -91,6 +92,7 @@
 <!-- 					description="MOD_TROMBINOSCOPE_SELECTION_FIELDSET_DESC" /> -->
 									
 				<fieldset name="selection_source" label="">
+				
 					<field name="selection" type="list" default="categories" 
 						label="MOD_TROMBINOSCOPE_FIELD_SELECTION_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_SELECTION_DESC">					
@@ -374,7 +376,9 @@
 					<field name="link_access" type="accesslevel" default="1" 
 						label="MOD_TROMBINOSCOPE_FIELD_ACCESSLINK_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_ACCESSLINK_DESC" />
+				</fieldset>
 					
+				<fieldset name="layout_edit" label="MOD_TROMBINOSCOPE_EDITING_LABEL">					
 <!-- 				<field type="subtitle" title="MOD_TROMBINOSCOPE_EDITING_LABEL" /> -->
 
 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"
@@ -382,7 +386,7 @@
 						description="MOD_TROMBINOSCOPE_FIELD_LINKTOEDIT_DESC" />
 				</fieldset>
 					
-				<fieldset name="layout_linking" label="MOD_TROMBINOSCOPE_HEADINGS_LABEL">
+				<fieldset name="layout_headings" label="MOD_TROMBINOSCOPE_HEADINGS_LABEL">
 <!-- 				<field type="title" title="MOD_TROMBINOSCOPE_HEADINGS_LABEL" />	 -->
 					
 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_NOTCOMPATIBLEWITHCAROUSEL" style="warning" />	
@@ -412,7 +416,7 @@
 <!-- 				<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
 				</fieldset>
 					
-				<fieldset name="layout_linking" label="MOD_TROMBINOSCOPE_FIELD_MODULELINK_LABEL">
+				<fieldset name="layout_modulelink" label="MOD_TROMBINOSCOPE_FIELD_MODULELINK_LABEL">
 <!-- 				<field type="title" title="MOD_TROMBINOSCOPE_FIELD_MODULELINK_LABEL" /> -->
 				
 					<field name="modulel" type="menuitem" default="" 
@@ -442,16 +446,17 @@
 <!-- 					description="MOD_TROMBINOSCOPE_THEMES_FIELDSET_DESC" /> -->
 			
 				<fieldset name="themes_theme" label="MOD_TROMBINOSCOPE_FIELD_THEME_LABEL">
+				
 					<field name="theme" type="styleselect" imgsuffix="_card_landscape" default="original" 
 						label="MOD_TROMBINOSCOPE_FIELD_THEME_LABEL"
 						description="MOD_TROMBINOSCOPE_FIELD_THEME_DESC" />
 						
-					<field type="imagelink" imagesrc="media/mod_trombinoscope/images/themes.svg" 
+					<field type="imagelink" imagesrc="media/mod_trombinoscopecontacts/images/themes.svg" 
 						title="MOD_TROMBINOSCOPE_THEMES_TITLE" text="MOD_TROMBINOSCOPE_THEMES_LINK" 
 						link="https://simplifyyourweb.com/free-products/trombinoscope/themes" />
 				</fieldset>
 					
-				<fieldset name="themes_social" label="">
+				<fieldset name="themes_social" label="">				
 <!-- 				<field type="title" title="MOD_TROMBINOSCOPE_THEMEOVERRIDES_LABEL" /> -->
 				
 					<field name="social_styling" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
@@ -581,7 +586,8 @@
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/contact-picture" class="alert alert-info" -->
 <!-- 					description="MOD_TROMBINOSCOPE_PICTURE_FIELDSET_DESC" /> -->
 							
-				<fieldset name="image_general" label="">	
+				<fieldset name="image_general" label="">
+				
 					<field name="s_pic" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
 						label="MOD_TROMBINOSCOPE_FIELD_SHOWPICTURE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_SHOWPICTURE_DESC">
@@ -619,8 +625,8 @@
 					<field name="k_height" type="imageradio" default="1" layout="joomla.form.field.radio.switcher" showon="s_pic:1[AND]crop_pic:0" 
 						label="MOD_TROMBINOSCOPE_FIELD_KEEPHEIGHT_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_KEEPHEIGHT_DESC">
-	                    <option value="0" imagesrc="/media/mod_trombinoscope/images/configs/keep_height_no_icon.png">JNO</option>
-	                    <option value="1" imagesrc="/media/mod_trombinoscope/images/configs/keep_height_icon.png">JYES</option>
+	                    <option value="0" imagesrc="/media/mod_trombinoscopecontacts/images/configs/keep_height_no_icon.png">JNO</option>
+	                    <option value="1" imagesrc="/media/mod_trombinoscopecontacts/images/configs/keep_height_icon.png">JYES</option>
 	                </field>
 					
 					<field name="pic_bgcolor" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" showon="s_pic:1" 
@@ -653,8 +659,8 @@
 					<field name="k_pic_s" type="imageradio" default="1" layout="joomla.form.field.radio.switcher" showon="s_pic:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_KEEPPICSPACE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_KEEPPICSPACE_DESC">
-	                    <option value="0" imagesrc="/media/mod_trombinoscope/images/configs/pic_keep_space_no_icon.png">JNO</option>
-	                    <option value="1" imagesrc="/media/mod_trombinoscope/images/configs/pic_keep_space_icon.png">JYES</option>
+	                    <option value="0" imagesrc="/media/mod_trombinoscopecontacts/images/configs/pic_keep_space_no_icon.png">JNO</option>
+	                    <option value="1" imagesrc="/media/mod_trombinoscopecontacts/images/configs/pic_keep_space_icon.png">JYES</option>
 	                </field>
 					
 					<field name="create_highres" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="s_pic:1" 
@@ -739,20 +745,20 @@
 				<fieldset name="fields_general" label="MOD_TROMBINOSCOPE_FIELDS_LABEL">	
 <!-- 				<field type="title" title="MOD_TROMBINOSCOPE_FIELDS_LABEL" /> -->
 				
-					<field type="sywimagepreview" path="/media/mod_trombinoscope/images/configs/fields.png" relativepath="false" />
+					<field type="sywimagepreview" path="/media/mod_trombinoscopecontacts/images/configs/fields.png" relativepath="false" />
 					
 					<field name="overflow" type="imageradio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_TROMBINOSCOPE_FIELD_OVERFLOW_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_OVERFLOW_DESC">
-	                    <option value="0" imagesrc="/media/mod_trombinoscope/images/configs/overflow_no_icon.png">JNO</option>
-						<option value="1" imagesrc="/media/mod_trombinoscope/images/configs/overflow_icon.png">JYES</option>
+	                    <option value="0" imagesrc="/media/mod_trombinoscopecontacts/images/configs/overflow_no_icon.png">JNO</option>
+						<option value="1" imagesrc="/media/mod_trombinoscopecontacts/images/configs/overflow_icon.png">JYES</option>
 					</field>
 					
 					<field name="k_s" type="imageradio" default="1" layout="joomla.form.field.radio.switcher" 
 						label="MOD_TROMBINOSCOPE_FIELD_KEEPSPACE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_KEEPSPACE_DESC">
-	                    <option value="0" imagesrc="/media/mod_trombinoscope/images/configs/keep_space_no_icon.png">JNO</option>
-	                    <option value="1" imagesrc="/media/mod_trombinoscope/images/configs/keep_space_icon.png">JYES</option>
+	                    <option value="0" imagesrc="/media/mod_trombinoscopecontacts/images/configs/keep_space_no_icon.png">JNO</option>
+	                    <option value="1" imagesrc="/media/mod_trombinoscopecontacts/images/configs/keep_space_icon.png">JYES</option>
 	                </field>
 						
 					<field name="lbl_separator" type="text" default="" filter="string" 
@@ -770,9 +776,9 @@
 					<field name="wrap_pre" type="imageradio" default="1" 
 						label="MOD_TROMBINOSCOPE_FIELD_ALLFIELDSWRAPAROUND_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_ALLFIELDSWRAPAROUND_DESC">
-	                    <option value="0" imagesrc="/media/mod_trombinoscope/images/configs/wrap_under_no_icon.png">JNO</option>
-	                    <option value="1" imagesrc="/media/mod_trombinoscope/images/configs/wrap_under_icon.png">JYES</option>
-	                    <option value="2" imagesrc="/media/mod_trombinoscope/images/configs/wrap_all_icon.png">JALL</option>
+	                    <option value="0" imagesrc="/media/mod_trombinoscopecontacts/images/configs/wrap_under_no_icon.png">JNO</option>
+	                    <option value="1" imagesrc="/media/mod_trombinoscopecontacts/images/configs/wrap_under_icon.png">JYES</option>
+	                    <option value="2" imagesrc="/media/mod_trombinoscopecontacts/images/configs/wrap_all_icon.png">JALL</option>
 	                </field>
 	            </fieldset>
 				
@@ -851,7 +857,7 @@
 				<fieldset name="fields_linkfields" label="MOD_TROMBINOSCOPE_LINKFIELDS_LABEL">
 <!-- 				<field type="title" title="MOD_TROMBINOSCOPE_LINKFIELDS_LABEL" /> -->
 				
-					<field type="sywimagepreview" path="/media/mod_trombinoscope/images/configs/link_fields.png" relativepath="false" />
+					<field type="sywimagepreview" path="/media/mod_trombinoscopecontacts/images/configs/link_fields.png" relativepath="false" />
 					
 					<field name="detaillink_blocks" type="subform" formsource="modules/mod_trombinoscope/forms/fields/detaillink.xml" multiple="true"
 						default="{'lf':'none','lf_icon':'','lf_access':'1'}"
@@ -1084,7 +1090,8 @@
 			
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/advanced" class="alert alert-info" /> -->
 						
-				<fieldset name="advanced_general" label="">		
+				<fieldset name="advanced_general" label="">
+				
 					<field name="site_mode" type="list" default="adv" 
 						label="MOD_TROMBINOSCOPE_FIELD_SITEMODE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_SITEMODE_DESC">
@@ -1155,7 +1162,7 @@
 					
 					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" description="MOD_TROMBINOSCOPE_INFO_AUTORESETPLUGIN" 
 						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset"
-						imagesrc="media/mod_trombinoscope/images/logo_autoreset_small.png"
+						imagesrc="media/mod_trombinoscopecontacts/images/logo_autoreset_small.png"
 						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" />
 				</fieldset>
 						
@@ -1211,8 +1218,8 @@
 					<field name="show_on_contact_page" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
 						label="MOD_TROMBINOSCOPE_FIELD_SHOWONCONTACTPAGE_LABEL"
 						description="MOD_TROMBINOSCOPE_FIELD_SHOWONCONTACTPAGE_DESC">
-						<option value="1">JYES</option>
 						<option value="0">JNO</option>
+						<option value="1">JYES</option>
 					</field>
 				</fieldset>
 				

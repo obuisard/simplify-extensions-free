@@ -238,8 +238,8 @@ class CSSFileCache extends HeaderFilesCache
 		// set the header
 		$this->sendHttpHeaders('css');
 
-		include JPATH_ROOT . '/media/mod_latestnewsenhanced/styles/style.css.php';
-		include JPATH_ROOT . '/media/mod_latestnewsenhanced/styles/themes/' . $theme . '/style.css.php';
+		include JPATH_ROOT . '/media/mod_trombinoscope/styles/style.css.php';
+		include JPATH_ROOT . '/media/mod_trombinoscope/styles/themes/' . $theme . '/style.css.php';
 
 		return $this->compress(ob_get_clean());
 	}
