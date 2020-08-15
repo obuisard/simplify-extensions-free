@@ -47,10 +47,10 @@ class ArticlesHelper
 				'a.checked_out, a.checked_out_time, '.
 				'a.catid, a.created, a.created_by, a.created_by_alias, '.
 				// Use created if modified is 0
-				'CASE WHEN a.modified = '.$db->quote($db->getNullDate()).' THEN a.created ELSE a.modified END as modified, '.
+				'CASE WHEN a.modified IS NULL THEN a.created ELSE a.modified END as modified, '.
 				'a.modified_by, '.
 				// Use created if publish_up is 0
-				'CASE WHEN a.publish_up = '.$db->quote($db->getNullDate()).' THEN a.created ELSE a.publish_up END as publish_up, '.
+				'CASE WHEN a.publish_up IS NULL THEN a.created ELSE a.publish_up END as publish_up, '.
 				'a.publish_down, a.images, a.urls, a.attribs, a.metadata, a.metakey, a.metadesc, a.access, a.hits, a.featured, a.language');
 
 		$query->select($subquery1);
@@ -75,14 +75,14 @@ class ArticlesHelper
 
 		// publishing
 
-		$nullDate = $db->quote($db->getNullDate());
+		//$nullDate = $db->quote($db->getNullDate());
 		$nowDate = $db->quote(Factory::getDate()->toSql());
 
-		$query->where('a.state = 1');
-		$query->where('(a.publish_up = '.$nullDate.' OR a.publish_up <= '.$nowDate.')');
-		$query->where('(a.publish_down = '.$nullDate.' OR a.publish_down >= '.$nowDate.')');
+		$query->where($db->quoteName('a.state') . ' = 1');
+		$query->where('(' . $db->quoteName('a.publish_up') . ' IS NULL OR ' . $db->quoteName('a.publish_up') . ' <= '.$nowDate.')');
+		$query->where('(' . $db->quoteName('a.publish_down') . ' IS NULL OR ' . $db->quoteName('a.publish_down') . ' >= '.$nowDate.')');
 
-		$query->where('c.published = 1'); // does not check for category published state in parent categories up the tree
+		$query->where($db->quoteName('c.published') . ' = 1'); // does not check for category published state in parent categories up the tree
 
 		// category filter
 
@@ -229,8 +229,8 @@ class ArticlesHelper
 			case 'm_dsc': $ordering .= 'a.modified DESC, a.created DESC'; break;
 			case 'c_asc': $ordering .= 'a.created ASC'; break;
 			case 'c_dsc': $ordering .= 'a.created DESC'; break;
-			case 'mc_asc': $ordering .= 'CASE WHEN (a.modified = '.$db->quote($db->getNullDate()).') THEN a.created ELSE a.modified END ASC'; break;
-			case 'mc_dsc': $ordering .= 'CASE WHEN (a.modified = '.$db->quote($db->getNullDate()).') THEN a.created ELSE a.modified END DESC'; break;
+			case 'mc_asc': $ordering .= 'CASE WHEN (a.modified IS NULL) THEN a.created ELSE a.modified END ASC'; break;
+			case 'mc_dsc': $ordering .= 'CASE WHEN (a.modified IS NULL) THEN a.created ELSE a.modified END DESC'; break;
 			case 'random': $ordering .= 'rand()'; break;
 			case 'hit': $ordering .= 'a.hits DESC'; break;
 			case 'title_asc': $ordering .= 'a.title ASC'; break;

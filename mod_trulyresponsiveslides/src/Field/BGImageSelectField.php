@@ -13,12 +13,12 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Form\Field\GroupedListField;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use SYW\Library\K2 as SYWK2;
 
-class BGImageSelectField extends ListField
+class BGImageSelectField extends GroupedListField
 {
 	public $type = 'BGImageSelect';
 
@@ -83,9 +83,9 @@ class BGImageSelectField extends ListField
 		return self::$k2_fields;
 	}
 
-	protected function getOptions()
+	protected function getGroups()
 	{
-		$options = array();
+		$groups = array();
 
 		$k2extrafields = array();
 		$customfields = array();
@@ -103,47 +103,39 @@ class BGImageSelectField extends ListField
 		//$options[] = HTMLHelper::_('select.option', 'default', Text::_('JDEFAULT'), 'value', 'text', $disable = false);
 
 		$group_options = self::getFieldGroup('com_content', $customfields, 'media');
-		$options = array_merge($options, $group_options);
+		$groups = array_merge($groups, $group_options);
 
 		if (SYWK2::exists()) {
 			$group_options = self::getFieldGroup('com_k2', $k2extrafields, 'image');
-			$options = array_merge($options, $group_options);
+			$groups = array_merge($groups, $group_options);
 		}
 
 		// merge any additional options in the XML definition.
-		$options = array_merge(parent::getOptions(), $options);
+		$groups = array_merge(parent::getGroups(), $groups);
 
-		return $options;
+		return $groups;
 	}
 
 	protected function getFieldGroup($option, $fields, $type)
 	{
-		$options = array();
+		$groups = array();
 
 		if (empty($fields)) {
-			return $options;
+			return $groups;
 		}
 
 		if ($option == 'com_k2') {
 
-			$fields_count = 0;
+			$group_name = Text::_('MOD_TRULYRESPONSIVESLIDER_VALUE_K2EXTRAFIELDS');
+			$groups[$group_name] = array();
+
 			foreach ($fields as $field) {
 
 				if ($field->type != $type) {
 					continue;
 				}
 
-				if ($fields_count == 0) {
-					//$options[] = JHtml::_('select.optgroup', Text::_('MOD_TRULYRESPONSIVESLIDER_VALUE_K2EXTRAFIELDS'));
-				}
-
-				$options[] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name, 'value', 'text', $disable = true);
-
-				$fields_count++;
-			}
-
-			if ($fields_count > 0) {
-				//$options[] = JHtml::_('select.optgroup', Text::_('MOD_TRULYRESPONSIVESLIDER_VALUE_K2EXTRAFIELDS'));
+				$groups[$group_name][] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
 			}
 		}
 
@@ -178,6 +170,10 @@ class BGImageSelectField extends ListField
 			// loop trough the groups
 
 			if ($fields_exist) {
+
+				$group_name = Text::_('MOD_TRULYRESPONSIVESLIDER_VALUE_JOOMLAFIELDS');
+				$groups[$group_name] = array();
+
 				//$options[] = JHtml::_('select.optgroup', Text::_('MOD_TRULYRESPONSIVESLIDER_VALUE_JOOMLAFIELDS'));
 
 				foreach ($fieldsPerGroup as $group_id => $groupFields) {
@@ -187,7 +183,7 @@ class BGImageSelectField extends ListField
 					}
 
 					foreach ($groupFields as $field) {
-						$options[] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title, 'value', 'text', $disable = true);
+						$groups[$group_name][] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
 					}
 				}
 
@@ -195,7 +191,7 @@ class BGImageSelectField extends ListField
 			}
 		}
 
-		return $options;
+		return $groups;
 	}
 }
 ?>

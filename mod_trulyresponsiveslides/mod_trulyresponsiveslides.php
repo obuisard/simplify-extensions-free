@@ -32,16 +32,13 @@ $layout = $params->get('layout');
 switch ($layout) {
 	case 'k2':
 		if (SYWK2::exists()) {
-			require_once (dirname(__FILE__).'/helpers/helper_k2.php');
 			$list = K2ItemsHelper::getItems($params, $module);
 		}
 		break;
 	case 'articles':
-		require_once (dirname(__FILE__).'/helpers/helper_articles.php');
 		$list = ArticlesHelper::getItems($params, $module);
 		break;
 	default:
-		require_once (dirname(__FILE__).'/helpers/helper_images.php');
 		$list = ImagesHelper::getItems($params, $module);
 		break;
 }

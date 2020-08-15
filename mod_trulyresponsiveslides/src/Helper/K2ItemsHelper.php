@@ -66,14 +66,15 @@ class K2ItemsHelper
 
 		// publishing
 
-		$nullDate = $db->quote($db->getNullDate());
+		//$nullDate = $db->quote($db->getNullDate());
 		$nowDate = $db->quote(Factory::getDate()->toSql());
 
-		$query->where('a.published = 1 AND a.trash = 0');
-		$query->where('(a.publish_up = '.$nullDate.' OR a.publish_up <= '.$nowDate.')');
-		$query->where('(a.publish_down = '.$nullDate.' OR a.publish_down >= '.$nowDate.')');
+		$query->where($db->quoteName('a.published') . ' = 1');
+		$query->where($db->quoteName('a.trash') . ' = 0');
+		$query->where('(' . $db->quoteName('a.publish_up') . ' IS NULL OR ' . $db->quoteName('a.publish_up') . ' <= '.$nowDate.')');
+		$query->where('(' . $db->quoteName('a.publish_down') . ' IS NULL OR ' . $db->quoteName('a.publish_down') . ' >= '.$nowDate.')');
 
-		$query->where('c.published = 1');
+		$query->where($db->quoteName('c.published') . ' = 1');
 
 		// category filter
 
@@ -210,8 +211,8 @@ class K2ItemsHelper
 			case 'm_dsc': $ordering .= 'a.modified DESC, a.created DESC'; break;
 			case 'c_asc': $ordering .= 'a.created ASC'; break;
 			case 'c_dsc': $ordering .= 'a.created DESC'; break;
-			case 'mc_asc': $ordering .= 'CASE WHEN (a.modified = '.$db->quote($db->getNullDate()).') THEN a.created ELSE a.modified END ASC'; break;
-			case 'mc_dsc': $ordering .= 'CASE WHEN (a.modified = '.$db->quote($db->getNullDate()).') THEN a.created ELSE a.modified END DESC'; break;
+			case 'mc_asc': $ordering .= 'CASE WHEN (a.modified IS NULL) THEN a.created ELSE a.modified END ASC'; break;
+			case 'mc_dsc': $ordering .= 'CASE WHEN (a.modified IS NULL) THEN a.created ELSE a.modified END DESC'; break;
 			case 'random': $ordering .= 'rand()'; break;
 			case 'hit': $ordering .= 'a.hits DESC'; break;
 			case 'title_asc': $ordering .= 'a.title ASC'; break;

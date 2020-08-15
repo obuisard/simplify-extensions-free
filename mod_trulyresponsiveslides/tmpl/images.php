@@ -90,7 +90,7 @@ use SYW\Library\Utilities as SYWUtilities;
 		$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
 
 		if ($result) {
-			$doc->addStyleSheet(Uri::base(true).'/cache/mod_trulyresponsiveslides/style_'.$module->id.'.css');
+			$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_trulyresponsiveslides/style_'.$module->id.'.css');
 		}
 
 		// caching the scripts
@@ -122,7 +122,7 @@ use SYW\Library\Utilities as SYWUtilities;
 			$result = $cache_js->cache('animation_'.$module->id.'.js', $clear_header_files_cache);
 
 			if ($result) {
-				$doc->addScript(Uri::base(true).'/cache/mod_trulyresponsiveslides/animation_'.$module->id.'.js');
+				$doc->addScript(Uri::base(true).'/media/cache/mod_trulyresponsiveslides/animation_'.$module->id.'.js');
 			}
 		}
 	}

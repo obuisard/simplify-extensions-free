@@ -6,10 +6,10 @@
 
 namespace SYW\Module\TrulyResponsiveSlides\Site\Helper;
 
+defined('_JEXEC') or die;
+
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
-
-defined('_JEXEC') or die;
 
 class ImagesHelper
 {
@@ -39,7 +39,7 @@ class ImagesHelper
 
 		$order = $params->get('images_sort', 'string');
 		switch ($order) {
-			case 'date': usort($list, "modTrulyResponsiveSlidesImagesHelper::dateSort"); break; // sort files by date
+			case 'date': usort($list, "ImagesHelper::dateSort"); break; // sort files by date
 			default: sort($list, SORT_STRING); break;
 		}
 
