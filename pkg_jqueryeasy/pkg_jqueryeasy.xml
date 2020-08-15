@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension version="4.0" type="package" method="upgrade">
+<extension type="package" method="upgrade">
 	<name>PKG_JQUERYEASY</name>
 	<author>Olivier Buisard</author>
 	<creationDate>2018-3-14</creationDate>
@@ -10,6 +10,7 @@
 	<packager>Olivier Buisard</packager>
  	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
 	<version>4.0.2</version>
+	<changelogurl>https://updates.simplifyyourweb.com/free/jqueryeasy/changelog.xml</changelogurl>
 	<description>PKG_JQUERYEASY_XML_DESCRIPTION</description> 
 	<scriptfile>installer.php</scriptfile>
 	<languages>		
@@ -29,6 +30,8 @@
 	   	<language tag="uk-UA">language/uk-UA/uk-UA.pkg_jqueryeasy.sys.ini</language>
 	</languages>
  	<files folder="packages">
+<!--  		<file type="library" id="sywlibrary">lib_syw.zip</file> -->
+<!-- 		<file type="plugin" id="syw" group="system">plg_system_syw.zip</file> -->
 		<file type="plugin" id="jqueryeasy" group="system">plg_system_jqueryeasy.zip</file>
 	</files>	
 	<updateservers>

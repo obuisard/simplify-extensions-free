@@ -9,92 +9,110 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
  * Script file for the jQuery Easy package
  */
-class pkg_jqueryeasyInstallerScript
+class Pkg_JQueryEasyInstallerScript
 {
-	static $version = '4.0.2';
-	static $available_languages = array('bg-BG', 'de-DE', 'en-GB', 'en-US', 'es-CO', 'es-ES', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sv-SE', 'tr-TR', 'uk-UA');
-	static $changelog_link = 'https://simplifyyourweb.com/downloads/jquery-easy/file/314-jquery-easy';
-	static $translation_link = 'https://simplifyyourweb.com/translators';
+	/**
+	 * The version number of the extension
+	 */
+	protected $release;
 
 	/**
-	 * Called before an install/update method
-	 *
-	 * @return  boolean  True on success
+	 * The extension name
 	 */
-	public function preflight($type, $parent)
-	{
-	    // make sure we are under Joomla 4.0 or over
+	protected $extension;
 
-	    if (version_compare(JVERSION, '3.15.0', 'lt')) {
-	        Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', '4'), 'error');
-	        return false;
-	    }
-
-		return true;
-	}
+	/*
+	 * Minimum extensions library version required
+	 */
+	protected $minimumLibrary = '2.0.0';
 
 	/**
-	 * Called after an install/update method
-	 *
-	 * @return  boolean  True on success
+	 * Minimum Joomla! version required to install the extension
 	 */
-	public function postflight($type, $parent)
+	protected $minimumJoomla = '4.0.0-beta3';
+
+	/**
+	 * Available languages
+	 */
+	protected $availableLanguages = array('bg-BG', 'de-DE', 'en-GB', 'en-US', 'es-CO', 'es-ES', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sv-SE', 'tr-TR', 'uk-UA');
+
+	/**
+	 * Extensions library link for download
+	 */
+	protected $libraryDownloadLink = 'https://simplifyyourweb.com/downloads/syw-extension-library';
+
+	/**
+	 * Link to the change logs
+	 */
+	protected $changelogLink = 'https://simplifyyourweb.com/downloads/jquery-easy/file/314-jquery-easy';
+
+	/**
+	 * Link to the translation page
+	 */
+	protected $translationLink = 'https://simplifyyourweb.com/translators';
+
+	/**
+	 * A list of files to be deleted
+	 */
+	protected $deleteFiles = array();
+
+	/**
+	 * A list of folders to be deleted
+	 */
+	protected $deleteFolders = array();
+
+	/**
+	 * Called before an install/update/uninstall method
+	 *
+	 * @param string     $action     Which action is happening (install|uninstall|discover_install|update)
+	 * @param Installer  $installer  The class calling this method
+	 *
+	 * @return boolean True on success
+	 */
+	public function preflight($action, $installer)
 	{
-		echo '<p style="margin: 10px 0 20px 0">';
-		echo '<img src="../plugins/system/jqueryeasy/images/logo.png" />';
-		echo '<br /><br /><span class="label">'.Text::sprintf('PKG_JQUERYEASY_VERSION', self::$version).'</span>';
-		echo '<br /><br />Olivier Buisard @ <a href="http://www.simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
-		echo '</p>';
+		if ($action === 'uninstall') {
+			return true;
+		}
 
- 		// language test
+		// make sure we are under Joomla 4.0 or over
 
- 		$current_language = Factory::getLanguage()->getTag();
- 		if (!in_array($current_language, self::$available_languages)) {
- 			Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this plugin.<br /><a href="' . self::$translation_link . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
- 		}
+		if (version_compare(JVERSION, $this->minimumJoomla, 'lt')) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', $this->minimumJoomla), 'error');
+			return false;
+		}
 
-		if ($type == 'update') {
+		$this->extension = $installer->getName();
+		$this->release = $installer->getManifest()->version;
 
-			// delete unnecessary files
+	    // install the library and its plugin if missing or outdated
 
-		    $files = array(
-		        '/plugins/system/jqueryeasy/jquerynoconflict.js',
-		        '/plugins/system/jqueryeasy/images/chat.png',
-		        '/plugins/system/jqueryeasy/images/visibility.png',
-		        '/plugins/system/jqueryeasy/images/thumb-up.png',
-		        '/plugins/system/jqueryeasy/images/wallet-membership.png',
-		        '/plugins/system/jqueryeasy/images/local-library.png',
-		        '/plugins/system/jqueryeasy/images/lifebuoy.png',
-		        '/plugins/system/jqueryeasy/images/SimplifyYourWeb_24.png'
-		    );
+		if (!Folder::exists(JPATH_ROOT.'/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw') || !PluginHelper::isEnabled('system', 'syw') || !SYW\Library\Version::isCompatible($this->minimumLibrary)) {
 
-			$folders = array();
-
-			foreach ($files as $file) {
-				if (File::exists(JPATH_ROOT.$file) && !File::delete(JPATH_ROOT.$file)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('FILES_JOOMLA_ERROR_FILE_FOLDER', $file), 'warning');
-				}
+			if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
+				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+				return false;
 			}
 
-			foreach ($folders as $folder) {
-				if (Folder::exists(JPATH_ROOT.$folder) && !Folder::delete(JPATH_ROOT.$folder)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('FILES_JOOMLA_ERROR_FILE_FOLDER', $folder), 'warning');
-				}
+			if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
+				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+				return false;
 			}
 
-			// remove the old update site
+			// enable the library plugin
+			$this->enablePlugin('plugin', 'syw', 'system');
 
-			$this->removeUpdateSite('package', 'pkg_jqueryeasy', '', 'http://www.barejoomlatemplates.com/autoupdates/jqueryeasy/jqueryeasy-v3-update.xml');
-			$this->removeUpdateSite('package', 'pkg_jqueryeasy', '', 'https://updates.simplifyyourweb.com/free/jqueryeasy/jqueryeasy-v3-update.xml');
-
-			// update warning
-
-			Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_JQUERYEASY_WARNING_RELEASENOTES', self::$changelog_link), 'warning');
+			Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
 		}
 
 		return true;
@@ -103,21 +121,128 @@ class pkg_jqueryeasyInstallerScript
 	/**
 	 * Called on installation
 	 *
-	 * @return  boolean  True on success
+	 * @return boolean True on success
 	 */
-	public function install($parent) { }
-
-	/**
-	 * Called on update
-	 *
-	 * @return  boolean  True on success
-	 */
-	public function update($parent) { }
+	public function install($installer) { }
 
 	/**
 	 * Called on uninstallation
 	 */
-	public function uninstall($parent) { }
+	public function uninstall($installer) { }
+
+	/**
+	 * Called on update
+	 *
+	 * @return boolean True on success
+	 */
+	public function update($installer) { }
+
+	/**
+	 * Called after an install/update/uninstall method
+	 *
+	 * @return boolean True on success
+	 */
+	public function postflight($action, $installer)
+	{
+		if ($action === 'uninstall') {
+			return true;
+		}
+
+		echo '<p style="margin: 10px 0 20px 0">';
+		echo HTMLHelper::image('plg_system_jqueryeasy/logo.png', 'jQuery Easy', null, true);
+		echo '<br /><br /><span class="badge badge-dark">'.Text::sprintf('PKG_JQUERYEASY_VERSION', $this->release).'</span>';
+		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
+		echo '</p>';
+
+ 		// language test
+
+ 		$current_language = Factory::getLanguage()->getTag();
+ 		if (!in_array($current_language, $this->availableLanguages)) {
+ 			//Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this plugin.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
+ 			echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
+ 		}
+
+		if ($action === 'update') {
+
+			// update warning
+
+			//Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_JQUERYEASY_WARNING_RELEASENOTES', $this->changelogLink), 'warning');
+			echo '<div class="alert alert-warning">' . Text::sprintf('PLG_SYSTEM_JQUERYEASY_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
+		}
+
+		$this->removeFiles();
+
+		return true;
+	}
+
+	private function removeFiles()
+	{
+		if (!empty($this->deleteFiles)) {
+			foreach ($this->deleteFiles as $filename) {
+				if (File::exists($filename) && !File::delete($filename)) {
+					Factory::getApplication()->enqueueMessage(Text::sprintf('COM_ARTICLEDETAILSPROFILES_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
+				}
+			}
+		}
+
+		if (!empty($this->deleteFolders)) {
+			foreach ($this->deleteFolders as $folder) {
+				if (Folder::exists(JPATH_ROOT.$folder) && !Folder::delete(JPATH_ROOT.$folder)) {
+					Factory::getApplication()->enqueueMessage(Text::sprintf('COM_LATESTNEWSENHANCEDPRO_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
+				}
+			}
+		}
+	}
+
+	private function installOrUpdatePackage($installer, $package_name, $installation_type = 'install')
+	{
+		// Get the path to the package
+
+		$sourcePath = $installer->getParent()->getPath('source');
+		$sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
+
+		// Extract and install the package
+
+		$package = InstallerHelper::unpack($sourcePackage);
+		$tmpInstaller = new Installer();
+
+		try {
+			if ($installation_type == 'install') {
+				$installResult = $tmpInstaller->install($package['dir']);
+			} else {
+				$installResult = $tmpInstaller->update($package['dir']);
+			}
+		} catch (\Exception $e) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private function enablePlugin($type, $element, $folder = '')
+	{
+		$db = Factory::getDBO();
+
+		$query = $db->getQuery(true);
+
+		$query->update($db->quoteName('#__extensions'));
+		$query->set($db->quoteName('enabled').' = 1');
+		$query->where($db->quoteName('type').' = '.$db->quote($type));
+		$query->where($db->quoteName('element').' = '.$db->quote($element));
+		$query->where($db->quoteName('folder').' = '.$db->quote($folder));
+
+		$db->setQuery($query);
+
+		try {
+			$db->execute();
+		} catch (ExecutionFailureException $e) {
+			//JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+			//return false;
+			// ? TODO message to manually enable the plugin
+		}
+
+		return true;
+	}
 
 	private function removeUpdateSite($type, $element, $folder = '', $location = '')
 	{
@@ -138,7 +263,7 @@ class pkg_jqueryeasyInstallerScript
 	    $extension_id = '';
 	    try {
 	        $extension_id = $db->loadResult();
-	    } catch (\RuntimeException $e) {
+	    } catch (ExecutionFailureException $e) {
 	        Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 	        return false;
 	    }
@@ -156,7 +281,7 @@ class pkg_jqueryeasyInstallerScript
 	        $updatesite_id = array(); // can have several results
 	        try {
 	            $updatesite_id = $db->loadColumn();
-	        } catch (\RuntimeException $e) {
+	        } catch (ExecutionFailureException $e) {
 	            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 	            return false;
 	        }
@@ -174,7 +299,7 @@ class pkg_jqueryeasyInstallerScript
 
 	            try {
 	                $db->execute();
-	            } catch (\RuntimeException $e) {
+	            } catch (ExecutionFailureException $e) {
 	                Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 	                return false;
 	            }
@@ -191,7 +316,7 @@ class pkg_jqueryeasyInstallerScript
 
 	                try {
 	                    $db->execute();
-	                } catch (\RuntimeException $e) {
+	                } catch (ExecutionFailureException $e) {
 	                    Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 	                    return false;
 	                }
