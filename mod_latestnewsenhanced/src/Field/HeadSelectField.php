@@ -11,7 +11,7 @@ defined( '_JEXEC' ) or die;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Form\Field\GroupedListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -19,7 +19,7 @@ use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use SYW\Library\K2 as SYWK2;
 
-class HeadSelectField extends ListField
+class HeadSelectField extends GroupedListField
 {
 	public $type = 'HeadSelect';
 
@@ -83,9 +83,9 @@ class HeadSelectField extends ListField
 		return self::$k2_fields;
 	}
 
-	protected function getOptions()
+	protected function getGroups()
 	{
-		$options = array();
+		$groups = array();
 
 		$k2extrafields = array();
 		$customfields = array();
@@ -113,32 +113,35 @@ class HeadSelectField extends ListField
 
 		// images
 
+		$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGEGROUP');
+		$groups[$group_name] = array();
+
 // 		$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGEGROUP'));
 
-		$options[] = HTMLHelper::_('select.option', 'image', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGE'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'image', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGE'), 'value', 'text', $disable = false);
 		if (SYWK2::exists()) {
-			$options[] = HTMLHelper::_('select.option', 'imageintro', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGEINTRO_WITHK2'), 'value', 'text', $disable = false);
-			$options[] = HTMLHelper::_('select.option', 'imagefull', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGEFULL_WITHK2'), 'value', 'text', $disable = false);
-			$options[] = HTMLHelper::_('select.option', 'allimagesasc', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLIMAGESASC_WITHK2'), 'value', 'text', $disable = false);
-			$options[] = HTMLHelper::_('select.option', 'allimagesdesc', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLIMAGESDESC_WITHK2'), 'value', 'text', $disable = false);
+			$groups[$group_name][] = HTMLHelper::_('select.option', 'imageintro', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGEINTRO_WITHK2'), 'value', 'text', $disable = false);
+			$groups[$group_name][] = HTMLHelper::_('select.option', 'imagefull', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGEFULL_WITHK2'), 'value', 'text', $disable = false);
+			$groups[$group_name][] = HTMLHelper::_('select.option', 'allimagesasc', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLIMAGESASC_WITHK2'), 'value', 'text', $disable = false);
+			$groups[$group_name][] = HTMLHelper::_('select.option', 'allimagesdesc', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLIMAGESDESC_WITHK2'), 'value', 'text', $disable = false);
 		} else {
-			$options[] = HTMLHelper::_('select.option', 'imageintro', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGEINTRO'), 'value', 'text', $disable = false);
-			$options[] = HTMLHelper::_('select.option', 'imagefull', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGEFULL'), 'value', 'text', $disable = false);
-			$options[] = HTMLHelper::_('select.option', 'allimagesasc', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLIMAGESASC'), 'value', 'text', $disable = false);
-			$options[] = HTMLHelper::_('select.option', 'allimagesdesc', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLIMAGESDESC'), 'value', 'text', $disable = false);
+			$groups[$group_name][] = HTMLHelper::_('select.option', 'imageintro', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGEINTRO'), 'value', 'text', $disable = false);
+			$groups[$group_name][] = HTMLHelper::_('select.option', 'imagefull', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGEFULL'), 'value', 'text', $disable = false);
+			$groups[$group_name][] = HTMLHelper::_('select.option', 'allimagesasc', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLIMAGESASC'), 'value', 'text', $disable = false);
+			$groups[$group_name][] = HTMLHelper::_('select.option', 'allimagesdesc', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLIMAGESDESC'), 'value', 'text', $disable = false);
 		}
 
-		$options[] = HTMLHelper::_('select.option', 'author', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTHORCONTACT') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'author', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTHORCONTACT') . ' (Pro)', 'value', 'text', $disable = true);
 		if (SYWK2::exists()) {
-			$options[] = HTMLHelper::_('select.option', 'authork2user', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTHORK2USER') . ' (Pro)', 'value', 'text', $disable = true);
+			$groups[$group_name][] = HTMLHelper::_('select.option', 'authork2user', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTHORK2USER') . ' (Pro)', 'value', 'text', $disable = true);
 		}
 
 		$group_options = self::getFieldGroup('com_content', $customfields, 'media');
-		$options = array_merge($options, $group_options);
+		$groups[$group_name] = array_merge($groups[$group_name], $group_options);
 
 		if (SYWK2::exists()) {
 			$group_options = self::getFieldGroup('com_k2', $k2extrafields, 'image');
-			$options = array_merge($options, $group_options);
+			$groups[$group_name] = array_merge($groups[$group_name], $group_options);
 		}
 
 // 		$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGEGROUP'));
@@ -148,24 +151,31 @@ class HeadSelectField extends ListField
 		if (PluginHelper::isEnabled('fields', 'sywicon')) {
 			$group_options = self::getFieldGroup('com_content', $customfields, 'sywicon');
 			if (!empty($group_options)) {
+
+				$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ICONGROUP');
+				$groups[$group_name] = array();
+
 // 				$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ICONGROUP'));
-				$options = array_merge($options, $group_options);
+				$groups[$group_name] = array_merge($groups[$group_name], $group_options);
 // 				$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ICONGROUP'));
 			}
 		}
 
 		// calendars
 
+		$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CALENDARGROUP');
+		$groups[$group_name] = array();
+
 // 		$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CALENDARGROUP'));
 
-		$options[] = HTMLHelper::_('select.option', 'calendar', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CALENDAR'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'calendar', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CALENDAR'), 'value', 'text', $disable = false);
 
 		$group_options = self::getFieldGroup('com_content', $customfields, 'calendar');
-		$options = array_merge($options, $group_options);
+		$groups[$group_name] = array_merge($groups[$group_name], $group_options);
 
 		if (SYWK2::exists()) {
 			$group_options = self::getFieldGroup('com_k2', $k2extrafields, 'date');
-			$options = array_merge($options, $group_options);
+			$groups[$group_name] = array_merge($groups[$group_name], $group_options);
 		}
 
 // 		$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CALENDARGROUP'));
@@ -178,79 +188,73 @@ class HeadSelectField extends ListField
 		    || PluginHelper::isEnabled('fields', 'acfvimeo')
 		    || PluginHelper::isEnabled('fields', 'acfyoutube')) {
 
+	    	$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_VIDEOGROUP');
+	    	$groups[$group_name] = array();
+
 // 		    $options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_VIDEOGROUP'));
 
     		if (PluginHelper::isEnabled('fields', 'acfdailymotion')) {
     		    $group_options = self::getFieldGroup('com_content', $customfields, 'acfdailymotion');
     		    if (!empty($group_options)) {
-    		        $options = array_merge($options, $group_options);
+    		    	$groups[$group_name] = array_merge($groups[$group_name], $group_options);
     		    }
     		}
 
     		if (PluginHelper::isEnabled('fields', 'acffacebookvideo')) {
     		    $group_options = self::getFieldGroup('com_content', $customfields, 'acffacebookvideo');
     		    if (!empty($group_options)) {
-    		        $options = array_merge($options, $group_options);
+    		    	$groups[$group_name] = array_merge($groups[$group_name], $group_options);
     		    }
     		}
 
     		if (PluginHelper::isEnabled('fields', 'acfhtml5video')) {
     		    $group_options = self::getFieldGroup('com_content', $customfields, 'acfhtml5video');
     		    if (!empty($group_options)) {
-    		        $options = array_merge($options, $group_options);
+    		    	$groups[$group_name] = array_merge($groups[$group_name], $group_options);
     		    }
     		}
 
     		if (PluginHelper::isEnabled('fields', 'acfvimeo')) {
     		    $group_options = self::getFieldGroup('com_content', $customfields, 'acfvimeo');
     		    if (!empty($group_options)) {
-    		        $options = array_merge($options, $group_options);
+    		    	$groups[$group_name] = array_merge($groups[$group_name], $group_options);
     		    }
     		}
 
     		if (PluginHelper::isEnabled('fields', 'acfyoutube')) {
     		    $group_options = self::getFieldGroup('com_content', $customfields, 'acfyoutube');
     		    if (!empty($group_options)) {
-    		        $options = array_merge($options, $group_options);
+    		    	$groups[$group_name] = array_merge($groups[$group_name], $group_options);
     		    }
     		}
 
 //     		$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_VIDEOGROUP'));
 		}
 
-		$options = array_merge(parent::getOptions(), $options);
+		$groups = array_merge(parent::getGroups(), $groups);
 
-		return $options;
+		return $groups;
 	}
 
 	protected function getFieldGroup($option, $fields, $type)
 	{
-		$options = array();
+		$groups = array();
 
 		if (empty($fields)) {
-			return $options;
+			return $groups;
 		}
 
 		if ($option == 'com_k2') {
 
-			$fields_count = 0;
+			$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS');
+			$groups[$group_name] = array();
+
 			foreach ($fields as $field) {
 
 				if ($field->type != $type) {
 					continue;
 				}
-
-				if ($fields_count == 0) {
-					//$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS'));
-				}
-
-				$options[] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
-
-				$fields_count++;
-			}
-
-			if ($fields_count > 0) {
-				//$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS'));
+				$groups[$group_name][] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
 			}
 		}
 
@@ -285,6 +289,10 @@ class HeadSelectField extends ListField
 			// loop trough the groups
 
 			if ($fields_exist) {
+
+				$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JOOMLAFIELDS');
+				$groups[$group_name] = array();
+
 				//$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JOOMLAFIELDS'));
 
 				foreach ($fieldsPerGroup as $group_id => $groupFields) {
@@ -294,7 +302,7 @@ class HeadSelectField extends ListField
 					}
 
 					foreach ($groupFields as $field) {
-						$options[] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
+						$groups[$group_name][] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
 					}
 				}
 
@@ -302,7 +310,7 @@ class HeadSelectField extends ListField
 			}
 		}
 
-		return $options;
+		return $groups;
 	}
 }
 ?>

@@ -13,6 +13,7 @@
 	
 	<media folder="media" destination="mod_latestnewsenhanced">
 		<filename>index.html</filename>
+		<folder>css</folder>
 		<folder>images</folder>
 		<folder>scripts</folder>
 		<folder>styles</folder>
@@ -87,7 +88,7 @@
 <!-- 					imagesrc="media/mod_latestnewsenhanced/images/logo_pro.png" -->
 <!-- 					downloadlink="https://simplifyyourweb.com/downloads/latest-news-enhanced-pro" downloadtext="MOD_LATESTNEWSENHANCED_INFO_PROVERSIONDOWLOAD" /> -->
 				
-<!-- 				<field type="sywlibtest" minversion="1.5.2" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
+<!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
 			</fieldset>
 			
 			<fieldset name="selection" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTION_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTION_FIELDSET_DESC">
@@ -1058,8 +1059,8 @@
 						<option value="1">JYES</option>
 					</field>					
 					
-					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_GDTEST_LABEL" style="warning" showon="create_thumb:1" />
-					<field type="gdtest" showon="create_thumb:1" />		
+<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_GDTEST_LABEL" style="warning" showon="create_thumb:1" /> -->
+					<field type="gdtest" message="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_GDTEST_LABEL" showon="create_thumb:1" />		
 						
 					<field name="crop_pic" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="create_thumb:1" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CROPPICTURE_LABEL" 
@@ -1080,8 +1081,8 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYPNG_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYPNG_DESC" />				
 							  
-					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWURLFOPENTEST_LABEL" style="warning" showon="create_thumb:1" />
-					<field type="phpsettingtest" setting="allow_url_fopen" showon="create_thumb:1" />
+<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWURLFOPENTEST_LABEL" style="warning" showon="create_thumb:1" /> -->
+					<field type="phpsettingtest" setting="allow_url_fopen" message="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWURLFOPENTEST_LABEL" showon="create_thumb:1" />
 					
 					<field name="allow_remote" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="create_thumb:1"  
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWREMOTE_LABEL" 
@@ -1531,6 +1532,11 @@
 <!-- 				<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_JQUERYVERSIONREQUIRED" style="info" /> -->
 
 				<fieldset name="advanced_general" label="">
+				
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAYOUTSUFFIX_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAYOUTSUFFIX_DESC" />
+					
 					<field name="site_mode" type="list" default="adv" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SITEMODE_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SITEMODE_DESC">
@@ -1670,8 +1676,7 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="advanced_module_standard" label="">		
-					<!-- <field name="filteringspacer2" type="spacer" hr="true" /> -->
+				<fieldset name="advanced_module_standard" label="">
 						
 					<field name="moduleclass_sfx" type="text" default="" filter="string"
 						label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" />

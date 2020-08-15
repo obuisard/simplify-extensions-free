@@ -593,8 +593,8 @@ if (empty($list)) { // $list can be an empty array
 		}
 	} else {
 		// remove animation.js if it exists
-		if (File::exists(JPATH_CACHE.'/mod_latestnewsenhanced/animation_'.$module->id.'.js')) {
-			File::delete(JPATH_CACHE.'/mod_latestnewsenhanced/animation_'.$module->id.'.js');
+		if (File::exists(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/animation_'.$module->id.'.js')) {
+			File::delete(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/animation_'.$module->id.'.js');
 		}
 	}
 
@@ -620,17 +620,17 @@ if (empty($list)) { // $list can be an empty array
 		}
 	} else {
 		// remove style.js if it exists
-		if (File::exists(JPATH_CACHE.'/mod_latestnewsenhanced/style_'.$module->id.'.js')) {
-			File::delete(JPATH_CACHE.'/mod_latestnewsenhanced/style_'.$module->id.'.js');
+		if (File::exists(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.js')) {
+			File::delete(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.js');
 		}
 	}
 
-	if (File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/styles/substitute_styles.css') || File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/styles/substitute_styles-min.css')) {
+	if (File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/substitute_styles.css') || File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/substitute_styles-min.css')) {
 		LNEHelper::loadUserStylesheet(true);
 
 		// remove style.css if it exists
-		if (File::exists(JPATH_CACHE.'/mod_latestnewsenhanced/style_'.$module->id.'.css')) {
-			File::delete(JPATH_CACHE.'/mod_latestnewsenhanced/style_'.$module->id.'.css');
+		if (File::exists(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.css')) {
+			File::delete(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.css');
 		}
 	} else {
 
@@ -672,7 +672,7 @@ if (empty($list)) { // $list can be an empty array
 
 		LNEHelper::loadCommonStylesheet();
 
-		if (File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/styles/common_user_styles.css') || File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/styles/common_user_styles-min.css')) {
+		if (File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/common_user_styles.css') || File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/common_user_styles-min.css')) {
 			LNEHelper::loadUserStylesheet();
 		}
 	}

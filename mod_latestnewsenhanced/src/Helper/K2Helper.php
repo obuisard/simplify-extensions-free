@@ -30,7 +30,7 @@ class K2Helper
 	 *
 	 * @param unknown $params
 	 * @param unknown $items
-	 * @throws Exception
+	 * @throws \Exception
 	 * @return array of categories (id, description, article count)
 	 */
 	static function getCategoryList($params, $items)
@@ -90,7 +90,7 @@ class K2Helper
 		$user = Factory::getUser();
 		$groups = implode(',', $user->getAuthorisedViewLevels());
 
-		$nullDate = $db->quote($db->getNullDate());
+		//$nullDate = $db->quote($db->getNullDate());
 		$nowDate = $db->quote(Factory::getDate()->toSql());
 
 		$jinput = $app->input;
@@ -222,11 +222,11 @@ class K2Helper
 			'a.published AS state, '.
 
 			// Use created if modified is 0
-			'CASE WHEN a.modified = '.$nullDate.' THEN a.created ELSE a.modified END as modified, '.
+			'CASE WHEN a.modified IS NULL THEN a.created ELSE a.modified END as modified, '.
 			'a.modified_by, uam.name as modified_by_name, '.
 
 			// Use created if publish_up is 0
-			'CASE WHEN a.publish_up = '.$nullDate.' THEN a.created ELSE a.publish_up END as publish_up, '.
+			'CASE WHEN a.publish_up IS NULL THEN a.created ELSE a.publish_up END as publish_up, '.
 			'a.publish_down, a.params, a.metadata, a.metakey, a.metadesc, a.access, a.hits, a.featured, a.language');
 
 		$query->select($subquery1);
@@ -270,12 +270,12 @@ class K2Helper
 		$postdate = $params->get('post_d', 'published');
 
 		if ($postdate != 'fin_pen' && $postdate != 'pending') {
-			$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
+			$query->where('(' . $db->quoteName('a.publish_up') . ' IS NULL OR ' . $db->quoteName('a.publish_up') . ' <= '.$nowDate.')');
 		}
 		if ($postdate == 'pending') {
-			$query->where('a.publish_up > ' . $nowDate);
+			$query->where($db->quoteName('a.publish_up') . ' > ' . $nowDate);
 		}
-		$query->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
+		$query->where('(' . $db->quoteName('a.publish_down') . ' IS NULL OR ' . $db->quoteName('a.publish_down') . ' >= '.$nowDate.')');
 
 		// filter by date range
 
@@ -692,14 +692,14 @@ class K2Helper
 			case 'o_dsc': if ($featured) { $ordering .= 'CASE WHEN (a.featured = 1) THEN a.featured_ordering ELSE a.ordering END DESC'; } else { $ordering .= 'a.ordering DESC'; } break;
 			case 'p_asc': $ordering .= 'a.publish_up ASC'; break;
 			case 'p_dsc': $ordering .= 'a.publish_up DESC'; break;
-			case 'f_asc': $ordering .= 'CASE WHEN (a.publish_down = '.$nullDate.') THEN a.publish_up ELSE a.publish_down END ASC'; break;
-			case 'f_dsc': $ordering .= 'CASE WHEN (a.publish_down = '.$nullDate.') THEN a.publish_up ELSE a.publish_down END DESC'; break;
+			case 'f_asc': $ordering .= 'CASE WHEN (a.publish_down IS NULL) THEN a.publish_up ELSE a.publish_down END ASC'; break;
+			case 'f_dsc': $ordering .= 'CASE WHEN (a.publish_down IS NULL) THEN a.publish_up ELSE a.publish_down END DESC'; break;
 			case 'm_asc': $ordering .= 'a.modified ASC, a.created ASC'; break;
 			case 'm_dsc': $ordering .= 'a.modified DESC, a.created DESC'; break;
 			case 'c_asc': $ordering .= 'a.created ASC'; break;
 			case 'c_dsc': $ordering .= 'a.created DESC'; break;
-			case 'mc_asc': $ordering .= 'CASE WHEN (a.modified = '.$nullDate.') THEN a.created ELSE a.modified END ASC'; break;
-			case 'mc_dsc': $ordering .= 'CASE WHEN (a.modified = '.$nullDate.') THEN a.created ELSE a.modified END DESC'; break;
+			case 'mc_asc': $ordering .= 'CASE WHEN (a.modified IS NULL) THEN a.created ELSE a.modified END ASC'; break;
+			case 'mc_dsc': $ordering .= 'CASE WHEN (a.modified IS NULL) THEN a.created ELSE a.modified END DESC'; break;
 			case 'random': $ordering .= 'rand()'; break;
 			case 'hit': $ordering .= 'a.hits DESC'; break;
 			case 'title_asc': $ordering .= 'a.title ASC'; break;

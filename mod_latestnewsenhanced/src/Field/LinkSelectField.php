@@ -11,14 +11,14 @@ defined( '_JEXEC' ) or die;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Form\Field\GroupedListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use SYW\Library\K2 as SYWK2;
 
-class LinkSelectField extends ListField
+class LinkSelectField extends GroupedListField
 {
 	public $type = 'LinkSelect';
 
@@ -82,29 +82,20 @@ class LinkSelectField extends ListField
 		return self::$k2_fields;
 	}
 
-	protected function getOptions()
+	protected function getGroups()
 	{
-		$options = array();
+		$groups = array();
 
 		if (SYWK2::exists()) {
 
 			// get K2 extra fields
 			$fields = self::getK2Fields(array('link'));
 
-			$fields_count = 0;
+			$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS');
+			$groups[$group_name] = array();
+
 			foreach ($fields as $field) {
-
-				if ($fields_count == 0) {
-// 					$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS'));
-				}
-
-				$options[] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
-
-				$fields_count++;
-			}
-
-			if ($fields_count > 0) {
-// 				$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS'));
+				$groups[$group_name][] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
 			}
 		}
 
@@ -140,6 +131,10 @@ class LinkSelectField extends ListField
 			// loop trough the groups
 
 			if ($fields_exist) {
+
+				$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JOOMLAFIELDS');
+				$groups[$group_name] = array();
+
 // 				$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JOOMLAFIELDS'));
 
 				foreach ($fieldsPerGroup as $group_id => $groupFields) {
@@ -149,7 +144,7 @@ class LinkSelectField extends ListField
 					}
 
 					foreach ($groupFields as $field) {
-						$options[] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
+						$groups[$group_name][] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
 					}
 				}
 
@@ -158,9 +153,9 @@ class LinkSelectField extends ListField
 		}
 
 		// Merge any additional options in the XML definition.
-		$options = array_merge(parent::getOptions(), $options);
+		$groups = array_merge(parent::getGroups(), $groups);
 
-		return $options;
+		return $groups;
 	}
 }
 ?>

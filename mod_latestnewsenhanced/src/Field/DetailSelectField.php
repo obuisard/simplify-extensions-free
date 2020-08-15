@@ -11,14 +11,14 @@ defined( '_JEXEC' ) or die;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Form\Field\GroupedListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use SYW\Library\K2 as SYWK2;
 
-class DetailSelectField extends ListField
+class DetailSelectField extends GroupedListField
 {
 	public $type = 'DetailSelect';
 
@@ -66,43 +66,45 @@ class DetailSelectField extends ListField
 		return self::$k2_fields;
 	}
 
-	protected function getOptions()
+	protected function getGroups()
 	{
-		$options = array();
+		$groups = array();
 
-		$options[] = HTMLHelper::_('select.option', 'hits', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_HITS'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'rating', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RATING'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'author', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTHOR'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'date', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DATE'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'ago', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AGO'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'agomhd', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AGOMHD'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'agohm', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AGOHM'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'time', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TIME'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'category', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CATEGORY'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'linkedcategory', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDCATEGORY'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'tags', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TAGS') . ' (Pro)', 'value', 'text', $disable = true);
-		$options[] = HTMLHelper::_('select.option', 'selectedtags', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SELECTEDTAGS') . ' (Pro)', 'value', 'text', $disable = true);
-		$options[] = HTMLHelper::_('select.option', 'linkedtags', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDTAGS') . ' (Pro)', 'value', 'text', $disable = true);
-		$options[] = HTMLHelper::_('select.option', 'linkedselectedtags', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDSELECTEDTAGS') . ' (Pro)', 'value', 'text', $disable = true);
-		$options[] = HTMLHelper::_('select.option', 'keywords', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_KEYWORDS'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'readmore', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_READMORE'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'share', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHAREICONS') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups['-'] = array();
 
-		$options[] = HTMLHelper::_('select.option', 'linka', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKA') . ' (Pro)', 'value', 'text', $disable = true);
-		$options[] = HTMLHelper::_('select.option', 'linkb', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKB') . ' (Pro)', 'value', 'text', $disable = true);
-		$options[] = HTMLHelper::_('select.option', 'linkc', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKC') . ' (Pro)', 'value', 'text', $disable = true);
-		$options[] = HTMLHelper::_('select.option', 'links', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKS') . ' (Pro)', 'value', 'text', $disable = true);
-		$options[] = HTMLHelper::_('select.option', 'linksnl', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKSNEWLINE') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups['-'][] = HTMLHelper::_('select.option', 'hits', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_HITS'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'rating', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RATING'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'author', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTHOR'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'date', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DATE'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'ago', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AGO'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'agomhd', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AGOMHD'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'agohm', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AGOHM'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'time', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TIME'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'category', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CATEGORY'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'linkedcategory', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDCATEGORY'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'tags', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TAGS') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups['-'][] = HTMLHelper::_('select.option', 'selectedtags', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SELECTEDTAGS') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups['-'][] = HTMLHelper::_('select.option', 'linkedtags', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDTAGS') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups['-'][] = HTMLHelper::_('select.option', 'linkedselectedtags', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDSELECTEDTAGS') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups['-'][] = HTMLHelper::_('select.option', 'keywords', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_KEYWORDS'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'readmore', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_READMORE'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'share', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHAREICONS') . ' (Pro)', 'value', 'text', $disable = true);
+
+		$groups['-'][] = HTMLHelper::_('select.option', 'linka', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKA') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups['-'][] = HTMLHelper::_('select.option', 'linkb', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKB') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups['-'][] = HTMLHelper::_('select.option', 'linkc', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKC') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups['-'][] = HTMLHelper::_('select.option', 'links', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKS') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups['-'][] = HTMLHelper::_('select.option', 'linksnl', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKSNEWLINE') . ' (Pro)', 'value', 'text', $disable = true);
 
 		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_jcomments') && ComponentHelper::isEnabled('com_jcomments')) {
-			$options[] = HTMLHelper::_('select.option', 'jcommentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JCOMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
-			$options[] = HTMLHelper::_('select.option', 'linkedjcommentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDJCOMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
+			$groups['-'][] = HTMLHelper::_('select.option', 'jcommentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JCOMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
+			$groups['-'][] = HTMLHelper::_('select.option', 'linkedjcommentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDJCOMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
 		}
 
 		if (SYWK2::exists()) {
-			//$options[] = HTMLHelper::_('select.option', 'k2_user', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2USER'), 'value', 'text', $disable = false);
-			$options[] = HTMLHelper::_('select.option', 'k2commentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2COMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
-			$options[] = HTMLHelper::_('select.option', 'linkedk2commentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDK2COMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
+			//$groups['-'][] = HTMLHelper::_('select.option', 'k2_user', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2USER'), 'value', 'text', $disable = false);
+			$groups['-'][] = HTMLHelper::_('select.option', 'k2commentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2COMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
+			$groups['-'][] = HTMLHelper::_('select.option', 'linkedk2commentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDK2COMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
 
 			// get K2 extra fields
 
@@ -111,23 +113,14 @@ class DetailSelectField extends ListField
 			// supported field types
 			$allowed_types = array('textfield', 'textarea', 'select', 'multipleSelect', 'radio', 'link', /*'labels',*/ 'date');
 
-			$fields_count = 0;
+			$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS');
+			$groups[$group_name] = array();
+
 			foreach ($fields as $field) {
 				if (in_array($field->type, $allowed_types)) {
-
-// 					if ($fields_count == 0) {
-// 						$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS'));
-// 					}
-
-					$options[] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
-
-					$fields_count++;
+					$groups[$group_name][] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
 				}
 			}
-
-// 			if ($fields_count > 0) {
-// 				$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS'));
-// 			}
 		}
 
 		// get Joomla! fields
@@ -168,6 +161,10 @@ class DetailSelectField extends ListField
 			// loop trough the groups
 
 			if ($fields_exist) {
+
+				$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JOOMLAFIELDS');
+				$groups[$group_name] = array();
+
 // 				$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JOOMLAFIELDS'));
 
 				foreach ($fieldsPerGroup as $group_id => $groupFields) {
@@ -177,7 +174,7 @@ class DetailSelectField extends ListField
 					}
 
 					foreach ($groupFields as $field) {
-						$options[] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
+						$groups[$group_name][] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
 					}
 				}
 
@@ -186,9 +183,9 @@ class DetailSelectField extends ListField
 		}
 
 		// Merge any additional options in the XML definition.
-		$options = array_merge(parent::getOptions(), $options);
+		$groups = array_merge(parent::getGroups(), $groups);
 
-		return $options;
+		return $groups;
 	}
 }
 ?>

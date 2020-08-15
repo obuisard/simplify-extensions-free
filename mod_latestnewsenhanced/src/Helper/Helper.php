@@ -960,7 +960,7 @@ class Helper
 
 		$minified = (JDEBUG) ? '' : '-min';
 
-		Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/styles/common_styles' . $minified . '.css');
+		Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/common_styles' . $minified . '.css');
 
 		self::$commonStylesLoaded = true;
 	}
@@ -982,10 +982,10 @@ class Helper
 			$prefix = 'substitute';
 		}
 
-		if (!File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/styles/'.$prefix.'_styles-min.css')) {
-			$doc->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/styles/'.$prefix.'_styles.css');
+		if (!File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles-min.css')) {
+			$doc->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles.css');
 		} else {
-			$doc->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/styles/'.$prefix.'_styles-min.css');
+			$doc->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles-min.css');
 		}
 
 		self::$userStylesLoaded = true;

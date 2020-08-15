@@ -15,9 +15,9 @@ use Joomla\CMS\Layout\FileLayout;
 use Joomla\Registry\Registry;
 use SYW\Library\Libraries as SYWLibraries;
 use SYW\Library\Utilities as SYWUtilities;
-use SYW\Module\LatestNewsEnhanced\Helper\Site\CalendarHelper as LNECalendarHelper;
-use SYW\Module\LatestNewsEnhanced\Helper\Site\ContentHelper as LNEContentHelper;
-use SYW\Module\LatestNewsEnhanced\Helper\Site\Helper as LNEHelper;
+use SYW\Module\LatestNewsEnhanced\Site\Helper\CalendarHelper as LNECalendarHelper;
+use SYW\Module\LatestNewsEnhanced\Site\Helper\ContentHelper as LNEContentHelper;
+use SYW\Module\LatestNewsEnhanced\Site\Helper\Helper as LNEHelper;
 
 if ($bootstrap_version > 0) {
 	HTMLHelper::_('bootstrap.tooltip');
