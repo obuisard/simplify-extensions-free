@@ -11,8 +11,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use SYW\Library\HeaderFilesCache;
 
-jimport('syw.headerfilescache', JPATH_LIBRARIES);
-
 class JSAnimationFileCache extends HeaderFilesCache
 {
 	public function __construct($extension, $params = null)

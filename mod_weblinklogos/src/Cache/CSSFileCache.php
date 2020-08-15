@@ -10,8 +10,6 @@ defined('_JEXEC') or die;
 
 use SYW\Library\HeaderFilesCache;
 
-jimport('syw.headerfilescache', JPATH_LIBRARIES);
-
 class CSSFileCache extends HeaderFilesCache
 {
 	public function __construct($extension, $params = null)

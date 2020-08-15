@@ -11,7 +11,7 @@
 	<description>MOD_WEBLINKLOGO_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\WeblinkLogos</namespace>
 	
-	<media folder="media" destination="mod_weblinklogo">
+	<media folder="media" destination="mod_weblinklogos">
 		<filename>index.html</filename>
 		<folder>css</folder>
 		<folder>images</folder>
@@ -72,13 +72,13 @@
 									
 				<field type="sywextensionpresencetest" title="Weblinks" description="MOD_WEBLINKLOGO_INFO_WEBLINKSCOMPONENT" alertlevel="warning" 
 					extensiontype="component" extensionelement="com_weblinks"
-					imagesrc="media/mod_weblinklogo/images/logo_weblinks.png"
+					imagesrc="media/mod_weblinklogos/images/logo_weblinks.png"
 					downloadlink="http://extensions.joomla.org/extensions/extension/official-extensions/weblinks" />	
 				
-<!-- 				<field type="sywextensionpresencetest" title="Weblink Logos Pro" description="MOD_WEBLINKLOGO_INFO_PROVERSION"  -->
-<!-- 					extensiontype="component" extensionelement="com_weblinklogospro" -->
-<!-- 					imagesrc="media/mod_weblinklogo/images/logo_pro.png" -->
-<!-- 					downloadlink="https://simplifyyourweb.com/downloads/weblink-logos-pro" downloadtext="MOD_WEBLINKLOGO_INFO_PROVERSIONDOWLOAD" /> -->
+				<field type="sywextensionpresencetest" title="Weblink Logos Pro" description="MOD_WEBLINKLOGO_INFO_PROVERSION" 
+					extensiontype="component" extensionelement="com_weblinklogospro"
+					imagesrc="media/mod_weblinklogos/images/logo_pro.png"
+					downloadlink="https://simplifyyourweb.com/downloads/weblink-logos-pro" downloadtext="MOD_WEBLINKLOGO_INFO_PROVERSIONDOWLOAD" />
 
 <!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
 			</fieldset>
@@ -88,8 +88,8 @@
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos/filtering" class="alert alert-info" -->
 <!-- 					description="MOD_WEBLINKLOGO_BASIC_FIELDSET_DESC" /> -->
 			
-<!-- 				<field type="title" title="MOD_WEBLINKLOGO_DYNAMIC_LABEL" /> -->
 				<fieldset name="selection_source" label="">
+<!-- 				<field type="title" title="MOD_WEBLINKLOGO_DYNAMIC_LABEL" /> -->
 				
 					<field name="related" type="list" default="0" 
 						label="MOD_WEBLINKLOGO_FIELD_RELATED_LABEL" 
@@ -107,8 +107,8 @@
 					<field name="cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
 						label="MOD_WEBLINKLOGO_FIELD_CATEGORYFILTER_LABEL"
 						description="MOD_WEBLINKLOGO_FIELD_CATEGORYFILTER_DESC">
-						<option value="1">MOD_WEBLINKLOGO_VALUE_INCLUS</option>
 						<option value="0">MOD_WEBLINKLOGO_VALUE_EXCLUS</option>
+						<option value="1">MOD_WEBLINKLOGO_VALUE_INCLUS</option>
 					</field>
 				
 					<field name="category" type="category" extension="com_weblinks" multiple="true" size="5" default="all" layout="joomla.form.field.list-fancy-select"
@@ -145,8 +145,8 @@
 					<field name="tags_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
 						label="MOD_WEBLINKLOGO_FIELD_TAGSFILTER_LABEL"
 						description="MOD_WEBLINKLOGO_FIELD_TAGSFILTER_DESC">
-						<option value="1">MOD_WEBLINKLOGO_VALUE_INCLUS</option>
 						<option value="0">MOD_WEBLINKLOGO_VALUE_EXCLUS</option>
+						<option value="1">MOD_WEBLINKLOGO_VALUE_INCLUS</option>
 					</field>
 					
 					<field name="tags" type="tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select"
@@ -319,8 +319,7 @@
 					</field>
 				</fieldset>						
 				
-				<fieldset name="layout_title" label="">				
-<!-- 				<field name="descriptionspacer1" type="spacer" hr="true" /> -->
+				<fieldset name="layout_title" label="">	
 				
 					<field name="title" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_WEBLINKLOGO_FIELD_TITLE_LABEL"
@@ -668,6 +667,7 @@
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos/advanced" class="alert alert-info" />					 -->
 	            
 	            <fieldset name="advanced_general" label="">
+	            
 		            <field name="site_mode" type="list" default="adv" 
 						label="MOD_WEBLINKLOGO_FIELD_SITEMODE_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_SITEMODE_DESC">
@@ -737,12 +737,12 @@
 						<option value="cache">MOD_WEBLINKLOGO_VALUE_CACHEDIRECTORY</option>
 					</field>		
 							  	
-					<field type="message" text="MOD_WEBLINKLOGO_FIELD_GDTEST_LABEL" style="warning" />
-					<field type="gdtest" />
+<!-- 					<field type="message" text="MOD_WEBLINKLOGO_FIELD_GDTEST_LABEL" style="warning" /> -->
+					<field type="gdtest" message="MOD_WEBLINKLOGO_FIELD_GDTEST_LABEL" />
 					
 					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" description="MOD_WEBLINKLOGO_INFO_AUTORESETPLUGIN" 
 						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset"
-						imagesrc="media/mod_weblinklogo/images/logo_autoreset_small.png"
+						imagesrc="media/mod_weblinklogos/images/logo_autoreset_small.png"
 						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" />	
 				</fieldset>
 						
@@ -785,7 +785,8 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="advanced_prepost" label="">		
+				<fieldset name="advanced_prepost" label="">
+					
 					<field name="pretext" type="editor" rows="5" editor="codemirror|none" filter="safehtml" buttons="false" syntax="html"
 						label="MOD_WEBLINKLOGO_FIELD_PRETEXT_LABEL"
 						description="MOD_WEBLINKLOGO_FIELD_PRETEXT_DESC" />

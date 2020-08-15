@@ -300,7 +300,7 @@ if ($carousel_configuration != 'none') {
 
 // style
 
-if (File::exists(JPATH_ROOT.'/media/mod_weblinklogo/css/substitute_styles.css') || File::exists(JPATH_ROOT.'/media/mod_weblinklogo/css/substitute_styles-min.css')) {
+if (File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/substitute_styles.css') || File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/substitute_styles-min.css')) {
 	Helper::loadUserStylesheet(true);
 
 	// remove style.css if it exists
@@ -326,7 +326,7 @@ if (File::exists(JPATH_ROOT.'/media/mod_weblinklogo/css/substitute_styles.css') 
 
 	Helper::loadCommonStylesheet();
 
-	if (File::exists(JPATH_ROOT.'/media/mod_weblinklogo/css/common_user_styles.css') || File::exists(JPATH_ROOT.'/media/mod_weblinklogo/css/common_user_styles-min.css')) {
+	if (File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/common_user_styles.css') || File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/common_user_styles-min.css')) {
 		Helper::loadUserStylesheet();
 	}
 }

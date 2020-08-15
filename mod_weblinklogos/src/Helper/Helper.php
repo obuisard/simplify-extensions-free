@@ -355,12 +355,11 @@ class Helper
 
 		// filter by start and end dates
 
-		$nullDate = $db->quote($db->getNullDate());
-		$date = Factory::getDate();
-		$nowDate = $db->quote($date->toSql());
+		//$nullDate = $db->quote($db->getNullDate());
+		$nowDate = $db->quote(Factory::getDate()->toSql());
 
-		$query->where('('.$db->quoteName('a.publish_up').' = '.$nullDate.' OR '.$db->quoteName('a.publish_up').' <= '.$nowDate.')');
-		$query->where('('.$db->quoteName('a.publish_down').' = '.$nullDate.' OR '.$db->quoteName('a.publish_down').' >= '.$nowDate.')');
+		$query->where('('.$db->quoteName('a.publish_up').' IS NULL OR '.$db->quoteName('a.publish_up').' <= '.$nowDate.')');
+		$query->where('('.$db->quoteName('a.publish_down').' IS NULL OR '.$db->quoteName('a.publish_down').' >= '.$nowDate.')');
 
 		// filter by language
 
@@ -786,7 +785,7 @@ class Helper
 
 		$minified = (JDEBUG) ? '' : '-min';
 
-		Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_weblinklogo/css/common_styles' . $minified . '.css');
+		Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/common_styles' . $minified . '.css');
 
 		self::$commonStylesLoaded = true;
 	}
@@ -809,10 +808,10 @@ class Helper
 			$prefix = 'substitute';
 		}
 
-		if (!File::exists(JPATH_ROOT.'/media/mod_weblinklogo/css/'.$prefix.'_styles-min.css')) {
-			$doc->addStyleSheet(Uri::base(true).'/media/mod_weblinklogo/css/'.$prefix.'_styles.css');
+		if (!File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/'.$prefix.'_styles-min.css')) {
+			$doc->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/'.$prefix.'_styles.css');
 		} else {
-			$doc->addStyleSheet(Uri::base(true).'/media/mod_weblinklogo/css/'.$prefix.'_styles-min.css');
+			$doc->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/'.$prefix.'_styles-min.css');
 		}
 
 		self::$userStylesLoaded = true;
