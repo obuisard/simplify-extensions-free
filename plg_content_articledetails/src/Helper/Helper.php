@@ -17,7 +17,8 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
-use Joomla\Component\Content\Site\Helper\RouteHelper;
+use Joomla\Component\Content\Site\Helper\RouteHelper as ContentRouteHleper;
+use Joomla\Component\Tags\Site\Helper\RouteHelper as TagsRouteHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
 use SYW\Library\Fonts;
@@ -545,7 +546,7 @@ class Helper
 						if ($item_params->get('link_parent_category') && !$app->input->getBool('print')) {
 							if ($view == 'article') {
 								if (!empty($item->parent_slug)) {
-									$info_block .= '<a class="detail_data" href="'.Route::_(RouteHelper::getCategoryRoute($item->parent_slug)).'">'.$item->parent_title.'</a>';
+									$info_block .= '<a class="detail_data" href="'.Route::_(ContentRouteHleper::getCategoryRoute($item->parent_slug)).'">'.$item->parent_title.'</a>';
 								} else {
 									$info_block .= '<span class="detail_data">'.$item->parent_title.'</span>';
 								}
@@ -553,10 +554,10 @@ class Helper
 
 								// No linking if the parent category is the one the view is in
 
-								$cat_link = Route::_(RouteHelper::getCategoryRoute($item->parent_id));
+								$cat_link = Route::_(ContentRouteHleper::getCategoryRoute($item->parent_id));
 								$current_link = Uri::current();
 								if (substr( $current_link, strlen( $current_link ) - strlen( $cat_link ) ) != $cat_link) { // the current links does not end with the parent category link
-									$info_block .= '<a class="detail_data" href="'.Route::_(RouteHelper::getCategoryRoute($item->parent_id)).'">'.$item->parent_title.'</a>';
+									$info_block .= '<a class="detail_data" href="'.Route::_(ContentRouteHleper::getCategoryRoute($item->parent_id)).'">'.$item->parent_title.'</a>';
 								} else {
 									$info_block .= '<span class="detail_data">'.$item->parent_title.'</span>';
 								}
@@ -593,7 +594,7 @@ class Helper
 						if ($item_params->get('link_category') && !$app->input->getBool('print')) {
 							if ($view == 'article') {
 								if (!empty($item->catslug)) {
-									$info_block .= '<a class="detail_data" href="'.Route::_(RouteHelper::getCategoryRoute($item->catslug)).'">'.$item->category_title.'</a>';
+									$info_block .= '<a class="detail_data" href="'.Route::_(ContentRouteHleper::getCategoryRoute($item->catslug)).'">'.$item->category_title.'</a>';
 								} else {
 									$info_block .= '<span class="detail_data">'.$item->category_title.'</span>';
 								}
@@ -601,10 +602,10 @@ class Helper
 
 								// No linking if the category is the one the view is in
 
-								$cat_link = Route::_(RouteHelper::getCategoryRoute($item->catid));
+								$cat_link = Route::_(ContentRouteHleper::getCategoryRoute($item->catid));
 								$current_link = Uri::current();
 								if (substr( $current_link, strlen( $current_link ) - strlen( $cat_link ) ) != $cat_link) { // the current links does not end with the category link
-									$info_block .= '<a class="detail_data" href="'.Route::_(RouteHelper::getCategoryRoute($item->catid)).'">'.$item->category_title.'</a>'; // keep linking in category view because of sub-categories
+									$info_block .= '<a class="detail_data" href="'.Route::_(ContentRouteHleper::getCategoryRoute($item->catid)).'">'.$item->category_title.'</a>'; // keep linking in category view because of sub-categories
 								} else {
 									$info_block .= '<span class="detail_data">'.$item->category_title.'</span>';
 								}
@@ -637,7 +638,7 @@ class Helper
 							if ($item_params->get('link_parent_category') && !$app->input->getBool('print')) {
 								if ($view == 'article') {
 									if (!empty($item->parent_slug)) {
-										$info_block .= '<a href="'.Route::_(RouteHelper::getCategoryRoute($item->parent_slug)).'">'.$item->parent_title.'</a>';
+										$info_block .= '<a href="'.Route::_(ContentRouteHleper::getCategoryRoute($item->parent_slug)).'">'.$item->parent_title.'</a>';
 										$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_COMBOCATEGORIESSEPARATOR');
 									} else {
 										$info_block .= $item->parent_title;
@@ -647,10 +648,10 @@ class Helper
 
 									// No linking if the parent category is the one the view is in
 
-									$cat_link = Route::_(RouteHelper::getCategoryRoute($item->parent_id));
+									$cat_link = Route::_(ContentRouteHleper::getCategoryRoute($item->parent_id));
 									$current_link = Uri::current();
 									if (substr( $current_link, strlen( $current_link ) - strlen( $cat_link ) ) != $cat_link) { // the current links does not end with the parent category link
-										$info_block .= '<a href="'.Route::_(RouteHelper::getCategoryRoute($item->parent_id)).'">'.$item->parent_title.'</a>';
+										$info_block .= '<a href="'.Route::_(ContentRouteHleper::getCategoryRoute($item->parent_id)).'">'.$item->parent_title.'</a>';
 										$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_COMBOCATEGORIESSEPARATOR');
 									} else {
 										$info_block .= $item->parent_title;
@@ -667,7 +668,7 @@ class Helper
 						if ($item_params->get('link_category') && !$app->input->getBool('print')) {
 							if ($view == 'article') {
 								if (!empty($item->catslug)) {
-									$info_block .= '<a href="'.Route::_(RouteHelper::getCategoryRoute($item->catslug)).'">'.$item->category_title.'</a>';
+									$info_block .= '<a href="'.Route::_(ContentRouteHleper::getCategoryRoute($item->catslug)).'">'.$item->category_title.'</a>';
 								} else {
 									$info_block .= $item->category_title;
 								}
@@ -675,10 +676,10 @@ class Helper
 
 								// No linking if the category is the one the view is in
 
-								$cat_link = Route::_(RouteHelper::getCategoryRoute($item->catid));
+								$cat_link = Route::_(ContentRouteHleper::getCategoryRoute($item->catid));
 								$current_link = Uri::current();
 								if (substr( $current_link, strlen( $current_link ) - strlen( $cat_link ) ) != $cat_link) { // the current links does not end with the category link
-									$info_block .= '<a href="'.Route::_(RouteHelper::getCategoryRoute($item->catid)).'">'.$item->category_title.'</a>'; // keep linking in category view because of sub-categories
+									$info_block .= '<a href="'.Route::_(ContentRouteHleper::getCategoryRoute($item->catid)).'">'.$item->category_title.'</a>'; // keep linking in category view because of sub-categories
 								} else {
 									$info_block .= $item->category_title;
 								}
@@ -1232,10 +1233,6 @@ class Helper
 								case 'alpha': usort($item_tags, "Helper::compare_tags_by_name"); break;
 							}
 
-							if ($value['info'] == 'linkedtags') {
-								JLoader::register('TagsHelperRoute', JPATH_BASE . '/components/com_tags/helpers/route.php');
-							}
-
 							if ($has_info_from_previous_detail) {
 								$info_block .= '<span class="delimiter">'.$separator.'</span>';
 							}
@@ -1269,7 +1266,7 @@ class Helper
 									}
 
 									if ($value['info'] == 'linkedtags' && !$app->input->getBool('print')) {
-										$info_block .= '<a href="'.Route::_(TagsHelperRoute::getTagRoute($tag->id . ':' . $tag->alias)).'" class="detail_data'.$tag_class_attribute.'">'.$tag->title.'</a>';
+										$info_block .= '<a href="'.Route::_(TagsRouteHelper::getTagRoute($tag->id . ':' . $tag->alias)).'" class="detail_data'.$tag_class_attribute.'">'.$tag->title.'</a>';
 									} else {
 										$info_block .= '<span class="detail_data'.$tag_class_attribute.'">'.$tag->title.'</span>';
 									}
@@ -1311,7 +1308,7 @@ class Helper
 										$info_block .= $tag->title;
 									} else {
 										if (!$app->input->getBool('print')) {
-											$info_block .= '<a href="'.Route::_(TagsHelperRoute::getTagRoute($tag->id . ':' . $tag->alias)).'">';
+											$info_block .= '<a href="'.Route::_(TagsRouteHelper::getTagRoute($tag->id . ':' . $tag->alias)).'">';
 											$info_block .= $tag->title;
 											$info_block .= '</a>';
 										} else {
@@ -1476,7 +1473,7 @@ class Helper
 
 						$info_block .= '<span class="detail_data">';
 
-						JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
+						\JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
 
 						$link = str_replace(array("tmpl=component", "print=1"), "", $item->link);
 						$link = rtrim($link, "?&amp;");
@@ -1522,9 +1519,9 @@ class Helper
 						$info_block .= '<span class="detail_data">';
 
 						if (isset($item->language)) {
-							$url  = RouteHelper::getArticleRoute($item->slug, $item->catid, $item->language);
+							$url  = ContentRouteHleper::getArticleRoute($item->slug, $item->catid, $item->language);
 						} else {
-							$url  = RouteHelper::getArticleRoute($item->slug, $item->catid);
+							$url  = ContentRouteHleper::getArticleRoute($item->slug, $item->catid);
 						}
 						$url .= '&tmpl=component&print=1&layout=default&page=' . @ $app->input->request->limitstart;
 

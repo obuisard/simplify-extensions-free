@@ -11,13 +11,13 @@ defined( '_JEXEC' ) or die;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Form\Field\GroupedListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 
-class HeadSelectField extends ListField
+class HeadSelectField extends GroupedListField
 {
 	public $type = 'HeadSelect';
 
@@ -45,7 +45,7 @@ class HeadSelectField extends ListField
 		return self::$core_fields[$origin];
 	}
 
-	protected function getOptions()
+	protected function getGroups()
 	{
 		$lang = Factory::getLanguage();
 		$lang->load('plg_content_articledetails');
@@ -62,23 +62,26 @@ class HeadSelectField extends ListField
 			}
 		}
 
-		$options = array();
+		$groups = array();
 
 		// images
 
+		$group_name = Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_IMAGEGROUP');
+		$groups[$group_name] = array();
+
 		//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_IMAGEGROUP'));
 
-		$options[] = HTMLHelper::_('select.option', 'contact', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKEDCONTACT') . ' (Pro)', 'value', 'text', $disable = true);
-		$options[] = HTMLHelper::_('select.option', 'gravatar', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_GRAVATAR') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'contact', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKEDCONTACT') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'gravatar', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_GRAVATAR') . ' (Pro)', 'value', 'text', $disable = true);
 
 		if (isset($customfields['com_users'])) {
 			$group_options = self::getFieldGroup('com_users', $customfields['com_users'], 'media');
-			$options = array_merge($options, $group_options);
+			$groups[$group_name] = array_merge($groups[$group_name], $group_options);
 		}
 
 		if (isset($customfields['com_content'])) {
 			$group_options = self::getFieldGroup('com_content', $customfields['com_content'], 'media');
-			$options = array_merge($options, $group_options);
+			$groups[$group_name] = array_merge($groups[$group_name], $group_options);
 		}
 
 		//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_IMAGEGROUP'));
@@ -89,8 +92,12 @@ class HeadSelectField extends ListField
 			if (isset($customfields['com_content']) && PluginHelper::isEnabled('fields', 'sywicon')) {
 				$group_options = self::getFieldGroup('com_content', $customfields['com_content'], 'sywicon');
 				if (!empty($group_options)) {
+
+					$group_name = Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_ICONGROUP');
+					$groups[$group_name] = array();
+
 					//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_ICONGROUP'));
-					$options = array_merge($options, $group_options);
+					$groups[$group_name] = array_merge($groups[$group_name], $group_options);
 					//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_ICONGROUP'));
 				}
 			}
@@ -99,30 +106,34 @@ class HeadSelectField extends ListField
 		// calendars
 
 		if ($this->location == 'header') {
+
+			$group_name = Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CALENDARGROUP');
+			$groups[$group_name] = array();
+
 			//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CALENDARGROUP'));
 
-			$options[] = HTMLHelper::_('select.option', 'calendar', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CALENDAR'), 'value', 'text', $disable = false);
+			$groups[$group_name][] = HTMLHelper::_('select.option', 'calendar', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CALENDAR'), 'value', 'text', $disable = false);
 
 			if (isset($customfields['com_content'])) {
 				$group_options = self::getFieldGroup('com_content', $customfields['com_content'], 'calendar');
-				$options = array_merge($options, $group_options);
+				$groups[$group_name] = array_merge($groups[$group_name], $group_options);
 			}
 
 			//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CALENDARGROUP'));
 		}
 
 		// merge any additional options in the XML definition.
-		$options = array_merge(parent::getOptions(), $options);
+		$groups = array_merge(parent::getGroups(), $groups);
 
-		return $options;
+		return $groups;
 	}
 
 	protected function getFieldGroup($option, $fields, $type)
 	{
-		$options = array();
+		$groups = array();
 
 		if (empty($fields)) {
-			return $options;
+			return $groups;
 		}
 
 		// organize the fields according to their group
@@ -159,6 +170,10 @@ class HeadSelectField extends ListField
 		}
 
 		if ($fields_exist) {
+
+			$group_name = Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JOOMLAFIELDS');
+			$groups[$group_name] = array();
+
 			//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JOOMLAFIELDS'));
 
 			foreach ($fieldsPerGroup as $group_id => $groupFields) {
@@ -168,14 +183,14 @@ class HeadSelectField extends ListField
 				}
 
 				foreach ($groupFields as $field) {
-					$options[] = HTMLHelper::_('select.option', $prefix.':'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
+					$groups[$group_name][] = HTMLHelper::_('select.option', $prefix.':'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
 				}
 			}
 
 			//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JOOMLAFIELDS'));
 		}
 
-		return $options;
+		return $groups;
 	}
 
 	public function setup(\SimpleXMLElement $element, $value, $group = null)

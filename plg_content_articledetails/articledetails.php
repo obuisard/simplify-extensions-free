@@ -396,7 +396,7 @@ class plgContentArticleDetails extends CMSPlugin
 			if (strtotime($row->publish_up) > strtotime(Factory::getDate())) {
 				$publishing_status_output .= '<span class="article_notpublishedyet label label-warning">'.Text::_('JNOTPUBLISHEDYET').'</span>';
 			}
-			if ((strtotime($row->publish_down) < strtotime(Factory::getDate())) && $row->publish_down != Factory::getDbo()->getNullDate()) {
+			if ((strtotime($row->publish_down) < strtotime(Factory::getDate())) && $row->publish_down != NULL) {
 				$publishing_status_output .= '<span class="article_expired label label-warning">'.Text::_('JEXPIRED').'</span>';
 			}
 

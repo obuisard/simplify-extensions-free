@@ -11,12 +11,12 @@ defined( '_JEXEC' ) or die;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Form\Field\GroupedListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 
-class DetailSelectField extends ListField
+class DetailSelectField extends GroupedListField
 {
 	public $type = 'DetailSelect';
 
@@ -31,47 +31,49 @@ class DetailSelectField extends ListField
 		return self::$core_fields;
 	}
 
-	protected function getOptions()
+	protected function getGroups()
 	{
-		$options = array();
+		$groups = array();
 
-		$options[] = HTMLHelper::_('select.option', 'hits', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_HITS'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'rating', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_RATING'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'author', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_AUTHOR'), 'value', 'text', $disable = false);
+		$groups['-'] = array();
+
+		$groups['-'][] = HTMLHelper::_('select.option', 'hits', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_HITS'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'rating', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_RATING'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'author', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_AUTHOR'), 'value', 'text', $disable = false);
 
 		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler') && ComponentHelper::isEnabled('com_comprofiler')) {
-			$options[] = HTMLHelper::_('select.option', 'authorcb', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_AUTHORCB'), 'value', 'text', $disable = false);
+			$groups['-'][] = HTMLHelper::_('select.option', 'authorcb', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_AUTHORCB'), 'value', 'text', $disable = false);
 		}
 
-		$options[] = HTMLHelper::_('select.option', 'created', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CREATEDDATE'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'modified', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_MODIFIEDDATE'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'published', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_PUBLISHEDDATE'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'finished', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_FINISHEDDATE'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'createdtime', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CREATEDTIME'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'modifiedtime', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_MODIFIEDTIME'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'publishedtime', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_PUBLISHEDTIME'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'finishedtime', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_FINISHEDTIME'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'parentcategory', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_PARENTCATEGORY'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'category', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CATEGORY'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'combocategories', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_COMBOCATEGORIES'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'tags', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_TAGS'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'linkedtags', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKEDTAGS'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'keywords', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_KEYWORDS'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'keywordssearch', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_KEYWORDSSEARCH'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'keywordsfinder', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_KEYWORDSFINDER'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'linka', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKA'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'linkb', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKB'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'linkc', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKC'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'links', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKS'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'linksnl', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKSNEWLINE'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'share', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_SHAREICONS'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'email', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_EMAIL'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'print', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_PRINT'), 'value', 'text', $disable = false);
-		$options[] = HTMLHelper::_('select.option', 'associations', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_ASSOCIATIONS'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'created', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CREATEDDATE'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'modified', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_MODIFIEDDATE'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'published', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_PUBLISHEDDATE'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'finished', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_FINISHEDDATE'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'createdtime', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CREATEDTIME'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'modifiedtime', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_MODIFIEDTIME'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'publishedtime', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_PUBLISHEDTIME'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'finishedtime', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_FINISHEDTIME'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'parentcategory', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_PARENTCATEGORY'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'category', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CATEGORY'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'combocategories', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_COMBOCATEGORIES'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'tags', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_TAGS'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'linkedtags', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKEDTAGS'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'keywords', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_KEYWORDS'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'keywordssearch', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_KEYWORDSSEARCH'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'keywordsfinder', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_KEYWORDSFINDER'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'linka', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKA'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'linkb', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKB'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'linkc', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKC'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'links', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKS'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'linksnl', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKSNEWLINE'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'share', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_SHAREICONS'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'email', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_EMAIL'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'print', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_PRINT'), 'value', 'text', $disable = false);
+		$groups['-'][] = HTMLHelper::_('select.option', 'associations', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_ASSOCIATIONS'), 'value', 'text', $disable = false);
 
 		if (File::exists(JPATH_ROOT . '/components/com_jcomments/jcomments.php')) {
-			$options[] = HTMLHelper::_('select.option', 'jcommentscount', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JCOMMENTSCOUNT'), 'value', 'text', $disable = false);
-			$options[] = HTMLHelper::_('select.option', 'linkedjcommentscount', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKEDJCOMMENTSCOUNT'), 'value', 'text', $disable = false);
+			$groups['-'][] = HTMLHelper::_('select.option', 'jcommentscount', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JCOMMENTSCOUNT'), 'value', 'text', $disable = false);
+			$groups['-'][] = HTMLHelper::_('select.option', 'linkedjcommentscount', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKEDJCOMMENTSCOUNT'), 'value', 'text', $disable = false);
 		}
 
 		// get Joomla! fields
@@ -112,6 +114,10 @@ class DetailSelectField extends ListField
 			// loop trough the groups
 
 			if ($fields_exist) {
+
+				$group_name = Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JOOMLAFIELDS');
+				$groups[$group_name] = array();
+
 				//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JOOMLAFIELDS'));
 
 				foreach ($fieldsPerGroup as $group_id => $groupFields) {
@@ -121,7 +127,7 @@ class DetailSelectField extends ListField
 					}
 
 					foreach ($groupFields as $field) {
-						$options[] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
+						$groups[$group_name][] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
 					}
 				}
 
@@ -130,9 +136,9 @@ class DetailSelectField extends ListField
 		}
 
 		// Merge any additional options in the XML definition.
-		$options = array_merge(parent::getOptions(), $options);
+		$groups = array_merge(parent::getGroups(), $groups);
 
-		return $options;
+		return $groups;
 	}
 }
 ?>
