@@ -26,7 +26,7 @@
 		<language tag="tr-TR">tr-TR/tr-TR.pkg_weblinklogos.sys.ini</language>
 	</languages>
  	<files folder="packages">
-		<file type="module" id="weblinklogos" client="site">mod_weblinklogo.zip</file>
+		<file type="module" id="weblinklogos" client="site">mod_weblinklogos.zip</file>
 	</files>
 	<updateservers>
 		<server type="extension" priority="1" name="Weblink Logos auto updater">https://updates.simplifyyourweb.com/free/weblinklogos/weblinklogos-pkg-update.xml</server>
