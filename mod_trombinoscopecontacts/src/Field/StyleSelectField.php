@@ -26,8 +26,8 @@ class StyleSelectField extends DynamicSingleSelect
 
 		$lang = Factory::getLanguage();
 
-		$path = '/media/mod_trombinoscope/styles/themes';
-		$imagepath = '/media/mod_trombinoscope/images/themes';
+		$path = '/media/mod_trombinoscopecontacts/styles/themes';
+		$imagepath = '/media/mod_trombinoscopecontacts/images/themes';
 
 		$optionsArray = Folder::folders(JPATH_SITE.$path);
 

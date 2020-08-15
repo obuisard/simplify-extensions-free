@@ -80,7 +80,7 @@
 				
 <!-- 				<field type="sywextensionpresencetest" title="Trombinoscope Contacts Pro" description="MOD_TROMBINOSCOPE_INFO_PROVERSION"  -->
 <!-- 					extensiontype="component" extensionelement="com_trombinoscopeextended" -->
-<!-- 					imagesrc="media/mod_trombinoscope/images/logo_pro.png" -->
+<!-- 					imagesrc="media/mod_trombinoscopecontacts/images/logo_pro.png" -->
 <!-- 					downloadlink="https://simplifyyourweb.com/downloads/trombinoscope-contacts-pro" downloadtext="MOD_TROMBINOSCOPE_INFO_PROVERSIONDOWLOAD" /> -->
 
 <!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
@@ -682,8 +682,8 @@
 						<option value="1">JYES</option>
 					</field>
 					
-					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_GDTEST" style="warning" showon="s_pic:1[AND]crop_pic:1" />
-					<field type="gdtest" showon="s_pic:1[AND]crop_pic:1" />
+<!-- 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_GDTEST" style="warning" showon="s_pic:1[AND]crop_pic:1" /> -->
+					<field type="gdtest" message="MOD_TROMBINOSCOPE_MESSAGE_GDTEST" showon="s_pic:1[AND]crop_pic:1" />
 					
 					<field name="filter" type="sywimagefiltermultipicker" default="none" selectionmax="2" filters="blur,sharpen,sepia,grayscale,sketch,negate,emboss,edgedetect" showon="s_pic:1[AND]crop_pic:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_IMAGEFILTER_LABEL" 
@@ -1092,6 +1092,10 @@
 						
 				<fieldset name="advanced_general" label="">
 				
+					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_TROMBINOSCOPE_FIELD_LAYOUTSUFFIX_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_LAYOUTSUFFIX_DESC" />
+				
 					<field name="site_mode" type="list" default="adv" 
 						label="MOD_TROMBINOSCOPE_FIELD_SITEMODE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_SITEMODE_DESC">
@@ -1196,8 +1200,8 @@
 				<fieldset name="advanced_locale" label="MOD_TROMBINOSCOPE_LOCALES_LABEL">
 <!-- 				<field type="title" title="MOD_TROMBINOSCOPE_LOCALES_LABEL" /> -->
 				
-					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_INTLFORSORT" style="warning" />
-					<field type="phpextensiontest" extension="intl" />
+<!-- 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_INTLFORSORT" style="warning" /> -->
+					<field type="phpextensiontest" extension="intl" message="MOD_TROMBINOSCOPE_MESSAGE_INTLFORSORT" />
 					
 					<field name="sort_locale" type="text" default="en_GB"
 						label="MOD_TROMBINOSCOPE_FIELD_SORTLOCALE_LABEL" 

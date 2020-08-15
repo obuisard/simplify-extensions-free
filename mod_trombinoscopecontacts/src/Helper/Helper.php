@@ -440,11 +440,11 @@ abstract class Helper
 
 		// date filter
 
-		$nullDate = $db->Quote($db->getNullDate());
-		$nowDate = $db->Quote(Factory::getDate()->toSql());
-		$query->where('cd.published = 1');
-		$query->where('(cd.publish_up = '.$nullDate.' OR cd.publish_up <= '.$nowDate.')');
-		$query->where('(cd.publish_down = '.$nullDate.' OR cd.publish_down >= '.$nowDate.')');
+		//$nullDate = $db->quote($db->getNullDate());
+		$nowDate = $db->quote(Factory::getDate()->toSql());
+		$query->where($db->quoteName('cd.published') . ' = 1');
+		$query->where('(' . $db->quoteName('cd.publish_up') . ' IS NULL OR ' . $db->quoteName('cd.publish_up') . ' <= '.$nowDate.')');
+		$query->where('(' . $db->quoteName('cd.publish_down') . ' IS NULL OR ' . $db->quoteName('cd.publish_down') . ' >= '.$nowDate.')');
 
 		// language filter
 
@@ -2400,7 +2400,7 @@ abstract class Helper
 
 		$minified = (JDEBUG) ? '' : '-min';
 
-		Factory::getDocument()->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscope/css/common_styles' . $minified . '.css');
+		Factory::getDocument()->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscopecontacts/css/common_styles' . $minified . '.css');
 
 		self::$commonStylesLoaded = true;
 	}
@@ -2422,10 +2422,10 @@ abstract class Helper
 			$prefix = 'substitute';
 		}
 
-		if (!File::exists(JPATH_ROOT . '/media/mod_trombinoscope/css/' . $prefix . '_styles-min.css')) {
-			$doc->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscope/css/' . $prefix . '_styles.css');
+		if (!File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css')) {
+			$doc->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles.css');
 		} else {
-			$doc->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscope/css/' . $prefix . '_styles-min.css');
+			$doc->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css');
 		}
 
 		self::$userStylesLoaded = true;
