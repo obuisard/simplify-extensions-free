@@ -11,6 +11,7 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
@@ -18,51 +19,105 @@ use Joomla\Database\Exception\ExecutionFailureException;
 /**
  * Script file for the packaged Latest News Enhanced module
  */
-class pkg_latestnewsenhancedInstallerScript
+class Pkg_LatestNewsEnhancedInstallerScript
 {
-	static $version = '4.15.0';
-	static $minimum_needed_library_version = '2.0.0';
-	static $available_languages = array('da-DK', 'de-DE', 'en-GB', 'es-ES', 'fi-FI', 'fr-FR', 'hu-HU', 'it-IT', 'ja-JP', 'nl-NL', 'pl-PL', 'pt-BR', 'ru-RU', 'sl-SI', 'tr-TR');
-	static $download_link = 'http://www.simplifyyourweb.com/downloads/syw-extension-library';
-	static $changelog_link = 'http://www.simplifyyourweb.com/free-products/latest-news-enhanced/file/162-latest-news-enhanced';
-	static $translation_link = 'https://simplifyyourweb.com/translators';
+	/**
+	 * The version number of the extension
+	 */
+	protected $release;
+
+	/**
+	 * The extension name
+	 */
+	protected $extension;
+
+	/*
+	 * Minimum extensions library version required
+	 */
+	protected $minimumLibrary = '2.0.0';
+
+	/**
+	 * Minimum Joomla! version required to install the extension
+	 */
+	protected $minimumJoomla = '4.0.0-beta3';
+
+	/**
+	 * Available languages
+	 */
+	protected $availableLanguages = array('da-DK', 'de-DE', 'en-GB', 'es-ES', 'fi-FI', 'fr-FR', 'hu-HU', 'it-IT', 'ja-JP', 'nl-NL', 'pl-PL', 'pt-BR', 'ru-RU', 'sl-SI', 'tr-TR');
+
+	/**
+	 * Extensions library link for download
+	 */
+	protected $libraryDownloadLink = 'https://simplifyyourweb.com/downloads/syw-extension-library';
+
+	/**
+	 * Link to the change logs
+	 */
+	protected $changelogLink = 'http://www.simplifyyourweb.com/free-products/latest-news-enhanced/file/162-latest-news-enhanced';
+
+	/**
+	 * Link to the translation page
+	 */
+	protected $translationLink = 'https://simplifyyourweb.com/translators';
+
+	/**
+	 * Link to the quick start page
+	 */
+	protected $quickstartLink = 'https://simplifyyourweb.com/documentation/latest-news/quickstart-guide';
+
+	/**
+	 * A list of files to be deleted
+	 */
+	protected $deleteFiles = array();
+
+	/**
+	 * A list of folders to be deleted
+	 */
+	protected $deleteFolders = array();
 
 	/**
 	 * Called before an install/update/uninstall method
 	 *
+	 * @param string     $action     Which action is happening (install|uninstall|discover_install|update)
+	 * @param Installer  $installer  The class calling this method
+	 *
 	 * @return boolean True on success
 	 */
-	public function preflight($type, $parent)
+	public function preflight($action, $installer)
 	{
-		if ($type == 'uninstall') {
+		if ($action === 'uninstall') {
 			return true;
 		}
 
-	    // make sure we are under Joomla 4.0 or over
+		// make sure we are under Joomla 4.0 or over
 
-	    if (version_compare(JVERSION, '3.20.0', 'lt')) {
-	        Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', '4.0'), 'error');
-	        return false;
-	    }
+		if (version_compare(JVERSION, $this->minimumJoomla, 'lt')) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', $this->minimumJoomla), 'error');
+			return false;
+		}
 
-   		// check if syw library is present
+		$this->extension = $installer->getName();
+		$this->release = $installer->getManifest()->version;
 
-	    if (!Folder::exists(JPATH_ROOT.'/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw') || !PluginHelper::isEnabled('system', 'syw') || !SYW\Library\Version::isCompatible(self::$minimum_needed_library_version)) {
+		// install the library and its plugin if missing or outdated
 
-   			if (!$this->installOrUpdatePackage($parent, 'lib_syw')) {
-   				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.self::$download_link.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+	    if (!Folder::exists(JPATH_ROOT.'/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw') || !PluginHelper::isEnabled('system', 'syw') || !SYW\Library\Version::isCompatible($this->minimumLibrary)) {
+
+   			if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
+   				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
    				return false;
    			}
 
-   			if (!$this->installOrUpdatePackage($parent, 'plg_system_syw')) {
-   				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.self::$download_link.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+   			if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
+   				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
    				return false;
    			}
 
    			// enable the library plugin
    			$this->enablePlugin('plugin', 'syw', 'system');
 
-   			Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', self::$minimum_needed_library_version), 'message');
+   			Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
    		}
 
 		return true;
@@ -73,209 +128,113 @@ class pkg_latestnewsenhancedInstallerScript
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function install($parent) {}
+	public function install($installer) {}
 
 	/**
 	 * Called on uninstallation
 	 */
-	public function uninstall($parent) {}
+	public function uninstall($installer) {}
 
 	/**
 	 * Called on update
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function update($parent) {}
+	public function update($installer) {}
 
 	/**
 	 * Called after an install/update/uninstall method
 	 *
 	 * @return boolean True on success
 	 */
-	public function postflight($type, $parent)
+	public function postflight($action, $installer)
 	{
-		if ($type == 'uninstall') {
+		if ($action === 'uninstall') {
 			return true;
 		}
 
    	    echo '<p style="margin: 10px 0 20px 0">';
-   	    echo '<img src="../media/mod_latestnewsenhanced/images/logo.png" />';
-   	    echo '<br /><br /><span class="label">'.Text::sprintf('PKG_LATESTNEWSENHANCED_VERSION', self::$version).'</span>';
+   	    echo HTMLHelper::image('mod_latestnewsenhanced/logo.png', 'Latest News Enhanced', null, true);
+   	    echo '<br /><br /><span class="badge badge-dark">'.Text::sprintf('PKG_LATESTNEWSENHANCED_VERSION', $this->release).'</span>';
    	    echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
    	    echo '</p>';
 
    	    // language test
 
    	    $current_language = Factory::getLanguage()->getTag();
-   	    if (!in_array($current_language, self::$available_languages)) {
-   	        Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . self::$translation_link . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
+   	    if (!in_array($current_language, $this->availableLanguages)) {
+   	        //Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
+   	    	echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
    	    }
 
-   	    // link to Quickstart
+   	    if ($action === 'install') {
 
-   	    $message = Text::sprintf('PKG_LATESTNEWSENHANCED_INFO_LEARN', 'https://simplifyyourweb.com/documentation/latest-news/quickstart-guide');
-   	    $message .= '<br /><br /><a href="https://simplifyyourweb.com/documentation/latest-news/quickstart-guide" target="_blank"><img src="../media/mod_latestnewsenhanced/images/quickstart.png" /></a>';
+	   	    // link to Quickstart
 
-    	Factory::getApplication()->enqueueMessage($message, 'notice');
+	   	    $message = Text::sprintf('PKG_LATESTNEWSENHANCED_INFO_LEARN', $this->quickstartLink);
+	   	    $message .= '<br /><br /><a href="' . $this->quickstartLink . '" target="_blank">' . HTMLHelper::image('mod_latestnewsenhanced/quickstart.png', 'Quick Start', null, true) . '</a>';
 
-    	// remove the old module update site
+	   	    //Factory::getApplication()->enqueueMessage($message, 'notice');
+	   	    echo '<div class="alert alert-info">' . $message . '</div>';
+   	    }
 
-//     	$this->removeUpdateSite('module', 'mod_latestnewsenhanced');
-//     	$this->removeUpdateSite('package', 'pkg_latestnewsenhanced', '', 'http://www.barejoomlatemplates.com/autoupdates/latestnewsenhanced/latestnewsenhanced-pkg-update.xml');
-//     	$this->removeUpdateSite('package', 'pkg_latestnewsenhanced', '', 'http://www.barejoomlatemplates.com/autoupdates/latestnewsenhanced/latestnewsenhanced-pkg-v4-update.xml');
-
-	    if ($type == 'update') {
+	    if ($action === 'update') {
 
 	        // update warning
 
-	        Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_WARNING_RELEASENOTES', self::$changelog_link), 'warning');
+	    	//Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_WARNING_RELEASENOTES', $this->changelogLink), 'warning');
+	    	echo '<div class="alert alert-warning">' . Text::sprintf('PKG_LATESTNEWSENHANCED_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
 
-	        // delete unnecessary files
+	    	// overrides warning
 
-	        $files = array();
+	    	$defaultemplate = $this->getDefaultTemplate();
 
-// 	        $files[] = '/modules/mod_latestnewsenhanced/animationmaster.js.php';
-// 	        $files[] = '/modules/mod_latestnewsenhanced/stylemaster.css.php';
-// 	        $files[] = '/modules/mod_latestnewsenhanced/stylemaster.js.php';
+	    	if ($defaultemplate) {
+	    		$overrides_path = JPATH_ROOT.'/templates/'.$defaultemplate.'/html/';
 
-	        foreach ($files as $file) {
-	            if (File::exists(JPATH_ROOT.$file) && !File::delete(JPATH_ROOT.$file)) {
-	                Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_ERROR_DELETINGFILEFOLDER', $file), 'warning');
-	            }
-	        }
+	    		if (Folder::exists($overrides_path.'mod_latestnewsenhanced')) {
+	    			Factory::getApplication()->enqueueMessage(Text::_('PKG_LATESTNEWSENHANCED_WARNING_OVERRIDES'), 'warning');
+	    		}
+	    	}
 
 	        // remove old cached headers which may interfere with fixes, updates or new additions
-
-	        $filenames_to_delete = array();
 
 	        if (function_exists('glob')) {
 
 	            $filenames = glob(JPATH_SITE.'/media/cache/mod_latestnewsenhanced/style_*.{css,js}', GLOB_BRACE);
 	            if ($filenames != false) {
-	                $filenames_to_delete = array_merge($filenames_to_delete, $filenames);
+	            	$this->deleteFiles = array_merge($this->deleteFiles, $filenames);
 	            }
 
 	            $filenames = glob(JPATH_SITE.'/media/cache/mod_latestnewsenhanced/animation_*.js');
 	            if ($filenames != false) {
-	                $filenames_to_delete = array_merge($filenames_to_delete, $filenames);
+	            	$this->deleteFiles = array_merge($this->deleteFiles, $filenames);
 	            }
-
-	            // from previous versions
-
-// 	            $filenames = glob(JPATH_ROOT.'/modules/mod_latestnewsenhanced/stylemaster_*.{css,js}', GLOB_BRACE);
-// 	            if ($filenames != false) {
-// 	                $filenames_to_delete = array_merge($filenames_to_delete, $filenames);
-// 	            }
-
-// 	            $filenames = glob(JPATH_ROOT.'/modules/mod_latestnewsenhanced/animationmaster_*.js');
-// 	            if ($filenames != false) {
-// 	                $filenames_to_delete = array_merge($filenames_to_delete, $filenames);
-// 	            }
-	        }
-
-	        foreach ($filenames_to_delete as $filename) {
-	            if (File::exists($filename) && !File::delete($filename)) {
-	                Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
-	            }
-	        }
-
-	        // overrides warning
-
-	        $defaultemplate = $this->getDefaultTemplate();
-
-	        if ($defaultemplate) {
-	            $overrides_path = JPATH_ROOT.'/templates/'.$defaultemplate.'/html/';
-
-	            if (Folder::exists($overrides_path.'mod_latestnewsenhanced')) {
-	                Factory::getApplication()->enqueueMessage(Text::_('PKG_LATESTNEWSENHANCED_WARNING_OVERRIDES'), 'warning');
-	            }
-	        }
-
-	        // update old instances to the new subforms
-
-	        $db = Factory::getDBO();
-
-	        $query = $db->getQuery(true);
-
-	        $query->select('id');
-	        $query->select('title');
-	        $query->select('params');
-	        $query->from('#__modules');
-	        $query->where($db->quoteName('module').'='.$db->quote('mod_latestnewsenhanced'));
-
-	        $db->setQuery($query);
-
-	        $lne_instances = array();
-	        try {
-	        	$lne_instances = $db->loadObjectList();
-	        } catch (ExecutionFailureException $e) {
-	        	Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
-	        	return false;
-	        }
-
-	        foreach ($lne_instances as $lne_instance) {
-
-	        	// get info fields and transform them into new subform
-
-	        	$instance_params = json_decode($lne_instance->params, true);
-
-	        	if (isset($instance_params['show_icons_1'])) {
-
-		        	$j = 0;
-		        	$j_sub = 0;
-
-		        	$info_blocs = array();
-
-		        	while ($j < 5) {
-		        		if (isset($instance_params['info_'.($j + 1)]) && $instance_params['info_'.($j + 1)] != 'none') {
-		        			$info_bloc = array();
-		        			$info_bloc['show_icons'] = isset($instance_params['show_icons_'.($j + 1)]) ? $instance_params['show_icons_'.($j + 1)] : 0;
-		        			$info_bloc['icon'] = '';
-		        			$info_bloc['prepend'] = isset($instance_params['prepend_'.($j + 1)]) ? $instance_params['prepend_'.($j + 1)] : '';
-		        			$info_bloc['extra_classes'] = isset($instance_params['extra_classes_'.($j + 1)]) ? $instance_params['extra_classes_'.($j + 1)] : '';
-		        			$info_bloc['info'] = $instance_params['info_'.($j + 1)];
-		        			$info_bloc['new_line'] = isset($instance_params['new_line_'.($j + 1)]) ? $instance_params['new_line_'.($j + 1)] : 0;
-		        			$info_bloc['access'] =  1;
-
-		        			$info_blocs['information_blocks'.$j_sub] = $info_bloc;
-		        			$j_sub++;
-		        		}
-		        		$j++;
-		        	}
-
-		        	$instance_params['information_blocks'] = $info_blocs;
-
-		        	$j = 0;
-		        	while ($j < 5) {
-		        		unset($instance_params['show_icons_'.($j + 1)]);
-		        		unset($instance_params['prepend_'.($j + 1)]);
-		        		unset($instance_params['info_'.($j + 1)]);
-		        		if (isset($instance_params['extra_classes_'.($j + 1)])) {
-		        			unset($instance_params['extra_classes_'.($j + 1)]);
-		        		}
-		        		unset($instance_params['new_line_'.($j + 1)]);
-		        		$j++;
-		        	}
-
-		        	$query->clear();
-
-		        	$query->update('#__modules');
-		        	$query->set($db->quoteName('params').'='.$db->quote(json_encode($instance_params)));
-		        	$query->where($db->quoteName('id').'='.$db->quote($lne_instance->id));
-
-		        	$db->setQuery($query);
-
-		        	try {
-		        		$db->execute();
-		        	} catch (ExecutionFailureException $e) {
-		        		Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
-		        		return false;
-		        	}
-	        	}
 	        }
 	    }
 
+	    $this->removeFiles();
+
 	    return true;
+	}
+
+	private function removeFiles()
+	{
+		if (!empty($this->deleteFiles)) {
+			foreach ($this->deleteFiles as $filename) {
+				if (File::exists($filename) && !File::delete($filename)) {
+					Factory::getApplication()->enqueueMessage(Text::sprintf('COM_ARTICLEDETAILSPROFILES_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
+				}
+			}
+		}
+
+		if (!empty($this->deleteFolders)) {
+			foreach ($this->deleteFolders as $folder) {
+				if (Folder::exists(JPATH_ROOT.$folder) && !Folder::delete(JPATH_ROOT.$folder)) {
+					Factory::getApplication()->enqueueMessage(Text::sprintf('COM_LATESTNEWSENHANCEDPRO_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
+				}
+			}
+		}
 	}
 
 	private function getDefaultTemplate()

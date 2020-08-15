@@ -8,7 +8,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<url>http://www.simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
- 	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
+ 	<packagerurl>https://simplifyyourweb.com/</packagerurl>
 	<version>4.15.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/latestnewsenhanced/changelog.xml</changelogurl>
 	<description>PKG_LATESTNEWSENHANCED_XML_DESCRIPTION</description> 
