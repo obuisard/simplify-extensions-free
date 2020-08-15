@@ -9,6 +9,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -18,51 +19,100 @@ use Joomla\Database\Exception\ExecutionFailureException;
 /**
  * Script file of the Article Details package
  */
-class pkg_articledetailsInstallerScript
+class Pkg_ArticleDetailsInstallerScript
 {
-	static $version = '5.4.0';
-	static $minimum_needed_library_version = '2.0.0';
-	static $available_languages = array('de-DE', 'en-GB', 'es-ES', 'fa-IR', 'fi-FI', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sl-SI', 'tr-TR');
-	static $download_link = 'https://simplifyyourweb.com/downloads/syw-extension-library';
-	static $changelog_link = 'https://simplifyyourweb.com/free-products/article-details/file/364-article-details';
-	static $translation_link = 'https://simplifyyourweb.com/translators';
+	/**
+	 * The version number of the extension
+	 */
+	protected $release;
+
+	/**
+	 * The extension name
+	 */
+	protected $extension;
+
+	/*
+	 * Minimum extensions library version required
+	 */
+	protected $minimumLibrary = '2.0.0';
+
+	/**
+	 * Minimum Joomla! version required to install the extension
+	 */
+	protected $minimumJoomla = '4.0.0-beta3';
+
+	/**
+	 * Available languages
+	 */
+	protected $availableLanguages = array('de-DE', 'en-GB', 'es-ES', 'fa-IR', 'fi-FI', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sl-SI', 'tr-TR');
+
+	/**
+	 * Extensions library link for download
+	 */
+	protected $libraryDownloadLink = 'https://simplifyyourweb.com/downloads/syw-extension-library';
+
+	/**
+	 * Link to the change logs
+	 */
+	protected $changelogLink = 'https://simplifyyourweb.com/free-products/article-details/file/364-article-details';
+
+	/**
+	 * Link to the translation page
+	 */
+	protected $translationLink = 'https://simplifyyourweb.com/translators';
+
+	/**
+	 * A list of files to be deleted
+	 */
+	protected $deleteFiles = array();
+
+	/**
+	 * A list of folders to be deleted
+	 */
+	protected $deleteFolders = array();
 
 	/**
 	 * Called before an install/update/uninstall method
 	 *
+	 * @param string     $action     Which action is happening (install|uninstall|discover_install|update)
+	 * @param Installer  $installer  The class calling this method
+	 *
 	 * @return boolean True on success
 	 */
-	public function preflight($type, $parent)
+	public function preflight($action, $installer)
 	{
-		if ($type == 'uninstall') {
+		if ($action === 'uninstall') {
 			return true;
 		}
 
 		// make sure we are under Joomla 4.0 or over
 
-		if (version_compare(JVERSION, '3.20.0', 'lt')) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', '4.0'), 'error');
+		if (version_compare(JVERSION, $this->minimumJoomla, 'lt')) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', $this->minimumJoomla), 'error');
 			return false;
 		}
 
-		// check if syw library is present
+		$this->extension = $installer->getName();
+		$this->release = $installer->getManifest()->version;
 
-		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw') || !PluginHelper::isEnabled('system', 'syw') || !SYW\Library\Version::isCompatible(self::$minimum_needed_library_version)) {
+		// install the library and its plugin if missing or outdated
 
-			if (!$this->installOrUpdatePackage($parent, 'lib_syw')) {
-				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.self::$download_link.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw') || !PluginHelper::isEnabled('system', 'syw') || !SYW\Library\Version::isCompatible($this->minimumLibrary)) {
+
+			if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
+				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
 				return false;
 			}
 
-			if (!$this->installOrUpdatePackage($parent, 'plg_system_syw')) {
-				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.self::$download_link.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+			if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
+				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
 				return false;
 			}
 
 			// enable the library plugin
 			$this->enablePlugin('plugin', 'syw', 'system');
 
-			Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', self::$minimum_needed_library_version), 'message');
+			Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
 		}
 
 		return true;
@@ -73,76 +123,53 @@ class pkg_articledetailsInstallerScript
 	 *
 	 * @return boolean True on success
 	 */
-	public function install($parent) {}
+	public function install($installer) {}
 
 	/**
 	 * Called on uninstallation
 	 */
-	public function uninstall($parent) {}
+	public function uninstall($installer) {}
 
 	/**
 	 * Called on update
 	 *
 	 * @return boolean True on success
 	 */
-	public function update($parent) {}
+	public function update($installer) {}
 
 	/**
 	 * Called after an install/update/uninstall method
 	 *
 	 * @return boolean True on success
 	 */
-	public function postflight($type, $parent)
+	public function postflight($action, $installer)
 	{
-		if ($type == 'uninstall') {
+		if ($action === 'uninstall') {
 			return true;
 		}
 
 		echo '<p style="margin: 20px 0">';
-		echo '<img src="../media/plg_content_articledetails/images/logo.png" />';
-		echo '<br /><br /><span class="label">'.Text::sprintf('PKG_ARTICLEDETAILS_VERSION', self::$version).'</span>';
+		echo HTMLHelper::image('plg_content_articledetails/logo.png', 'Article Details', null, true);
+		echo '<br /><br /><span class="badge badge-dark">'.Text::sprintf('PKG_ARTICLEDETAILS_VERSION', $this->release).'</span>';
 		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
 		echo '</p>';
 
 		// language test
 
 		$current_language = Factory::getLanguage()->getTag();
-		if (!in_array($current_language, self::$available_languages)) {
-			Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . self::$translation_link . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
+		if (!in_array($current_language, $this->availableLanguages)) {
+			//Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
+			echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
 		}
 
-		// remove the old plugin update sites
-
-//   	$this->removeUpdateSite('plugin', 'articledetails', 'content', 'http://www.barejoomlatemplates.com/autoupdates/articledetails/articledetails-update.xml');
-//     	$this->removeUpdateSite('package', 'pkg_articledetails', '', 'http://www.barejoomlatemplates.com/autoupdates/articledetails/articledetails-pkg-update.xml');
-
-		if ($type == 'update') {
+		if ($action === 'update') {
 
 			// update warning
 
-			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_ARTICLEDETAILS_WARNING_RELEASENOTES', self::$changelog_link), 'warning');
-
-			// delete unnecessary files
-
-			$files = array();
-
-// 			$files[] = '/plugins/content/articledetails/fields/styleselect.php';
-// 			$files[] = '/plugins/content/articledetails/images/glyphicons-halflings.png';
-// 			$files[] = '/plugins/content/articledetails/images/preview.png';
-// 			$files[] = '/plugins/content/articledetails/stylemaster.css.php';
-// 			$files[] = '/plugins/content/articledetails/printmaster.css.php';
-// 			$files[] = '/plugins/content/articledetails/style.css';
-// 			$files[] = '/plugins/content/articledetails/print.css';
-
-			foreach ($files as $file) {
-				if (File::exists(JPATH_ROOT.$file) && !File::delete(JPATH_ROOT.$file)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_ARTICLEDETAILS_ERROR_DELETINGFILEFOLDER', $file), 'warning');
-				}
-			}
+			//Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_ARTICLEDETAILS_WARNING_RELEASENOTES', $this->changelogLink), 'warning');
+			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_ARTICLEDETAILS_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
 
 			// remove old cached headers which may interfere with fixes, updates or new additions
-
-			$filenames_to_delete = array();
 
 			if (function_exists('glob')) {
 
@@ -150,188 +177,38 @@ class pkg_articledetailsInstallerScript
 
 				$filenames = glob(JPATH_SITE.'/media/cache/plg_content_articledetails/style_*.css');
 				if ($filenames != false) {
-					$filenames_to_delete = array_merge($filenames_to_delete, $filenames);
+					$this->deleteFiles = array_merge($this->deleteFiles, $filenames);
 				}
 
 				$filenames = glob(JPATH_SITE.'/media/cache/plg_content_articledetails/print_*.css');
 				if ($filenames != false) {
-					$filenames_to_delete = array_merge($filenames_to_delete, $filenames);
-				}
-			}
-
-			foreach ($filenames_to_delete as $filename) {
-				if (File::exists($filename) && !File::delete($filename)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_ARTICLEDETAILS_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
-				}
-			}
-
-			// move old fields to new subforms
-
-			$plugin = PluginHelper::getPlugin('content', 'articledetails');
-
-			if (is_object($plugin) && !empty($plugin->params)) {
-
-				$plugin_params = json_decode($plugin->params, true);
-
-				$changes_made = false;
-
-				if (isset($plugin_params['show_icons_b1'])) {
-
-					$changes_made = true;
-
-					$j = 0;
-					$j_sub = 0;
-
-					$info_blocs = array();
-
-					while ($j < 3) {
-						if (isset($plugin_params['info_b'.($j + 1)]) && $plugin_params['info_b'.($j + 1)] != 'none') {
-							$info_bloc = array();
-							$info_bloc['show_icons'] = isset($plugin_params['show_icons_b'.($j + 1)]) ? $plugin_params['show_icons_b'.($j + 1)] : 0;
-							$info_bloc['icon'] = '';
-							$info_bloc['prepend'] = isset($plugin_params['prepend_b'.($j + 1)]) ? $plugin_params['prepend_b'.($j + 1)] : '';
-							$info_bloc['append'] = '';
-							$info_bloc['info'] = $plugin_params['info_b'.($j + 1)];
-							$info_bloc['extra_classes'] = isset($plugin_params['extra_classes_b'.($j + 1)]) ? $plugin_params['extra_classes_b'.($j + 1)] : '';
-							$info_bloc['new_line'] = isset($plugin_params['new_line_b'.($j + 1)]) ? $plugin_params['new_line_b'.($j + 1)] : 0;
-							$info_bloc['showing_in'] = isset($plugin_params['showing_in_b'.($j + 1)]) ? $plugin_params['showing_in_b'.($j + 1)] : '';
-							$info_bloc['access'] = 1;
-
-							$info_blocs['information_blocks'.$j_sub] = $info_bloc;
-							$j_sub++;
-						}
-						$j++;
-					}
-
-					$j = 0;
-					while ($j < 3) {
-						unset($plugin_params['show_icons_b'.($j + 1)]);
-						unset($plugin_params['prepend_b'.($j + 1)]);
-						unset($plugin_params['info_b'.($j + 1)]);
-						unset($plugin_params['extra_classes_b'.($j + 1)]);
-						unset($plugin_params['new_line_b'.($j + 1)]);
-						unset($plugin_params['showing_in_b'.($j + 1)]);
-						$j++;
-					}
-
-					if (!empty($info_blocs)) {
-						$plugin_params['before_title_information_blocks'] = $info_blocs;
-					}
-				}
-
-				if (isset($plugin_params['show_icons_1'])) {
-
-					$changes_made = true;
-
-					$j = 0;
-					$j_sub = 0;
-
-					$info_blocs = array();
-
-					while ($j < 9) {
-						if (isset($plugin_params['info_'.($j + 1)]) && $plugin_params['info_'.($j + 1)] != 'none') {
-							$info_bloc = array();
-							$info_bloc['show_icons'] = isset($plugin_params['show_icons_'.($j + 1)]) ? $plugin_params['show_icons_'.($j + 1)] : 0;
-							$info_bloc['icon'] = '';
-							$info_bloc['prepend'] = isset($plugin_params['prepend_'.($j + 1)]) ? $plugin_params['prepend_'.($j + 1)] : '';
-							$info_bloc['append'] = '';
-							$info_bloc['info'] = $plugin_params['info_'.($j + 1)];
-							$info_bloc['extra_classes'] = isset($plugin_params['extra_classes_'.($j + 1)]) ? $plugin_params['extra_classes_'.($j + 1)] : '';
-							$info_bloc['new_line'] = isset($plugin_params['new_line_'.($j + 1)]) ? $plugin_params['new_line_'.($j + 1)] : 0;
-							$info_bloc['showing_in'] = isset($plugin_params['showing_in_'.($j + 1)]) ? $plugin_params['showing_in_'.($j + 1)] : '';
-							$info_bloc['access'] = 1;
-
-							$info_blocs['information_blocks'.$j_sub] = $info_bloc;
-							$j_sub++;
-						}
-						$j++;
-					}
-
-					$j = 0;
-					while ($j < 9) {
-						unset($plugin_params['show_icons_'.($j + 1)]);
-						unset($plugin_params['prepend_'.($j + 1)]);
-						unset($plugin_params['info_'.($j + 1)]);
-						unset($plugin_params['extra_classes_'.($j + 1)]);
-						unset($plugin_params['new_line_'.($j + 1)]);
-						unset($plugin_params['showing_in_'.($j + 1)]);
-						$j++;
-					}
-
-					if (!empty($info_blocs)) {
-						$plugin_params['after_title_information_blocks'] = $info_blocs;
-					}
-				}
-
-				if (isset($plugin_params['show_icons_foot1'])) {
-
-					$changes_made = true;
-
-					$j = 0;
-					$j_sub = 0;
-
-					$info_blocs = array();
-
-					while ($j < 3) {
-						if (isset($plugin_params['info_foot'.($j + 1)]) && $plugin_params['info_foot'.($j + 1)] != 'none') {
-							$info_bloc = array();
-							$info_bloc['show_icons'] = isset($plugin_params['show_icons_foot'.($j + 1)]) ? $plugin_params['show_icons_foot'.($j + 1)] : 0;
-							$info_bloc['icon'] = '';
-							$info_bloc['prepend'] = isset($plugin_params['prepend_foot'.($j + 1)]) ? $plugin_params['prepend_foot'.($j + 1)] : '';
-							$info_bloc['append'] = '';
-							$info_bloc['info'] = $plugin_params['info_foot'.($j + 1)];
-							$info_bloc['extra_classes'] = isset($plugin_params['extra_classes_foot'.($j + 1)]) ? $plugin_params['extra_classes_foot'.($j + 1)] : '';
-							$info_bloc['new_line'] = isset($plugin_params['new_line_foot'.($j + 1)]) ? $plugin_params['new_line_foot'.($j + 1)] : 0;
-							$info_bloc['showing_in'] = 2;
-							$info_bloc['access'] = 1;
-
-							$info_blocs['information_blocks'.$j_sub] = $info_bloc;
-							$j_sub++;
-						}
-						$j++;
-					}
-
-					$j = 0;
-					while ($j < 3) {
-						unset($plugin_params['show_icons_foot'.($j + 1)]);
-						unset($plugin_params['prepend_foot'.($j + 1)]);
-						unset($plugin_params['info_foot'.($j + 1)]);
-						unset($plugin_params['extra_classes_foot'.($j + 1)]);
-						unset($plugin_params['new_line_foot'.($j + 1)]);
-						unset($plugin_params['showing_in_foot'.($j + 1)]);
-						$j++;
-					}
-
-					if (!empty($info_blocs)) {
-						$plugin_params['footer_information_blocks'] = $info_blocs;
-					}
-				}
-
-				if ($changes_made) {
-
-					$db = Factory::getDBO();
-
-					$query = $db->getQuery(true);
-
-					$query->update('#__extensions');
-					$query->set($db->quoteName('params').'='.$db->quote(json_encode($plugin_params)));
-					$query->where($db->quoteName('type').'='.$db->quote('plugin'));
-					$query->where($db->quoteName('folder').'='.$db->quote('content'));
-					$query->where($db->quoteName('element').'='.$db->quote('articledetails'));
-
-					$db->setQuery($query);
-
-					try {
-						$db->execute();
-					} catch (ExecutionFailureException $e) {
-						Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
-						return false;
-					}
+					$this->deleteFiles = array_merge($this->deleteFiles, $filenames);
 				}
 			}
 		}
 
+		$this->removeFiles();
+
 		return true;
+	}
+
+	private function removeFiles()
+	{
+		if (!empty($this->deleteFiles)) {
+			foreach ($this->deleteFiles as $filename) {
+				if (File::exists($filename) && !File::delete($filename)) {
+					Factory::getApplication()->enqueueMessage(Text::sprintf('COM_ARTICLEDETAILSPROFILES_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
+				}
+			}
+		}
+
+		if (!empty($this->deleteFolders)) {
+			foreach ($this->deleteFolders as $folder) {
+				if (Folder::exists(JPATH_ROOT.$folder) && !Folder::delete(JPATH_ROOT.$folder)) {
+					Factory::getApplication()->enqueueMessage(Text::sprintf('COM_LATESTNEWSENHANCEDPRO_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
+				}
+			}
+		}
 	}
 
 	private function removeUpdateSite($type, $element, $folder = '', $location = '')
