@@ -8,6 +8,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 
 /**
@@ -15,15 +16,52 @@ use Joomla\CMS\Language\Text;
  */
 class plgsystemsywautoresetInstallerScript
 {
-	static $version = '1.4.0';
+	/**
+	 * The version number of the extension
+	 */
+	protected $release;
 
 	/**
-	 * Called before an install/update method
-	 *
-	 * @return  boolean  True on success
+	 * The extension name
 	 */
-	public function preflight($type, $parent)
+	protected $extension;
+
+	/*
+	 * Minimum extensions library version required
+	 */
+	//protected $minimumLibrary = '2.0.0';
+
+	/**
+	 * Minimum Joomla! version required to install the extension
+	 */
+	protected $minimumJoomla = '4.0.0-beta3';
+
+	/**
+	 * Extensions library link for download
+	 */
+	//protected $libraryDownloadLink = 'https://simplifyyourweb.com/downloads/syw-extension-library';
+
+	/**
+	 * Called before an install/update/uninstall method
+	 *
+	 * @param string     $action     Which action is happening (install|uninstall|discover_install|update)
+	 * @param Installer  $installer  The class calling this method
+	 *
+	 * @return boolean True on success
+	 */
+	public function preflight($action, $installer)
 	{
+		if ($action === 'uninstall') {
+			return true;
+		}
+
+		// make sure we are under Joomla 4.0 or over
+
+		if (version_compare(JVERSION, $this->minimumJoomla, 'lt')) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', $this->minimumJoomla), 'error');
+			return false;
+		}
+
 		if (!Folder::exists(JPATH_ROOT.'/modules/mod_latestnewsenhanced')
 		    && !Folder::exists(JPATH_ROOT.'/modules/mod_latestnewsenhancedextended')
 			//&& !Folder::exists(JPATH_ROOT.'/modules/mod_trulyresponsiveslides')
@@ -35,24 +73,28 @@ class plgsystemsywautoresetInstallerScript
 			return false;
 		}
 
-
-		//test Joomla version
-
+		$this->extension = $installer->getName();
+		$this->release = $installer->getManifest()->version;
 
 		return true;
 	}
 
 	/**
-	 * Called after an install/update method
+	 * Called after an install/update/uninstall method
 	 *
-	 * @return  boolean  True on success
+	 * @return boolean True on success
 	 */
-	public function postflight($type, $parent)
+	public function postflight($action, $installer)
 	{
-		echo '<p style="margin: 20px 0">';
-		echo '<span class="label">'.Text::sprintf('PLG_SYSTEM_SYWAUTORESET_VERSION', self::$version).'</span>';
+		if ($action === 'uninstall') {
+			return true;
+		}
+
+		echo '<p style="margin: 10px 0 20px 0">';
+		echo HTMLHelper::image('plg_system_sywautoreset/logo.png', 'SYW Auto Reset', null, true);
+		echo '<br /><br /><span class="badge badge-dark">'.Text::sprintf('PLG_SYSTEM_SYWAUTORESET_VERSION', $this->release).'</span>';
 		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
-		echo '</p>';// remove the old module update sites
+		echo '</p>';
 
 		return true;
 	}
