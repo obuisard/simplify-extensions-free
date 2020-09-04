@@ -91,7 +91,7 @@ class plgsystemsywautoresetInstallerScript
 		}
 
 		echo '<p style="margin: 10px 0 20px 0">';
-		echo HTMLHelper::image('plg_system_sywautoreset/logo.png', 'SYW Auto Reset', null, true);
+		//echo HTMLHelper::image('plg_system_sywautoreset/logo.png', 'SYW Auto Reset', null, true);
 		echo '<br /><br /><span class="badge badge-dark">'.Text::sprintf('PLG_SYSTEM_SYWAUTORESET_VERSION', $this->release).'</span>';
 		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
 		echo '</p>';
