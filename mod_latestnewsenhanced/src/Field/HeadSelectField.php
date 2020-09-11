@@ -153,10 +153,10 @@ class HeadSelectField extends GroupedListField
 			if (!empty($group_options)) {
 
 				$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ICONGROUP');
-				$groups[$group_name] = array();
+				$groups[$group_name] = $group_options;
 
 // 				$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ICONGROUP'));
-				$groups[$group_name] = array_merge($groups[$group_name], $group_options);
+//				$groups[$group_name] = array_merge($groups[$group_name], $group_options);
 // 				$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ICONGROUP'));
 			}
 		}
@@ -246,15 +246,12 @@ class HeadSelectField extends GroupedListField
 
 		if ($option == 'com_k2') {
 
-			$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS');
-			$groups[$group_name] = array();
-
 			foreach ($fields as $field) {
 
 				if ($field->type != $type) {
 					continue;
 				}
-				$groups[$group_name][] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
+				$groups[] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
 			}
 		}
 
@@ -290,11 +287,6 @@ class HeadSelectField extends GroupedListField
 
 			if ($fields_exist) {
 
-				$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JOOMLAFIELDS');
-				$groups[$group_name] = array();
-
-				//$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JOOMLAFIELDS'));
-
 				foreach ($fieldsPerGroup as $group_id => $groupFields) {
 
 					if (!$groupFields) {
@@ -302,11 +294,9 @@ class HeadSelectField extends GroupedListField
 					}
 
 					foreach ($groupFields as $field) {
-						$groups[$group_name][] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
+						$groups[] = HTMLHelper::_('select.option', 'jfield:'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
 					}
 				}
-
-				//$options[] = HTMLHelper::_('select.optgroup', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JOOMLAFIELDS'));
 			}
 		}
 

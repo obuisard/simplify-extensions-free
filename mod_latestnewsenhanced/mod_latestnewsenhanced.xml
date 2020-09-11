@@ -96,7 +96,7 @@
 <!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/latest-news/the-list-of-options/selection" class="alert alert-info" -->
 <!-- 					description="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTION_FIELDSET_DESC" /> -->
 								
-				<fieldset name="selection_source" label="">
+				<fieldset name="selection_source" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONSOURCE_FIELDSET_LABEL">
 					<field name="datasource" type="datasourceselect" default="articles"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DATASOURCE_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DATASOURCE_DESC">	
@@ -117,7 +117,7 @@
 <!-- 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
 				</fieldset>
 								
-				<fieldset name="selection_categories" label="">
+				<fieldset name="selection_categories" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONCATEGORIES_FIELDSET_LABEL">
 				
 					<field name="cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CATEGORYFILTER_LABEL"
@@ -163,7 +163,7 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="selection_tags" label="">
+				<fieldset name="selection_tags" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONTAGS_FIELDSET_LABEL">
 				
 					<field name="tags_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGSFILTER_LABEL"
@@ -203,14 +203,14 @@
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGORDER_DESC" />					
 				</fieldset>
 				
-				<fieldset name="selection_keywords" label="">
+				<fieldset name="selection_keywords" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONKEYWORDS_FIELDSET_LABEL">
 					
 					<field name="keys" type="text" default="" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_METAKEYS_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_METAKEYS_DESC" />
 				</fieldset>
 				
-				<fieldset name="selection_authors" label="">
+				<fieldset name="selection_authors" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONAUTHORS_FIELDSET_LABEL">
 
 					<field name="show_a" type="list" default="alias" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHOR_LABEL" 
@@ -250,7 +250,7 @@
 					</field>
 				</fieldset>
 			  	
-				<fieldset name="selection_dates" label="">
+				<fieldset name="selection_dates" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONDATES_FIELDSET_LABEL">
 								
 					<field name="post_d" type="list" default="published" 
 			           	label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSTDATE_LABEL" 
@@ -321,7 +321,7 @@
 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_EXAMPLE_RELATIVEDATEEXAMPLE3" style="example" showon="use_range:1" />
 				</fieldset>
 
-				<fieldset name="selection_exin" label="">
+				<fieldset name="selection_exin" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONINEX_FIELDSET_LABEL">
 
 					<field name="ex_current_item" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDECURRENTITEM_LABEL"
@@ -343,7 +343,7 @@
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_UNAUTHORIZED_DESC" />
 				</fieldset>
 				
-				<fieldset name="selection_featured" label="">
+				<fieldset name="selection_featured" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONFEATURED_FIELDSET_LABEL">
 					
 					<field name="show_f" type="list" default="3" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FEATURED_LABEL"
@@ -355,7 +355,7 @@
 					</field>
 				</fieldset>	
 				
-				<fieldset name="selection_order" label="">
+				<fieldset name="selection_order" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONORDER_FIELDSET_LABEL">
 							
 					<field name="order" type="list" default="p_dsc" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ORDERING_LABEL" 
@@ -379,7 +379,7 @@
 				  	</field>
 				</fieldset>
 				
-				<fieldset name="selection_language" label="">
+				<fieldset name="selection_language" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONLANGUAGE_FIELDSET_LABEL">
 			  	
 					<field name="filter_lang" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FILTERLANGUAGE_LABEL" 
@@ -389,7 +389,7 @@
 					</field>
 				</fieldset>
 					
-				<fieldset name="selection_count" label="">
+				<fieldset name="selection_count" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONCOUNT_FIELDSET_LABEL">
 			  	
 					<field name="count" type="sywverbosetext" default="" filter="string" size="4" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COUNT_LABEL" 
@@ -414,7 +414,8 @@
 				<!-- <field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/latest-news/the-list-of-options/layout" class="alert alert-info"
 					description="MOD_LATESTNEWSENHANCEDEXTENDED_CONFIGURATION_FIELDSET_DESC" /> -->
 
-				<fieldset name="layout_general" label="">
+				<fieldset name="layout_general" label="MOD_LATESTNEWSENHANCEDEXTENDED_CONFIGURATION_FIELDSET_LABEL">
+				
 					<field name="layout" type="modulelayout" class="custom-select" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_LAYOUT_LABEL"
 						description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
@@ -441,7 +442,8 @@
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMS_HEIGHT_DESC" />
 				</fieldset>
 				
-				<fieldset name="layout_leading" label="">						
+				<fieldset name="layout_leading" label="MOD_LATESTNEWSENHANCEDEXTENDED_LAYOUTLEADING_FIELDSET_LABEL">
+				
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_USELEADING_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_USELEADING_DESC" />
@@ -854,7 +856,7 @@
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" />
 				</fieldset>
 
-				<fieldset name="themes_body" label="">
+				<fieldset name="themes_body" label="MOD_LATESTNEWSENHANCEDEXTENDED_THEMEBODY_FIELDSET_LABEL">
 <!-- 				<field type="title" title="MOD_LATESTNEWSENHANCEDEXTENDED_THEMEOVERRIDES_LABEL" />	 -->
 					
 					<field name="bgcolor" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
@@ -1009,7 +1011,8 @@
 				<!-- <field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/latest-news/the-list-of-options/head-image" class="alert alert-info"
 					description="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGE_FIELDSET_DESC" /> -->
 						
-				<fieldset name="image_general" label="">								
+				<fieldset name="image_general" label="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGE_FIELDSET_LABEL">
+				
 					<field name="default_pic" type="media" default=""
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICTURE_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICTURE_DESC" />
@@ -1050,7 +1053,7 @@
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICHOVEREFFECT_DESC" />
 				</fieldset>
 				
-				<fieldset name="image_thumbnail" label="">
+				<fieldset name="image_thumbnail" label="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGETHUMBNAIL_FIELDSET_LABEL">
 					
 					<field name="create_thumb" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATETHUMBNAILS_LABEL" 
@@ -1092,7 +1095,8 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="image_advanced" label="">
+				<fieldset name="image_advanced" label="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGEADVANCED_FIELDSET_LABEL">
+				
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEHIGHRES_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEHIGHRES_DESC" />
@@ -1309,7 +1313,8 @@
 				<!-- <field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/latest-news/the-list-of-options/information" class="alert alert-info"
 					description="MOD_LATESTNEWSENHANCEDEXTENDED_DETAILS_FIELDSET_DESC" /> -->
 				
-				<fieldset name="details_information" label="">
+				<fieldset name="details_information" label="MOD_LATESTNEWSENHANCEDEXTENDED_DETAILS_FIELDSET_LABEL">
+				
 					<field name="separator" type="text" default="" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEPARATOR_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEPARATOR_DESC" />	
@@ -1388,7 +1393,7 @@
 				<!-- <field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/latest-news/the-list-of-options/animation-pagination" class="alert alert-info"
 					description="MOD_LATESTNEWSENHANCEDEXTENDED_ANIMATE_FIELDSET_DESC" /> -->
 					
-				<fieldset name="animation_visible" label="">
+				<fieldset name="animation_visible" label="MOD_LATESTNEWSENHANCEDEXTENDED_ANIMATEVISIBLE_FIELDSET_LABEL">
 							
 					<field name="visible_items" type="sywverbosetext" default="1" filter="integer" size="4" icon="SYWicon-visibility" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSPERSLIDE_LABEL" 
@@ -1531,13 +1536,13 @@
 				
 <!-- 				<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_JQUERYVERSIONREQUIRED" style="info" /> -->
 
-				<fieldset name="advanced_general" label="">
+				<fieldset name="advanced_general" label="MOD_LATESTNEWSENHANCEDEXTENDED_ADVANCED_FIELDSET_LABEL">
 				
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAYOUTSUFFIX_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAYOUTSUFFIX_DESC" />
 					
-					<field name="site_mode" type="list" default="adv" 
+					<field name="site_mode" type="list" default="dev" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SITEMODE_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SITEMODE_DESC">
 						<option value="dev">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TESTMODE</option>
@@ -1630,35 +1635,16 @@
 						<option value="1">JYES</option>
 					</field>
 				</fieldset>
-						
-				<fieldset name="advanced_module" label="MOD_LATESTNEWSENHANCEDEXTENDED_MODULE_LABEL">				
-				<!-- <field type="title" title="MOD_LATESTNEWSENHANCEDEXTENDED_MODULE_LABEL" /> -->
-					
-					<field name="show_on_mobile" type="list" default="1" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONMOBILE_LABEL"
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONMOBILE_DESC">
-						<option value="0">JNO</option>
-						<option value="1">JYES</option>
-						<option value="2">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ONLY</option>
-					</field>
-					
-					<field name="show_on_item_page" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONITEMPAGE_LABEL"
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONITEMPAGE_DESC">
-						<option value="0">JNO</option>
-						<option value="1">JYES</option>
-					</field>
-				</fieldset>	
 				
 				<fieldset name="advanced_paragraph" label="MOD_LATESTNEWSENHANCEDEXTENDED_PARAGRAPHFUNCTIONALITY_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_MESSAGE_PARAGRAPHFUNCTIONALITY">
+				<!-- <field type="subtitle" title="MOD_LATESTNEWSENHANCEDEXTENDED_PARAGRAPHFUNCTIONALITY_LABEL" /> -->
 					
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AFTERPARAGRAPH_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AFTERPARAGRAPH_DESC" />
 				</fieldset>
 				
-				<fieldset name="advanced_prepost" label="">		
-					<!-- <field name="filteringspacer1" type="spacer" hr="true" /> -->
+				<fieldset name="advanced_prepost" label="MOD_LATESTNEWSENHANCEDEXTENDED_ADVANCEDPREPOST_FIELDSET_LABEL">
 					
 					<field name="pretext" type="editor" rows="5" editor="codemirror|none" filter="safehtml" buttons="false" syntax="html"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PRETEXT_LABEL"
@@ -1676,7 +1662,23 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="advanced_module_standard" label="">
+				<fieldset name="advanced_module" label="MOD_LATESTNEWSENHANCEDEXTENDED_MODULE_LABEL">				
+				<!-- <field type="title" title="MOD_LATESTNEWSENHANCEDEXTENDED_MODULE_LABEL" /> -->
+					
+					<field name="show_on_mobile" type="list" default="1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONMOBILE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONMOBILE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+						<option value="2">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ONLY</option>
+					</field>
+					
+					<field name="show_on_item_page" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONITEMPAGE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONITEMPAGE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
 						
 					<field name="moduleclass_sfx" type="text" default="" filter="string"
 						label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" />
