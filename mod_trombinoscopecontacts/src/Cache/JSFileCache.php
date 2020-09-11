@@ -47,7 +47,7 @@ class JSFileCache extends HeaderFilesCache
 		//echo 'document.addEventListener("DOMContentLoaded", function() { ';
 
 		echo 'document.addEventListener("readystatechange", function(event) { ';
-		echo 'if (event.target.readyState !== "loading") { ';
+		echo 'if (event.target.readyState === "complete") { ';
 
 				echo 'var flip_' . $suffix . ' = new flipCards({ ';
 					echo 'selector: ".te_' . $suffix . ' .person", ';

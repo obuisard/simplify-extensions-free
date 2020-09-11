@@ -34,78 +34,79 @@ class FieldSelectField extends GroupedListField
 	{
 		$groups = array();
 
-		$groups['-'] = array();
+		$group_name = Text::_('MOD_TROMBINOSCOPE_VALUE_STANDARDFIELDS');
+		$groups[$group_name] = array();
 
-		$groups['-'][] = HTMLHelper::_('select.option', 'empty', Text::_('MOD_TROMBINOSCOPE_VALUE_EMPTY'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'empty', Text::_('MOD_TROMBINOSCOPE_VALUE_EMPTY'), 'value', 'text', $disable = false);
 
-		$groups['-'][] = HTMLHelper::_('select.option', 'c_p', Text::_('MOD_TROMBINOSCOPE_VALUE_POSITION'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'tel', Text::_('MOD_TROMBINOSCOPE_VALUE_TELEPHONE'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'mob', Text::_('MOD_TROMBINOSCOPE_VALUE_MOBILE'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'fax', Text::_('MOD_TROMBINOSCOPE_VALUE_FAX'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'mail', Text::_('MOD_TROMBINOSCOPE_VALUE_EMAIL'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'web', Text::_('MOD_TROMBINOSCOPE_VALUE_WEBPAGE'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'add', Text::_('MOD_TROMBINOSCOPE_VALUE_ADDRESS'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'sub', Text::_('MOD_TROMBINOSCOPE_VALUE_SUBURB'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'st', Text::_('MOD_TROMBINOSCOPE_VALUE_STATE'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'p_c', Text::_('MOD_TROMBINOSCOPE_VALUE_POSTCODE'), 'value', 'text', $disable = false);
-		//$groups['-'][] = HTMLHelper::_('select.option', 'f_a', Text::_('MOD_TROMBINOSCOPE_VALUE_FORMATTEDADDRESS'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'f_f_a', Text::_('MOD_TROMBINOSCOPE_VALUE_FULLYFORMATTEDADDRESS'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'cou', Text::_('MOD_TROMBINOSCOPE_VALUE_COUNTRY'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'misc', Text::_('MOD_TROMBINOSCOPE_VALUE_MISC'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'c_p', Text::_('MOD_TROMBINOSCOPE_VALUE_POSITION'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'tel', Text::_('MOD_TROMBINOSCOPE_VALUE_TELEPHONE'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'mob', Text::_('MOD_TROMBINOSCOPE_VALUE_MOBILE'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'fax', Text::_('MOD_TROMBINOSCOPE_VALUE_FAX'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'mail', Text::_('MOD_TROMBINOSCOPE_VALUE_EMAIL'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'web', Text::_('MOD_TROMBINOSCOPE_VALUE_WEBPAGE'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'add', Text::_('MOD_TROMBINOSCOPE_VALUE_ADDRESS'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'sub', Text::_('MOD_TROMBINOSCOPE_VALUE_SUBURB'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'st', Text::_('MOD_TROMBINOSCOPE_VALUE_STATE'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'p_c', Text::_('MOD_TROMBINOSCOPE_VALUE_POSTCODE'), 'value', 'text', $disable = false);
+		//$groups[$group_name][] = HTMLHelper::_('select.option', 'f_a', Text::_('MOD_TROMBINOSCOPE_VALUE_FORMATTEDADDRESS'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'f_f_a', Text::_('MOD_TROMBINOSCOPE_VALUE_FULLYFORMATTEDADDRESS'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'cou', Text::_('MOD_TROMBINOSCOPE_VALUE_COUNTRY'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'misc', Text::_('MOD_TROMBINOSCOPE_VALUE_MISC'), 'value', 'text', $disable = false);
 
 		// gender
-		$groups['-'][] = HTMLHelper::_('select.option', 'gen', Text::_('MOD_TROMBINOSCOPE_VALUE_GENDER') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'gen', Text::_('MOD_TROMBINOSCOPE_VALUE_GENDER') . ' (Pro)', 'value', 'text', $disable = true);
 
 		// birthdate
-		$groups['-'][] = HTMLHelper::_('select.option', 'dob', Text::_('MOD_TROMBINOSCOPE_VALUE_BIRTHDATE') . ' (Pro)', 'value', 'text', $disable = true);
-		$groups['-'][] = HTMLHelper::_('select.option', 'age', Text::_('MOD_TROMBINOSCOPE_VALUE_AGE') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'dob', Text::_('MOD_TROMBINOSCOPE_VALUE_BIRTHDATE') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'age', Text::_('MOD_TROMBINOSCOPE_VALUE_AGE') . ' (Pro)', 'value', 'text', $disable = true);
 
 		// company
-		$groups['-'][] = HTMLHelper::_('select.option', 'com', Text::_('MOD_TROMBINOSCOPE_VALUE_COMPANY') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'com', Text::_('MOD_TROMBINOSCOPE_VALUE_COMPANY') . ' (Pro)', 'value', 'text', $disable = true);
 
 		// department
-		$groups['-'][] = HTMLHelper::_('select.option', 'dep', Text::_('MOD_TROMBINOSCOPE_VALUE_DEPARTMENT') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'dep', Text::_('MOD_TROMBINOSCOPE_VALUE_DEPARTMENT') . ' (Pro)', 'value', 'text', $disable = true);
 
 		// map
-		$groups['-'][] = HTMLHelper::_('select.option', 'map', Text::_('MOD_TROMBINOSCOPE_VALUE_MAP') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'map', Text::_('MOD_TROMBINOSCOPE_VALUE_MAP') . ' (Pro)', 'value', 'text', $disable = true);
 
 		// summary
-		$groups['-'][] = HTMLHelper::_('select.option', 'sum', Text::_('MOD_TROMBINOSCOPE_VALUE_SUMMARY') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'sum', Text::_('MOD_TROMBINOSCOPE_VALUE_SUMMARY') . ' (Pro)', 'value', 'text', $disable = true);
 
 		// Facebook
-		$groups['-'][] = HTMLHelper::_('select.option', 'facebook', 'Facebook' . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'facebook', 'Facebook' . ' (Pro)', 'value', 'text', $disable = true);
 
 		// Twitter
-		$groups['-'][] = HTMLHelper::_('select.option', 'twitter', 'Twitter' . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'twitter', 'Twitter' . ' (Pro)', 'value', 'text', $disable = true);
 
 		// LinkedIn
-		$groups['-'][] = HTMLHelper::_('select.option', 'linkedin', 'LinkedIn' . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'linkedin', 'LinkedIn' . ' (Pro)', 'value', 'text', $disable = true);
 
 		// Google+
-		$groups['-'][] = HTMLHelper::_('select.option', 'googleplus', 'Google+' . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'googleplus', 'Google+' . ' (Pro)', 'value', 'text', $disable = true);
 
 		// YouTube
-		$groups['-'][] = HTMLHelper::_('select.option', 'youtube', 'YouTube' . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'youtube', 'YouTube' . ' (Pro)', 'value', 'text', $disable = true);
 
 		// Instagram
-		$groups['-'][] = HTMLHelper::_('select.option', 'instagram', 'Instagram' . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'instagram', 'Instagram' . ' (Pro)', 'value', 'text', $disable = true);
 
 		// Pinterest
-		$groups['-'][] = HTMLHelper::_('select.option', 'pinterest', 'Pinterest' . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'pinterest', 'Pinterest' . ' (Pro)', 'value', 'text', $disable = true);
 
 		// Skype
-		$groups['-'][] = HTMLHelper::_('select.option', 'skype', 'Skype' . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'skype', 'Skype' . ' (Pro)', 'value', 'text', $disable = true);
 
-		$groups['-'][] = HTMLHelper::_('select.option', 'a', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKA'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'a_sw', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKA_SAMEWINDOW'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'b', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKB'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'b_sw', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKB_SAMEWINDOW'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'c', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKC'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'c_sw', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKC_SAMEWINDOW'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'd', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKD'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'd_sw', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKD_SAMEWINDOW'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'e', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKE'), 'value', 'text', $disable = false);
-		$groups['-'][] = HTMLHelper::_('select.option', 'e_sw', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKE_SAMEWINDOW'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'a', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKA'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'a_sw', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKA_SAMEWINDOW'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'b', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKB'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'b_sw', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKB_SAMEWINDOW'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'c', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKC'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'c_sw', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKC_SAMEWINDOW'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'd', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKD'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'd_sw', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKD_SAMEWINDOW'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'e', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKE'), 'value', 'text', $disable = false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'e_sw', Text::_('MOD_TROMBINOSCOPE_VALUE_LINKE_SAMEWINDOW'), 'value', 'text', $disable = false);
 
 		// get Joomla! fields
 		// test the fields folder first to avoid message warning that the component is missing
@@ -159,6 +160,10 @@ class FieldSelectField extends GroupedListField
 				//$options[] = HTMLHelper::_('select.optgroup', $groupTitles[$group_id]);
 			}
 		}
+
+		$group_name = Text::_('MOD_TROMBINOSCOPE_VALUE_PLUGINFIELDS');
+		$groups[$group_name] = array();
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'pluginpro', Text::_('MOD_TROMBINOSCOPE_VALUE_ADDYOUROWN') . ' (Pro)', 'value', 'text', $disable = true);
 
 		// Merge any additional options in the XML definition.
 		$groups = array_merge(parent::getGroups(), $groups);

@@ -43,6 +43,7 @@ $params->set('suffix', $class_suffix);
 $urlPath = Uri::base().'modules/mod_trombinoscope/';
 $doc = Factory::getDocument();
 $app = Factory::getApplication();
+$wam = $app->getDocument()->getWebAssetManager();
 
 $user = Factory::getUser();
 $groups	= $user->getAuthorisedViewLevels();
@@ -420,14 +421,21 @@ if ($carousel_configuration != 'none') {
 
 	if ($generate_inline_scripts) {
 
-		$doc->addScriptDeclaration($cache_anim_js->getBuffer());
+		$wam->addInlineScript($cache_anim_js->getBuffer());
+		//$doc->addScriptDeclaration($cache_anim_js->getBuffer());
 
 	} else {
 
 		$result = $cache_anim_js->cache('animation_' . $module->id . $rtl_suffix . '.js', $clear_header_files_cache);
 
 		if ($result) {
-			$doc->addScript(Uri::base(true) . '/media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js');
+
+			$wam->registerAndUseScript('tc.animation_' . $module->id . $rtl_suffix, 'media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js', [], ['defer' => true]);
+			//$doc->addScript(Uri::base(true) . '/media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js', [], ['defer' => true]);
+
+
+			// Uri::root(true) . 'media...' does not work!
+
 		}
 	}
 
@@ -442,7 +450,9 @@ if ($carousel_configuration != 'none') {
 if ($show_picture && $photo_align != 't' && $min_card_flip_width) {
 	Helper::loadFlipCards();
 	$cache_js = new JSFileCache('mod_trombinoscopecontacts', $params);
-	$doc->addScriptDeclaration($cache_js->getBuffer());
+
+	$wam->addInlineScript($cache_js->getBuffer());
+	//$doc->addScriptDeclaration($cache_js->getBuffer());
 } else {
 	// remove style.js if it exists
 	if (File::exists(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/style_'.$module->id.'.js')) {
@@ -487,7 +497,8 @@ if (File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/substitute_s
 	$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
 
 	if ($result) {
-		$doc->addStyleSheet(Uri::base(true) . '/media/cache/mod_trombinoscopecontacts/style_' . $module->id . '.css');
+		$wam->registerAndUseStyle('style_' . $module->id, 'media/cache/mod_trombinoscopecontacts/style_' . $module->id . '.css');
+		//$doc->addStyleSheet(Uri::base(true) . '/media/cache/mod_trombinoscopecontacts/style_' . $module->id . '.css');
 	}
 
 	Helper::loadCommonStylesheet();

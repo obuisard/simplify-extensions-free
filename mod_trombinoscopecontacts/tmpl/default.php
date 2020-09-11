@@ -11,6 +11,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Component\Contact\Site\Helper\RouteHelper as ContactRouteHelper;
 use Joomla\Component\Tags\Site\Helper\RouteHelper as TagsRouteHelper;
 use Joomla\Registry\Registry;
 use SYW\Library\Libraries as SYWLIbraries;
@@ -94,10 +95,10 @@ if ($remove_whitespaces) {
 				if (in_array($link_access, $groups)) {
 				    switch ($contact_link) {
 				        case 'standard' :
-				            $link = Route::_(Helper::getContactRoute('contact', $item->slug, $item->catid));
+				        	$link = Route::_(ContactRouteHelper::getContactRoute($item->slug, $item->catid, $item->language));
 				            break;
 				        case 'popup' :
-				            $link = Route::_(Helper::getContactRoute('contact', $item->slug, $item->catid).'&tmpl=component');
+				        	$link = Route::_(ContactRouteHelper::getContactRoute($item->slug, $item->catid, $item->language) . '&tmpl=component');
 				            $link_attributes = ' onclick="return false;" data-modaltitle="'.htmlspecialchars($formatted_name, ENT_COMPAT, 'UTF-8').'"';
 				            if ($bootstrap_version > 0) {
 				            	$link_attributes .= ' data-toggle="modal" data-target="#tcpmodal_'.$module->id.'"';
@@ -120,11 +121,11 @@ if ($remove_whitespaces) {
 				$heading_link = '';
 
 				if ($link_to_category) {
-					$link_category = Route::_(Helper::getCategoryRoute($item->catid));
+					$link_category = Route::_(ContactRouteHelper::getCategoryRoute($item->catid, $item->language));
 				}
 
 				if ($link_to_category_header) {
-					$heading_link = Route::_(Helper::getCategoryRoute($item->catid));
+					$heading_link = Route::_(ContactRouteHelper::getCategoryRoute($item->catid, $item->language));
 				}
 
 				$extraclasses = " personid-".$item->id." catid-".$item->catid;

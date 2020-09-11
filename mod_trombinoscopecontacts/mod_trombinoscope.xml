@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>4.2.0</version>
+	<version>4.3.0</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -62,7 +62,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\TrombinoscopeContacts\Site\Field">			
 			<fieldset name="basic" label="MOD_TROMBINOSCOPE_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.2.0" />
+				<field type="extensionversion" version="4.3.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_TROMBINOSCOPE_TRANSLATORS" />
@@ -78,10 +78,10 @@
 					review="http://extensions.joomla.org/extensions/extension/directory-a-documentation/address-book/trombinoscope-contacts" 
 					donate="https://simplifyyourweb.com/free-products/trombinoscope" />
 				
-<!-- 				<field type="sywextensionpresencetest" title="Trombinoscope Contacts Pro" description="MOD_TROMBINOSCOPE_INFO_PROVERSION"  -->
-<!-- 					extensiontype="component" extensionelement="com_trombinoscopeextended" -->
-<!-- 					imagesrc="media/mod_trombinoscopecontacts/images/logo_pro.png" -->
-<!-- 					downloadlink="https://simplifyyourweb.com/downloads/trombinoscope-contacts-pro" downloadtext="MOD_TROMBINOSCOPE_INFO_PROVERSIONDOWLOAD" /> -->
+				<field type="sywextensionpresencetest" title="Trombinoscope Contacts Pro" description="MOD_TROMBINOSCOPE_INFO_PROVERSION" 
+					extensiontype="component" extensionelement="com_trombinoscopeextended"
+					imagesrc="media/mod_trombinoscopecontacts/images/logo_pro.png"
+					downloadlink="https://simplifyyourweb.com/downloads/trombinoscope-contacts-pro" downloadtext="MOD_TROMBINOSCOPE_INFO_PROVERSIONDOWLOAD" />
 
 <!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
 			</fieldset>	
@@ -91,7 +91,7 @@
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/filtering" class="alert alert-info" -->
 <!-- 					description="MOD_TROMBINOSCOPE_SELECTION_FIELDSET_DESC" /> -->
 									
-				<fieldset name="selection_source" label="">
+				<fieldset name="selection_source" label="MOD_TROMBINOSCOPE_SELECTIONSOURCE_FIELDSET_LABEL">
 				
 					<field name="selection" type="list" default="categories" 
 						label="MOD_TROMBINOSCOPE_FIELD_SELECTION_LABEL" 
@@ -109,7 +109,7 @@
 						description="MOD_TROMBINOSCOPE_FIELD_CONTACT_DESC" />
 				</fieldset>
 								
-				<fieldset name="selection_categories" label="">
+				<fieldset name="selection_categories" label="MOD_TROMBINOSCOPE_SELECTIONCATEGORIES_FIELDSET_LABEL">
 				
 					<field name="cat" type="category" extension="com_contact" multiple="true" size="5" default="all" layout="joomla.form.field.list-fancy-select" showon="selection!:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_CATEGORY_LABEL" 
@@ -128,19 +128,9 @@
 					<field name="levelsubcategories" type="sywverbosetext" default="1" filter="integer" size="4" showon="selection!:contact[AND]includesubcat:onelevel" 
 						label="MOD_TROMBINOSCOPE_FIELD_SUBCATEGORYLEVELS_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_SUBCATEGORYLEVELS_DESC" />
-						
-					<field name="c_order" type="list" default="" showon="selection!:contact" 
-						label="MOD_TROMBINOSCOPE_FIELD_CATORDER_LABEL" 
-						description="MOD_TROMBINOSCOPE_FIELD_CATORDER_DESC">	
-						<option value="">JNONE</option>				
-						<option value="oa">MOD_TROMBINOSCOPE_VALUE_BYORDER_ASC</option>
-						<option value="od">MOD_TROMBINOSCOPE_VALUE_BYORDER_DESC</option>
-						<option value="na">MOD_TROMBINOSCOPE_VALUE_BYTITLE_ASC</option>
-						<option value="nd">MOD_TROMBINOSCOPE_VALUE_BYTITLE_DESC</option>
-					</field>
 				</fieldset>
 				
-				<fieldset name="selection_tags" label="">
+				<fieldset name="selection_tags" label="MOD_TROMBINOSCOPE_SELECTIONTAGS_FIELDSET_LABEL">
 				
 					<field name="tags" type="tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select" showon="selection!:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_TAGS_LABEL" 
@@ -156,14 +146,14 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="selection_keywords" label="">
+				<fieldset name="selection_keywords" label="MOD_TROMBINOSCOPE_SELECTIONKEYWORDS_FIELDSET_LABEL">
 								
 					<field name="keys" type="text" default="" showon="selection!:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_METAKEYS_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_METAKEYS_DESC" />
 				</fieldset>
 
-				<fieldset name="selection_exin" label="">
+				<fieldset name="selection_exin" label="MOD_TROMBINOSCOPE_SELECTIONINEX_FIELDSET_LABEL">
 				 
 					<field name="ex" type="text" default="" filter="string" translateHint="false" hint="20,34,47" showon="selection!:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_EXCLUDE_LABEL" 
@@ -174,7 +164,7 @@
 						description="MOD_TROMBINOSCOPE_FIELD_INCLUDE_DESC" />
 				</fieldset>
 				
-				<fieldset name="selection_featured" label="">
+				<fieldset name="selection_featured" label="MOD_TROMBINOSCOPE_SELECTIONFEATURED_FIELDSET_LABEL">
 				
 					<field name="f" type="list" default="s" showon="selection!:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_INCLUDEFEATURED_LABEL" 
@@ -186,7 +176,17 @@
 					</field>
 				</fieldset>	
 				
-				<fieldset name="selection_order" label="">
+				<fieldset name="selection_order" label="MOD_TROMBINOSCOPE_SELECTIONORDER_FIELDSET_LABEL">
+						
+					<field name="c_order" type="list" default="" showon="selection!:contact" 
+						label="MOD_TROMBINOSCOPE_FIELD_CATORDER_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_CATORDER_DESC">	
+						<option value="">JNONE</option>				
+						<option value="oa">MOD_TROMBINOSCOPE_VALUE_BYORDER_ASC</option>
+						<option value="od">MOD_TROMBINOSCOPE_VALUE_BYORDER_DESC</option>
+						<option value="na">MOD_TROMBINOSCOPE_VALUE_BYTITLE_ASC</option>
+						<option value="nd">MOD_TROMBINOSCOPE_VALUE_BYTITLE_DESC</option>
+					</field>
 					
 					<field name="order" type="list" default="oa" showon="selection!:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_ORDER_LABEL" 
@@ -210,7 +210,7 @@
 						description="MOD_TROMBINOSCOPE_FIELD_MANUALIDS_DESC" />				
 				</fieldset>
 				
-				<fieldset name="selection_language" label="">
+				<fieldset name="selection_language" label="MOD_TROMBINOSCOPE_SELECTIONLANGUAGE_FIELDSET_LABEL">
 				
 					<field name="filter_lang" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="selection!:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_FILTERLANGUAGE_LABEL" 
@@ -220,7 +220,7 @@
 					</field>
 				</fieldset>
 					
-				<fieldset name="selection_count" label="">
+				<fieldset name="selection_count" label="MOD_TROMBINOSCOPE_SELECTIONCOUNT_FIELDSET_LABEL">
 					
 					<field name="count" type="sywverbosetext" default="" size="4" showon="selection!:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_COUNT_LABEL" 
@@ -233,7 +233,7 @@
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/layout" class="alert alert-info" -->
 <!-- 					description="MOD_TROMBINOSCOPE_CONFIGURATION_FIELDSET_DESC" /> -->
 					
-				<fieldset name="layout_general" label="">
+				<fieldset name="layout_general" label="MOD_TROMBINOSCOPE_CONFIGURATION_FIELDSET_LABEL">
 				
 					<field name="layout" type="modulelayout" class="custom-select" 
 						label="JFIELD_ALT_LAYOUT_LABEL"
@@ -278,7 +278,7 @@
 						description="MOD_TROMBINOSCOPE_FIELD_CARD_HEIGHT_DESC" />
 				</fieldset>
 					
-				<fieldset name="layout_card_elements" label="">
+				<fieldset name="layout_card_elements" label="MOD_TROMBINOSCOPE_CONFIGURATIONCARDITEMS_FIELDSET_LABEL">
 				
 					<field name="s_cat" type="list" default="sl" 
 						label="MOD_TROMBINOSCOPE_FIELD_SHOWCATEGORY_LABEL" 
@@ -384,6 +384,10 @@
 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"
 						label="MOD_TROMBINOSCOPE_FIELD_LINKTOEDIT_LABEL"
 						description="MOD_TROMBINOSCOPE_FIELD_LINKTOEDIT_DESC" />
+						
+					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"
+						label="MOD_TROMBINOSCOPE_FIELD_EDITLINK_LABEL"
+						description="MOD_TROMBINOSCOPE_FIELD_EDITLINK_DESC" />
 				</fieldset>
 					
 				<fieldset name="layout_headings" label="MOD_TROMBINOSCOPE_HEADINGS_LABEL">
@@ -456,7 +460,7 @@
 						link="https://simplifyyourweb.com/free-products/trombinoscope/themes" />
 				</fieldset>
 					
-				<fieldset name="themes_social" label="">				
+				<fieldset name="themes_social" label="MOD_TROMBINOSCOPE_THEMESSOCIAL_FIELDSET_LABEL">				
 <!-- 				<field type="title" title="MOD_TROMBINOSCOPE_THEMEOVERRIDES_LABEL" /> -->
 				
 					<field name="social_styling" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
@@ -586,7 +590,7 @@
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/contact-picture" class="alert alert-info" -->
 <!-- 					description="MOD_TROMBINOSCOPE_PICTURE_FIELDSET_DESC" /> -->
 							
-				<fieldset name="image_general" label="">
+				<fieldset name="image_general" label="MOD_TROMBINOSCOPE_PICTURE_FIELDSET_LABEL">
 				
 					<field name="s_pic" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
 						label="MOD_TROMBINOSCOPE_FIELD_SHOWPICTURE_LABEL" 
@@ -673,7 +677,7 @@
 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_MANUALHIGHRESOLUTIONIMAGES" style="warning" showon="s_pic:1[AND]create_highres:1[AND]crop_pic:0" />
 				</fieldset>
 				
-				<fieldset name="image_thumbnail" label="">				
+				<fieldset name="image_thumbnail" label="MOD_TROMBINOSCOPE_PICTURETHUMBNAIL_FIELDSET_LABEL">				
 				
 					<field name="crop_pic" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="s_pic:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_CROPPICTURE_LABEL" 
@@ -694,7 +698,7 @@
 						description="MOD_TROMBINOSCOPE_FIELD_IMAGEQUALITY_DESC" />
 				</fieldset>
 					
-				<fieldset name="image_linking" label="">	
+				<fieldset name="image_linking" label="MOD_TROMBINOSCOPE_PICTURELINKING_FIELDSET_LABEL">	
 				
 					<field name="link_pic" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="s_pic:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_LINKPICTURE_LABEL" 
@@ -719,9 +723,9 @@
 						description="MOD_TROMBINOSCOPE_FIELD_PICTUREHOVERMARGIN_DESC" />
 				</fieldset>
 					
-				<fieldset name="image_background" label="">
+				<fieldset name="image_background" label="MOD_TROMBINOSCOPE_PICTUREBACKGROUND_FIELDSET_LABEL">
 					
-					<field name="individual_bg_pic" type="bgimageselect" default="" 
+					<field name="individual_bg_pic" type="bgimageselect" default="" showon="s_pic:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_INDIVIDUALBGPICTURE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_INDIVIDUALBGPICTURE_DESC">
 						<option value="">JNONE</option>
@@ -729,9 +733,9 @@
 						<option value="pic">MOD_TROMBINOSCOPE_PICTURE_FIELDSET_LABEL</option>
 					</field>
 					
-					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_NEEDJOOMLAFORCUSTOMFIELDSANDPAIDVERSION" style="neutral" label="Pro" />
+					<!-- <field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_NEEDJOOMLAFORCUSTOMFIELDSANDPAIDVERSION" style="neutral" label="Pro" /> -->
 					
-					<field name="d_bg_pic" type="media" default="" 
+					<field name="d_bg_pic" type="media" default="" showon="s_pic:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_INDIVIDUALDEFAULTBGPICTURE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_INDIVIDUALDEFAULTBGPICTURE_DESC" />
 				</fieldset>
@@ -848,7 +852,7 @@
 				<fieldset name="fields_otherfields" label="MOD_TROMBINOSCOPE_OTHERFIELDS_LABEL">
 <!-- 				<field type="subtitle" title="MOD_TROMBINOSCOPE_OTHERFIELDS_LABEL" /> -->
 			
-					<field name="detail_blocks" type="subform" formsource="modules/mod_trombinoscope/forms/fields/detail.xml" multiple="true"
+					<field name="detail_blocks" type="subform" formsource="modules/mod_trombinoscope/forms/fields/detail.xml" multiple="true" max="7"
 						default="{'f':'none','s_f_lbl':'0','f_lbl':'','f_icon':'','f_tooltip':'1','f_one_line':'1','f_access':'1'}"
 		   				label="MOD_TROMBINOSCOPE_DETAILBLOCS_LABEL" 
 		   				description="MOD_TROMBINOSCOPE_MOREDETAILBLOCS_DESC" />
@@ -859,7 +863,7 @@
 				
 					<field type="sywimagepreview" path="/media/mod_trombinoscopecontacts/images/configs/link_fields.png" relativepath="false" />
 					
-					<field name="detaillink_blocks" type="subform" formsource="modules/mod_trombinoscope/forms/fields/detaillink.xml" multiple="true"
+					<field name="detaillink_blocks" type="subform" formsource="modules/mod_trombinoscope/forms/fields/detaillink.xml" multiple="true" max="5" 
 						default="{'lf':'none','lf_icon':'','lf_access':'1'}"
 		   				label="MOD_TROMBINOSCOPE_DETAILBLOCS_LABEL" 
 		   				description="MOD_TROMBINOSCOPE_MOREDETAILBLOCS_DESC" />
@@ -1086,17 +1090,17 @@
                 </field>    
 			</fieldset>
 			
-			<fieldset name="advanced">
+			<fieldset name="advanced" description="MOD_TROMBINOSCOPE_ADVANCED_FIELDSET_DESC">
 			
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/advanced" class="alert alert-info" /> -->
 						
-				<fieldset name="advanced_general" label="">
+				<fieldset name="advanced_general" label="MOD_TROMBINOSCOPE_ADVANCED_FIELDSET_LABEL">
 				
 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_TROMBINOSCOPE_FIELD_LAYOUTSUFFIX_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_LAYOUTSUFFIX_DESC" />
 				
-					<field name="site_mode" type="list" default="adv" 
+					<field name="site_mode" type="list" default="dev" 
 						label="MOD_TROMBINOSCOPE_FIELD_SITEMODE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_SITEMODE_DESC">
 						<option value="dev">MOD_TROMBINOSCOPE_VALUE_TESTMODE</option>
@@ -1206,28 +1210,9 @@
 					<field name="sort_locale" type="text" default="en_GB"
 						label="MOD_TROMBINOSCOPE_FIELD_SORTLOCALE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_SORTLOCALE_DESC" />
-				</fieldset>				
-						
-				<fieldset name="advanced_module" label="MOD_TROMBINOSCOPE_MODULE_LABEL">		
-<!-- 				<field type="title" title="MOD_TROMBINOSCOPE_MODULE_LABEL" /> -->
-					
-					<field name="show_on_mobile" type="list" default="1" 
-						label="MOD_TROMBINOSCOPE_FIELD_SHOWONMOBILE_LABEL"
-						description="MOD_TROMBINOSCOPE_FIELD_SHOWONMOBILE_DESC">
-						<option value="1">JYES</option>
-						<option value="2">MOD_TROMBINOSCOPE_VALUE_ONLY</option>
-						<option value="0">JNO</option>
-					</field>
-					
-					<field name="show_on_contact_page" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
-						label="MOD_TROMBINOSCOPE_FIELD_SHOWONCONTACTPAGE_LABEL"
-						description="MOD_TROMBINOSCOPE_FIELD_SHOWONCONTACTPAGE_DESC">
-						<option value="0">JNO</option>
-						<option value="1">JYES</option>
-					</field>
 				</fieldset>
 				
-				<fieldset name="advanced_prepost" label="">
+				<fieldset name="advanced_prepost" label="MOD_TROMBINOSCOPE_ADVANCEDPREPOST_FIELDSET_LABEL">
 				
 					<field name="pretext" type="editor" rows="5" editor="codemirror|none" filter="safehtml" buttons="false" syntax="html"
 						label="MOD_TROMBINOSCOPE_FIELD_PRETEXT_LABEL"
@@ -1245,7 +1230,22 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="advanced_module_standard" label="">
+				<fieldset name="advanced_module" label="MOD_TROMBINOSCOPE_MODULE_LABEL">
+				
+					<field name="show_on_mobile" type="list" default="1" 
+						label="MOD_TROMBINOSCOPE_FIELD_SHOWONMOBILE_LABEL"
+						description="MOD_TROMBINOSCOPE_FIELD_SHOWONMOBILE_DESC">
+						<option value="1">JYES</option>
+						<option value="2">MOD_TROMBINOSCOPE_VALUE_ONLY</option>
+						<option value="0">JNO</option>
+					</field>
+					
+					<field name="show_on_contact_page" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TROMBINOSCOPE_FIELD_SHOWONCONTACTPAGE_LABEL"
+						description="MOD_TROMBINOSCOPE_FIELD_SHOWONCONTACTPAGE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
 						
 					<field name="moduleclass_sfx" type="text"
 						label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" />

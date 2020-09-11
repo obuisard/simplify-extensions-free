@@ -18,8 +18,6 @@ class StyleSelectField extends DynamicSingleSelect
 {
 	public $type = 'StyleSelect';
 
-	protected $img_suffix;
-
 	protected function getOptions()
 	{
 		$options = array();
@@ -49,9 +47,7 @@ class StyleSelectField extends DynamicSingleSelect
 				}
 			}
 
-			$image_hover = '';
-
-			$options[] = array($option, $translated_option, $description, URI::root(true) . $imagepath . '/' . $option . $this->img_suffix . '.png', $image_hover);
+			$options[] = array($option, $translated_option, $description, URI::root(true) . $imagepath . '/' . $option . '.png');
 		}
 
 		return $options;
@@ -64,7 +60,6 @@ class StyleSelectField extends DynamicSingleSelect
 		if ($return) {
 			$this->width = 240;
 			$this->height = 125;
-			$this->img_suffix = isset($this->element['imgsuffix']) ? $this->element['imgsuffix'] : '';
 		}
 
 		return $return;
