@@ -88,7 +88,7 @@
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos/filtering" class="alert alert-info" -->
 <!-- 					description="MOD_WEBLINKLOGO_BASIC_FIELDSET_DESC" /> -->
 			
-				<fieldset name="selection_source" label="">
+				<fieldset name="selection_source" label="MOD_WEBLINKLOGO_SELECTIONSOURCE_FIELDSET_LABEL">
 <!-- 				<field type="title" title="MOD_WEBLINKLOGO_DYNAMIC_LABEL" /> -->
 				
 					<field name="related" type="list" default="0" 
@@ -101,7 +101,7 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="selection_categories" label="">
+				<fieldset name="selection_categories" label="MOD_WEBLINKLOGO_SELECTIONCATEGORIES_FIELDSET_LABEL">
 <!-- 				<field type="title" title="MOD_WEBLINKLOGO_STATIC_LABEL" />	 -->
 				
 					<field name="cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
@@ -140,7 +140,7 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="selection_tags" label="">
+				<fieldset name="selection_tags" label="MOD_WEBLINKLOGO_SELECTIONTAGS_FIELDSET_LABEL">
 				
 					<field name="tags_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
 						label="MOD_WEBLINKLOGO_FIELD_TAGSFILTER_LABEL"
@@ -170,7 +170,7 @@
 					</field>
 				</fieldset>
 
-				<fieldset name="selection_exin" label="">
+				<fieldset name="selection_exin" label="MOD_WEBLINKLOGO_SELECTIONINEX_FIELDSET_LABEL">
 			
 					<field name="ex" type="text" default="" filter="string" translateHint="false" hint="20,34,47" 
 						label="MOD_WEBLINKLOGO_FIELD_EXCLUDE_LABEL" 
@@ -181,7 +181,7 @@
 						description="MOD_WEBLINKLOGO_FIELD_INCLUDE_DESC" />
 				</fieldset>
 				
-				<fieldset name="selection_order" label="">
+				<fieldset name="selection_order" label="MOD_WEBLINKLOGO_SELECTIONORDER_FIELDSET_LABEL">
 					
 					<field name="ordering" type="list" default="title" 
 						label="MOD_WEBLINKLOGO_FIELD_ORDERING_LABEL"
@@ -199,8 +199,18 @@
 						<option value="desc">MOD_WEBLINKLOGO_FIELD_VALUE_DESCENDING</option>
 					</field>
 				</fieldset>
+				
+				<fieldset name="selection_language" label="MOD_WEBLINKLOGO_SELECTIONLANGUAGE_FIELDSET_LABEL">
+				
+					<field name="filter_lang" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_FILTERLANGUAGE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_FILTERLANGUAGE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
 					
-				<fieldset name="selection_count" label="">
+				<fieldset name="selection_count" label="MOD_WEBLINKLOGO_SELECTIONCOUNT_FIELDSET_LABEL">
 					
 					<field name="count" type="sywverbosetext" default="" size="4" 
 						label="MOD_WEBLINKLOGO_FIELD_COUNT_LABEL"
@@ -319,7 +329,7 @@
 					</field>
 				</fieldset>						
 				
-				<fieldset name="layout_title" label="">	
+				<fieldset name="layout_title" label="MOD_WEBLINKLOGO_LAYOUTTITLE_FIELDSET_LABEL">	
 				
 					<field name="title" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_WEBLINKLOGO_FIELD_TITLE_LABEL"
@@ -347,7 +357,7 @@
 					</field>
 				</fieldset>					
 				
-				<fieldset name="layout_hits" label="">	
+				<fieldset name="layout_hits" label="MOD_WEBLINKLOGO_LAYOUTHITS_FIELDSET_LABEL">	
 				
 					<field name="hits" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_WEBLINKLOGO_FIELD_HITS_LABEL"
@@ -372,7 +382,7 @@
 					</field>
 				</fieldset>					
 				
-				<fieldset name="layout_description" label="">
+				<fieldset name="layout_description" label="MOD_WEBLINKLOGO_LAYOUTDESCRIPTION_FIELDSET_LABEL">
 				
 					<field name="description" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_WEBLINKLOGO_FIELD_DESCRIPTION_LABEL"
@@ -662,13 +672,13 @@
                 </field>    
 			</fieldset>
 			
-			<fieldset name="advanced">
+			<fieldset name="advanced" description="MOD_WEBLINKLOGO_ADVANCED_FIELDSET_DESC">
 			
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos/advanced" class="alert alert-info" />					 -->
 	            
-	            <fieldset name="advanced_general" label="">
+	            <fieldset name="advanced_general" label="MOD_WEBLINKLOGO_ADVANCED_FIELDSET_LABEL">
 	            
-		            <field name="site_mode" type="list" default="adv" 
+		            <field name="site_mode" type="list" default="dev" 
 						label="MOD_WEBLINKLOGO_FIELD_SITEMODE_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_SITEMODE_DESC">
 						<option value="dev">MOD_WEBLINKLOGO_VALUE_TESTMODE</option>
@@ -772,20 +782,8 @@
 						<option value="1">JYES</option>
 					</field>
 				</fieldset>
-						
-				<fieldset name="advanced_module" label="MOD_WEBLINKLOGO_MODULE_LABEL">		
-<!-- 				<field type="title" title="MOD_WEBLINKLOGO_MODULE_LABEL" /> -->
 				
-					<field name="show_on_mobile" type="list" default="1" 
-						label="MOD_WEBLINKLOGO_FIELD_SHOWONMOBILE_LABEL"
-						description="MOD_WEBLINKLOGO_FIELD_SHOWONMOBILE_DESC">
-						<option value="1">JYES</option>
-						<option value="2">MOD_WEBLINKLOGO_VALUE_ONLY</option>
-						<option value="0">JNO</option>
-					</field>
-				</fieldset>
-				
-				<fieldset name="advanced_prepost" label="">
+				<fieldset name="advanced_prepost" label="MOD_WEBLINKLOGO_ADVANCEDPREPOST_FIELDSET_LABEL">
 					
 					<field name="pretext" type="editor" rows="5" editor="codemirror|none" filter="safehtml" buttons="false" syntax="html"
 						label="MOD_WEBLINKLOGO_FIELD_PRETEXT_LABEL"
@@ -802,8 +800,17 @@
 						<option value="1">JYES</option>
 					</field>
 				</fieldset>
+						
+				<fieldset name="advanced_module" label="MOD_WEBLINKLOGO_MODULE_LABEL">		
+<!-- 				<field type="title" title="MOD_WEBLINKLOGO_MODULE_LABEL" /> -->
 				
-				<fieldset name="advanced_module_standard" label="">
+					<field name="show_on_mobile" type="list" default="1" 
+						label="MOD_WEBLINKLOGO_FIELD_SHOWONMOBILE_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_SHOWONMOBILE_DESC">
+						<option value="1">JYES</option>
+						<option value="2">MOD_WEBLINKLOGO_VALUE_ONLY</option>
+						<option value="0">JNO</option>
+					</field>
 					
 					<field name="moduleclass_sfx" type="text"
 						label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" />

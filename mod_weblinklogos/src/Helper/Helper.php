@@ -363,7 +363,7 @@ class Helper
 
 		// filter by language
 
-		if ($app->getLanguageFilter()) {
+		if ($params->get('filter_lang', 1) && $app->getLanguageFilter()) {
 			$query->where($db->quoteName('a.language').' IN ('.$db->quote(Factory::getLanguage()->getTag()).','.$db->quote('*').')');
 		}
 
