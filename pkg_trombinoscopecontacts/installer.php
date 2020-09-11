@@ -101,27 +101,8 @@ class Pkg_TrombinoscopeInstallerScript
 		$this->extension = $installer->getName();
 		$this->release = $installer->getManifest()->version;
 
-		// install the library and its plugin if missing or outdated
-
-	    if (!Folder::exists(JPATH_ROOT.'/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw') || !PluginHelper::isEnabled('system', 'syw') || !SYW\Library\Version::isCompatible($this->minimumLibrary)) {
-
-	    	if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
-	    		Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-	    		return false;
-	    	}
-
-	    	if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
-	    		Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-	    		return false;
-	    	}
-
-	    	// enable the library plugin
-	    	$this->enablePlugin('plugin', 'syw', 'system');
-
-	    	Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
-	    }
-
-		return true;
+		// make sure the library is installed and that it is compatible with the extension
+		return $this->installOrUpdateLibrary();
 	}
 
 	/**
@@ -155,7 +136,7 @@ class Pkg_TrombinoscopeInstallerScript
 		}
 
         echo '<p style="margin: 10px 0 20px 0">';
-    	echo HTMLHelper::image('mod_trombinoscope/logo.png', 'Trombinoscope Contacts', null, true);
+    	echo HTMLHelper::image('mod_trombinoscopecontacts/logo.png', 'Trombinoscope Contacts', null, true);
     	echo '<br /><br /><span class="badge badge-dark">'.Text::sprintf('PKG_TROMBINOSCOPE_VERSION', $this->release).'</span>';
     	echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
     	echo '</p>';
@@ -180,7 +161,7 @@ class Pkg_TrombinoscopeInstallerScript
      	$images_path = $media_params->get('image_path', 'images');
 
      	foreach ($imagefiles as $imagefile) {
-     		$src = JPATH_ROOT.'/media/mod_trombinoscope/images/'.$imagefile;
+     		$src = JPATH_ROOT.'/media/mod_trombinoscopecontacts/images/'.$imagefile;
      		$dest = JPATH_ROOT.'/'.$images_path.'/'.$imagefile;
 
      		if (!File::copy($src, $dest)) {
@@ -193,7 +174,7 @@ class Pkg_TrombinoscopeInstallerScript
      		// link to Quickstart
 
      		$message = Text::sprintf('PKG_TROMBINOSCOPE_INFO_LEARN', $this->quickstartLink);
-     		$message .= '<br /><br /><a href="' . $this->quickstartLink . '" target="_blank">' . HTMLHelper::image('mod_trombinoscope/quickstart.png', 'Quick Start', null, true) . '</a>';
+     		$message .= '<br /><br /><a href="' . $this->quickstartLink . '" target="_blank">' . HTMLHelper::image('mod_trombinoscopecontacts/quickstart.png', 'Quick Start', null, true) . '</a>';
 
      		//Factory::getApplication()->enqueueMessage($message, 'notice');
      		echo '<div class="alert alert-info">' . $message . '</div>';
@@ -394,25 +375,80 @@ class Pkg_TrombinoscopeInstallerScript
 		return true;
 	}
 
-	private function enablePlugin($type, $element, $folder = '')
+	private function enableExtension($type, $element, $folder = '', $enable = true)
 	{
 		$db = Factory::getDBO();
 
 		$query = $db->getQuery(true);
 
 		$query->update($db->quoteName('#__extensions'));
-		$query->set($db->quoteName('enabled').' = 1');
+		if ($enable) {
+			$query->set($db->quoteName('enabled').' = 1');
+		} else {
+			$query->set($db->quoteName('enabled').' = 0');
+		}
 		$query->where($db->quoteName('type').' = '.$db->quote($type));
 		$query->where($db->quoteName('element').' = '.$db->quote($element));
-		$query->where($db->quoteName('folder').' = '.$db->quote($folder));
+		if ($folder) {
+			$query->where($db->quoteName('folder').' = '.$db->quote($folder));
+		}
 
 		$db->setQuery($query);
 
 		try {
 			$db->execute();
 		} catch (ExecutionFailureException $e) {
-			//JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+			//Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 			return false;
+		}
+
+		return true;
+	}
+
+	private function installOrUpdateLibrary()
+	{
+		// install the library and its plugin if missing or outdated
+
+		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
+			if (!Folder::exists(JPATH_ROOT . '/libraries/syw')) {
+				if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
+					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+					return false;
+				}
+			}
+
+			if (!Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
+				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
+					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+					return false;
+				}
+			}
+
+			Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
+		} else {
+
+			$library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
+			if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
+
+				if (!$this->installOrUpdatePackage($installer, 'lib_syw', 'update')) {
+					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
+					return false;
+				}
+
+				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw', 'update')) {
+					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
+					return false;
+				}
+
+				Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_UPDATED', $this->minimumLibrary), 'message');
+			}
+		}
+
+		if (!PluginHelper::isEnabled('system', 'syw')) {
+			if (!$this->enableExtension('plugin', 'syw', 'system')) {
+				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_COULDNOTENABLEPLUGINFORLIBRARY'), 'error');
+				return false;
+			}
 		}
 
 		return true;
