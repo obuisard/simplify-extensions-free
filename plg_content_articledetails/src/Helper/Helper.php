@@ -1473,26 +1473,27 @@ class Helper
 
 						$info_block .= '<span class="detail_data">';
 
-						\JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
+// 						\JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
 
 						$link = str_replace(array("tmpl=component", "print=1"), "", $item->link);
 						$link = rtrim($link, "?&amp;");
 						$link = rawurldecode(rtrim(Uri::root(), "/").$link);
 
-						$template = $app->getTemplate();
-						$url = 'index.php?option=com_mailto&tmpl=component&template='.$template.'&link='.MailToHelper::addLink($link);
+// 						$template = $app->getTemplate();
+// 						$url = 'index.php?option=com_mailto&tmpl=component&template='.$template.'&link='.MailToHelper::addLink($link);
 
-						$status = 'width=400,height=350,menubar=yes,resizable=yes';
+// 						$status = 'width=400,height=350,menubar=yes,resizable=yes';
 
 						$attribs = array(
 							'title'   => Text::_('JGLOBAL_EMAIL'),
 							'class' => 'hasTooltip',
-							'onclick' => "window.open(this.href,'win2','".$status."'); return false;"
+// 							'onclick' => "window.open(this.href,'win2','".$status."'); return false;"
 						);
 
 						$text = '<i class="SYWicon-email"></i><span>'.Text::_('JGLOBAL_EMAIL').'</span>';
 
-						$info_block .= HTMLHelper::_('link', $url, $text, $attribs);
+// 						$info_block .= HTMLHelper::_('link', $url, $text, $attribs);
+						$info_block .= HTMLHelper::_('link', 'mailto:?subject=' . htmlspecialchars($item->title) . '&amp;body=' . $link, $text, $attribs); // TODO or urlencode the title?
 
 						$info_block .= '</span>';
 
@@ -1608,27 +1609,28 @@ class Helper
 	 *
 	 * @return string
 	 */
-	public static function sendToFriendIcon($link, $classes = '')
+	public static function sendToFriendIcon($title, $link, $classes = '')
 	{
-		\JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
+// 		\JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
 
 		$link = rawurldecode($link);
 
-		$template = Factory::getApplication()->getTemplate();
-		$url = 'index.php?option=com_mailto&tmpl=component&template='.$template.'&link='.MailToHelper::addLink($link);
+// 		$template = Factory::getApplication()->getTemplate();
+// 		$url = 'index.php?option=com_mailto&tmpl=component&template='.$template.'&link='.MailToHelper::addLink($link);
 
-		$status = 'width=400,height=350,menubar=yes,resizable=yes';
+// 		$status = 'width=400,height=350,menubar=yes,resizable=yes';
 
 		$attribs = array(
 			'title' => Text::_('JGLOBAL_EMAIL'),
 			'class' => 'hasTooltip sendtofriend'.$classes,
-			'onclick' => "window.open(this.href,'win2','".$status."'); return false;",
-		    'aria-label' => Text::_('JGLOBAL_EMAIL')
+// 			'onclick' => "window.open(this.href,'win2','".$status."'); return false;",
+// 		    'aria-label' => Text::_('JGLOBAL_EMAIL')
 		);
 
 		$text = '<i class="SYWicon-email" aria-hidden="true"></i>';
 
-		$output = HTMLHelper::_('link', $url, $text, $attribs);
+		//$output = HTMLHelper::_('link', $url, $text, $attribs);
+		$output = HTMLHelper::_('link', 'mailto:?subject=' . urlencode($title) . '&amp;body=' . $link, $text, $attribs);
 
 		return $output;
 	}

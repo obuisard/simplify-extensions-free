@@ -94,10 +94,10 @@ class HeadSelectField extends GroupedListField
 				if (!empty($group_options)) {
 
 					$group_name = Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_ICONGROUP');
-					$groups[$group_name] = array();
+					$groups[$group_name] = $group_options;
 
 					//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_ICONGROUP'));
-					$groups[$group_name] = array_merge($groups[$group_name], $group_options);
+					//$groups[$group_name] = array_merge($groups[$group_name], $group_options);
 					//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_ICONGROUP'));
 				}
 			}
@@ -171,11 +171,6 @@ class HeadSelectField extends GroupedListField
 
 		if ($fields_exist) {
 
-			$group_name = Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JOOMLAFIELDS');
-			$groups[$group_name] = array();
-
-			//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JOOMLAFIELDS'));
-
 			foreach ($fieldsPerGroup as $group_id => $groupFields) {
 
 				if (!$groupFields) {
@@ -183,11 +178,9 @@ class HeadSelectField extends GroupedListField
 				}
 
 				foreach ($groupFields as $field) {
-					$groups[$group_name][] = HTMLHelper::_('select.option', $prefix.':'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
+					$groups[] = HTMLHelper::_('select.option', $prefix.':'.$field->type.':'.$field->id, $groupTitles[$group_id].': '.$field->title . ' (Pro)', 'value', 'text', $disable = true);
 				}
 			}
-
-			//$options[] = HTMLHelper::_('select.optgroup', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JOOMLAFIELDS'));
 		}
 
 		return $groups;

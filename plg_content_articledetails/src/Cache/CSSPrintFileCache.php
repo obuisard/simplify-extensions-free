@@ -71,9 +71,9 @@ class CSSPrintFileCache extends HeaderFilesCache
 		// set the header
 		$this->sendHttpHeaders('css');
 
-		include JPATH_ROOT . '/plugins/content/articledetails/styles/print.css.php';
+		include JPATH_ROOT . '/media/plg_content_articledetails/styles/print.css.php';
 		if ($calendar) {
-			include JPATH_ROOT . '/plugins/content/articledetails/styles/calendar/'.$calendar.'/print.css.php';
+			include JPATH_ROOT . '/media/plg_content_articledetails/styles/calendar/' . $calendar . '/print.css.php';
 		}
 
 		return $this->compress(ob_get_clean());

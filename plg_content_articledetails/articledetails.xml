@@ -101,12 +101,12 @@
 				<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_INFO_SYNTAX" style="info" />
 			</fieldset>
 			
-			<fieldset name="layout" label="PLG_CONTENT_ARTICLEDETAILS_LAYOUT_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_LAYOUT_FIELDSET_DESC">
+			<fieldset name="categorylayout" label="PLG_CONTENT_ARTICLEDETAILS_CATEGORYLAYOUT_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_CATEGORYLAYOUT_FIELDSET_DESC">
 				
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/layout" class="alert alert-info" -->
 <!-- 					description="PLG_CONTENT_ARTICLEDETAILS_LAYOUT_FIELDSET_DESC" /> -->
 				
-				<fieldset name="layout_listview" label="PLG_CONTENT_ARTICLEDETAILS_LISTVIEW_LABEL">
+				<fieldset name="layout_listview" label="PLG_CONTENT_ARTICLEDETAILS_CATEGORYLAYOUT_FIELDSET_LABEL">
 <!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_LISTVIEW_LABEL" /> -->
 				
 					<field name="disable_in_list_views" type="radio" default="0" layout="joomla.form.field.radio.switcher"
@@ -116,7 +116,7 @@
 						<option value="1">JYES</option>
 					</field>
 					
-					<field name="layoutspacer1" type="spacer" hr="true" showon="disable_in_list_views:0" />
+<!-- 					<field name="layoutspacer1" type="spacer" hr="true" showon="disable_in_list_views:0" /> -->
 					
 					<field name="lists_head_type" type="headselect" default="none" showon="disable_in_list_views:0" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADTYPELISTS_LABEL" 
@@ -142,7 +142,7 @@
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_VERTICALALIGN_LABEL" 
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_VERTICALALIGN_DESC" />
 						
-					<field name="layoutspacer2" type="spacer" hr="true" showon="disable_in_list_views:0" />
+<!-- 					<field name="layoutspacer2" type="spacer" hr="true" showon="disable_in_list_views:0" /> -->
 					
 					<field name="lists_align_details" type="list" default="left" showon="disable_in_list_views:0" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ALIGNDETAILS_LABEL" 
@@ -151,15 +151,20 @@
 						<option value="center">PLG_CONTENT_ARTICLEDETAILS_VALUE_CENTER</option>	
 						<option value="right">PLG_CONTENT_ARTICLEDETAILS_VALUE_RIGHT</option>
 					</field>
+				</fieldset>
 					
-					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL" showon="disable_in_list_views:0" />
+				<fieldset name="layout_listviewmobile" label="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL">
+<!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL" showon="disable_in_list_views:0" /> -->
 	
 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="disable_in_list_views:0" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_CENTERINTROIMAGE_LABEL" 
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_CENTERINTROIMAGE_DESC" />
 				</fieldset>
-				
-				<fieldset name="layout_articleviewheader" label="PLG_CONTENT_ARTICLEDETAILS_ARTICLEVIEWHEADER_LABEL">
+			</fieldset>
+			
+			<fieldset name="articlelayout" label="PLG_CONTENT_ARTICLEDETAILS_ARTICLELAYOUT_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_ARTICLELAYOUT_FIELDSET_DESC">
+								
+				<fieldset name="layout_articleviewheader" label="PLG_CONTENT_ARTICLEDETAILS_HEADER_LABEL">
 <!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_ARTICLEVIEW_LABEL" /> -->
 				
 <!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_HEADER_LABEL" /> -->
@@ -188,7 +193,7 @@
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_VERTICALALIGN_LABEL" 
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_VERTICALALIGN_DESC" />
 						
-					<field name="layoutspacer3" type="spacer" hr="true" />
+<!-- 					<field name="layoutspacer3" type="spacer" hr="true" /> -->
 									
 					<field name="align_details" type="list" default="left" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ALIGNDETAILS_LABEL" 
@@ -199,9 +204,8 @@
 					</field>
 				</fieldset>
 						
-				<fieldset name="layout_articleviewfooter" label="PLG_CONTENT_ARTICLEDETAILS_ARTICLEVIEWFOOTER_LABEL">
-				
-					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_FOOTER_LABEL" />
+				<fieldset name="layout_articleviewfooter" label="PLG_CONTENT_ARTICLEDETAILS_FOOTER_LABEL">				
+<!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_FOOTER_LABEL" /> -->
 					
 					<field name="footer_head_type" type="headselect" default="none" location="footer" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADTYPE_LABEL" 
@@ -211,7 +215,7 @@
 					
 <!-- 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_MOREELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
 					
-					<field name="layoutspacer4" type="spacer" hr="true" />
+<!-- 					<field name="layoutspacer4" type="spacer" hr="true" /> -->
 					
 					<field name="footer_align_details" type="list" default="left" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ALIGNDETAILS_LABEL" 
@@ -220,8 +224,10 @@
 						<option value="center">PLG_CONTENT_ARTICLEDETAILS_VALUE_CENTER</option>	
 						<option value="right">PLG_CONTENT_ARTICLEDETAILS_VALUE_RIGHT</option>
 					</field>
-					
-					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL" />
+				</fieldset>
+				
+				<fieldset name="layout_articleviewfootermobile" label="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL">
+<!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL" /> -->
 					
 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_CENTERFULLIMAGE_LABEL" 
@@ -260,7 +266,7 @@
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/calendar" class="alert alert-info" -->
 <!-- 					description="PLG_CONTENT_ARTICLEDETAILS_CALENDAR_FIELDSET_DESC" /> -->
 
-				<fieldset name="calendar_date" label="">
+				<fieldset name="calendar_date" label="PLG_CONTENT_ARTICLEDETAILS_CALENDAR_FIELDSET_LABEL">
 		            <field name="post_d" type="list" default="published" 
 			           	label="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSTDATE_LABEL" 
 			           	description="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSTDATE_DESC">
@@ -440,7 +446,7 @@
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/header" class="alert alert-info" -->
 <!-- 					description="PLG_CONTENT_ARTICLEDETAILS_HEADER_FIELDSET_DESC" /> -->
 					
-				<fieldset name="header_publish" label="">
+				<fieldset name="header_publish" label="PLG_CONTENT_ARTICLEDETAILS_HEADER_FIELDSET_LABEL">
 					<field name="show_pub_status" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWPUBLICATIONSTATUS_LABEL" 
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWPUBLICATIONSTATUS_DESC">
@@ -508,7 +514,7 @@
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/details" class="alert alert-info" -->
 <!-- 					description="PLG_CONTENT_ARTICLEDETAILS_DETAILS_FIELDSET_DESC" /> -->
 					
-				<fieldset name="details_styles"	label="">
+				<fieldset name="details_styles"	label="PLG_CONTENT_ARTICLEDETAILS_DETAILSSTYLES_FIELDSET_LABEL">
 				
 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_WARNING_INFORMATIONCONDITIONSTOSHOW" style="warning" />
 						
@@ -762,19 +768,17 @@
 				</fieldset>
 			</fieldset>
 			
-			<fieldset name="advanced">
+			<fieldset name="advanced" description="PLG_CONTENT_ARTICLEDETAILS_ADVANCED_FIELDSET_DESC">
 			
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/advanced" class="alert alert-info" /> -->
 				
-				<fieldset name="advanced_general" label="">
+				<fieldset name="advanced_general" label="PLG_CONTENT_ARTICLEDETAILS_ADVANCED_FIELDSET_LABEL">
 				
 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_LAYOUTSUFFIX_LABEL" 
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_LAYOUTSUFFIX_DESC" />
-	
-					<field name="advancedspacer" type="spacer" hr="true" />
 					
-					<field name="site_mode" type="list" default="adv" 
+					<field name="site_mode" type="list" default="dev" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SITEMODE_LABEL" 
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SITEMODE_DESC">
 						<option value="dev">PLG_CONTENT_ARTICLEDETAILS_VALUE_TESTMODE</option>
