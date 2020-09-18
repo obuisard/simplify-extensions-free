@@ -81,7 +81,7 @@
 <!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/data-source" class="alert alert-info" -->
 <!-- 					description="MOD_TRULYRESPONSIVESLIDER_DATASOURCE_FIELDSET_DESC" /> -->
 			
-				<fieldset name="datasource_general" label="">
+				<fieldset name="datasource_general" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONSOURCE_FIELDSET_LABEL">
 				
 					<field name="layout" type="datasourceselect" default="articles"
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_LAYOUT_LABEL"
@@ -110,7 +110,7 @@
 	                </field>
 	            </fieldset>                
 					
-				<fieldset name="datasource_categories" label="">
+				<fieldset name="datasource_categories" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONCATEGORIES_FIELDSET_LABEL">
 				
 					<field name="cat_id" type="category" extension="com_content" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select" showon="layout:articles" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CATEGORY_LABEL" 
@@ -133,7 +133,7 @@
 					</field>				
 	            </fieldset>                
 					
-				<fieldset name="datasource_tags" label="">	
+				<fieldset name="datasource_tags" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONTAGS_FIELDSET_LABEL">	
 					
 					<field name="tags" type="tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select" showon="layout:articles" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TAGS_LABEL" 
@@ -155,7 +155,7 @@
 					</field>
 	            </fieldset>                
 					
-				<fieldset name="datasource_inex" label="">
+				<fieldset name="datasource_exin" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONINEX_FIELDSET_LABEL">
 					
 					<field name="ex" type="text" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles,k2" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_EXCLUDE_LABEL" 
@@ -164,9 +164,21 @@
 					<field name="in" type="text" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles,k2" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDE_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDE_DESC" />
-	            </fieldset>                
+	            </fieldset>
 					
-				<fieldset name="datasource_order" label="">
+				<fieldset name="datasource_featured" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONFEATURED_FIELDSET_LABEL">
+				  	
+					<field name="show_f" type="list" default="" showon="layout:articles,k2" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_FEATURED_LABEL"
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_FEATURED_DESC">
+						<option value="0">JNO</option>
+						<option value="">JYES</option>
+						<option value="1">MOD_TRULYRESPONSIVESLIDER_VALUE_ONLYSHOWFEATURED</option>
+						<option value="2">MOD_TRULYRESPONSIVESLIDER_VALUE_SHOWFIRST</option>
+					</field>
+	            </fieldset>                 
+					
+				<fieldset name="datasource_order" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONORDER_FIELDSET_LABEL">
 											
 					<field name="cat_order" type="list" default="" showon="layout:articles,k2" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CATORDER_LABEL" 
@@ -194,21 +206,19 @@
 						<option value="title_dsc">MOD_TRULYRESPONSIVESLIDER_VALUE_TITLEDESC</option>
 						<option value="title_asc">MOD_TRULYRESPONSIVESLIDER_VALUE_TITLEASC</option>
 				  	</field>
-	            </fieldset>                
-					
-				<fieldset name="datasource_featured" label="">
-				  	
-					<field name="show_f" type="list" default="" showon="layout:articles,k2" 
-						label="MOD_TRULYRESPONSIVESLIDER_FIELD_FEATURED_LABEL"
-						description="MOD_TRULYRESPONSIVESLIDER_FIELD_FEATURED_DESC">
+	            </fieldset>
+				
+				<fieldset name="datasource_language" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONLANGUAGE_FIELDSET_LABEL">
+				
+					<field name="filter_lang" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="layout:articles,k2" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_FILTERLANGUAGE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_FILTERLANGUAGE_DESC">
 						<option value="0">JNO</option>
-						<option value="">JYES</option>
-						<option value="1">MOD_TRULYRESPONSIVESLIDER_VALUE_ONLYSHOWFEATURED</option>
-						<option value="2">MOD_TRULYRESPONSIVESLIDER_VALUE_SHOWFIRST</option>
+						<option value="1">JYES</option>
 					</field>
-	            </fieldset>                
+				</fieldset>
 					
-				<fieldset name="datasource_count" label="">
+				<fieldset name="datasource_count" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONCOUNT_FIELDSET_LABEL">
 					
 					<field name="count" type="sywverbosetext" default="" filter="string" size="4" showon="layout:articles,k2" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_COUNT_LABEL" 
@@ -221,7 +231,7 @@
 <!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/slider" class="alert alert-info" -->
 <!-- 					description="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_DESC" /> -->
 					
-				<fieldset name="slider_general" label="">
+				<fieldset name="slider_general" label="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_LABEL">
 				
 					<field name="animation" type="list" default="basic" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ANIMATION_LABEL" 
@@ -500,15 +510,15 @@
 					description="MOD_TRULYRESPONSIVESLIDER_FIELD_INTERVAL_DESC" />			
 			</fieldset>
 					
-			<fieldset name="advanced">	
+			<fieldset name="advanced" description="MOD_TRULYRESPONSIVESLIDER_ADVANCED_FIELDSET_DESC">	
 			
 <!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/advanced" class="alert alert-info" /> -->
 			
 <!-- 				<field type="message" text="MOD_TRULYRESPONSIVESLIDER_INFO_JQUERYVERSIONREQUIRED" style="info" /> -->
 				
-				<fieldset name="advanced_general" label="">
+				<fieldset name="advanced_general" label="MOD_TRULYRESPONSIVESLIDER_ADVANCED_FIELDSET_LABEL">
 				
-					<field name="site_mode" type="list" default="adv" 
+					<field name="site_mode" type="list" default="dev" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_SITEMODE_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_SITEMODE_DESC">
 						<option value="dev">MOD_TRULYRESPONSIVESLIDER_VALUE_TESTMODE</option>
@@ -565,10 +575,10 @@
 						<option value="cache">MOD_TRULYRESPONSIVESLIDER_VALUE_CACHEDIRECTORY</option>
 					</field>
 					
-					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" message="MOD_TRULYRESPONSIVESLIDER_INFO_AUTORESETPLUGIN" 
-						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset"
-						imagesrc="media/mod_trulyresponsiveslides/images/logo_autoreset_small.png"
-						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" />
+<!-- 					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" message="MOD_TRULYRESPONSIVESLIDER_INFO_AUTORESETPLUGIN"  -->
+<!-- 						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset" -->
+<!-- 						imagesrc="media/mod_trulyresponsiveslides/images/logo_autoreset_small.png" -->
+<!-- 						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" /> -->
 				</fieldset>
 						
 				<fieldset name="advanced_headers" label="MOD_TRULYRESPONSIVESLIDER_HEADERFILES_LABEL">	
@@ -603,20 +613,8 @@
 						<option value="1">JYES</option>
 					</field>
 				</fieldset>
-						
-				<fieldset name="advanced_module" label="MOD_TRULYRESPONSIVESLIDER_MODULE_LABEL">		
-<!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_MODULE_LABEL" />				 -->
 				
-					<field name="show_on_mobile" type="list" default="1" 
-						label="MOD_TRULYRESPONSIVESLIDER_FIELD_SHOWONMOBILE_LABEL"
-						description="MOD_TRULYRESPONSIVESLIDER_FIELD_SHOWONMOBILE_DESC">
-						<option value="0">JNO</option>
-						<option value="1">JYES</option>
-						<option value="2">MOD_TRULYRESPONSIVESLIDER_VALUE_ONLY</option>
-					</field>
-				</fieldset>
-				
-				<fieldset name="advanced_prepost" label="">		
+				<fieldset name="advanced_prepost" label="MOD_TRULYRESPONSIVESLIDER_ADVANCEDPREPOST_FIELDSET_LABEL">		
 					<field name="pretext" type="editor" rows="5" filter="safehtml" buttons="false" syntax="html"
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_PRETEXT_LABEL"
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_PRETEXT_DESC" />
@@ -634,7 +632,16 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="advanced_module_standard" label="">	
+				<fieldset name="advanced_module" label="MOD_TRULYRESPONSIVESLIDER_MODULE_LABEL">		
+<!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_MODULE_LABEL" />				 -->
+				
+					<field name="show_on_mobile" type="list" default="1" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_SHOWONMOBILE_LABEL"
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_SHOWONMOBILE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+						<option value="2">MOD_TRULYRESPONSIVESLIDER_VALUE_ONLY</option>
+					</field>
 			                
 					<field name="moduleclass_sfx" type="text"
 						label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" />
