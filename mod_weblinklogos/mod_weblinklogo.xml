@@ -678,6 +678,10 @@
 	            
 	            <fieldset name="advanced_general" label="MOD_WEBLINKLOGO_ADVANCED_FIELDSET_LABEL">
 	            
+		            <field type="message" text="MOD_WEBLINKLOGO_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_WEBLINKLOGO_FIELD_LAYOUTSUFFIX_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_LAYOUTSUFFIX_DESC" />
+	            
 		            <field name="site_mode" type="list" default="dev" 
 						label="MOD_WEBLINKLOGO_FIELD_SITEMODE_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_SITEMODE_DESC">
