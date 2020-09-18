@@ -395,7 +395,7 @@
 		            </field>
 		        </fieldset>
 		        
-<!-- 		        <fieldset name="independant_jquery" label="PLG_SYSTEM_JQUERYEASY_INDEPENDENTMODIFICATIONS_LABEL" description="PLG_SYSTEM_JQUERYEASY_INFO_INDEPENDENT"> -->	            
+		        <fieldset name="independant_jquery" label="PLG_SYSTEM_JQUERYEASY_INDEPENDENTMODIFICATIONS_LABEL" description="PLG_SYSTEM_JQUERYEASY_INFO_INDEPENDENT">	            
 <!-- 		            <field type="title" title="PLG_SYSTEM_JQUERYEASY_INDEPENDENTMODIFICATIONS_LABEL" /> -->
 		            
 <!-- 		            <field type="message" style="info" text="PLG_SYSTEM_JQUERYEASY_INFO_INDEPENDENT" /> -->
@@ -408,7 +408,11 @@
 <!-- 		                <option value="0">JNO</option> -->
 <!-- 		                <option value="1">JYES</option> -->
 <!-- 		            </field> -->
-<!-- 		    	</fieldset> -->
+	            
+		            <field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"
+		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_DISABLECHOSEN_LABEL" 
+		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_DISABLECHOSEN_DESC" />
+		    	</fieldset>
 			</fieldset>
 			
 			<fieldset name="bootstrap_options" label="PLG_SYSTEM_JQUERYEASY_BOOTSTRAPOPTIONS_LABEL" description="PLG_SYSTEM_JQUERYEASY_BOOTSTRAPOPTIONS_DESC">

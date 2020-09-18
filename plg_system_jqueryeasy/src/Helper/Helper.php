@@ -33,14 +33,11 @@ class Helper
         if (isset($array_of_template_values['none']) && $array_of_template_values['none'] > 0) { // 'none' was selected
             // keep the plugin enabled
         } else {
-            if (!empty(Factory::getApplication()->getTemplate(true)->id)) {
-                $current_template_id = Factory::getApplication()->getTemplate(true)->id;
-                foreach ($array_of_template_values as $key => $value) {
-                    if ($current_template_id == $key) {
-                        return false;
-                    }
-                }
-            }
+        	if (Factory::getApplication()->getTemplate() !== 'system') {
+        		if (in_array(Factory::getApplication()->getTemplate(true)->id, $templates_array)) {
+        			return false;
+        		}
+        	}
         }
 
         // enable plugin only on the allowed pages
@@ -223,6 +220,15 @@ class Helper
                 Factory::getDocument()->addScriptDeclaration($declaration);
             }
         }
+
+//         if (trim($declaration) != '') {
+//         	$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
+//         	//$declaration = preg_replace('!\/\*[\s\S]*?\*\/|\/\/.*!', '', $declaration); // remove comments
+//         	//$declaration = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $declaration); // minify
+
+//         	$wam->addInlineScript($declaration);
+//         }
     }
 
     static public function addStyleSheet($url, $versioning = false, $type = 'text/css', $media = null, $attribs = array())

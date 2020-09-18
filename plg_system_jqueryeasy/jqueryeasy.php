@@ -109,9 +109,10 @@ class plgSystemJQueryEasy extends CMSPlugin
 
 		// BEGIN prepare spaces to fill with scripts declarations
 
-		if (!$this->_headonly) {
-		    Helper::addScriptDeclaration(trim((string) $this->params->get('addjavascriptdeclaration' . $this->_suffix, '')), 'ADD_SCRIPT_DECLARATION_HERE');
-		}
+ 		if (!$this->_headonly) {
+ 		    Helper::addScriptDeclaration(trim((string) $this->params->get('addjavascriptdeclaration' . $this->_suffix, '')), 'ADD_SCRIPT_DECLARATION_HERE');
+//			Helper::addScriptDeclaration($javascript_declaration);
+ 		}
 
 		// END prepare spaces to fill with scripts declarations
 
@@ -660,31 +661,15 @@ class plgSystemJQueryEasy extends CMSPlugin
 					}
 				}
 
-				// remaining scripts
-
-				foreach ($scripts as $url => $type) {
-			    	$new_scripts[$url] = $type;
-				}
-
 				Helper::report($this->_verbose_array, 'message', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REORDEREDLIBRARIES');
-			} else {
-			    foreach ($scripts as $url => $type) {
-			        $new_scripts[$url] = $type;
-			    }
 			}
 	    }
 
-	    if ($this->_headonly) {
-	        Factory::getDocument()->_scripts = array_merge($new_scripts, $scripts);
-	    } else {
-	        Factory::getDocument()->_scripts = $new_scripts;
-	    }
+	    Factory::getDocument()->_scripts = array_merge($new_scripts, $scripts);
 
 	    Factory::getDocument()->_script['text/javascript'] = $script_declarations['text/javascript'];
 
-	    if ($this->_headonly) {
-	        Factory::getDocument()->_styleSheets = array_merge($new_styles, $styles);
-	    }
+	    Factory::getDocument()->_styleSheets = array_merge($new_styles, $styles);
 
 	    Factory::getDocument()->_style['text/css'] = $style_declarations['text/css'];
 
@@ -1087,7 +1072,7 @@ class plgSystemJQueryEasy extends CMSPlugin
     				Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSTYLESHEETDECLARATION', $lines[0]);
     			}
     		}
-    		
+
     		// Remove blank lines
 
     		if ($this->params->get('removeblanklines' . $this->_suffix, 0)) {
