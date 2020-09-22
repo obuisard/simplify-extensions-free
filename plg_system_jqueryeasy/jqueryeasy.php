@@ -111,7 +111,6 @@ class plgSystemJQueryEasy extends CMSPlugin
 
  		if (!$this->_headonly) {
  		    Helper::addScriptDeclaration(trim((string) $this->params->get('addjavascriptdeclaration' . $this->_suffix, '')), 'ADD_SCRIPT_DECLARATION_HERE');
-//			Helper::addScriptDeclaration($javascript_declaration);
  		}
 
 		// END prepare spaces to fill with scripts declarations
@@ -137,7 +136,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 		// compression
 
 		$compressed = '';
-		if ($this->params->get('compression' . $this->_suffix, 'compressed') == 'compressed' && !JDEBUG) {
+		if ($this->params->get('compression' . $this->_suffix, 'compressed') == 'compressed' && !(defined('JDEBUG') && JDEBUG)) {
 			$compressed = '.min';
 		}
 
