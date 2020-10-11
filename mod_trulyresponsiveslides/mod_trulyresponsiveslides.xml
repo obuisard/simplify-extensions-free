@@ -29,6 +29,8 @@
 	</files>
 	
 	<languages>
+		<language tag="de-DE">language/de-DE/de-DE.mod_trulyresponsiveslides.ini</language>
+		<language tag="de-DE">language/de-DE/de-DE.mod_trulyresponsiveslides.sys.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.mod_trulyresponsiveslides.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.mod_trulyresponsiveslides.sys.ini</language>
 		<language tag="fa-IR">language/fa-IR/fa-IR.mod_trulyresponsiveslides.ini</language>
