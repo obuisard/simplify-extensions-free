@@ -14,6 +14,7 @@
 	<description>PKG_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description> 
 	<scriptfile>installer.php</scriptfile>
 	<languages>
+		<language tag="de-DE">language/de-DE/de-DE.pkg_trulyresponsiveslides.sys.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.pkg_trulyresponsiveslides.sys.ini</language>
 		<language tag="fa-IR">language/fa-IR/fa-IR.pkg_trulyresponsiveslides.sys.ini</language>
 		<language tag="fr-FR">language/fr-FR/fr-FR.pkg_trulyresponsiveslides.sys.ini</language>
