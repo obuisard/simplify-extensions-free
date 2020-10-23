@@ -11,30 +11,30 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Environment\Browser;
 use SYW\Library\Vendor\MobileDetect;
 
-class Utilities 
+class Utilities
 {
 	static $isMobile = null;
 	static $SVGSprites = array();
-	
+
 	/*
 	 * Determines if the device is mobile
 	 */
 	static function isMobile($use_joomla_library = false)
 	{
 		if (!isset(self::$isMobile)) {
-			
-			if ($use_joomla_library) {				
+
+			if ($use_joomla_library) {
 				$browser = Browser::getInstance();
 				self::$isMobile = $browser->isMobile();
-			} else {				
+			} else {
 				$detect = new MobileDetect;
 				self::$isMobile = $detect->isMobile();
 			}
 		}
-		
+
 		return self::$isMobile;
 	}
-	
+
 	/*
 	* Returns the google font found in a font family
 	* The returned font is of format "Google Font"
@@ -42,7 +42,7 @@ class Utilities
 	static function getGoogleFont($font_family)
 	{
 		$google_font = '';
-	
+
 		$standard_fonts = array();
 		$standard_fonts[] = "Palatino Linotype";
 		$standard_fonts[] = "Book Antiqua";
@@ -57,7 +57,7 @@ class Utilities
 		$standard_fonts[] = "MS Sans Serif";
 		$standard_fonts[] = "Courier New";
 		$standard_fonts[] = "Lucida Console";
-	
+
 		$fonts = explode(',', $font_family);
 		foreach ($fonts as $font) {
 			if (substr_count($font, '"') == 2) { // found a font with 2 quotes
@@ -70,10 +70,10 @@ class Utilities
 				$google_font = $font;
 			}
 		}
-	
+
 		return $google_font;
 	}
-	
+
 	/*
 	 * Transform "Google Font" into Google+Font for use in <link> tag
 	 */
@@ -82,7 +82,7 @@ class Utilities
 		$font = str_replace(' ', '+', $google_font); // replace spaces by +
 		return trim($font, '"');
 	}
-	
+
 	/*
 	 * Convert a hexa decimal color code to its RGB equivalent
 	 *
@@ -91,7 +91,7 @@ class Utilities
 	 * @param string $seperator (to separate RGB values. Applicable only if second parameter is true.)
 	 * @return array or string (depending on second parameter. Returns False if invalid hex color value)
 	 */
-	static function hex2RGB($hexStr, $returnAsString = false, $seperator = ',') 
+	static function hex2RGB($hexStr, $returnAsString = false, $seperator = ',')
 	{
 	    $hexStr = preg_replace("/[^0-9A-Fa-f]/", '', $hexStr); // Gets a proper hex string
 	    $rgbArray = array();
@@ -107,10 +107,10 @@ class Utilities
 	    } else {
 	        return false; //Invalid hex color code
 	    }
-	    
+
 	    return $returnAsString ? implode($seperator, $rgbArray) : $rgbArray; // returns the rgb string or the associative array
-	} 
-	
+	}
+
 	/*
 	 * Bootstrap conversion function (handles Bootstrap 2,3 and 4)
 	 * returns default class if Bootstrap version is unknown (or 0)
@@ -119,11 +119,11 @@ class Utilities
 	{
 		$bootstrap_version = intval($bootstrap_version);
 	    switch ($property) {
-	        
+
 	        // buttons
-	        
+
 	        case 'btn': return 'btn'; break; // exists for all versions
-	        
+
 	        case 'btn-default': // no default in B2 nor B4
 	        	if ($bootstrap_version == 0 || $bootstrap_version == 3) { return 'btn-default'; }
 	            break;
@@ -159,9 +159,9 @@ class Utilities
 	            if ($bootstrap_version == 0 || $bootstrap_version == 3) { return 'btn-xs'; }
 	            return 'btn-sm';
 	            break;
-	            
-	            // labels
-	            
+
+	        // labels
+
 	        case 'label':
 	        	if ($bootstrap_version < 4) { return 'label'; }
 	            return 'badge';
@@ -204,9 +204,9 @@ class Utilities
 	        	if ($bootstrap_version == 0) { return 'label-dark'; }
 	            if ($bootstrap_version >= 4) { return 'badge-dark'; }
 	            break;
-	            
-	            // badges-pills
-	            
+
+	        // badges-pills
+
 	        case 'badge':
 	        	if ($bootstrap_version < 4) { return 'badge'; }
 	            return 'badge badge-pill';
@@ -242,11 +242,11 @@ class Utilities
 	        case 'badge-dark': // not in B2 nor B3
 	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'badge-dark'; }
 	            break;
-	            
-	            // alerts
-	            
+
+	        // alerts
+
 	        case 'alert': return 'alert'; break; // exists for all versions
-	        
+
 	        case 'alert-primary': // not in B2 nor B3
 	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'alert-primary'; }
 	            break;
@@ -268,11 +268,11 @@ class Utilities
 	        case 'alert-dark': // not in B2 nor B3
 	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'alert-dark'; }
 	            break;
-	            
-	            // pagination
-	            
+
+	        // pagination
+
 	        case 'pagination': return 'pagination'; break; // exists for all versions
-	        
+
 	        case 'pagination-large':
 	            if ($bootstrap_version == 2) { return 'pagination-large'; }
 	            return 'pagination-lg';
@@ -297,29 +297,39 @@ class Utilities
 	        	if ($bootstrap_version == 0) { return 'pagination-right'; }
 	            if ($bootstrap_version >= 4) { return 'justify-content-end'; }
 	            break;
-            
-	            // align
-	            
+
+	        // align
+
 	        case 'float-right':
 	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'float-right'; }
 	            return 'pull-right';
 	            break;
-	            
+
 	        case 'float-left':
 	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'float-left'; }
 	            return 'pull-left';
 	            break;
-	            
+
 	        case 'float-none':
 	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'float-none'; }
 	            break;
-	            
-	            // clearfix exists for all versions
+
+	        // clearfix exists for all versions
+
+	        // hidden on the phone
+
+	        case 'hidden-phone':
+	        	switch ($bootstrap_version) {
+	        		case 0: case 2: return 'hidden-phone'; break;
+	        		case 3: return 'hidden-xs'; break;
+	        		default: return 'd-none d-sm-block'; break;
+	        	}
+	        	break;
 	    }
-	    
+
 	    return '';
 	}
-	
+
 	/**
 	 * output inline svg with reusable sprites and avoid duplicate code
 	 *

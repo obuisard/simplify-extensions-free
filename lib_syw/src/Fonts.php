@@ -9,37 +9,31 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\HTML\HTMLHelper;
 
 class Fonts
 {
-	//protected static $iconfontLoaded = false;
+	protected static $iconfontLoaded = array('syw' => false, 'icomoon' => false);
 	protected static $googlefontLoaded = array();
 
 	/**
 	 * Load the icon font if needed
 	 */
-	static function loadIconFont($syw_font = true, $icomoon_font = false, $debug = false)
+	static function loadIconFont($name = 'syw')
 	{
-// 		if (self::$iconfontLoaded) {
-// 			return;
-// 		}
-
-	    if ($syw_font) {
-	    	$minified = (JDEBUG) ? '' : '-min';
-    		//Factory::getDocument()->addStyleSheet(URI::base(true).'/media/syw/css/fonts.css');
-	    	HTMLHelper::stylesheet('syw/fonts' . $minified . '.css', array('relative' => true, 'version' => 'auto'));
-	    }
-
-	    // TODO Beware! not used in Joomla 4 anymore (add font-awesome)
-	    // offer old icomoon css for backward compatibility
-
-	    if ($icomoon_font) {
-	        //Factory::getDocument()->addStyleSheet(URI::base(true).'/media/jui/css/icomoon.css');
-	    	HTMLHelper::stylesheet('jui/icomoon.css', array('relative' => true, 'version' => 'auto'));
+		if (self::$iconfontLoaded[$name]) {
+			return;
 		}
 
-		//self::$iconfontLoaded = true;
+		$minified = (JDEBUG) ? '' : '-min';
+
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
+	    switch ($name) {
+	    	case 'icomoon' : $wam->registerAndUseStyle('syw.font.icomoon', 'syw/fonts-icomoon' . $minified . '.css', ['relative' => true, 'version' => 'auto']); break;
+	    	default: $wam->registerAndUseStyle('syw.font', 'syw/fonts' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
+	    }
+
+		self::$iconfontLoaded[$name] = true;
 	}
 
 	/**
@@ -55,7 +49,8 @@ class Fonts
 			return;
 		}
 
-		Factory::getDocument()->addStyleSheet('https://fonts.googleapis.com/css?family='.$safefont);
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+		$wam->registerAndUseStyle('syw.googlefont.' . $safefont, 'https://fonts.googleapis.com/css?family=' . $safefont);
 
 		self::$googlefontLoaded[$safefont] = true;
 	}

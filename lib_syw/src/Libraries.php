@@ -9,17 +9,14 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-//use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\HTML\HTMLHelper;
 
 class Libraries
 {
-	//static $purePajinateLoaded = false;
+	static $purePajinateLoaded = false;
 	static $lazysizesLoaded = false;
 	static $tinySliderLoaded = false;
 	static $tingleLoaded = false;
 
-	//static $jq_pajinateLoaded = false;
 	static $jq_owlLoaded = false;
 
 	static $jqcLoaded = false;
@@ -42,24 +39,26 @@ class Libraries
 	 */
 	static function loadPurePajinate($remote = false, $defer = false, $async = false)
 	{
-// 		if (self::$purePajinateLoaded) {
-// 			return;
-// 		}
+		if (self::$purePajinateLoaded) {
+			return;
+		}
 
 		$minified = (JDEBUG) ? '' : '.min';
 
 		$attributes = array();
 		if ($defer) {
-			$attributes['defer'] = 'defer';
+			$attributes['defer'] = true;
 		}
 		if ($async) {
 			$attributes['async'] = 'async';
 		}
 
-		//Factory::getDocument()->addScript(URI::root(true).'/media/syw/js/purepajinate/purePajinate' . $minified . '.js', array('version' => 'auto'), $attributes);
-		HTMLHelper::script('syw/purepajinate/purePajinate' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+		$wam->registerAndUseScript('syw.purePajinate', 'syw/purepajinate/purePajinate' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes);
 
-		//self::$purePajinateLoaded = true;
+		//HTMLHelper::script('syw/purepajinate/purePajinate' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
+
+		self::$purePajinateLoaded = true;
 	}
 
 	/*
@@ -76,6 +75,7 @@ class Libraries
 	 * https://github.com/ganlanyuan/tiny-slider
 	 * IE8+ compatible
 	 * the CSS file has been modified to add styling of the dots
+	 * the JS file has been modified to add RTL support
 	 */
 	static function loadTinySlider($remote = false, $defer = false, $async = false)
 	{
@@ -83,29 +83,41 @@ class Libraries
 			return;
 		}
 
-		$doc = Factory::getDocument();
+		$minified = (JDEBUG) ? '' : '.min';
+
+		// WARNING loading the library remotely won't have the RTL fix
+		$remote = false;
 
 		$attributes = array();
 		if ($defer) {
-			$attributes['defer'] = 'defer';
+			$attributes['defer'] = true;
 		}
 		if ($async) {
 			$attributes['async'] = 'async';
 		}
 
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 		if ($remote) {
-			$minified = (JDEBUG) ? '' : '/min';
 
-			$doc->addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/tiny-slider.css'); // no min
-			$doc->addStyleDeclaration('.tns-nav{text-align:center;margin:10px 0}.tns-nav>[aria-controls]{width:9px;height:9px;padding:0;margin:0 5px;border-radius:50%;background:#ddd;border:0}.tns-nav>.tns-nav-active{background:#999}');
-			$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2' . $minified . '/tiny-slider.js');
+			$wam->registerAndUseStyle('syw.tinyslider', 'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider' . $minified . '.css');
+			$wam->registerAndUseScript('syw.tinyslider', 'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider' . $minified . '.js', [], $attributes);
+
+			$wam->addInlineStyle('.tns-slider{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}.tns-nav{text-align:center;margin:10px 0}.tns-nav>[aria-controls]{width:9px;height:9px;padding:0;margin:0 5px;border-radius:50%;background:#ddd;border:0}.tns-nav>.tns-nav-active{background:#999}');
+
+			//$doc->addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider' . $minified . '.css');
+
+			// style additions
+			//$doc->addStyleDeclaration('.tns-slider{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}.tns-nav{text-align:center;margin:10px 0}.tns-nav>[aria-controls]{width:9px;height:9px;padding:0;margin:0 5px;border-radius:50%;background:#ddd;border:0}.tns-nav>.tns-nav-active{background:#999}');
+
+			//$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider' . $minified . '.js');
 		} else {
-			$minified = (JDEBUG) ? '' : '.min';
 
-			//$doc->addStyleSheet(URI::root(true).'/media/syw/css/tinyslider/tiny-slider' . $minified . '.css', array('version' => 'auto'));
-			HTMLHelper::stylesheet('syw/tinyslider/tiny-slider' . $minified . '.css', array('relative' => true, 'version' => 'auto'));
-			//$doc->addScript(URI::root(true).'/media/syw/js/tinyslider/tiny-slider' . $minified . '.js', array('version' => 'auto'), $attributes);
-			HTMLHelper::script('syw/tinyslider/tiny-slider' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
+			$wam->registerAndUseStyle('syw.tinyslider', 'syw/tinyslider/tiny-slider' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
+			$wam->registerAndUseScript('syw.tinyslider', 'syw/tinyslider/tiny-slider' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes);
+
+			//HTMLHelper::stylesheet('syw/tinyslider/tiny-slider' . $minified . '.css', array('relative' => true, 'version' => 'auto'));
+			//HTMLHelper::script('syw/tinyslider/tiny-slider' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
 		}
 
 		self::$tinySliderLoaded = true;
@@ -127,22 +139,28 @@ class Libraries
 
 		$attributes = array();
 		if ($defer) {
-			$attributes['defer'] = 'defer';
+			$attributes['defer'] = true;
 		}
 		if ($async) {
 			$attributes['async'] = 'async';
 		}
 
-		$doc = Factory::getDocument();
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		if ($remote) {
-			$doc->addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle' . $minified . '.css');
-			$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle' . $minified . '.js');
+
+			$wam->registerAndUseStyle('syw.tingle', 'https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle' . $minified . '.css');
+			$wam->registerAndUseScript('syw.tingle', 'https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle' . $minified . '.js', [], $attributes);
+
+			//$doc->addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle' . $minified . '.css');
+			//$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle' . $minified . '.js');
 		} else {
-			//$doc->addStyleSheet(JURI::root(true).'/media/syw/css/tingle/tingle' . $minified . '.css', array('version' => 'auto'));
-			HTMLHelper::stylesheet('syw/tingle/tingle' . $minified . '.css', array('relative' => true, 'version' => 'auto'));
-			//$doc->addScript(JURI::root(true).'/media/syw/js/tingle/tingle' . $minified . '.js', array('version' => 'auto'), $attributes);
-			HTMLHelper::script('syw/tingle/tingle' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
+
+			$wam->registerAndUseStyle('syw.tingle', 'syw/tingle/tingle' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
+			$wam->registerAndUseScript('syw.tingle', 'syw/tingle/tingle' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes);
+
+			//HTMLHelper::stylesheet('syw/tingle/tingle' . $minified . '.css', array('relative' => true, 'version' => 'auto'));
+			//HTMLHelper::script('syw/tingle/tingle' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
 		}
 
 		self::$tingleLoaded = true;
@@ -219,7 +237,9 @@ class Libraries
 			});
 JS;
 
-		Factory::getDocument()->addScriptDeclaration(self::compress($inline_js));
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+		$wam->addInlineScript(self::compress($inline_js));
+		//Factory::getDocument()->addScriptDeclaration(self::compress($inline_js));
 
 		self::$instantiatePureModalLoaded[] = $selector;
 	}
@@ -239,22 +259,28 @@ JS;
 
 		$attributes = array();
 		if ($defer) {
-			$attributes['defer'] = 'defer';
+			$attributes['defer'] = true;
 		}
 		if ($async) {
 			$attributes['async'] = 'async';
 		}
 
-		$doc = Factory::getDocument();
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		if ($remote) {
-			$doc->addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel' . $minified . '.css');
-			$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel' . $minified . '.js');
+
+			$wam->registerAndUseStyle('syw.owlcarousel', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel' . $minified . '.css');
+			$wam->registerAndUseScript('syw.owlcarousel', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel' . $minified . '.js', [], $attributes, ['jquery']);
+
+			//$doc->addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel' . $minified . '.css');
+			//$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel' . $minified . '.js');
 		} else {
-			//$doc->addStyleSheet(URI::root(true).'/media/syw/css/owlcarousel/owl.carousel' . $minified . '.css', array('version' => 'auto'));
-			HTMLHelper::stylesheet('syw/owlcarousel/owl.carousel' . $minified . '.css', array('relative' => true, 'version' => 'auto'));
-			//$doc->addScript(URI::root(true).'/media/syw/js/owlcarousel/owl.carousel' . $minified . '.js', array('version' => 'auto'), $attributes);
-			HTMLHelper::script('syw/owlcarousel/owl.carousel' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
+
+			$wam->registerAndUseStyle('syw.owlcarousel', 'syw/owlcarousel/owl.carousel' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
+			$wam->registerAndUseScript('syw.owlcarousel', 'syw/owlcarousel/owl.carousel' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+
+			//HTMLHelper::stylesheet('syw/owlcarousel/owl.carousel' . $minified . '.css', array('relative' => true, 'version' => 'auto'));
+			//HTMLHelper::script('syw/owlcarousel/owl.carousel' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
 		}
 
 		self::$jq_owlLoaded = true;
@@ -275,49 +301,23 @@ JS;
 
 		$attributes = array();
 		if ($defer) {
-			$attributes['defer'] = 'defer';
+			$attributes['defer'] = true;
 		}
 		if ($async) {
 			$attributes['async'] = 'async';
 		}
 
-		$doc = Factory::getDocument();
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		if ($remote) {
-			$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.0/lazysizes.min.js'); // only minified version
+			$wam->registerAndUseScript('syw.lazysizes', 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.0/lazysizes.min.js', [], $attributes, ['jquery']);
+			//$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.0/lazysizes.min.js'); // only minified version
 		} else {
-			//$doc->addScript(URI::root(true).'/media/syw/js/lazysizes/lazysizes' . $minified . '.js', array('version' => 'auto'), $attributes);
-			HTMLHelper::script('syw/lazysizes/lazysizes' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
+			$wam->registerAndUseScript('syw.lazysizes', 'syw/lazysizes/lazysizes' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+			//HTMLHelper::script('syw/lazysizes/lazysizes' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
 		}
 
 		self::$lazysizesLoaded = true;
-	}
-
-	/**
-	 * Load Pajinate (jQuery plugin)
-	 * v0.4 modified
-	 * https://github.com/wesnolte/Pajinate
-	 */
-	static function loadPagination($defer = false, $async = false, $remote = false)
-	{
-// 		if (self::$jq_pajinateLoaded) {
-// 			return;
-// 		}
-
-		$minified = (JDEBUG) ? '' : '.min';
-
-		$attributes = array();
-		if ($defer) {
-			$attributes['defer'] = 'defer';
-		}
-		if ($async) {
-			$attributes['async'] = 'async';
-		}
-
-		//Factory::getDocument()->addScript(URI::root(true).'/media/syw/js/pagination/jquery.pajinate' . $minified . '.js', array('version' => 'auto'), $attributes);
-		HTMLHelper::script('syw/pagination/jquery.pajinate' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
-
-		//self::$jq_pajinateLoaded = true;
 	}
 
 	/**
@@ -332,7 +332,7 @@ JS;
 
 		$attributes = array();
 		if ($defer) {
-			$attributes['defer'] = 'defer';
+			$attributes['defer'] = true;
 		}
 		if ($async) {
 			$attributes['async'] = 'async';
@@ -359,12 +359,12 @@ JS;
 			self::loadCarousel_transit($defer, $async, $remote);
 		}
 
-		$doc = Factory::getDocument();
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		if (!self::$jqcMultipackLoaded && $will_use_multipack) { // multi-pack is not used when debug or when remote
 
-			//$doc->addScript(URI::root(true).'/media/syw/js/carousel/jquery.carouFredSel.min.js', array('version' => 'auto'), $attributes);
-			HTMLHelper::script('syw/carousel/jquery.carouFredSel.min.js', array('relative' => true, 'version' => 'auto'), $attributes);
+			$wam->registerAndUseScript('syw.caroufredsel', 'syw/carousel/jquery.carouFredSel.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+			//HTMLHelper::script('syw/carousel/jquery.carouFredSel.min.js', array('relative' => true, 'version' => 'auto'), $attributes);
 
 			self::$jqcMultipackLoaded = true;
 		} else {
@@ -374,10 +374,11 @@ JS;
 			}
 
 			if ($remote) {
-				$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/jquery.caroufredsel/6.2.1/jquery.carouFredSel.packed.js'); // only minified version
+				$wam->registerAndUseScript('syw.caroufredsel', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.caroufredsel/6.2.1/jquery.carouFredSel.packed.js', [], $attributes, ['jquery']); // only minified version
+				//$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/jquery.caroufredsel/6.2.1/jquery.carouFredSel.packed.js'); // only minified version
 			} else {
-				//$doc->addScript(URI::root(true).'/media/syw/js/carousel/jquery.carouFredSel-6.2.1' . ((JDEBUG) ? '' : '-packed') . '.js', array('version' => 'auto'), $attributes);
-				HTMLHelper::script('syw/carousel/jquery.carouFredSel-6.2.1' . ((JDEBUG) ? '' : '-packed') . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
+				$wam->registerAndUseScript('syw.caroufredsel', 'syw/carousel/jquery.carouFredSel-6.2.1' . ((JDEBUG) ? '' : '-packed') . '.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+				//HTMLHelper::script('syw/carousel/jquery.carouFredSel-6.2.1' . ((JDEBUG) ? '' : '-packed') . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
 			}
 
 			self::$jqcLoaded = true;
@@ -396,19 +397,20 @@ JS;
 
 		$attributes = array();
 		if ($defer) {
-			$attributes['defer'] = 'defer';
+			$attributes['defer'] = true;
 		}
 		if ($async) {
 			$attributes['async'] = 'async';
 		}
 
-		$doc = Factory::getDocument();
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		if ($remote) {
-			$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce' . ((JDEBUG) ? '' : '.min') . '.js');
+			$wam->registerAndUseScript('syw.caroufredsel.throttle', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce' . ((JDEBUG) ? '' : '.min') . '.js', [], $attributes, ['jquery']);
+			//$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce' . ((JDEBUG) ? '' : '.min') . '.js');
 		} else {
-			//$doc->addScript(URI::root(true).'/media/syw/js/carousel/jquery.ba-throttle-debounce.min.js', array('version' => 'auto'), $attributes);
-			HTMLHelper::script('syw/carousel/jquery.ba-throttle-debounce.min.js', array('relative' => true, 'version' => 'auto'), $attributes);
+			$wam->registerAndUseScript('syw.caroufredsel.throttle', 'syw/carousel/jquery.ba-throttle-debounce.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+			//HTMLHelper::script('syw/carousel/jquery.ba-throttle-debounce.min.js', array('relative' => true, 'version' => 'auto'), $attributes);
 		}
 
 		self::$jqcthrottleLoaded = true;
@@ -426,19 +428,20 @@ JS;
 
 		$attributes = array();
 		if ($defer) {
-			$attributes['defer'] = 'defer';
+			$attributes['defer'] = true;
 		}
 		if ($async) {
 			$attributes['async'] = 'async';
 		}
 
-		$doc = Factory::getDocument();
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		if ($remote) {
-			$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.18/jquery.touchSwipe' . ((JDEBUG) ? '' : '.min') . '.js');
+			$wam->registerAndUseScript('syw.caroufredsel.touch', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.18/jquery.touchSwipe' . ((JDEBUG) ? '' : '.min') . '.js', [], $attributes, ['jquery']);
+			//$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.18/jquery.touchSwipe' . ((JDEBUG) ? '' : '.min') . '.js');
 		} else {
-			//$doc->addScript(URI::root(true).'/media/syw/js/carousel/jquery.touchSwipe.min.js', array('version' => 'auto'), $attributes);
-			HTMLHelper::script('syw/carousel/jquery.touchSwipe.min.js', array('relative' => true, 'version' => 'auto'), $attributes);
+			$wam->registerAndUseScript('syw.caroufredsel.touch', 'syw/carousel/jquery.touchSwipe.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+			//HTMLHelper::script('syw/carousel/jquery.touchSwipe.min.js', array('relative' => true, 'version' => 'auto'), $attributes);
 		}
 
 		self::$jqctouchLoaded = true;
@@ -456,14 +459,16 @@ JS;
 
 		$attributes = array();
 		if ($defer) {
-			$attributes['defer'] = 'defer';
+			$attributes['defer'] = true;
 		}
 		if ($async) {
 			$attributes['async'] = 'async';
 		}
 
-		//Factory::getDocument()->addScript(URI::root(true).'/media/syw/js/carousel/jquery.mousewheel.min.js', array('version' => 'auto'), $attributes);
-		HTMLHelper::script('syw/carousel/jquery.mousewheel.min.js', array('relative' => true, 'version' => 'auto'), $attributes);
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
+		$wam->registerAndUseScript('syw.caroufredsel.mousewheel', 'syw/carousel/jquery.mousewheel.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+		//HTMLHelper::script('syw/carousel/jquery.mousewheel.min.js', array('relative' => true, 'version' => 'auto'), $attributes);
 
 		self::$jqcmousewheelLoaded = true;
 	}
@@ -480,14 +485,16 @@ JS;
 
 		$attributes = array();
 		if ($defer) {
-			$attributes['defer'] = 'defer';
+			$attributes['defer'] = true;
 		}
 		if ($async) {
 			$attributes['async'] = 'async';
 		}
 
-		//Factory::getDocument()->addScript(URI::root(true).'/media/syw/js/carousel/jquery.transit.min.js', array('version' => 'auto'), $attributes);
-		HTMLHelper::script('syw/carousel/jquery.transit.min.js', array('relative' => true, 'version' => 'auto'), $attributes);
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
+		$wam->registerAndUseScript('syw.caroufredsel.transit', 'syw/carousel/jquery.transit.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+		//HTMLHelper::script('syw/carousel/jquery.transit.min.js', array('relative' => true, 'version' => 'auto'), $attributes);
 
 		self::$jqctransitLoaded = true;
 	}
@@ -507,7 +514,7 @@ JS;
 		$javascript = array();
 
 		$javascript[] = 'document.addEventListener("readystatechange", function(event) { ';
-			$javascript[] = 'if (event.target.readyState !== "loading") { ';
+			$javascript[] = 'if (event.target.readyState == "complete") { ';
 
 				$javascript[] = 'var elements = document.querySelectorAll("' . $selector . '[data-src]"); ';
 
@@ -515,7 +522,7 @@ JS;
 
 					$javascript[] = 'for (var i = 0; i < elements.length; i++) { ';
 						$javascript[] = 'el = elements[i]; ';
-						$javascript[] = 'if (el.classList) { el.classList.add("lazyload"); } else { el.className += " " + className } ';
+						$javascript[] = 'if (el.classList) { el.classList.add("lazyload"); } else { el.className += " lazyload" } ';
 						if ($lazyload && $lazyload_image) {
 							$javascript[] = 'el.setAttribute("src", "' . $lazyload_image . '"); ';
 						}
@@ -528,7 +535,7 @@ JS;
 
 						$javascript[] = 'for (var i = 0; i < elements.length; i++) { ';
 							$javascript[] = 'el = elements[i]; ';
-							$javascript[] = 'if (el.classList) { el.classList.add("lazyload"); } else { el.className += " " + className } ';
+							$javascript[] = 'if (el.classList) { el.classList.add("lazyload"); } else { el.className += " lazyload" } ';
 							$javascript[] = 'el.setAttribute("data-src", el.getAttribute("src")); ';
 							$javascript[] = 'el.setAttribute("src", "' . $lazyload_image . '"); ';
 						$javascript[] = '} ';
@@ -539,7 +546,10 @@ JS;
 			$javascript[] = '} ';
 		$javascript[] = '}); ';
 
-		Factory::getDocument()->addScriptDeclaration(implode($javascript));
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
+		$wam->addInlineScript(implode($javascript));
+		//Factory::getDocument()->addScriptDeclaration(implode($javascript));
 
 		self::$highresLoaded[] = $selector;
 	}
@@ -556,7 +566,10 @@ JS;
 		// returns false if version e > t (version is 1.3.2 for example)
 		$compareScript = 'function SYWCompareVersions(e,t){var r=!1;if(e==t)return!0;"object"!=typeof e&&(e=e.toString().split(".")),"object"!=typeof t&&(t=t.toString().split("."));for(var o=0;o<Math.max(e.length,t.length);o++){if(void 0==e[o]&&(e[o]=0),void 0==t[o]&&(t[o]=0),Number(e[o])<Number(t[o])){r=!0;break}if(e[o]!=t[o])break}return r};';
 
-		Factory::getDocument()->addScriptDeclaration($compareScript);
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
+		$wam->addInlineScript($compareScript);
+		//Factory::getDocument()->addScriptDeclaration($compareScript);
 
 		self::$compareLoaded = true;
 	}
