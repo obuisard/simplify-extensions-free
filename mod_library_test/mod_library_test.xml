@@ -9,6 +9,10 @@
 	<authorUrl>www.simplifyyourweb.com</authorUrl>
 	<version>2.0.0</version>
 	<description>MOD_LIBRARY_TEST_XML_DESCRIPTION</description>
+	<media folder="media" destination="mod_library_test">
+		<filename>index.html</filename>	
+		<folder>images</folder>
+	</media>
 	<files>
 		<filename module="mod_library_test">mod_library_test.php</filename>
 		<filename>index.html</filename>
