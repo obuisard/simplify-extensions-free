@@ -16,8 +16,7 @@ class GDTestField extends FormField
 {
 	public $type = 'Gdtest';
 
-	protected $show_gif;
-	protected $show_webp;
+	protected $supportedtypes; // can be gif jpg png webp
 	protected $message;
 
 	protected function getLabel()
@@ -34,7 +33,7 @@ class GDTestField extends FormField
 
 		$html = '';
 
-		if( !in_array( 'gd', $extensions ) ) {
+		if (!in_array( 'gd', $extensions)) {
 			$html .= '<div style="margin: 0" class="alert alert-error">';
 				if ($this->message) {
 					$html .= '<span style="display: inline-block; padding-bottom: 10px">'. $this->message .'</span><br />';
@@ -50,7 +49,7 @@ class GDTestField extends FormField
 				}
 				$html .= '<span>'.Text::_('LIB_SYW_GDTEST_LOADED').' ('.GD_VERSION.')'.'</span><br />';
 
-			if ($this->show_gif) {
+			if (in_array('gif', $this->supportedtypes)) {
 				if (imagetypes() & IMG_GIF) {
 					$html .= '<span class="badge badge-success">GIF '.lcfirst(Text::_('JENABLED')).'</span> ';
 				} else {
@@ -58,19 +57,23 @@ class GDTestField extends FormField
 				}
 			}
 
-			if (imagetypes() & IMG_JPG) {
-				$html .= '<span class="badge badge-success">JPG '.lcfirst(Text::_('JENABLED')).'</span> ';
-			} else {
-				$html .= '<span class="badge badge-warning">JPG '.lcfirst(Text::_('JDISABLED')).'</span> ';
+			if (in_array('jpg', $this->supportedtypes)) {
+				if (imagetypes() & IMG_JPG) {
+					$html .= '<span class="badge badge-success">JPG '.lcfirst(Text::_('JENABLED')).'</span> ';
+				} else {
+					$html .= '<span class="badge badge-warning">JPG '.lcfirst(Text::_('JDISABLED')).'</span> ';
+				}
 			}
 
-			if (imagetypes() & IMG_PNG) {
-				$html .= '<span class="badge badge-success">PNG '.lcfirst(Text::_('JENABLED')).'</span>';
-			} else {
-				$html .= '<span class="badge badge-warning">PNG '.lcfirst(Text::_('JDISABLED')).'</span>';
+			if (in_array('png', $this->supportedtypes)) {
+				if (imagetypes() & IMG_PNG) {
+					$html .= '<span class="badge badge-success">PNG '.lcfirst(Text::_('JENABLED')).'</span>';
+				} else {
+					$html .= '<span class="badge badge-warning">PNG '.lcfirst(Text::_('JDISABLED')).'</span>';
+				}
 			}
-
-			if ($this->show_webp) {
+			
+			if (in_array('webp', $this->supportedtypes)) {
 				if (imagetypes() & IMG_WEBP) {
 					$html .= ' <span class="badge badge-success">WEBP '.lcfirst(Text::_('JENABLED')).'</span>';
 				} else {
@@ -89,8 +92,8 @@ class GDTestField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->show_gif = isset($this->element['showgif']) ? filter_var($this->element['showgif'], FILTER_VALIDATE_BOOLEAN) : true;
-			$this->show_webp = isset($this->element['showwebp']) ? filter_var($this->element['showwebp'], FILTER_VALIDATE_BOOLEAN) : false;
+			$supportedtypes = isset($this->element['supportedtypes']) ? strtolower(str_replace(' ', '', $this->element['supportedtypes'])) : 'gif,jpg,png';
+			$this->supportedtypes = explode(',', $supportedtypes);
 			$this->message = isset($this->element['message']) ? trim(Text::_($this->element['message'])) : '';
 		}
 
