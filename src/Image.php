@@ -72,9 +72,14 @@ class Image
 	protected $thumbnail_high_res_height = 0;
 
 	/*
-	 * The memory limit currently established on the server
+	 * The current memory limit
 	 */
 	private $memory_limit = -1;
+
+	/*
+	 * The memory limit set on the server
+	 */
+	private $initial_memory_limit = -1;
 
 	/**
 	 * Get the image resource
@@ -184,45 +189,44 @@ class Image
 	 * @param string $from_path
 	 * @param number $width
 	 * @param number $height
-	 * @param boolean|string $increase_memory_limit
+	 * @param boolean|string $increase_memory_limit (ex: '256M')
 	 */
 	public function __construct($from_path = '', $width = 0, $height = 0, $increase_memory_limit = false)
 	{
 		$this->image = false;
 
+		$this->set_initial_memory_limit();
 		if (is_bool($increase_memory_limit) && $increase_memory_limit) {
-			$this->set_memory_limit();
 			$this->increase_memory_limit();
 		} else if (is_string($increase_memory_limit)) {
-			$this->set_memory_limit();
 			$this->increase_memory_limit($increase_memory_limit);
 		}
 
 		Log::addLogger(array('text_file' => 'syw.errors.php'), Log::ALL, array('syw'));
 
 		if ($from_path && $width > 0 && $height > 0) { // create image with the required dimensions
-			
+
 			if (substr($from_path, 0, 4) === 'data') {
-				
+
 				$data_array = explode(';', $from_path);
-				
+
 				$image_string = str_replace('base64,', '', $data_array[1]);
 				$image_string = base64_decode($image_string);
 				$original_image = @imagecreatefromstring($image_string); // no support for WebP
-				
+
 				if (!$original_image) {
 					$this->image = null;
 				} else {
 					$this->image_mimetype = str_replace('data:', '', $data_array[0]);
 					$this->image_path = $from_path;
-					
+
 					$original_width = imagesx($original_image);
 					$original_height = imagesy($original_image);
-					
+
 					// crop only if necessary
 					if ($original_width == $width && $original_height == $height) {
 						$this->image = $original_image;
-						
+
 						$this->image_width = $width;
 						$this->image_height = $height;
 					} else {
@@ -231,41 +235,41 @@ class Image
 						$h = $height / $ratio;
 						$x = ($original_width - $width / $ratio) / 2;
 						$y = ($original_height - $height / $ratio) / 2;
-						
+
 						$this->image = imagecreatetruecolor($width, $height);
 						if (!$this->image) {
 							$this->image = null;
 						} else {
 							$this->image_width = $width;
 							$this->image_height = $height;
-							
+
 							$this->copy_resource($this->image, $original_image, 0, 0, $x, $y, $width, $height, $w, $h);
 						}
 					}
 				}
 			} else {
-				
+
 				// allow image file names with spaces
 				$from_path = str_replace('%20', ' ', $from_path);
-				
+
 				// check if $from_path is url, make sure it goes thru
 				if (substr_count($from_path, 'http') > 0) {
 					$this->image_path_remote = true;
-					
+
 					// HTTPS is only supported when the openssl extension is enabled
 					// in order to minimize errors, we can replace the https:// with http://
 					$from_path = str_replace('https://', 'http://', $from_path);
-					
+
 					$file_headers = @get_headers($from_path); // @ to avoid warnings
 					if (!$file_headers || substr_count($file_headers[0], '200') <= 0) {
 						$this->image =  null;
 					}
 				}
-				
+
 				if (!$this->image) {
-					
+
 					$this->image_path = $from_path;
-					
+
 					$this->image_mimetype = $this->get_image_mime_type($from_path);
 					if (!$this->image_mimetype) {
 						$this->image = null;
@@ -277,17 +281,17 @@ class Image
 							case 'image/webp': $original_image = @imagecreatefromwebp($from_path); break;
 							default: $original_image = false; // unsupported type
 						}
-						
+
 						if (!$original_image) {
 							$this->image = null;
 						} else {
 							$original_width = imagesx($original_image);
 							$original_height = imagesy($original_image);
-							
+
 							// crop only if necessary
 							if ($original_width == $width && $original_height == $height) {
 								$this->image = $original_image;
-								
+
 								$this->image_width = $width;
 								$this->image_height = $height;
 							} else {
@@ -296,61 +300,61 @@ class Image
 								$h = $height / $ratio;
 								$x = ($original_width - $width / $ratio) / 2;
 								$y = ($original_height - $height / $ratio) / 2;
-								
+
 								$this->image = imagecreatetruecolor($width, $height);
 								if (!$this->image) {
 									$this->image = null;
 								} else {
 									$this->image_width = $width;
 									$this->image_height = $height;
-									
+
 									$this->copy_resource($this->image, $original_image, 0, 0, $x, $y, $width, $height, $w, $h);
 								}
 							}
-							
+
 							unset($original_image);
 						}
 					}
 				}
 			}
-			
+
 		} elseif ($from_path) { // create image with dimensions of imported picture
-			
+
 			if (substr($from_path, 0, 4) === 'data') {
-				
+
 				$data_array = explode(';', $from_path);
-				
+
 				$this->image_mimetype = str_replace('data:', '', $data_array[0]);
 				$this->image_path = $from_path;
-				
+
 				$image_string = str_replace('base64,', '', $data_array[1]);
 				$image_string = base64_decode($image_string);
 				$this->image = @imagecreatefromstring($image_string); // no support for WebP
-				
+
 				if (!$this->image) {
 					$this->image = null;
 				}
 			} else {
 				// allow image file names with spaces
 				$from_path = str_replace('%20', ' ', $from_path);
-				
+
 				// check if $from_path is url, make sure it goes thru
 				if (substr_count($from_path, 'http') > 0) {
 					$this->image_path_remote = true;
-					
+
 					// HTTPS is only supported when the openssl extension is enabled
 					// in order to minimize errors, we can replace the https:// with http://
 					$from_path = str_replace('https://', 'http://', $from_path);
-					
+
 					$file_headers = @get_headers($from_path); // @ to avoid warnings
 					if (!$file_headers || substr_count($file_headers[0], '200') <= 0) {
 						$this->image =  null;
 					}
 				}
-				
+
 				if (!$this->image) {
 					$this->image_path = $from_path;
-					
+
 					$this->image_mimetype = $this->get_image_mime_type($from_path);
 					if (!$this->image_mimetype) {
 						$this->image = null;
@@ -362,7 +366,7 @@ class Image
 							case 'image/webp': $this->image = @imagecreatefromwebp($from_path); break;
 							default: $this->image = false; // unsupported type
 						}
-						
+
 						if (!$this->image) {
 							$this->image = null;
 						}
@@ -370,7 +374,7 @@ class Image
 				}
 			}
 		} elseif (empty($from_path) && $width > 0 && $height > 0) { // create blank image with required dimensions
-			
+
 			$this->image = imagecreatetruecolor($width, $height);
 			if (!$this->image) {
 				$this->image = null;
@@ -381,17 +385,17 @@ class Image
 		} else {
 			$this->image = null;
 		}
-		
+
 		if ($this->image) {
-			
+
 			if ($this->image_mimetype && $this->image_mimetype !== 'image/jpeg') {
 				$this->is_image_transparent = (imagecolortransparent($this->image) >= 0) ? true : false;
 			}
-			
+
 			if ($this->image_width == 0) {
 				$this->image_width = imagesx($this->image);
 			}
-			
+
 			if ($this->image_height == 0) {
 				$this->image_height = imagesy($this->image);
 			}
@@ -907,11 +911,10 @@ class Image
 					$this->thumbnail_high_res = $thumbnail;
 				} else { // if one of the 2 thumbnails fails, do not create any of them
 
-					if (is_resource($thumbnail)) {
+					if (isset($thumbnail) && (is_resource($thumbnail) || (is_object($thumbnail) && $thumbnail instanceOf \GdImage))) {
 						imagedestroy($thumbnail);
+						unset($thumbnail);
 					}
-
-					unset($thumbnail);
 
 					return $creation_success;
 				}
@@ -925,7 +928,7 @@ class Image
 				case 'image/gif':
 					if ($high_resolution) {
 						if (imagegif($this->thumbnail_high_res, $to_path_high_res)) {
-	
+
 							// keep transparency
 							$rgba = imagecolorsforindex($this->thumbnail_high_res, imagecolortransparent($this->thumbnail_high_res));
 							$background = imagecolorallocate($this->thumbnail_high_res, $rgba['red'], $rgba['green'], $rgba['blue']);
@@ -999,14 +1002,6 @@ class Image
 				$this->thumbnail_width = $thumbnail_width / 2;
 				$this->thumbnail_height = $thumbnail_height / 2;
 			}
-		} else {
-			if (is_resource($this->thumbnail)) {
-				imagedestroy($this->thumbnail);
-			}
-
-			if ($high_resolution && is_resource($this->thumbnail_high_res)) {
-				imagedestroy($this->thumbnail_high_res);
-			}
 		}
 
 		return $creation_success;
@@ -1025,9 +1020,10 @@ class Image
 	/**
 	 * Stores the original value of the server's memory limit
 	 */
-	private function set_memory_limit()
+	private function set_initial_memory_limit()
 	{
-		$this->memory_limit = ini_get('memory_limit');
+		$this->initial_memory_limit = ini_get('memory_limit');
+		$this->memory_limit = $this->initial_memory_limit;
 	}
 
 	/**
@@ -1037,7 +1033,10 @@ class Image
 	 */
 	private function increase_memory_limit($new_limit = '256M')
 	{
-		ini_set('memory_limit', $new_limit);
+		$result = ini_set('memory_limit', $new_limit); // may be prevented by the server
+		if ($result !== false) {
+			$this->memory_limit = $new_limit;
+		}
 	}
 
 	/**
@@ -1045,21 +1044,43 @@ class Image
 	 */
 	private function reset_memory_limit()
 	{
-		if ($this->memory_limit > 0) {
-			ini_set('memory_limit', $this->memory_limit);
-		}
+		$this->memory_limit = $this->initial_memory_limit;
+		ini_set('memory_limit', $this->initial_memory_limit);
+	}
+
+	/**
+	 * Set the new memory limit
+	 *
+	 * @param String $limit (ex: '256M)
+	 */
+	public function setMemoryLimit(String $new_limit)
+	{
+		$this->increase_memory_limit($new_limit);
+	}
+
+	/**
+	 * Returns the memory allocated by the server
+	 *
+	 * @return number|string
+	 */
+	public function getMemoryLimit()
+	{
+		return $this->memory_limit;
 	}
 
 	public function destroy()
 	{
-		if (is_resource($this->thumbnail)) {
-			imagedestroy($this->thumbnail);
+		if (isset($this->thumbnail) && (is_resource($this->thumbnail) || (is_object($this->thumbnail) && $this->thumbnail instanceOf \GdImage))) {
+			imagedestroy($this->thumbnail); // does nothing in PHP 8.0+, needs unset
+			unset($this->thumbnail);
 		}
-		if (is_resource($this->thumbnail_high_res)) {
+		if (isset($this->thumbnail_high_res) && (is_resource($this->thumbnail_high_res) || (is_object($this->thumbnail_high_res) && $this->thumbnail_high_res instanceOf \GdImage))) {
 			imagedestroy($this->thumbnail_high_res);
+			unset($this->thumbnail_high_res);
 		}
-		if (is_resource($this->image)) {
+		if (isset($this->image) && (is_resource($this->image) || (is_object($this->image) && $this->image instanceOf \GdImage))) {
 			imagedestroy($this->image);
+			unset($this->image);
 		}
 
 		$this->reset_memory_limit();
