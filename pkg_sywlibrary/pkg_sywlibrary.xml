@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension version="4.0" type="package" method="upgrade">
+<extension type="package" method="upgrade">
 	<name>PKG_SYWLIBRARY</name>
 	<author>Olivier Buisard</author>
 	<creationDate>01/21/2018</creationDate>
@@ -10,6 +10,7 @@
 	<packager>Olivier Buisard</packager>
  	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
 	<version>2.0.0</version>
+	<changelogurl>https://updates.simplifyyourweb.com/free/sywlibrary/changelog.xml</changelogurl>
 	<description>PKG_SYWLIBRARY_XML_DESCRIPTION</description> 
 	<scriptfile>installer.php</scriptfile>
 	<languages>		
@@ -31,8 +32,9 @@
 	</languages>
  	<files folder="packages">
 		<file type="library" id="sywlibrary">lib_syw.zip</file>
+		<file type="plugin" id="sywlibrary" group="system">plg_system_syw.zip</file>
 	</files>
 	<updateservers>
-		<server type="extension" priority="1" name="SimplifyYourWeb Extensions Library updater">http://www.barejoomlatemplates.com/autoupdates/sywlibrary/sywlibrary-v2-update.xml</server>
+		<server type="extension" priority="1" name="SimplifyYourWeb Extensions Library updater">https://updates.simplifyyourweb.com/free/sywlibrary/sywlibrary-pkg-update.xml</server>
 	</updateservers>
 </extension>
