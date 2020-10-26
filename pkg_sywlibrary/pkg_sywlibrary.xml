@@ -13,22 +13,27 @@
 	<changelogurl>https://updates.simplifyyourweb.com/free/sywlibrary/changelog.xml</changelogurl>
 	<description>PKG_SYWLIBRARY_XML_DESCRIPTION</description> 
 	<scriptfile>installer.php</scriptfile>
-	<languages>		
-<!-- 		<language tag="cs-CZ">language/cs-CZ/cs-CZ.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="da-DK">language/da-DK/da-DK.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="de-DE">language/de-DE/de-DE.pkg_sywlibrary.sys.ini</language> -->
+	<languages>	
+		<language tag="bg-BG">language/bg-BG/bg-BG.pkg_sywlibrary.sys.ini</language>	
+		<language tag="cs-CZ">language/cs-CZ/cs-CZ.pkg_sywlibrary.sys.ini</language>
+		<language tag="da-DK">language/da-DK/da-DK.pkg_sywlibrary.sys.ini</language>
+		<language tag="de-DE">language/de-DE/de-DE.pkg_sywlibrary.sys.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.pkg_sywlibrary.sys.ini</language>
-<!-- 		<language tag="en-US">language/en-US/en-US.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="es-ES">language/es-ES/es-ES.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="fa-IR">language/fa-IR/fa-IR.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="fi-FI">language/fi-FI/fi-FI.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="fr-FR">language/fr-FR/fr-FR.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="it-IT">language/it-IT/it-IT.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="nl-NL">language/nl-NL/nl-NL.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="pt-BR">language/pt-BR/pt-BR.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="ru-RU">language/ru-RU/ru-RU.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="sl-SI">language/sl-SI/sl-SI.pkg_sywlibrary.sys.ini</language> -->
-<!-- 		<language tag="tr-TR">language/tr-TR/tr-TR.pkg_sywlibrary.sys.ini</language> -->
+		<language tag="en-US">language/en-US/en-US.pkg_sywlibrary.sys.ini</language>
+		<language tag="es-ES">language/es-ES/es-ES.pkg_sywlibrary.sys.ini</language>
+		<language tag="fa-IR">language/fa-IR/fa-IR.pkg_sywlibrary.sys.ini</language>
+		<language tag="fi-FI">language/fi-FI/fi-FI.pkg_sywlibrary.sys.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.pkg_sywlibrary.sys.ini</language>
+		<language tag="hu-HU">language/hu-HU/hu-HU.pkg_sywlibrary.sys.ini</language>
+		<language tag="it-IT">language/it-IT/it-IT.pkg_sywlibrary.sys.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.pkg_sywlibrary.sys.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.pkg_sywlibrary.sys.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.pkg_sywlibrary.sys.ini</language>
+		<language tag="pt-BR">language/pt-BR/pt-BR.pkg_sywlibrary.sys.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.pkg_sywlibrary.sys.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.pkg_sywlibrary.sys.ini</language>
+		<language tag="sv-SE">language/sv-SE/sv-SE.pkg_sywlibrary.sys.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.pkg_sywlibrary.sys.ini</language>
 	</languages>
  	<files folder="packages">
 		<file type="library" id="sywlibrary">lib_syw.zip</file>

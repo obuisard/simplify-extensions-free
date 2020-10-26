@@ -16,7 +16,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 class pkg_sywlibraryInstallerScript
 {
 	static $version = '2.0.0';
-	static $available_languages = array('bg-BG', 'cs-CZ', 'da-DK', 'de-DE', 'en-GB', 'en-US', 'es-ES', 'fa-IR', 'fi-FI', 'fr-FR', 'ja-JP', 'hu-HU', 'it-IT', 'nl-NL', 'pl-PL', 'pt-BR', 'ru-RU', 'sl-SI', 'sv-SE', 'tr-TR');
+	static $available_languages = array('bg-BG', 'cs-CZ', 'da-DK', 'de-DE', 'en-GB', 'en-US', 'es-ES', 'fa-IR', 'fi-FI', 'fr-FR', 'hu-HU', 'it-IT', 'ja-JP', 'nl-NL', 'pl-PL', 'pt-BR', 'ru-RU', 'sl-SI', 'sv-SE', 'tr-TR');
 	static $changelog_link = 'https://simplifyyourweb.com/downloads/syw-extension-library/file/383-simplify-your-web-extensions-library';
 	static $translation_link = 'https://simplifyyourweb.com/translators';
 
