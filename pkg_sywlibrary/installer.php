@@ -7,74 +7,80 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
  * Script file for the SYW extensions library package
  */
-class pkg_sywlibraryInstallerScript
+class Pkg_SYWLibraryInstallerScript
 {
-	static $version = '2.0.0';
-	static $available_languages = array('bg-BG', 'cs-CZ', 'da-DK', 'de-DE', 'en-GB', 'en-US', 'es-ES', 'fa-IR', 'fi-FI', 'fr-FR', 'hu-HU', 'it-IT', 'ja-JP', 'nl-NL', 'pl-PL', 'pt-BR', 'ru-RU', 'sl-SI', 'sv-SE', 'tr-TR');
-	static $changelog_link = 'https://simplifyyourweb.com/downloads/syw-extension-library/file/383-simplify-your-web-extensions-library';
-	static $translation_link = 'https://simplifyyourweb.com/translators';
+	/**
+	 * The version number of the extension
+	 */
+	protected $release;
+
+	/**
+	 * The extension name
+	 */
+	protected $extension;
+
+	/**
+	 * Minimum Joomla! version required to install the extension
+	 */
+	protected $minimumJoomla = '4.0.0-beta4';
+
+	/**
+	 * Available languages
+	 */
+	protected $availableLanguages = array('bg-BG', 'cs-CZ', 'da-DK', 'de-DE', 'en-GB', 'en-US', 'es-ES', 'fa-IR', 'fi-FI', 'fr-FR', 'hu-HU', 'it-IT', 'ja-JP', 'nl-NL', 'pl-PL', 'pt-BR', 'ru-RU', 'sl-SI', 'sv-SE', 'tr-TR');
+
+	/**
+	 * Link to the change logs
+	 */
+	protected $changelogLink = 'https://simplifyyourweb.com/downloads/syw-extension-library/file/383-simplify-your-web-extensions-library';
+
+	/**
+	 * Link to the translation page
+	 */
+	protected $translationLink = 'https://simplifyyourweb.com/translators';
+
+	/**
+	 * A list of files to be deleted
+	 */
+	protected $deleteFiles = array();
+
+	/**
+	 * A list of folders to be deleted
+	 */
+	protected $deleteFolders = array();
 
 	/**
 	 * Called before an install/update/uninstall method
 	 *
-	 * @return  boolean  True on success
+	 * @param string     $action     Which action is happening (install|uninstall|discover_install|update)
+	 * @param Installer  $installer  The class calling this method
+	 *
+	 * @return boolean True on success
 	 */
-	public function preflight($type, $parent)
+	public function preflight($action, $installer)
 	{
-		if ($type == 'uninstall') {
+		if ($action == 'uninstall') {
 			return true;
 		}
 
 		// make sure we are under Joomla 4.0 or over
 
-		if (version_compare(JVERSION, '3.15.0', 'lt')) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', '4.0'), 'error');
+		if (version_compare(JVERSION, $this->minimumJoomla, 'lt')) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', $this->minimumJoomla), 'error');
 			return false;
 		}
 
-		return true;
-	}
-
-	/**
-	 * Called after an install/update/uninstall method
-	 *
-	 * @return  boolean  True on success
-	 */
-	public function postflight($type, $parent, $results)
-	{
-		if ($type == 'uninstall') {
-			return true;
-		}
-
-		echo '<p style="margin: 10px 0 20px 0">';
-		echo HTMLHelper::image('syw/logo.png', 'SimplifyYourWeb Extensions Library', null, true);
-		echo '<br /><br /><span class="badge badge-info">' . Text::sprintf('PKG_SYWLIBRARY_VERSION', self::$version) . '</span>';
-		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
-		echo '</p>';
-
- 		// language test
-
- 		$current_language = Factory::getLanguage()->getTag();
- 		if (!in_array($current_language, self::$available_languages)) {
- 			Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this library.<br /><a href="' . self::$translation_link . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
- 		}
-
- 		// enable the library plugin
-
- 		$this->enablePlugin('plugin', 'syw', 'system');
-
-		if ($type == 'update') {
-
-			// update warning
-
-			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_SYWLIBRARY_WARNING_RELEASENOTES', self::$changelog_link), 'warning');
-		}
+		$this->extension = $installer->getName();
+		$this->release = $installer->getManifest()->version;
 
 		return true;
 	}
@@ -84,40 +90,108 @@ class pkg_sywlibraryInstallerScript
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function install($parent) { }
+	public function install($installer) { }
 
 	/**
 	 * Called on update
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function update($parent) { }
+	public function update($installer) { }
 
 	/**
 	 * Called on uninstallation
 	 */
-	public function uninstall($parent) { }
+	public function uninstall($installer) { }
 
-	private function enablePlugin($type, $element, $folder = '')
+	/**
+	 * Called after an install/update/uninstall method
+	 *
+	 * @return boolean True on success
+	 */
+	public function postflight($action, $installer)
+	{
+		if ($action == 'uninstall') {
+			return true;
+		}
+
+		echo '<p style="margin: 10px 0 20px 0">';
+		echo HTMLHelper::image('syw/logo.png', 'SimplifyYourWeb Extensions Library', null, true);
+		echo '<br /><br /><span class="badge badge-dark">' . Text::sprintf('PKG_SYWLIBRARY_VERSION', $this->release) . '</span>';
+		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
+		echo '</p>';
+
+ 		// language test
+
+ 		$current_language = Factory::getLanguage()->getTag();
+ 		if (!in_array($current_language, $this->availableLanguages)) {
+ 			//Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this library.<br /><a href="' . self::$translation_link . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
+ 			echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
+ 		}
+
+ 		// enable the library plugin
+
+ 		$plugin_is_enable = $this->enableExtension('plugin', 'syw', 'system');
+ 		if (!$plugin_is_enable) {
+ 			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_SYWLIBRARY_WARNING_ENABLEPLUGIN') . '</div>';
+ 		}
+
+ 		if ($action == 'update') {
+
+			// update warning
+
+			//Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_SYWLIBRARY_WARNING_RELEASENOTES', self::$changelog_link), 'warning');
+ 			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_SYWLIBRARY_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
+ 		}
+
+ 		$this->removeFiles();
+
+		return true;
+	}
+
+	private function removeFiles()
+	{
+		if (!empty($this->deleteFiles)) {
+			foreach ($this->deleteFiles as $filename) {
+				if (File::exists($filename) && !File::delete($filename)) {
+					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_SYWLIBRARY_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
+				}
+			}
+		}
+
+		if (!empty($this->deleteFolders)) {
+			foreach ($this->deleteFolders as $folder) {
+				if (Folder::exists(JPATH_ROOT.$folder) && !Folder::delete(JPATH_ROOT.$folder)) {
+					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_SYWLIBRARY_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
+				}
+			}
+		}
+	}
+
+	private function enableExtension($type, $element, $folder = '', $enable = true)
 	{
 		$db = Factory::getDBO();
 
 		$query = $db->getQuery(true);
 
 		$query->update($db->quoteName('#__extensions'));
-		$query->set($db->quoteName('enabled').' = 1');
+		if ($enable) {
+			$query->set($db->quoteName('enabled').' = 1');
+		} else {
+			$query->set($db->quoteName('enabled').' = 0');
+		}
 		$query->where($db->quoteName('type').' = '.$db->quote($type));
 		$query->where($db->quoteName('element').' = '.$db->quote($element));
-		$query->where($db->quoteName('folder').' = '.$db->quote($folder));
+		if ($folder) {
+			$query->where($db->quoteName('folder').' = '.$db->quote($folder));
+		}
 
 		$db->setQuery($query);
 
 		try {
 			$db->execute();
-		} catch (\RuntimeException $e) {
-			//JFactory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
-			//return false;
-			// ? TODO message to manually enable the plugin
+		} catch (ExecutionFailureException $e) {
+			return false;
 		}
 
 		return true;
