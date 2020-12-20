@@ -78,8 +78,8 @@ if (empty($list)) { // $list can be an empty array
 	// parameters
 
 	$urlPath = Uri::base().'modules/mod_latestnewsenhanced/';
-	$doc = Factory::getDocument();
 	$app = Factory::getApplication();
+	$wam = $app->getDocument()->getWebAssetManager();
 
 	$params->set('bootstrap_version', $bootstrap_version); // for use in header files
 
@@ -581,14 +581,16 @@ if (empty($list)) { // $list can be an empty array
 
 		if ($generate_inline_scripts) {
 
-			$doc->addScriptDeclaration($cache_anim_js->getBuffer());
+			//$doc->addScriptDeclaration($cache_anim_js->getBuffer());
+			$wam->addInlineScript($cache_anim_js->getBuffer());
 
 		} else {
 
 			$result = $cache_anim_js->cache('animation_'.$module->id.'.js', $clear_header_files_cache);
 
 			if ($result) {
-				$doc->addScript(Uri::base(true).'/media/cache/mod_latestnewsenhanced/animation_'.$module->id.'.js');
+				//$doc->addScript(Uri::base(true).'/media/cache/mod_latestnewsenhanced/animation_'.$module->id.'.js');
+				$wam->registerAndUseScript('lne.animation_' . $module->id, $cache_anim_js->getCachePath() . '/animation_' . $module->id . '.js', [], ['defer' => true]);
 			}
 		}
 	} else {
@@ -598,32 +600,34 @@ if (empty($list)) { // $list can be an empty array
 		}
 	}
 
-	if ((empty($animation) || $animation == 'justpagination') && $item_width_unit == '%' && !empty($min_item_width)) {
+//	if ((empty($animation) || $animation == 'justpagination') && $item_width_unit == '%' && !empty($min_item_width)) {
 
 		// add items responsiveness	when not in an animation other than pagination
 
-		HTMLHelper::_('jquery.framework');
+//		HTMLHelper::_('jquery.framework');
 
-		$cache_js = new JSFileCache('mod_latestnewsenhanced', $params);
+//		$cache_js = new JSFileCache('mod_latestnewsenhanced', $params);
 
-		if ($generate_inline_scripts) {
+//		if ($generate_inline_scripts) {
 
-			$doc->addScriptDeclaration($cache_js->getBuffer());
+			//$doc->addScriptDeclaration($cache_js->getBuffer());
+//			$wam->addInlineScript($cache_js->getBuffer());
 
-		} else {
+//		} else {
 
-			$result = $cache_js->cache('style_'.$module->id.'.js', $clear_header_files_cache);
+//			$result = $cache_js->cache('script_'.$module->id.'.js', $clear_header_files_cache);
 
-			if ($result) {
-				$doc->addScript(Uri::base(true).'/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.js');
-			}
-		}
-	} else {
+//			if ($result) {
+				//$doc->addScript(Uri::base(true).'/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.js');
+//				$wam->registerAndUseScript('lne.script_' . $module->id, $cache_js->getCachePath() . '/script_' . $module->id . '.js');
+//			}
+//		}
+//	} else {
 		// remove style.js if it exists
-		if (File::exists(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.js')) {
-			File::delete(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.js');
-		}
-	}
+//		if (File::exists(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/script_'.$module->id.'.js')) {
+//			File::delete(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/script_'.$module->id.'.js');
+//		}
+//	}
 
 	if (File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/substitute_styles.css') || File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/substitute_styles-min.css')) {
 		LNEHelper::loadUserStylesheet(true);
@@ -667,7 +671,8 @@ if (empty($list)) { // $list can be an empty array
 		$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
 
 		if ($result) {
-			$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.css');
+			//$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.css');
+			$wam->registerAndUseStyle('lne.style_' . $module->id, $cache_css->getCachePath() . '/style_' . $module->id . '.css');
 		}
 
 		LNEHelper::loadCommonStylesheet();

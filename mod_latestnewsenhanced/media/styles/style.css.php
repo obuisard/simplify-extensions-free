@@ -24,6 +24,26 @@ header("Content-type: text/css; charset=UTF-8");
 	    	margin-left: auto;
 	    	margin-right: auto;
 	    <?php endif; ?>
+	    
+	    display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+
+		<?php if (!$horizontal) : ?>
+			-webkit-flex-direction: column;
+			-ms-flex-direction: column;
+			flex-direction: column;
+
+			-ms-flex-line-pack: center;
+   			align-content: center;
+		<?php endif; ?>
 	}
 
 	<?php echo $suffix; ?> ul.latestnews-items li.latestnews-item {
@@ -32,13 +52,24 @@ header("Content-type: text/css; charset=UTF-8");
 		<?php else : ?>
 			font-size: medium;
 		<?php endif; ?>
+		
+		-webkit-box-flex: 1;
+		-ms-flex: 1 1 auto;
+		flex: 1 1 auto;
+			
     	width: <?php echo $item_width; ?><?php echo $item_width_unit; ?>;
+    	
+    	<?php if ($item_min_width) : ?>
+			min-width: <?php echo $item_min_width; ?>px;
+		<?php endif; ?>
+		<?php if ($item_max_width) : ?>
+			max-width: <?php echo $item_max_width; ?>px;
+		<?php endif; ?>
+		
     	<?php if ($item_width_unit == '%') : ?>
-    		margin-left: <?php echo $margin_in_perc; ?>%;
-			margin-right: <?php echo $margin_in_perc; ?>%;
+    		margin: <?php echo intval($space_between_items / 2); ?>px <?php echo $margin_in_perc; ?>%;
     	<?php else : ?>
-    		margin-left: auto;
-    		margin-right: auto;
+    		margin: <?php echo intval($space_between_items / 2); ?>px;
     	<?php endif; ?>
 	}
 
@@ -70,6 +101,12 @@ header("Content-type: text/css; charset=UTF-8");
 							height: <?php echo $head_height; ?>px;
 							min-height: <?php echo $head_height; ?>px;
 						<?php endif; ?>
+
+						<?php if ($maintain_height) : ?>
+							display: table-cell;
+							vertical-align: middle;
+						<?php endif; ?>
+
 						background-color: <?php echo $bgcolor; ?>;
 					}
 

@@ -57,6 +57,15 @@ class CSSFileCache extends HeaderFilesCache
 
 		$variables[] = 'item_width';
 
+		$item_min_width = trim($params->get('min_item_w', ''));
+		$variables[] = 'item_min_width';
+
+		$item_max_width = trim($params->get('max_item_w', ''));
+		$variables[] = 'item_max_width';
+
+		$space_between_items = $params->get('item_spacebetween', '0');
+		$variables[] = 'space_between_items';
+
 		$margin_in_perc = 0;
 		if ($item_width_unit == '%') {
 			$news_per_row = (int)(100 / $item_width);
@@ -139,6 +148,16 @@ class CSSFileCache extends HeaderFilesCache
 			$image = true;
 		}
 		$variables[] = 'image';
+
+		$filter = $params->get('filter', 'none');
+		if (!$params->get('create_thumb', 1)) {
+			$filter = $params->get('filter_original', 'none');
+		}
+
+		if (strpos($filter, '_css') !== false) {
+			$filter = str_replace('_css', '', $filter);
+			$variables[] = 'filter';
+		}
 
 		// calendar
 
@@ -257,6 +276,16 @@ class CSSFileCache extends HeaderFilesCache
 		}
 		if ($animation) {
 			include JPATH_ROOT . '/media/mod_latestnewsenhanced/styles/animations/'.$animation.'/style.css.php';
+		}
+
+		// image CSS filters
+
+		if (isset($filter)) {
+			switch($filter) {
+				case 'sepia': echo $suffix . ' .newshead .picture img { -webkit-filter: sepia(100%); filter: sepia(100%); }'; break;
+				case 'grayscale': echo $suffix . ' .newshead .picture img { -webkit-filter: grayscale(100%); filter: grayscale(100%); }'; break;
+				case 'negate': echo $suffix . ' .newshead .picture img { -webkit-filter: invert(100%); filter: invert(100%); }';
+			}
 		}
 
 		return $this->compress(ob_get_clean());

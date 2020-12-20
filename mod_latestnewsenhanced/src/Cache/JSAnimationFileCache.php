@@ -83,6 +83,15 @@ class JSAnimationFileCache extends HeaderFilesCache
 		}
 		$variables[] = 'margin_in_perc';
 
+		$min_width = trim($params->get('min_item_w', '')); // px
+		$variables[] = 'min_width';
+
+		$max_width = trim($params->get('max_item_w', ''));
+		$variables[] = 'max_width';
+
+		$space_between_items = $params->get('item_spacebetween', '0');
+		$variables[] = 'space_between_items';
+
 		$items_height = trim($params->get('items_h', ''));
 		$variables[] = 'items_height';
 		$items_width = trim($params->get('items_w', ''));

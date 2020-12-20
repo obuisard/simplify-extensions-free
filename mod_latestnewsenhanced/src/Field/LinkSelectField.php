@@ -152,8 +152,17 @@ class LinkSelectField extends GroupedListField
 			}
 		}
 
+		$parent_groups = parent::getGroups();
+		foreach ($parent_groups as $key => $parent_options) {
+			foreach ($parent_options as $parent_option) {
+				if ($parent_option->disable == true) {
+					$parent_option->text = $parent_option->text . ' (Pro)';
+				}
+			}
+		}
+
 		// Merge any additional options in the XML definition.
-		$groups = array_merge(parent::getGroups(), $groups);
+		$groups = array_merge($parent_groups, $groups);
 
 		return $groups;
 	}

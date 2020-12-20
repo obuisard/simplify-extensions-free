@@ -26,6 +26,7 @@ use Joomla\Database\Exception\ExecutionFailureException;
 use SYW\Library\Cache as SYWCache;
 use SYW\Library\Tags as SYWTags;
 use SYW\Library\Text as SYWText;
+use SYW\Library\Utilities as SYWUtilities;
 
 class ContentHelper
 {
@@ -929,9 +930,11 @@ class ContentHelper
 			$head_width = $head_width - $border_width * 2;
 			$head_height = $head_height - $border_width * 2;
 
+			$filter = $params->get('filter', 'none');
+
 			$quality_jpg = $params->get('quality_jpg', 100);
 			$quality_png = $params->get('quality_png', 0);
-			$filter = $params->get('filter', 'none');
+			$quality_webp = $params->get('quality_webp', 80);
 
 			if ($quality_jpg > 100) {
 				$quality_jpg = 100;
@@ -947,7 +950,14 @@ class ContentHelper
 				$quality_png = 0;
 			}
 
-			$image_qualities = array('jpg' => $quality_jpg, 'png' => $quality_png);
+			if ($quality_webp > 100) {
+				$quality_webp = 100;
+			}
+			if ($quality_webp < 0) {
+				$quality_webp = 0;
+			}
+
+			$image_qualities = array('jpg' => $quality_jpg, 'png' => $quality_png, 'webp' => $quality_webp);
 
 			$clear_cache = $params->get('clear_cache', 0);
 			if ($params->get('site_mode', 'adv') == 'dev') {
@@ -980,7 +990,15 @@ class ContentHelper
 		$title_letter_count = trim($params->get('letter_count_title', ''));
 		$title_truncate_last_word = $params->get('trunc_l_w_title', 0);
 		//$show_date = $params->get('show_d', 'date');
-		$link_to = $params->get('link_to', 'article');
+		
+		$link_to = $params->get('link_to', 'item');
+		switch ($params->get('link_target', 'default')) {
+			case 'same': $link_target = ''; break;
+			case 'new': $link_target = 1; break;
+			case 'modal': $link_target = 3; break;
+			case 'popup': $link_target = 2; break;
+			default: $link_target = 'default';
+		}
 
 		$when_no_date = $params->get('when_no_date', 0);
 		$items_with_no_date = array();
@@ -1039,8 +1057,9 @@ class ContentHelper
 
 			if ($item->state == 1) {
 
-				$item->linktarget = '';
+				//$item->linktarget = '';
 				$item->isinternal = true;
+				
 				$item->linktitle = $item->title;
 
 				$link_string = RouteHelper::getArticleRoute($item->slug, $item->cat_slug, $item->language);
@@ -1068,8 +1087,10 @@ class ContentHelper
 
 				if ($item->category_authorized && (!$show_unauthorized_items || in_array($item->access, $authorised))) {
 
-					if ($link_to == 'modal') {
-						$item->linktarget = 3;
+					if ($link_target !== 'default') {
+						$item->linktarget = $link_target;
+					} else {
+						$item->linktarget = '';
 					}
 
 					// strange: no Itemid search in ContentHelperRoute::getArticleRoute starting in Joomla 3.7
@@ -1077,8 +1098,6 @@ class ContentHelper
 					$item->link = Route::_($link_string);
 					$item->authorized = true; // we know that user has the privilege to view the article
 				} else {
-
-					// cannot open in modal window in this case - too many cases where it might fail bacause the login form	opens first
 
 					$link = new Uri(Route::_('index.php?option=com_users&view=login', false));
 
@@ -1106,6 +1125,7 @@ class ContentHelper
 					// returns 'index.php/latest-news/13-ipsum/9-phosfluorescently-engage-worldwide-methodologies-with-web-enabled-technology-5';
 
 					$item->link = $link;
+					$item->linktarget = ''; // cannot open in modal window in this case - too many cases where it might fail bacause the login form	opens first
 					$item->authorized = false;
 				}
 			}
@@ -1263,26 +1283,27 @@ class ContentHelper
 
 				if ($filename) {
 
-					$extra_styling = '';
+// 					$extra_styling = '';
 
-					if ($thumbnails_exist) {
+// 					if ($thumbnails_exist) {
 						// thumbnails have been created
 
-						if (!$crop_picture && $maintain_height) {
+// 						if (!$crop_picture && $maintain_height) {
 
-							$imagesize = @getimagesize($filename); // @ to avoid warnings
-							if ($imagesize !== FALSE) {
-								$imageheight = $imagesize[1];
+// 							$imagesize = @getimagesize($filename); // @ to avoid warnings
+// 							if ($imagesize !== FALSE) {
+// 								$imageheight = $imagesize[1];
 
-								$top = intval(($head_height - $imageheight) / 2); // to center the image, when no cropping
-								$extra_styling = ' style="position: relative; top: '.$top.'px"';
-							}
-						}
+// 								$top = intval(($head_height - $imageheight) / 2); // to center the image, when no cropping
+// 								$extra_styling = ' style="position: relative; top: '.$top.'px"';
+// 							}
+// 						}
 
-						$filename = Uri::base(true).'/'.$filename;
-					}
+// 						$filename = Uri::base(true).'/'.$filename;
+// 					}
 
-					$item->imagetag = '<img alt="'.$item->title.'" src="'.$filename.'"'.$extra_styling.' />';
+					//$item->imagetag = '<img alt="'.$item->title.'" src="'.$filename.'"'.$extra_styling.' />';
+					$item->imagetag = SYWUtilities::getImageElement($filename, $item->title, array('width' => $head_width, 'height' => $head_height), true);
 				}
 			}
 

@@ -21,8 +21,10 @@ use SYW\Library\Libraries as SYWLibraries;
 
 class Helper
 {
-	static $commonStylesLoaded = false;
-	static $userStylesLoaded = false;
+	protected static $commonStylesLoaded = false;
+	protected static $userStylesLoaded = false;
+
+	protected static $image_extension_types = array('png', 'jpg', 'gif', 'jpeg', 'webp');
 
 	/**
 	 * Look for images in content
@@ -30,7 +32,7 @@ class Helper
 	 * @param string $introtext
 	 * @param string $fulltext
 	 *
-	 * @return the image source if found one, null otherwise
+	 * @return string|null the image source if found one, null otherwise
 	 */
 	static function getImageSrcFromContent($introtext, $fulltext = '')
 	{
@@ -75,7 +77,7 @@ class Helper
 	* @param string $filter
 	* @param boolean $create_high_resolution
 	*
-	* @return the original image path if errors before thumbnail creation
+	* @return array the original image path if errors before thumbnail creation
 	*  or no thumbnail path if errors during thumbnail creation
 	*  or thumbnail path if no error
 	*/
@@ -109,11 +111,13 @@ class Helper
 		$url_array = explode("?", $imagesrc);
 		$imagesrc = $url_array[0];
 
-		$imageext = explode('.', $imagesrc);
-		$imageext = $imageext[count($imageext) - 1];
-		$imageext = strtolower($imageext);
+// 		$imageext = explode('.', $imagesrc);
+// 		$imageext = $imageext[count($imageext) - 1];
+// 		$imageext = strtolower($imageext);
 
-		if ($imageext != 'jpg' && $imageext != 'jpeg' && $imageext != 'png' && $imageext != 'gif') {
+		$imageext = strtolower(File::getExt($imagesrc));
+
+		if (!in_array($imageext, self::$image_extension_types)) {
 
 			// case where image is a URL with no extension (generated image)
 			// example: http://argos.scene7.com/is/image/Argos/7491801_R_Z001A_UC1266013?$TMB$&wid=312&hei=312
@@ -151,7 +155,7 @@ class Helper
 			}
 		}
 
-		$filename = $tmp_path.'/thumb_'.$module_id.'_'.$item_id.'.'.$imageext;
+		$filename = $tmp_path . '/thumb_' . $module_id . '_' . $item_id . '.' . $imageext;
 
 		// create the thumbnail
 
@@ -167,7 +171,8 @@ class Helper
 
 			switch ($imageext){
 				case 'jpg': case 'jpeg': $quality = $image_quality_array['jpg']; break; // 0 to 100
-				case 'png': $quality = $image_quality_array['png']; break; // compression: 0 to 9
+				case 'png': $quality = round(11.111111 * (9 - $image_quality_array['png'])); break; // compression: 0 to 9
+				case 'webp': $quality = $image_quality_array['webp']; break; // 0 to 100
 				default : $quality = -1;
 			}
 
@@ -188,7 +193,12 @@ class Helper
 				$head_height = $image->getImageHeight();
 			}
 
-			$creation_success = $image->createThumbnail($head_width, $head_height, $crop_picture, $quality, $filter, $filename, $create_high_resolution);
+			$creation_success = $image->toThumbnail($filename, '', $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution);
+
+			if ($creation_success && $image->getImageMimeType() === 'image/webp') { // create fallback
+				$creation_success = $image->toThumbnail($tmp_path . '/thumb_' . $module_id . '_' . $item_id . '.png', 'image/png', $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution);
+			}
+
 			if (!$creation_success) {
 				$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
 			}
@@ -244,14 +254,12 @@ class Helper
 	 * @param string $tmp_path
 	 * @param boolean $include_highres
 	 *
-	 * @return the thumbnail filename if found, false otherwise
+	 * @return string|boolean the thumbnail filename if found, false otherwise
 	 */
 	static function thumbnailExists($module_id, $item_id, $tmp_path, $include_highres = false)
 	{
-		$thumbnail_extension_types = array('png', 'jpg', 'gif', 'jpeg');
-
 		$existing_thumbnail_path = null;
-		foreach ($thumbnail_extension_types as $thumbnail_extension_type) {
+		foreach (self::$image_extension_types as $thumbnail_extension_type) {
 			$thumbnail_path = $tmp_path.'/thumb_'.$module_id.'_'.$item_id.'.'.$thumbnail_extension_type;
 			if (is_file(JPATH_ROOT.'/'.$thumbnail_path)) {
 				$existing_thumbnail_path = $thumbnail_path; // uses the first file found, but could be several with different extensions
@@ -958,9 +966,12 @@ class Helper
 			return;
 		}
 
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 		$minified = (JDEBUG) ? '' : '-min';
 
-		Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/common_styles' . $minified . '.css');
+		//Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/common_styles' . $minified . '.css');
+		$wam->registerAndUseStyle('lne.common_styles', 'mod_latestnewsenhanced/common_styles' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
 
 		self::$commonStylesLoaded = true;
 	}
@@ -975,17 +986,19 @@ class Helper
 			return;
 		}
 
-		$doc = Factory::getDocument();
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$prefix = 'common_user';
 		if ($styles_substitute) {
 			$prefix = 'substitute';
 		}
 
-		if (!File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles-min.css')) {
-			$doc->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles.css');
+		if (!File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles-min.css') || JDEBUG) {
+			//$doc->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles.css');
+			$wam->registerAndUseStyle('lne.' . $prefix . '_styles', 'mod_latestnewsenhanced/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
 		} else {
-			$doc->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles-min.css');
+			//$doc->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles-min.css');
+			$wam->registerAndUseStyle('lne.' . $prefix . '_styles', 'mod_latestnewsenhanced/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
 		}
 
 		self::$userStylesLoaded = true;

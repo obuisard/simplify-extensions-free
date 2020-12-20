@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>4.15.0</version>
+	<version>5.0.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -67,7 +67,7 @@
 			
 			<fieldset name="basic" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.15.0" />
+				<field type="extensionversion" version="5.0.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_LATESTNEWSENHANCED_TRANSLATORS" />
@@ -463,12 +463,20 @@
 						<option value="percent">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PERCENTAGE</option>
 					</field>
 					
-					<field name="min_item_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz" showon="item_w_u:percent" 
+					<field name="min_item_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MIN_ITEM_WIDTH_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MIN_ITEM_WIDTH_DESC" />
+								
+					<field name="max_item_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MAX_ITEM_WIDTH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MAX_ITEM_WIDTH_DESC" />	
+					
+					<field name="item_spacebetween" type="sywverbosetext" default="0" size="4" unit="px" filter="integer" icon="SYWicon-swap-horiz" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEBETWEENITEMS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEBETWEENITEMS_DESC" />
 				</fieldset>
 					
-				<fieldset name="layout_head" label="MOD_LATESTNEWSENHANCEDEXTENDED_HEAD_LABEL">				
+				<fieldset name="layout_head" label="MOD_LATESTNEWSENHANCEDEXTENDED_HEAD_LABEL">
 					<!-- <field type="subtitle" title="MOD_LATESTNEWSENHANCEDEXTENDED_HEAD_LABEL" /> -->
 					
 					<field name="head_type" type="headselect" default="none" 
@@ -648,15 +656,35 @@
 						<option value="append">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_APPENDEDLINK</option>
 					</field>
 					
-					<field name="link_to" type="linkselect" default="article" 
+<!-- 					<field name="link_to" type="linkselect" default="article"  -->
+<!-- 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTONEWS_LABEL"  -->
+<!-- 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTONEWS_DESC"> -->
+<!-- 						<option value="article">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ARTICLE</option> -->
+<!-- 						<option value="modal">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ARTICLEMODAL</option> -->
+<!-- 						<option value="inlinearticle" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INLINEARTICLE</option> -->
+<!-- 	 					<option value="urla" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLA</option> -->
+<!-- 	 					<option value="urlb" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLB</option> -->
+<!-- 	 					<option value="urlc" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLC</option> -->
+<!-- 					</field> -->
+					
+					<field name="link_to" type="linkselect" default="item" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTONEWS_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTONEWS_DESC">
-						<option value="article">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ARTICLE</option>
-						<option value="modal">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ARTICLEMODAL</option>
-						<option value="inlinearticle" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INLINEARTICLE</option>
-	 					<option value="urla" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLA</option>
-	 					<option value="urlb" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLB</option>
-	 					<option value="urlc" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLC</option>
+						<option value="item">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ITEM</option>
+						<option value="urla" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLA</option>
+						<option value="urlb" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLB</option>
+						<option value="urlc" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLC</option>
+					</field>				
+					
+					<field name="link_target" type="listfree" default="default" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTARGET_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTARGET_DESC">
+<!-- 					<option value="default">JDEFAULT</option> -->
+						<option value="same">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SAMEWINDOW</option>
+						<option value="new">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_NEWWINDOW</option>
+						<option value="modal">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MODAL</option>
+						<option value="popup">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_POPUP</option>
+						<option value="inline" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INLINE</option>
 					</field>
 					
 <!-- 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
@@ -727,7 +755,7 @@
 				<fieldset name="layout_categories" label="MOD_LATESTNEWSENHANCEDEXTENDED_CATEGORIES_LABEL">
 <!-- 				<field type="title" title="MOD_LATESTNEWSENHANCEDEXTENDED_CATEGORIES_LABEL" /> -->
 									
-					<field name="pos_cat" type="checkboxes" 
+					<field name="pos_cat" type="checkboxesfree" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITIONCATEGORY_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITIONCATEGORY_DESC">
 						<option value="first">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FIRST</option>
@@ -1037,7 +1065,7 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHADOWWIDTH_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICSHADOWWIDTH_DESC" />	
 						
-					<field name="sh_type" type="list" default="s" 
+					<field name="sh_type" type="listfree" default="s" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHADOWTYPE_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHADOWTYPE_DESC">					
 						<option value="s">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHADOW_SIMPLE</option>
@@ -1046,7 +1074,7 @@
 						<option value="vr" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHADOW_VRIGHT</option>
 					</field>
 					
-	<!-- 				<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
+<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
 					
 					<field name="hover_effect" type="sywtransitionpicker" default="none" transitiongroups="2d" icon="SYWicon-layers" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HOVEREFFECT_LABEL" 
@@ -1063,16 +1091,20 @@
 					</field>					
 					
 <!-- 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_GDTEST_LABEL" style="warning" showon="create_thumb:1" /> -->
-					<field type="gdtest" message="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_GDTEST_LABEL" showon="create_thumb:1" />		
+					<field type="gdtest" supportedtypes="gif,jpg,png,webp" message="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_GDTEST_LABEL" showon="create_thumb:1" />		
 						
 					<field name="crop_pic" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="create_thumb:1" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CROPPICTURE_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CROPPICTURE_DESC">
 						<option value="0">JNO</option>
 						<option value="1">JYES</option>
-					</field>
+					</field>				
+								
+					<field name="filter_original" type="sywimagefilterpicker" cssfilters="true" gdfilters="false" default="none" showon="create_thumb:0" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEFILTER_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEFILTERORIGINAL_DESC" />
 					
-					<field name="filter" type="sywimagefilterpicker" default="none" showon="create_thumb:1" 
+					<field name="filter" type="sywimagefilterpicker" cssfilters="true" default="none" showon="create_thumb:1" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEFILTER_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEFILTER_DESC" />
 					
@@ -1082,7 +1114,11 @@
 						
 					<field name="quality_png" type="sywverbosetext" default="0" filter="integer" size="8" maxlength="1" min="0" max="9" showon="create_thumb:1" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYPNG_LABEL" 
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYPNG_DESC" />				
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYPNG_DESC" />
+				
+					<field name="quality_webp" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" showon="create_thumb:1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYWEBP_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYWEBP_DESC" />				
 							  
 <!-- 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWURLFOPENTEST_LABEL" style="warning" showon="create_thumb:1" /> -->
 					<field type="phpsettingtest" setting="allow_url_fopen" message="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWURLFOPENTEST_LABEL" showon="create_thumb:1" />
@@ -1452,7 +1488,7 @@
 					
 					<!-- <field type="subtitle" title="MOD_LATESTNEWSENHANCEDEXTENDED_PARAMETERS_LABEL" /> -->
 	                
-	                <field name="pagination_pos" type="list" default="below"
+	                <field name="pagination_pos" type="listfree" default="below"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITIONPAGINATION_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITIONPAGINATION_DESC">
 	                    <option value="below">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_BELOWITEMS</option>

@@ -57,11 +57,16 @@ class AnimationSelectField extends DynamicSingleSelect
 				if (File::exists(JPATH_ROOT . $imagepath . '/' . $option . '_hover.png')) {
 					$image_hover = Uri::root(true) . $imagepath . '/' . $option . '_hover.png';
 				}
+				
+				$badge = 'jQuery';
+				if (strpos($upper_option, 'PURE') !== false) {
+					$badge = 'javascript';
+				}
 
 				if (File::exists(JPATH_ROOT.$path.'/'.$option.'/style.css.php')) {
-					$options[] = array($option, $translated_option, $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover);
+					$options[] = array($option, $translated_option, $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover, false, $badge);
 				} else {
-					$options_disabled[] = array($option, $translated_option . ' (Pro)', $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover, 'disabled');
+					$options_disabled[] = array($option, $translated_option . ' (Pro)', $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover, true, $badge);
 				}
 			}
 		}
