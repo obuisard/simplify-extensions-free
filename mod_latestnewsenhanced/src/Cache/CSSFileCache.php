@@ -29,6 +29,9 @@ class CSSFileCache extends HeaderFilesCache
 		$overall = $params->get('overall_style', 'original');
 		$variables[] = 'overall';
 
+		$horizontal = ($params->get('align', 'v') === 'h') ? true : false;
+		$variables[] = 'horizontal';
+
 		// items width and height
 
 		$items_height = trim($params->get('items_h', ''));

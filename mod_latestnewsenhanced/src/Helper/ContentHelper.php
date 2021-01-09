@@ -990,7 +990,7 @@ class ContentHelper
 		$title_letter_count = trim($params->get('letter_count_title', ''));
 		$title_truncate_last_word = $params->get('trunc_l_w_title', 0);
 		//$show_date = $params->get('show_d', 'date');
-		
+
 		$link_to = $params->get('link_to', 'item');
 		switch ($params->get('link_target', 'default')) {
 			case 'same': $link_target = ''; break;
@@ -1059,7 +1059,7 @@ class ContentHelper
 
 				//$item->linktarget = '';
 				$item->isinternal = true;
-				
+
 				$item->linktitle = $item->title;
 
 				$link_string = RouteHelper::getArticleRoute($item->slug, $item->cat_slug, $item->language);
@@ -1302,8 +1302,13 @@ class ContentHelper
 // 						$filename = Uri::base(true).'/'.$filename;
 // 					}
 
+					$img_attributes = array();
+					if ($crop_picture) {
+						$img_attributes = array('width' => $head_width, 'height' => $head_height);
+					}
+
 					//$item->imagetag = '<img alt="'.$item->title.'" src="'.$filename.'"'.$extra_styling.' />';
-					$item->imagetag = SYWUtilities::getImageElement($filename, $item->title, array('width' => $head_width, 'height' => $head_height), true);
+					$item->imagetag = SYWUtilities::getImageElement($filename, $item->title, $img_attributes, true);
 				}
 			}
 
