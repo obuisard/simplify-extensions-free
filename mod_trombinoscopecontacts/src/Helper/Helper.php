@@ -8,21 +8,20 @@ namespace SYW\Module\TrombinoscopeContacts\Site\Helper;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\Categories\CategoryNode;
+use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\Categories\Categories;
 use Joomla\Component\Contact\Site\Helper\RouteHelper as ContactRouteHelper;
-use Joomla\CMS\Helper\TagsHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
+use SYW\Library\Cache as SYWCache;
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Tags as SYWTags;
 use SYW\Library\Text as SYWText;
@@ -30,18 +29,205 @@ use SYW\Library\Utilities as SYWUtilities;
 
 abstract class Helper
 {
-	protected static $lookup;
+	protected static $sort_locale;
+	protected static $contact_globals;
 
-	//static $address_format;
-	//static $text_type;
-	static $sort_locale;
-	static $contactGlobals = null;
+	protected static $flipScriptLoaded = false;
+	protected static $commonStylesLoaded = false;
+	protected static $userStylesLoaded = false;
 
-	static $flipScriptLoaded = false;
-	static $commonStylesLoaded = false;
-	static $userStylesLoaded = false;
+	/**
+	 * Is the picture set to be shown?
+	 * @return boolean
+	 */
+	public static function isShowPicture($params)
+	{
+		return $params->get('s_pic', true);
+	}
 
-	static function getContacts($params, $module)
+	/**
+	 * Get the picture border width
+	 * @return number
+	 */
+	public static function getPictureBorderWidth($params)
+	{
+		return intval($params->get('border_w', 0));
+	}
+
+	/**
+	 * Get the picture width
+	 * @return number
+	 */
+	public static function getPictureWidth($params)
+	{
+		return intval($params->get('pic_w', 100)) - self::getPictureBorderWidth($params) * 2;
+	}
+
+	/**
+	 * Get the picture height
+	 * @return number
+	 */
+	public static function getPictureHeight($params)
+	{
+		return intval($params->get('pic_h', 120) - self::getPictureBorderWidth($params) * 2);
+	}
+
+	/**
+	 * Get the picture quality
+	 * @return number
+	 */
+	public static function getPictureQuality($params)
+	{
+		$quality = intval($params->get('quality', 100));
+		if ($quality > 100) {
+			return 100;
+		}
+		if ($quality < 0) {
+			return 0;
+		}
+		return $quality;
+	}
+
+	/**
+	 * Get the picture filter(s)
+	 * @return array[][]
+	 */
+	public static function getPictureFilters($params)
+	{
+		$filter = $params->get('filter', 'none');
+		if (is_array($filter)) {
+			return array('filters' => $filter);
+		}
+		return array('filters' => array($filter));
+	}
+
+	/**
+	 * Is the picture set to be cropped?
+	 * @return boolean
+	 */
+	public static function isCropPicture($params)
+	{
+		return $params->get('crop_pic', 0);
+	}
+
+	/**
+	 * Is the high definition picture needed?
+	 * @return boolean
+	 */
+	public static function isCreateHighResolutionPicture($params)
+	{
+		return $params->get('create_highres', false);
+	}
+
+	/**
+	 * Get the image temporary path
+	 * @return string the path
+	 */
+	public static function getPictureTemporaryPath($params)
+	{
+		$thumb_path = $params->get('thumb_path', 'images');
+		$subdirectory = 'thumbnails/tc';
+		if ($thumb_path == 'cache') {
+			$subdirectory = 'mod_trombinoscopecontacts';
+		}
+		return SYWCache::getTmpPath($thumb_path, $subdirectory);
+	}
+
+	/**
+	 * Is the picture cache set to be cleared
+	 * @return boolean
+	 */
+	public static function IsClearPictureCache($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('clear_cache', true);
+	}
+
+	/**
+	 * Is the style/script cache set to be cleared
+	 * @return boolean
+	 */
+	public static function IsClearHeaderCache($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('clear_css_cache', 'true');
+	}
+
+	/**
+	 * Get the site mode
+	 * @return string (dev|prod|adv)
+	 */
+	public static function getSiteMode($params)
+	{
+		return $params->get('site_mode', 'adv');
+	}
+
+	/**
+	 * Are errors shown ?
+	 * @return boolean
+	 */
+	public static function isShowErrors($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('show_errors', false);
+	}
+
+	/**
+	 * Are white spaces removed ?
+	 * @return boolean
+	 */
+	public static function isRemoveWhitespaces($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return false;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return true;
+		}
+		return $params->get('remove_whitespaces', false);
+	}
+
+	/**
+	 * Get the Bootstrap version the extension must be compatible with
+	 * @return number
+	 */
+	public static function getBootstrapVersion($params)
+	{
+		$bootstrap_version = $params->get('bootstrap_version', 'joomla');
+		if ($bootstrap_version === 'joomla') {
+			return version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 4;
+		}
+		return intval($bootstrap_version);
+	}
+
+	/**
+	 * Does Bootstrap need to be loaded ?
+	 * @return boolean
+	 */
+	public static function isLoadBootstrap($params)
+	{
+		if ($params->get('bootstrap_version', 'joomla') === 'joomla') {
+			return true;
+		}
+		return false;
+	}
+
+	public static function getContacts($params, $module)
 	{
 		$app = Factory::getApplication();
 		$option = $app->input->get('option', '');
@@ -314,6 +500,10 @@ abstract class Helper
 		} else {
 
 			$count = trim($params->get('count', ''));
+			$startat = $params->get('startat', 1);
+			if ($startat < 1) {
+				$startat = 1;
+			}
 
 			// filter by category
 
@@ -456,7 +646,7 @@ abstract class Helper
 		// launch query
 
 		if (!empty($count)) {
-			$db->setQuery($query, 0, intval($count));
+			$db->setQuery($query, $startat - 1, intval($count));
 		} else {
 			$db->setQuery($query);
 		}
@@ -484,8 +674,38 @@ abstract class Helper
 			$item->lastpart = self::_substring_index(trim($item->name), ' ', -1);
 
 			// keep original image (needed if showing picture in popup)
-
 			$item->original_image = $item->image;
+
+			if (self::isShowPicture($params)) {
+				if ($item->image) {
+					if (self::isCropPicture($params)) {
+						$item->image = self::getCroppedImage($module->id, $item->id, $item->image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
+					}
+				} else {
+					if ($params->get('d_pic', '')) {
+						if (self::isCropPicture($params)) {
+							$item->image = self::getCroppedImage($module->id, 'default', $params->get('d_pic', ''), self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
+						} else {
+							$item->image = $params->get('d_pic', '');
+						}
+					} else {
+						if (self::getContactGlobalParams()->get('default_image') != null) {
+							if (self::isCropPicture($params)) {
+								$item->image = self::getCroppedImage($module->id, 'global', self::getContactGlobalParams()->get('default_image'), self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
+							} else {
+								$item->image = self::getContactGlobalParams()->get('default_image');
+							}
+						} else {
+							$item->image = '';
+						}
+					}
+				}
+
+				if ($item->image == 'error') {
+					$item->error[] = Text::_('MOD_TROMBINOSCOPE_ERROR_CREATINGTHUMBNAIL');
+					$item->image = '';
+				}
+			}
 
 			// get tags
 
@@ -934,27 +1154,27 @@ abstract class Helper
 	    return '';
 	}
 
-	static function getContactGlobalParams()
+	public static function getContactGlobalParams()
 	{
-		if (!isset(self::$contactGlobals)) {
+		if (!isset(self::$contact_globals)) {
 
-			self::$contactGlobals = new Registry();
+			self::$contact_globals = new Registry();
 
 			$global_contact_params = ComponentHelper::getParams('com_contact');
 
-			self::$contactGlobals->set("linka_name", $global_contact_params->get('linka_name'));
-			self::$contactGlobals->set("linkb_name", $global_contact_params->get('linkb_name'));
-			self::$contactGlobals->set("linkc_name", $global_contact_params->get('linkc_name'));
-			self::$contactGlobals->set("linkd_name", $global_contact_params->get('linkd_name'));
-			self::$contactGlobals->set("linke_name", $global_contact_params->get('linke_name'));
+			self::$contact_globals->set("linka_name", trim($global_contact_params->get('linka_name')));
+			self::$contact_globals->set("linkb_name", trim($global_contact_params->get('linkb_name')));
+			self::$contact_globals->set("linkc_name", trim($global_contact_params->get('linkc_name')));
+			self::$contact_globals->set("linkd_name", trim($global_contact_params->get('linkd_name')));
+			self::$contact_globals->set("linke_name", trim($global_contact_params->get('linke_name')));
 
-			self::$contactGlobals->set("default_image", $global_contact_params->get('image'));
+			self::$contact_globals->set("default_image", $global_contact_params->get('image'));
 		}
 
-		return self::$contactGlobals;
+		return self::$contact_globals;
 	}
 
-	static function renderName($params, $value, $extraclass = '')
+	public static function renderName($params, $value, $extraclass = '')
 	{
 	    $html = '';
 
@@ -1020,7 +1240,7 @@ abstract class Helper
 	    return $html;
 	}
 
-	static function getRequestedLinks($params, $prefix = '', $subform = '')
+	public static function getRequestedLinks($params, $prefix = '', $subform = '')
 	{
 		$links = array();
 
@@ -1043,6 +1263,7 @@ abstract class Helper
 					$info_details['label'] = '';
 					$info_details['icon'] = $detail_bloc->lf_icon;
 					$info_details['show_tooltip'] = true;
+					$info_details['classes'] = '';
 
 					$links[$j] = $info_details;
 				}
@@ -1052,12 +1273,12 @@ abstract class Helper
 		return $links;
 	}
 
-	static function renderLink($params, $item, $index, $requested_link, $extraclass = '')
+	public static function renderLink($params, $item, $index, $requested_link, $extraclass = '')
 	{
 	    return self::getFieldOutput($index, $requested_link, $params, $item, $extraclass, true);
 	}
 
-	static function getRequestedInfos($params, $prefix = '', $subform = '')
+	public static function getRequestedInfos($params, $prefix = '', $subform = '')
 	{
 		$infos = array();
 
@@ -1081,6 +1302,7 @@ abstract class Helper
 					$info_details['icon'] = $detail_bloc->f_icon;
 					$info_details['show_tooltip'] = $detail_bloc->f_tooltip == 1 ? true : false;
 					$info_details['one_line'] = (!isset($detail_bloc->f_one_line) || (isset($detail_bloc->f_one_line) && $detail_bloc->f_one_line == 1)) ? true : false;
+					$info_details['classes'] = isset($detail_bloc->f_classes) ? $detail_bloc->f_classes : '';
 
 					$infos[$j] = $info_details;
 				}
@@ -1090,12 +1312,12 @@ abstract class Helper
 		return $infos;
 	}
 
-	static function renderInfo($params, $item, $index, $requested_info, $extraclass = '')
+	public static function renderInfo($params, $item, $index, $requested_info, $extraclass = '')
 	{
 	    return self::getFieldOutput($index, $requested_info, $params, $item, $extraclass);
 	}
 
-	static function getFieldOutput($index, $info_details, $params, $item, $extraclass = '', $iconlinkonly = false)
+	public static function getFieldOutput($index, $info_details, $params, $item, $extraclass = '', $iconlinkonly = false)
 	{
 		// restricted access
 
@@ -1129,6 +1351,7 @@ abstract class Helper
 			}
 		}
 
+		$extraclass .= ' ' . trim($info_details['classes']);
 		$extraclass = trim($extraclass);
 
 		$item_params = new Registry();
@@ -1248,9 +1471,9 @@ abstract class Helper
 							if ($params->get('cloak_e', false)) {
 							    $generated_link_tag = '<span class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" aria-label="'.$label.'" '.self::getTitleAttribute($label, $fieldtooltip).'>';
 								if ($params->get('e_substitut', '') != '') {
-								    $generated_link_tag .= HtmlHelper::_('email.cloak', $initial_value, true, $params->get('e_substitut', ''), false);
+								    $generated_link_tag .= HTMLHelper::_('email.cloak', $initial_value, true, $params->get('e_substitut', ''), false);
 								} else {
-								    $generated_link_tag .= HtmlHelper::_('email.cloak', $initial_value);
+								    $generated_link_tag .= HTMLHelper::_('email.cloak', $initial_value);
 								}
 								$generated_link_tag .= '</span>';
 							}
@@ -1413,87 +1636,27 @@ abstract class Helper
 				}
 				break;
 
-			case 'a' : // link a
-			case 'a_sw' :
-				$value = trim($item_params->get('linka', ''));
-				$class = 'fieldlinka';
+			case 'a': case 'b': case 'c': case 'd': case 'e': // links a .. e
+			case 'a_sw': case 'b_sw': case 'c_sw': case 'd_sw': case 'e_sw':
+				$value = trim($item_params->get('link' . str_replace('_sw', '', $info_details['name']), ''));
+				$class = 'fieldlink' . str_replace('_sw', '', $info_details['name']);
 				if ($value) {
 				    if (!$params->get('protocol', true)) {
 				        $substitute_value = self::remove_protocol($value);
 				    }
 				    $value_is_link = true;
-				    $label = empty($fieldlabel) ? self::getLabelForLink('linka', $value, $item_params) : $fieldlabel;
+				    $label = empty($fieldlabel) ? ($params->get('linkae_l_as_s', 0) ? Text::_('MOD_TROMBINOSCOPE_LABEL_LINK') : self::getLabelForLink('link' . str_replace('_sw', '', $info_details['name']), $value, $item_params, false)) : $fieldlabel;
 				    $icon_class = !empty($fieldicon) ? $fieldicon : self::getIconForLink($value);
-				    if ($info_details['name'] == 'a') {
+
+				    if (strpos($info_details['name'], '_sw') === false) {
 				        $target = '_blank';
 				    }
-				}
-				break;
 
-			case 'b' : // link b
-			case 'b_sw' :
-				$value = trim($item_params->get('linkb', ''));
-				$class = 'fieldlinkb';
-				if ($value) {
-				    if (!$params->get('protocol', true)) {
-				        $substitute_value = self::remove_protocol($value);
-				    }
-    				$value_is_link = true;
-    				$label = empty($fieldlabel) ? self::getLabelForLink('linkb', $value, $item_params) : $fieldlabel;
-    				$icon_class = !empty($fieldicon) ? $fieldicon : self::getIconForLink($value);
-    				if ($info_details['name'] == 'b') {
-    				    $target = '_blank';
-    				}
-				}
-				break;
-
-			case 'c' : // link c
-			case 'c_sw' :
-				$value = trim($item_params->get('linkc', ''));
-				$class = 'fieldlinkc';
-				if ($value) {
-				    if (!$params->get('protocol', true)) {
-				        $substitute_value = self::remove_protocol($value);
-				    }
-    				$value_is_link = true;
-    				$label = empty($fieldlabel) ? self::getLabelForLink('linkc', $value, $item_params) : $fieldlabel;
-    				$icon_class = !empty($fieldicon) ? $fieldicon : self::getIconForLink($value);
-    				if ($info_details['name'] == 'c') {
-    				    $target = '_blank';
-    				}
-				}
-				break;
-
-			case 'd' : // link d
-			case 'd_sw' :
-				$value = trim($item_params->get('linkd', ''));
-				$class = 'fieldlinkd';
-				if ($value) {
-				    if (!$params->get('protocol', true)) {
-				        $substitute_value = self::remove_protocol($value);
-				    }
-    				$value_is_link = true;
-    				$label = empty($fieldlabel) ? self::getLabelForLink('linkd', $value, $item_params) : $fieldlabel;
-    				$icon_class = !empty($fieldicon) ? $fieldicon : self::getIconForLink($value);
-    				if ($info_details['name'] == 'd') {
-    				    $target = '_blank';
-    				}
-				}
-				break;
-
-			case 'e' : // link e
-			case 'e_sw' :
-				$value = trim($item_params->get('linke', ''));
-				$class = 'fieldlinke';
-				if ($value) {
-				    if (!$params->get('protocol', true)) {
-				        $substitute_value = self::remove_protocol($value);
-					}
-				    $value_is_link = true;
-				    $label = empty($fieldlabel) ? self::getLabelForLink('linke', $value, $item_params) : $fieldlabel;
-				    $icon_class = !empty($fieldicon) ? $fieldicon : self::getIconForLink($value);
-				    if ($info_details['name'] == 'e') {
-				        $target = '_blank';
+				    if ($params->get('linkae_l_as_s', 0)) {
+				    	$linkX_label = self::getLabelForLink('link' . str_replace('_sw', '', $info_details['name']), $value, $item_params, true);
+				    	if ($linkX_label) {
+				    		$substitute_value = $linkX_label;
+				    	}
 				    }
 				}
 				break;
@@ -1584,31 +1747,35 @@ abstract class Helper
 		return $html;
 	}
 
-	static $social_networks_labels = array('facebook' => 'Facebook', 'linkedin' => 'LinkedIn', 'twitter' => 'Twitter', 'plus.google' => 'Google+', 'instagram' => 'Instagram', 'tumblr' => 'Tumblr', 'pinterest' => 'Pinterest', 'youtube' => 'YouTube', 'vimeo' => 'Vimeo', 'wordpress' => 'Wordpress', 'skype' => 'Skype', 'blogspot' => 'Blogger');
+	protected static $social_networks_labels = array('facebook' => 'Facebook', 'linkedin' => 'LinkedIn', 'twitter' => 'Twitter', 'plus.google' => 'Google+', 'instagram' => 'Instagram', 'tumblr' => 'Tumblr', 'pinterest' => 'Pinterest', 'youtube' => 'YouTube', 'vimeo' => 'Vimeo', 'wordpress' => 'Wordpress', 'skype' => 'Skype', 'blogspot' => 'Blogger');
 
-	public static function getLabelForLink($field, $link, $params) {
+	public static function getLabelForLink($field, $link, $params, $is_substitute)
+	{
+		$label = trim($params->get($field.'_name'));
 
-		$label = $params->get($field.'_name');
-
-		if (empty($label)) {
+		if ($label) {
+			return $label;
+		} else {
 		    $globalparams = self::getContactGlobalParams();
 		    if ($globalparams->get($field.'_name')) {
 		        return $globalparams->get($field.'_name');
 		    }
-		} else {
-		    return $label;
 		}
 
-		foreach (self::$social_networks_labels as $key => $value) {
-		    if (strpos($link, $key) > 0) {
-		        return $value;
-			}
-		}
+ 		foreach (self::$social_networks_labels as $key => $value) {
+ 		    if (strpos($link, $key) > 0) {
+ 		        return $value;
+ 			}
+ 		}
 
-		return Text::_('MOD_TROMBINOSCOPE_LABEL_LINK');
+ 		if ($is_substitute) {
+ 			return '';
+ 		}
+
+ 		return Text::_('MOD_TROMBINOSCOPE_LABEL_LINK');
 	}
 
-	static $social_networks_icons = array('facebook' => 'facebook', 'linkedin' => 'linkedin', 'twitter' => 'twitter', 'plus.google' => 'googleplus', 'instagram' => 'instagram', 'tumblr' => 'tumblr', 'pinterest' => 'pinterest', 'youtube' => 'youtube', 'vimeo' => 'vimeo', 'wordpress' => 'wordpress', 'skype' => 'skype', 'blogspot' => 'blogger');
+	protected static $social_networks_icons = array('facebook' => 'facebook', 'linkedin' => 'linkedin', 'twitter' => 'twitter', 'plus.google' => 'googleplus', 'instagram' => 'instagram', 'tumblr' => 'tumblr', 'pinterest' => 'pinterest', 'youtube' => 'youtube', 'vimeo' => 'vimeo', 'wordpress' => 'wordpress', 'skype' => 'skype', 'blogspot' => 'blogger');
 
 	public static function getIconForLink($link)
 	{
@@ -1653,8 +1820,8 @@ abstract class Helper
 
 		$filename = $tmp_path.'/thumb_'.$module_id.'_'.$item_id.'.'.$imageext;
 		$filename_highres = $tmp_path.'/thumb_'.$module_id.'_'.$item_id.'@2x.'.$imageext;
-		if ((is_file(JPATH_ROOT.'/'.$filename) && !$clear_cache && !$create_highres_images)
-			|| (is_file(JPATH_ROOT.'/'.$filename) && !$clear_cache && $create_highres_images && is_file(JPATH_ROOT.'/'.$filename_highres))) {
+		if ((!$clear_cache && !$create_highres_images && is_file(JPATH_ROOT.'/'.$filename))
+			|| (!$clear_cache && $create_highres_images && is_file(JPATH_ROOT.'/'.$filename) && is_file(JPATH_ROOT.'/'.$filename_highres))) {
 
 			// thumbnail already exists
 
@@ -1701,15 +1868,6 @@ abstract class Helper
 
 				// END find image compression plugin
 
-				switch ($imageext){
-					case 'jpg': case 'jpeg': break; // compression: 0 to 100
-					case 'png': // compression: 0 to 9
-						$pngQuality = ($quality - 100) / 11.111111;
-						$quality = round(abs($pngQuality));
-						break;
-					default : $quality = -1; break;
-				}
-
 				$filters_output = array();
 
 				$filters = $filter["filters"];
@@ -1733,9 +1891,15 @@ abstract class Helper
 				}
 
 				if (!is_null($compression_plugin)) {
-					$creation_success = $image->createThumbnail($head_width, $head_height, $crop_picture, $quality, $filters_output, $filename_temp, $create_highres_images);
+					$creation_success = $image->toThumbnail($filename_temp, '', $head_width, $head_height, $crop_picture, $quality, $filters_output, $create_highres_images);
+					if ($creation_success && $image->getImageMimeType() === 'image/webp') {
+						$creation_success = $image->toThumbnail($tmp_path.'/thumb_temp_'.$module_id.'_'.$item_id.'.png', 'image/png', $head_width, $head_height, $crop_picture, $quality, $filters_output, $create_highres_images);
+					}
 				} else {
-					$creation_success = $image->createThumbnail($head_width, $head_height, $crop_picture, $quality, $filters_output, $filename, $create_highres_images);
+					$creation_success = $image->toThumbnail($filename, '', $head_width, $head_height, $crop_picture, $quality, $filters_output, $create_highres_images);
+					if ($creation_success && $image->getImageMimeType() === 'image/webp') {
+						$creation_success = $image->toThumbnail($tmp_path.'/thumb_'.$module_id.'_'.$item_id.'.png', 'image/png', $head_width, $head_height, $crop_picture, $quality, $filters_output, $create_highres_images);
+					}
 				}
 
 				if (!$creation_success) {
@@ -1778,7 +1942,7 @@ abstract class Helper
 		return $filename;
 	}
 
-	protected static function remove_protocol($url)
+	public static function remove_protocol($url)
 	{
 		$disallowed = array('http://', 'https://');
 		foreach($disallowed as $d) {
@@ -1789,7 +1953,7 @@ abstract class Helper
 		return $url;
 	}
 
-	static function getAutoMapLink($address, $params = '', $embed = false) {
+	public static function getAutoMapLink($address, $params = '', $embed = false) {
 
 		$address_array = explode("\n", $address);
 		$address = '';
@@ -2221,17 +2385,17 @@ abstract class Helper
 	/**
 	 * Load flipcards script for all module instances
 	 */
-	static function loadFlipCards()
+	public static function loadFlipCards()
 	{
 		if (self::$flipScriptLoaded) {
 			return;
 		}
 
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 		$minified = (JDEBUG) ? '' : '.min';
 
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->registerAndUseScript('mod_trombinoscopecontacts.flipcards', 'mod_trombinoscopecontacts/flipcards' . $minified . '.js', [], ['defer' => true]);
-
+		$wam->registerAndUseScript('tc.flipcards', 'mod_trombinoscopecontacts/flipcards' . $minified . '.js', ['relative' => true, 'version' => 'auto'], ['defer' => true]);
 		//Factory::getDocument()->addScript(Uri::base(true) . '/media/mod_trombinoscopecontacts/js/flipcards' . $minified . '.js');
 
 		self::$flipScriptLoaded = true;
@@ -2240,17 +2404,17 @@ abstract class Helper
 	/**
 	 * Load common stylesheet to all module instances
 	 */
-	static function loadCommonStylesheet()
+	public static function loadCommonStylesheet()
 	{
 		if (self::$commonStylesLoaded) {
 			return;
 		}
 
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 		$minified = (JDEBUG) ? '' : '-min';
 
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->registerAndUseStyle('mod_trombinoscopecontacts.common', 'mod_trombinoscopecontacts/common_styles' . $minified . '.css');
-
+		$wam->registerAndUseStyle('tc.common_styles', 'mod_trombinoscopecontacts/common_styles' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
 		//Factory::getDocument()->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscopecontacts/css/common_styles' . $minified . '.css');
 
 		self::$commonStylesLoaded = true;
@@ -2260,26 +2424,24 @@ abstract class Helper
 	 * Load user stylesheet to all module instances
 	 * if the file has 'substitute' in the name, it will replace all module styles
 	 */
-	static function loadUserStylesheet($styles_substitute = false)
+	public static function loadUserStylesheet($styles_substitute = false)
 	{
 		if (self::$userStylesLoaded) {
 			return;
 		}
 
-		$doc = Factory::getDocument();
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$prefix = 'common_user';
 		if ($styles_substitute) {
 			$prefix = 'substitute';
 		}
 
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-
 		if (!File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css') || JDEBUG) {
-			$wam->registerAndUseStyle('mod_trombinoscopecontacts.' . $prefix, 'mod_trombinoscopecontacts/' . $prefix . '_styles.css');
+			$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
 			//$doc->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles.css');
 		} else {
-			$wam->registerAndUseStyle('mod_trombinoscopecontacts.' . $prefix, 'mod_trombinoscopecontacts/' . $prefix . '_styles-min.css');
+			$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
 			//$doc->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css');
 		}
 

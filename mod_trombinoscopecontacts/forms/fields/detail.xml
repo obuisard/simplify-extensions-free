@@ -40,4 +40,8 @@
 	<field name="f_access" type="accesslevel" default="1" showon="f!:none[AND]f!:empty" 
 		label="MOD_TROMBINOSCOPE_FIELD_ACCESSFIELD_LABEL" 
 		description="MOD_TROMBINOSCOPE_FIELD_ACCESSFIELD_DESC" />
+		
+	<field name="f_classes" type="text" default="" showon="f!:none[AND]f!:empty"
+		label="MOD_TROMBINOSCOPE_FIELD_EXTRACLASSES_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_EXTRACLASSES_DESC" />
 </form>

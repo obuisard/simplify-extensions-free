@@ -14,7 +14,6 @@ use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
-use SYW\Library\Cache as SYWCache;
 use SYW\Library\Fonts as SYWFonts;
 use SYW\Library\Libraries as SYWLibraries;
 use SYW\Library\Utilities as SYWUtilities;
@@ -24,12 +23,6 @@ use SYW\Module\TrombinoscopeContacts\Site\Cache\JSAnimationFileCache;
 use SYW\Module\TrombinoscopeContacts\Site\Cache\JSFileCache;
 use SYW\Module\TrombinoscopeContacts\Site\Helper\Helper;
 
-$list = Helper::getContacts($params, $module);
-
-if (empty($list)) {
-	return;
-}
-
 $isMobile = SYWUtilities::isMobile();
 
 $show_on_mobile = $params->get('show_on_mobile', 1);
@@ -37,11 +30,17 @@ if (($isMobile && $show_on_mobile == 0) || (!$isMobile && $show_on_mobile == 2))
 	return;
 }
 
+$list = Helper::getContacts($params, $module);
+
+if (empty($list)) {
+	return;
+}
+
 $class_suffix = $module->id;
 $params->set('suffix', $class_suffix);
 
 $urlPath = Uri::base().'modules/mod_trombinoscope/';
-$doc = Factory::getDocument();
+//$doc = Factory::getDocument();
 $app = Factory::getApplication();
 $wam = $app->getDocument()->getWebAssetManager();
 
@@ -50,30 +49,14 @@ $groups	= $user->getAuthorisedViewLevels();
 
 $globalparams = Helper::getContactGlobalParams();
 
-$bootstrap_version = $params->get('bootstrap_version', 'joomla');
-$load_bootstrap = false;
-if ($bootstrap_version === 'joomla') {
-    $bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 4;
-    $load_bootstrap = true;
-} else {
-	$bootstrap_version = intval($bootstrap_version);
-}
+$bootstrap_version = Helper::getBootstrapVersion($params);
+$load_bootstrap = Helper::isLoadBootstrap($params);
 
 $params->set('bootstrap_version', $bootstrap_version); // for use in js and css cached files
 
-$show_errors = $params->get('show_errors', 0);
-if ($params->get('site_mode', 'adv') == 'dev') {
-	$show_errors = 1;
-} else if ($params->get('site_mode', 'adv') == 'prod') {
-	$show_errors = 0;
-}
+$show_errors = Helper::isShowErrors($params);
 
-$remove_whitespaces = $params->get('remove_whitespaces', 0);
-if ($params->get('site_mode', 'adv') == 'dev') {
-	$remove_whitespaces = 0;
-} else if ($params->get('site_mode', 'adv') == 'prod') {
-	$remove_whitespaces = 1;
-}
+$remove_whitespaces = Helper::isRemoveWhitespaces($params);
 
 $module_link = $params->get('modulel', '');
 $module_link_label = '';
@@ -150,6 +133,12 @@ $uppercase = $params->get('name_upper', 0);
 $pre_name = $params->get('s_name_lbl', 0);
 $name_label = trim($params->get('name_lbl', '')) == '' ? Text::_('MOD_TROMBINOSCOPE_LABEL_NAME') : trim($params->get('name_lbl', ''));
 $name_icon = $params->get('name_icon', '');
+
+$link_name = $params->get('link_name', true);
+if ($contact_link !== 'none' && empty($link_label) && !$link_picture) {
+	$link_name = true;
+}
+
 $name_tooltip = $params->get('name_tooltip', true);
 
 $show_allfields_label = $params->get('s_f_lbl', 0);
@@ -165,20 +154,18 @@ $card_height = $params->get('card_h', '');
 
 $min_card_flip_width = trim($params->get('min_card_flip_w', ''));
 
-$border_width = $params->get('border_w', 0);
+$border_width = Helper::getPictureBorderWidth($params);
 $border_radius = $params->get('border_r', 0);
 
-$picture_width = $params->get('pic_w', 100);
-$picture_height = $params->get('pic_h', 120);
-$picture_width = $picture_width - $border_width * 2;
-$picture_height = $picture_height - $border_width * 2;
+$picture_width = Helper::getPictureWidth($params);
+$picture_height = Helper::getPictureHeight($params);
 
 $picture_hover_type = $params->get('pic_hover_type', 'none');
 if ($picture_hover_type != 'none') {
 	$picture_hover_type = 'hvr-'.$picture_hover_type;
 }
 
-$show_picture = $params->get('s_pic', true);
+$show_picture = Helper::isShowPicture($params);
 $keep_picture_space = $params->get('k_pic_s', true);
 $overflow = $params->get('overflow', false);
 
@@ -188,38 +175,15 @@ $vcard_type = $params->get('vcard_type', 'p');
 $show_featured = $params->get('s_f', false);
 $featured_icon = $params->get('f_icon', 'star');
 
-$crop_picture = $params->get('crop_pic', 0);
+$crop_picture = Helper::isCropPicture($params);
 
-$quality = $params->get('quality', 100);
-if ($quality > 100) {
-	$quality = 100;
-}
-if ($quality < 0) {
-	$quality = 0;
-}
+$quality = Helper::getPictureQuality($params);
 
-$clear_cache = $params->get('clear_cache', 1);
-if ($params->get('site_mode', 'adv') == 'dev') {
-	$clear_cache = 1;
-} else if ($params->get('site_mode', 'adv') == 'prod') {
-	$clear_cache = 0;
-}
+$clear_cache = Helper::IsClearPictureCache($params);
 
-$subdirectory = 'thumbnails/tc';
+$tmp_path = Helper::getPictureTemporaryPath($params);
 
-$thumb_path = $params->get('thumb_path', 'images');
-
-if ($thumb_path == 'cache') {
-	$subdirectory = 'mod_trombinoscopecontacts';
-}
-$tmp_path = SYWCache::getTmpPath($thumb_path, $subdirectory);
-
-$filter = $params->get('filter', 'none');
-if (is_array($filter)) {
-	$filter = array('filters' => $filter);
-} else {
-	$filter = array('filters' => array($filter));
-}
+$filter = Helper::getPictureFilters($params);
 
 $category_showing = $params->get('s_cat', 'sl');
 $cat_view_id = $params->get('cat_views', 'auto');
@@ -334,12 +298,7 @@ $auto_map_params = trim($params->get('auto_map_params', ''));
 $date_format = $params->get('d_format', 'd F Y');
 $birthdate_format = $params->get('dob_format', 'F d');
 
-$clear_header_files_cache = $params->get('clear_css_cache', 1);
-if ($params->get('site_mode', 'adv') == 'dev') {
-	$clear_header_files_cache = 1;
-} else if ($params->get('site_mode', 'adv') == 'prod') {
-	$clear_header_files_cache = 0;
-}
+$clear_header_files_cache = Helper::IsClearHeaderCache($params);
 
 $generate_inline_scripts = $params->get('inline_scripts', 0);
 $load_remotely = $params->get('remote_libraries', 0);
@@ -429,13 +388,8 @@ if ($carousel_configuration != 'none') {
 		$result = $cache_anim_js->cache('animation_' . $module->id . $rtl_suffix . '.js', $clear_header_files_cache);
 
 		if ($result) {
-
-			$wam->registerAndUseScript('tc.animation_' . $module->id . $rtl_suffix, 'media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js', [], ['defer' => true]);
+			$wam->registerAndUseScript('tc.animation_' . $module->id . $rtl_suffix, $cache_anim_js->getCachePath() . '/animation_' . $module->id . $rtl_suffix . '.js', [], ['defer' => true]);
 			//$doc->addScript(Uri::base(true) . '/media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js', [], ['defer' => true]);
-
-
-			// Uri::root(true) . 'media...' does not work!
-
 		}
 	}
 
@@ -450,14 +404,8 @@ if ($carousel_configuration != 'none') {
 if ($show_picture && $photo_align != 't' && $min_card_flip_width) {
 	Helper::loadFlipCards();
 	$cache_js = new JSFileCache('mod_trombinoscopecontacts', $params);
-
 	$wam->addInlineScript($cache_js->getBuffer());
 	//$doc->addScriptDeclaration($cache_js->getBuffer());
-} else {
-	// remove style.js if it exists
-	if (File::exists(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/style_'.$module->id.'.js')) {
-		File::delete(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/style_'.$module->id.'.js');
-	}
 }
 
 // styles
@@ -497,7 +445,7 @@ if (File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/substitute_s
 	$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
 
 	if ($result) {
-		$wam->registerAndUseStyle('style_' . $module->id, 'media/cache/mod_trombinoscopecontacts/style_' . $module->id . '.css');
+		$wam->registerAndUseStyle('tc.style_' . $module->id, $cache_css->getCachePath() . '/style_' . $module->id . '.css');
 		//$doc->addStyleSheet(Uri::base(true) . '/media/cache/mod_trombinoscopecontacts/style_' . $module->id . '.css');
 	}
 
@@ -514,10 +462,10 @@ if ($picture_hover_type != 'none') {
 }
 
 // handle high resolution images
-$create_highres_images = $params->get('create_highres', false);
-if ($show_picture && $create_highres_images) {
-	SYWLibraries::loadLazysizes($load_remotely);
-}
+$create_highres_images = Helper::isCreateHighResolutionPicture($params);
+// if ($show_picture && $create_highres_images) {
+// 	SYWLibraries::loadLazysizes($load_remotely);
+// }
 
 // load icon font
 $load_icon_font = $params->get('load_icon_font', 1);

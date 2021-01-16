@@ -39,12 +39,14 @@ header("Content-type: text/css; charset=UTF-8");
 <?php endif; ?>
 
 	<?php echo $prefix; ?> .person {
-		font-size: <?php echo $font_size; ?>px;
-		width: <?php echo $card_width; ?><?php echo $card_width_unit; ?>;
+		font-size: <?php echo $font_size; ?>px<?php if ($animated) : ?> !important<?php endif; ?>;
+
 		<?php if (!$animated) : ?>
 			-webkit-box-flex: 1;
 			-ms-flex: 1 1 auto;
 			flex: 1 1 auto;
+
+			width: <?php echo $card_width; ?><?php echo $card_width_unit; ?>;
 
 			<?php if ($card_min_width) : ?>
 				min-width: <?php echo $card_min_width; ?>px;

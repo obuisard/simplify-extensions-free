@@ -168,6 +168,10 @@ class JSAnimationFileCache extends HeaderFilesCache
 					echo 'var te = document.getElementById("te_' . $suffix . '"); ';
 					echo 'if (te.classList) { te.classList.add("show"); } else { te.className += " show" } ';
 
+					//if (!$horizontal && intval($visible_items) == 1) {
+						//echo $carousel_var . '.updateSliderHeight(); ';
+					//}
+
 					if ($show_arrows) {
 						echo 'if (data.items < ' . $visible_items . ' || data.slideCount > ' . $visible_items . ') {';
 							echo 'var elems = document.querySelectorAll(".te_' . $suffix . ' .items_pagination"); ';

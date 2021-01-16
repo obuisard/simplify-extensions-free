@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>4.3.0</version>
+	<version>4.4.0</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -62,7 +62,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\TrombinoscopeContacts\Site\Field">			
 			<fieldset name="basic" label="MOD_TROMBINOSCOPE_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.3.0" />
+				<field type="extensionversion" version="4.4.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_TROMBINOSCOPE_TRANSLATORS" />
@@ -86,7 +86,7 @@
 <!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
 			</fieldset>	
 
-			<fieldset name="selection" label="MOD_TROMBINOSCOPE_SELECTION_FIELDSET_LABEL" description="MOD_TROMBINOSCOPE_SELECTION_FIELDSET_DESC">
+			<fieldset name="selection" label="MOD_TROMBINOSCOPE_SELECTION_FIELDSET_LABEL" description="MOD_TROMBINOSCOPE_SELECTION_FIELDSET_DESC" addfieldprefix="Joomla\Component\Contact\Administrator\Field">
 								
 <!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/filtering" class="alert alert-info" -->
 <!-- 					description="MOD_TROMBINOSCOPE_SELECTION_FIELDSET_DESC" /> -->
@@ -104,7 +104,7 @@
 						<option value="user">MOD_TROMBINOSCOPE_VALUE_USER</option>
 					</field>
 					
-					<field name="contact_id" type="contact" default="" showon="selection:contact" 
+					<field name="contact_id" type="modal_contact" default="" showon="selection:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_CONTACT_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_CONTACT_DESC" />
 				</fieldset>
@@ -225,6 +225,10 @@
 					<field name="count" type="sywverbosetext" default="" size="4" showon="selection!:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_COUNT_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_COUNT_DESC" />
+						
+					<field name="startat" type="sywverbosetext" default="1" filter="integer" size="4" showon="selection!:contact"
+						label="MOD_TROMBINOSCOPE_FIELD_STARTAT_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_STARTAT_DESC" />
 				</fieldset>
 			</fieldset>	
 				
@@ -687,7 +691,7 @@
 					</field>
 					
 <!-- 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_GDTEST" style="warning" showon="s_pic:1[AND]crop_pic:1" /> -->
-					<field type="gdtest" message="MOD_TROMBINOSCOPE_MESSAGE_GDTEST" showon="s_pic:1[AND]crop_pic:1" />
+					<field type="gdtest" supportedtypes="gif,jpg,png,webp" message="MOD_TROMBINOSCOPE_MESSAGE_GDTEST" showon="s_pic:1[AND]crop_pic:1" />
 					
 					<field name="filter" type="sywimagefiltermultipicker" default="none" selectionmax="2" filters="blur,sharpen,sepia,grayscale,sketch,negate,emboss,edgedetect" showon="s_pic:1[AND]crop_pic:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_IMAGEFILTER_LABEL" 
@@ -805,6 +809,13 @@
 						label="MOD_TROMBINOSCOPE_FIELD_ICONNAME_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_ICONNAME_DESC" />
 						
+					<field name="link_name" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TROMBINOSCOPE_FIELD_LINKNAME_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_LINKNAME_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+						
 					<field name="name_tooltip" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
 						label="MOD_TROMBINOSCOPE_FIELD_SHOWTOOLTIP_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_SHOWTOOLTIPNAME_DESC">
@@ -853,7 +864,7 @@
 <!-- 				<field type="subtitle" title="MOD_TROMBINOSCOPE_OTHERFIELDS_LABEL" /> -->
 			
 					<field name="detail_blocks" type="subform" formsource="modules/mod_trombinoscope/forms/fields/detail.xml" multiple="true" max="7"
-						default="{'f':'none','s_f_lbl':'0','f_lbl':'','f_icon':'','f_tooltip':'1','f_one_line':'1','f_access':'1'}"
+						default="{'f':'none','s_f_lbl':'0','f_lbl':'','f_icon':'','f_tooltip':'1','f_one_line':'1','f_access':'1','f_classes':''}"
 		   				label="MOD_TROMBINOSCOPE_DETAILBLOCS_LABEL" 
 		   				description="MOD_TROMBINOSCOPE_MOREDETAILBLOCS_DESC" />
 		   		</fieldset>
@@ -993,6 +1004,16 @@
 						description="MOD_TROMBINOSCOPE_FIELD_PROTOCOL_DESC">
 						<option value="0">JHIDE</option>
 						<option value="1">JSHOW</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="format_linksae" label="MOD_TROMBINOSCOPE_LINKSAE_LABEL">
+				
+					<field name="linkae_l_as_s" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TROMBINOSCOPE_FIELD_LABELASSUBSTITUTE_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_LABELASSUBSTITUTE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
 					</field>
 				</fieldset>
 			</fieldset>		

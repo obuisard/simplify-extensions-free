@@ -10,7 +10,6 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Router\Route;
-use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Contact\Site\Helper\RouteHelper as ContactRouteHelper;
 use Joomla\Component\Tags\Site\Helper\RouteHelper as TagsRouteHelper;
 use Joomla\Registry\Registry;
@@ -150,7 +149,7 @@ if ($remove_whitespaces) {
 					$extraclasses .= " text_only";
 				} else {
 					$extraclasses .= " ";
-					if (!$keep_picture_space && empty($item->image) && empty($default_picture) && $globalparams->get('default_image') == null) {
+					if (!$keep_picture_space && empty($item->image)) {
 						$extraclasses .= "text_only ghost_";
 					}
 					switch ($photo_align) {
@@ -160,27 +159,6 @@ if ($remove_whitespaces) {
 						case 'lr': $extraclasses .= ($i % 2) ? "picture_right" : "picture_left"; break;
 						case 'rl': $extraclasses .= ($i % 2) ? "picture_left" : "picture_right"; break;
 						default : $extraclasses .= "picture_left";
-					}
-				}
-
-				if ($show_picture && $crop_picture) {
-					if (empty($item->image)) {
-						if (empty($default_picture)) {
-							if ($globalparams->get('default_image') != null) {
-								$item->image = Helper::getCroppedImage($class_suffix, 'global', $globalparams->get('default_image'), $tmp_path, $clear_cache, $picture_width, $picture_height, $crop_picture, $quality, $filter, $create_highres_images);
-							} else {
-								$item->image = '';
-							}
-						} else {
-							$item->image = Helper::getCroppedImage($class_suffix, 'default', $default_picture, $tmp_path, $clear_cache, $picture_width, $picture_height, $crop_picture, $quality, $filter, $create_highres_images);
-						}
-					} else {
-						$item->image = Helper::getCroppedImage($class_suffix, $item->id, $item->image, $tmp_path, $clear_cache, $picture_width, $picture_height, $crop_picture, $quality, $filter, $create_highres_images);
-					}
-
-					if ($item->image == 'error') {
-						$item->error[] = Text::_('MOD_TROMBINOSCOPE_ERROR_CREATINGTHUMBNAIL');
-						$item->image = '';
 					}
 				}
 			?>
@@ -237,10 +215,10 @@ if ($remove_whitespaces) {
     					<div class="innerperson">
     						<div class="personpicture">
 
-    							<?php if (isset($item->individual_bg) && !empty($item->individual_bg)) : ?>
+    							<?php if (isset($item->individual_bg) && $item->individual_bg) : ?>
     								<div class="individualbg">
     									<div class="innerindividualbg">
-    										<?php echo HtmlHelper::_('image', $item->individual_bg, null); ?>
+    										<?php echo SYWUtilities::getImageElement($item->individual_bg, '', null, ($carousel_configuration != 'none') ? false : true); ?>
     									</div>
     								</div>
     							<?php endif; ?>
@@ -261,16 +239,8 @@ if ($remove_whitespaces) {
     								<?php if ($link_picture && $link) : ?>
     									<a href="<?php echo $link; ?>"<?php echo $link_attributes; ?><?php echo Helper::getTitleAttribute($formatted_name, $picture_tooltip) ?><?php echo Helper::getClassAttribute($picture_tooltip, $link_classes); ?>>
     								<?php endif; ?>
-    								<?php if (!empty($item->image)) : ?>
-    									<?php if ($create_highres_images) : ?>
-    										<?php echo HtmlHelper::_('image', $item->image, $formatted_name, array('class' => 'lazyload', 'srcset' => 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==', 'data-srcset' => Uri::base(true).'/'.$item->image.' 1x, '.str_replace('.', '@2x.', Uri::base(true).'/'.$item->image).' 2x')); ?>
-    									<?php else : ?>
-    										<?php echo HtmlHelper::_('image', $item->image, $formatted_name); ?>
-    									<?php endif; ?>
-    								<?php elseif (!empty($default_picture)) : ?>
-    									<?php echo HtmlHelper::_('image', $default_picture, $formatted_name); ?>
-    								<?php elseif ($globalparams->get('default_image') != null) : ?>
-    									<?php echo HtmlHelper::_('image', $globalparams->get('default_image'), $formatted_name); ?>
+    								<?php if ($item->image) : ?>
+    									<?php echo SYWUtilities::getImageElement($item->image, $formatted_name, $crop_picture ? array('width' => $picture_width, 'height' => $picture_height) : array(), ($carousel_configuration != 'none') ? false : true, $create_highres_images); ?>
     								<?php else : ?>
     									<span class="nopicture">&nbsp;</span>
     								<?php endif; ?>
@@ -328,7 +298,7 @@ if ($remove_whitespaces) {
 
     							<?php
         							$title_attribute = Helper::getTitleAttribute($name_label, $name_tooltip);
-        							if (empty($link_label) && $link) {
+        							if ($link_name && $link) {
         							    $name_value = '<a href="'.$link.'"'.$link_attributes.$title_attribute.Helper::getClassAttribute($name_tooltip, $link_classes.' fieldvalue').' aria-label="'.$name_label.'"><span>'.$formatted_name.'</span></a>';
         							} else {
         							    $name_value = '<span class="fieldvalue'.Helper::getTooltipClass($name_tooltip).'" aria-label="'.$name_label.'"'.$title_attribute.'>'.$formatted_name.'</span>';
@@ -345,7 +315,7 @@ if ($remove_whitespaces) {
     							<?php if ($link_label && $link) : ?>
     								<div class="personlinks">
     									<div class="personlink go">
-    										<a href="<?php echo $link; ?>" title="<?php echo $formatted_name; ?>"<?php echo $link_attributes; ?><?php echo Helper::getClassAttribute(true, $link_classes); ?>>
+    										<a href="<?php echo $link; ?>"<?php echo $link_attributes; ?><?php echo Helper::getClassAttribute(false, $link_classes); ?>>
     											<?php if ($doc->getDirection() == 'rtl') : ?>
     												<i class="icon SYWicon-arrow-left" aria-hidden="true"></i><span><?php echo $link_label; ?></span>
     											<?php else : ?>
@@ -391,7 +361,7 @@ if ($remove_whitespaces) {
 		<div class="posttext">
 			<?php
 				if ($params->get('allow_plugins_prepost', 0)) {
-					echo HtmlHelper::_('content.prepare', $params->get('posttext'));
+					echo HTMLHelper::_('content.prepare', $params->get('posttext'));
 				} else {
 					echo $params->get('posttext');
 				}

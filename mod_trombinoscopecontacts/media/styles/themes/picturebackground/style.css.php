@@ -140,7 +140,7 @@ header("Content-type: text/css; charset=UTF-8");
 
 <?php echo $prefix; ?> .iconlinks .iconbg .icon,
 <?php echo $prefix; ?> .vcard .iconbg .icon {
-    padding: 6px;
+    padding: 0.4em;
     border-radius: <?php echo ($iconfont_link_size + .3); ?>em;
 }
 
@@ -148,7 +148,7 @@ header("Content-type: text/css; charset=UTF-8");
 	<?php echo $prefix; ?> .iconlinks .icon,
 	<?php echo $prefix; ?> .vcard .icon {
 		background-color: #fff;
-		padding: 6px;
+		padding: 0.4em;
 		border-radius: <?php echo ($iconfont_link_size + .3); ?>em;
 	}
 <?php endif; ?>

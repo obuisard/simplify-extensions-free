@@ -90,13 +90,15 @@
 						.te .vcard .icon {
 							line-height: 1em;
 							width: 1em;
+							height: 1em;
 							display: inline-block;
 							vertical-align: middle;
+							box-sizing: initial;
 						}
 						
 						.te .iconlinks .iconbg .icon,
 						.te .vcard .iconbg .icon {
-							padding: 4px;
+							padding: 0.3em;
 						}
 						
 						.te .iconlinks span,
