@@ -6,15 +6,15 @@
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Installer\InstallerHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
@@ -40,7 +40,7 @@ class Pkg_TrombinoscopeInstallerScript
 	/**
 	 * Minimum Joomla! version required to install the extension
 	 */
-	protected $minimumJoomla = '4.0.0-beta3';
+	protected $minimumJoomla = '4.0.0-beta4';
 
 	/**
 	 * Available languages
@@ -55,7 +55,7 @@ class Pkg_TrombinoscopeInstallerScript
 	/**
 	 * Link to the change logs
 	 */
-	protected $changelogLink = 'http://www.simplifyyourweb.com/free-products/trombinoscope/file/353-trombinoscope-contacts';
+	protected $changelogLink = 'http://www.simplifyyourweb.com/free-products/trombinoscope/file/384-trombinoscope-contacts';
 
 	/**
 	 * Link to the translation page
@@ -137,7 +137,7 @@ class Pkg_TrombinoscopeInstallerScript
 
         echo '<p style="margin: 10px 0 20px 0">';
     	echo HTMLHelper::image('mod_trombinoscopecontacts/logo.png', 'Trombinoscope Contacts', null, true);
-    	echo '<br /><br /><span class="badge badge-dark">'.Text::sprintf('PKG_TROMBINOSCOPE_VERSION', $this->release).'</span>';
+    	echo '<br /><br /><span class="badge badge-dark">' . Text::sprintf('PKG_TROMBINOSCOPE_VERSION', $this->release) . '</span>';
     	echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
     	echo '</p>';
 
@@ -156,6 +156,7 @@ class Pkg_TrombinoscopeInstallerScript
      	$imagefiles[] = 'no-photo-86x110.jpg';
      	$imagefiles[] = 'silhouette-100x120.jpg';
      	$imagefiles[] = 'silhouette-transparent-100x120.png';
+     	//$imagefiles[] = 'silhouette-transparent-100x120.webp'; // test WebP is supported
 
      	$media_params = ComponentHelper::getParams('com_media');
      	$images_path = $media_params->get('image_path', 'images');
@@ -225,7 +226,7 @@ class Pkg_TrombinoscopeInstallerScript
 		if (!empty($this->deleteFiles)) {
 			foreach ($this->deleteFiles as $filename) {
 				if (File::exists($filename) && !File::delete($filename)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('COM_ARTICLEDETAILSPROFILES_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
+					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TROMBINOSCOPE_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
 				}
 			}
 		}
@@ -233,7 +234,7 @@ class Pkg_TrombinoscopeInstallerScript
 		if (!empty($this->deleteFolders)) {
 			foreach ($this->deleteFolders as $folder) {
 				if (Folder::exists(JPATH_ROOT.$folder) && !Folder::delete(JPATH_ROOT.$folder)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('COM_LATESTNEWSENHANCEDPRO_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
+					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TROMBINOSCOPE_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
 				}
 			}
 		}
