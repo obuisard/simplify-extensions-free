@@ -68,7 +68,7 @@
 				
 				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" icon="help" />
 				
-				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" imagesrc="../plugins/system/jqueryeasy/images/jquery.png" />
+				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" imagesrc="../media/syw/images/filters/original.jpg" />
 				
 				<!-- SubTitle -->	
 				<field type="subtitle" color="#fc930a" title="MOD_LIBRARY_TEST" />
@@ -136,14 +136,14 @@
 			<fieldset name="pickers" label="MOD_LIBRARY_TEST_PICKERS_FIELDSET_LABEL">
 			
 				<!-- Article -->
-				<field name="article_id" type="article" default=""
-					label="Article Id"
-					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+<!-- 				<field name="article_id" type="article" default="" -->
+<!-- 					label="Article Id" -->
+<!-- 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" /> -->
 				
 				<!-- Contact -->
-				<field name="contact_id" type="contact" default="" 
-					label="Contact Id" 
-					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />				
+<!-- 				<field name="contact_id" type="contact" default=""  -->
+<!-- 					label="Contact Id"  -->
+<!-- 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />				 -->
 							
 				<!-- SYWColorPicker -->
 				<field name="colorpicker" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
@@ -159,12 +159,17 @@
 					
 					
 				<field name="colorpickerjoomla" type="color" default="transparent" 
-					keywords="transparent" preview="true" 
+					preview="true" control="simple" split="4"
 					label="Color Joomla" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
-				<field name="colorpickerjoomla2" type="color" default="hsl(214,63%,20%)" 
-					keywords="transparent" preview="true" control="slider" format="hue" saveFormat="hsl"
+				<field name="colorpickerjoomla2" type="color" default="transparent" 
+					keywords="transparent,initial,inherit" preview="true" format="hex"
+					label="Color Joomla" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<field name="colorpickerjoomla3" type="color" default="hsl(214,63%,20%)" 
+					preview="true" control="slider" format="hue" saveFormat="hsl"
 					label="Color Joomla" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
@@ -218,18 +223,52 @@
 			<!-- DynamicSingleSelect -->
 			<fieldset name="dynamicselect" label="MOD_LIBRARY_TEST_DYNAMICSELECT_FIELDSET_LABEL">
 			
-				<!-- SYWLoaderPicker -->
-				<field name="loader" type="sywloaderpicker" default="default" 
-					label="Loader" 
-					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
+				<!-- DynamicSingleSelect -->
+				<field name="raw_picker" type="dynamicsingleselect" default="" noelement="true"
+					label="Raw" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="fs">LIB_SYW_ALIGN_VALUE_START</option>
+					<option value="c">LIB_SYW_ALIGN_VALUE_CENTER</option>
+					<option value="fe">LIB_SYW_ALIGN_VALUE_END</option>
+				</field>
 			
+				<!-- SYWLoaderPicker -->
+				<field name="loader" type="sywloaderpicker" default="default" imagebgcolor="#ccc"
+					label="Loader" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />				
+					
+				<!-- SYWSpacingSelect -->	
+				<field name="spacing" type="sywspacingselect" default="c" 
+						label="Spacing" 
+						description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWAlignmentSelect row -->
+				<field name="align_row" type="sywalignmentselect" default="fs" global="true"
+					label="Alignment (row)" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
+				<!-- SYWAlignmentSelect col -->
+				<field name="items_col" type="sywalignmentselect" direction="vertical" default="s" 
+					label="Alignment (col)" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
 				<!-- SYWImageFilterPicker -->
-				<field name="filter" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a"
+				<field name="filter" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a" global="true"
 					label="Image Filter" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
+				<!-- SYWImageFilterPicker -->
+				<field name="filter2" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a" cssfilters="true" gdfilters="false" 
+					label="Image Filter" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
+					
+				<!-- SYWImageFilterPicker -->
+				<field name="filter3" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a" extended="true" cssfilters="true" gdfilters="true" 
+					label="Image Filter" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
 				<!-- SYWImageFilterMultiPicker -->
-				<field name="filter2" type="sywimagefiltermultipicker" default="none" selectionmax="2" filters="blur,sharpen,duotone,sepia,grayscale,sketch,pixelate,negate,emboss,edgedetect" selectedcolor="#fc930a" 
+				<field name="filter4" type="sywimagefiltermultipicker" default="none" selectionmax="2" filters="blur,sharpen,duotone,sepia,grayscale,sketch,pixelate,negate,emboss,edgedetect" selectedcolor="#fc930a" 
 					label="Image Filter (2 choices)" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
 			
