@@ -13,24 +13,24 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
-class ExtensionLinkField extends FormField 
-{		
+class ExtensionLinkField extends FormField
+{
 	public $type = 'ExtensionLink';
-	
+
 	protected $link_type;
 	protected $link;
 	protected $syw_description;
 
-	protected function getLabel() 
-	{		
+	protected function getLabel()
+	{
 		$html = '';
-		
+
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
-		
+
 		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
 		HTMLHelper::_('bootstrap.tooltip');
-			
+
 		switch ($this->link_type) {
 			case 'forum': $icon="SYWicon-chat"; $title = 'LIB_SYW_EXTENSIONLINK_FORUM_LABEL'; break;
 			case 'forumbeta': $icon="SYWicon-chat"; $title = 'LIB_SYW_EXTENSIONLINK_FORUMBETA_LABEL'; $class = 'btn-inverse'; break;
@@ -49,7 +49,7 @@ class ExtensionLinkField extends FormField
 			case 'translate': $icon="SYWicon-translate"; $title = 'LIB_SYW_EXTENSIONLINK_TRANSLATE_LABEL'; break;
 			default: $icon = ''; $title = '';
 		}
-		
+
 		if ($this->link) {
 			$html .= '<a class="btn btn-dark btn-sm hasTooltip" title="'.Text::_($title).'" href="'.$this->link.'" target="_blank">';
 		} else {
@@ -61,17 +61,17 @@ class ExtensionLinkField extends FormField
 		} else {
 			$html .= '</span>';
 		}
-		
+
 		return $html;
 	}
 
-	protected function getInput() 
-	{		
+	protected function getInput()
+	{
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
-		
+
 		$html = '<div class="syw_info" style="padding-top: 5px; overflow: inherit">';
-			
+
 		if ($this->syw_description) {
 			if ($this->link) {
 				$html .= Text::sprintf($this->syw_description, $this->link);
@@ -79,7 +79,7 @@ class ExtensionLinkField extends FormField
 				$html .= Text::_($this->syw_description);
 			}
 		} else {
-			
+
 			switch ($this->link_type) {
 				case 'forum': $desc = 'LIB_SYW_EXTENSIONLINK_FORUM_DESC'; break;
 				case 'forumbeta': $desc = 'LIB_SYW_EXTENSIONLINK_FORUMBETA_DESC'; break;
@@ -98,7 +98,7 @@ class ExtensionLinkField extends FormField
 				case 'translate': $desc = 'LIB_SYW_EXTENSIONLINK_TRANSLATE_DESC'; break;
 				default: $desc = '';
 			}
-			
+
 			if ($desc) {
 				if ($this->link) {
 				    if ($this->link_type == 'translate') {
@@ -110,8 +110,8 @@ class ExtensionLinkField extends FormField
 					$html .= Text::_($desc);
 				}
 			}
-		}	
-		
+		}
+
 		if ($this->link_type == 'review') {
 			$html = rtrim($html, '.');
 			$html .= ' <a href="'.$this->link.'" target="_blank" style="text-decoration: none; vertical-align: text-bottom">';
@@ -121,22 +121,22 @@ class ExtensionLinkField extends FormField
 			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
 			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i></a> .';
 		}
-		
+
 		$html .= '</div>';
 
 		return $html;
 	}
-	
+
 	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
-		
+
 		if ($return) {
-			$this->link_type = $this->element['linktype'];
-			$this->link = isset($this->element['link']) ? $this->element['link'] : '';
-			$this->syw_description = isset($this->element['sywdescription']) ? $this->element['sywdescription'] : '';
+			$this->link_type = (string)$this->element['linktype'];
+			$this->link = isset($this->element['link']) ? (string)$this->element['link'] : '';
+			$this->syw_description = isset($this->element['sywdescription']) ? (string)$this->element['sywdescription'] : '';
 		}
-		
+
 		return $return;
 	}
 

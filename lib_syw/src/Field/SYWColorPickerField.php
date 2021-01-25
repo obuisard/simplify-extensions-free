@@ -13,57 +13,57 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
-class SYWColorPickerField extends FormField 
-{		
+class SYWColorPickerField extends FormField
+{
 	public $type = 'SYWColorPicker';
-	
+
 	protected $use_global;
 	protected $allow_transparency;
 	protected $icon;
 	protected $help;
 	protected $rgba;
-	
-	protected function getInput() 
-	{		
-		$doc = Factory::getDocument();	
-		
+
+	protected function getInput()
+	{
+		$doc = Factory::getDocument();
+
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
-		
+
 		HTMLHelper::_('bootstrap.tooltip');
-					
+
 		$html = '';
-			
+
 		$color = strtolower($this->value);
-			
+
 		if (!$color || in_array($color, array('none', 'transparent'))) {
 			$color = '';
 		} elseif (!$this->rgba && $color['0'] != '#') {
 			$color = '#'.$color;
 		}
-		
+
 		$direction = $lang->isRtl() ? ' dir="ltr" style="text-align:right"' : '';
-		
+
 		HTMLHelper::_('jquery.framework');
 		HTMLHelper::_('script', 'vendor/minicolors/jquery.minicolors.min.js', ['version' => 'auto', 'relative' => true]);
 		HTMLHelper::_('stylesheet', 'vendor/minicolors/jquery.minicolors.css', ['version' => 'auto', 'relative' => true]);
 		HTMLHelper::_('script', 'system/fields/color-field-adv-init.min.js', ['version' => 'auto', 'relative' => true]);
-		
+
 		$icon = isset($this->icon) ? $this->icon : '';
 		if (!empty($icon)) {
 		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
 		}
-		
+
 		if ($icon || $this->allow_transparency || $this->use_global) {
-		    $html .= '<div class="input-group">';	
+		    $html .= '<div class="input-group">';
 		} else {
 		    $html .= '<div>';
 		}
-		
+
 		if (!empty($icon)) {
 			$html .= '<div class="input-group-prepend"><span class="input-group-text"><i class="'.$icon.'"></i></span></div>';
 		}
-		
+
 		$data_rgba = '';
 		if ($this->rgba) {
 		    $data_rgba = ' data-format="rgba" style="width: auto"';
@@ -76,7 +76,7 @@ class SYWColorPickerField extends FormField
 			if (empty($this->value) && $this->use_global) {
 				$disabled = ' disabled';
 			}
-			
+
 			$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" />';
 			$html .= '<input style="height:auto" type="text" name="visible_'.$this->name.'" id="visible_'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="form-control minicolors"'.$direction.$data_rgba.$disabled.' />';
 		}
@@ -84,7 +84,7 @@ class SYWColorPickerField extends FormField
 		if ($this->use_global || $this->allow_transparency) {
 		    $html .= '<div class="input-group-append">';
 		}
-		
+
 		if ($this->use_global) {
 			$class = 'btn hasTooltip';
 			if (empty($this->value)) {
@@ -92,7 +92,7 @@ class SYWColorPickerField extends FormField
 			}
 			$html .= '<button type="button" id="global_'.$this->id.'" class="'.$class.'" title="'.Text::_('JGLOBAL_USE_GLOBAL').'><span>'.Text::_('JGLOBAL_USE_GLOBAL').'</span></button>';
 		}
-			
+
 		if ($this->allow_transparency) {
 			$html .= '<button type="button" id="a_'.$this->id.'" class="btn btn-secondary hasTooltip" title="'.Text::_('JLIB_FORM_BUTTON_CLEAR').'"><i class="icon-remove"></i></button>';
 		}
@@ -100,20 +100,20 @@ class SYWColorPickerField extends FormField
 		if ($this->use_global || $this->allow_transparency) {
 		    $html .= '</div>';
 		}
-		
+
 		$html .= '</div>';
-		
+
 		if ($this->help) {
 			$html .= '<span class="help-block">'.Text::_($this->help).'</span>';
 		}
-			
+
 		if ($this->allow_transparency || $this->use_global) {
 			$script = 'jQuery(document).ready(function (){';
-			
+
 			$script .= 'jQuery("#visible_'.$this->id.'").change(function() { jQuery("#'.$this->id.'").val(jQuery("#visible_'.$this->id.'").val()) });';
 			$script .= 'jQuery("#visible_'.$this->id.'").parent().find("span").first().children(".minicolors-panel").click(function() { jQuery("#visible_'.$this->id.'").change() });';
 			$script .= 'jQuery("#visible_'.$this->id.'").next(".minicolors-panel").mouseup(function() { setTimeout(function(){ jQuery("#'.$this->id.'").val(jQuery("#visible_'.$this->id.'").val());}, 500); });';
-			
+
 			if ($this->use_global) {
 				$script .= 'jQuery("#global_'.$this->id.'").click(function() {';
 				$script .= 'jQuery("#visible_'.$this->id.'").parent().find("span").first().children().css("background-color","transparent");';
@@ -126,32 +126,32 @@ class SYWColorPickerField extends FormField
 				}
 				$script .= '});';
 			}
-			
+
 			if ($this->allow_transparency) {
 				$script .= 'jQuery("#a_'.$this->id.'").click(function() {';
 				$script .= 'jQuery("#visible_'.$this->id.'").parent().find("span").first().children().css("background-color","transparent");';
 				$script .= 'jQuery("#visible_'.$this->id.'").val(""); jQuery("#'.$this->id.'").val("transparent");';
 				$script .= '});';
 			}
-			
+
 			$script .= '});';
-		
+
 			$doc->addScriptDeclaration($script);
-		} 
-		
+		}
+
 		return $html;
 	}
-	
+
 	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->use_global = ($this->element['global'] == "true") ? true : false;
+			$this->use_global = ((string)$this->element['global'] == "true" || (string)$this->element['useglobal'] == "true") ? true : false;
 			$this->allow_transparency = isset($this->element['transparency']) ? filter_var($this->element['transparency'], FILTER_VALIDATE_BOOLEAN) : false;
-			$this->icon = isset($this->element['icon']) ? $this->element['icon'] : null;			
-			$this->help = isset($this->element['help']) ? $this->element['help'] : '';
-			$this->rgba = ($this->element['rgba'] == "true") ? true : false;
+			$this->icon = isset($this->element['icon']) ? (string)$this->element['icon'] : null;
+			$this->help = isset($this->element['help']) ? (string)$this->element['help'] : '';
+			$this->rgba = ((string)$this->element['rgba'] == "true") ? true : false;
 		}
 
 		return $return;

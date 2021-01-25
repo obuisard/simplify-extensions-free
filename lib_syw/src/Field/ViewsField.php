@@ -95,8 +95,8 @@ class ViewsField extends GroupedListField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->extension_option = isset($this->element['option']) ? trim($this->element['option']) : '';
-			$this->extension_view = isset($this->element['view']) ? $this->element['view'] : '';
+			$this->extension_option = isset($this->element['option']) ? trim((string)$this->element['option']) : '';
+			$this->extension_view = isset($this->element['view']) ? (string)$this->element['view'] : '';
 		}
 
 		return $return;

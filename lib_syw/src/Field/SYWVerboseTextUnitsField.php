@@ -33,6 +33,8 @@ class SYWVerboseTextUnitsField extends ListField
 	{
 		$html = '';
 
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
@@ -93,7 +95,7 @@ class SYWVerboseTextUnitsField extends ListField
 					$script .= '}); ';
 				$script .= '});';
 
-				Factory::getDocument()->addScriptDeclaration($script);
+				$wam->addInlineScript($script);
 
 				$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'_unit" value="'.$this->values['unit'].'" size="3" />';
 
@@ -125,13 +127,13 @@ class SYWVerboseTextUnitsField extends ListField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->max = isset($this->element['max']) ? $this->element['max'] : null;
-			$this->min = isset($this->element['min']) ? $this->element['min'] : null;
-			$this->units = isset($this->element['units']) ? $this->element['units'] : '';
-			$this->default_unit = isset($this->element['defaultunit']) ? $this->element['defaultunit'] : '';
-			$this->help = isset($this->element['help']) ? $this->element['help'] : '';
-			$this->icon = isset($this->element['icon']) ? $this->element['icon'] : '';
-			$this->maxLength = isset($this->element['maxlength']) ? ' maxlength="' . $this->maxLength . '"' : '';
+			$this->max = isset($this->element['max']) ? (string)$this->element['max'] : null;
+			$this->min = isset($this->element['min']) ? (string)$this->element['min'] : null;
+			$this->units = isset($this->element['units']) ? (string)$this->element['units'] : '';
+			$this->default_unit = isset($this->element['defaultunit']) ? (string)$this->element['defaultunit'] : '';
+			$this->help = isset($this->element['help']) ? (string)$this->element['help'] : '';
+			$this->icon = isset($this->element['icon']) ? (string)$this->element['icon'] : '';
+			$this->maxLength = isset($this->element['maxlength']) ? ' maxlength="' . ((string)$this->maxLength) . '"' : '';
 		}
 
 		return $return;

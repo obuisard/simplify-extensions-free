@@ -67,17 +67,17 @@ class GDTestField extends FormField
 
 			if (in_array('png', $this->supportedtypes)) {
 				if (imagetypes() & IMG_PNG) {
-					$html .= '<span class="badge badge-success">PNG '.lcfirst(Text::_('JENABLED')).'</span>';
+					$html .= '<span class="badge badge-success">PNG '.lcfirst(Text::_('JENABLED')).'</span> ';
 				} else {
-					$html .= '<span class="badge badge-warning">PNG '.lcfirst(Text::_('JDISABLED')).'</span>';
+					$html .= '<span class="badge badge-warning">PNG '.lcfirst(Text::_('JDISABLED')).'</span> ';
 				}
 			}
-			
+
 			if (in_array('webp', $this->supportedtypes)) {
 				if (imagetypes() & IMG_WEBP) {
-					$html .= ' <span class="badge badge-success">WEBP '.lcfirst(Text::_('JENABLED')).'</span>';
+					$html .= ' <span class="badge badge-success">WEBP '.lcfirst(Text::_('JENABLED')).'</span> ';
 				} else {
-					$html .= ' <span class="badge badge-warning">WEBP '.lcfirst(Text::_('JDISABLED')).'</span>';
+					$html .= ' <span class="badge badge-warning">WEBP '.lcfirst(Text::_('JDISABLED')).'</span> ';
 				}
 			}
 
@@ -92,9 +92,9 @@ class GDTestField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$supportedtypes = isset($this->element['supportedtypes']) ? strtolower(str_replace(' ', '', $this->element['supportedtypes'])) : 'gif,jpg,png';
+			$supportedtypes = isset($this->element['supportedtypes']) ? strtolower(str_replace(' ', '', (string)$this->element['supportedtypes'])) : 'gif,jpg,png';
 			$this->supportedtypes = explode(',', $supportedtypes);
-			$this->message = isset($this->element['message']) ? trim(Text::_($this->element['message'])) : '';
+			$this->message = isset($this->element['message']) ? trim(Text::_((string)$this->element['message'])) : '';
 		}
 
 		return $return;

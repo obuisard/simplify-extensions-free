@@ -185,10 +185,10 @@ class OverridesTestField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->extension = isset($this->element['extension']) ? $this->element['extension'] : null;
-			$this->view = isset($this->element['view']) ? '/'.$this->element['view'] : '';
-			$this->additional_extensions = isset($this->element['additional_extensions']) ? $this->element['additional_extensions'] : null;
-			$this->parent_extension = isset($this->element['parent_extension']) ? $this->element['parent_extension'] : null;
+			$this->extension = isset($this->element['extension']) ? (string)$this->element['extension'] : null;
+			$this->view = isset($this->element['view']) ? '/' . ((string)$this->element['view']) : '';
+			$this->additional_extensions = isset($this->element['additional_extensions']) ? (string)$this->element['additional_extensions'] : null;
+			$this->parent_extension = isset($this->element['parent_extension']) ? (string)$this->element['parent_extension'] : null;
 			$this->include_layouts = isset($this->element['include_layouts']) ? filter_var($this->element['include_layouts'], FILTER_VALIDATE_BOOLEAN) : true;
 		}
 

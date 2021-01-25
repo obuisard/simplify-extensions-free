@@ -171,10 +171,10 @@ class SYWCardinalTextField extends ListField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->unit = isset($this->element['unit']) ? $this->element['unit'] : '';
-			$this->help = isset($this->element['help']) ? $this->element['help'] : '';
+			$this->unit = isset($this->element['unit']) ? (string)$this->element['unit'] : '';
+			$this->help = isset($this->element['help']) ? (string)$this->element['help'] : '';
 
-			$icons = isset($this->element['icons']) ? explode(",", $this->element['icons']) : array('');
+			$icons = isset($this->element['icons']) ? explode(",", (string)$this->element['icons']) : array('');
 			if (count($icons) == 1) {
 				$icons[] = $icons[0];
 				$icons[] = $icons[0];
@@ -185,7 +185,7 @@ class SYWCardinalTextField extends ListField
 			$this->icons['bottom'] = $icons[2];
 			$this->icons['left'] = $icons[3];
 
-			$tooltips = isset($this->element['tooltips']) ? explode(",", $this->element['tooltips']) : array('');
+			$tooltips = isset($this->element['tooltips']) ? explode(",", (string)$this->element['tooltips']) : array('');
 			if (count($tooltips) == 1) {
 				$tooltips[] = $tooltips[0];
 				$tooltips[] = $tooltips[0];
@@ -196,9 +196,9 @@ class SYWCardinalTextField extends ListField
 			$this->tooltips['bottom'] = empty($tooltips[2]) ? '' : Text::_($tooltips[2]);
 			$this->tooltips['left'] = empty($tooltips[3]) ? '' : Text::_($tooltips[3]);
 
-			$this->maxLength = isset($this->element['maxlength']) ? ' maxlength="'.$this->maxLength.'"' : '';
+			$this->maxLength = isset($this->element['maxlength']) ? ' maxlength="' . ((string)$this->maxLength) . '"' : '';
 
-			$this->layout = isset($this->element['layout']) ? $this->element['layout'] : 'default';
+			$this->layout = isset($this->element['layout']) ? (string)$this->element['layout'] : 'default';
 		}
 
 		return $return;

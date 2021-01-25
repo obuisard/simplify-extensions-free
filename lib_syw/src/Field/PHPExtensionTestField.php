@@ -57,8 +57,8 @@ class PHPExtensionTestField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->extension = isset($this->element['extension']) ? trim($this->element['extension']) : '';
-			$this->message = isset($this->element['message']) ? trim(Text::_($this->element['message'])) : '';
+			$this->extension = isset($this->element['extension']) ? trim((string)$this->element['extension']) : '';
+			$this->message = isset($this->element['message']) ? trim(Text::_((string)$this->element['message'])) : '';
 		}
 
 		return $return;

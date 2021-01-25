@@ -52,11 +52,11 @@ class SYWOnlineHelpField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->title = !empty($this->element['label']) ? $this->element['label'] : (isset($this->element['title']) ? $this->element['title'] : '');
-			$this->syw_description= isset($this->element['sywdescription']) ? $this->element['sywdescription'] : '';
-			$this->heading = isset($this->element['heading']) ? $this->element['heading'] : 'h4';
-			$this->layer_class = isset($this->class) ? ' '.$this->class : (isset($this->element['class']) ? ' '.$this->element['class']: '');
-			$this->url = isset($this->element['url']) ? $this->element['url'] : '';
+			$this->title = !empty($this->element['label']) ? (string)$this->element['label'] : (isset($this->element['title']) ? (string)$this->element['title'] : '');
+			$this->syw_description= isset($this->element['sywdescription']) ? (string)$this->element['sywdescription'] : '';
+			$this->heading = isset($this->element['heading']) ? (string)$this->element['heading'] : 'h4';
+			$this->layer_class = isset($this->class) ? ' '.$this->class : (isset($this->element['class']) ? ' ' . ((string)$this->element['class']) : '');
+			$this->url = isset($this->element['url']) ? (string)$this->element['url'] : '';
 		}
 
 		return $return;

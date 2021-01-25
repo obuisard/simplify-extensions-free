@@ -48,7 +48,7 @@ class ExtensionVersionField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->version = isset($this->element['version']) ? $this->element['version'] : '';
+			$this->version = isset($this->element['version']) ? (string)$this->element['version'] : '';
 		}
 
 		return $return;

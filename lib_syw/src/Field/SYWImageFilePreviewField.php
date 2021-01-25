@@ -132,8 +132,8 @@ class SYWImageFilePreviewField extends FormField
         $return = parent::setup($element, $value, $group);
 
         if ($return) {
-            $this->width = isset($this->element['width']) ? trim($this->element['width']) : '200';
-            $this->height = isset($this->element['height']) ? trim($this->element['height']) : '';
+        	$this->width = isset($this->element['width']) ? trim((string)$this->element['width']) : '200';
+        	$this->height = isset($this->element['height']) ? trim((string)$this->element['height']) : '';
             $this->show_name = isset($this->element['showname']) ? filter_var($this->element['showname'], FILTER_VALIDATE_BOOLEAN) : false;
             $this->show_preview = isset($this->element['showpreview']) ? filter_var($this->element['showpreview'], FILTER_VALIDATE_BOOLEAN) : false;
             $this->clear = isset($this->element['clear']) ? filter_var($this->element['clear'], FILTER_VALIDATE_BOOLEAN) : true;
