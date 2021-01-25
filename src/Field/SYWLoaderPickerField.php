@@ -34,11 +34,11 @@ class SYWLoaderPickerField extends DynamicSingleSelect
 // 			$options[] = array('', JText::_('JGLOBAL_USE_GLOBAL'), '('.JText::_('LIB_SYW_GLOBAL_UNKNOWN').')', $path.'global.jpg');
 // 		}
 
-		$options[] = array('default', Text::_('JDEFAULT'), '', $path.'spin.gif');
+		$options[] = array('default', Text::_('JDEFAULT'), '', $path.'spin.gif', '', false, 'gif');
 
 		$loaders = explode(',', $this->loaders);
 		foreach ($loaders as $loader) {
-			$options[] = array($loader, ucfirst($loader), '', $path.$loader.'.svg');
+			$options[] = array($loader, ucfirst($loader), '', $path.$loader.'.svg', '', false, 'svg');
 		}
 
 		return $options;
@@ -52,7 +52,7 @@ class SYWLoaderPickerField extends DynamicSingleSelect
 			$this->width = 80;
 			$this->height = 80;
 			$this->loaders = 'spin,disk,triangle';
-			$this->imagebgc = isset($this->element['imagebgc']) ? $this->element['imagebgc'] : '#f4f4f4';
+			$this->imagebgc = isset($this->element['imagebgc']) ? (string)$this->element['imagebgc'] : '#f4f4f4';
 		}
 
 		return $return;

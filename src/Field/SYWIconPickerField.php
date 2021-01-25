@@ -529,7 +529,7 @@ class SYWIconPickerField extends FormField
 
 	protected function getInput()
 	{
-		$doc = Factory::getDocument();
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
@@ -595,7 +595,7 @@ class SYWIconPickerField extends FormField
 
 		$script .= '}); ';
 
-		$doc->addScriptDeclaration($script);
+		$wam->addInlineScript($script);
 
 		$html = '';
 
@@ -679,14 +679,14 @@ class SYWIconPickerField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->icons = isset($this->element['icons']) ? $this->element['icons'] : null;
-			$this->icongroups = isset($this->element['icongroups']) ? $this->element['icongroups'] : null;
-			$this->help = isset($this->element['help']) ? $this->element['help'] : '';
+			$this->icons = isset($this->element['icons']) ? (string)$this->element['icons'] : null;
+			$this->icongroups = isset($this->element['icongroups']) ? (string)$this->element['icongroups'] : null;
+			$this->help = isset($this->element['help']) ? (string)$this->element['help'] : '';
 			$this->icomoon = isset($this->element['icomoon']) ? filter_var($this->element['icomoon'], FILTER_VALIDATE_BOOLEAN) : false;
 			$this->editable = isset($this->element['editable']) ? filter_var($this->element['editable'], FILTER_VALIDATE_BOOLEAN) : false;
-			$this->buttonrole = isset($this->element['buttonrole']) ? Text::_($this->element['buttonrole']) : 'default';
-			$this->buttonlabel = isset($this->element['buttonlabel']) ? Text::_($this->element['buttonlabel']) : ($this->buttonrole == 'clear' ? Text::_('JCLEAR') : Text::_('JDEFAULT'));
-			$this->emptyicon = isset($this->element['emptyicon']) ? $this->element['emptyicon'] : ($this->buttonrole == 'default' ? 'question' : '');
+			$this->buttonrole = isset($this->element['buttonrole']) ? Text::_((string)$this->element['buttonrole']) : 'default';
+			$this->buttonlabel = isset($this->element['buttonlabel']) ? Text::_((string)$this->element['buttonlabel']) : ($this->buttonrole == 'clear' ? Text::_('JCLEAR') : Text::_('JDEFAULT'));
+			$this->emptyicon = isset($this->element['emptyicon']) ? (string)$this->element['emptyicon'] : ($this->buttonrole == 'default' ? 'question' : '');
 		}
 
 		return $return;

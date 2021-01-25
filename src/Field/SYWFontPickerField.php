@@ -88,6 +88,8 @@ class SYWFontPickerField extends FormField
 	 */
 	protected function getInput()
 	{
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
@@ -111,7 +113,7 @@ class SYWFontPickerField extends FormField
 			$script .= '}); ';
 		$script .= '});';
 
-		Factory::getDocument()->addScriptDeclaration($script);
+		$wam->addInlineScript($script);
 
 		$html = '<div class="input-group">';
 

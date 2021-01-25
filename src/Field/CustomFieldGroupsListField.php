@@ -29,27 +29,27 @@ class CustomFieldGroupsListField extends ListField
 	static function getCoreFieldGroups($context)
 	{
 		$usable_context = str_replace('.', '_', $context);
-		
+
 		if (!isset(self::$core_fieldgroups[$usable_context])) {
-			
+
 			$db = Factory::getDbo();
-			
+
 			$query = $db->getQuery(true);
-			
+
 			$query->select('id, title');
 			$query->from('#__fields_groups');
 			$query->where('state = 1');
 			$query->where('context = ' . $db->quote($context));
-							
+
 			$db->setQuery($query);
-			
+
 			$results = array();
 			try {
 				$results = $db->loadObjectList();
 			} catch (\RuntimeException $e) {
 				Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 			}
-			
+
 			self::$core_fieldgroups[$usable_context] = $results;
 		}
 
@@ -60,7 +60,7 @@ class CustomFieldGroupsListField extends ListField
 	{
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
-		
+
 		$options = array();
 
 		// get Joomla! field groups
@@ -85,7 +85,7 @@ class CustomFieldGroupsListField extends ListField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->context = isset($this->element['context']) ? $this->element['context'] : 'com_contact.contact';
+			$this->context = isset($this->element['context']) ? (string)$this->element['context'] : 'com_contact.contact';
 		}
 
 		return $return;

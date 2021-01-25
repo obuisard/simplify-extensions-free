@@ -109,7 +109,7 @@ class SYWTransitionPickerField extends FormField
 
     protected function getInput()
     {
-        $doc = Factory::getDocument();
+    	$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
         $lang = Factory::getLanguage();
         $lang->load('lib_syw.sys', JPATH_SITE);
@@ -181,7 +181,7 @@ class SYWTransitionPickerField extends FormField
         }
         $script .= '});';
 
-        $doc->addScriptDeclaration($script);
+        $wam->addInlineScript($script);
 
         $html = '';
 
@@ -265,13 +265,13 @@ class SYWTransitionPickerField extends FormField
         $return = parent::setup($element, $value, $group);
 
         if ($return) {
-            $this->use_global = ($this->element['global'] == "true") ? true : false;
-            $this->transitions = isset($this->element['transitions']) ? $this->element['transitions'] : null;
-            $this->transitiongroups = isset($this->element['transitiongroups']) ? $this->element['transitiongroups'] : null;
-            $this->icon = isset($this->element['icon']) ? $this->element['icon'] : null;
-            $this->help = isset($this->element['help']) ? $this->element['help'] : null;
-            $this->sampleimage = isset($this->element['sampleimage']) ? $this->element['sampleimage'] : null;
-            $this->sampleicon = isset($this->element['sampleicon']) ? $this->element['sampleicon'] : null;
+        	$this->use_global = ((string)$this->element['global'] == "true" || (string)$this->element['useglobal'] == "true") ? true : false;
+        	$this->transitions = isset($this->element['transitions']) ? (string)$this->element['transitions'] : null;
+        	$this->transitiongroups = isset($this->element['transitiongroups']) ? (string)$this->element['transitiongroups'] : null;
+        	$this->icon = isset($this->element['icon']) ? (string)$this->element['icon'] : null;
+        	$this->help = isset($this->element['help']) ? (string)$this->element['help'] : null;
+        	$this->sampleimage = isset($this->element['sampleimage']) ? (string)$this->element['sampleimage'] : null;
+        	$this->sampleicon = isset($this->element['sampleicon']) ? (string)$this->element['sampleicon'] : null;
         }
 
         return $return;

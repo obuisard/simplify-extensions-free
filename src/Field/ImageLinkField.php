@@ -13,24 +13,24 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
-class ImageLinkField extends FormField 
+class ImageLinkField extends FormField
 {
 	public $type = 'ImageLink';
-	
+
 	protected $title;
 	protected $text;
 	protected $titleintext;
 	protected $link;
 	protected $image_src;
 
-	protected function getLabel() 
-	{		
+	protected function getLabel()
+	{
 		$html = '';
-		
+
 		HTMLHelper::_('bootstrap.tooltip');
-		
-		$html .= '<div>';		
-		
+
+		$html .= '<div>';
+
 		$html .= '<a href="'.$this->link.'" target="_blank" class="hasTooltip" title="'.Text::_($this->title).'">';
 		if ($this->image_src) {
 			$html .= '<img src="'.URI::root().$this->image_src.'" alt="'.Text::_($this->title).'">';
@@ -38,43 +38,43 @@ class ImageLinkField extends FormField
 			$html .= Text::_($this->title);
 		}
 		$html .= '</a>';
-		
-		$html .= '</div>';		
-		
-		return $html;
-	}
 
-	protected function getInput() 
-	{			
-		$html = '';
-		
-		$html .= '<div style="padding-top: 5px; overflow: inherit">';
-			
-		if ($this->titleintext) {
-			$html .= '<strong>'.Text::_($this->title).'</strong>: ';
-		}
-				
-		if ($this->text) {
-			$html .= Text::sprintf($this->text, $this->link);
-		}
-		
 		$html .= '</div>';
 
 		return $html;
 	}
-	
+
+	protected function getInput()
+	{
+		$html = '';
+
+		$html .= '<div style="padding-top: 5px; overflow: inherit">';
+
+		if ($this->titleintext) {
+			$html .= '<strong>'.Text::_($this->title).'</strong>: ';
+		}
+
+		if ($this->text) {
+			$html .= Text::sprintf($this->text, $this->link);
+		}
+
+		$html .= '</div>';
+
+		return $html;
+	}
+
 	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
-		
+
 		if ($return) {
-			$this->title = isset($this->element['title']) ? trim($this->element['title']) : '';
-			$this->text = isset($this->element['text']) ? trim($this->element['text']) : '';
+			$this->title = isset($this->element['title']) ? trim((string)$this->element['title']) : '';
+			$this->text = isset($this->element['text']) ? trim((string)$this->element['text']) : '';
 			$this->titleintext = isset($this->element['titleintext']) ? filter_var($this->element['titleintext'], FILTER_VALIDATE_BOOLEAN) : false;
-			$this->link = isset($this->element['link']) ? $this->element['link'] : '';
-			$this->image_src = isset($this->element['imagesrc']) ? $this->element['imagesrc'] : ''; // ex: ../modules/mod_latestnews/images/icon.png
+			$this->link = isset($this->element['link']) ? (string)$this->element['link'] : '';
+			$this->image_src = isset($this->element['imagesrc']) ? (string)$this->element['imagesrc'] : ''; // ex: ../modules/mod_latestnews/images/icon.png
 		}
-		
+
 		return $return;
 	}
 

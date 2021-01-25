@@ -190,7 +190,7 @@ class ImageRadioField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->use_global = ($this->element['useglobal'] == "true") ? true : false;
+			$this->use_global = ((string)$this->element['global'] == "true" || (string)$this->element['useglobal'] == "true") ? true : false;
 			$this->image_height = 0;
 		}
 

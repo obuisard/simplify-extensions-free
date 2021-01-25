@@ -238,6 +238,7 @@ class Libraries
 JS;
 
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 		$wam->addInlineScript(self::compress($inline_js));
 		//Factory::getDocument()->addScriptDeclaration(self::compress($inline_js));
 
@@ -310,10 +311,10 @@ JS;
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		if ($remote) {
-			$wam->registerAndUseScript('syw.lazysizes', 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.0/lazysizes.min.js', [], $attributes, ['jquery']);
+			$wam->registerAndUseScript('syw.lazysizes', 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.0/lazysizes.min.js', [], $attributes);
 			//$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.0/lazysizes.min.js'); // only minified version
 		} else {
-			$wam->registerAndUseScript('syw.lazysizes', 'syw/lazysizes/lazysizes' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+			$wam->registerAndUseScript('syw.lazysizes', 'syw/lazysizes/lazysizes' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes);
 			//HTMLHelper::script('syw/lazysizes/lazysizes' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
 		}
 

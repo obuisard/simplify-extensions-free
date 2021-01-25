@@ -55,8 +55,8 @@ class PHPSettingTestField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->setting = isset($this->element['setting']) ? trim($this->element['setting']) : '';
-			$this->message = isset($this->element['message']) ? trim(Text::_($this->element['message'])) : '';
+			$this->setting = isset($this->element['setting']) ? trim((string)$this->element['setting']) : '';
+			$this->message = isset($this->element['message']) ? trim(Text::_((string)$this->element['message'])) : '';
 		}
 
 		return $return;

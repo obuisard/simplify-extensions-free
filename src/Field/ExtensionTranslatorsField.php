@@ -12,47 +12,47 @@ use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
-class ExtensionTranslatorsField extends FormField 
-{		
+class ExtensionTranslatorsField extends FormField
+{
 	public $type = 'ExtensionTranslators';
-	
-	protected function getLabel() 
-	{		
+
+	protected function getLabel()
+	{
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
-		
+
 		$html = '';
-		
+
 		$html .= '<div style="clear: both;">';
 		if (!empty($this->translators)) {
 			$html .= Text::_('LIB_SYW_EXTENSIONTRANSLATORS_TRANSLATORS_LABEL');
 		}
 		$html .= '</div>';
-		
+
 		return $html;
 	}
 
-	protected function getInput() 
-	{		
+	protected function getInput()
+	{
 		$html = '';
-		
+
 		if (!empty($this->translators)) {
 			$html .= '<div style="padding-top: 5px; overflow: inherit">';
 			$html .= $this->translators;
 			$html .= '</div>';
 		}
-		
+
 		return $html;
 	}
-	
+
 	public function setup(\SimpleXMLElement $element, $value, $group = null)
 	{
 		$return = parent::setup($element, $value, $group);
-	
+
 		if ($return) {
-			$this->translators = isset($this->element['translators']) ? Text::_($this->element['translators']) : NULL;
+			$this->translators = isset($this->element['translators']) ? Text::_((string)$this->element['translators']) : NULL;
 		}
-	
+
 		return $return;
 	}
 

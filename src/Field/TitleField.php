@@ -59,9 +59,9 @@ class TitleField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->title = isset($this->element['title']) ? trim($this->element['title']) : '';
-			$this->image_src = isset($this->element['imagesrc']) ? $this->element['imagesrc'] : ''; // ex: ../modules/mod_latestnews/images/icon.png (16x16)
-			$this->icon = isset($this->element['icon']) ? $this->element['icon'] : ''; // ex: thumb-up
+			$this->title = isset($this->element['title']) ? trim((string)$this->element['title']) : '';
+			$this->image_src = isset($this->element['imagesrc']) ? (string)$this->element['imagesrc'] : ''; // ex: ../modules/mod_latestnews/images/icon.png (16x16)
+			$this->icon = isset($this->element['icon']) ? (string)$this->element['icon'] : ''; // ex: thumb-up
 			$this->color = '#6f6f6f'; // isset($this->element['color']) ? $this->element['color'] : '#6f6f6f';
 		}
 

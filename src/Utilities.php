@@ -9,6 +9,8 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Environment\Browser;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\HTML\HTMLHelper;
 use SYW\Library\Vendor\MobileDetect;
 
 class Utilities
@@ -381,6 +383,83 @@ class Utilities
 		$output .= '</svg>';
 
 		return $output;
+	}
+
+	/**
+	 * Output the <picture> or <img> HTML element according to the image source
+	 * Follows web standards and ensures proper fallbacks
+	 * If the image extension is webp, it adds a png fallback
+	 *
+	 * @param string $src the image source
+	 * @param string $alt the image alt attribute
+	 * @param array $attributes attributes to be added to the <img> element (can contain width and height for the image)
+	 * @param boolean $lazy_load lazy load the image
+	 * @param boolean $high_resolution handle high resolution devices
+	 * @return string the <picture> or <img> element
+	 */
+	public static function getImageElement($src, $alt, $attributes = array(), $lazy_load = false, $high_resolution = false)
+	{
+		$html = '';
+
+		// get the image extension and the image path from $src
+		$image_path = File::stripExt($src);
+		$image_extension = File::getExt($src);
+
+		if (!$lazy_load) {
+			$attributes['loading'] = 'eager';
+		} else {
+			$attributes['loading'] = 'lazy'; // no need in Joomla 4, HTMLHelper forces 'lazy' by default if the attribute is missing
+			// make sure it is not removed from Joomla 4
+		}
+
+		$source_highres = false;
+		if ($high_resolution && File::exists(JPATH_SITE . '/' . $image_path . '@2x.' . $image_extension)) {
+			$source_highres = true;
+		}
+
+		$extensions_needing_fallbacks = array('webp', 'avif');
+		$mime_types = array('webp' => 'image/webp', 'avif' => 'image/avif');
+		$possible_fallback_extensions = array('png', 'jpg');
+
+		$fallback = false;
+		$fallback_highres = false;
+		$fallback_extension = '';
+
+		if (in_array($image_extension, $extensions_needing_fallbacks)) {
+			foreach ($possible_fallback_extensions as $possible_fallback_extension) {
+				if (File::exists(JPATH_SITE . '/' . $image_path . '.' . $possible_fallback_extension)) {
+					$fallback = true;
+					$fallback_extension = $possible_fallback_extension;
+					if ($high_resolution && File::exists(JPATH_SITE . '/' . $image_path . '@2x.' . $possible_fallback_extension)) {
+						$fallback_highres = true;
+					}
+					break;
+				}
+			}
+		}
+
+		if ($fallback) {
+			$html .= '<picture>';
+			$html .= '<source type="' . $mime_types[$image_extension] . '" srcset="' . $src . ($source_highres ? ' 1x,' . $image_path . '@2x.' . $image_extension . ' 2x' : '') . '">';
+		}
+
+		if ($fallback) {
+			if ($fallback_highres) {
+				$attributes['srcset'] = $image_path . '@2x.' . $fallback_extension . ' 2x';
+			}
+		} else {
+			if ($source_highres) {
+				$attributes['srcset'] = $image_path . '@2x.' . $image_extension . ' 2x';
+			}
+		}
+
+		$html .= HTMLHelper::_('image', $fallback ? $image_path . '.' . $fallback_extension : $src, $alt, $attributes);
+
+		if ($fallback) {
+			$html .= '</picture>';
+		}
+
+		return $html;
 	}
 
 }

@@ -110,16 +110,16 @@ class SYWExtensionPresenceTestField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-		    $this->extensiontype = $this->element['extensiontype'];
-		    $this->extensionelement = $this->element['extensionelement'];
-		    $this->extensionfolder = isset($this->element['extensionfolder']) ? $this->element['extensionfolder'] : '';
+			$this->extensiontype = (string)$this->element['extensiontype'];
+			$this->extensionelement = (string)$this->element['extensionelement'];
+			$this->extensionfolder = isset($this->element['extensionfolder']) ? (string)$this->element['extensionfolder'] : '';
 		    //$this->minversion = isset($this->element['minversion']) ? $this->element['minversion'] : '';
-			$this->downloadlink = $this->element['downloadlink'];
-			$this->downloadtext = isset($this->element['downloadtext']) ? trim($this->element['downloadtext']) : 'LIB_SYW_SYWEXTENSIONTEST_DOWNLOAD';
-			$this->title = isset($this->element['title']) ? trim($this->element['title']) : '';
-			$this->imagesrc = isset($this->element['imagesrc']) ? $this->element['imagesrc'] : ''; // ex: modules/mod_latestnews/images/icon.png
-			$this->alertlevel = isset($this->element['alertlevel']) ? $this->element['alertlevel'] : 'info';
-			$this->message = isset($this->element['message']) ? trim(Text::_($this->element['message'])) : '';
+			$this->downloadlink = (string)$this->element['downloadlink'];
+			$this->downloadtext = isset($this->element['downloadtext']) ? trim((string)$this->element['downloadtext']) : 'LIB_SYW_SYWEXTENSIONTEST_DOWNLOAD';
+			$this->title = isset($this->element['title']) ? trim((string)$this->element['title']) : '';
+			$this->imagesrc = isset($this->element['imagesrc']) ? (string)$this->element['imagesrc'] : ''; // ex: modules/mod_latestnews/images/icon.png
+			$this->alertlevel = isset($this->element['alertlevel']) ? (string)$this->element['alertlevel'] : 'info';
+			$this->message = isset($this->element['message']) ? trim(Text::_((string)$this->element['message'])) : '';
 		}
 
 		return $return;

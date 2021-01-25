@@ -18,7 +18,7 @@ FormHelper::loadFieldClass('dynamicmultipleselect');
 class SYWImageFilterMultiPickerField extends DynamicMultipleSelect
 {
 	public $type = 'SYWImageFilterMultiPicker';
-	
+
 	protected $filters;
 
 	protected function getOptions()
@@ -29,13 +29,13 @@ class SYWImageFilterMultiPickerField extends DynamicMultipleSelect
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
 		$path = URI::root(true).'/media/syw/images/filters/';
-		
+
 		if ($this->use_global) {
 			$options[] = array('', Text::_('JGLOBAL_USE_GLOBAL'), '('.Text::_('LIB_SYW_GLOBAL_UNKNOWN').')', $path.'global.jpg');
 		}
-		
+
 		$options[] = array('none', Text::_('LIB_SYW_IMAGEFILTERPICKER_ORIGINAL'), '', $path.'original.jpg');
-		
+
 		$filters = explode(',', $this->filters);
 		foreach ($filters as $filter) {
 			$options[] = array($filter, Text::_('LIB_SYW_IMAGEFILTERPICKER_'.strtoupper($filter)), '', $path.$filter.'.jpg');
@@ -51,7 +51,7 @@ class SYWImageFilterMultiPickerField extends DynamicMultipleSelect
 		if ($return) {
 			$this->width = 80;
 			$this->height = 80;
-			$this->filters = isset($this->element['filters']) ? $this->element['filters'] : 'sepia,grayscale,sketch,negate,emboss,edgedetect';
+			$this->filters = isset($this->element['filters']) ? (string)$this->element['filters'] : 'sepia,grayscale,sketch,negate,emboss,edgedetect';
 		}
 
 		return $return;

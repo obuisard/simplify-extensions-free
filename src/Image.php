@@ -389,7 +389,7 @@ class Image
 		if ($this->image) {
 
 			if ($this->image_mimetype && $this->image_mimetype !== 'image/jpeg') {
-				$this->is_image_transparent = (imagecolortransparent($this->image) >= 0) ? true : false;
+				$this->is_image_transparent = (imagecolortransparent($this->image) >= 0) ? true : false; // ONLY works for gif files
 			}
 
 			if ($this->image_width == 0) {

@@ -106,10 +106,10 @@ class MessageField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->message_type = isset($this->element['style']) ? trim($this->element['style']) : 'info';
-			$this->message = isset($this->element['text']) ? trim($this->element['text']) : '';
-			$this->badge_type = isset($this->element['badgetype']) ? trim($this->element['badgetype']) : 'danger';
-			$this->badge = isset($this->element['badge']) ? trim($this->element['badge']) : '';
+			$this->message_type = isset($this->element['style']) ? trim((string)$this->element['style']) : 'info';
+			$this->message = isset($this->element['text']) ? trim((string)$this->element['text']) : '';
+			$this->badge_type = isset($this->element['badgetype']) ? trim((string)$this->element['badgetype']) : 'danger';
+			$this->badge = isset($this->element['badge']) ? trim((string)$this->element['badge']) : '';
 		}
 
 		return $return;

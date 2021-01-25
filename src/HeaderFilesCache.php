@@ -88,7 +88,7 @@ abstract class HeaderFilesCache
 	{
 		Log::addLogger(array('text_file' => 'syw.errors.php'), Log::ALL, array('syw'));
 
-		$cache_path = $this->getCachePath();
+		$cache_path = $this->getCachePath(true);
 
 		if (!$reset && File::exists($cache_path.'/'.$output_file)) {
 			return true;
@@ -130,27 +130,24 @@ abstract class HeaderFilesCache
 	/**
 	 * Get the cache path for the extension
 	 *
+	 * @param boolean $include_root
 	 * @return string
 	 */
-	public function getCachePath()
+	public function getCachePath($include_root = false)
 	{
-		$path = JPATH_SITE . '/media/cache';
+		$path = '';
+
+		if ($include_root) {
+			$path = JPATH_SITE;
+		}
+
+		$path .= '/media/cache';
 
 		if (SYWCache::isFolderReady($path, $this->extension)) {
 			return $path . '/' . $this->extension;
 		}
 
 		return $path;
-	}
-
-	/**
-	 * Get the cache url for the extension
-	 *
-	 * @return string
-	 */
-	public function getCacheURL()
-	{
-		return Uri::base(true) . '/media/cache';
 	}
 
 	/**

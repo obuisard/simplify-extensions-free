@@ -49,7 +49,7 @@ class SubTitleField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->title = isset($this->element['title']) ? trim($this->element['title']) : '';
+			$this->title = isset($this->element['title']) ? trim((string)$this->element['title']) : '';
 			$this->color = '#6f6f6f'; // isset($this->element['color']) ? $this->element['color'] : '#6f6f6f';
 		}
 

@@ -118,10 +118,10 @@ class CustomFieldsListField extends ListField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->context = isset($this->element['context']) ? $this->element['context'] : 'com_contact.contact';
-			$this->allowed_types = isset($this->element['allowed_types']) ? explode(",", $this->element['allowed_types']) : null;
+			$this->context = isset($this->element['context']) ? (string)$this->element['context'] : 'com_contact.contact';
+			$this->allowed_types = isset($this->element['allowed_types']) ? explode(",", (string)$this->element['allowed_types']) : null;
 			$this->show_group = isset($this->element['show_group']) ? filter_var($this->element['show_group'], FILTER_VALIDATE_BOOLEAN) : true;
-			$this->show_on_client = isset($this->element['show_on_client']) ? $this->element['show_on_client'] : null;
+			$this->show_on_client = isset($this->element['show_on_client']) ? (string)$this->element['show_on_client'] : null;
 		}
 
 		return $return;

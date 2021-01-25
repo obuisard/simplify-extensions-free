@@ -1,10 +1,11 @@
 /*
  * A pure javascript class for paginating through any number of DOM elements
- * v1.0.1
+ * v1.0.2
  *
  * @copyright	Copyright (C) 2011 Simplify Your Web, Inc. All rights reserved.
  * @license	GNU General Public License version 3 or later; see LICENSE.txt
  */
+
 class purePajinate {
 	constructor(options) {
 		this.config = {
@@ -104,7 +105,6 @@ class purePajinate {
 			el.innerHTML = navigation_html;
 			/* Show a subset of page links */
 			var page_links = el.querySelectorAll('.page_link');
-			var min = Math.min(page_links.length, this.config.pageLinksToDisplay);
 			for (let i = 0; i < page_links.length; i++) {
 				if (i >= this.config.pageLinksToDisplay + this.config.startPage || i < this.config.startPage) {
 					page_links[i].style.display = 'none';
@@ -115,9 +115,11 @@ class purePajinate {
 				ellipses.style.display = 'none';
 			});
 			/* Set the active page link styling */
-			var first_page = el.querySelector('.previous_link').nextElementSibling.nextElementSibling;
-			first_page.classList.add('active_page');
-			first_page.classList.add(this.config.activeClass);
+			if (page_links.length > 0) {
+            	var first_page = page_links[0];
+            	first_page.classList.add('active_page');
+            	first_page.classList.add(this.config.activeClass);
+            }
 			this.total_page_no_links = page_links.length;
 			this.config.pageLinksToDisplay = Math.min(this.config.pageLinksToDisplay, this.total_page_no_links);
 			const that = this; /* avoids bind(this) in function(e) { }.bind(this) */
