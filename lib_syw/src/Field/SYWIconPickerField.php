@@ -503,7 +503,7 @@ class SYWIconPickerField extends FormField
 			} else {
 				$iconlist .= '<li class="dropdown-item" style="width: auto; display: inline-block; border: none; margin: 2px;" data-SYWicon="'.$icon_item.'">';
 			}
-			$iconlist .= '<a href="#" class="label hvr-grow hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a>';
+			$iconlist .= '<a href="#" class="badge hvr-grow hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a>';
 			$iconlist .= '</li>';
 		}
 
@@ -627,7 +627,7 @@ class SYWIconPickerField extends FormField
 		if (isset($this->icons)) {
 			$icons = explode(",", $this->icons);
 			foreach ($icons as $icon_item) {
-				$html .= '<li class="dropdown-item" style="width: auto; display: inline-block; border: none; margin: 2px;" data-SYWicon="'.$icon_item.'"><a href="#" class="label hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a></li>';
+				$html .= '<li class="dropdown-item" style="width: auto; display: inline-block; border: none; margin: 2px;" data-SYWicon="'.$icon_item.'"><a href="#" class="badge hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a></li>';
 			}
 		} else if (isset($this->icongroups)) {
 			$icongroups = explode(",", $this->icongroups);

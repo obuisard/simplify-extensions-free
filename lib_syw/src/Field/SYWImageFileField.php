@@ -41,6 +41,8 @@ class SYWImageFileField extends FormField
 
 		$html .= '<input type="file" name="' . $this->name . '" id="' . $this->id . '"' . ' value="'. htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8') .'"' . $accept . $disabled . $class . $size . $maxLength . $onchange . ' />';
 
+		$path = htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8');
+
 		if ($this->show_preview) {
 
 			$style = '';
@@ -51,15 +53,20 @@ class SYWImageFileField extends FormField
 				$style .= 'max-height: '.$this->height.'px;';
 			}
 
-			$path = htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8');
-
 			$html .= '<div class="image_preview" style="'.$style.' overflow: auto; border: 1px solid #ccc; border-radius: 3px; padding: 10px; margin-top: 5px; text-align: center">';
 
 			if (!empty($path)) {
-				$html .= '<img src="'.URI::root().$path.'" style="max-width: 100%">';
+				$parts = explode('/', $path);
+				$html .= '<img src="'.URI::root().$path.'" alt="'.end($parts).'" style="max-width: 100%">';
+
+// 				$extensions_needing_fallbacks = array('webp', 'avif');
+// 				$image_extension = JFile::getExt($path);
+// 				if (in_array($image_extension, $extensions_needing_fallbacks)) {
+// 					$html .= '<br /><br /><span style="font-size: .8em">'.JText::_('LIB_SYW_IMAGEPREVIEW_PREVIEWMAYNOTBEAVAILABLE').'</span>';
+// 				}
+
 				if ($this->show_name) {
-					$parts = explode('/', $path);
-					$html .= '<br /><br /><span class="label">'.end($parts).'</span>';
+					$html .= '<br /><br /><span class="file_name">'.end($parts).'</span>';
 				}
 			} else {
 				// no preview available
@@ -69,7 +76,7 @@ class SYWImageFileField extends FormField
 			$html .= '</div>';
 		} else {
 			if ($this->show_name) {
-				$parts = explode('/', htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8'));
+				$parts = explode('/', $path);
 				$html .= '<br /><br /><input class="image_file form-control" type="text" disabled="disabled" value="'.end($parts).'" />';
 			}
 		}
