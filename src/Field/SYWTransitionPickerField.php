@@ -74,7 +74,7 @@ class SYWTransitionPickerField extends FormField
         foreach ($transitions as $transition_item) {
             $transition_item = str_replace('hvr-', '', $transition_item);
             $transitionlist .= '<li class="dropdown-item" data-transition="'.$transition_item.'">';
-            $transitionlist .= '<a href="#" class="label hasTooltip hvr-'.$transition_item.'" style="display: inline-block; padding: 8px; font-size: 1em" title="'.$transition_item.'" onclick="return false;" title="'.$transition_item.'">';
+            $transitionlist .= '<a href="#" class="badge hasTooltip hvr-'.$transition_item.'" style="display: inline-block; padding: 8px; font-size: 1em" title="'.$transition_item.'" onclick="return false;" title="'.$transition_item.'">';
 
             if (!empty($image)) {
                 $transitionlist .= '<img src="'.URI::root().$image.'" alt="'.$transition_item.'"><span style="margin-left: 10px">'.$transition_item.'</span>';
@@ -209,7 +209,7 @@ class SYWTransitionPickerField extends FormField
             foreach ($transitions as $transition_item) {
                 $transition_item = str_replace('hvr-', '', $transition_item); // just in case
                 $html .= '<li class="dropdown-item" data-transition="'.$transition_item.'">';
-                $html .= '<a href="#" class="label hvr-'.$transition_item.'" style="display: inline-block; padding: 8px; font-size: 1em" title="'.$transition_item.'" onclick="return false;">';
+                $html .= '<a href="#" class="badge hvr-'.$transition_item.'" style="display: inline-block; padding: 8px; font-size: 1em" title="'.$transition_item.'" onclick="return false;">';
 
                 if (!empty($this->sampleimage)) {
                     $html .= '<img src="'.URI::root().$this->sampleimage.'" alt="'.$transition_item.'" title="'.$transition_item.'"><span style="margin-left: 10px">'.$transition_item.'</span>';

@@ -60,6 +60,8 @@ class SYWImageFilePreviewField extends FormField
         $html .= '<input type="file" name="' . $this->getName($this->fieldname . '_file') . '" id="' . $this->id . '_file"' . $accept . $disabled . $class . $size . $maxLength . $onchange . ' />';
         $html .= '<input type="hidden" name="' . $this->name . '" id="' . $this->id . '"' . ' value="'. htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8') .'" />';
 
+        $path = htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8');
+
         if ($this->show_preview) {
 
             $style = '';
@@ -70,24 +72,30 @@ class SYWImageFilePreviewField extends FormField
                 $style .= 'max-height: '.$this->height.'px;';
             }
 
-            $path = htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8');
-
             $html .= '<div id="'.$this->id.'_preview" style="'.$style.' overflow: auto; border: 1px solid #ccc; border-radius: 3px; padding: 10px; margin-top: 5px; text-align: center">';
 
                 if (!empty($path)) {
 
-                    $html .= '<div class="image_preview">';
+                	$html .= '<div class="image_preview">';
 
-                        $html .= '<img src="'.Uri::root().$path.'" style="max-width: 100%">';
-                        if ($this->show_name) {
-                            $parts = explode('/', $path);
-                            $html .= '<br /><br /><span class="badge">'.end($parts).'</span>';
-                        }
+                	$parts = explode('/', $path);
 
-                        // clear button
-                        if ($this->clear) {
-                            $html .= '<br /><br /><a href="#" onclick="jQuery(\'#' . $this->id . '_preview\').find(\'.image_preview\').hide(); jQuery(\'#' . $this->id . '\').val(\'\'); jQuery(\'#' . $this->id . '_preview\').find(\'.no_preview\').show(); return false;" class="btn btn-small">' . Text::_('JACTION_DELETE') . '</a>';
-                        }
+                    $html .= '<img src="'.Uri::root().$path.'" alt="'.end($parts).'" style="max-width: 100%">';
+
+//                 $extensions_needing_fallbacks = array('webp', 'avif');
+//                 $image_extension = JFile::getExt($path);
+//                 if (in_array($image_extension, $extensions_needing_fallbacks)) {
+//                 	$html .= '<br /><br /><span style="font-size: .8em">'.JText::_('LIB_SYW_IMAGEPREVIEW_PREVIEWMAYNOTBEAVAILABLE').'</span>';
+//                 }
+
+                    if ($this->show_name) {
+                        $html .= '<br /><br /><span class="file_name">'.end($parts).'</span>';
+                    }
+
+                    // clear button
+                    if ($this->clear) {
+                        $html .= '<br /><br /><a href="#" onclick="jQuery(\'#' . $this->id . '_preview\').find(\'.image_preview\').hide(); jQuery(\'#' . $this->id . '\').val(\'\'); jQuery(\'#' . $this->id . '_preview\').find(\'.no_preview\').show(); return false;" class="btn btn-small">' . Text::_('JACTION_DELETE') . '</a>';
+                    }
 
                     $html .= '</div>';
 
@@ -106,7 +114,7 @@ class SYWImageFilePreviewField extends FormField
         } else {
                 $html .= '<br /><br />';
 
-                $parts = explode('/', htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8'));
+                $parts = explode('/', $path);
 
                 $html .= '<div class="input-group">';
 

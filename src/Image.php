@@ -432,7 +432,7 @@ class Image
 		}
 
 		if (function_exists('mime_content_type')) {
-			$file_type = strtolower(mime_content_type($path));
+			$file_type = strtolower(@mime_content_type($path));
 
 			if (substr($file_type, 0, 6) === 'image/') {
 				return $file_type;

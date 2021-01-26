@@ -46,10 +46,11 @@ class SYWImagePreviewField extends FormField
 				$this->path = URI::root().$this->path;
 			}
 
-			$html .= '<img src="'.$this->path.'" style="max-width: 100%">';
+			$parts = explode('/', $this->path);
+
+			$html .= '<img src="'.$this->path.'" alt="'.end($parts).'" style="max-width: 100%">';
 			if ($this->show_name) {
-				$parts = explode('/', $this->path);
-				$html .= '<br /><br /><span class="label">'.end($parts).'</span>';
+				$html .= '<br /><br /><span class="file_name">'.end($parts).'</span>';
 			}
 		} else {
 			// no preview available
