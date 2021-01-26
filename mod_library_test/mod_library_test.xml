@@ -92,12 +92,12 @@
 				
 				<!-- SYWImageFile -->	
 				<!-- Note: the preview won't work -->			
-				<field name="image" type="sywimagefile" accept=".gif,.jpg,.png" showpreview="true" showname="true" 
+				<field name="image" type="sywimagefile" accept=".gif,.jpg,.png,.webp" showpreview="true" showname="true" 
 					label="Image File" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 				
 				<!-- SYWImageFilePreview -->
-				<field name="image2" id="image2" type="sywimagefilepreview" accept=".gif,.jpg,.png" showpreview="true" showname="true" 
+				<field name="image2" id="image2" type="sywimagefilepreview" accept=".gif,.jpg,.png,.webp" showpreview="true" showname="true" 
 					label="Image File Preview" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />				
 				
