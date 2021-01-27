@@ -25,8 +25,10 @@ use SYW\Library\Text as SYWText;
 class Helper
 {
 	//static $clickScriptLoaded = false;
-	static $commonStylesLoaded = false;
-	static $userStylesLoaded = false;
+	protected static $commonStylesLoaded = false;
+	protected static $userStylesLoaded = false;
+
+	protected static $image_extension_types = array('png', 'jpg', 'jpeg', 'gif', 'webp');
 
 	/**
 	 * Load the script that handles click feedback
@@ -37,7 +39,7 @@ class Helper
 // 			return;
 // 		}
 
-		$doc = Factory::getDocument();
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$script = 'document.addEventListener("readystatechange", function(event) { ';
 			$script .= 'if (event.target.readyState === "complete") { ';
@@ -59,7 +61,8 @@ class Helper
 // 			$script .= '}); ';
 // 		$script .= '});';
 
-		$doc->addScriptDeclaration($script);
+		//$doc->addScriptDeclaration($script);
+		$wam->addInlineScript($script);
 
 // 		self::$clickScriptLoaded = true;
 	}
@@ -629,11 +632,13 @@ class Helper
 		$url_array = explode("?", $imagesrc);
 		$imagesrc = $url_array[0];
 
-		$imageext = explode('.', $imagesrc);
-		$imageext = $imageext[count($imageext) - 1];
-		$imageext = strtolower($imageext);
+// 		$imageext = explode('.', $imagesrc);
+// 		$imageext = $imageext[count($imageext) - 1];
+// 		$imageext = strtolower($imageext);
 
-		if ($imageext != 'jpg' && $imageext != 'jpeg' && $imageext != 'png' && $imageext != 'gif') {
+		$imageext = strtolower(File::getExt($imagesrc));
+
+		if (!in_array($imageext, self::$image_extension_types)) {
 
 			// case where image is a URL with no extension (generated image)
 			// example: http://argos.scene7.com/is/image/Argos/7491801_R_Z001A_UC1266013?$TMB$&wid=312&hei=312
@@ -671,7 +676,7 @@ class Helper
 			}
 		}
 
-		if ($filter == 'none') {
+		if ($filter == 'none' || strpos($filter, '_css') !== false) {
 			$filtername = '';
 		} else {
 			$filtername = '_'.$filter;
@@ -702,7 +707,8 @@ class Helper
 
 				switch ($imageext){
 					case 'jpg': case 'jpeg': $quality = $image_quality_array['jpg']; break; // 0 to 100
-					case 'png': $quality = $image_quality_array['png']; break; // compression: 0 to 9
+					case 'png': $quality = round(11.111111 * (9 - $image_quality_array['png'])); break; // compression: 0 to 9
+					case 'webp': $quality = $image_quality_array['webp']; break; // 0 to 100
 					default : $quality = -1; break;
 				}
 
@@ -723,7 +729,12 @@ class Helper
 					$head_height = $image->getImageHeight();
 				}
 
-				$creation_success = $image->createThumbnail($head_width, $head_height, $crop_picture, $quality, $filter, $filename, $create_highres_images);
+				$creation_success = $image->toThumbnail($filename, '', $head_width, $head_height, $crop_picture, $quality, $filter, $create_highres_images);
+
+				if ($creation_success && $image->getImageMimeType() === 'image/webp') { // create fallback
+					$creation_success = $image->toThumbnail($tmp_path . '/thumb' . $module_id . '_' . $item_id . $filtername . '.png', 'image/png', $head_width, $head_height, $crop_picture, $quality, $filter, $create_highres_images);
+				}
+
 				if (!$creation_success) {
 					$result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
 				}
@@ -783,9 +794,12 @@ class Helper
 			return;
 		}
 
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 		$minified = (JDEBUG) ? '' : '-min';
 
-		Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/common_styles' . $minified . '.css');
+		//Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/common_styles' . $minified . '.css');
+		$wam->registerAndUseStyle('wl.common_styles', 'mod_weblinklogos/common_styles' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
 
 		self::$commonStylesLoaded = true;
 	}
@@ -800,18 +814,19 @@ class Helper
 			return;
 		}
 
-		jimport('joomla.filesystem.file');
-		$doc = Factory::getDocument();
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$prefix = 'common_user';
 		if ($styles_substitute) {
 			$prefix = 'substitute';
 		}
 
-		if (!File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/'.$prefix.'_styles-min.css')) {
-			$doc->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/'.$prefix.'_styles.css');
+		if (!File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/'.$prefix.'_styles-min.css') || JDEBUG) {
+			//$doc->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/'.$prefix.'_styles.css');
+			$wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
 		} else {
-			$doc->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/'.$prefix.'_styles-min.css');
+			//$doc->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/'.$prefix.'_styles-min.css');
+			$wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
 		}
 
 		self::$userStylesLoaded = true;

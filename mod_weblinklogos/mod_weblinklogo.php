@@ -20,12 +20,6 @@ use SYW\Module\WeblinkLogos\Site\Cache\CSSFileCache;
 use SYW\Module\WeblinkLogos\Site\Cache\JSAnimationFileCache;
 use SYW\Module\WeblinkLogos\Site\Helper\Helper;
 
-$list = Helper::getList($params);
-
-if (empty($list)) {
-	return;
-}
-
 $isMobile = SYWUtilities::isMobile();
 
 $show_on_mobile = $params->get('show_on_mobile', 1);
@@ -33,12 +27,19 @@ if (($isMobile && $show_on_mobile == 0) || (!$isMobile && $show_on_mobile == 2))
 	return;
 }
 
+$list = Helper::getList($params);
+
+if (empty($list)) {
+	return;
+}
+
 $class_suffix = $module->id;
 $params->set('suffix', $class_suffix);
 
 $urlPath = Uri::base().'modules/mod_weblinklogo/'; // use Uri::base(true) when caching
-$doc = Factory::getDocument();
+//$doc = Factory::getDocument();
 $app = Factory::getApplication();
+$wam = $app->getDocument()->getWebAssetManager();
 
 $bootstrap_version = $params->get('bootstrap_version', 'joomla');
 $load_bootstrap = false;
@@ -74,10 +75,18 @@ $height = $params->get('height', 40);
 $restrict_width = $params->get('restrict_width', 0);
 $center_vertically = $params->get('center_vertically', 0);
 
+$filter = $params->get('filter', 'none');
+if (strpos($filter, '_css') !== false) {
+	$filter = 'none';
+}
+$filter_hover = $params->get('filter_hover', 'none');
+if (strpos($filter_hover, '_css') !== false) {
+	$filter_hover = 'none';
+}
+
 $quality_jpg = $params->get('quality_jpg', 100);
 $quality_png = $params->get('quality_png', 0);
-$filter = $params->get('filter', 'none');
-$filter_hover = $params->get('filter_hover', 'none');
+$quality_webp = $params->get('quality_webp', 80);
 
 if ($quality_jpg > 100) {
 	$quality_jpg = 100;
@@ -93,7 +102,14 @@ if ($quality_png < 0) {
 	$quality_png = 0;
 }
 
-$image_qualities = array('jpg' => $quality_jpg, 'png' => $quality_png);
+if ($quality_webp > 100) {
+	$quality_webp = 100;
+}
+if ($quality_webp < 0) {
+	$quality_webp = 0;
+}
+
+$image_qualities = array('jpg' => $quality_jpg, 'png' => $quality_png, 'webp' => $quality_webp);
 
 $hover_type = $params->get('hover_type', 'none'); // hover animation
 if ($hover_type != 'none') {
@@ -281,14 +297,16 @@ if ($carousel_configuration != 'none') {
 
 	if ($generate_inline_scripts) {
 
-		$doc->addScriptDeclaration($cache_anim_js->getBuffer());
+		//$doc->addScriptDeclaration($cache_anim_js->getBuffer());
+		$wam->addInlineScript($cache_anim_js->getBuffer());
 
 	} else {
 
 		$result = $cache_anim_js->cache('animation_' . $module->id . $rtl_suffix . '.js', $clear_header_files_cache);
 
 		if ($result) {
-			$doc->addScript(Uri::base(true).'/media/cache/mod_weblinklogos/animation_' . $module->id . $rtl_suffix . '.js');
+			//$doc->addScript(Uri::base(true).'/media/cache/mod_weblinklogos/animation_' . $module->id . $rtl_suffix . '.js');
+			$wam->registerAndUseScript('wl.animation_' . $module->id . $rtl_suffix, $cache_anim_js->getCachePath() . '/animation_' . $module->id . $rtl_suffix . '.js', [], ['defer' => true]);
 		}
 	}
 } else {
@@ -321,7 +339,8 @@ if (File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/substitute_styles.css')
 	$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
 
 	if ($result) {
-		$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_weblinklogos/style_'.$module->id.'.css');
+		//$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_weblinklogos/style_'.$module->id.'.css');
+		$wam->registerAndUseStyle('wl.style_' . $module->id, $cache_css->getCachePath() . '/style_' . $module->id . '.css');
 	}
 
 	Helper::loadCommonStylesheet();
@@ -333,11 +352,6 @@ if (File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/substitute_styles.css')
 
 // handle high resolution images
 $create_highres_images = $params->get('create_highres', false);
-if ($create_highres_images) {
-	//HTMLHelper::_('jquery.framework');
-	SYWLibraries::loadLazysizes($load_remotely);
-	//SYWLibraries::triggerLazysizes('.weblinklogos .weblink_item img'); // use .weblinklogos to handle all instances of the module at once
-}
 
 // load icon font
 // $load_icon_font = $params->get('load_icon_font', 1);

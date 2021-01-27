@@ -26,7 +26,7 @@ header("Content-type: text/css; charset=UTF-8");
 				max-width: <?php echo $overall_width; ?>px;
 			<?php else : ?>
 				<?php if ($horizontal) : ?>
-					max-width: <?php echo $width; ?>px;
+					max-width: <?php echo ($computed_width + $margin_left + $margin_right); ?>px;
 				<?php endif; ?>
 			<?php endif; ?>
 			margin: 0 auto;
@@ -40,19 +40,102 @@ header("Content-type: text/css; charset=UTF-8");
 		<?php endif; ?>
 <?php endif; ?>
 
-#weblinklogo_<?php echo $suffix; ?> ul.weblink_items li .weblink_item_wrapper {
-	<?php if ($animated) : ?>
-		margin-top: <?php echo $margin_top; ?>px;
-		margin-bottom: <?php echo $margin_bottom; ?>px;
-		<?php if ($card_shadow) : ?>
-			margin-left: <?php echo $shadow_width; ?>px;
-			margin-right: <?php echo $shadow_width; ?>px;
-		<?php endif; ?>
-	<?php else : ?>
-		margin: <?php echo $margin_top; ?>px <?php echo $margin_right; ?>px <?php echo $margin_bottom; ?>px <?php echo $margin_left; ?>px;
-	<?php endif; ?>
+<?php if (!$animated) : ?>
+	#weblinklogo_<?php echo $suffix; ?> ul.weblink_items {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+	}
+<?php endif; ?>
 
-	position: relative;
+<?php if (!$animated) : ?>
+	#weblinklogo_<?php echo $suffix; ?> ul.weblink_items.grid {
+		-webkit-flex-direction: row;
+		-ms-flex-direction: row;
+		flex-direction: row;
+
+		-webkit-flex-wrap: wrap;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+
+		<?php if ($items_align == 'fs') : ?>
+	    	-webkit-box-pack: start;
+			-webkit-justify-content: flex-start;
+	    	-ms-flex-pack: start;
+	        justify-content: flex-start;
+	    <?php elseif ($items_align == 'fe') : ?>
+	    	-webkit-box-pack: end;
+			-webkit-justify-content: flex-end;
+	    	-ms-flex-pack: end;
+	        justify-content: flex-end;
+	    <?php elseif ($items_align == 'c') : ?>
+	    	-webkit-box-pack: center;
+			-webkit-justify-content: center;
+	    	-ms-flex-pack: center;
+	        justify-content: center;
+	    <?php elseif ($items_align == 'sb') : ?>
+	    	-webkit-box-pack: justify;
+	    	-webkit-justify-content: space-between;
+	        -ms-flex-pack: justify;
+	        justify-content: space-between;
+	    <?php elseif ($items_align == 'se') : ?>
+	    	-webkit-box-pack: space-evenly;
+			-webkit-justify-content: space-evenly;
+			-ms-flex-pack: space-evenly;
+	        justify-content: space-evenly;
+	    <?php else : ?>
+	    	-webkit-justify-content: space-around;
+			-ms-flex-pack: distribute;
+	        justify-content: space-around;
+	    <?php endif; ?>
+
+		<?php if ($items_valign == 'fs') : ?>
+	    	-webkit-box-align: start;
+	    	-ms-flex-align: start;
+	    	align-items: flex-start;
+	    <?php elseif ($items_valign == 'fe') : ?>
+	    	-webkit-box-align: end;
+	    	-ms-flex-align: end;
+	    	align-items: flex-end;
+	    <?php else : ?>
+	    	-webkit-box-align: center;
+	    	-ms-flex-align: center;
+	    	align-items: center;
+		<?php endif; ?>
+	}
+<?php endif; ?>
+
+<?php if (!$animated) : ?>
+	#weblinklogo_<?php echo $suffix; ?> ul.weblink_items.list {
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-webkit-flex-direction: column;
+		-ms-flex-direction: column;
+		flex-direction: column;
+
+		<?php if ($items_valign_list == 'fs') : ?>
+	    	-webkit-box-align: start;
+	    	-ms-flex-align: start;
+	    	align-items: flex-start;
+	    <?php elseif ($items_valign_list == 'fe') : ?>
+	    	-webkit-box-align: end;
+	    	-ms-flex-align: end;
+	    	align-items: flex-end;
+	    <?php elseif ($items_valign_list == 'c') : ?>
+	    	-webkit-box-align: center;
+	    	-ms-flex-align: center;
+	    	align-items: center;
+		<?php else : ?>
+	    	-webkit-box-align: stretch;
+	    	-ms-flex-align: stretch;
+	    	align-items: stretch;
+		<?php endif; ?>
+	}
+<?php endif; ?>
+
+#weblinklogo_<?php echo $suffix; ?> ul.weblink_items li .weblink_item_wrapper {
+
+	margin: <?php echo $margin_top; ?>px <?php echo $margin_right; ?>px <?php echo $margin_bottom; ?>px <?php echo $margin_left; ?>px;
 
 	<?php if ($overall_bgcolor != 'transparent') : ?>
 		background-color: <?php echo $overall_bgcolor; ?>;
@@ -75,24 +158,28 @@ header("Content-type: text/css; charset=UTF-8");
 	<?php endif; ?>
 
 	<?php if ($overall_bgcolor != 'transparent' || $card_shadow || $card_border_width > 0) : ?>
-		padding: 10px;
+		padding: <?php echo $padding; ?>px;
 	<?php endif; ?>
 }
 
 <?php if (!$animated) : ?>
-#weblinklogo_<?php echo $suffix; ?> ul.weblink_items.grid li.weblink_item .weblink_item_wrapper {
-	<?php if ($overall_width) : ?>
-		max-width: <?php echo $overall_width; ?>px;
-		<?php if ($force_width) : ?>
-			min-width: <?php echo $overall_width; ?>px;
+	#weblinklogo_<?php echo $suffix; ?> ul.weblink_items.grid li .weblink_item_wrapper {
+		<?php if ($overall_width) : ?>
+			max-width: <?php echo $overall_width; ?>px;
+			<?php if ($force_width) : ?>
+				min-width: <?php echo $overall_width; ?>px;
+			<?php endif; ?>
+		<?php elseif ($width > 0) : ?>
+			<?php if (!$restrict_width_to_image) : ?>
+				width: <?php echo $computed_width; ?>px;
+			<?php else : ?>
+				max-width: <?php echo $computed_width; ?>px;
+			<?php endif; ?>
 		<?php endif; ?>
-	<?php elseif ($width > 0 && !$restrict_width_to_image) : ?>
-		width: <?php echo $width; ?>px;
-	<?php endif; ?>
-}
+	}
 <?php endif; ?>
 
-#weblinklogo_<?php echo $suffix; ?> ul.weblink_items.list li.weblink_item .weblink_item_wrapper {
+#weblinklogo_<?php echo $suffix; ?> ul.weblink_items.list li .weblink_item_wrapper {
 
 	<?php if (!$animated) : ?>
 		<?php if ($overall_width) : ?>
@@ -100,14 +187,8 @@ header("Content-type: text/css; charset=UTF-8");
 			<?php if ($force_width) : ?>
 				min-width: <?php echo $overall_width; ?>px;
 			<?php endif; ?>
-			margin-left: auto;
-			margin-right: auto;
 		<?php endif; ?>
 	<?php endif; ?>
-
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
 
 	<?php if ($content_valign == 'middle') : ?>
 		-webkit-box-align: center;
@@ -123,29 +204,56 @@ header("Content-type: text/css; charset=UTF-8");
 		align-items: flex-start;
 	<?php endif; ?>
 
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
+	<?php if ($text_wrap) : ?>
+		-webkit-flex-wrap: wrap;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+	<?php endif; ?>
+
+	<?php if (!$logo_solo) : ?>
+		padding: 0 <?php echo $padding; ?>px <?php echo $padding; ?>px 0; /* emulated gap */
+	<?php endif; ?>
 }
+
+<?php if (!$logo_solo) : ?>
+	html[dir="rtl"] #weblinklogo_<?php echo $suffix; ?> ul.weblink_items.list li .weblink_item_wrapper {
+		padding: 0 0 <?php echo $padding; ?>px <?php echo $padding; ?>px; /* emulated gap */
+	}
+<?php endif; ?>
 
 	<?php if ($logo_bgcolor != 'transparent') : ?>
 		#weblinklogo_<?php echo $suffix; ?> ul.weblink_items li .logo {
 			background-color: <?php echo $logo_bgcolor; ?>;
-			padding: 10px;
+			padding: <?php echo $padding; ?>px;
 		}
 	<?php endif; ?>
 
-	<?php if ($width > 0 && !$restrict_width_to_image) : ?>
+	<?php if (($width > 0 && !$restrict_width_to_image) || !$logo_solo) : ?>
 		#weblinklogo_<?php echo $suffix; ?> ul.weblink_items.list li .logo {
-			width: <?php echo $width; ?>px;
+			<?php if ($width > 0 && !$restrict_width_to_image) : ?>
+				width: <?php echo $width; ?>px;
+			<?php endif; ?>
+			<?php if (!$logo_solo) : ?>
+				margin: <?php echo $padding; ?>px 0 0 <?php echo $padding; ?>px; /* emulated gap */
+			<?php endif; ?>
+		}
+	<?php endif; ?>
+
+	<?php if (!$logo_solo) : ?>
+		html[dir="rtl"] #weblinklogo_<?php echo $suffix; ?> ul.weblink_items.list li .logo {
+			margin: <?php echo $padding; ?>px <?php echo $padding; ?>px 0 0; /* emulated gap */
 		}
 	<?php endif; ?>
 
 		#weblinklogo_<?php echo $suffix; ?> ul.weblink_items li .logo_caption {
-			font-size: <?php echo ($font_size / 100); ?>em;
+			margin-top: <?php echo $padding; ?>px;
+			font-size: <?php echo $font_size; ?>;
 		}
 
 		#weblinklogo_<?php echo $suffix; ?> ul.weblink_items li .logo_link {
+			<?php if ($height > 0 && !$restrict_width_to_image) : ?>
+				height: <?php echo $height; ?>px;
+			<?php endif; ?>
 		    filter: alpha(opacity=<?php echo ($opacity * 100); ?>);
 		    opacity: <?php echo $opacity; ?>;
 		}
@@ -169,7 +277,12 @@ header("Content-type: text/css; charset=UTF-8");
 		<?php else : ?>
 			position: absolute;
 			left: 50%;
-			transform: translateX(-50%);
+			<?php if ($center_vertically) : ?>
+				top: 50%;
+				transform: translate(-50%, -50%);
+			<?php else : ?>
+				transform: translateX(-50%);
+			<?php endif; ?>
 		<?php endif; ?>
 	}
 
@@ -177,22 +290,30 @@ header("Content-type: text/css; charset=UTF-8");
 		#weblinklogo_<?php echo $suffix; ?> ul.weblink_items li .logo_link a img.hover {
 			position: absolute;
 			left: 50%;
-			transform: translateX(-50%);
+			top: 50%;
+			transform: translate(-50%, -50%);
 		}
 	<?php endif; ?>
 
 	#weblinklogo_<?php echo $suffix; ?> ul.weblink_items li .description {
-		font-size: <?php echo ($font_size / 100); ?>em;
+		font-size: <?php echo $font_size; ?>;
 	}
 
-	#weblinklogo_<?php echo $suffix; ?> ul.weblink_items.list li .description {
-		-webkit-box-flex: 1;
-		-ms-flex: 1;
-		flex: 1;
-	}
+	<?php if (!$logo_solo) : ?>
+		#weblinklogo_<?php echo $suffix; ?> ul.weblink_items.list li .description {
+			margin: <?php echo $padding; ?>px 0 0 <?php echo $padding; ?>px; /* emulated gap */
+		}
+	<?php endif; ?>
+
+	<?php if (!$logo_solo) : ?>
+		html[dir="rtl"] #weblinklogo_<?php echo $suffix; ?> ul.weblink_items.list li .description {
+			margin: <?php echo $padding; ?>px <?php echo $padding; ?>px 0 0; /* emulated gap */
+		}
+	<?php endif; ?>
 
 	#weblinklogo_<?php echo $suffix; ?> ul.weblink_items.grid li .description {
 		text-align: <?php echo $content_align; ?>;
+		padding-top: <?php echo $padding; ?>px;
 	}
 
 /* carousel */

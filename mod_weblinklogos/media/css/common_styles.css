@@ -7,7 +7,6 @@
 		list-style: none;
 		margin: 0;
 	    padding: 0;
-		text-align: center;
 	}
 
 		.weblinklogos ul.weblink_items li.weblink_item {
@@ -24,33 +23,29 @@
 		
 			.weblinklogos ul.weblink_items li .weblink_item_wrapper {
 				overflow: hidden;
+				position: relative;
 		    	-webkit-box-sizing: border-box;
 				-moz-box-sizing: border-box;
 				box-sizing: border-box;
 			}
+			
+			.weblinklogos ul.weblink_items.list li .weblink_item_wrapper {
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: flex;
+			}
 
 				.weblinklogos ul.weblink_items li .logo {
 				    text-align: center;
-				}
-				
-				.weblinklogos ul.weblink_items.grid li .logo {
 					margin: 0 auto;
 				}
 				
-				.weblinklogos ul.weblink_items.list li .logo {
-				    float: left;
-				    margin-right: 10px;
-				}
-				
 				html[dir="rtl"] .weblinklogos ul.weblink_items.list li .logo {
-				    float: right;
-				    margin-right: 0;
-				    margin-left: 10px;
+				    -webkit-box-orient: horizontal;
+					-webkit-box-direction: reverse;
+					-ms-flex-direction: row-reverse;
+					flex-direction: row-reverse;
 				}
-				
-					.weblinklogos ul.weblink_items li .logo_caption {
-					    margin-top: 10px;
-					}
 				
 					.weblinklogos ul.weblink_items li .logo_link {
 						position: relative;
@@ -58,11 +53,13 @@
 	
 						.weblinklogos ul.weblink_items li .logo_link a {
 							display: inline-block;
+							position: relative;
+							font-size: 0;
 						}
 	
 							.weblinklogos ul.weblink_items li .logo_link a img {
-								vertical-align: top;
 								max-height: 100%;
+								border: 0;
 							}
 							
 							.weblinklogos ul.weblink_items li .logo_link.smooth a img {
@@ -96,8 +93,10 @@
 					text-align: right;
 				}
 				
-				.weblinklogos ul.weblink_items.grid li .description {
-					padding-top: 10px;
+				.weblinklogos ul.weblink_items.list li .description {
+					-webkit-box-flex: 1;
+					-ms-flex: 1;
+					flex: 1;
 				}
 	
 					.weblinklogos ul.weblink_items li .title {

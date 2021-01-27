@@ -26,12 +26,31 @@ class CSSFileCache extends HeaderFilesCache
 		$bootstrap_version = $params->get('bootstrap_version', 2);
 		$variables[] = 'bootstrap_version';
 
+		$items_align = $params->get('items_align', 'c');
+		$variables[] = 'items_align';
+
+		$items_valign = $params->get('items_valign', 'fs');
+		$variables[] = 'items_valign';
+
+		$items_valign_list = $params->get('items_valign_list', 's');
+		$variables[] = 'items_valign_list';
+
 		// card
 
 		$overall_bgcolor = trim($params->get('overallbgcolor', '')) != '' ? trim($params->get('overallbgcolor')) : 'transparent';
 		$variables[] = 'overall_bgcolor';
 
-		$font_size = $params->get('fontsize', 90);
+		$font_size = $params->get('fontsize', array('90', '%'));
+		$unit = '%';
+		if (is_array($font_size)) {
+			$unit = $font_size[1];
+			$font_size = $font_size[0];
+		}
+		if ($unit == '%') {
+			$font_size = $font_size / 100;
+			$unit = 'em';
+		}
+		$font_size = $font_size . $unit;
 		$variables[] = 'font_size';
 
 		$card_shadow = $params->get('card_shadow', false);
@@ -79,6 +98,9 @@ class CSSFileCache extends HeaderFilesCache
 		}
 		$variables[] = 'margin_left';
 
+		$padding = $params->get('content_spacing', 10);
+		$variables[] = 'padding';
+
 		// logo
 
 		$width = $params->get('width', 120);
@@ -102,6 +124,21 @@ class CSSFileCache extends HeaderFilesCache
 		$restrict_width_to_image = $params->get('restrict_width', 0);
 		$variables[] = 'restrict_width_to_image';
 
+		$center_vertically = $params->get('center_vertically', 0);
+		$variables[] = 'center_vertically';
+
+		$filter = $params->get('filter', 'none');
+		if (strpos($filter, '_css') !== false) {
+			$filter = str_replace('_css', '', $filter);
+			$variables[] = 'filter';
+		}
+
+		$filter_hover = $params->get('filter_hover', 'none');
+		if (strpos($filter_hover, '_css') !== false) {
+			$filter_hover = str_replace('_css', '', $filter_hover);
+			$variables[] = 'filter_hover';
+		}
+
 		// text
 
 		$content_align = $params->get('content_align', 'center');
@@ -109,6 +146,9 @@ class CSSFileCache extends HeaderFilesCache
 
 		$content_valign = $params->get('content_valign', 'top');
 		$variables[] = 'content_valign';
+
+		$text_wrap = $params->get('text_wrap', 1);
+		$variables[] = 'text_wrap';
 
 		// animation
 
@@ -133,6 +173,30 @@ class CSSFileCache extends HeaderFilesCache
 		$show_pages = $params->get('includepages', 0);
 		$variables[] = 'show_pages';
 
+		// computed values
+
+		$logo_solo = true;
+		if ($params->get('description', 0) || $params->get('title', 0) || $params->get('hits', 0)) {
+			$logo_solo = false;
+		}
+		$variables[] = 'logo_solo';
+
+		$computed_width = $width;
+
+		if ($card_border_width > 0) {
+			$computed_width += $card_border_width * 2;
+		}
+
+		if ($overall_bgcolor != 'transparent' || $card_shadow || $card_border_width > 0) {
+			$computed_width += $padding * 2;
+		}
+
+		if ($logo_bgcolor != 'transparent') {
+			$computed_width += $padding * 2;
+		}
+
+		$variables[] = 'computed_width';
+
 		// set all necessary parameters
 		$this->params = compact($variables);
 	}
@@ -152,6 +216,24 @@ class CSSFileCache extends HeaderFilesCache
 		$this->sendHttpHeaders('css');
 
 		include JPATH_ROOT . '/media/mod_weblinklogos/styles/style.css.php';
+
+		// image CSS filters
+
+		if (isset($filter)) {
+			switch($filter) {
+				case 'sepia': echo '#weblinklogo_' . $suffix . ' .logo img.original { -webkit-filter: sepia(100%); filter: sepia(100%); }'; break;
+				case 'grayscale': echo '#weblinklogo_' . $suffix . ' .logo img.original { -webkit-filter: grayscale(100%); filter: grayscale(100%); }'; break;
+				case 'negate': echo '#weblinklogo_' . $suffix . ' .logo img.original { -webkit-filter: invert(100%); filter: invert(100%); }';
+			}
+		}
+
+		if (isset($filter_hover)) {
+			switch($filter_hover) {
+				case 'sepia': echo '#weblinklogo_' . $suffix . ' .logo img.hover { -webkit-filter: sepia(100%); filter: sepia(100%); }'; break;
+				case 'grayscale': echo '#weblinklogo_' . $suffix . ' .logo img.hover { -webkit-filter: grayscale(100%); filter: grayscale(100%); }'; break;
+				case 'negate': echo '#weblinklogo_' . $suffix . ' .logo img.hover { -webkit-filter: invert(100%); filter: invert(100%); }';
+			}
+		}
 
 		return $this->compress(ob_get_clean());
 	}

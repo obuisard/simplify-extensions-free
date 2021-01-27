@@ -9,10 +9,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
-use Joomla\CMS\Uri\Uri;
-use SYW\Library\Libraries as SYWLibraries;
-use SYW\Library\Utilities as SYWUtilities;
-use SYW\Module\WeblinkLogos\Site\Helper\Helper;
 
 $modal_needed = false;
 
@@ -48,6 +44,7 @@ if ($remove_whitespaces) {
 			<?php if ($arrow_prev_left) : ?>
 				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="prev_<?php echo $class_suffix; ?>" class="previous<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="SYWicon-arrow-left2"></span></a></li>
 			<?php endif; ?>
+
 			<?php if ($arrow_prev_top) : ?>
 				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="prev_<?php echo $class_suffix; ?>" class="previous<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="SYWicon-arrow-up2"></span></a></li>
 			<?php endif; ?>
@@ -57,61 +54,6 @@ if ($remove_whitespaces) {
 
 	<ul class="weblink_items <?php echo $configuration; ?>">
 		<?php foreach ($list as $item) : ?>
-			<?php
-				$imagetag = '';
-				$identical = false;
-
-				if (empty($item->image_first)) {
-					$item->error[] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_IMAGEFILEDOESNOTEXIST', '');
-				} else {
-					$result_array = Helper::getThumbnailPath($unique_filename_extra, $item->id, $item->image_first, $tmp_path, $clear_cache, $width, $height, false, $image_qualities, $filter, $create_highres_images);
-
-					if (!empty($result_array[1])) {
-						$item->error[] = $result_array[1];
-					}
-
-					if (!empty($result_array[0])) {
-
-						$attributes = array('class' => 'original');
-
-						$imagetag .= SYWUtilities::getImageElement($result_array[0], $item->alt_first, $attributes, ($carousel_configuration != 'none') ? false : true, $create_highres_images);
-					}
-
-					if (!empty($item->image_second)) {
-					    $additional_suffix = '';
-					    if ($filter === $filter_hover) {
-					        $additional_suffix = '_hover';
-					    }
-					    $result_array_hover = Helper::getThumbnailPath($unique_filename_extra, $item->id.$additional_suffix, $item->image_second, $tmp_path, $clear_cache, $width, $height, false, $image_qualities, $filter_hover, $create_highres_images);
-					} else {
-						if ($filter === $filter_hover) { // thumbs will be identical
-							$result_array_hover = $result_array;
-							$identical = true;
-						} else {
-							$result_array_hover = Helper::getThumbnailPath($unique_filename_extra, $item->id, $item->image_first, $tmp_path, $clear_cache, $width, $height, false, $image_qualities, $filter_hover, $create_highres_images);
-						}
-					}
-
-					if (!empty($result_array_hover[1]) && !$identical) {
-						$item->error[] = $result_array_hover[1];
-					}
-
-					if (!empty($result_array_hover[0])) {
-
-						$attributes = array('class' => 'hover');
-
-						if ($params->get('logo_tooltip', 1)) {
-							if ($bootstrap_version > 0) {
-								HTMLHelper::_('bootstrap.tooltip');
-								$attributes['class'] .= ' hasTooltip';
-							}
-							$attributes['title'] = htmlspecialchars($item->title);
-						}
-
-						$imagetag .= SYWUtilities::getImageElement($result_array_hover[0], $item->alt_first, $attributes, ($carousel_configuration != 'none') ? false : true, $create_highres_images);
-					}
-				}
-			?>
 			<li class="weblink_item weblink_id_<?php echo $item->id; ?> weblink_catid_<?php echo $item->catid; ?>">
 
 				<?php if ($show_errors && !empty($item->error)) : ?>
@@ -126,34 +68,6 @@ if ($remove_whitespaces) {
 				<?php else : ?>
 					<?php if ($carousel_configuration != 'none') : ?><div class="shell_animate"><?php endif; ?>
 					<div class="weblink_item_wrapper">
-						<div class="logo">
-							<div class="logo_link<?php echo ($identical && $hover_type == 'smooth') ? '' : ' '.$hover_type; ?>">
-								<?php
-									switch ($item->target)
-									{
-										case 1:	// open in a new window
-											echo '<a href="'. $item->link .'" target="_blank" rel="'.$params->get('follow', 'nofollow').'">'.$imagetag.'</a>';
-											break;
-										case 2: // open in a popup window
-										    echo '<a href="#" onclick="window.open(\''. $item->link .'\', \'\', \'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width='.$popup_width.',height='.$popup_height.'\'); return false">'.$imagetag.'</a>';
-											break;
-										case 3: // open in a modal window
-										    $modal_needed = true;
-										    $link_attributes = ' onclick="return false;" data-modaltitle="'.htmlspecialchars($item->title, ENT_COMPAT, 'UTF-8').'"';
-										    if ($bootstrap_version > 0) {
-										    	$link_attributes .= ' data-toggle="modal" data-target="#wlpmodal_'.$module->id.'"';
-										    }
-										    echo '<a href="'.$item->link.'" class="wlpmodal_'.$module->id.'"' . $link_attributes . '>'.$imagetag.'</a>';
-											break;
-										default: // open in parent window
-											echo '<a href="'. $item->link .'" rel="'.$params->get('follow', 'nofollow').'">'.$imagetag.'</a>';
-									}
-								?>
-							</div>
-							<?php if ($params->get('caption', 0)) : ?>
-								<div class="logo_caption<?php echo $caption_classes; ?>"><?php echo htmlspecialchars($item->caption_first, ENT_COMPAT, 'UTF-8'); ?></div>
-							<?php endif; ?>
-						</div>
 						<?php if (($params->get('description', 0) && $item->description) || $params->get('title', 0) || $params->get('hits', 0)) : ?>
 							<div class="description">
 								<?php if ($params->get('title', 0)) : ?>
@@ -212,9 +126,11 @@ if ($remove_whitespaces) {
 				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="prev_<?php echo $class_suffix; ?>" class="previous<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="<?php echo ($carousel_configuration == 'h' ? 'SYWicon-arrow-left2' : 'SYWicon-arrow-up2') ?>"></span></a></li><!--
 				 --><li<?php echo $extra_pagination_li_class_attribute; ?>><a id="next_<?php echo $class_suffix; ?>" class="next<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="<?php echo ($carousel_configuration == 'h' ? 'SYWicon-arrow-right2' : 'SYWicon-arrow-down2') ?>"></span></a></li>
 			<?php endif; ?>
+
 			<?php if ($arrow_next_right) : ?>
 				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="next_<?php echo $class_suffix; ?>" class="next<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="SYWicon-arrow-right2"></span></a></li>
 			<?php endif; ?>
+
 			<?php if ($arrow_next_bottom) : ?>
 				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="next_<?php echo $class_suffix; ?>" class="next<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="SYWicon-arrow-down2"></span></a></li>
 			<?php endif; ?>
@@ -239,10 +155,10 @@ if ($remove_whitespaces) {
 	<?php endif; ?>
 </div>
 <?php
-    if ($modal_needed) {
-    	if ($bootstrap_version == 0) {
-    		SYWLibraries::loadPureModal($load_remotely);
-    	}
+	if ($modal_needed) {
+		if ($bootstrap_version == 0) {
+			SYWLibraries::loadPureModal($load_remotely);
+		}
 
     	$layout = new FileLayout('wlpmodal', JPATH_ROOT.'/modules/mod_weblinklogo/layouts'); // no overrides possible
 

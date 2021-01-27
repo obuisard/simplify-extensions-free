@@ -236,7 +236,21 @@
 						<option value="grid">MOD_WEBLINKLOGO_FIELD_VALUE_GRID</option>
 						<option value="list">MOD_WEBLINKLOGO_FIELD_VALUE_LIST</option>
 					</field>
+			
+					<field name="items_align" type="sywspacingselect" default="c" showon="logos_layout:grid"
+						label="MOD_WEBLINKLOGO_FIELD_ITEMSALIGNMENT_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ITEMSALIGNMENT_DESC" />
 					
+					<field name="items_valign" type="sywalignmentselect" default="fs" showon="logos_layout:grid"
+						label="MOD_WEBLINKLOGO_FIELD_ITEMSVALIGNMENT_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ITEMSVALIGNMENT_DESC" />
+					
+					<field name="items_valign_list" type="sywalignmentselect" direction="vertical" default="s" showon="logos_layout:list"
+						label="MOD_WEBLINKLOGO_FIELD_ITEMSVALIGNMENT_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ITEMSVALIGNMENT_DESC" />
+					
+					<field type="message" text="MOD_WEBLINKLOGO_WARNING_ALIGNMENTFORANIMATIONS" style="warning" />
+				
 					<field name="layout" type="modulelayout"
 						label="JFIELD_ALT_LAYOUT_LABEL"
 						description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
@@ -257,7 +271,7 @@
 				<fieldset name="layout_item" label="MOD_WEBLINKLOGO_ITEM_TITLE">
 <!-- 				<field type="title" title="MOD_WEBLINKLOGO_ITEM_TITLE" /> -->
 				
-					<field name="overall_width" type="sywverbosetext" default="" filter="string" size="4" unit="px" icon="SYWicon-swap-horiz" help="MOD_WEBLINKLOGO_INFO_OVERALLWIDTH_LABEL" 
+					<field name="overall_width" type="sywverbosetext" default="" filter="string" size="4" unit="px" icon="SYWicon-swap-horiz" 
 						label="MOD_WEBLINKLOGO_FIELD_OVERALLWIDTH_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_OVERALLWIDTH_DESC" />
 					
@@ -326,6 +340,17 @@
 						<option value="top">MOD_WEBLINKLOGO_FIELD_VALUE_TOP</option>									
 						<option value="middle">MOD_WEBLINKLOGO_FIELD_VALUE_MIDDLE</option>				
 						<option value="bottom">MOD_WEBLINKLOGO_FIELD_VALUE_BOTTOM</option>
+					</field>
+				
+					<field name="content_spacing" type="sywverbosetext" default="10" filter="integer" size="4" unit="px" icon="SYWicon-space_bar" 
+						label="MOD_WEBLINKLOGO_FIELD_CONTENTSPACING_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CONTENTSPACING_DESC" />
+				
+					<field name="text_wrap" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="logos_layout:list" 
+						label="MOD_WEBLINKLOGO_FIELD_WRAPTEXT_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_WRAPTEXT_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
 					</field>
 				</fieldset>						
 				
@@ -442,7 +467,7 @@
 					label="MOD_WEBLINKLOGO_FIELD_OVERALLBGCOLOR_LABEL" 
 					description="MOD_WEBLINKLOGO_FIELD_OVERALLBGCOLOR_DESC" />
 				
-				<field name="fontsize" type="sywverbosetext" default="90" filter="integer" size="4" maxlength="3" unit="%" icon="SYWicon-format-size" 
+				<field name="fontsize" type="sywverbosetextunits" default="90" size="4" maxlength="3" units="px,%" defaultunit="%" icon="SYWicon-format-size" 
 					label="MOD_WEBLINKLOGO_FIELD_FONTSIZE_LABEL" 
 					description="MOD_WEBLINKLOGO_FIELD_FONTSIZE_DESC" />
 					
@@ -537,7 +562,7 @@
 					<option value="1">JYES</option>
 				</field>
 				
-				<field name="center_vertically" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+				<field name="center_vertically" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="restrict_width:0" 
 					label="MOD_WEBLINKLOGO_FIELD_CENTERVERTICALLY_LABEL" 
 					description="MOD_WEBLINKLOGO_FIELD_CENTERVERTICALLY_DESC">
 					<option value="0">JNO</option>
@@ -558,11 +583,11 @@
 					label="MOD_WEBLINKLOGO_FIELD_IMAGEOPACITY_LABEL" 
 					description="MOD_WEBLINKLOGO_FIELD_IMAGEOPACITY_DESC" />
 				
-				<field name="filter" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a" 
+				<field name="filter" type="sywimagefilterpicker" cssfilters="true" default="none" 
 					label="MOD_WEBLINKLOGO_FIELD_IMAGEFILTER_LABEL" 
 					description="MOD_WEBLINKLOGO_FIELD_IMAGEFILTER_DESC" />
 				
-				<field name="filter_hover" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a" 
+				<field name="filter_hover" type="sywimagefilterpicker" cssfilters="true" default="none" 
 					label="MOD_WEBLINKLOGO_FIELD_IMAGEFILTERHOVER_LABEL" 
 					description="MOD_WEBLINKLOGO_FIELD_IMAGEFILTERHOVER_DESC" />
 				
@@ -580,6 +605,10 @@
 				<field name="quality_png" type="sywverbosetext" default="0" filter="integer" size="8" maxlength="1" min="0" max="9" 
 					label="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYPNG_LABEL" 
 					description="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYPNG_DESC" />
+					
+				<field name="quality_webp" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" 
+					label="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYWEBP_LABEL" 
+					description="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYWEBP_DESC" />
 			</fieldset>
 			
 			<fieldset name="carousel" label="MOD_WEBLINKLOGO_CAROUSEL_FIELDSET_LABEL" description="MOD_WEBLINKLOGO_CAROUSEL_FIELDSET_DESC">
@@ -678,9 +707,9 @@
 	            
 	            <fieldset name="advanced_general" label="MOD_WEBLINKLOGO_ADVANCED_FIELDSET_LABEL">
 	            
-		            <field type="message" text="MOD_WEBLINKLOGO_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
-						label="MOD_WEBLINKLOGO_FIELD_LAYOUTSUFFIX_LABEL" 
-						description="MOD_WEBLINKLOGO_FIELD_LAYOUTSUFFIX_DESC" />
+<!-- 		            <field type="message" text="MOD_WEBLINKLOGO_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"  -->
+<!-- 						label="MOD_WEBLINKLOGO_FIELD_LAYOUTSUFFIX_LABEL"  -->
+<!-- 						description="MOD_WEBLINKLOGO_FIELD_LAYOUTSUFFIX_DESC" /> -->
 	            
 		            <field name="site_mode" type="list" default="dev" 
 						label="MOD_WEBLINKLOGO_FIELD_SITEMODE_LABEL" 
@@ -752,7 +781,7 @@
 					</field>		
 							  	
 <!-- 					<field type="message" text="MOD_WEBLINKLOGO_FIELD_GDTEST_LABEL" style="warning" /> -->
-					<field type="gdtest" message="MOD_WEBLINKLOGO_FIELD_GDTEST_LABEL" />
+					<field type="gdtest" supportedtypes="gif,jpg,png,webp" message="MOD_WEBLINKLOGO_FIELD_GDTEST_LABEL" />
 					
 					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" description="MOD_WEBLINKLOGO_INFO_AUTORESETPLUGIN" 
 						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset"
@@ -811,9 +840,9 @@
 					<field name="show_on_mobile" type="list" default="1" 
 						label="MOD_WEBLINKLOGO_FIELD_SHOWONMOBILE_LABEL"
 						description="MOD_WEBLINKLOGO_FIELD_SHOWONMOBILE_DESC">
+						<option value="0">JNO</option>
 						<option value="1">JYES</option>
 						<option value="2">MOD_WEBLINKLOGO_VALUE_ONLY</option>
-						<option value="0">JNO</option>
 					</field>
 					
 					<field name="moduleclass_sfx" type="text"
