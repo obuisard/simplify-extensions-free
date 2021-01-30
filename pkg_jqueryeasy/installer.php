@@ -147,8 +147,8 @@ class Pkg_JQueryEasyInstallerScript
 
 			// update warning
 
-			//Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_JQUERYEASY_WARNING_RELEASENOTES', $this->changelogLink), 'warning');
-			echo '<div class="alert alert-warning">' . Text::sprintf('PLG_SYSTEM_JQUERYEASY_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
+			//Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_JQUERYEASY_WARNING_RELEASENOTES', $this->changelogLink), 'warning');
+			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_JQUERYEASY_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
 		}
 
 		$this->removeFiles();
@@ -161,7 +161,7 @@ class Pkg_JQueryEasyInstallerScript
 		if (!empty($this->deleteFiles)) {
 			foreach ($this->deleteFiles as $filename) {
 				if (File::exists($filename) && !File::delete($filename)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('COM_ARTICLEDETAILSPROFILES_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
+					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_JQUERYEASY_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
 				}
 			}
 		}
@@ -169,7 +169,7 @@ class Pkg_JQueryEasyInstallerScript
 		if (!empty($this->deleteFolders)) {
 			foreach ($this->deleteFolders as $folder) {
 				if (Folder::exists(JPATH_ROOT.$folder) && !Folder::delete(JPATH_ROOT.$folder)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('COM_LATESTNEWSENHANCEDPRO_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
+					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_JQUERYEASY_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
 				}
 			}
 		}
