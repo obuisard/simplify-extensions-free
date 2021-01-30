@@ -83,7 +83,7 @@ class Helper
 
             case 'jqueryui_css': return '([\\/a-zA-Z0-9_:\.~-]*)jquery[.-]*ui([0-9\.-]|latest|core|custom|min|pack)*?.css(.*?)';
 
-            case 'noconflict_declaration': return '[^};\n>]*(jQuery|\$)\.no[cC]onflict\((true|false|)\);';
+            case 'noconflict_declaration': return '[^};\n>]*(jQuery|\$)\.no[cC]onflict\(\s*(true|false|)\s*\);';
             case 'caption_declaration': return '([\s\w();,\':\.-]*)JCaption([\s\w();,\':\.-]*)';
         }
 

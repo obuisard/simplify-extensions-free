@@ -207,7 +207,7 @@
 								
 					<field type="jqueryversion" />
 					
-					<field name="jqueryversionfrontend" type="list" default="3.5" showon="jqueryinpage:1,2,3" 
+					<field name="jqueryversionfrontend" type="list" default="3.5" showon="jqueryinfrontend:1,2,3" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYVERSION_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYVERSION_DESC">
 		            	<option value="3.5#slim" disabled="true">3.5.x slim</option>
@@ -239,48 +239,48 @@
 		                <option value="joomla">PLG_SYSTEM_JQUERYEASY_VALUE_JOOMLA</option>
 		            </field>
 		            
-		            <field name="jquerysubversionfrontend" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinpage:1,2,3[AND]jqueryversionfrontend:1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,2.0,2.1,2.2,3.0,3.1,3.2,3.3,3.4,3.5" 
+		            <field name="jquerysubversionfrontend" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinfrontend:1,2,3[AND]jqueryversionfrontend!:local,joomla" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYSUBVERSION_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYSUBVERSION_DESC" />
 						
-					<field type="cdnlinks" library="jquery" showon="jqueryinpage:1,2,3[AND]jqueryversionfrontend:1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,2.0,2.1,2.2,3.0,3.1,3.2,3.3,3.4,3.5" />
+					<field type="cdnlinks" library="jquery" showon="jqueryinfrontend:1,2,3[AND]jqueryversionfrontend!:local,joomla" />
 									
-					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY2" showon="jqueryinpage:1,2,3[AND]jqueryversionfrontend:2.0,2.1,2.2,3.0,3.1,3.2,3.3,3.4,3.5" />
-					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY3" showon="jqueryinpage:1,2,3[AND]jqueryversionfrontend:3.0,3.1,3.2,3.3,3.4,3.5" />
+					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY2" showon="jqueryinfrontend:1,2,3[AND]jqueryversionfrontend:2.0,2.1,2.2,3.0,3.1,3.2,3.3,3.4,3.5" />
+					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY3" showon="jqueryinfrontend:1,2,3[AND]jqueryversionfrontend:3.0,3.1,3.2,3.3,3.4,3.5" />
 						
-					<field name="localversionfrontend" type="text" default="" size="50" showon="jqueryinpage:1,2,3[AND]jqueryversionfrontend:local" class="input-xxlarge" 
+					<field name="localversionfrontend" type="text" default="" size="50" showon="jqueryinfrontend:1,2,3[AND]jqueryversionfrontend:local" class="input-xxlarge" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALVERSION_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALVERSION_DESC" />
 						
-					<field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_JQUERYPATH" showon="jqueryinpage:1,2,3[AND]jqueryversionfrontend:local" />
+					<field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_JQUERYPATH" showon="jqueryinfrontend:1,2,3[AND]jqueryversionfrontend:local" />
 				</fieldset>
 				
 				<fieldset name="migrate" label="PLG_SYSTEM_JQUERYEASY_FIELD_MIGRATE_LABEL">
 <!-- 					<field type="subtitle" title="PLG_SYSTEM_JQUERYEASY_FIELD_MIGRATE_LABEL" /> -->
 					
-					<field type="message" style="info" text="PLG_SYSTEM_JQUERYEASY_INFO_JQUERYMIGRATE" showon="jqueryinpage:1,2,3" />
+					<field type="message" style="info" text="PLG_SYSTEM_JQUERYEASY_INFO_JQUERYMIGRATE" showon="jqueryinfrontend:1,2,3" />
 						
 					<field type="migrateversion" />
 					
-					<field name="migrateversionfrontend" type="migrateselect" default="none" showon="jqueryinpage:1,2,3" 
+					<field name="migrateversionfrontend" type="migrateselect" default="none" showon="jqueryinfrontend:1,2,3" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_MIGRATEVERSION_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_MIGRATEVERSION_DESC">	
 		            	<option value="none">JNONE</option>
 					</field>
 					
-					<field name="migratesubversionfrontend" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinpage:1,2,3[AND]migrateversionfrontend:3.0.0,3.1,3.2,3.3" 
+					<field name="migratesubversionfrontend" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinfrontend:1,2,3[AND]migrateversionfrontend:3.0.0,3.1,3.2,3.3" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_MIGRATESUBVERSION_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_MIGRATESUBVERSION_DESC" />
 					
-					<field type="cdnlinks" library="migrate" showon="jqueryinpage:1,2,3[AND]migrateversionfrontend:1.2.1,1.3.0,1.4.1,3.0.0,3.1,3.2,3.3" />
+					<field type="cdnlinks" library="migrate" showon="jqueryinfrontend:1,2,3[AND]migrateversionfrontend:1.2.1,1.3.0,1.4.1,3.0.0,3.1,3.2,3.3" />
 					
-					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERYMIGRATE3" showon="jqueryinpage:1,2,3[AND]migrateversionfrontend:3.0.0,3.1,3.2,3.3" />
+					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERYMIGRATE3" showon="jqueryinfrontend:1,2,3[AND]migrateversionfrontend:3.0.0,3.1,3.2,3.3" />
 						
-					<field name="localpathmigratefrontend" type="text" default="" size="50" showon="jqueryinpage:1,2,3[AND]migrateversionfrontend:local" class="input-xxlarge" 
+					<field name="localpathmigratefrontend" type="text" default="" size="50" showon="jqueryinfrontend:1,2,3[AND]migrateversionfrontend:local" class="input-xxlarge" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALPATHMIGRATE_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALPATHMIGRATE_DESC" />
 						
-					<field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_JQUERYMIGRATEPATH" showon="jqueryinpage:1,2,3[AND]migrateversionfrontend:local" />
+					<field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_JQUERYMIGRATEPATH" showon="jqueryinfrontend:1,2,3[AND]migrateversionfrontend:local" />
 		        </fieldset>
 		        
 		        <fieldset name="jqueryui" label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUI_LABEL">
@@ -288,7 +288,7 @@
 		            
 		            <field type="jqueryuiversion" />
 		            
-		            <field name="jqueryuiversionfrontend" type="list" default="1.9" showon="jqueryinpage:2" 
+		            <field name="jqueryuiversionfrontend" type="list" default="1.9" showon="jqueryinfrontend:2" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUIVERSION_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUIVERSION_DESC">
 		            	<option value="1.12">1.12.x</option>
@@ -301,28 +301,28 @@
 <!-- 		                <option value="joomla">PLG_SYSTEM_JQUERYEASY_VALUE_JOOMLA</option> -->
 		            </field>
 		            
-		            <field name="jqueryuisubversionfrontend" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinpage:2[AND]jqueryuiversionfrontend:1.7,1.8,1.9,1.10,1.11,1.12" 
+		            <field name="jqueryuisubversionfrontend" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinfrontend:2[AND]jqueryuiversionfrontend:1.7,1.8,1.9,1.10,1.11,1.12" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUISUBVERSION_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUISUBVERSION_DESC" />
 						
-					<field type="cdnlinks" library="jqueryui" showon="jqueryinpage:2[AND]jqueryuiversionfrontend:1.7,1.8,1.9,1.10,1.11,1.12" />
+					<field type="cdnlinks" library="jqueryui" showon="jqueryinfrontend:2[AND]jqueryuiversionfrontend:1.7,1.8,1.9,1.10,1.11,1.12" />
 					
-		            <field name="localuiversionfrontend" type="text" default="" size="50" showon="jqueryinpage:2[AND]jqueryuiversionfrontend:local" class="input-xxlarge" 
+		            <field name="localuiversionfrontend" type="text" default="" size="50" showon="jqueryinfrontend:2[AND]jqueryuiversionfrontend:local" class="input-xxlarge" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALUIVERSION_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALUIVERSION_DESC" />
 						
-					<field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_JQUERYUIPATH" showon="jqueryinpage:2[AND]jqueryuiversionfrontend:local" />
+					<field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_JQUERYUIPATH" showon="jqueryinfrontend:2[AND]jqueryuiversionfrontend:local" />
 						
-		            <field name="jqueryuithemefrontend" type="jqueryuithemeselect" default="none" showon="jqueryinpage:2" 
+		            <field name="jqueryuithemefrontend" type="jqueryuithemeselect" default="none" showon="jqueryinfrontend:2" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUITHEME_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUITHEME_DESC">
 		            </field>
 		            
-		            <field name="jqueryuithemecustomfrontend" type="text" default="" size="50" showon="jqueryinpage:2[AND]jqueryuithemefrontend:custom" class="input-xxlarge" 
+		            <field name="jqueryuithemecustomfrontend" type="text" default="" size="50" showon="jqueryinfrontend:2[AND]jqueryuithemefrontend:custom" class="input-xxlarge" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_CUSTOMTHEME_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_CUSTOMTHEME_DESC" />
 						
-					<field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_JQUERYUICSSPATH" showon="jqueryinpage:2[AND]jqueryuithemefrontend:custom" />
+					<field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_JQUERYUICSSPATH" showon="jqueryinfrontend:2[AND]jqueryuithemefrontend:custom" />
 				</fieldset>
 				
 				<fieldset name="jquerymobile" label="PLG_SYSTEM_JQUERYEASY_JQUERYMOBILE_LABEL">
@@ -338,27 +338,27 @@
 					
 <!-- 					<field type="message" style="info" text="PLG_SYSTEM_JQUERYEASY_INFO_DEPENDENT" /> -->
 					
-		            <field name="replacewhenuniquefrontend" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="jqueryinpage:1,2,3" 
+		            <field name="replacewhenuniquefrontend" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="jqueryinfrontend:1,2,3" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_REPLACEWHENUNIQUE_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_REPLACEWHENUNIQUE_DESC">
 		                <option value="0">JNO</option>
 		                <option value="1">JYES</option>
 		            </field>
 		            
-		            <field name="addwhenmissingfrontend" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="jqueryinpage:1,2,3" 
+		            <field name="addwhenmissingfrontend" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="jqueryinfrontend:1,2,3" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_ADDWHENMISSING_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_ADDWHENMISSING_DESC">
 		                <option value="0">JNO</option>
 		                <option value="1">JYES</option>
 		            </field>
 		            
-		            <field name="ignorescriptsfrontend" type="textarea" cols="40" rows="5" default="" filter="raw" class="input-xxlarge" showon="jqueryinpage:1,2,3" 
+		            <field name="ignorescriptsfrontend" type="textarea" cols="40" rows="5" default="" filter="raw" class="input-xxlarge" showon="jqueryinfrontend:1,2,3" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_IGNORESCRIPTS_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_IGNORESCRIPTS_DESC" />
 		            
-		            <field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_IGNORESCRIPT" showon="jqueryinpage:1,2,3" />		            
+		            <field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_IGNORESCRIPT" showon="jqueryinfrontend:1,2,3" />		            
 						            
-		            <field name="removenoconflictfrontend" type="list" default="1" showon="jqueryinpage:1,2,3" 
+		            <field name="removenoconflictfrontend" type="list" default="1" showon="jqueryinfrontend:1,2,3" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_REMOVENOCONFLICT_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_REMOVENOCONFLICT_DESC">
 		                <option value="0">JNO</option>
@@ -366,7 +366,7 @@
 	                	<option value="2">PLG_SYSTEM_JQUERYEASY_FIELD_REMOVENOCONFLICT_VALUE_VAR</option>
 		            </field>
 		            
-		            <field name="addnoconflictfrontend" type="list" default="0" showon="jqueryinpage:1,2,3" 
+		            <field name="addnoconflictfrontend" type="list" default="0" showon="jqueryinfrontend:1,2,3" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_ADDNOCONFLICT_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_ADDNOCONFLICT_DESC">
 		                <option value="0">JNO</option>
@@ -374,7 +374,7 @@
 		                <option value="2">PLG_SYSTEM_JQUERYEASY_VALUE_SCRIPT</option>
 		            </field>
 		            
-		            <field name="replacedocumentreadyfrontend" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="jqueryinpage:1,2,3" 
+		            <field name="replacedocumentreadyfrontend" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="jqueryinfrontend:1,2,3" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_REPLACEDOCUMENTREADY_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_REPLACEDOCUMENTREADY_DESC">
 		                <option value="0">JNO</option>

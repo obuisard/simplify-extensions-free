@@ -237,17 +237,17 @@ class plgSystemJQueryEasy extends CMSPlugin
 
 
 
-        if (!isset(Factory::getDocument()->_script['text/javascript'])) {
-            Factory::getDocument()->_script['text/javascript'] = '';
-        }
-        $script_declarations = Factory::getDocument()->_script; // array of script declarations
+		$script_declarations = Factory::getDocument()->_script; // array of script declarations
+		if (!isset($script_declarations['text/javascript'])) {
+			$script_declarations['text/javascript'] = '';
+		}
 
         $styles = Factory::getDocument()->_styleSheets;
 
-        if (!isset(Factory::getDocument()->_style['text/css'])) {
-            Factory::getDocument()->_style['text/css'] = '';
-        }
         $style_declarations = Factory::getDocument()->_style; // array of style declarations
+        if (!isset($style_declarations['text/css'])) {
+        	$style_declarations['text/css'] = '';
+        }
 
  	    $new_scripts = array();
 	    $new_styles = array();
@@ -280,7 +280,7 @@ class plgSystemJQueryEasy extends CMSPlugin
 	                            $script_declarations['text/javascript'] = preg_replace('/' . $quoted_match . '/', '', $script_declarations['text/javascript'], 1);
 	                            Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDNOCONFLICTSCRIPTDECLARATIONS', $match[0]);
 	                        } else { // ignore the removal of variable declaration (keep var|let|const j = $.noConflict(); BUT replace $)
-	                            if (preg_match('/(var|let|const)/i', $match[0])) {
+	                            if (preg_match('/(.*)=/i', $match[0])) {
 	                                if (strpos($match[0], '$') !== false) {
 	                                    $match[0] = str_replace('$.', 'jQuery.', $match[0]);
 	                                    $script_declarations['text/javascript'] = preg_replace('/' . $quoted_match . '/', $match[0], $script_declarations['text/javascript'], 1);
@@ -666,11 +666,22 @@ class plgSystemJQueryEasy extends CMSPlugin
 
 	    Factory::getDocument()->_scripts = array_merge($new_scripts, $scripts);
 
+	    if (trim($script_declarations['text/javascript']) != '') {
+	    	Factory::getDocument()->_script['text/javascript'] = $script_declarations['text/javascript'];
+	    } else {
+	    	// after removal of scripts, we may end up with nothing
+	    	if (isset(Factory::getDocument()->_script['text/javascript'])) {
+	    		unset(Factory::getDocument()->_script['text/javascript']);
+	    	}
+	    }
+
 	    Factory::getDocument()->_script['text/javascript'] = $script_declarations['text/javascript'];
 
 	    Factory::getDocument()->_styleSheets = array_merge($new_styles, $styles);
 
-	    Factory::getDocument()->_style['text/css'] = $style_declarations['text/css'];
+	    if (trim($style_declarations['text/css']) != '') {
+	    	Factory::getDocument()->_style['text/css'] = $style_declarations['text/css'];
+	    }
 
 	    // 	    var_dump(preg_replace('!\s+!', ' ', Factory::getDocument()->_script['text/javascript']));
 	    //  	    var_dump(Factory::getDocument()->_scripts);
@@ -757,7 +768,7 @@ class plgSystemJQueryEasy extends CMSPlugin
     						    $number_of_deletions++;
     						    //}
     						} else { // ignore the removal if variable declaration (keep var|let|const j = $.noConflict(); BUT replace $)
-    						    if (preg_match('/(var|let|const)/i', $match[0])) {
+    						    if (preg_match('/(.*)=/i', $match[0])) {
     						        if (strpos($match[0], '$') !== false) {
     						            $match[0] = str_replace('$.', 'jQuery.', $match[0]);
     						            $body = preg_replace('#' . $quoted_match . '#', $match[0], $body, 1);
