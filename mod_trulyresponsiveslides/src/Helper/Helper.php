@@ -14,6 +14,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use SYW\Library\Cache as SYWCache;
 use SYW\Library\Image as SYWImage;
+use SYW\Library\Utilities as SYWUtilities;
 
 class Helper
 {
@@ -59,16 +60,6 @@ class Helper
 				break;
 			case 3:	// open in a modal window
 				$link_attributes = ' onclick="return false;" data-modaltitle="'.htmlspecialchars($linkText, ENT_COMPAT, 'UTF-8').'"';
-
-
-
-
-				// missing $bootstrap_version
-
-
-
-
-
 				if ($bootstrap_version > 0) {
 					$link_attributes .= ' data-toggle="modal" data-target="#trsmodal_'.$id.'"';
 				}
@@ -94,7 +85,7 @@ class Helper
 
 		foreach ($image_list as $image_item) {
 
-			$imagename = File::getName($image_item);
+			$imagename = basename($image_item);
 			$imgfilename = $tmp_path.'/img_'.$module_suffix.'_'.$imagename;
 			if (is_file(JPATH_ROOT.'/'.$imgfilename)) {
 				$list_images_array[] = $imgfilename; // get re-created image that fits the slider
@@ -130,7 +121,7 @@ class Helper
 		} else {
 			foreach($image_list as $image_item) {
 				$imageext = File::getExt($image_item);
-				$imagename = File::getName($image_item);
+				$imagename = basename($image_item);
 				$imagenamenoext = File::stripExt($imagename);
 				$imgfilename = $tmp_path.'/img_'.$module_suffix.'_'.$imagenamenoext;
 				if (is_file(JPATH_ROOT.'/'.$imgfilename.'.'.$imageext) && !$clear_cache) { // image already exists
@@ -138,6 +129,8 @@ class Helper
 				} else { // re-create the image if original image has a different size than the slider
 
 					$image = new SYWImage($images_path.$image_item);
+
+					$quality = 80;
 
 					if (is_null($image->getImagePath())) {
 						//$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCED_ERROR_IMAGEFILEDOESNOTEXIST', $original_image_src);
@@ -154,13 +147,18 @@ class Helper
 								File::delete(JPATH_ROOT.'/'.$imgfilename.'.'.$imageext); // remove potential thumbnail otherwise it will be used instead of the original
 							}
 						} else {
-							switch ($imageext){
-								case 'jpg': case 'jpeg': $quality = 100; break; // 0 to 100
-								case 'png': $quality = 0; break; // compression: 0 to 9
-								default : $quality = -1; break;
-							}
+// 							switch ($imageext){
+// 								case 'jpg': case 'jpeg': $quality = 100; break; // 0 to 100
+// 								case 'png': $quality = 0; break; // compression: 0 to 9
+// 								case 'webp': $quality = 100; break; // 0 to 100
+// 								default : $quality = -1; break;
+// 							}
 
-							$image->createThumbnail($img_width, $img_height, true, $quality, null, $imgfilename.'.'.$imageext);
+							if ($image->toThumbnail($imgfilename . '.' . $imageext, '', $img_width, $img_height, true, $quality)) {
+								if ($image->getImageMimeType() === 'image/webp') { // create fallback
+									$image->toThumbnail($imgfilename . '.png', 'image/png', $img_width, $img_height, true, $quality);
+								}
+							}
 						}
 					}
 
@@ -193,6 +191,7 @@ class Helper
 
 		$quality_jpg = $params->get('quality_jpg', 100);
 		$quality_png = $params->get('quality_png', 0);
+		$quality_webp = $params->get('quality_webp', 80);
 
 		if ($quality_jpg > 100) {
 			$quality_jpg = 100;
@@ -206,6 +205,12 @@ class Helper
 		if ($quality_png < 0) {
 			$quality_png = 0;
 		}
+		if ($quality_webp > 100) {
+			$quality_webp = 100;
+		}
+		if ($quality_webp < 0) {
+			$quality_webp = 0;
+		}
 
 		$extensions = get_loaded_extensions();
 		if (!in_array('gd', $extensions)) {
@@ -213,8 +218,9 @@ class Helper
 		} else {
 			foreach($image_list as $image_item) {
 				$imageext = File::getExt($image_item);
-				$imagename = File::getName($image_item);
-				$thumbfilename = $tmp_path.'/thumb_'.$module_suffix.'_'.$imagename;
+				$imagename = basename($image_item);
+				$imagenamenoext = File::stripExt($imagename);
+				$thumbfilename = $tmp_path.'/thumb_'.$module_suffix.'_'.$imagenamenoext;
 				if (is_file(JPATH_ROOT.'/'.$thumbfilename) && !$clear_cache) { // thumbnail already exists
 					// do nothing
 				} else { // create the thumbnail
@@ -234,11 +240,16 @@ class Helper
 
 						switch ($imageext){
 							case 'jpg': case 'jpeg': $quality = $quality_jpg; break; // 0 to 100
-							case 'png': $quality = $quality_png; break; // compression: 0 to 9
+							case 'png': $quality = round(11.111111 * (9 - $quality_png)); break; // compression: 0 to 9
+							case 'webp': $quality = $quality_webp; break; // 0 to 100
 							default : $quality = -1; break;
 						}
 
-						$image->createThumbnail($thumb_width, $thumb_height, $crop_picture, $quality, null, $thumbfilename);
+						if ($image->toThumbnail($thumbfilename . '.' . $imageext, '', $thumb_width, $thumb_height, $crop_picture, $quality)) {
+							if ($image->getImageMimeType() === 'image/webp') { // create fallback
+								$image->toThumbnail($thumbfilename . '.png', 'image/png', $thumb_width, $thumb_height, $crop_picture, $quality);
+							}
+						}
 					}
 
 					$image->destroy();
@@ -271,10 +282,10 @@ class Helper
 
 			$alt = Text::sprintf('MOD_TRULYRESPONSIVESLIDER_SLIDENUMBER', $i);
 			if (!empty($alts) && isset($alts[$i]) && $alts[$i] != '') {
-				$alt = $alts[$i];
+				$alt = htmlspecialchars($alts[$i], ENT_COMPAT, 'UTF-8');
 			}
 
-			$html .= '<li><img src="'.$image_directory.'/'.$item.'" alt="'.$alt.'" />'.$caption.'</li>';
+			$html .= '<li>' . SYWUtilities::getImageElement($item, $alt, array('width' => $params->get('img_w', 900), 'height' => $params->get('img_h', 600))) . $caption . '</li>';
 
 			$i++;
 		}
@@ -302,7 +313,7 @@ class Helper
 
 			$html .= self::getRTL() ? self::getRTL().', ' : '';
 
-			$html .= self::getRemoveLoading().', ';
+			//$html .= self::getRemoveLoading().', ';
 
 			if ($params->get('out_captions', 0)) {
 				$html .= self::getOutCaption($id_suffix);
@@ -349,10 +360,15 @@ class Helper
 
 			$alt = Text::sprintf('MOD_TRULYRESPONSIVESLIDER_SLIDENUMBER', $i);
 			if (!empty($alts) && isset($alts[$i]) && $alts[$i] != '') {
-				$alt = $alts[$i];
+				$alt = htmlspecialchars($alts[$i], ENT_COMPAT, 'UTF-8');
 			}
 
-			$html .= '<li data-thumb="'.$tmp_directory.'/thumb_'.$id_suffix.'_'.File::getName($item).'"><img src="'.$image_directory.'/'.$item.'" alt="'.$alt.'" />'.$caption.'</li>';
+			$thumbnail_filename = basename($item);
+			if (strtolower(File::getExt($thumbnail_filename)) === 'webp') {
+				$thumbnail_filename = File::stripExt($thumbnail_filename) . '.png';
+			}
+
+			$html .= '<li data-thumb="' . $tmp_directory . '/thumb_' . $id_suffix . '_' . $thumbnail_filename . '" data-thumb-alt="' . $alt . '">' . SYWUtilities::getImageElement($item, $alt, array('width' => $params->get('img_w', 900), 'height' => $params->get('img_h', 600))) . $caption . '</li>';
 
 			$i++;
 		}
@@ -380,7 +396,7 @@ class Helper
 
 			$html .= self::getRTL() ? self::getRTL().', ' : '';
 
-			$html .= self::getRemoveLoading().', ';
+			//$html .= self::getRemoveLoading().', ';
 
 			if ($params->get('out_captions', 0)) {
 				$html .= self::getOutCaption($id_suffix);
@@ -459,7 +475,7 @@ class Helper
 	}
 
 	static protected function getRemoveLoading() {
-		return "start: function(slider) { $('body').removeClass('loading'); }";
+		return ''; //"start: function(slider) { $('body').removeClass('loading'); }";
 	}
 
 	static protected function getRTL() {
@@ -508,22 +524,27 @@ class Helper
 			return;
 		}
 
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 		$minified = (JDEBUG) ? '' : '-min';
 
-		$doc = Factory::getDocument();
-
-		$doc->addScriptVersion(Uri::root(true).'/media/mod_trulyresponsiveslides/js/jquery.flexslider' . $minified . '.js');
+		//$doc->addScriptVersion(Uri::root(true).'/media/mod_trulyresponsiveslides/js/jquery.flexslider' . $minified . '.js');
+		$wam->registerAndUseScript('trs.flexslider', 'mod_trulyresponsiveslides/jquery.flexslider' . $minified . '.js', ['relative' => true, 'version' => 'auto'], [], ['jquery']);
 
 		if (JDEBUG) {
-			$doc->addStyleSheet(Uri::root(true).'/media/mod_trulyresponsiveslides/css/flexslider.css');
+			//$doc->addStyleSheet(Uri::root(true).'/media/mod_trulyresponsiveslides/css/flexslider.css');
+			$wam->registerAndUseStyle('trs.flexslider', 'mod_trulyresponsiveslides/flexslider.css', ['relative' => true]);
 			if (Factory::getDocument()->getDirection() == 'rtl') {
-				$doc->addStyleSheet(Uri::root(true).'/media/mod_trulyresponsiveslides/css/flexslider-rtl.css');
+				//$doc->addStyleSheet(Uri::root(true).'/media/mod_trulyresponsiveslides/css/flexslider-rtl.css');
+				$wam->registerAndUseStyle('trs.flexslider_rtl', 'mod_trulyresponsiveslides/flexslider-rtl.css', ['relative' => true]);
 			}
 		} else {
 			if (Factory::getDocument()->getDirection() != 'rtl') {
-				$doc->addStyleSheetVersion(Uri::root(true).'/media/mod_trulyresponsiveslides/css/flexslider-min.css');
+				//$doc->addStyleSheetVersion(Uri::root(true).'/media/mod_trulyresponsiveslides/css/flexslider-min.css');
+				$wam->registerAndUseStyle('trs.flexslider', 'mod_trulyresponsiveslides/flexslider-min.css', ['relative' => true, 'version' => 'auto']);
 			} else {
-				$doc->addStyleSheetVersion(Uri::root(true).'/media/mod_trulyresponsiveslides/css/flexslider-pack-min.css'); // regular stylesheet + RTL
+				//$doc->addStyleSheetVersion(Uri::root(true).'/media/mod_trulyresponsiveslides/css/flexslider-pack-min.css'); // regular stylesheet + RTL
+				$wam->registerAndUseStyle('trs.flexslider', 'mod_trulyresponsiveslides/flexslider-pack-min.css', ['relative' => true, 'version' => 'auto']);
 			}
 		}
 

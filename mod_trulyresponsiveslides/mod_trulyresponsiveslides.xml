@@ -235,14 +235,9 @@
 					
 				<fieldset name="slider_general" label="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_LABEL">
 				
-					<field name="animation" type="list" default="basic" 
+					<field name="animation" type="sliderselect" default="basic" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ANIMATION_LABEL" 
-						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ANIMATION_DESC">
-						<option value="basic">MOD_TRULYRESPONSIVESLIDER_VALUE_ANIMATIONBASIC</option>
-						<option value="withthumb">MOD_TRULYRESPONSIVESLIDER_VALUE_ANIMATIONWITHTHUMB</option>
-						<option value="withthumbslider" disabled="true">MOD_TRULYRESPONSIVESLIDER_VALUE_ANIMATIONWITHTHUMBSLIDER</option>
-						<option value="withautohidethumbslider" disabled="true">MOD_TRULYRESPONSIVESLIDER_VALUE_ANIMATIONWITHAUTOHIDETHUMBSLIDER</option>
-					</field>
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ANIMATION_DESC" />
 				
 <!-- 				<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" />				 -->
 				
@@ -322,17 +317,9 @@
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_OPACITYCOLOR_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_OPACITYCOLOR_DESC" />
 						
-					<field name="default_position" type="list" default="s" 
+					<field name="default_position" type="positionselect" default="s" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_DEFAULTPOSITION_LABEL" 
-						description="MOD_TRULYRESPONSIVESLIDER_FIELD_DEFAULTPOSITION_DESC">
-						<option value="s">s</option>
-						<option value="n">n</option>
-						<option value="c">c</option>
-						<option value="sw">sw</option>
-						<option value="se">se</option>
-						<option value="nw">nw</option>
-						<option value="ne">ne</option>
-					</field>
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_DEFAULTPOSITION_DESC" />
 					
 					<field name="cat_tag" type="list" default="3" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CATEGORYTAG_LABEL" 
@@ -558,7 +545,7 @@
 <!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_PICTURES_LABEL" /> -->
 				
 <!-- 				<field type="message" text="MOD_TRULYRESPONSIVESLIDER_FIELD_GDTEST_LABEL" style="warning" /> -->
-					<field type="gdtest" showgif="false" message="MOD_TRULYRESPONSIVESLIDER_FIELD_GDTEST_LABEL" />	
+					<field type="gdtest" supportedtypes="jpg,png,webp" message="MOD_TRULYRESPONSIVESLIDER_FIELD_GDTEST_LABEL" />	
 						
 					<field type="message" text="MOD_TRULYRESPONSIVESLIDER_INFO_CLEARCACHE" style="info" showon="site_mode:adv" />
 						

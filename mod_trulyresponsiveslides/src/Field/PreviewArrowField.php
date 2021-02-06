@@ -21,6 +21,8 @@ class PreviewArrowField extends FormField
 
 	protected function getInput()
 	{
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 	    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
 
 		// a little over-complicated because having a radius, a bg transparent and no shadow leaves some traces
@@ -76,7 +78,8 @@ class PreviewArrowField extends FormField
 			$script .= 'jQuery(\'.preview_arrow\').hover(function() { jQuery(this).css(\'opacity\', \'.7\'); } , function() { jQuery(this).css(\'opacity\', \'1\'); }); ';
 		$script .= '});';
 
-		Factory::getDocument()->addScriptDeclaration($script);
+		//Factory::getDocument()->addScriptDeclaration($script);
+		$wam->addInlineScript($script);
 
 		$html = '';
 

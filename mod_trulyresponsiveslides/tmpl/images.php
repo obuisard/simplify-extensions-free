@@ -22,6 +22,7 @@ use SYW\Library\Utilities as SYWUtilities;
 	} elseif (empty($list)) {
 		$errors[] = array(Text::_('MOD_TRULYRESPONSIVESLIDER_ERROR_NOSLIDE'), 'warning');
 	} else {
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$thumb_width_percent = '';
 
@@ -90,7 +91,8 @@ use SYW\Library\Utilities as SYWUtilities;
 		$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
 
 		if ($result) {
-			$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_trulyresponsiveslides/style_'.$module->id.'.css');
+			//$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_trulyresponsiveslides/style_'.$module->id.'.css');
+			$wam->registerAndUseStyle('trs.style_' . $module->id, $cache_css->getCachePath() . '/style_' . $module->id . '.css');
 		}
 
 		// caching the scripts
@@ -117,12 +119,14 @@ use SYW\Library\Utilities as SYWUtilities;
 		$cache_js->addDeclaration($scriptDeclaration, 'js');
 
 		if ($inline_scripts) {
-			$doc->addScriptDeclaration($cache_js->getBuffer(true));
+			//$doc->addScriptDeclaration($cache_js->getBuffer(true));
+			$wam->addInlineScript($cache_js->getBuffer(true));
 		} else {
 			$result = $cache_js->cache('animation_'.$module->id.'.js', $clear_header_files_cache);
 
 			if ($result) {
-				$doc->addScript(Uri::base(true).'/media/cache/mod_trulyresponsiveslides/animation_'.$module->id.'.js');
+				//$doc->addScript(Uri::base(true).'/media/cache/mod_trulyresponsiveslides/animation_'.$module->id.'.js');
+				$wam->registerAndUseScript('trs.animation_' . $module->id, $cache_js->getCachePath() . '/animation_' . $module->id . '.js', [], ['defer' => true]);
 			}
 		}
 	}

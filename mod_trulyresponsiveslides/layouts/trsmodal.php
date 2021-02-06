@@ -12,6 +12,8 @@ use Joomla\CMS\Language\Text;
 use SYW\Library\Stylesheets as SYWStylesheets;
 use SYW\Library\Libraries as SYWLibraries;
 
+$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 $bootstrapVersion = isset($displayData['bootstrap_version']) ? intval($displayData['bootstrap_version']) : 2;
 $loadBootstrap = isset($displayData['load_bootstrap']) ? $displayData['load_bootstrap'] : true;
 if ($loadBootstrap) {
@@ -50,7 +52,8 @@ if ($bootstrapVersion > 0) {
 
 	$script .= "}); ";
 
-	Factory::getDocument()->addScriptDeclaration($script);
+	//Factory::getDocument()->addScriptDeclaration($script);
+	$wam->addInlineScript($script);
 
 	$style = '';
 	if ($bootstrapVersion > 2) {
@@ -58,7 +61,9 @@ if ($bootstrapVersion > 0) {
 	} else {
     	$style = '@media (min-width: 768px) { #'.$selector.' { max-width: 80%; left: 50%; margin-left: auto; -webkit-transform: translate(-50%); -ms-transform: translate(-50%); transform: translate(-50%); width: '.$width.'px; } } ';
 	}
-	Factory::getDocument()->addStyleDeclaration($style);
+
+	//Factory::getDocument()->addStyleDeclaration($style);
+	$wam->addInlineStyle($style);
 } else {
 	SYWLibraries::instantiatePureModal($selector);
 	SYWStylesheets::loadPureModalsCss();
