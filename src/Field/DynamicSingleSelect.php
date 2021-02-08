@@ -146,7 +146,7 @@ class DynamicSingleSelect extends ListField
 			}
 
 			if (isset($option[6])) {
-				$html .= '<div class="badge badge-warning imagelabel">' . $option[6] . '</div>';
+				$html .= '<div class="badge badge-' . ($option[6] === 'Pro' ? 'danger' : 'warning') . ' imagelabel">' . $option[6] . '</div>';
 			}
 
 			$html .= '</div>';

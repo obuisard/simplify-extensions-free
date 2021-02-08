@@ -13,6 +13,7 @@ use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Database\Exception\ExecutionFailureException;
 
 class OverridesTestField extends FormField
 {
@@ -46,7 +47,7 @@ class OverridesTestField extends FormField
 
 		try {
 			$defaultemplate = $db->loadResult();
-		} catch (\RuntimeException $e) {
+		} catch (ExecutionFailureException $e) {
 			return $html;
 		}
 

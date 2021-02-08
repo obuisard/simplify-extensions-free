@@ -395,15 +395,21 @@ class Utilities
 	 * @param array $attributes attributes to be added to the <img> element (can contain width and height for the image)
 	 * @param boolean $lazy_load lazy load the image
 	 * @param boolean $high_resolution handle high resolution devices
+	 * @param array breakpoints the possible breakpoints to use for media queries (ordered from lower to higher)
+	 * @param boolean check the file existence, use when full control over the creation of images
 	 * @return string the <picture> or <img> element
 	 */
-	public static function getImageElement($src, $alt, $attributes = array(), $lazy_load = false, $high_resolution = false)
+	public static function getImageElement($src, $alt, $attributes = array(), $lazy_load = false, $high_resolution = false, $breakpoints = null, $check_files = true)
 	{
 		$html = '';
 
+		$extensions_needing_fallbacks = array('webp', 'avif');
+		$mime_types = array('jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif', 'webp' => 'image/webp', 'avif' => 'image/avif');
+		$possible_fallback_extensions = array('png', 'jpg');
+
 		// get the image extension and the image path from $src
-		$image_path = File::stripExt($src);
-		$image_extension = File::getExt($src);
+		$source_path = File::stripExt($src);
+		$source_extension = File::getExt($src);
 
 		if (!$lazy_load) {
 			$attributes['loading'] = 'eager';
@@ -412,51 +418,169 @@ class Utilities
 			// make sure it is not removed from Joomla 4
 		}
 
-		$source_highres = false;
-		if ($high_resolution && File::exists(JPATH_SITE . '/' . $image_path . '@2x.' . $image_extension)) {
-			$source_highres = true;
-		}
+		if (!empty($breakpoints)) {
 
-		$extensions_needing_fallbacks = array('webp', 'avif');
-		$mime_types = array('webp' => 'image/webp', 'avif' => 'image/avif');
-		$possible_fallback_extensions = array('png', 'jpg');
+			$html .= '<picture>';
 
-		$fallback = false;
-		$fallback_highres = false;
-		$fallback_extension = '';
+			foreach ($breakpoints as $breakpoint) {
 
-		if (in_array($image_extension, $extensions_needing_fallbacks)) {
-			foreach ($possible_fallback_extensions as $possible_fallback_extension) {
-				if (File::exists(JPATH_SITE . '/' . $image_path . '.' . $possible_fallback_extension)) {
-					$fallback = true;
-					$fallback_extension = $possible_fallback_extension;
-					if ($high_resolution && File::exists(JPATH_SITE . '/' . $image_path . '@2x.' . $possible_fallback_extension)) {
-						$fallback_highres = true;
+				$source_highres_breakpoint = false;
+				if ($high_resolution) {
+					if ($check_files) {
+						if (File::exists(JPATH_SITE . '/' . $source_path . '_' . $breakpoint . '@2x.' . $source_extension)) {
+							$source_highres_breakpoint = true;
+						}
+					} else {
+						$source_highres_breakpoint = true;
 					}
-					break;
+				}
+
+				$fallback_breakpoint = false;
+				$fallback_extension_breakpoint = 'png';
+				$fallback_highres_breakpoint = false;
+
+				if (in_array($source_extension, $extensions_needing_fallbacks)) {
+
+					if ($check_files) {
+						foreach ($possible_fallback_extensions as $possible_fallback_extension) {
+							if (File::exists(JPATH_SITE . '/' . $source_path . '_' . $breakpoint . '.' . $possible_fallback_extension)) {
+								$fallback_breakpoint = true;
+								$fallback_extension_breakpoint = $possible_fallback_extension;
+								if ($high_resolution && File::exists(JPATH_SITE . '/' . $source_path . '_' . $breakpoint . '@2x.' . $possible_fallback_extension)) {
+									$fallback_highres_breakpoint = true;
+								}
+								break;
+							}
+						}
+					} else {
+						$fallback_breakpoint = true;
+						if ($high_resolution) {
+							$fallback_highres_breakpoint = true;
+						}
+					}
+				}
+
+				$html .= '<source type="' . $mime_types[$source_extension] . '" media="(max-width: ' . $breakpoint . 'px)" srcset="' . $source_path . '_' . $breakpoint . '.' . $source_extension . ($source_highres_breakpoint ? ' 1x,' . $source_path . '_' . $breakpoint . '@2x.' . $source_extension . ' 2x' : '') . '">';
+				if ($fallback_breakpoint) {
+					$html .= '<source type="' . $mime_types[$fallback_extension_breakpoint] . '" media="(max-width: ' . $breakpoint . 'px)" srcset="' . $source_path . '_' . $breakpoint . '.' . $fallback_extension_breakpoint . ($fallback_highres_breakpoint ? ' 1x,' . $source_path . '_' . $breakpoint . '@2x.' . $fallback_extension_breakpoint . ' 2x' : '') . '">';
 				}
 			}
-		}
 
-		if ($fallback) {
-			$html .= '<picture>';
-			$html .= '<source type="' . $mime_types[$image_extension] . '" srcset="' . $src . ($source_highres ? ' 1x,' . $image_path . '@2x.' . $image_extension . ' 2x' : '') . '">';
-		}
-
-		if ($fallback) {
-			if ($fallback_highres) {
-				$attributes['srcset'] = $image_path . '@2x.' . $fallback_extension . ' 2x';
+			$source_highres = false;
+			if ($high_resolution) {
+				if ($check_files) {
+					if (File::exists(JPATH_SITE . '/' . $source_path . '@2x.' . $source_extension)) {
+						$source_highres = true;
+					}
+				} else {
+					$source_highres = true;
+				}
 			}
-		} else {
-			if ($source_highres) {
-				$attributes['srcset'] = $image_path . '@2x.' . $image_extension . ' 2x';
+
+			$fallback = false;
+			$fallback_extension = 'png';
+			$fallback_highres = false;
+
+			if (in_array($source_extension, $extensions_needing_fallbacks)) {
+
+				if ($check_files) {
+					foreach ($possible_fallback_extensions as $possible_fallback_extension) {
+						if (File::exists(JPATH_SITE . '/' . $source_path . '.' . $possible_fallback_extension)) {
+							$fallback = true;
+							$fallback_extension = $possible_fallback_extension;
+							if ($high_resolution && File::exists(JPATH_SITE . '/' . $source_path . '@2x.' . $possible_fallback_extension)) {
+								$fallback_highres = true;
+							}
+							break;
+						}
+					}
+				} else {
+					$fallback = true;
+					if ($high_resolution) {
+						$fallback_highres = true;
+					}
+				}
 			}
-		}
 
-		$html .= HTMLHelper::_('image', $fallback ? $image_path . '.' . $fallback_extension : $src, $alt, $attributes);
+			if ($fallback) {
+				$html .= '<source type="' . $mime_types[$source_extension] . '" srcset="' . $src . ($source_highres ? ' 1x,' . $source_path . '@2x.' . $source_extension . ' 2x' : '') . '">';
+			}
 
-		if ($fallback) {
+			if ($fallback) {
+				if ($fallback_highres) {
+					$attributes['srcset'] = $source_path . '@2x.' . $fallback_extension . ' 2x';
+				}
+			} else {
+				if ($source_highres) {
+					$attributes['srcset'] = $source_path . '@2x.' . $source_extension . ' 2x';
+				}
+			}
+
+			$html .= HTMLHelper::_('image', $fallback ? $source_path . '.' . $fallback_extension : $src, $alt, $attributes);
+
 			$html .= '</picture>';
+
+		} else {
+
+			$source_highres = false;
+			if ($high_resolution) {
+				if ($check_files) {
+					if (File::exists(JPATH_SITE . '/' . $source_path . '@2x.' . $source_extension)) {
+						$source_highres = true;
+					}
+				} else {
+					$source_highres = true;
+				}
+			}
+
+			$fallback = false;
+			$fallback_extension = 'png';
+			$fallback_highres = false;
+
+			if (in_array($source_extension, $extensions_needing_fallbacks)) {
+
+				if ($check_files) {
+					foreach ($possible_fallback_extensions as $possible_fallback_extension) {
+						if (File::exists(JPATH_SITE . '/' . $source_path . '.' . $possible_fallback_extension)) {
+							$fallback = true;
+							$fallback_extension = $possible_fallback_extension;
+							if ($high_resolution && File::exists(JPATH_SITE . '/' . $source_path . '@2x.' . $possible_fallback_extension)) {
+								$fallback_highres = true;
+							}
+							break;
+						}
+					}
+				} else {
+					$fallback = true;
+					if ($high_resolution) {
+						$fallback_highres = true;
+					}
+				}
+			}
+
+			if ($fallback) {
+				$html .= '<picture>';
+			}
+
+			if ($fallback) {
+				$html .= '<source type="' . $mime_types[$source_extension] . '" srcset="' . $src . ($source_highres ? ' 1x,' . $source_path . '@2x.' . $source_extension . ' 2x' : '') . '">';
+			}
+
+			if ($fallback) {
+				if ($fallback_highres) {
+					$attributes['srcset'] = $source_path . '@2x.' . $fallback_extension . ' 2x';
+				}
+			} else {
+				if ($source_highres) {
+					$attributes['srcset'] = $source_path . '@2x.' . $source_extension . ' 2x';
+				}
+			}
+
+			$html .= HTMLHelper::_('image', $fallback ? $source_path . '.' . $fallback_extension : $src, $alt, $attributes);
+
+			if ($fallback) {
+				$html .= '</picture>';
+			}
 		}
 
 		return $html;
