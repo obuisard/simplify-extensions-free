@@ -15,6 +15,7 @@ use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Database\Exception\ExecutionFailureException;
 
 FormHelper::loadFieldClass('list');
 
@@ -46,7 +47,7 @@ class CustomFieldGroupsListField extends ListField
 			$results = array();
 			try {
 				$results = $db->loadObjectList();
-			} catch (\RuntimeException $e) {
+			} catch (ExecutionFailureException $e) {
 				Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 			}
 

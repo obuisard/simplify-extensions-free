@@ -12,6 +12,7 @@ use Joomla\CMS\Form\Field\GroupedListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Factory;
+use Joomla\Database\Exception\ExecutionFailureException;
 
 class ViewsField extends GroupedListField
 {
@@ -55,7 +56,7 @@ class ViewsField extends GroupedListField
 							$groups['[' . $extension_view . ']'][] = HTMLHelper::_('select.option', $extension_view . ':' . $result->value, $result->text, 'value', 'text', $disable = false);
 						}
 					}
-				} catch (\RuntimeException $e) {
+				} catch (ExecutionFailureException $e) {
 					//return false;
 				}
 			}
@@ -79,7 +80,7 @@ class ViewsField extends GroupedListField
 						$groups[0][] = HTMLHelper::_('select.option', $result->value, $result->text, 'value', 'text', $disable = false);
 					}
 				}
-			} catch (\RuntimeException $e) {
+			} catch (ExecutionFailureException $e) {
 				//return false;
 			}
 		}

@@ -13,6 +13,7 @@ use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
+use Joomla\Database\Exception\ExecutionFailureException;
 use SYW\Library\K2 as SYWK2;
 
 FormHelper::loadFieldClass('list');
@@ -70,7 +71,7 @@ class K2TagsField extends ListField
 				foreach ($items as $item) {
 					$options[] = HTMLHelper::_('select.option', $item->id, $item->name);
 				}
-			} catch (\RuntimeException $e) {
+			} catch (ExecutionFailureException $e) {
 				//return false;
 			}
 		}
