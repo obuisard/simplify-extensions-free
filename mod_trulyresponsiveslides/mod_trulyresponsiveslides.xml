@@ -279,6 +279,37 @@
 						
 					<field type="previewArrow" label="MOD_TRULYRESPONSIVESLIDER_PREVIEW_LABEL" />
 				</fieldset>
+				
+				<fieldset name="slider_thumbnails" label="MOD_TRULYRESPONSIVESLIDER_THUMBNAILS_LABEL">
+<!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_THUMBNAILS_LABEL" showon="animation!:basic" />						 -->
+				
+					<field name="thumb_w" type="sywverbosetext" default="80" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="animation!:basic" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBNAIL_WIDTH_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBNAIL_WIDTH_DESC" />
+					
+					<field name="thumb_h" type="sywverbosetext" default="60" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="animation!:basic" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBNAIL_HEIGHT_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBNAIL_HEIGHT_DESC" />
+					
+					<field name="crop_pic" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="animation!:basic"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CROPPICTURE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CROPPICTURE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				
+					<field name="quality_jpg" type="sywverbosetext" default="100" filter="integer" size="8" maxlength="3" min="0" max="100" showon="animation!:basic" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYJPG_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYJPG_DESC" />
+					
+					<field name="quality_png" type="sywverbosetext" default="0" filter="integer" size="8" maxlength="1" min="0" max="9" showon="animation!:basic" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYPNG_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYPNG_DESC" />
+					
+					<field name="quality_webp" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" showon="animation!:basic" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYWEBP_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYWEBP_DESC" />
+				</fieldset>
 			</fieldset>	
 			
 			<fieldset name="slide" label="MOD_TRULYRESPONSIVESLIDER_SLIDE_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_IMAGE_SLIDE_DESC">			
@@ -456,19 +487,16 @@
 <!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/transitions" class="alert alert-info" -->
 <!-- 					description="MOD_TRULYRESPONSIVESLIDER_ANIMATION_FIELDSET_DESC" /> -->
 				
-				<field name="type" type="radio" default="fade" layout="joomla.form.field.radio.switcher" 
+				<field name="type" type="transitionselect" default="fade" 
 					label="MOD_TRULYRESPONSIVESLIDER_FIELD_TYPE_LABEL" 
-					description="MOD_TRULYRESPONSIVESLIDER_FIELD_TYPE_DESC">
-					<option value="fade">MOD_TRULYRESPONSIVESLIDER_VALUE_FADE</option>
-					<option value="slide">MOD_TRULYRESPONSIVESLIDER_VALUE_SLIDE</option>
-				</field>
+					description="MOD_TRULYRESPONSIVESLIDER_FIELD_TYPE_DESC" />
 				
-				<field name="direction" type="radio" default="horizontal" layout="joomla.form.field.radio.switcher" 
-					label="MOD_TRULYRESPONSIVESLIDER_FIELD_DIRECTION_LABEL" 
-					description="MOD_TRULYRESPONSIVESLIDER_FIELD_DIRECTION_DESC">
-					<option value="horizontal">MOD_TRULYRESPONSIVESLIDER_HORIZONTAL</option>
-					<option value="vertical">MOD_TRULYRESPONSIVESLIDER_VERTICAL</option>
-				</field>
+<!-- 				<field name="direction" type="radio" default="horizontal" layout="joomla.form.field.radio.switcher"  -->
+<!-- 					label="MOD_TRULYRESPONSIVESLIDER_FIELD_DIRECTION_LABEL"  -->
+<!-- 					description="MOD_TRULYRESPONSIVESLIDER_FIELD_DIRECTION_DESC"> -->
+<!-- 					<option value="horizontal">MOD_TRULYRESPONSIVESLIDER_HORIZONTAL</option> -->
+<!-- 					<option value="vertical">MOD_TRULYRESPONSIVESLIDER_VERTICAL</option> -->
+<!-- 				</field> -->
 				
 				<field name="autostart" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
 					label="MOD_TRULYRESPONSIVESLIDER_FIELD_AUTOSTART_LABEL" 
@@ -563,11 +591,6 @@
 						<option value="images">MOD_TRULYRESPONSIVESLIDER_VALUE_IMAGESDIRECTORY</option>
 						<option value="cache">MOD_TRULYRESPONSIVESLIDER_VALUE_CACHEDIRECTORY</option>
 					</field>
-					
-<!-- 					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" message="MOD_TRULYRESPONSIVESLIDER_INFO_AUTORESETPLUGIN"  -->
-<!-- 						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset" -->
-<!-- 						imagesrc="media/mod_trulyresponsiveslides/images/logo_autoreset_small.png" -->
-<!-- 						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" /> -->
 				</fieldset>
 						
 				<fieldset name="advanced_headers" label="MOD_TRULYRESPONSIVESLIDER_HEADERFILES_LABEL">	

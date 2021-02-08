@@ -303,7 +303,7 @@ class Helper
 		$html .= '$("#slider_'.$id_suffix.'").flexslider({ ';
 			$html .= self::getAnimation($params->get('type', 'fade')).', ';
 			$html .= self::getAnimationLoop($params->get('loop', 0)).', ';
-			$html .= self::getDirection($params->get('direction', 'horizontal')).', ';
+			$html .= self::getDirection($params->get('direction', 'horizontal'), $params->get('type', 'fade')).', ';
 			$html .= self::getSlideshowSpeed($params->get('interval', 3000)).', ';
 			$html .= self::getAnimationSpeed($params->get('speed', 1000)).', ';
 			$html .= self::getPauseOnHover($params->get('pauseonslide', 1)).', ';
@@ -385,7 +385,7 @@ class Helper
 		$html .= '$("#slider_'.$id_suffix.'").flexslider({ ';
 			$html .= self::getAnimation($params->get('type', 'fade')).', ';
 			$html .= self::getAnimationLoop($params->get('loop', 0)).', ';
-			$html .= self::getDirection($params->get('direction', 'horizontal')).', ';
+			$html .= self::getDirection($params->get('direction', 'horizontal'), $params->get('type', 'fade')).', ';
 			$html .= self::getSlideshowSpeed($params->get('interval', 3000)).', ';
 			$html .= self::getAnimationSpeed($params->get('speed', 1000)).', ';
 			$html .= self::getPauseOnHover($params->get('pauseonslide', 1)).', ';
@@ -442,7 +442,12 @@ class Helper
 	}
 
 	static protected function getAnimation($type) {
-		return 'animation: "'.$type.'"';
+		
+		switch ($type) {
+			case 'slide': case 'slidev' : return 'animation: "slide"';
+		}
+		
+		return 'animation: "fade"';
 	}
 
 	static protected function getAnimationLoop($loop) {
@@ -450,8 +455,14 @@ class Helper
 		return 'animationLoop: '.$animation_loop;
 	}
 
-	static protected function getDirection($direction) {
-		return 'direction: "'.$direction.'"';
+	static protected function getDirection($direction, $type = 'fade') {
+		
+		switch ($type) {
+			//case 'slide' : if ($direction == 'vertical') { return 'direction: "vertical"'; };
+			case 'slidev' : return 'direction: "vertical"';
+		}
+		
+		return 'direction: "horizontal"';
 	}
 
 	/* time between changes */

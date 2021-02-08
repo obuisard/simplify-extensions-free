@@ -125,6 +125,11 @@ class CSSFileCache extends HeaderFilesCache
 		$dot_navigation = $params->get('dot_navigation', 'under');
 		$variables[] = 'dot_navigation';
 
+		// transitions
+
+		$transition = $params->get('type', 'fade');
+		$variables[] = 'transition';
+
 		// set all necessary parameters
 		$this->params = compact($variables);
 	}
@@ -144,6 +149,16 @@ class CSSFileCache extends HeaderFilesCache
 		$this->sendHttpHeaders('css');
 
 		include JPATH_ROOT . '/media/mod_trulyresponsiveslides/styles/style.css.php';
+
+		if ($transition == 'zoomout') {
+			echo '#slider_' . $suffix . ' .slides { overflow: hidden }';
+			echo '#slider_' . $suffix . ' .slides li img { -webkit-transition: -webkit-transform 1.5s ease-in-out; transition: -webkit-transform 1.5s ease-in-out; -o-transition: transform 1.5s ease-in-out; transition: transform 1.5s ease-in-out; }';
+			echo '#slider_' . $suffix . ' .slides li.flex-active-slide img { -webkit-transform: scale(1.225); -ms-transform: scale(1.225); transform: scale(1.225); }';
+		} else if ($transition == 'zoomin') {
+			echo '#slider_' . $suffix . ' .slides { overflow: hidden }';
+			echo '#slider_' . $suffix . ' .slides li img { -webkit-transition: -webkit-transform 1.5s ease-in-out; transition: -webkit-transform 1.5s ease-in-out; -o-transition: transform 1.5s ease-in-out; transition: transform 1.5s ease-in-out; -webkit-transform: scale(1.225); -ms-transform: scale(1.225); transform: scale(1.225); }';
+			echo '#slider_' . $suffix . ' .slides li.flex-active-slide img { -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1); }';
+		}
 
 		return $this->compress(ob_get_clean());
 	}
