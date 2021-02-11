@@ -13,6 +13,7 @@
 	<changelogurl>https://updates.simplifyyourweb.com/free/latestnewsenhanced/changelog.xml</changelogurl>
 	<description>PKG_LATESTNEWSENHANCED_XML_DESCRIPTION</description> 
 	<scriptfile>installer.php</scriptfile>
+	<variant>free</variant>
 	<languages>
 		<language tag="da-DK">language/da-DK/da-DK.pkg_latestnewsenhanced.sys.ini</language>
 		<language tag="de-DE">language/de-DE/de-DE.pkg_latestnewsenhanced.sys.ini</language>
