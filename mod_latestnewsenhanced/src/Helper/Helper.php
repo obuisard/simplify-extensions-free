@@ -946,6 +946,10 @@ class Helper
 		// remove potential 'newsextra' block when no data is available
 		$info_block = str_replace('<dd class="newsextra"></dd>', '', $info_block);
 
+		if (strpos($info_block, 'dd') === false) {
+			return ''; // accessibility rule: if no dd then no dt is allowed
+		}
+
 		return $info_block;
 	}
 

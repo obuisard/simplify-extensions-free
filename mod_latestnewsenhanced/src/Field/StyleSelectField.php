@@ -57,7 +57,7 @@ class StyleSelectField extends DynamicSingleSelect
 			if (File::exists(JPATH_ROOT.$path.'/'.$option.'/style.css.php')) {
 				$options[] = array($option, $translated_option, $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover);
 			} else {
-				$options_disabled[] = array($option, $translated_option . ' (Pro)', $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover, 'disabled');
+				$options_disabled[] = array($option, $translated_option . ' (Pro)', $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover, 'disabled', 'Pro');
 			}
 		}
 

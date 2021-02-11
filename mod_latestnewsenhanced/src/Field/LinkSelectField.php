@@ -9,13 +9,11 @@ namespace SYW\Module\LatestNewsEnhanced\Site\Field;
 defined( '_JEXEC' ) or die;
 
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Form\Field\GroupedListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use Joomla\Database\Exception\ExecutionFailureException;
 use SYW\Library\K2 as SYWK2;
 
 class LinkSelectField extends GroupedListField
@@ -48,35 +46,7 @@ class LinkSelectField extends GroupedListField
 	static function getK2Fields($allowed_types = array())
 	{
 		if (!isset(self::$k2_fields)) {
-
-			$db = Factory::getDBO();
-
-			$query = $db->getQuery(true);
-
-			$query->select('fields.id');
-			$query->select('fields.type');
-			$query->select('fields.name');
-			$query->select('groups.name AS group_name');
-			$query->from('#__k2_extra_fields AS fields');
-			$query->where($db->quoteName('fields.published').' = 1');
-
-			if (!empty($allowed_types)) {
-				$query->where($db->quoteName('fields.type').' IN ("'.implode('","', $allowed_types).'")');
-			}
-
-			$query->order($db->quoteName('fields.ordering'));
-
-			$query->innerJoin('#__k2_extra_fields_groups AS groups ON groups.id = fields.group');
-
-			$db->setQuery($query);
-
-			try {
-				$fields = $db->loadObjectList();
-			} catch (ExecutionFailureException $e) {
-				$fields = array();
-			}
-
-			self::$k2_fields = $fields;
+			self::$k2_fields = SYWK2::getK2Fields($allowed_types);
 		}
 
 		return self::$k2_fields;
