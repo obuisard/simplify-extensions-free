@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<field name="filter" type="sywimagefilterpicker" filters="blur,sharpen,sepia,grayscale,sketch,negate,emboss,edgedetect" cssfilters="true" default="none"
+		label="MOD_TROMBINOSCOPE_FIELD_IMAGEFILTER_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_IMAGEFILTER_DESC" />
+</form>

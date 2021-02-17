@@ -94,11 +94,18 @@ abstract class Helper
 	 */
 	public static function getPictureFilters($params)
 	{
-		$filter = $params->get('filter', 'none');
-		if (is_array($filter)) {
-			return array('filters' => $filter);
+		$filters = array();
+
+		$image_filters = $params->get('image_filters', null);
+		if (!empty($image_filters) && is_object($image_filters)) {
+			foreach ($image_filters as $image_filter) {
+				if ($image_filter->filter && $image_filter->filter != 'none') {
+					$filters[] = $image_filter->filter;
+				}
+			}
 		}
-		return array('filters' => array($filter));
+
+		return array('filters' => array_unique($filters));
 	}
 
 	/**

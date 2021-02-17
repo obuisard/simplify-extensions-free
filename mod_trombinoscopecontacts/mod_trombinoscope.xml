@@ -689,13 +689,18 @@
 	                    <option value="0">JNO</option>
 						<option value="1">JYES</option>
 					</field>
+				
+					<field name="filter_original" type="sywimagefilterpicker" cssfilters="true" gdfilters="false" default="none" showon="s_pic:1[AND]crop_pic:0" 
+						label="MOD_TROMBINOSCOPE_FIELD_IMAGEFILTER_LABEL"
+						description="MOD_TROMBINOSCOPE_FIELD_IMAGEFILTERORIGINAL_DESC" />
 					
 <!-- 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_GDTEST" style="warning" showon="s_pic:1[AND]crop_pic:1" /> -->
 					<field type="gdtest" supportedtypes="gif,jpg,png,webp" message="MOD_TROMBINOSCOPE_MESSAGE_GDTEST" showon="s_pic:1[AND]crop_pic:1" />
 					
-					<field name="filter" type="sywimagefiltermultipicker" default="none" selectionmax="2" filters="blur,sharpen,sepia,grayscale,sketch,negate,emboss,edgedetect" showon="s_pic:1[AND]crop_pic:1" 
-						label="MOD_TROMBINOSCOPE_FIELD_IMAGEFILTER_LABEL" 
-						description="MOD_TROMBINOSCOPE_FIELD_IMAGEFILTER_DESC" />			
+					<field name="image_filters" type="subform" formsource="modules/mod_trombinoscope/forms/fields/imagefilters.xml" multiple="true" max="2" showon="s_pic:1[AND]crop_pic:1"
+						default="{'filter':'none'}"
+	   					label="MOD_TROMBINOSCOPE_IMAGEFILTERS_LABEL" 
+	   					description="MOD_TROMBINOSCOPE_IMAGEFILTERS_DESC" />
 					
 					<field name="quality" type="sywverbosetext" default="100" filter="integer" size="12" maxlength="3" min="0" max="100" showon="s_pic:1[AND]crop_pic:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_IMAGEQUALITY_LABEL" 

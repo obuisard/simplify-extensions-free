@@ -139,6 +139,43 @@ class CSSFileCache extends HeaderFilesCache
 		$picture_scale = $params->get('scale', 1);
 		$variables[] = 'picture_scale';
 
+		// image filters
+
+		$filters = array();
+
+		if ($params->get('crop_pic', 1)) {
+
+			$image_filters = $params->get('image_filters', null);
+			if (!empty($image_filters) && is_object($image_filters)) {
+				foreach ($image_filters as $image_filter) {
+					if ($image_filter->filter && strpos($image_filter->filter, '_css') !== false) {
+						$filters[] = str_replace('_css', '', $image_filter->filter);
+					}
+				}
+			}
+		} else {
+			$image_filter = $params->get('filter_original', 'none');
+			if (strpos($image_filter, '_css') !== false) {
+				$filters[] = str_replace('_css', '', $image_filter);
+			}
+		}
+
+		if (!empty($filters)) {
+
+			$css_filters = '';
+			foreach ($filters as $filter) {
+				switch($filter) {
+					case 'sepia': $css_filters .= 'sepia(100%) '; break;
+					case 'grayscale': $css_filters .= 'grayscale(100%) '; break;
+					case 'negate': $css_filters .= 'invert(100%) ';
+				}
+			}
+
+			if ($css_filters) {
+				$variables[] = 'css_filters';
+			}
+		}
+
 		// text
 
 		$font_override = false;
@@ -240,6 +277,12 @@ class CSSFileCache extends HeaderFilesCache
 
 		include JPATH_ROOT . '/media/mod_trombinoscopecontacts/styles/style.css.php';
 		include JPATH_ROOT . '/media/mod_trombinoscopecontacts/styles/themes/' . $theme . '/style.css.php';
+
+		// image CSS filters
+
+		if (isset($css_filters)) {
+			echo $prefix . ' .picture img { -webkit-filter: ' . rtrim($css_filters) . '; filter: ' . rtrim($css_filters) . '; }';
+		}
 
 		return $this->compress(ob_get_clean());
 	}
