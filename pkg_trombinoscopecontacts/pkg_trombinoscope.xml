@@ -12,6 +12,7 @@
 	<version>4.4.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/trombinoscopecontacts/changelog.xml</changelogurl>
 	<description>PKG_TROMBINOSCOPE_XML_DESCRIPTION</description> 
+	<variant>free</variant>
 	<scriptfile>installer.php</scriptfile>
 	<languages>
 		<language tag="cs-CZ">language/cs-CZ/cs-CZ.pkg_trombinoscope.sys.ini</language>
