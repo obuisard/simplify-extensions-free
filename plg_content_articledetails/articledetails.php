@@ -148,6 +148,8 @@ class plgContentArticleDetails extends CMSPlugin
 
 			$this->_syntax_exists = true;
 
+			$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
 			// add styles
 
 			if ($this->params->get('load_icon_font', true)) {
@@ -169,14 +171,16 @@ class plgContentArticleDetails extends CMSPlugin
 			$result = $cache_css->cache('style_article.css', $clear_header_files_cache);
 
 			if ($result) {
-				Factory::getDocument()->addStyleSheet($cache_css->getCacheURL() . '/plg_content_articledetails/style_article.css');
+				//Factory::getDocument()->addStyleSheet($cache_css->getCacheURL() . '/plg_content_articledetails/style_article.css');
+				$wam->registerAndUseStyle('adp.article_style', $cache_css->getCachePath() . '/style_article.css');
 			}
 
-			$cache_css_print = new CSSPrintFile('plg_content_articledetails', $this->params);
+			$cache_css_print = new CSSPrintFileCache('plg_content_articledetails', $this->params);
 			$result = $cache_css_print->cache('print_article.css', $clear_header_files_cache);
 
 			if ($result) {
-				Factory::getDocument()->addStyleSheet($cache_css_print->getCacheURL() . '/plg_content_articledetails/print_article.css', [], ['media' => 'print']);
+				//Factory::getDocument()->addStyleSheet($cache_css_print->getCacheURL() . '/plg_content_articledetails/print_article.css', [], ['media' => 'print']);
+				$wam->registerAndUseStyle('adp.article_print_style', $cache_css_print->getCachePath() . '/print_article.css', [], ['media' => 'print']);
 			}
 		}
 	}
@@ -207,7 +211,10 @@ class plgContentArticleDetails extends CMSPlugin
 		}
 
 		if ($view == 'article' || $view == 'category' || $view == 'featured') {
+
 			if ($this->_foundCategory($row->catid)) {
+
+				$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 				// heads
 
@@ -250,14 +257,16 @@ class plgContentArticleDetails extends CMSPlugin
 				$result = $cache_css->cache('style_'.$view.'.css', $clear_header_files_cache);
 
 				if ($result) {
-					Factory::getDocument()->addStyleSheet($cache_css->getCacheURL() . '/plg_content_articledetails/style_'.$view.'.css');
+					//Factory::getDocument()->addStyleSheet($cache_css->getCacheURL() . '/plg_content_articledetails/style_'.$view.'.css');
+					$wam->registerAndUseStyle('adp.' . $view . '_style', $cache_css->getCachePath() . '/style_' . $view . '.css');
 				}
 
 				$cache_css_print = new CSSPrintFileCache('plg_content_articledetails', $this->params);
 				$result = $cache_css_print->cache('print_'.$view.'.css', $clear_header_files_cache);
 
 				if ($result) {
-					Factory::getDocument()->addStyleSheet($cache_css_print->getCacheURL() . '/plg_content_articledetails/print_'.$view.'.css', [], ['media' => 'print']);
+					//Factory::getDocument()->addStyleSheet($cache_css_print->getCacheURL() . '/plg_content_articledetails/print_'.$view.'.css', [], ['media' => 'print']);
+					$wam->registerAndUseStyle('adp.' . $view . '_print_style', $cache_css_print->getCachePath() . '/print_' . $view . '.css', [], ['media' => 'print']);
 				}
 
 				return $this->_createOutputBefore($context, $row, $params, $page, $view);
