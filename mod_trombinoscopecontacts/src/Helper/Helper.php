@@ -258,169 +258,175 @@ abstract class Helper
 		// contact selection
 		$selection = $params->get('selection', 'categories');
 
-		// metakeys filtering
-
 		$metakeys = array();
-		$item_on_page_keys = array();
+		$tags = array();
 
-		if ($selection == 'related') {
+		if ($selection != 'contact') { // we don't want to go through metakeys and tags if we just want the contact selected
 
-			$item_on_page_id = '';
-			if (($option == 'com_contact' || $option == 'com_trombinoscopeextended') && $view == 'contact') {
-				$temp = $app->input->getString('id');
-				$temp = explode(':', $temp);
-				$item_on_page_id = $temp[0];
-			}
+			// metakeys filtering
 
-			if ($item_on_page_id) { // the content is a standard contact or a TCP contact page
+			//$metakeys = array();
+			$item_on_page_keys = array();
 
-				$query->select($db->quoteName('metakey'));
-				$query->from($db->quoteName('#__contact_details'));
-				$query->where($db->quoteName('id').' = '.$item_on_page_id);
+			if ($selection == 'related') {
 
-				$db->setQuery($query);
-
-				try {
-					$result = $db->loadResult();
-				} catch (ExecutionFailureException $e) {
-					$app->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
-					return null;
+				$item_on_page_id = '';
+				if (($option == 'com_contact' || $option == 'com_trombinoscopeextended') && $view == 'contact') {
+					$temp = $app->input->getString('id');
+					$temp = explode(':', $temp);
+					$item_on_page_id = $temp[0];
 				}
 
-				$result = trim($result);
-				if (empty($result)) {
-					return array(); // won't find a related contact if no key is present
-				}
+				if ($item_on_page_id) { // the content is a standard contact or a TCP contact page
 
-				$keys = explode(',', $result);
+					$query->select($db->quoteName('metakey'));
+					$query->from($db->quoteName('#__contact_details'));
+					$query->where($db->quoteName('id').' = '.$item_on_page_id);
 
-				// assemble any non-blank word(s)
-				foreach ($keys as $key) {
-					$key = trim($key);
-					if ($key) {
-						$item_on_page_keys[] = $key;
+					$db->setQuery($query);
+
+					try {
+						$result = $db->loadResult();
+					} catch (ExecutionFailureException $e) {
+						$app->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+						return null;
 					}
-				}
 
-				if (empty($item_on_page_keys)) {
-					return array();
-				}
-
-				$query->clear();
-
-				$related_id = $item_on_page_id;
-			} else {
-				return null; // no result (was not on contact page)
-			}
-		}
-
-		// explode the meta keys on a comma
-		$keys = explode(',', $params->get('keys', ''));
-
-		// assemble any non-blank word(s)
-		foreach ($keys as $key) {
-			$key = trim($key);
-			if ($key) {
-				$metakeys[] = $key;
-			}
-		}
-
-		if (!empty($item_on_page_keys)) {
-			if (!empty($metakeys)) { // if none of the tags we filter are in the content item on the page, return nothing
-
-				$keys_in_common = array_intersect($item_on_page_keys, $metakeys);
-				if (empty($keys_in_common)) {
-					return array();
-				}
-
-				$metakeys = $keys_in_common;
-
-			} else {
-				$metakeys = $item_on_page_keys;
-			}
-		}
-
-		// tags filtering
-
-		$tags = $params->get('tags', array());
-		$item_on_page_tagids = array();
-
-		if ($selection == 'relatedbytags' || $selection == 'relatedcontactbytags') {
-
-			if ($option == 'com_trombinoscopeextended' && $view == 'contact') { // because tags are recorded with com_contact
-				$option = 'com_contact';
-			}
-
-			$get_the_tags = false;
-			if ($selection == 'relatedcontactbytags' && $option == 'com_contact' && $view == 'contact') {
-				$get_the_tags = true;
-			} else if ($selection == 'relatedbytags') {
-				$get_the_tags = true;
-			}
-
-			if ($get_the_tags) {
-				$temp = $app->input->getString('id');
-				$temp = explode(':', $temp);
-				$item_on_page_id = $temp[0];
-
-				if ($item_on_page_id) {
-					$helper_tags = new TagsHelper();
-					$tag_objects = $helper_tags->getItemTags($option.'.'.$view, $item_on_page_id);
-					foreach ($tag_objects as $tag_object) {
-						$item_on_page_tagids[] = $tag_object->tag_id;
+					$result = trim($result);
+					if (empty($result)) {
+						return array(); // won't find a related contact if no key is present
 					}
-				}
 
-				if (empty($item_on_page_tagids)) {
-					return array(); // no result because no tag found for the object on the page
-				}
+					$keys = explode(',', $result);
 
-				if ($option == 'com_contact' && $view == 'contact') { // we do get rid of the contact only if the related element is a contact
+					// assemble any non-blank word(s)
+					foreach ($keys as $key) {
+						$key = trim($key);
+						if ($key) {
+							$item_on_page_keys[] = $key;
+						}
+					}
+
+					if (empty($item_on_page_keys)) {
+						return array();
+					}
+
+					$query->clear();
+
 					$related_id = $item_on_page_id;
+				} else {
+					return null; // no result (was not on contact page)
 				}
-			} else {
-				return null; // no result (was not on contact page)
 			}
-		}
 
-		if (!empty($tags)) {
+			// explode the meta keys on a comma
+			$keys = explode(',', $params->get('keys', ''));
 
-			// if all selected, get all available tags
-			$array_of_tag_values = array_count_values($tags);
-			if (isset($array_of_tag_values['all']) && $array_of_tag_values['all'] > 0) { // 'all' was selected
-				$tags = array();
-				$tag_objects = SYWTags::getTags('com_contact.contact');
-				if ($tag_objects !== false) {
-					foreach ($tag_objects as $tag_object) {
-						$tags[] = $tag_object->id;
+			// assemble any non-blank word(s)
+			foreach ($keys as $key) {
+				$key = trim($key);
+				if ($key) {
+					$metakeys[] = $key;
+				}
+			}
+
+			if (!empty($item_on_page_keys)) {
+				if (!empty($metakeys)) { // if none of the tags we filter are in the content item on the page, return nothing
+
+					$keys_in_common = array_intersect($item_on_page_keys, $metakeys);
+					if (empty($keys_in_common)) {
+						return array();
 					}
-				}
 
-				if (empty($tags) /*&& $params->get('tags_inex', 1)*/) { // won't return any contact if no contact has been associated to any tag (TODO when include tags only)
-					return array();
+					$metakeys = $keys_in_common;
+
+				} else {
+					$metakeys = $item_on_page_keys;
 				}
 			}
-		}
 
-		if (!empty($item_on_page_tagids)) {
-			if (!empty($tags)) { // if none of the tags we filter are in the content item on the page, return nothing
+			// tags filtering
 
-				// take the tags common to the item on the page and the module selected tags
-				$tags_in_common = array_intersect($item_on_page_tagids, $tags);
-				if (empty($tags_in_common)) {
-					return array();
+			$tags = $params->get('tags', array());
+			$item_on_page_tagids = array();
+
+			if ($selection == 'relatedbytags' || $selection == 'relatedcontactbytags') {
+
+				if ($option == 'com_trombinoscopeextended' && $view == 'contact') { // because tags are recorded with com_contact
+					$option = 'com_contact';
 				}
 
-				if ($params->get('tags_match', 'any') == 'all') {
-					if (count($tags_in_common) != count($tags)) {
+				$get_the_tags = false;
+				if ($selection == 'relatedcontactbytags' && $option == 'com_contact' && $view == 'contact') {
+					$get_the_tags = true;
+				} else if ($selection == 'relatedbytags') {
+					$get_the_tags = true;
+				}
+
+				if ($get_the_tags) {
+					$temp = $app->input->getString('id');
+					$temp = explode(':', $temp);
+					$item_on_page_id = $temp[0];
+
+					if ($item_on_page_id) {
+						$helper_tags = new TagsHelper();
+						$tag_objects = $helper_tags->getItemTags($option.'.'.$view, $item_on_page_id);
+						foreach ($tag_objects as $tag_object) {
+							$item_on_page_tagids[] = $tag_object->tag_id;
+						}
+					}
+
+					if (empty($item_on_page_tagids)) {
+						return array(); // no result because no tag found for the object on the page
+					}
+
+					if ($option == 'com_contact' && $view == 'contact') { // we do get rid of the contact only if the related element is a contact
+						$related_id = $item_on_page_id;
+					}
+				} else {
+					return null; // no result (was not on contact page)
+				}
+			}
+
+			if (!empty($tags)) {
+
+				// if all selected, get all available tags
+				$array_of_tag_values = array_count_values($tags);
+				if (isset($array_of_tag_values['all']) && $array_of_tag_values['all'] > 0) { // 'all' was selected
+					$tags = array();
+					$tag_objects = SYWTags::getTags('com_contact.contact');
+					if ($tag_objects !== false) {
+						foreach ($tag_objects as $tag_object) {
+							$tags[] = $tag_object->id;
+						}
+					}
+
+					if (empty($tags) /*&& $params->get('tags_inex', 1)*/) { // won't return any contact if no contact has been associated to any tag (TODO when include tags only)
 						return array();
 					}
 				}
+			}
 
-				$tags = $tags_in_common;
+			if (!empty($item_on_page_tagids)) {
+				if (!empty($tags)) { // if none of the tags we filter are in the content item on the page, return nothing
 
-			} else {
-				$tags = $item_on_page_tagids;
+					// take the tags common to the item on the page and the module selected tags
+					$tags_in_common = array_intersect($item_on_page_tagids, $tags);
+					if (empty($tags_in_common)) {
+						return array();
+					}
+
+					if ($params->get('tags_match', 'any') == 'all') {
+						if (count($tags_in_common) != count($tags)) {
+							return array();
+						}
+					}
+
+					$tags = $tags_in_common;
+
+				} else {
+					$tags = $item_on_page_tagids;
+				}
 			}
 		}
 
@@ -490,6 +496,7 @@ abstract class Helper
 		$query->join('INNER', '#__categories AS cc ON cd.catid = cc.id');
 
 		$count = '';
+		$startat = 1;
 
 		if ($selection == 'contact') {
 			$contact_id = $params->get('contact_id', '');
@@ -498,13 +505,21 @@ abstract class Helper
 			} else {
 				return null;
 			}
-		} else if ($selection == 'user') {
-			if ($user->id > 0) {
-				$query->where('cd.user_id='.$user->id);
-			} else {
-				return null;
-			}
+// 		} else if ($selection == 'user') {
+// 			if ($user->id > 0) {
+// 				$query->where('cd.user_id='.$user->id);
+// 			} else {
+// 				return null;
+// 			}
 		} else {
+
+			if ($selection == 'user') {
+				if ($user->id > 0) {
+					$query->where('cd.user_id='.$user->id);
+				} else {
+					return null;
+				}
+			}
 
 			$count = trim($params->get('count', ''));
 			$startat = $params->get('startat', 1);
