@@ -12,7 +12,11 @@
 	<version>1.14.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/trulyresponsiveslides/changelog.xml</changelogurl>
 	<description>PKG_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description> 
+	
 	<scriptfile>installer.php</scriptfile>
+	
+	<variant>free</variant>
+	
 	<languages>
 		<language tag="de-DE">language/de-DE/de-DE.pkg_trulyresponsiveslides.sys.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.pkg_trulyresponsiveslides.sys.ini</language>
