@@ -12,7 +12,11 @@
 	<version>4.0.2</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/jqueryeasy/changelog.xml</changelogurl>
 	<description>PKG_JQUERYEASY_XML_DESCRIPTION</description> 
+	
 	<scriptfile>installer.php</scriptfile>
+	
+	<variant>free</variant>
+	
 	<languages>		
 		<language tag="bg-BG">language/bg-BG/bg-BG.pkg_jqueryeasy.sys.ini</language>
 	  	<language tag="de-DE">language/de-DE/de-DE.pkg_jqueryeasy.sys.ini</language>
