@@ -17,6 +17,7 @@
 		<filename module="mod_library_test">mod_library_test.php</filename>
 		<filename>index.html</filename>
 		<filename>license.txt</filename>
+		<folder>forms</folder>
 		<folder>tmpl</folder>
 	</files>
 	<languages>
@@ -270,7 +271,12 @@
 				<!-- SYWImageFilterMultiPicker -->
 				<field name="filter4" type="sywimagefiltermultipicker" default="none" selectionmax="2" filters="blur,sharpen,duotone,sepia,grayscale,sketch,pixelate,negate,emboss,edgedetect" selectedcolor="#fc930a" 
 					label="Image Filter (2 choices)" 
-					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />					
+					
+				<field name="image_filters" type="subform" formsource="modules/mod_library_test/forms/fields/imagefilters.xml" multiple="true" max="2"
+					default="{'filter':'none'}"
+	   				label="Filters" 
+	   				description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
 			
 			</fieldset>
 			
