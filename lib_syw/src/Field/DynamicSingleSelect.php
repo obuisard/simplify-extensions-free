@@ -46,23 +46,44 @@ class DynamicSingleSelect extends ListField
 			document.addEventListener("readystatechange", function(event) {
 				if (event.target.readyState == "complete") {
 					let my_object = document.getElementById("' . $this->id . '_elements");
-
-					let input_field = document.getElementById("' . $this->id . '_id");
-					let enabled_children = my_object.querySelectorAll(".element.enabled");
-					for (let i = 0; i < enabled_children.length; i++) {
-						if (enabled_children[i].getAttribute("data-option") == "' . $this->value . '") {
-							enabled_children[i].classList.add("selected");
-						}
-
-						enabled_children[i].addEventListener("click", function(event) {
-							input_field.value = this.getAttribute("data-option");
-							input_field.dispatchEvent(new Event("change"));
-							for (let j = 0; j < enabled_children.length; j++) {
-								enabled_children[j].classList.remove("selected");
+					if (my_object != null) {
+						let input_field = document.getElementById("' . $this->id . '_id");
+						let enabled_children = my_object.querySelectorAll(".element.enabled");
+						for (let i = 0; i < enabled_children.length; i++) {
+							if (enabled_children[i].getAttribute("data-option") == "' . $this->value . '") {
+								enabled_children[i].classList.add("selected");
 							}
-							this.classList.add("selected");
-						});
+
+							enabled_children[i].addEventListener("click", function(event) {
+								input_field.value = this.getAttribute("data-option");
+								input_field.dispatchEvent(new Event("change"));
+								for (let j = 0; j < enabled_children.length; j++) {
+									enabled_children[j].classList.remove("selected");
+								}
+								this.classList.add("selected");
+							});
+						}
 					}
+
+					document.addEventListener("subform-row-add", function(e) {
+						let enabled_children = e.detail.row.querySelectorAll(".element.enabled");
+
+						for (let i = 0; i < enabled_children.length; i++) {
+							if (enabled_children[i].getAttribute("data-option") == "' . $this->default . '") {
+								enabled_children[i].classList.add("selected");
+							}
+
+							enabled_children[i].addEventListener("click", function(event) {
+								let inputfield = this.parentNode.parentNode.querySelector("input");
+								inputfield.value = this.getAttribute("data-option");
+								inputfield.dispatchEvent(new Event("change"));
+								for (let j = 0; j < enabled_children.length; j++) {
+									enabled_children[j].classList.remove("selected");
+								}
+								this.classList.add("selected");
+							});
+						}
+					});
 				}
 			});
 		');
@@ -78,7 +99,7 @@ class DynamicSingleSelect extends ListField
 			#".$this->id."_elements .element.selected { background-color: ".$this->selectedcolor."; color: #fff }
 			#".$this->id."_elements .element.disabled { opacity: 0.65; filter: alpha(opacity=65); cursor: default; }
 			#".$this->id."_elements .images-container { display: inline-block; position: relative; width: ".$this->width."px; height: ".$this->height."px; margin-bottom: 5px;" . ($this->imagebgcolor ? " background-color: " . $this->imagebgcolor : "") . " }
-			#".$this->id."_elements .images-container .imagelabel { position: absolute; top: 5px; left: 5px; z-index: 100 }
+			#".$this->id."_elements .images-container .imagelabel { position: absolute; top: 5px; left: 5px; z-index: 10 }
 			#".$this->id."_elements .title { width: ".$this->width."px; }
 			#".$this->id."_elements .description { width: ".$this->width."px; font-size: .8em }
 			#".$this->id."_elements .element img { display: block; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); -webkit-transition: opacity .4s ease; transition: opacity .4s ease; max-width: ".$this->width."px; max-height: ".$this->height."px; }
@@ -101,7 +122,8 @@ class DynamicSingleSelect extends ListField
 			$value = $this->value;
 		}
 
-		$html = '<div id="'.$this->id.'_elements" class="elements">';
+		$html = '<div class="dynamicfield">';
+		$html .= '<div id="'.$this->id.'_elements" class="elements">';
 
 		foreach ($options as $option) {
 
@@ -160,6 +182,7 @@ class DynamicSingleSelect extends ListField
 
 		$html .= '</div>';
 		$html .= '<input type="hidden" id="'.$this->id.'_id" name="'.$this->name.'" value="'.$value.'" />';
+		$html .= '</div>';
 
 		return $html;
 	}
