@@ -50,6 +50,7 @@ class SYWImageFilterPickerField extends DynamicSingleSelect
 				$config_value = $config_params->get($this->fieldname);
 
 				if (!is_null($config_value)) {
+					$config_value = str_replace('_css', '', $config_value);
 					$options[] = array('', Text::sprintf('JGLOBAL_USE_GLOBAL_VALUE', Text::_('LIB_SYW_IMAGEFILTERPICKER_'.strtoupper($config_value))), '', $path . $config_value . '.jpg', '');
 				} else {
 					$options[] = array('', Text::_('JGLOBAL_USE_GLOBAL'), '('.Text::_('LIB_SYW_GLOBAL_UNKNOWN').')', '', '');
