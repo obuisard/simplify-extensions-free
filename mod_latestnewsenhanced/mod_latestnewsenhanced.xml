@@ -474,6 +474,10 @@
 					<field name="item_spacebetween" type="sywverbosetext" default="0" size="4" unit="px" filter="integer" icon="SYWicon-swap-horiz" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEBETWEENITEMS_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEBETWEENITEMS_DESC" />
+				
+					<field name="items_align" type="sywspacingselect" default="c" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSALIGNMENT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSALIGNMENT_DESC" />
 				</fieldset>
 					
 				<fieldset name="layout_head" label="MOD_LATESTNEWSENHANCEDEXTENDED_HEAD_LABEL">

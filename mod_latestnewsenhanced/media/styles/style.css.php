@@ -32,9 +32,36 @@ header("Content-type: text/css; charset=UTF-8");
 		-ms-flex-wrap: wrap;
 		flex-wrap: wrap;
 
-		-webkit-box-pack: center;
-		-ms-flex-pack: center;
-		justify-content: center;
+		<?php if ($items_align == 'fs') : ?>
+	    	-webkit-box-pack: start;
+			-webkit-justify-content: flex-start;
+	    	-ms-flex-pack: start;
+	        justify-content: flex-start;
+	    <?php elseif ($items_align == 'fe') : ?>
+	    	-webkit-box-pack: end;
+			-webkit-justify-content: flex-end;
+	    	-ms-flex-pack: end;
+	        justify-content: flex-end;
+	    <?php elseif ($items_align == 'c') : ?>
+	    	-webkit-box-pack: center;
+			-webkit-justify-content: center;
+	    	-ms-flex-pack: center;
+	        justify-content: center;
+	    <?php elseif ($items_align == 'sb') : ?>
+	    	-webkit-box-pack: justify;
+	    	-webkit-justify-content: space-between;
+	        -ms-flex-pack: justify;
+	        justify-content: space-between;
+	    <?php elseif ($items_align == 'se') : ?>
+	    	-webkit-box-pack: space-evenly;
+			-webkit-justify-content: space-evenly;
+			-ms-flex-pack: space-evenly;
+	        justify-content: space-evenly;
+	    <?php else : ?>
+	    	-webkit-justify-content: space-around;
+			-ms-flex-pack: distribute;
+	        justify-content: space-around;
+	    <?php endif; ?>
 
 		<?php if (!$horizontal) : ?>
 			-webkit-flex-direction: column;
