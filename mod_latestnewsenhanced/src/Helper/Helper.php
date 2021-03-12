@@ -298,7 +298,7 @@ class Helper
 
 		$bootstrap_version = isset($module_params->bootstrap_version) ? $module_params->bootstrap_version : 'joomla';
 		if ($bootstrap_version === 'joomla') {
-			$bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 4;
+			$bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
 		} else {
 			$bootstrap_version = intval($bootstrap_version);
 		}

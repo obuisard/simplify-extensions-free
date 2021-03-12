@@ -14,7 +14,7 @@ use SYW\Library\Libraries as SYWLibraries;
 
 $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
-$bootstrapVersion = isset($displayData['bootstrap_version']) ? intval($displayData['bootstrap_version']) : 2;
+$bootstrapVersion = isset($displayData['bootstrap_version']) ? intval($displayData['bootstrap_version']) : 5;
 $loadBootstrap = isset($displayData['load_bootstrap']) ? $displayData['load_bootstrap'] : true;
 if ($loadBootstrap) {
     SYWStylesheets::loadBootstrapModals();
