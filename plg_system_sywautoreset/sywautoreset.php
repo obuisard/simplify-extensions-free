@@ -18,7 +18,7 @@ use Joomla\Utilities\ArrayHelper;
 
 /**
  * Plugin that resets the cached images, if any, for an item, before it is saved
- * Works for: LNE, LNEP, TC, TCP, TRS, TRSP, WL, WLP
+ * Works for: LNE, LNEP, TC, TCP, WL, WLP
  *
  */
 class plgSystemSYWAutoReset extends CMSPlugin
@@ -28,12 +28,12 @@ class plgSystemSYWAutoReset extends CMSPlugin
     protected $filter_names = array('blur', 'duotone', 'edgedetect', 'emboss', 'grayscale', 'negate', 'pixelate', 'sepia', 'sharpen', 'sketch');
 
     public function onUserAfterSave($data, $isNew, $result, $error)
-    {
+    {    	
+    	if ($isNew) {
+    		return true;
+    	}
+    	
         if (Factory::getApplication()->isAdmin()) {
-            return true;
-        }
-
-        if ($isNew) {
             return true;
         }
 
@@ -114,7 +114,7 @@ class plgSystemSYWAutoReset extends CMSPlugin
 
                     foreach ($paths as $path) {
                         //$filenames = glob(JPATH_SITE.$path.'/*.{png,jpg,gif}', GLOB_BRACE);
-                        $filenames = Folder::files(JPATH_ROOT.$path, '.png|.jpg|.jpeg|.gif', false, true); // tests if the folder exists but returns warning
+                        $filenames = Folder::files(JPATH_ROOT.$path, '.png|.jpg|.jpeg|.gif|.webp', false, true); // tests if the folder exists but returns warning
                         if ($filenames != false) {
                             $filenames_to_delete = array_merge($filenames_to_delete, $filenames);
                         }
@@ -176,18 +176,18 @@ class plgSystemSYWAutoReset extends CMSPlugin
     }
 
     public function onContentBeforeSave($context, $item, $isNew)
-    {
-        if ($context != 'com_content.article' && $context != 'com_k2.item' && $context != 'com_contact.contact' && $context != 'com_trombinoscopeextended.usercontact' && $context != 'com_weblinks.weblink' && $context != 'com_weblinklogospro.weblink') {
-            return true;
-        }
-
-        if ($isNew) {
+    {    	
+    	if ($isNew) {
+    		return true;
+    	}
+    	
+    	if ($context != 'com_content.article' && $context != 'com_content.form' && $context != 'com_k2.item' && $context != 'com_contact.contact' && $context != 'com_trombinoscopeextended.usercontact' && $context != 'com_weblinks.weblink' && $context != 'com_weblinklogospro.weblink') {
             return true;
         }
 
         // go through if article is in any of the categories selected
 
-        if ($context == 'com_content.article') {
+        if ($context == 'com_content.article' || $context == 'com_content.form') {
 
             $categories_array = $this->params->get('article_cat', array());
 
@@ -358,7 +358,7 @@ class plgSystemSYWAutoReset extends CMSPlugin
 
             foreach ($paths as $path) {
                 //$filenames = glob(JPATH_SITE.$path.'/*.{png,jpg,gif}', GLOB_BRACE);
-                $filenames = Folder::files(JPATH_ROOT.$path, '.png|.jpg|.jpeg|.gif', false, true); // tests if the folder exists but returns warning
+                $filenames = Folder::files(JPATH_ROOT.$path, '.png|.jpg|.jpeg|.gif|.webp', false, true); // tests if the folder exists but returns warning
                 if ($filenames != false) {
                     $filenames_to_delete = array_merge($filenames_to_delete, $filenames);
                 }
@@ -402,18 +402,18 @@ class plgSystemSYWAutoReset extends CMSPlugin
                 if (File::exists($filename)) {
                     if (File::delete($filename)) {
                         $some_files_deleted = true; // deleted the file
-                        if ($this->params->get('verbose', 0) || (Factory::getApplication()->isAdmin() && $this->params->get('verbose', 0) == 2) || (Factory::getApplication()->isSite() && $this->params->get('verbose', 0) == 3)) {
+                        if ($this->params->get('verbose', 0) == 1 || (Factory::getApplication()->isAdmin() && $this->params->get('verbose', 0) == 2) || (Factory::getApplication()->isSite() && $this->params->get('verbose', 0) == 3)) {
                             Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_SYWAUTORESET_INFO_FILEDELETED', str_replace('\\', '/', str_replace(JPATH_ROOT, '', $filename))), 'message');
                         }
                     } else {
-                        if ($this->params->get('verbose', 0) || (Factory::getApplication()->isAdmin() && $this->params->get('verbose', 0) == 2) || (Factory::getApplication()->isSite() && $this->params->get('verbose', 0) == 3)) {
+                    	if ($this->params->get('verbose', 0) == 1 || (Factory::getApplication()->isAdmin() && $this->params->get('verbose', 0) == 2) || (Factory::getApplication()->isSite() && $this->params->get('verbose', 0) == 3)) {
                             Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_SYWAUTORESET_ERROR_DELETINGFILE', str_replace('\\', '/', str_replace(JPATH_ROOT, '', $filename))), 'warning');
                         }
                     }
                 }
             }
 
-            if ($some_files_deleted && ($this->params->get('verbose', 0) || (Factory::getApplication()->isAdmin() && $this->params->get('verbose', 0) == 2) || (Factory::getApplication()->isSite() && $this->params->get('verbose', 0) == 3))) {
+            if ($some_files_deleted && ($this->params->get('verbose', 0) == 1 || (Factory::getApplication()->isAdmin() && $this->params->get('verbose', 0) == 2) || (Factory::getApplication()->isSite() && $this->params->get('verbose', 0) == 3))) {
                 Factory::getApplication()->enqueueMessage(Text::_('PLG_SYSTEM_SYWAUTORESET_INFO_IMAGECACHECLEARED'), 'message');
             }
 
