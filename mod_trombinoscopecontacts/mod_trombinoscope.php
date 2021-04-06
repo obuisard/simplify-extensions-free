@@ -359,8 +359,7 @@ if ($carousel_configuration != 'none') {
 	        if ($pagination_size) {
 	            $extra_pagination_classes .= ' ' . SYWUtilities::getBootstrapProperty('pagination-'.$pagination_size, $bootstrap_version);
 	        }
-	    }
-	    if ($bootstrap_version == 3 || $bootstrap_version == 4) {
+	    } else { // Bootstrap 3, 4 or 5
 	        $extra_pagination_ul_class_attribute = ' class="pagination';
 	        if ($pagination_size) {
 	            $extra_pagination_ul_class_attribute .= ' ' . SYWUtilities::getBootstrapProperty('pagination-'.$pagination_size, $bootstrap_version);
@@ -369,7 +368,7 @@ if ($carousel_configuration != 'none') {
 	            $extra_pagination_ul_class_attribute .= ' '.$pagination_align;
 	        }
 	        $extra_pagination_ul_class_attribute .= '"';
-	        if ($bootstrap_version == 4) {
+	        if ($bootstrap_version >= 4) {
 	            $extra_pagination_li_class_attribute = ' class="page-item"';
 	            $extra_pagination_a_classes = ' page-link';
 	        }

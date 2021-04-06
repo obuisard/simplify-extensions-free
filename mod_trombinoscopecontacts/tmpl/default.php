@@ -100,7 +100,7 @@ if ($remove_whitespaces) {
 				        	$link = Route::_(ContactRouteHelper::getContactRoute($item->slug, $item->catid, $item->language) . '&tmpl=component');
 				            $link_attributes = ' onclick="return false;" data-modaltitle="'.htmlspecialchars($formatted_name, ENT_COMPAT, 'UTF-8').'"';
 				            if ($bootstrap_version > 0) {
-				            	$link_attributes .= ' data-toggle="modal" data-target="#tcpmodal_'.$module->id.'"';
+				            	$link_attributes .= ' data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'toggle="modal" data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'target="#tcpmodal_'.$module->id.'"';
 				            }
 				            $link_classes = 'tcpmodal_'.$module->id;
 				            $modal_needed = true;

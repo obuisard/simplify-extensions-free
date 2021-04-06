@@ -24,7 +24,7 @@ class JSAnimationFileCache extends HeaderFilesCache
 		$suffix = $params->get('suffix');
 		$variables[] = 'suffix';
 
-		$bootstrap_version = $params->get('bootstrap_version', 2);
+		$bootstrap_version = $params->get('bootstrap_version', 5);
 		$variables[] = 'bootstrap_version';
 
 		$card_width = $params->get('card_w', 100);

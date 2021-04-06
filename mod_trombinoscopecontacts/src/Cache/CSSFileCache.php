@@ -26,7 +26,7 @@ class CSSFileCache extends HeaderFilesCache
 		$theme = $params->get('theme', 'original');
 		$variables[] = 'theme';
 
-		$bootstrap_version = $params->get('bootstrap_version', 2);
+		$bootstrap_version = $params->get('bootstrap_version', 5);
 		$variables[] = 'bootstrap_version';
 
 		// show

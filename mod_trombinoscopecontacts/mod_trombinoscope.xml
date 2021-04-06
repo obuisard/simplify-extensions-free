@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>4.4.0</version>
+	<version>5.0.0</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -62,7 +62,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\TrombinoscopeContacts\Site\Field">			
 			<fieldset name="basic" label="MOD_TROMBINOSCOPE_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.4.0" />
+				<field type="extensionversion" version="5.0.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_TROMBINOSCOPE_TRANSLATORS" />
@@ -87,9 +87,11 @@
 			</fieldset>	
 
 			<fieldset name="selection" label="MOD_TROMBINOSCOPE_SELECTION_FIELDSET_LABEL" description="MOD_TROMBINOSCOPE_SELECTION_FIELDSET_DESC" addfieldprefix="Joomla\Component\Contact\Administrator\Field">
-								
-<!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/filtering" class="alert alert-info" -->
-<!-- 					description="MOD_TROMBINOSCOPE_SELECTION_FIELDSET_DESC" /> -->
+
+				<fieldset name="selection_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/filtering" />
+				</fieldset>
 									
 				<fieldset name="selection_source" label="MOD_TROMBINOSCOPE_SELECTIONSOURCE_FIELDSET_LABEL">
 				
@@ -233,13 +235,15 @@
 			</fieldset>	
 				
 			<fieldset name="configuration" label="MOD_TROMBINOSCOPE_CONFIGURATION_FIELDSET_LABEL" description="MOD_TROMBINOSCOPE_CONFIGURATION_FIELDSET_DESC">
-				
-<!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/layout" class="alert alert-info" -->
-<!-- 					description="MOD_TROMBINOSCOPE_CONFIGURATION_FIELDSET_DESC" /> -->
+			
+				<fieldset name="configuration_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/layout" />
+				</fieldset>
 					
 				<fieldset name="layout_general" label="MOD_TROMBINOSCOPE_CONFIGURATION_FIELDSET_LABEL">
 				
-					<field name="layout" type="modulelayout" class="custom-select" 
+					<field name="layout" type="modulelayout" class="form-select" 
 						label="JFIELD_ALT_LAYOUT_LABEL"
 						description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
 						
@@ -450,8 +454,10 @@
 					
 			<fieldset name="themes" label="MOD_TROMBINOSCOPE_THEMES_FIELDSET_LABEL" description="MOD_TROMBINOSCOPE_THEMES_FIELDSET_DESC">
 			
-<!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/theming" class="alert alert-info" -->
-<!-- 					description="MOD_TROMBINOSCOPE_THEMES_FIELDSET_DESC" /> -->
+				<fieldset name="themes_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/theming" />
+				</fieldset>
 			
 				<fieldset name="themes_theme" label="MOD_TROMBINOSCOPE_FIELD_THEME_LABEL">
 				
@@ -591,8 +597,10 @@
 			
 			<fieldset name="picture" label="MOD_TROMBINOSCOPE_PICTURE_FIELDSET_LABEL" description="MOD_TROMBINOSCOPE_PICTURE_FIELDSET_DESC">
 			
-<!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/contact-picture" class="alert alert-info" -->
-<!-- 					description="MOD_TROMBINOSCOPE_PICTURE_FIELDSET_DESC" /> -->
+				<fieldset name="picture_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/contact-picture" />
+				</fieldset>
 							
 				<fieldset name="image_general" label="MOD_TROMBINOSCOPE_PICTURE_FIELDSET_LABEL">
 				
@@ -742,7 +750,7 @@
 						<option value="pic">MOD_TROMBINOSCOPE_PICTURE_FIELDSET_LABEL</option>
 					</field>
 					
-					<!-- <field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_NEEDJOOMLAFORCUSTOMFIELDSANDPAIDVERSION" style="neutral" label="Pro" /> -->
+					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_NEEDPAIDVERSION" style="neutral" label="Pro" />
 					
 					<field name="d_bg_pic" type="media" default="" showon="s_pic:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_INDIVIDUALDEFAULTBGPICTURE_LABEL" 
@@ -751,9 +759,11 @@
 			</fieldset>		
 		
 			<fieldset name="fields" label="MOD_TROMBINOSCOPE_FIELDS_FIELDSET_LABEL" description="MOD_TROMBINOSCOPE_FIELDS_FIELDSET_DESC">
-						
-<!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/contact-information" class="alert alert-info" -->
-<!-- 					description="MOD_TROMBINOSCOPE_FIELDS_FIELDSET_DESC" /> -->
+			
+				<fieldset name="fields_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/contact-information" />
+				</fieldset>
 						
 				<fieldset name="fields_general" label="MOD_TROMBINOSCOPE_FIELDS_LABEL">	
 <!-- 				<field type="title" title="MOD_TROMBINOSCOPE_FIELDS_LABEL" /> -->
@@ -888,8 +898,10 @@
 			
 			<fieldset name="fields_format" label="MOD_TROMBINOSCOPE_FIELDSFORMAT_FIELDSET_LABEL" description="MOD_TROMBINOSCOPE_FIELDSFORMAT_FIELDSET_DESC">
 			
-<!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/fields-format" class="alert alert-info" -->
-<!-- 					description="MOD_TROMBINOSCOPE_FIELDSFORMAT_FIELDSET_DESC" /> -->
+				<fieldset name="fields_format_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/fields-format" />
+				</fieldset>
 				
 				<fieldset name="format_address" label="MOD_TROMBINOSCOPE_ADDRESS_LABEL">
 <!-- 				<field type="subtitle" title="MOD_TROMBINOSCOPE_ADDRESS_LABEL" /> -->
@@ -1024,101 +1036,109 @@
 			</fieldset>		
 				
 			<fieldset name="carousel" label="MOD_TROMBINOSCOPE_CAROUSEL_FIELDSET_LABEL" description="MOD_TROMBINOSCOPE_CAROUSEL_FIELDSET_DESC">
-								
-<!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/carousel" class="alert alert-info" -->
-<!-- 					description="MOD_TROMBINOSCOPE_CAROUSEL_FIELDSET_DESC" /> -->
-					
-<!-- 				<field type="message" text="MOD_TROMBINOSCOPE_INFO_JQUERY" style="warning" /> -->
-				
-				<field name="carousel_config" type="list" default="none" 
-					label="MOD_TROMBINOSCOPE_FIELD_CONFIGURATION_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_CONFIGURATION_DESC">
-					<option value="none">JNONE</option>
-					<option value="v">MOD_TROMBINOSCOPE_VALUE_VERTICAL</option>
-					<option value="h">MOD_TROMBINOSCOPE_VALUE_HORIZONTAL</option>
-				</field>
-				
-				<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_DYNAMICWIDTHNOTCOMPATIBLEWITHCAROUSEL" style="warning" showon="carousel_config:h[AND]card_w_u!:px" />
-				<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_STATICWIDTHNOTCOMPATIBLEWITHCAROUSEL" style="warning" showon="carousel_config:v[AND]card_w_u:px" />
-					
-				<field name="visible_items" type="sywverbosetext" default="1" filter="integer" size="4" icon="SYWicon-visibility" showon="carousel_config:v,h" 
-					label="MOD_TROMBINOSCOPE_FIELD_VISIBLEITEMS_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_VISIBLEITEMS_DESC" />
-					
-<!-- 				<field type="message" text="MOD_TROMBINOSCOPE_INFO_VISIBLEITEMS" style="warning" label="MOD_TROMBINOSCOPE_FIELD_VISIBLEITEMS_LABEL" /> -->
-				
-				<field name="moveatonce" type="radio" default="all" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
-					label="MOD_TROMBINOSCOPE_FIELD_MOVEATONCE_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_MOVEATONCE_DESC">
-                    <option value="one">MOD_TROMBINOSCOPE_VALUE_ONEATATIME</option>
-                    <option value="all">MOD_TROMBINOSCOPE_VALUE_ALLVISIBLE</option>
-                </field>
-                
-                <field name="arrows" type="list" default="none" showon="carousel_config:v,h" 
-					label="MOD_TROMBINOSCOPE_FIELD_ARROWS_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_ARROWS_DESC">
-                    <option value="none">JNONE</option>
-                    <option value="around">MOD_TROMBINOSCOPE_VALUE_AROUND</option>
-                    <option value="under">MOD_TROMBINOSCOPE_VALUE_UNDER</option>
-                    <!-- <option value="title">MOD_TROMBINOSCOPE_VALUE_MODULETITLE</option> -->
-                </field>
-                
-                <field name="arrowstyle" type="radio" default="" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h[AND]arrows:around,under" 
-					label="MOD_TROMBINOSCOPE_FIELD_ARROWSTYLE_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_ARROWSTYLE_DESC">
-                    <option value="">JDEFAULT</option>
-                    <option value="pagination">Bootstrap</option>
-                </field>
-                
-                <field name="arrowsize_bootstrap" type="list" default="" showon="carousel_config:v,h[AND]arrows:around,under[AND]arrowstyle:pagination" 
-					label="MOD_TROMBINOSCOPE_FIELD_BOOTSTRAPSIZE_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_BOOTSTRAPSIZE_DESC">
-					<option value="">JDEFAULT</option>
-					<option value="small">MOD_TROMBINOSCOPE_VALUE_SMALL</option>
-					<option value="mini">MOD_TROMBINOSCOPE_VALUE_MINI</option>
-				</field>                
-                
-                <field name="arrowsize" type="sywverbosetext" default="1" filter="float" size="4" maxlength="5" unit="em" icon="SYWicon-format-size" showon="carousel_config:v,h[AND]arrows:around,under" 
-					label="MOD_TROMBINOSCOPE_FIELD_ARROWSIZE_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_ARROWSIZE_DESC" />
-					
-				<field name="arrowoffset" type="sywverbosetext" default="0" filter="integer" size="4" unit="px" icon="SYWicon-settings-ethernet" showon="carousel_config:v,h[AND]arrows:around,under" 
-					label="MOD_TROMBINOSCOPE_FIELD_ARROWSOFFSET_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_ARROWSOFFSET_DESC" />					
-					
-				<field name="includepages" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
-					label="MOD_TROMBINOSCOPE_FIELD_INCLUDEPAGES_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_INCLUDEPAGES_DESC">	
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
+			
+				<fieldset name="carousel_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
 
-				<field name="auto" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
-					label="MOD_TROMBINOSCOPE_FIELD_AUTO_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_AUTO_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>	
-                		
-				<field name="speed" type="sywverbosetext" default="1000" filter="integer" size="4" unit="ms" icon="SYWicon-timer" showon="carousel_config:v,h" 
-					label="MOD_TROMBINOSCOPE_FIELD_SPEED_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_SPEED_DESC" />
-									
-				<field name="interval" type="sywverbosetext" default="3000" filter="integer" size="4" unit="ms" icon="SYWicon-timer" showon="carousel_config:v,h" 
-					label="MOD_TROMBINOSCOPE_FIELD_INTERVAL_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_INTERVAL_DESC" />
-                
-                <field name="restart_on_refresh" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
-					label="MOD_TROMBINOSCOPE_FIELD_RESTARTONREFRESH_LABEL" 
-					description="MOD_TROMBINOSCOPE_FIELD_RESTARTONREFRESH_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>    
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/carousel" />
+				</fieldset>
+				
+				<fieldset name="carousel_all" label="MOD_TROMBINOSCOPE_CAROUSEL_FIELDSET_LABEL">
+					
+	<!-- 				<field type="message" text="MOD_TROMBINOSCOPE_INFO_JQUERY" style="warning" /> -->
+					
+					<field name="carousel_config" type="list" default="none" 
+						label="MOD_TROMBINOSCOPE_FIELD_CONFIGURATION_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_CONFIGURATION_DESC">
+						<option value="none">JNONE</option>
+						<option value="v">MOD_TROMBINOSCOPE_VALUE_VERTICAL</option>
+						<option value="h">MOD_TROMBINOSCOPE_VALUE_HORIZONTAL</option>
+					</field>
+					
+					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_DYNAMICWIDTHNOTCOMPATIBLEWITHCAROUSEL" style="warning" showon="carousel_config:h[AND]card_w_u!:px" />
+					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_STATICWIDTHNOTCOMPATIBLEWITHCAROUSEL" style="warning" showon="carousel_config:v[AND]card_w_u:px" />
+						
+					<field name="visible_items" type="sywverbosetext" default="1" filter="integer" size="4" icon="SYWicon-visibility" showon="carousel_config:v,h" 
+						label="MOD_TROMBINOSCOPE_FIELD_VISIBLEITEMS_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_VISIBLEITEMS_DESC" />
+						
+	<!-- 				<field type="message" text="MOD_TROMBINOSCOPE_INFO_VISIBLEITEMS" style="warning" label="MOD_TROMBINOSCOPE_FIELD_VISIBLEITEMS_LABEL" /> -->
+					
+					<field name="moveatonce" type="radio" default="all" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
+						label="MOD_TROMBINOSCOPE_FIELD_MOVEATONCE_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_MOVEATONCE_DESC">
+	                    <option value="one">MOD_TROMBINOSCOPE_VALUE_ONEATATIME</option>
+	                    <option value="all">MOD_TROMBINOSCOPE_VALUE_ALLVISIBLE</option>
+	                </field>
+	                
+	                <field name="arrows" type="list" default="none" showon="carousel_config:v,h" 
+						label="MOD_TROMBINOSCOPE_FIELD_ARROWS_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_ARROWS_DESC">
+	                    <option value="none">JNONE</option>
+	                    <option value="around">MOD_TROMBINOSCOPE_VALUE_AROUND</option>
+	                    <option value="under">MOD_TROMBINOSCOPE_VALUE_UNDER</option>
+	                    <!-- <option value="title">MOD_TROMBINOSCOPE_VALUE_MODULETITLE</option> -->
+	                </field>
+	                
+	                <field name="arrowstyle" type="radio" default="" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h[AND]arrows:around,under" 
+						label="MOD_TROMBINOSCOPE_FIELD_ARROWSTYLE_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_ARROWSTYLE_DESC">
+	                    <option value="">JDEFAULT</option>
+	                    <option value="pagination">Bootstrap</option>
+	                </field>
+	                
+	                <field name="arrowsize_bootstrap" type="list" default="" showon="carousel_config:v,h[AND]arrows:around,under[AND]arrowstyle:pagination" 
+						label="MOD_TROMBINOSCOPE_FIELD_BOOTSTRAPSIZE_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_BOOTSTRAPSIZE_DESC">
+						<option value="">JDEFAULT</option>
+						<option value="small">MOD_TROMBINOSCOPE_VALUE_SMALL</option>
+						<option value="mini">MOD_TROMBINOSCOPE_VALUE_MINI</option>
+					</field>                
+	                
+	                <field name="arrowsize" type="sywverbosetext" default="1" filter="float" size="4" maxlength="5" unit="em" icon="SYWicon-format-size" showon="carousel_config:v,h[AND]arrows:around,under" 
+						label="MOD_TROMBINOSCOPE_FIELD_ARROWSIZE_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_ARROWSIZE_DESC" />
+						
+					<field name="arrowoffset" type="sywverbosetext" default="0" filter="integer" size="4" unit="px" icon="SYWicon-settings-ethernet" showon="carousel_config:v,h[AND]arrows:around,under" 
+						label="MOD_TROMBINOSCOPE_FIELD_ARROWSOFFSET_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_ARROWSOFFSET_DESC" />					
+						
+					<field name="includepages" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
+						label="MOD_TROMBINOSCOPE_FIELD_INCLUDEPAGES_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_INCLUDEPAGES_DESC">	
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+	
+					<field name="auto" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
+						label="MOD_TROMBINOSCOPE_FIELD_AUTO_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_AUTO_DESC">
+	                    <option value="0">JNO</option>
+	                    <option value="1">JYES</option>
+	                </field>	
+	                		
+					<field name="speed" type="sywverbosetext" default="1000" filter="integer" size="4" unit="ms" icon="SYWicon-timer" showon="carousel_config:v,h" 
+						label="MOD_TROMBINOSCOPE_FIELD_SPEED_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_SPEED_DESC" />
+										
+					<field name="interval" type="sywverbosetext" default="3000" filter="integer" size="4" unit="ms" icon="SYWicon-timer" showon="carousel_config:v,h" 
+						label="MOD_TROMBINOSCOPE_FIELD_INTERVAL_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_INTERVAL_DESC" />
+	                
+	                <field name="restart_on_refresh" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
+						label="MOD_TROMBINOSCOPE_FIELD_RESTARTONREFRESH_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_RESTARTONREFRESH_DESC">
+	                    <option value="0">JNO</option>
+	                    <option value="1">JYES</option>
+	                </field>
+	        	</fieldset>
 			</fieldset>
 			
 			<fieldset name="advanced" description="MOD_TROMBINOSCOPE_ADVANCED_FIELDSET_DESC">
 			
-<!-- 				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/advanced" class="alert alert-info" /> -->
+				<fieldset name="advanced_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/trombinoscope-contacts/module-trombinoscope-contacts/advanced" />
+				</fieldset>
 						
 				<fieldset name="advanced_general" label="MOD_TROMBINOSCOPE_ADVANCED_FIELDSET_LABEL">
 				
@@ -1142,6 +1162,7 @@
 						<option value="2">2</option>
 						<option value="3">3</option>
 						<option value="4">4</option>
+						<option value="5">5</option>
 					</field>
 					
 					<field name="show_errors" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 

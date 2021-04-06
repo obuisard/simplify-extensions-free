@@ -9,19 +9,17 @@ defined('JPATH_BASE') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
+use SYW\Library\Utilities as SYWUtilities;
 
-$bootstrapVersion = isset($displayData['bootstrap_version']) ? intval($displayData['bootstrap_version']) : 2;
+$bootstrap_version = isset($displayData['bootstrap_version']) ? intval($displayData['bootstrap_version']) : 5;
 
 $tag = $displayData['tag'];
 $link = isset($displayData['link']) ? $displayData['link'] : '';
 $onclick = isset($displayData['onclick']) ? $displayData['onclick'] : '';
 
-$tagParams = new Registry($tag->params);
-$default_classes = 'label label-info';
-if ($bootstrapVersion >= 4) {
-	$default_classes = 'badge badge-info';
-}
-$tag_class = $tagParams->get('tag_link_class', $default_classes);
+$tag_params = new Registry($tag->params);
+$default_classes = SYWUtilities::getBootstrapProperty('label label-info', $bootstrap_version);
+$tag_class = $tag_params->get('tag_link_class', $default_classes);
 
 if (Factory::getLanguage()->hasKey($tag->title)) {
 	$tag->title = Text::_($tag->title);

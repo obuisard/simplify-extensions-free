@@ -141,6 +141,15 @@ abstract class Helper
 	}
 
 	/**
+	 * Get the site mode
+	 * @return string (dev|prod|adv)
+	 */
+	public static function getSiteMode($params)
+	{
+		return $params->get('site_mode', 'adv');
+	}
+
+	/**
 	 * Is the picture cache set to be cleared
 	 * @return boolean
 	 */
@@ -168,15 +177,6 @@ abstract class Helper
 			return false;
 		}
 		return $params->get('clear_css_cache', 'true');
-	}
-
-	/**
-	 * Get the site mode
-	 * @return string (dev|prod|adv)
-	 */
-	public static function getSiteMode($params)
-	{
-		return $params->get('site_mode', 'adv');
 	}
 
 	/**
@@ -217,7 +217,7 @@ abstract class Helper
 	{
 		$bootstrap_version = $params->get('bootstrap_version', 'joomla');
 		if ($bootstrap_version === 'joomla') {
-			return version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 4;
+			return 5; // version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
 		}
 		return intval($bootstrap_version);
 	}
@@ -699,32 +699,47 @@ abstract class Helper
 			$item->original_image = $item->image;
 
 			if (self::isShowPicture($params)) {
+
+				$picture_output = '';
+				
 				if ($item->image) {
 					if (self::isCropPicture($params)) {
-						$item->image = self::getCroppedImage($module->id, $item->id, $item->image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
-					}
-				} else {
-					if ($params->get('d_pic', '')) {
-						if (self::isCropPicture($params)) {
-							$item->image = self::getCroppedImage($module->id, 'default', $params->get('d_pic', ''), self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
-						} else {
-							$item->image = $params->get('d_pic', '');
-						}
+						$picture_output = self::getCroppedImage($module->id, $item->id, $item->image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
 					} else {
-						if (self::getContactGlobalParams()->get('default_image') != null) {
-							if (self::isCropPicture($params)) {
-								$item->image = self::getCroppedImage($module->id, 'global', self::getContactGlobalParams()->get('default_image'), self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
-							} else {
-								$item->image = self::getContactGlobalParams()->get('default_image');
-							}
+						$picture_output = (File::exists(JPATH_SITE . '/' . $item->image)) ? $item->image : 'error';
+					}
+				}
+				
+				if ($picture_output == 'error' || $picture_output == '') {
+					$default_image = $params->get('d_pic', '');
+					if ($default_image) {
+						if (self::isCropPicture($params)) {
+							$picture_output = self::getCroppedImage($module->id, 'default', $default_image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
 						} else {
-							$item->image = '';
+							$picture_output = (File::exists(JPATH_SITE . '/' . $default_image)) ? $default_image : 'error';
 						}
 					}
 				}
+				
+				if ($picture_output == 'error' || $picture_output == '') {
+					$global_image = self::getContactGlobalParams()->get('default_image');
+					if ($global_image) {
+						if (self::isCropPicture($params)) {
+							$picture_output = self::getCroppedImage($module->id, 'global', $global_image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
+						} else {
+							$picture_output = (File::exists(JPATH_SITE . '/' . $global_image)) ? $global_image : 'error';
+						}
+					}
+				}
+				
+				$item->image = $picture_output;
 
-				if ($item->image == 'error') {
-					$item->error[] = Text::_('MOD_TROMBINOSCOPE_ERROR_CREATINGTHUMBNAIL');
+				if ($picture_output == 'error') {
+					if (self::isCropPicture($params)) {
+						$item->error[] = Text::_('MOD_TROMBINOSCOPE_ERROR_CREATINGTHUMBNAIL');
+					} else {
+						$item->error[] = Text::_('MOD_TROMBINOSCOPE_ERROR_RETRIEVINGIMAGE');
+					}
 					$item->image = '';
 				}
 			}
@@ -1184,13 +1199,13 @@ abstract class Helper
 
 			$global_contact_params = ComponentHelper::getParams('com_contact');
 
-			self::$contact_globals->set("linka_name", trim($global_contact_params->get('linka_name')));
-			self::$contact_globals->set("linkb_name", trim($global_contact_params->get('linkb_name')));
-			self::$contact_globals->set("linkc_name", trim($global_contact_params->get('linkc_name')));
-			self::$contact_globals->set("linkd_name", trim($global_contact_params->get('linkd_name')));
-			self::$contact_globals->set("linke_name", trim($global_contact_params->get('linke_name')));
+			self::$contact_globals->set("linka_name", trim($global_contact_params->get('linka_name', '')));
+			self::$contact_globals->set("linkb_name", trim($global_contact_params->get('linkb_name', '')));
+			self::$contact_globals->set("linkc_name", trim($global_contact_params->get('linkc_name', '')));
+			self::$contact_globals->set("linkd_name", trim($global_contact_params->get('linkd_name', '')));
+			self::$contact_globals->set("linke_name", trim($global_contact_params->get('linke_name', '')));
 
-			self::$contact_globals->set("default_image", $global_contact_params->get('image'));
+			self::$contact_globals->set("default_image", $global_contact_params->get('image', ''));
 		}
 
 		return self::$contact_globals;
@@ -1666,6 +1681,7 @@ abstract class Helper
 				    if (!$params->get('protocol', true)) {
 				        $substitute_value = self::remove_protocol($value);
 				    }
+
 				    $value_is_link = true;
 				    $label = empty($fieldlabel) ? ($params->get('linkae_l_as_s', 0) ? Text::_('MOD_TROMBINOSCOPE_LABEL_LINK') : self::getLabelForLink('link' . str_replace('_sw', '', $info_details['name']), $value, $item_params, false)) : $fieldlabel;
 				    $icon_class = !empty($fieldicon) ? $fieldicon : self::getIconForLink($value);
@@ -1676,9 +1692,9 @@ abstract class Helper
 
 				    if ($params->get('linkae_l_as_s', 0)) {
 				    	$linkX_label = self::getLabelForLink('link' . str_replace('_sw', '', $info_details['name']), $value, $item_params, true);
-				    	if ($linkX_label) {
-				    		$substitute_value = $linkX_label;
-				    	}
+					    if ($linkX_label) {
+					    	$substitute_value = $linkX_label;
+					    }
 				    }
 				}
 				break;
@@ -1784,17 +1800,17 @@ abstract class Helper
 		    }
 		}
 
- 		foreach (self::$social_networks_labels as $key => $value) {
- 		    if (strpos($link, $key) > 0) {
- 		        return $value;
- 			}
- 		}
+		foreach (self::$social_networks_labels as $key => $value) {
+		    if (strpos($link, $key) > 0) {
+		        return $value;
+			}
+		}
 
- 		if ($is_substitute) {
- 			return '';
- 		}
+		if ($is_substitute) {
+			return '';
+		}
 
- 		return Text::_('MOD_TROMBINOSCOPE_LABEL_LINK');
+		return Text::_('MOD_TROMBINOSCOPE_LABEL_LINK');
 	}
 
 	protected static $social_networks_icons = array('facebook' => 'facebook', 'linkedin' => 'linkedin', 'twitter' => 'twitter', 'plus.google' => 'googleplus', 'instagram' => 'instagram', 'tumblr' => 'tumblr', 'pinterest' => 'pinterest', 'youtube' => 'youtube', 'vimeo' => 'vimeo', 'wordpress' => 'wordpress', 'skype' => 'skype', 'blogspot' => 'blogger');
@@ -1842,8 +1858,8 @@ abstract class Helper
 
 		$filename = $tmp_path.'/thumb_'.$module_id.'_'.$item_id.'.'.$imageext;
 		$filename_highres = $tmp_path.'/thumb_'.$module_id.'_'.$item_id.'@2x.'.$imageext;
-		if ((!$clear_cache && !$create_highres_images && is_file(JPATH_ROOT.'/'.$filename))
-			|| (!$clear_cache && $create_highres_images && is_file(JPATH_ROOT.'/'.$filename) && is_file(JPATH_ROOT.'/'.$filename_highres))) {
+		if ((!$clear_cache && !$create_highres_images && File::exists(JPATH_ROOT . '/' . $filename))
+			|| (!$clear_cache && $create_highres_images && File::exists(JPATH_ROOT . '/' . $filename) && File::exists(JPATH_ROOT . '/' . $filename_highres))) {
 
 			// thumbnail already exists
 
@@ -2417,7 +2433,7 @@ abstract class Helper
 
 		$minified = (JDEBUG) ? '' : '.min';
 
-		$wam->registerAndUseScript('tc.flipcards', 'mod_trombinoscopecontacts/flipcards' . $minified . '.js', ['relative' => true, 'version' => 'auto'], ['defer' => true]);
+		$wam->registerAndUseScript('tc.flipcards', 'mod_trombinoscopecontacts/flipcards' . $minified . '.js', ['relative' => true, 'version' => 'auto']); // no defer
 		//Factory::getDocument()->addScript(Uri::base(true) . '/media/mod_trombinoscopecontacts/js/flipcards' . $minified . '.js');
 
 		self::$flipScriptLoaded = true;

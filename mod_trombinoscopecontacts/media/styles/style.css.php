@@ -409,8 +409,8 @@ header("Content-type: text/css; charset=UTF-8");
     	}
     <?php endif; ?>
 
-    /* extra bootstrap 4 styles for 'around' positions */
-    <?php if ($bootstrap_arrows && $bootstrap_version == 4) : ?>
+    /* extra bootstrap 4 and 5 styles for 'around' positions */
+    <?php if ($bootstrap_arrows && $bootstrap_version >= 4) : ?>
 
         <?php echo $prefix; ?> .items_pagination.left .page-item:first-child .page-link,
         <?php echo $prefix; ?> .items_pagination.up .page-item:first-child .page-link {
