@@ -493,7 +493,7 @@ header("Content-type: text/css; charset=UTF-8");
     <?php endif; ?>
 
     /* extra bootstrap 4 styles for 'around' positions */
-    <?php if ($bootstrap && $bootstrap_version == 4) : ?>
+    <?php if ($bootstrap && $bootstrap_version >= 4) : ?>
 
         #weblinklogo_<?php echo $suffix; ?> .items_pagination.left .page-item:first-child .page-link,
         #weblinklogo_<?php echo $suffix; ?> .items_pagination.up .page-item:first-child .page-link {

@@ -44,7 +44,7 @@ $wam = $app->getDocument()->getWebAssetManager();
 $bootstrap_version = $params->get('bootstrap_version', 'joomla');
 $load_bootstrap = false;
 if ($bootstrap_version === 'joomla') {
-    $bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 4;
+    $bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
     $load_bootstrap = true;
 } else {
 	$bootstrap_version = intval($bootstrap_version);
@@ -53,19 +53,9 @@ if ($bootstrap_version === 'joomla') {
 $params->set('bootstrap_version', $bootstrap_version); // for use in js and css cached files
 
 $general_errors = array();
-$show_errors = $params->get('show_errors', 0);
-if ($params->get('site_mode', 'adv') == 'dev') {
-	$show_errors = 1;
-} else if ($params->get('site_mode', 'adv') == 'prod') {
-	$show_errors = 0;
-}
+$show_errors = Helper::isShowErrors($params);
 
-$remove_whitespaces = $params->get('remove_whitespaces', 0);
-if ($params->get('site_mode', 'adv') == 'dev') {
-	$remove_whitespaces = 0;
-} else if ($params->get('site_mode', 'adv') == 'prod') {
-	$remove_whitespaces = 1;
-}
+$remove_whitespaces = Helper::isRemoveWhitespaces($params);
 
 // logos
 
@@ -136,12 +126,7 @@ if ($unique_files) {
 	$unique_filename_extra = $module->id;
 }
 
-$clear_cache = $params->get('clear_cache', 1);
-if ($params->get('site_mode', 'adv') == 'dev') {
-	$clear_cache = 1;
-} else if ($params->get('site_mode', 'adv') == 'prod') {
-	$clear_cache = 0;
-}
+$clear_cache = Helper::IsClearPictureCache($params);
 
 if ($clear_cache) {
 	Helper::clearThumbnails($tmp_path, $unique_filename_extra);
@@ -194,12 +179,7 @@ if ($hits_classes) {
 	$hits_classes = ' '.$hits_classes;
 }
 
-$clear_header_files_cache = $params->get('clear_header_files_cache', 1);
-if ($params->get('site_mode', 'adv') == 'dev') {
-	$clear_header_files_cache = 1;
-} else if ($params->get('site_mode', 'adv') == 'prod') {
-	$clear_header_files_cache = 0;
-}
+$clear_header_files_cache = Helper::IsClearHeaderCache($params);
 
 $generate_inline_scripts = $params->get('inline_scripts', 0);
 $load_remotely = $params->get('remote_libraries', 0);
@@ -277,7 +257,7 @@ if ($carousel_configuration != 'none') {
 	            $extra_pagination_classes .= ' '.SYWUtilities::getBootstrapProperty('pagination-'.$pagination_size, $bootstrap_version);
 	        }
 	    }
-	    if ($bootstrap_version == 3 || $bootstrap_version == 4) {
+	    if ($bootstrap_version >= 3) {
 	        $extra_pagination_ul_class_attribute = ' class="pagination';
 	        if ($pagination_size) {
 	            $extra_pagination_ul_class_attribute .= ' '.SYWUtilities::getBootstrapProperty('pagination-'.$pagination_size, $bootstrap_version);
@@ -286,7 +266,7 @@ if ($carousel_configuration != 'none') {
 	            $extra_pagination_ul_class_attribute .= ' '.$pagination_align;
 	        }
 	        $extra_pagination_ul_class_attribute .= '"';
-	        if ($bootstrap_version == 4) {
+	        if ($bootstrap_version >= 4) {
 	            $extra_pagination_li_class_attribute = ' class="page-item"';
 	            $extra_pagination_a_classes = ' page-link';
 	        }

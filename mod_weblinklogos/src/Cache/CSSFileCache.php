@@ -23,7 +23,7 @@ class CSSFileCache extends HeaderFilesCache
 		$suffix = $params->get('suffix');
 		$variables[] = 'suffix';
 
-		$bootstrap_version = $params->get('bootstrap_version', 2);
+		$bootstrap_version = $params->get('bootstrap_version', 5);
 		$variables[] = 'bootstrap_version';
 
 		$items_align = $params->get('items_align', 'c');

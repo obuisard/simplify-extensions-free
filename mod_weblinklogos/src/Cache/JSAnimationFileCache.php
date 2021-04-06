@@ -24,7 +24,7 @@ class JSAnimationFileCache extends HeaderFilesCache
 		$suffix = $params->get('suffix');
 		$variables[] = 'suffix';
 
-		$bootstrap_version = $params->get('bootstrap_version', 2);
+		$bootstrap_version = $params->get('bootstrap_version', 5);
 		$variables[] = 'bootstrap_version';
 
 		$logos_layout = $params->get('logos_layout', 'grid');
@@ -40,34 +40,34 @@ class JSAnimationFileCache extends HeaderFilesCache
 			$card_border_width = $params->get('card_border_w', 0);
 			$overall_bgcolor = trim($params->get('overallbgcolor', '')) != '' ? trim($params->get('overallbgcolor')) : 'transparent';
 			$logo_bgcolor = trim($params->get('logobgcolor', '')) != '' ? trim($params->get('logobgcolor')) : 'transparent';
-			
+
 			$padding = $params->get('content_spacing', 10);
-			
+
 			if ($card_border_width > 0) {
 				$card_width += $card_border_width * 2;
 			}
-			
+
 			if ($overall_bgcolor != 'transparent' || $card_shadow || $card_border_width > 0) {
 				$card_width += $padding * 2;
 			}
-			
+
 			if ($logo_bgcolor != 'transparent') {
 				$card_width += $padding * 2;
 			}
 		}
-		
+
 		$margin_left = $params->get('margin_left', 5);
 		if ($card_shadow && $margin_left < $shadow_width) {
 			$margin_left = $shadow_width;
 		}
-		
+
 		$margin_right = $params->get('margin_right', 5);
 		if ($card_shadow && $margin_right < $shadow_width) {
 			$margin_right = $shadow_width;
 		}
-		
+
 		$card_width += $margin_left + $margin_right;
-		
+
 		$variables[] = 'card_width';
 
 		$force_width = $params->get('force_width', 1);

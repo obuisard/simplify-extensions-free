@@ -20,7 +20,7 @@ if ($remove_whitespaces) {
 
 	<?php if ($show_errors && !empty($general_errors)) : ?>
 		<?php foreach ($general_errors as $error) : ?>
-			<div class="alert <?php echo SYWUtilities::getBootstrapProperty('alert-'.$error[1], $bootstrap_version); ?>">
+			<div class="<?php echo SYWUtilities::getBootstrapProperty('alertalert-'.$error[1], $bootstrap_version); ?>">
     			<?php echo $error[0]; ?>
 			</div>
     	<?php endforeach; ?>
@@ -57,7 +57,7 @@ if ($remove_whitespaces) {
 			<li class="weblink_item weblink_id_<?php echo $item->id; ?> weblink_catid_<?php echo $item->catid; ?>">
 
 				<?php if ($show_errors && !empty($item->error)) : ?>
-					<div class="alert <?php echo SYWUtilities::getBootstrapProperty('alert-error', $bootstrap_version); ?>">
+					<div class="<?php echo SYWUtilities::getBootstrapProperty('alert alert-error', $bootstrap_version); ?>">
 						<span><?php echo 'id '.$item->id.':'; ?></span>
             			<ul>
 						<?php foreach ($item->error as $error) : ?>
@@ -86,7 +86,7 @@ if ($remove_whitespaces) {
         										    $modal_needed = true;
         										    $link_attributes = ' onclick="return false;" data-modaltitle="'.htmlspecialchars($item->title, ENT_COMPAT, 'UTF-8').'"';
         										    if ($bootstrap_version > 0) {
-        										    	$link_attributes .= ' data-toggle="modal" data-target="#wlpmodal_'.$module->id.'"';
+        										    	$link_attributes .= ' data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'toggle="modal" data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'target="#wlpmodal_'.$module->id.'"';
         										    }
         										    echo '<a href="'.$item->link.'" class="wlpmodal_'.$module->id.'"' . $link_attributes . '>'.$item->title.'</a>';
         											break;

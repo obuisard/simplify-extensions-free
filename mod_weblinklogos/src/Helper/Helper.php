@@ -24,6 +24,8 @@ use SYW\Library\Text as SYWText;
 
 class Helper
 {
+	protected static $weblinks_config_params;
+
 	//static $clickScriptLoaded = false;
 	protected static $commonStylesLoaded = false;
 	protected static $userStylesLoaded = false;
@@ -499,13 +501,7 @@ class Helper
 					$item->image_first = $params->get('d_logo');
 				} else {
 
-					$site_mode = $params->get('site_mode', 'adv');
-					$show_errors = $params->get('show_errors', 0);
-					if ($site_mode == 'dev') {
-						$show_errors = 1;
-					} else if ($site_mode == 'prod') {
-						$show_errors = 0;
-					}
+					$show_errors = self::isShowErrors($params);
 
 					if (!$show_errors) {
 						unset($items[$i]);
@@ -523,8 +519,7 @@ class Helper
 				$count_clicks = false;
 				if (isset($weblink_params->count_clicks)) {
 					if ($weblink_params->count_clicks == '') {
-						$global_weblink_params = ComponentHelper::getParams('com_weblinks');
-						$count_clicks = $global_weblink_params->get('count_clicks');
+						$count_clicks = self::getWeblinksConfig()->get('count_clicks');
 					} else {
 						$count_clicks = $weblink_params->count_clicks;
 					}
@@ -544,8 +539,7 @@ class Helper
 				$item->target = 1;
 				if (isset($weblink_params->target)) {
 					if ($weblink_params->target == '') {
-						$global_weblink_params = ComponentHelper::getParams('com_weblinks');
-						$item->target = $global_weblink_params->get('target');
+						$item->target = self::getWeblinksConfig()->get('target');
 					} else {
 						$item->target = $weblink_params->target;
 					}
@@ -830,6 +824,93 @@ class Helper
 		}
 
 		self::$userStylesLoaded = true;
+	}
+
+	/**
+	* Get the site mode
+	* @return string (dev|prod|adv)
+	*/
+	public static function getSiteMode($params)
+	{
+		return $params->get('site_mode', 'adv');
+	}
+
+	/**
+	 * Is the picture cache set to be cleared
+	 * @return boolean
+	 */
+	public static function IsClearPictureCache($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('clear_cache', true);
+	}
+
+	/**
+	 * Is the style/script cache set to be cleared
+	 * @return boolean
+	 */
+	public static function IsClearHeaderCache($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('clear_header_files_cache', 'true');
+	}
+
+	/**
+	 * Are errors shown ?
+	 * @return boolean
+	 */
+	public static function isShowErrors($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('show_errors', false);
+	}
+
+	/**
+	 * Are white spaces removed ?
+	 * @return boolean
+	 */
+	public static function isRemoveWhitespaces($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return false;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return true;
+		}
+		return $params->get('remove_whitespaces', false);
+	}
+
+	/**
+	 * Get the Weblinks component's configuration parameters
+	 * @return \Joomla\Registry\Registry
+	 */
+	public static function getWeblinksConfig()
+	{
+		if (!isset(self::$weblinks_config_params)) {
+
+			self::$weblinks_config_params = new Registry();
+
+			if (\JFile::exists(JPATH_ADMINISTRATOR . '/components/com_weblinks/config.xml')) {
+				self::$weblinks_config_params = ComponentHelper::getParams('com_weblinks');
+			}
+		}
+
+		return self::$weblinks_config_params;
 	}
 
 }
