@@ -151,7 +151,7 @@ class Pkg_WeblinkLogosInstallerScript
 
    		echo '<p style="margin: 10px 0 20px 0">';
    		echo HTMLHelper::image('mod_weblinklogo/logo.png', 'Weblink Logos', null, true);
-   		echo '<br /><br /><span class="badge badge-dark">'.Text::sprintf('PKG_WEBLINKLOGOS_VERSION', $this->release).'</span>';
+   		echo '<br /><br /><span class="badge bg-dark">'.Text::sprintf('PKG_WEBLINKLOGOS_VERSION', $this->release).'</span>';
    		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
    		echo '</p>';
 
@@ -233,11 +233,26 @@ class Pkg_WeblinkLogosInstallerScript
 		return true;
 	}
 
+	private function moveFile($file, $source, $destination, $minified_version = '.min')
+	{
+		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_WEBLINKLOGOS_ERROR_CANNOTMOVEFILE', $file), 'warning');
+		}
+
+		$file_pieces = explode('.', $file); // assumes only one . in file name
+		$file_pieces[0] .= $minified_version;
+		$file = implode('.', $file_pieces);
+
+		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_WEBLINKLOGOS_ERROR_CANNOTMOVEFILE', $file), 'warning');
+		}
+	}
+
 	private function removeFiles()
 	{
 		if (!empty($this->deleteFiles)) {
 			foreach ($this->deleteFiles as $filename) {
-				if (File::exists($filename) && !File::delete($filename)) {
+				if (File::exists(JPATH_SITE . $filename) && !File::delete(JPATH_SITE . $filename)) {
 					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_WEBLINKLOGOS_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
 				}
 			}
@@ -245,7 +260,7 @@ class Pkg_WeblinkLogosInstallerScript
 
 		if (!empty($this->deleteFolders)) {
 			foreach ($this->deleteFolders as $folder) {
-				if (Folder::exists(JPATH_ROOT.$folder) && !Folder::delete(JPATH_ROOT.$folder)) {
+				if (Folder::exists(JPATH_ROOT . $folder) && !Folder::delete(JPATH_ROOT . $folder)) {
 					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_WEBLINKLOGOS_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
 				}
 			}
