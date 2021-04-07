@@ -110,11 +110,11 @@ class CDNLinksField extends FormField
 
 			foreach ($cdns as $cdn => $link) {
 
-				$label_style = ' badge-info';
+				$label_style = ' bg-info';
 				$title = '';
 				$class = '';
 				if ($cdn == $chosen_cdn) {
-					$label_style = ' badge-success';
+					$label_style = ' bg-success';
 					$title = ' title="'.Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_SELECTEDCDN').'"';
 					$class = ' class="hasTooltip"';
 				}

@@ -16,7 +16,7 @@ class JQueryVersionField extends FormField
 {
 	public $type = 'Jqueryversion';
 
-	static $versions = array('4.0' => '3.5.1');
+	static $versions = array('4.0' => '3.6.0');
 
 	protected function getLabel()
 	{
@@ -61,7 +61,7 @@ class JQueryVersionField extends FormField
 							if (data != undefined && data.version != undefined) {
 
 								const json_version = document.createElement("span");
-								json_version.classList.add("badge", "badge-info");
+								json_version.classList.add("badge", "bg-info");
 								json_version.innerText = data.version;
 
 								const the_version = document.createTextNode("' . Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL') . ' ");

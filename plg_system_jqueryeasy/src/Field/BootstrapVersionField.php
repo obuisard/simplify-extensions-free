@@ -57,7 +57,7 @@ class BootstrapVersionField extends FormField
 							if (data != undefined && data.version != undefined) {
 
 								const json_version = document.createElement("span");
-								json_version.classList.add("badge", "badge-info");
+								json_version.classList.add("badge", "bg-info");
 								json_version.innerText = data.version;
 
 								const the_version = document.createTextNode("' . Text::_('MOD_JQUERYEASYPROFILE_FIELD_LATESTAVAILABLEVERSION_LABEL') . ' ");
