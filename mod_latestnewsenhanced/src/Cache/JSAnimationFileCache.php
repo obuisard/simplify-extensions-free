@@ -11,6 +11,9 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Language\Text;
 use SYW\Library\HeaderFilesCache;
 use SYW\Library\Utilities as SYWUtilities;
+use SYW\Module\LatestNewsEnhanced\Site\Helper\Helper;
+
+require_once (dirname(__FILE__).'/helpers/helper.php');
 
 class JSAnimationFileCache extends HeaderFilesCache
 {
@@ -31,15 +34,10 @@ class JSAnimationFileCache extends HeaderFilesCache
 		$jQuery_var = 'jQuery';
 		$variables[] = 'jQuery_var';
 
-		$show_errors = $params->get('show_errors', 0);
-		if ($params->get('site_mode', 'adv') == 'dev') {
-			$show_errors = 1;
-		} else if ($params->get('site_mode', 'adv') == 'prod') {
-			$show_errors = 0;
-		}
+		$show_errors = Helper::isShowErrors($params);
 		$variables[] = 'show_errors';
 
-		$bootstrap_version = $params->get('bootstrap_version', 2);
+		$bootstrap_version = $params->get('bootstrap_version', 5);
 		$variables[] = 'bootstrap_version';
 
 		$animation = $params->get('anim', '');
@@ -51,7 +49,7 @@ class JSAnimationFileCache extends HeaderFilesCache
 
 		// general parameters
 
-		$horizontal = ($params->get('align', 'v') == 'h') ? true : false;
+		$horizontal = ($params->get('align', 'v') === 'h') ? true : false;
 		$variables[] = 'horizontal';
 
 		$item_width = trim($params->get('item_w', 100));

@@ -31,16 +31,6 @@ header("Content-type: text/css; charset=UTF-8");
 		-webkit-align-self: stretch;
 		-ms-flex-item-align: stretch;
 		align-items: stretch;
-
-		-webkit-border-radius: 3px;
-		-moz-border-radius: 3px;
-		border-radius: 3px;
-
-		-moz-box-shadow: 1px 1px 3px rgba(207, 207, 207, 0.8);
-		-webkit-box-shadow: 1px 1px 3px rgba(207, 207, 207, 0.8);
-		box-shadow: 1px 1px 4px rgba(207, 207, 207, 0.8);
-
-		margin: 4px 5px 5px 4px;
 	}
 
 	<?php echo $suffix; ?> .head_right .innernews {
@@ -79,6 +69,24 @@ header("Content-type: text/css; charset=UTF-8");
 			-ms-flex: none;
 			flex: none;
 		}
+
+		<?php echo $suffix; ?> .text_top .newshead,
+		<?php echo $suffix; ?> .text_bottom .newshead {
+			width: 100%;
+		}					
+
+			<?php if ($head_align) : ?>	
+				<?php echo $suffix; ?> .text_top .newshead > div,
+				<?php echo $suffix; ?> .text_bottom .newshead > div {
+					<?php if ($head_align == 'left') : ?>
+						margin: 0 auto 0 0;
+					<?php elseif ($head_align == 'right') : ?>
+						margin: 0 0 0 auto;
+					<?php elseif ($head_align == 'center') : ?>
+						margin: 0 auto;
+					<?php endif; ?>
+				}
+			<?php endif; ?>	
 
 		<?php echo $suffix; ?> .head_left .newsinfooverhead,
 		<?php echo $suffix; ?> .head_right .newsinfooverhead,
@@ -149,7 +157,7 @@ header("Content-type: text/css; charset=UTF-8");
 				flex: none;
 			}
 
-			<?php echo $suffix; ?> .item_details {
+			<?php echo $suffix; ?> .newsinfo .item_details {
 				padding: 0 0 10px 0;
 
 				-webkit-box-flex: none;
@@ -158,7 +166,7 @@ header("Content-type: text/css; charset=UTF-8");
 				flex: none;
 			}
 
-			<?php echo $suffix; ?> .item_details.after_text {
+			<?php echo $suffix; ?> .newsinfo .item_details.after_text {
 				-webkit-box-flex: 1 1 auto;
 				-webkit-flex: 1 1 auto;
 				-ms-flex: 1 1 auto;
@@ -210,7 +218,7 @@ header("Content-type: text/css; charset=UTF-8");
 			}
 
 			<?php echo $suffix; ?> p.link + .catlink {
-				padding: 5px 0 0 0;
+				padding: 10px 0 0 0;
 			}
 
 			<?php echo $suffix; ?> .innernews > .catlink {
@@ -222,7 +230,6 @@ header("Content-type: text/css; charset=UTF-8");
 	<?php echo $suffix; ?> .newshead.picturetype {
 		position: relative;
 		max-width: 100%;
-		background-color: <?php echo $bgcolor; ?>;
 	}
 
 	<?php if ($pic_border_width > 0 || $pic_border_radius > 0) : ?>
@@ -248,4 +255,20 @@ header("Content-type: text/css; charset=UTF-8");
 		display: inherit;
 	}
 
+	<?php if (intval($pic_shadow_width) > 0) : ?>
+		<?php echo $suffix; ?> .shadow.simple .picturetype {
+			padding: <?php echo (intval($pic_shadow_width) + 2) ?>px;
+
+			-moz-box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+
+		<?php echo $suffix; ?> .shadow.simple .picture,
+		<?php echo $suffix; ?> .shadow.simple .nopicture {
+			-moz-box-shadow: 0 0 <?php echo $pic_shadow_width; ?>px rgba(0, 0, 0, 0.8);
+			-webkit-box-shadow: 0 0 <?php echo $pic_shadow_width; ?>px rgba(0, 0, 0, 0.8);
+			box-shadow: 0 0 <?php echo $pic_shadow_width; ?>px rgba(0, 0, 0, 0.8);
+		}
+	<?php endif; ?>
 <?php endif; ?>

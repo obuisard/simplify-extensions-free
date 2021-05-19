@@ -29,13 +29,17 @@ class AnimationSelectField extends DynamicSingleSelect
 		$path = '/media/mod_latestnewsenhanced/styles/animations';
 		$imagepath = '/media/mod_latestnewsenhanced/images/animations';
 
-		$options[] = array('', Text::_('JNO'), '', Uri::root(true).'/media/mod_latestnewsenhanced/images/select_no.png');
+		$options[] = array('', Text::_('JNONE'), '', Uri::root(true).'/media/mod_latestnewsenhanced/images/select_no.png');
 
 		$optionsArray = Folder::folders(JPATH_SITE.$path);
 
 		foreach ($optionsArray as $option) {
 
 			if ($option != 'justpagination') {
+				
+				if (!File::exists(JPATH_ROOT . $imagepath . '/' . $option . '.png')) {
+					continue;
+				}
 
 				$upper_option = strtoupper($option);
 
@@ -66,7 +70,7 @@ class AnimationSelectField extends DynamicSingleSelect
 				if (File::exists(JPATH_ROOT.$path.'/'.$option.'/style.css.php')) {
 					$options[] = array($option, $translated_option, $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover, false, $badge);
 				} else {
-					$options_disabled[] = array($option, $translated_option . ' (Pro)', $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover, true, $badge);
+					$options_disabled[] = array($option, $translated_option . ' (Pro)', $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover, true, 'Pro,' . $badge);
 				}
 			}
 		}
@@ -82,7 +86,7 @@ class AnimationSelectField extends DynamicSingleSelect
 
 		if ($return) {
 			$this->width = 150;
-			$this->maxwidth = 170;
+			$this->maxwidth = 180;
 			$this->height = 100;
 		}
 

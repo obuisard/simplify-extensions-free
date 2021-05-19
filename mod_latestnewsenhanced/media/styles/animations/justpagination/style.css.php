@@ -276,7 +276,7 @@ header("Content-type: text/css; charset=UTF-8");
 <?php endif; ?>
 
 /* extra bootstrap 4 styles for 'around' positions */
-<?php if ($pagination_style && $bootstrap_version == 4) : ?>
+<?php if ($pagination_style && $bootstrap_version >= 4) : ?>
 
     <?php echo $suffix; ?> .items_pagination.left .page-item:first-child .page-link,
     <?php echo $suffix; ?> .items_pagination.up .page-item:first-child .page-link {

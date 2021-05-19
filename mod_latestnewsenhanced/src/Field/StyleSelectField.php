@@ -32,6 +32,10 @@ class StyleSelectField extends DynamicSingleSelect
 		$optionsArray = Folder::folders(JPATH_SITE.$path);
 
 		foreach ($optionsArray as $option) {
+			
+			if (!File::exists(JPATH_ROOT . $imagepath . '/' . $option . '.png')) {
+				continue;
+			}
 
 			$upper_option = strtoupper($option);
 

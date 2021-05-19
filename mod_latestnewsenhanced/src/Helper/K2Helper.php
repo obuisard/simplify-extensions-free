@@ -888,6 +888,8 @@ class K2Helper
 
 			$crop_picture = $params->get('crop_pic', 0);
 
+			$lazyload = $params->get('lazyload', false);
+
 			$allow_remote = $params->get('allow_remote', true);
 
 			$maintain_height = $params->get('maintain_height', 0);
@@ -927,12 +929,7 @@ class K2Helper
 
 			$image_qualities = array('jpg' => $quality_jpg, 'png' => $quality_png, 'webp' => $quality_webp);
 
-			$clear_cache = $params->get('clear_cache', 0);
-			if ($params->get('site_mode', 'adv') == 'dev') {
-				$clear_cache = 1;
-			} else if ($params->get('site_mode', 'adv') == 'prod') {
-				$clear_cache = 0;
-			}
+			$clear_cache = Helper::IsClearPictureCache($params);
 
 			$subdirectory = 'thumbnails/lne';
 			if ($params->get('thumb_path', 'images') == 'cache') {
@@ -959,7 +956,7 @@ class K2Helper
 		$title_truncate_last_word = $params->get('trunc_l_w_title', 0);
 		//$show_date = $params->get('show_d', 'date');
 
-		$link_to = $params->get('link_to', 'article');
+		$link_to = $params->get('link_to', 'item');
 		switch ($params->get('link_target', 'default')) {
 			case 'same': $link_target = ''; break;
 			case 'inline': $link_target = 4; break;
@@ -1018,7 +1015,8 @@ class K2Helper
 			if ($item->state == 1) {
 
 				//$item->linktarget = '';
-				//$item->isinternal = true;
+				$item->isinternal = true;
+				
 				$item->linktitle = $item->title;
 
 				$link_string = K2HelperRoute::getItemRoute($item->slug, $item->cat_slug);
@@ -1175,7 +1173,7 @@ class K2Helper
 					}
 
 					if ($imagesrc) { // found an image
-					    if (!$params->get('create_thumb', 1)) {
+						if (!$params->get('create_thumb', 1) || $head_width <= 0 || $head_height <= 0) {
 					        $filename = $imagesrc;
 					    } else {
 					    	$result_array = Helper::getImageFromSrc($module->id, $item->id, $imagesrc, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, false, $allow_remote);
@@ -1210,32 +1208,20 @@ class K2Helper
 
 				if ($filename) {
 
-// 					$extra_styling = '';
-
-// 					if ($thumbnails_exist) {
-						// thumbnails have been created
-
-// 						if (!$crop_picture && $maintain_height) {
-
-// 							$imagesize = @getimagesize($filename); // @ to avoid warnings
-// 							if ($imagesize !== FALSE) {
-// 								$imageheight = $imagesize[1];
-
-// 								$top = intval(($head_height - $imageheight) / 2); // to center the image, when no cropping
-// 								$extra_styling = ' style="position: relative; top: '.$top.'px"';
-// 							}
-// 						}
-
-// 						$filename = Uri::base(true).'/'.$filename;
-// 					}
-
 					$img_attributes = array();
-					if ($crop_picture) {
+					if ($crop_picture && $head_width > 0 && $head_height > 0) {
 						$img_attributes = array('width' => $head_width, 'height' => $head_height);
 					}
+					
+					$extra_attributes = trim($params->get('image_attributes', ''));
+					if ($extra_attributes) {
+						$xml = new \SimpleXMLElement('<element ' . $extra_attributes . ' />');
+						foreach ($xml->attributes() as $attribute_name => $attribute_value) {
+							$img_attributes[$attribute_name] = $attribute_value;
+						}
+					}
 
-					//$item->imagetag = '<img alt="'.$item->title.'" src="'.$filename.'"'.$extra_styling.' />';
-					$item->imagetag = SYWUtilities::getImageElement($filename, $item->title, $img_attributes, true);
+					$item->imagetag = SYWUtilities::getImageElement($filename, $item->title, $img_attributes, $lazyload);
 				}
 			}
 

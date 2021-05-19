@@ -17,6 +17,16 @@ header("Content-type: text/css; charset=UTF-8");
 	}
 <?php endif; ?>
 			
+<?php if ($cal_shadow_width > 0) : ?>
+	<?php echo $suffix; ?> .newshead.calendartype {
+		padding: <?php echo (intval($cal_shadow_width) + 2); ?>px;
+   						
+   		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+<?php endif; ?>
+			
 	<?php echo $suffix; ?> .newshead .calendar {	
 		font-family: Arial, Helvetica, sans-serif;
 		font-size: <?php echo $font_ratio; ?>em;
@@ -26,17 +36,8 @@ header("Content-type: text/css; charset=UTF-8");
 			box-shadow: 0 0 <?php echo $cal_shadow_width; ?>px rgba(0, 0, 0, 0.8);
 			-moz-box-shadow: 0 0 <?php echo $cal_shadow_width; ?>px rgba(0, 0, 0, 0.8);
 			-webkit-box-shadow: 0 0 <?php echo $cal_shadow_width; ?>px rgba(0, 0, 0, 0.8);
-			/* IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS */
-			
-			margin: <?php echo $cal_shadow_width; ?>px;
 		<?php endif; ?>	
 	}
-	
-	<?php if ($cal_shadow_width > 0) : ?>
-		<?php echo $suffix; ?> .newshead .nocalendar {			
-			margin: <?php echo $cal_shadow_width; ?>px;
-		}
-	<?php endif; ?>
 	
 	<?php echo $suffix; ?> .newshead .calendar.noimage {			
 		
@@ -70,7 +71,6 @@ header("Content-type: text/css; charset=UTF-8");
 			border-radius: <?php echo $cal_border_radius; ?>px;
 			-moz-border-radius: <?php echo $cal_border_radius; ?>px;
 			-webkit-border-radius: <?php echo $cal_border_radius; ?>px;
-			/* IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS */
 	
 			-moz-background-clip: padding-box;
 			-webkit-background-clip: padding-box;

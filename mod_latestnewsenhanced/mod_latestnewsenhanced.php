@@ -9,7 +9,6 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Multilanguage;
@@ -21,7 +20,6 @@ use SYW\Library\Utilities as SYWUtilities;
 use SYW\Library\Stylesheets as SYWStylesheets;
 use SYW\Module\LatestNewsEnhanced\Site\Cache\CSSFileCache;
 use SYW\Module\LatestNewsEnhanced\Site\Cache\JSAnimationFileCache;
-use SYW\Module\LatestNewsEnhanced\Site\Cache\JSFileCache;
 use SYW\Module\LatestNewsEnhanced\Site\Helper\CalendarHelper as LNECalendarHelper;
 use SYW\Module\LatestNewsEnhanced\Site\Helper\Helper as LNEHelper;
 use SYW\Module\LatestNewsEnhanced\Site\Helper\ContentHelper as LNEContentHelper;
@@ -60,7 +58,7 @@ if ($list === null) {
 $bootstrap_version = $params->get('bootstrap_version', 'joomla');
 $load_bootstrap = false;
 if ($bootstrap_version === 'joomla') {
-    $bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
+    $bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
     $load_bootstrap = true;
 } else {
 	$bootstrap_version = intval($bootstrap_version);
@@ -83,19 +81,9 @@ if (empty($list)) { // $list can be an empty array
 
 	$params->set('bootstrap_version', $bootstrap_version); // for use in header files
 
-	$show_errors = $params->get('show_errors', 0);
-	if ($params->get('site_mode', 'adv') == 'dev') {
-		$show_errors = 1;
-	} else if ($params->get('site_mode', 'adv') == 'prod') {
-		$show_errors = 0;
-	}
+	$show_errors = LNEHelper::isShowErrors($params);
 
-	$remove_whitespaces = $params->get('remove_whitespaces', 0);
-	if ($params->get('site_mode', 'adv') == 'dev') {
-		$remove_whitespaces = 0;
-	} else if ($params->get('site_mode', 'adv') == 'prod') {
-		$remove_whitespaces = 1;
-	}
+	$remove_whitespaces = LNEHelper::isRemoveWhitespaces($params);
 
 	$items_align = $params->get('align', 'v');
 
@@ -138,12 +126,7 @@ if (empty($list)) { // $list can be an empty array
 	$keep_space = $params->get('keep_image_space', 1);
 	$alignment = ($items_align == 'v') ? 'vertical' : 'horizontal';
 
-	$clear_header_files_cache = $params->get('clear_css_cache', 1);
-	if ($params->get('site_mode', 'adv') == 'dev') {
-		$clear_header_files_cache = 1;
-	} else if ($params->get('site_mode', 'adv') == 'prod') {
-		$clear_header_files_cache = 0;
-	}
+	$clear_header_files_cache = LNEHelper::IsClearHeaderCache($params);
 
 	$generate_inline_scripts = $params->get('inline_scripts', 0);
 	$load_remotely = $params->get('remote_libraries', 0);
@@ -581,7 +564,6 @@ if (empty($list)) { // $list can be an empty array
 
 		if ($generate_inline_scripts) {
 
-			//$doc->addScriptDeclaration($cache_anim_js->getBuffer());
 			$wam->addInlineScript($cache_anim_js->getBuffer());
 
 		} else {
@@ -589,7 +571,6 @@ if (empty($list)) { // $list can be an empty array
 			$result = $cache_anim_js->cache('animation_'.$module->id.'.js', $clear_header_files_cache);
 
 			if ($result) {
-				//$doc->addScript(Uri::base(true).'/media/cache/mod_latestnewsenhanced/animation_'.$module->id.'.js');
 				$wam->registerAndUseScript('lne.animation_' . $module->id, $cache_anim_js->getCachePath() . '/animation_' . $module->id . '.js', [], ['defer' => true]);
 			}
 		}
@@ -599,35 +580,6 @@ if (empty($list)) { // $list can be an empty array
 			File::delete(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/animation_'.$module->id.'.js');
 		}
 	}
-
-//	if ((empty($animation) || $animation == 'justpagination') && $item_width_unit == '%' && !empty($min_item_width)) {
-
-		// add items responsiveness	when not in an animation other than pagination
-
-//		HTMLHelper::_('jquery.framework');
-
-//		$cache_js = new JSFileCache('mod_latestnewsenhanced', $params);
-
-//		if ($generate_inline_scripts) {
-
-			//$doc->addScriptDeclaration($cache_js->getBuffer());
-//			$wam->addInlineScript($cache_js->getBuffer());
-
-//		} else {
-
-//			$result = $cache_js->cache('script_'.$module->id.'.js', $clear_header_files_cache);
-
-//			if ($result) {
-				//$doc->addScript(Uri::base(true).'/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.js');
-//				$wam->registerAndUseScript('lne.script_' . $module->id, $cache_js->getCachePath() . '/script_' . $module->id . '.js');
-//			}
-//		}
-//	} else {
-		// remove style.js if it exists
-//		if (File::exists(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/script_'.$module->id.'.js')) {
-//			File::delete(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/script_'.$module->id.'.js');
-//		}
-//	}
 
 	if (File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/substitute_styles.css') || File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/substitute_styles-min.css')) {
 		LNEHelper::loadUserStylesheet(true);
@@ -671,7 +623,6 @@ if (empty($list)) { // $list can be an empty array
 		$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
 
 		if ($result) {
-			//$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_latestnewsenhanced/style_'.$module->id.'.css');
 			$wam->registerAndUseStyle('lne.style_' . $module->id, $cache_css->getCachePath() . '/style_' . $module->id . '.css');
 		}
 

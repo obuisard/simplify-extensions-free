@@ -25,14 +25,14 @@ document.addEventListener("readystatechange", function(event) {
 				var news = document.querySelector("<?php echo $css_prefix ?>.newslist");
 				if (news.classList) { news.classList.add("show"); } else { news.className += " " + className; }
 
-				<?php if ($pagination_style && ($bootstrap_version == 3 || $bootstrap_version == 4)) : ?>
+				<?php if ($pagination_style && $bootstrap_version >= 3) : ?>
 	        		var pagination = document.querySelectorAll("<?php echo $css_prefix ?> .items_pagination ul");
 	        		for (var j = 0; j < pagination.length; j++) {
 		        		if (pagination[j].classList) { pagination[j].classList.add("pagination"); } else { pagination[j].className += " pagination"; }
 		        		<?php if ($pagination_size) : ?>
 		        			if (pagination[j].classList) { pagination[j].classList.add("<?php echo $pagination_size ?>"); } else { pagination[j].className += " <?php echo $pagination_size ?>"; }
 		            	<?php endif; ?>
-		        		<?php if ($bootstrap_version == 4) : ?>
+		        		<?php if ($bootstrap_version >= 4) : ?>
 		                	<?php if ($pagination_align) : ?>
 		                		if (pagination[j].classList) { pagination[j].classList.add("<?php echo $pagination_align ?>"); } else { pagination[j].className += " <?php echo $pagination_align ?>"; }
 		                    <?php endif; ?>

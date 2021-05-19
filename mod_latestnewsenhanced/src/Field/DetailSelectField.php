@@ -72,10 +72,10 @@ class DetailSelectField extends GroupedListField
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'links', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKS') . ' (Pro)', 'value', 'text', $disable = true);
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'linksnl', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKSNEWLINE') . ' (Pro)', 'value', 'text', $disable = true);
 
-		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_jcomments') && ComponentHelper::isEnabled('com_jcomments')) {
-			$groups[$group_name][] = HTMLHelper::_('select.option', 'jcommentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JCOMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
-			$groups[$group_name][] = HTMLHelper::_('select.option', 'linkedjcommentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDJCOMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
-		}
+// 		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_jcomments') && ComponentHelper::isEnabled('com_jcomments')) {
+// 			$groups[$group_name][] = HTMLHelper::_('select.option', 'jcommentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JCOMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
+// 			$groups[$group_name][] = HTMLHelper::_('select.option', 'linkedjcommentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDJCOMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
+// 		}
 
 		if (SYWK2::exists()) {
 			//$groups[$group_name][] = HTMLHelper::_('select.option', 'k2_user', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2USER'), 'value', 'text', $disable = false);
@@ -160,7 +160,7 @@ class DetailSelectField extends GroupedListField
 
 		$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PLUGINFIELDS');
 		$groups[$group_name] = array();
-		$groups[$group_name][] = HTMLHelper::_('select.option', 'pluginpro', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_ADDYOUROWN') . ' (Pro)', 'value', 'text', $disable = true);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'pluginpro', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ADDYOUROWN') . ' (Pro)', 'value', 'text', $disable = true);
 
 		// Merge any additional options in the XML definition.
 		$groups = array_merge(parent::getGroups(), $groups);

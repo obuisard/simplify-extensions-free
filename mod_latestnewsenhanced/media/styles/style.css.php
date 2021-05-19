@@ -29,6 +29,7 @@ header("Content-type: text/css; charset=UTF-8");
 		display: -ms-flexbox;
 		display: flex;
 
+		-webkit-flex-wrap: wrap;
 		-ms-flex-wrap: wrap;
 		flex-wrap: wrap;
 
@@ -66,10 +67,39 @@ header("Content-type: text/css; charset=UTF-8");
 		<?php if (!$horizontal) : ?>
 			-webkit-flex-direction: column;
 			-ms-flex-direction: column;
-			flex-direction: column;
-
-			-ms-flex-line-pack: center;
-   			align-content: center;
+			flex-direction: column;  			
+   			
+   			<?php if ($items_valign_col == 'fs') : ?>
+		    	-webkit-box-align: start;
+		    	-ms-flex-align: start;
+		    	align-items: flex-start;
+		    <?php elseif ($items_valign_col == 'fe') : ?>
+		    	-webkit-box-align: end;
+		    	-ms-flex-align: end;
+		    	align-items: flex-end;
+		    <?php elseif ($items_valign_col == 'c') : ?>
+		    	-webkit-box-align: center;
+		    	-ms-flex-align: center;
+		    	align-items: center;
+			<?php else : ?>
+		    	-webkit-box-align: stretch;
+		    	-ms-flex-align: stretch;
+		    	align-items: stretch;
+			<?php endif; ?>
+   		<?php else: ?>
+	   		<?php if ($items_valign_row == 'fs') : ?>
+		    	-webkit-box-align: start;
+		    	-ms-flex-align: start;
+		    	align-items: flex-start;
+		    <?php elseif ($items_valign_row == 'fe') : ?>
+		    	-webkit-box-align: end;
+		    	-ms-flex-align: end;
+		    	align-items: flex-end;
+		    <?php else : ?>
+		    	-webkit-box-align: center;
+		    	-ms-flex-align: center;
+		    	align-items: center;
+			<?php endif; ?>
 		<?php endif; ?>
 	}
 
@@ -100,53 +130,154 @@ header("Content-type: text/css; charset=UTF-8");
     	<?php endif; ?>
 	}
 
-		<?php echo $suffix; ?> .news {
-			<?php if ($item_width_unit == '%') : ?>
-				width: 100%;
-			<?php else : ?>
-				width: <?php echo $item_width; ?>px;
-			<?php endif; ?>
-		}
-
-			<?php if ($bgcolor_body && $bgcolor_body != 'transparent') : ?>
+			<?php if (($bgcolor_body && $bgcolor_body != 'transparent') || $border_width_body > 0 || $border_radius_body > 0 || $shadow_body != 'none' || $padding_body > 0 || $font_color_body) : ?>
 				<?php echo $suffix; ?> .innernews {
-					background-color: <?php echo $bgcolor_body; ?>;
+					<?php if ($bgcolor_body && $bgcolor_body != 'transparent') : ?>
+						background-color: <?php echo $bgcolor_body; ?>;
+					<?php endif; ?>
+					<?php if ($border_width_body > 0 && ($border_color_body || $colortheme)) : ?>
+						<?php if ($border_color_body) : ?>
+							border: <?php echo $border_width_body; ?>px solid <?php echo $border_color_body; ?>;
+						<?php else : ?>
+							border-width: <?php echo $border_width_body; ?>px;
+							border-style: solid;
+						<?php endif; ?>
+					<?php endif; ?>
+					<?php if ($border_radius_body > 0) : ?>
+    					-moz-border-radius: <?php echo $border_radius_body; ?>px;
+    					-webkit-border-radius: <?php echo $border_radius_body; ?>px;
+						border-radius: <?php echo $border_radius_body; ?>px;
+					<?php endif; ?>
+					<?php if ($shadow_body == 's') : ?>
+						-webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+						box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+						margin: 6px;
+					<?php endif; ?>
+					<?php if ($shadow_body == 'm') : ?>
+						-webkit-box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),0 1px 10px 0 rgba(0,0,0,0.12),0 2px 4px -1px rgba(0,0,0,0.3);
+						box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),0 1px 10px 0 rgba(0,0,0,0.12),0 2px 4px -1px rgba(0,0,0,0.3);
+						margin: 11px;
+					<?php endif; ?>
+					<?php if ($shadow_body == 'l') : ?>
+						-webkit-box-shadow: 0 8px 17px 2px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12),0 5px 5px -3px rgba(0,0,0,0.2);
+						box-shadow: 0 8px 17px 2px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12),0 5px 5px -3px rgba(0,0,0,0.2);
+						margin: 27px;
+					<?php endif; ?>
+					<?php if ($shadow_body == 'ss') : ?>
+						-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
+						box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
+						margin: 5px;
+					<?php endif; ?>
+					<?php if ($shadow_body == 'sm') : ?>
+						-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
+						box-shadow: 1px 1px 10px rgba(51, 51, 51, 0.2);
+						margin: 11px;
+					<?php endif; ?>
+					<?php if ($shadow_body == 'sl') : ?>
+						-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
+						box-shadow: 1px 1px 15px rgba(51, 51, 51, 0.2);
+						margin: 16px;
+					<?php endif; ?>
+					<?php if ($padding_body > 0) : ?>
+						padding: <?php echo $padding_body; ?>px;
+					<?php endif; ?>				
+					<?php if ($font_color_body) : ?>
+						color: <?php echo $font_color_body; ?>;
+					<?php endif; ?>
 				}
 			<?php endif; ?>
 
-				<?php if ($image) : ?>
+			<?php if ($link_color_body) : ?>
+				<?php echo $suffix; ?> .innernews a:not(.btn) {
+					color: <?php echo $link_color_body; ?>;
+				}			
+			<?php endif; ?>
+			
+			<?php if ($link_color_hover_body) : ?>
+				<?php echo $suffix; ?> .innernews a:not(.btn):hover,
+				<?php echo $suffix; ?> .innernews a:not(.btn):focus {
+					color: <?php echo $link_color_hover_body; ?>;
+					text-decoration: underline;
+				}			
+			<?php endif; ?>			
 
+				<?php if ($padding_head) : ?>			
+					<?php echo $suffix; ?> .newshead {
+						padding: <?php echo $padding_head; ?>px !important;
+					}
+				<?php endif; ?>
+				
+				<?php if ($padding_info) : ?>			
+					<?php echo $suffix; ?> .newsinfo,
+					<?php echo $suffix; ?> .newsinfooverhead {
+						padding: <?php echo $padding_info; ?>px !important;
+					}
+				<?php endif; ?>					
+
+			<?php if ($image) : ?>
+			
+				<?php if ($head_width <= 0 || $head_height <= 0) : ?>
+					<?php echo $suffix; ?> .newshead .picture {
+						overflow: hidden;
+						text-align: center;
+						position: relative;
+						width: max-content;
+						max-width: 100%;
+						<?php if ($bgcolor && $bgcolor != 'transparent') : ?>
+							background-color: <?php echo $bgcolor; ?>;
+						<?php endif; ?>
+					}
+					
+					<?php echo $suffix; ?> .newshead .nopicture {
+						display: none;
+					}			
+				<?php else : ?>
 					<?php echo $suffix; ?> .newshead .picture,
 					<?php echo $suffix; ?> .newshead .nopicture {
-						<?php if ($head_width > 0) : ?>
-							max-width: <?php echo $head_width; ?>px;
-						<?php endif; ?>
-						<?php if ($head_height > 0) : ?>
-							max-height: <?php echo $head_height; ?>px;
-						<?php endif; ?>
-						<?php if ($maintain_height && $head_height > 0) : ?>
+						overflow: hidden;
+						text-align: center;
+						position: relative;
+						max-width: <?php echo $head_width; ?>px;
+						max-height: <?php echo $head_height; ?>px;
+						<?php if ($maintain_height) : ?>
 							height: <?php echo $head_height; ?>px;
 							min-height: <?php echo $head_height; ?>px;
 						<?php endif; ?>
-
-						<?php if ($maintain_height) : ?>
-							display: table-cell;
-							vertical-align: middle;
+						<?php if ($bgcolor && $bgcolor != 'transparent') : ?>
+							background-color: <?php echo $bgcolor; ?>;
 						<?php endif; ?>
-
-						background-color: <?php echo $bgcolor; ?>;
 					}
 
-					<?php echo $suffix; ?> .newshead .nopicture > span {
-						<?php if ($head_width > 0) : ?>
+					<?php if ($maintain_height) : ?>
+						<?php echo $suffix; ?> .newshead .nopicture > a span,
+						<?php echo $suffix; ?> .newshead .nopicture > span {
+							display: inline-block;
 							width: <?php echo $head_width; ?>px;
-						<?php endif; ?>
-						<?php if ($head_height > 0) : ?>
 							height: <?php echo $head_height; ?>px;
-						<?php endif; ?>
-					}
-
+						}
+					<?php endif; ?>
 				<?php endif; ?>
+
+				<?php echo $suffix; ?> .newshead .picture .innerpicture a,
+				<?php echo $suffix; ?> .newshead .nopicture > a {
+					text-decoration: none;
+					display: inline-block;
+					height: 100%;
+    				width: 100%;
+    				cursor: pointer;
+				}
+				
+				<?php echo $suffix; ?> .newshead .picture .innerpicture a:hover,
+				<?php echo $suffix; ?> .newshead .nopicture > a:hover {
+					text-decoration: none;
+				}
+	
+				<?php echo $suffix; ?> .newshead .picture img {
+					max-width: 100%;
+					max-height: 100%;
+				}
+
+			<?php endif; ?>
 
 			<?php if ($calendar) : ?>
 
@@ -170,6 +301,24 @@ header("Content-type: text/css; charset=UTF-8");
 						height: <?php echo $head_height; ?>px;
 					}
 
+					<?php echo $suffix; ?> .newshead .calendar .position1, 
+					<?php echo $suffix; ?> .newshead .calendar .position2, 
+					<?php echo $suffix; ?> .newshead .calendar .position3, 
+					<?php echo $suffix; ?> .newshead .calendar .position4, 
+					<?php echo $suffix; ?> .newshead .calendar .position5 {
+						display: block;
+					}
+
+			<?php endif; ?>
+
+			<?php if ($content_align) : ?>
+				<?php echo $suffix; ?> .newsinfooverhead .item_details .newsextra,
+				<?php echo $suffix; ?> .newsinfooverhead .newstitle,
+				<?php echo $suffix; ?> .newsinfo .item_details .newsextra,
+				<?php echo $suffix; ?> .newsinfo .newstitle,
+				<?php echo $suffix; ?> .newsinfo .newsintro {
+					text-align: <?php echo $content_align; ?> !important;
+				}
 			<?php endif; ?>
 
 					<?php if ($force_title_one_line) : ?>

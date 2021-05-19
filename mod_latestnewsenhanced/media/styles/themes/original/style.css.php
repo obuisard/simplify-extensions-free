@@ -15,10 +15,6 @@ header("Content-type: text/css; charset=UTF-8");
 	opacity: 0.5;
 }
 
-	<?php echo $suffix; ?> .innernews {
-		padding: 2px;
-	}
-
 		<?php echo $suffix; ?> .head_left .newshead {
 			float: left;
 			margin: 0 8px 0 0;
@@ -28,6 +24,19 @@ header("Content-type: text/css; charset=UTF-8");
 			float: right;
 			margin: 0 0 0 8px;
 		}
+
+			<?php if ($head_align) : ?>	
+				<?php echo $suffix; ?> .text_top .newshead > div,
+				<?php echo $suffix; ?> .text_bottom .newshead > div {
+					<?php if ($head_align == 'left') : ?>
+						margin: 0 auto 0 0;
+					<?php elseif ($head_align == 'right') : ?>
+						margin: 0 0 0 auto;
+					<?php elseif ($head_align == 'center') : ?>
+						margin: 0 auto;
+					<?php endif; ?>
+				}
+			<?php endif; ?>	
 
 		<?php echo $suffix; ?> .head_left .newsinfooverhead,
 		<?php echo $suffix; ?> .head_right .newsinfooverhead,

@@ -24,9 +24,9 @@ if ($bootstrap_version > 0) {
 }
 ?>
 <?php if ($datasource != 'articles') : ?>
-	<div class="alert <?php echo SYWUtilities::getBootstrapProperty('alert-error', $bootstrap_version); ?>"><?php echo Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_WRONGLAYOUT'); ?></div>
+	<div class="<?php echo SYWUtilities::getBootstrapProperty('alert alert-error', $bootstrap_version); ?>"><?php echo Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_WRONGLAYOUT'); ?></div>
 <?php elseif (empty($list)) : ?>
-	<div id="lnee_<?php echo $class_suffix; ?>" class="lnee nonews<?php echo $isMobile ? ' mobile' : ''; ?>"><div class="alert <?php echo SYWUtilities::getBootstrapProperty('alert-info', $bootstrap_version); ?>"><?php echo $nodata_message; ?></div></div>
+	<div id="lnee_<?php echo $class_suffix; ?>" class="lnee nonews<?php echo $isMobile ? ' mobile' : ''; ?>"><div class="<?php echo SYWUtilities::getBootstrapProperty('alert alert-info', $bootstrap_version); ?>"><?php echo $nodata_message; ?></div></div>
 <?php else : ?>
 	<?php
 		$categories = LNEContentHelper::getCategoryList($params, $list);
@@ -200,7 +200,7 @@ if ($bootstrap_version > 0) {
 				?>
 				<li class="latestnews-item id-<?php echo $item->id; ?> catid-<?php echo $item->catid; ?><?php echo $css_item; ?>">
 					<?php if ($show_errors && !empty($item->error)) : ?>
-						<div class="alert <?php echo SYWUtilities::getBootstrapProperty('alert-error', $bootstrap_version); ?>">
+						<div class="<?php echo SYWUtilities::getBootstrapProperty('alert alert-error', $bootstrap_version); ?>">
     						<span><?php echo 'id '.$item->id.':'; ?></span>
                 			<ul>
     						<?php foreach ($item->error as $error) : ?>

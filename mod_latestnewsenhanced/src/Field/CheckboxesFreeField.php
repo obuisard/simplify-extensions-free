@@ -20,7 +20,7 @@ class CheckboxesFreeField extends CheckboxesField
 
 		foreach ($options as $option) {
 			if ($option->disable == true) {
-				$option->text = $option->text . ' <span class="badge badge-important">Pro</span>';
+				$option->text = $option->text . ' <span class="badge bg-important">Pro</span>';
 			}
 		}
 

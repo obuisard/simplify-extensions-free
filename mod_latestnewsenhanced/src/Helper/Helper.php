@@ -298,7 +298,7 @@ class Helper
 
 		$bootstrap_version = isset($module_params->bootstrap_version) ? $module_params->bootstrap_version : 'joomla';
 		if ($bootstrap_version === 'joomla') {
-			$bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
+			$bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
 		} else {
 			$bootstrap_version = intval($bootstrap_version);
 		}
@@ -362,7 +362,7 @@ class Helper
 
 				$link_attributes = ' onclick="return false;" data-modaltitle="'.htmlspecialchars($item->linktitle, ENT_COMPAT, 'UTF-8').'"';
 				if ($bootstrap_version > 0) {
-					$link_attributes .= ' data-toggle="modal" data-target="#lnemodal_'.$module_id.'"';
+					$link_attributes .= ' data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'toggle="modal" data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'target="#lnemodal_'.$module_id.'"';
 				}
 
 				return '<a href="'.$item->link.$extra_url.$anchors.'"'.$attribute_class.$attribute_title.$attribute_aria_label.$link_attributes.'>';
@@ -974,7 +974,6 @@ class Helper
 
 		$minified = (JDEBUG) ? '' : '-min';
 
-		//Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/common_styles' . $minified . '.css');
 		$wam->registerAndUseStyle('lne.common_styles', 'mod_latestnewsenhanced/common_styles' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
 
 		self::$commonStylesLoaded = true;
@@ -998,14 +997,81 @@ class Helper
 		}
 
 		if (!File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles-min.css') || JDEBUG) {
-			//$doc->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles.css');
 			$wam->registerAndUseStyle('lne.' . $prefix . '_styles', 'mod_latestnewsenhanced/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
 		} else {
-			//$doc->addStyleSheet(Uri::base(true).'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles-min.css');
 			$wam->registerAndUseStyle('lne.' . $prefix . '_styles', 'mod_latestnewsenhanced/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
 		}
 
 		self::$userStylesLoaded = true;
+	}
+
+	/**
+	 * Get the site mode
+	 * @return string (dev|prod|adv)
+	 */
+	public static function getSiteMode($params)
+	{
+		return $params->get('site_mode', 'adv');
+	}
+
+	/**
+	 * Is the picture cache set to be cleared
+	 * @return boolean
+	 */
+	public static function IsClearPictureCache($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('clear_cache', true);
+	}
+
+	/**
+	 * Is the style/script cache set to be cleared
+	 * @return boolean
+	 */
+	public static function IsClearHeaderCache($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('clear_css_cache', 'true');
+	}
+
+	/**
+	 * Are errors shown ?
+	 * @return boolean
+	 */
+	public static function isShowErrors($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('show_errors', false);
+	}
+
+	/**
+	 * Are white spaces removed ?
+	 * @return boolean
+	 */
+	public static function isRemoveWhitespaces($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return false;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return true;
+		}
+		return $params->get('remove_whitespaces', false);
 	}
 
 }

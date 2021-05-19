@@ -31,10 +31,7 @@
 	    text-align: initial;
 	}
 	
-		.lnee .news {
-			overflow: hidden;
-		}
-		
+		.lnee .news,
 			.lnee .innernews {
 				overflow: hidden;
 				-webkit-box-sizing: border-box;
@@ -54,45 +51,7 @@
 				padding: 0;
 			}
 		
-					.lnee .newshead .calendar .position1, 
-					.lnee .newshead .calendar .position2, 
-					.lnee .newshead .calendar .position3, 
-					.lnee .newshead .calendar .position4, 
-					.lnee .newshead .calendar .position5 {
-						display: block;
-					}	
-	
-					.lnee .newshead .picture,
-					.lnee .newshead .nopicture {
-		    			overflow: hidden;
-						text-align: center;
-						position: relative;
-					}
-				
-					.lnee .newshead .picture .innerpicture a,
-					.lnee .newshead .nopicture > a {
-						text-decoration: none;
-						display: inline-block;
-						height: 100%;
-	    				width: 100%;
-	    				cursor: pointer;
-					}
-					
-					.lnee .newshead .picture .innerpicture a:hover,
-					.lnee .newshead .nopicture > a:hover {
-						text-decoration: none;
-					}
-		
-					.lnee .newshead .picture img {
-						max-width: 100%;
-						max-height: 100%;
-					}
-		
-					.lnee .newshead .nopicture > a span,
-					.lnee .newshead .nopicture > span {
-						display: inline-block;
-					}
-				
+				.lnee .newshead,
 				.lnee .newsinfo {
 					-webkit-box-sizing: border-box;
 					-moz-box-sizing: border-box;
