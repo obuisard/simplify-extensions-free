@@ -191,14 +191,14 @@ header("Content-type: text/css; charset=UTF-8");
 		}
 
 		.articledetails .info .item_details {
-			font-size: <?php echo ($font_details / 100); ?>em;			
+			font-size: <?php echo ($font_details / 100); ?>em;
 			margin-bottom: 3px;
 		}
 
 			.articledetails .info .item_details .delimiter {
 				white-space: pre-wrap;
 			}
-			
+
 			.articledetails .info .details {
 				<?php if ($details_line_spacing[0]) : ?>
 					line-height: <?php echo $details_line_spacing[0]; ?><?php echo $details_line_spacing[1]; ?>;
@@ -224,6 +224,10 @@ header("Content-type: text/css; charset=UTF-8");
 				color: inherit;
 			}
 
+			.articledetails .info .details .detail {
+				vertical-align: middle;
+			}
+
 			.articledetails .info .details .detail_email .detail_data i,
 			.articledetails .info .details .detail_print .detail_data i {
 				vertical-align: middle;
@@ -236,12 +240,11 @@ header("Content-type: text/css; charset=UTF-8");
 				color: <?php echo $star_color; ?>;
 			}
 
-			.articledetails .info .details .detail_social {
-				vertical-align: middle;
-				<?php if ($share_bgcolor) : ?>
+			<?php if ($share_bgcolor) : ?>
+				.articledetails .info .details .detail_social {
 					line-height: 30px;
-				<?php endif; ?>
-			}
+				}
+			<?php endif; ?>
 
 			.articledetails .info .details .detail_social a {
 				text-align: center;
@@ -270,76 +273,4 @@ header("Content-type: text/css; charset=UTF-8");
     					border-radius: <?php echo $share_radius; ?>px;
     				<?php endif; ?>
     			}
-			<?php endif; ?>
-
-			<?php if ($share_bgcolor) : ?>
-				.articledetails .info .details .detail_social a.sendtofriend i {
-					background-color: #8d6e63;
-				}
-			<?php endif; ?>
-
-			<?php if ($share_color) : ?>
-				.articledetails .info .details .detail_social a.sendtofriend i {
-					color: #8d6e63;
-				}
-			<?php endif; ?>
-
-			<?php if ($share_bgcolor) : ?>
-				.articledetails .info .details .detail_social a.facebook i {
-					background-color: #43609c;
-				}
-			<?php endif; ?>
-
-			<?php if ($share_color) : ?>
-				.articledetails .info .details .detail_social a.facebook i {
-					color: #43609c;
-				}
-			<?php endif; ?>
-
-			<?php if ($share_bgcolor) : ?>
-				.articledetails .info .details .detail_social a.googleplus i {
-					background-color: #db4437;
-				}
-			<?php endif; ?>
-
-			<?php if ($share_color) : ?>
-				.articledetails .info .details .detail_social a.googleplus i {
-					color: #db4437;
-				}
-			<?php endif; ?>
-
-			<?php if ($share_bgcolor) : ?>
-				.articledetails .info .details .detail_social a.stumbleupon i {
-					background-color: #eb4924;
-				}
-			<?php endif; ?>
-
-			<?php if ($share_color) : ?>
-				.articledetails .info .details .detail_social a.stumbleupon i {
-					color: #eb4924;
-				}
-			<?php endif; ?>
-
-			<?php if ($share_bgcolor) : ?>
-				.articledetails .info .details .detail_social a.twitter i {
-					background-color: #02b0e8;
-				}
-			<?php endif; ?>
-
-			<?php if ($share_color) : ?>
-				.articledetails .info .details .detail_social a.twitter i {
-					color: #02b0e8;
-				}
-			<?php endif; ?>
-
-			<?php if ($share_bgcolor) : ?>
-				.articledetails .info .details .detail_social a.linkedin i {
-					background-color: #0077b6;
-				}
-			<?php endif; ?>
-
-			<?php if ($share_color) : ?>
-				.articledetails .info .details .detail_social a.linkedin i {
-					color: #0077b6;
-				}
 			<?php endif; ?>

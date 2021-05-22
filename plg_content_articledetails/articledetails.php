@@ -20,9 +20,13 @@ use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
-use Joomla\Component\Content\Site\Helper\AssociationHelper;
-use Joomla\Component\Content\Site\Helper\RouteHelper;
+use Joomla\Component\Contact\Site\Helper\RouteHelper as ContactRouteHelper;
+use Joomla\Component\Content\Site\Helper\AssociationHelper as ContentAssociationHelper;
+use Joomla\Component\Content\Site\Helper\RouteHelper as ContentRouteHelper;
 use Joomla\Registry\Registry;
+use SYW\Component\TrombinoscopeExtended\Site\Helper\RouteHelper as TrombinoscopeExtendedRouteHelper;
+use SYW\Library\Cache as SYWCache;
+use SYW\Library\Fonts as SYWFonts;
 use SYW\Plugin\Content\ArticleDetails\Cache\CSSFileCache;
 use SYW\Plugin\Content\ArticleDetails\Cache\CSSPrintFileCache;
 use SYW\Plugin\Content\ArticleDetails\Helper\CalendarHelper;
@@ -43,14 +47,6 @@ class plgContentArticleDetails extends CMSPlugin
 	        $this->_library_loaded = false;
 	        return;
 	    }
-
-// 	    \JLoader::register('SYWFonts', JPATH_LIBRARIES.'/syw/fonts.php');
-// 	    \JLoader::register('SYWCache', JPATH_LIBRARIES.'/syw/cache.php');
-// 	    if (!class_exists('SYWFonts') || !class_exists('SYWCache')) {
-// 	        Factory::getApplication()->enqueueMessage(Text::_('PLG_CONTENT_ARTICLEDETAILS_WARNING_CORRUPTEDLIBRARY'), 'error');
-// 	        $this->_library_loaded = false;
-// 	        return;
-// 	    }
 
 		$this->_syntax_exists = false;
 	}
@@ -159,12 +155,7 @@ class plgContentArticleDetails extends CMSPlugin
 			$additional_inline_styles = Helper::getInlineStyles($this->params);
 			$additional_inline_styles .= CalendarHelper::getCalendarInlineStyles($this->params);
 
-			$clear_header_files_cache = $this->params->get('clear_header_files_cache', 1);
-			if ($this->params->get('site_mode', 'adv') == 'dev') {
-				$clear_header_files_cache = 1;
-			} else if ($this->params->get('site_mode', 'adv') == 'prod') {
-				$clear_header_files_cache = 0;
-			}
+			$clear_header_files_cache = Helper::IsClearHeaderCache($this->params);
 
 			$cache_css = new CSSFileCache('plg_content_articledetails', $this->params);
 			$cache_css->addDeclaration($additional_inline_styles);
@@ -235,7 +226,7 @@ class plgContentArticleDetails extends CMSPlugin
 				// add styles
 
 				if ($this->params->get('load_icon_font', true)) {
-					SYW\Library\Fonts::loadIconFont();
+					SYWFonts::loadIconFont();
 				}
 
 				$this->params->set('view', $view);
@@ -245,12 +236,7 @@ class plgContentArticleDetails extends CMSPlugin
 					$additional_inline_styles .= CalendarHelper::getCalendarInlineStyles($this->params);
 				}
 
-				$clear_header_files_cache = $this->params->get('clear_header_files_cache', 1);
-				if ($this->params->get('site_mode', 'adv') == 'dev') {
-					$clear_header_files_cache = 1;
-				} else if ($this->params->get('site_mode', 'adv') == 'prod') {
-					$clear_header_files_cache = 0;
-				}
+				$clear_header_files_cache = Helper::IsClearHeaderCache($this->params);
 
 				$cache_css = new CSSFileCache('plg_content_articledetails', $this->params);
 				$cache_css->addDeclaration($additional_inline_styles);
@@ -315,12 +301,10 @@ class plgContentArticleDetails extends CMSPlugin
 		$db = Factory::getDbo();
 		$app = Factory::getApplication();
 
-		$site_mode = $this->params->get('site_mode', 'adv');
-
 		$bootstrap_version = $this->params->get('bootstrap_version', 'joomla');
 		$load_bootstrap = false;
 		if ($bootstrap_version === 'joomla') {
-			$bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 4;
+			$bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
 			$load_bootstrap = true;
 		} else {
 			$bootstrap_version = intval($bootstrap_version);
@@ -333,9 +317,9 @@ class plgContentArticleDetails extends CMSPlugin
 			$row->link = $row->readmore_link;
 		} else if ($params->get('access-view')) {
 			if (isset($row->language)) {
-				$row->link = Route::_(RouteHelper::getArticleRoute($row->slug, $row->catid, $row->language));
+				$row->link = Route::_(ContentRouteHelper::getArticleRoute($row->slug, $row->catid, $row->language));
 			} else {
-				$row->link = Route::_(RouteHelper::getArticleRoute($row->slug, $row->catid));
+				$row->link = Route::_(ContentRouteHelper::getArticleRoute($row->slug, $row->catid));
 			}
 		}
 
@@ -481,9 +465,9 @@ class plgContentArticleDetails extends CMSPlugin
 			$row->link = $row->readmore_link;
 		} else if ($params->get('access-view')) {
 			if (isset($row->language)) {
-				$row->link = Route::_(RouteHelper::getArticleRoute($row->slug, $row->catid, $row->language));
+				$row->link = Route::_(ContentRouteHelper::getArticleRoute($row->slug, $row->catid, $row->language));
 			} else {
-				$row->link = Route::_(RouteHelper::getArticleRoute($row->slug, $row->catid));
+				$row->link = Route::_(ContentRouteHelper::getArticleRoute($row->slug, $row->catid));
 			}
 		}
 
@@ -621,16 +605,14 @@ class plgContentArticleDetails extends CMSPlugin
 						$url_addition = '&Itemid=' . $default_view;
 					}
 
-					JLoader::register('TrombinoscopeExtendedHelperRoute', JPATH_SITE . '/components/com_trombinoscopeextended/helpers/route.php');
-					$row->contact_link = Route::_(TrombinoscopeExtendedHelperRoute::getContactRoute('trombinoscopeextended', $contact->contactid . ':' . $contact->alias, $contact->catid) . $url_addition);
+					$row->contact_link = Route::_(TrombinoscopeExtendedRouteHelper::getContactRoute('trombinoscopeextended', $contact->contactid . ':' . $contact->alias, $contact->catid) . $url_addition);
 				} else if (PluginHelper::isEnabled('content', 'contact')) {
 
 					$plugin = PluginHelper::getPlugin('content', 'contact');
 					$params_plugin = new Registry($plugin->params);
 
 					if ($contact->contactid && $params_plugin->get('url', 'url') === 'url') {
-						JLoader::register('ContactHelperRoute', JPATH_SITE . '/components/com_contact/helpers/route.php');
-						$row->contact_link = Route::_(ContactHelperRoute::getContactRoute($contact->contactid . ':' . $contact->alias, $contact->catid));
+						$row->contact_link = Route::_(ContactRouteHelper::getContactRoute($contact->contactid . ':' . $contact->alias, $contact->catid));
 					} else if ($contact->webpage && $params_plugin->get('url', 'url') === 'webpage') {
 						$row->contact_link = $contact->webpage;
 					} else if ($contact->email && $params_plugin->get('url', 'url') === 'email') {
@@ -657,7 +639,7 @@ class plgContentArticleDetails extends CMSPlugin
 		}
 
 		if (!isset($row->associations) && $params->get('show_associations')) {
-			$row->associations = AssociationHelper::displayAssociations($row->id);
+			$row->associations = AssociationRouteHelper::displayAssociations($row->id);
 		}
 	}
 

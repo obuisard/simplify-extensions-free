@@ -74,8 +74,8 @@ class CSSPrintFileCache extends HeaderFilesCache
 
 		include JPATH_ROOT . '/media/plg_content_articledetails/styles/print.css.php';
 		if ($calendar) {
-			if (File::exists(JPATH_ROOT . '/media/plg_content_articledetails/styles/calendar/' . $calendar . '/print.css.php')) {
-				include JPATH_ROOT . '/media/plg_content_articledetails/styles/calendar/' . $calendar . '/print.css.php';
+			if (File::exists(JPATH_ROOT . '/media/plg_content_articledetails/styles/calendars/' . $calendar . '/print.css.php')) {
+				include JPATH_ROOT . '/media/plg_content_articledetails/styles/calendars/' . $calendar . '/print.css.php';
 			}
 		}
 

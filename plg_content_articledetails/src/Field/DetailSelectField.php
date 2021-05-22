@@ -42,9 +42,9 @@ class DetailSelectField extends GroupedListField
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'rating', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_RATING'), 'value', 'text', $disable = false);
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'author', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_AUTHOR'), 'value', 'text', $disable = false);
 
-		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler') && ComponentHelper::isEnabled('com_comprofiler')) {
-			$groups[$group_name][] = HTMLHelper::_('select.option', 'authorcb', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_AUTHORCB'), 'value', 'text', $disable = false);
-		}
+// 		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler') && ComponentHelper::isEnabled('com_comprofiler')) {
+// 			$groups[$group_name][] = HTMLHelper::_('select.option', 'authorcb', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_AUTHORCB'), 'value', 'text', $disable = false);
+// 		}
 
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'created', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_CREATEDDATE'), 'value', 'text', $disable = false);
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'modified', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_MODIFIEDDATE'), 'value', 'text', $disable = false);
@@ -72,10 +72,10 @@ class DetailSelectField extends GroupedListField
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'print', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_PRINT'), 'value', 'text', $disable = false);
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'associations', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_ASSOCIATIONS'), 'value', 'text', $disable = false);
 
-		if (File::exists(JPATH_ROOT . '/components/com_jcomments/jcomments.php')) {
-			$groups[$group_name][] = HTMLHelper::_('select.option', 'jcommentscount', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JCOMMENTSCOUNT'), 'value', 'text', $disable = false);
-			$groups[$group_name][] = HTMLHelper::_('select.option', 'linkedjcommentscount', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKEDJCOMMENTSCOUNT'), 'value', 'text', $disable = false);
-		}
+// 		if (File::exists(JPATH_ROOT . '/components/com_jcomments/jcomments.php')) {
+// 			$groups[$group_name][] = HTMLHelper::_('select.option', 'jcommentscount', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_JCOMMENTSCOUNT'), 'value', 'text', $disable = false);
+// 			$groups[$group_name][] = HTMLHelper::_('select.option', 'linkedjcommentscount', Text::_('PLG_CONTENT_ARTICLEDETAILS_VALUE_LINKEDJCOMMENTSCOUNT'), 'value', 'text', $disable = false);
+// 		}
 
 		// get Joomla! fields
 		// test the fields folder first to avoid message warning that the component is missing

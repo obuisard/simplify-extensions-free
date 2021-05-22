@@ -64,6 +64,11 @@ class CSSFileCache extends HeaderFilesCache
 		}
 		$variables[] = 'share_radius';
 
+		// social networks
+
+		$social_networks = $params->get('social_networks', array());
+		$variables[] = 'social_networks';
+
 		// head type, width and height
 
 		$head_width = 0;
@@ -164,7 +169,38 @@ class CSSFileCache extends HeaderFilesCache
 
 		include JPATH_ROOT . '/media/plg_content_articledetails/styles/style.css.php';
 		if ($calendar) {
-			include JPATH_ROOT . '/media/plg_content_articledetails/styles/calendar/' . $calendar . '/style.css.php';
+			include JPATH_ROOT . '/media/plg_content_articledetails/styles/calendars/' . $calendar . '/style.css.php';
+		}
+
+		// social networks
+		if (!empty($social_networks) && is_object($social_networks)) {
+
+			$default_colors = array('facebook' => '#43609c', 'twitter' => '#02b0e8', 'linkedin' => '#0077b6', 'sendtofriend' => '#8d6e63');
+
+			foreach ($social_networks as $social_network) {
+				if ($social_network->social_network != 'none') {
+
+					$social_network_class = $social_network->social_network;
+
+					if ($social_network->social_network == 'email') {
+						$social_network_class = 'sendtofriend';
+					}
+
+					$color = isset($default_colors[$social_network_class]) ? $default_colors[$social_network_class] : '';
+
+					if ($share_bgcolor && $color) {
+						echo '.articledetails .info .details .detail_social a.' . $social_network_class . ' i {';
+						echo 'background-color: ' . $color . ';';
+						echo '}';
+					}
+
+					if ($share_color && $color) {
+						echo '.articledetails .info .details .detail_social a.' . $social_network_class . ' i {';
+						echo 'color: ' . $color . ';';
+						echo '}';
+					}
+				}
+			}
 		}
 
 		return $this->compress(ob_get_clean());

@@ -21,8 +21,8 @@ use Joomla\Component\Content\Site\Helper\RouteHelper as ContentRouteHelper;
 use Joomla\Component\Tags\Site\Helper\RouteHelper as TagsRouteHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
-use SYW\Library\Fonts;
-use SYW\Library\Utilities;
+use SYW\Library\Fonts as SYWFonts;
+use SYW\Library\Utilities as SYWUtilities;
 
 class Helper
 {
@@ -183,7 +183,7 @@ class Helper
 		$bootstrap_version = $params->get('bootstrap_version', 'joomla');
 		$load_bootstrap = false;
 		if ($bootstrap_version === 'joomla') {
-			$bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 4;
+			$bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
 			$load_bootstrap = true;
 		} else {
 			$bootstrap_version = intval($bootstrap_version);
@@ -1260,7 +1260,7 @@ class Helper
 									$tag_class_attribute = '';
 									if ($params->get('bootstrap_tags', 0)) { // in fact, get classes per tag from the console
 										$tagParams = new Registry($tag->params);
-										$tag_class_attribute = ' '.$tagParams->get('tag_link_class', SYWUtilities::getBootstrapProperty('label', $bootstrap_version) . ' ' . SYWUtilities::getBootstrapProperty('label-info', $bootstrap_version));
+										$tag_class_attribute = ' '.$tagParams->get('tag_link_class', SYWUtilities::getBootstrapProperty('label label-info', $bootstrap_version));
 									} else if (trim($params->get('tag_classes', ''))) {
 										$tag_class_attribute = ' '.trim($params->get('tag_classes'));
 									}
@@ -1366,43 +1366,28 @@ class Helper
 						if ($params->get('share_facebook', 0)) {
 							$icons_to_show[] = 'facebook';
 						}
-						if ($params->get('share_google', 0)) {
-							$icons_to_show[] = 'google';
-						}
 						if ($params->get('share_twitter', 0)) {
 							$icons_to_show[] = 'twitter';
 						}
 						if ($params->get('share_linkedin', 0)) {
 							$icons_to_show[] = 'linkedin';
 						}
-						if ($params->get('share_stumbleupon', 0)) {
-							$icons_to_show[] = 'stumbleupon';
-						}
 
 						// end backward compatibility
 
-						for ($i = 1; $i < 7; $i++) {
+						$share_classes = trim($params->get('share_classes', ''));
+						$share_classes = empty($share_classes) ? '' : ' '.$share_classes;
 
-							$icon_to_show = $params->get('share_pos_'.$i, 'none');
+						$social_networks = $params->get('social_networks'); // array of objects
+						if (!empty($social_networks) && is_object($social_networks)) {
 
-							if (isset($icons_to_show[$i])) {
-								$icon_to_show = $icons_to_show[$i];
-							}
-
-							$share_classes = trim($params->get('share_classes', ''));
-							$share_classes = empty($share_classes) ? '' : ' '.$share_classes;
-
-							switch ($icon_to_show) {
-								case 'email':
-									if ($item_params->get('show_email_icon')) {
-										$info_block .= self::sendToFriendIcon(htmlspecialchars($item->title), $root_path.$url, $share_classes);
-									}
-									break;
-								case 'facebook': $info_block .= self::getFacebookButton(htmlspecialchars($item->title), $root_path.$url, $share_classes); break;
-								case 'google': $info_block .= self::getGoogleButton($root_path.$url, $share_classes); break;
-								case 'twitter': $info_block .= self::getTwitterButton(htmlspecialchars($item->title), $root_path.$url, $share_classes); break;
-								case 'linkedin': $info_block .= self::getLinkedInButton(htmlspecialchars($item->title), $root_path.$url, $share_classes); break;
-								case 'stumbleupon': $info_block .= self::getStumbleuponButton(htmlspecialchars($item->title), $root_path.$url, $share_classes); break;
+							foreach ($social_networks as $social_network) {
+								switch ($social_network->social_network) {
+									case 'email': $info_block .= self::sendToFriendIcon($item->title, $root_path.$url, $share_classes); break;
+									case 'facebook': $info_block .= self::getFacebookButton(htmlspecialchars($item->title), $root_path.$url, $share_classes); break;
+									case 'twitter': $info_block .= self::getTwitterButton(htmlspecialchars($item->title), $root_path.$url, $share_classes); break;
+									case 'linkedin': $info_block .= self::getLinkedInButton(htmlspecialchars($item->title), $root_path.$url, $share_classes); break;
+								}
 							}
 						}
 
@@ -1416,49 +1401,49 @@ class Helper
 					}
 				break;
 
-				case 'jcommentscount':
-				case 'linkedjcommentscount':
-					if (file_exists(JPATH_ROOT . '/components/com_jcomments/jcomments.php')) {
+// 				case 'jcommentscount':
+// 				case 'linkedjcommentscount':
+// 					if (file_exists(JPATH_ROOT . '/components/com_jcomments/jcomments.php')) {
 
-						if ($has_info_from_previous_detail) {
-							$info_block .= '<span class="delimiter">'.$separator.'</span>';
-						}
+// 						if ($has_info_from_previous_detail) {
+// 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
+// 						}
 
-						$info_block .= '<span class="detail detail_jcommentscount' . $extraclasses . '">';
+// 						$info_block .= '<span class="detail detail_jcommentscount' . $extraclasses . '">';
 
-						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_COMMENTS'), $value['show_icon'], 'comment', $value['icon']);
+// 						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_COMMENTS'), $value['show_icon'], 'comment', $value['icon']);
 
-						$info_block .= '<span class="detail_data">';
+// 						$info_block .= '<span class="detail_data">';
 
-						require_once(JPATH_ROOT . '/components/com_jcomments/jcomments.php');
+// 						require_once(JPATH_ROOT . '/components/com_jcomments/jcomments.php');
 
-						$comments_count = JComments::getCommentsCount($item->id, 'com_content');
+// 						$comments_count = JComments::getCommentsCount($item->id, 'com_content');
 
-						if ($value['info'] == 'linkedjcommentscount' && isset($item->link) && !empty($item->link)) {
+// 						if ($value['info'] == 'linkedjcommentscount' && isset($item->link) && !empty($item->link)) {
 
-							$link_to_comments = '#addcomments';
-							if ($view != 'article') {
-								$link_to_comments = $item->link.'#addcomments';
-							}
+// 							$link_to_comments = '#addcomments';
+// 							if ($view != 'article') {
+// 								$link_to_comments = $item->link.'#addcomments';
+// 							}
 
-							$info_block .= '<a href="'.$link_to_comments.'" class="hasTooltip" title="'.Text::_('PLG_CONTENT_ARTICLEDETAILS_GOTOCOMMENTS').'">'.Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_COMMENTS', $comments_count).'</a>';
-						} else {
-							if ($comments_count > 0) {
-								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_COMMENTS', $comments_count);
-							} else {
-								$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_NOCOMMENT');
-							}
-						}
+// 							$info_block .= '<a href="'.$link_to_comments.'" class="hasTooltip" title="'.Text::_('PLG_CONTENT_ARTICLEDETAILS_GOTOCOMMENTS').'">'.Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_COMMENTS', $comments_count).'</a>';
+// 						} else {
+// 							if ($comments_count > 0) {
+// 								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_COMMENTS', $comments_count);
+// 							} else {
+// 								$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_NOCOMMENT');
+// 							}
+// 						}
 
-						$info_block .= '</span>';
+// 						$info_block .= '</span>';
 
-						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_COMMENTS'), $value['show_icon'], 'comment', $value['icon']);
+// 						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_COMMENTS'), $value['show_icon'], 'comment', $value['icon']);
 
-						$info_block .= '</span>';
+// 						$info_block .= '</span>';
 
-						$has_info_from_previous_detail = true;
-					}
-				break;
+// 						$has_info_from_previous_detail = true;
+// 					}
+// 				break;
 
 				case 'email':
 					if (/*$item_params->get('show_email_icon') &&*/ $item->link && !$app->input->getBool('print')) {
@@ -1493,7 +1478,7 @@ class Helper
 						$text = '<i class="SYWicon-email"></i><span>'.Text::_('JGLOBAL_EMAIL').'</span>';
 
 // 						$info_block .= HTMLHelper::_('link', $url, $text, $attribs);
-						$info_block .= HTMLHelper::_('link', 'mailto:?subject=' . urlencode($item->title) . '&amp;body=' . $link, $text, $attribs);
+						$info_block .= HTMLHelper::_('link', 'mailto:?subject=' . rawurlencode($item->title) . '&amp;body=' . $link, $text, $attribs);
 
 						$info_block .= '</span>';
 
@@ -1634,7 +1619,7 @@ class Helper
 		$text = '<i class="SYWicon-email" aria-hidden="true"></i>';
 
 		//$output = HTMLHelper::_('link', $url, $text, $attribs);
-		$output = HTMLHelper::_('link', 'mailto:?subject=' . urlencode($title) . '&amp;body=' . $link, $text, $attribs);
+		$output = HTMLHelper::_('link', 'mailto:?subject=' . rawurlencode($title) . '&amp;body=' . $link, $text, $attribs);
 
 		return $output;
 	}
@@ -1729,9 +1714,9 @@ class Helper
 		if (!empty($font_details)) {
 			$font_details = str_replace('\'', '"', $font_details); // " lost, replaced by '
 
-			$google_font = Utilities::getGoogleFont($font_details); // get Google font, if any
+			$google_font = SYWUtilities::getGoogleFont($font_details); // get Google font, if any
 			if ($google_font) {
-				Fonts::loadGoogleFont($google_font);
+				SYWFonts::loadGoogleFont($google_font);
 			}
 
 			$_style .= '.articledetails .info .details {';
@@ -1856,6 +1841,45 @@ class Helper
 		}
 
 		return $contacts[$author_id];
+	}
+
+	/**
+	 * Get the site mode
+	 * @return string (dev|prod|adv)
+	 */
+	public static function getSiteMode($params)
+	{
+		return $params->get('site_mode', 'adv');
+	}
+
+	/**
+	 * Is the style/script cache set to be cleared
+	 * @return boolean
+	 */
+	public static function IsClearHeaderCache($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('clear_header_files_cache', 'true');
+	}
+
+	/**
+	 * Are errors shown ?
+	 * @return boolean
+	 */
+	public static function isShowErrors($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('show_errors', false);
 	}
 
 }
