@@ -80,8 +80,10 @@
 			
 			<fieldset name="datasource" label="MOD_TRULYRESPONSIVESLIDER_DATASOURCE_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_DATASOURCE_FIELDSET_DESC">
 			
-<!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/data-source" class="alert alert-info" -->
-<!-- 					description="MOD_TRULYRESPONSIVESLIDER_DATASOURCE_FIELDSET_DESC" /> -->
+				<fieldset name="datasource_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/data-source" />
+				</fieldset>
 			
 				<fieldset name="datasource_general" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONSOURCE_FIELDSET_LABEL">
 				
@@ -228,10 +230,12 @@
 				</fieldset>
 			</fieldset>	
 			
-			<fieldset name="slider" label="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_DESC">			
-			
-<!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/slider" class="alert alert-info" -->
-<!-- 					description="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_DESC" /> -->
+			<fieldset name="slider" label="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_DESC">
+
+				<fieldset name="slider_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/slider" />
+				</fieldset>
 					
 				<fieldset name="slider_general" label="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_LABEL">
 				
@@ -312,10 +316,12 @@
 				</fieldset>
 			</fieldset>	
 			
-			<fieldset name="slide" label="MOD_TRULYRESPONSIVESLIDER_SLIDE_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_IMAGE_SLIDE_DESC">			
-			
-<!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/slides" class="alert alert-info" -->
-<!-- 					description="MOD_TRULYRESPONSIVESLIDER_IMAGE_SLIDE_DESC" /> -->
+			<fieldset name="slide" label="MOD_TRULYRESPONSIVESLIDER_SLIDE_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_IMAGE_SLIDE_DESC">
+
+				<fieldset name="slide_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/slides" />
+				</fieldset>
 			
 				<fieldset name="slide_caption" label="MOD_TRULYRESPONSIVESLIDER_CAPTION_LABEL">
 <!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_CAPTION_LABEL" />		 -->
@@ -425,10 +431,12 @@
 				</fieldset>
 			</fieldset>
 			
-			<fieldset name="tooltips" label="MOD_TRULYRESPONSIVESLIDES_TOOLTIPS_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_TOOLTIPS_FIELDSET_DESC">		
-			
-<!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/tooltips" class="alert alert-info" -->
-<!-- 					description="MOD_TRULYRESPONSIVESLIDER_TOOLTIPS_FIELDSET_DESC" /> -->
+			<fieldset name="tooltips" label="MOD_TRULYRESPONSIVESLIDES_TOOLTIPS_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_TOOLTIPS_FIELDSET_DESC">
+
+				<fieldset name="tooltips_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/tooltips" />
+				</fieldset>
 				
 				<fieldset name="tooltips_target" label="MOD_TRULYRESPONSIVESLIDER_TOOLTIPTARGET_LABEL">
 <!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_TOOLTIPTARGET_LABEL" /> -->
@@ -482,10 +490,12 @@
 				</fieldset>
 			</fieldset>
 						
-			<fieldset name="animation" label="MOD_TRULYRESPONSIVESLIDER_ANIMATION_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_ANIMATION_FIELDSET_DESC">		
-			
-<!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/transitions" class="alert alert-info" -->
-<!-- 					description="MOD_TRULYRESPONSIVESLIDER_ANIMATION_FIELDSET_DESC" /> -->
+			<fieldset name="animation" label="MOD_TRULYRESPONSIVESLIDER_ANIMATION_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_ANIMATION_FIELDSET_DESC">
+
+				<fieldset name="animation_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/transitions" />
+				</fieldset>
 				
 				<field name="type" type="transitionselect" default="fade" 
 					label="MOD_TRULYRESPONSIVESLIDER_FIELD_TYPE_LABEL" 
@@ -527,9 +537,12 @@
 					description="MOD_TRULYRESPONSIVESLIDER_FIELD_INTERVAL_DESC" />			
 			</fieldset>
 					
-			<fieldset name="advanced" description="MOD_TRULYRESPONSIVESLIDER_ADVANCED_FIELDSET_DESC">	
-			
-<!-- 				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/advanced" class="alert alert-info" /> -->
+			<fieldset name="advanced" description="MOD_TRULYRESPONSIVESLIDER_ADVANCED_FIELDSET_DESC">
+
+				<fieldset name="advanced_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/advanced" />
+				</fieldset>
 			
 <!-- 				<field type="message" text="MOD_TRULYRESPONSIVESLIDER_INFO_JQUERYVERSIONREQUIRED" style="info" /> -->
 				
@@ -551,6 +564,7 @@
 						<option value="2">2</option>
 						<option value="3">3</option>
 						<option value="4">4</option>
+						<option value="5">5</option>
 					</field>
 			
 					<field name="show_errors" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 

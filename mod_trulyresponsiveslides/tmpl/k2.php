@@ -223,7 +223,7 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper;
 
 <?php if ($show_errors && !empty($errors)) : ?>
 	<?php foreach ($errors as $error) : ?>
-		<div class="alert <?php echo SYWUtilities::getBootstrapProperty('alert-'.$error[1], $bootstrap_version); ?>">
+		<div class="<?php echo SYWUtilities::getBootstrapProperty('alert alert-'.$error[1], $bootstrap_version); ?>">
 			<?php echo $error[0]; ?>
 		</div>
 	<?php endforeach; ?>

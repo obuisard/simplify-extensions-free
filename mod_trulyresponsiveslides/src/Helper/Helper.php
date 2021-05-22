@@ -26,7 +26,7 @@ class Helper
 
 		$bootstrap_version = isset($module_params->bootstrap_version) ? $module_params->bootstrap_version : 'joomla';
 		if ($bootstrap_version === 'joomla') {
-			$bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 4;
+			$bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
 		} else {
 			$bootstrap_version = intval($bootstrap_version);
 		}
@@ -35,7 +35,7 @@ class Helper
 	}
 
 	// for B/C
-	static function createHtmlLink($url, $target, $text, $id = '', $showTooltips = true, $popup_width = '600', $popup_height = '480', $bootstrap_version = 2)
+	static function createHtmlLink($url, $target, $text, $id = '', $showTooltips = true, $popup_width = '600', $popup_height = '480', $bootstrap_version = 5)
 	{
 		$linkText = (empty($text)) ? $url : $text;
 
@@ -61,7 +61,7 @@ class Helper
 			case 3:	// open in a modal window
 				$link_attributes = ' onclick="return false;" data-modaltitle="'.htmlspecialchars($linkText, ENT_COMPAT, 'UTF-8').'"';
 				if ($bootstrap_version > 0) {
-					$link_attributes .= ' data-toggle="modal" data-target="#trsmodal_'.$id.'"';
+					$link_attributes .= ' data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'toggle="modal" data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'target="#trsmodal_'.$id.'"';
 				}
 				return '<a href="'.$url.'" class="trsmodal_'.$id.$extraClass.'"' . $link_attributes . '>'.$linkText.'</a>';
 				break;
@@ -73,13 +73,15 @@ class Helper
 		return '';
 	}
 
-	static function getImageList(&$params, $module_suffix, $image_list, $images_path) {
+	static function getImageList(&$params, $module_suffix, $image_list, $images_path)
+	{
+		$thumb_path = $params->get('thumb_path', 'images');
 
 		$subdirectory = 'thumbnails/trs';
-		if ($params->get('thumb_path', 'images') == 'cache') {
+		if ($thumb_path == 'cache') {
 			$subdirectory = 'mod_trulyresponsiveslides';
 		}
-		$tmp_path = SYWCache::getTmpPath($params->get('thumb_path', 'images'), $subdirectory);
+		$tmp_path = SYWCache::getTmpPath($thumb_path, $subdirectory);
 
 		$list_images_array = array();
 
@@ -102,18 +104,15 @@ class Helper
 		$img_width = $params->get('img_w', 1024);
 		$img_height = $params->get('img_h', 640);
 
-		$clear_cache = $params->get('clear_cache', 0);
-		if ($params->get('site_mode', 'adv') == 'dev') {
-			$clear_cache = 1;
-		} else if ($params->get('site_mode', 'adv') == 'prod') {
-			$clear_cache = 0;
-		}
+		$clear_cache = self::IsClearPictureCache($params);
+
+		$thumb_path = $params->get('thumb_path', 'images');
 
 		$subdirectory = 'thumbnails/trs';
-		if ($params->get('thumb_path', 'images') == 'cache') {
+		if ($thumb_path == 'cache') {
 			$subdirectory = 'mod_trulyresponsiveslides';
 		}
-		$tmp_path = SYWCache::getTmpPath($params->get('thumb_path', 'images'), $subdirectory);
+		$tmp_path = SYWCache::getTmpPath($thumb_path, $subdirectory);
 
 		$extensions = get_loaded_extensions();
 		if (!in_array('gd', $extensions)) {
@@ -176,18 +175,15 @@ class Helper
 		$thumb_width = $params->get('thumb_w', 80);
 		$thumb_height = $params->get('thumb_h', 60);
 
-		$clear_cache = $params->get('clear_cache', 0);
-		if ($params->get('site_mode', 'adv') == 'dev') {
-			$clear_cache = 1;
-		} else if ($params->get('site_mode', 'adv') == 'prod') {
-			$clear_cache = 0;
-		}
+		$clear_cache = self::IsClearPictureCache($params);
+
+		$thumb_path = $params->get('thumb_path', 'images');
 
 		$subdirectory = 'thumbnails/trs';
-		if ($params->get('thumb_path', 'images') == 'cache') {
+		if ($thumb_path == 'cache') {
 			$subdirectory = 'mod_trulyresponsiveslides';
 		}
-		$tmp_path = SYWCache::getTmpPath($params->get('thumb_path', 'images'), $subdirectory);
+		$tmp_path = SYWCache::getTmpPath($thumb_path, $subdirectory);
 
 		$quality_jpg = $params->get('quality_jpg', 100);
 		$quality_png = $params->get('quality_png', 0);
@@ -332,11 +328,13 @@ class Helper
 
 	static function getSliderWithThumbHtml(&$params, $image_list, $alts, $caption_list, $tooltips_lists, $image_directory, $id_suffix)
 	{
+		$thumb_path = $params->get('thumb_path', 'images');
+
 		$subdirectory = 'thumbnails/trs';
-		if ($params->get('thumb_path', 'images') == 'cache') {
+		if ($thumb_path == 'cache') {
 			$subdirectory = 'mod_trulyresponsiveslides';
 		}
-		$tmp_path = SYWCache::getTmpPath($params->get('thumb_path', 'images'), $subdirectory);
+		$tmp_path = SYWCache::getTmpPath($thumb_path, $subdirectory);
 
 		$tmp_directory = Uri::root(true).'/'.$tmp_path;
 
@@ -442,11 +440,11 @@ class Helper
 	}
 
 	static protected function getAnimation($type) {
-		
+
 		switch ($type) {
 			case 'slide': case 'slidev' : return 'animation: "slide"';
 		}
-		
+
 		return 'animation: "fade"';
 	}
 
@@ -456,12 +454,12 @@ class Helper
 	}
 
 	static protected function getDirection($direction, $type = 'fade') {
-		
+
 		switch ($type) {
 			//case 'slide' : if ($direction == 'vertical') { return 'direction: "vertical"'; };
 			case 'slidev' : return 'direction: "vertical"';
 		}
-		
+
 		return 'direction: "horizontal"';
 	}
 
@@ -560,6 +558,60 @@ class Helper
 		}
 
 		self::$fsLoaded = true;
+	}
+
+	/**
+	 * Get the site mode
+	 * @return string (dev|prod|adv)
+	 */
+	public static function getSiteMode($params)
+	{
+		return $params->get('site_mode', 'adv');
+	}
+
+	/**
+	 * Is the picture cache set to be cleared
+	 * @return boolean
+	 */
+	public static function IsClearPictureCache($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('clear_cache', true);
+	}
+
+	/**
+	 * Is the style/script cache set to be cleared
+	 * @return boolean
+	 */
+	public static function IsClearHeaderCache($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('clear_header_files_cache', 'true');
+	}
+
+	/**
+	 * Are errors shown ?
+	 * @return boolean
+	 */
+	public static function isShowErrors($params)
+	{
+		if (self::getSiteMode($params) == 'dev') {
+			return true;
+		}
+		if (self::getSiteMode($params) == 'prod') {
+			return false;
+		}
+		return $params->get('show_errors', false);
 	}
 
 }

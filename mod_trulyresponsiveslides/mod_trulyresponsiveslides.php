@@ -53,7 +53,7 @@ $params->set('suffix', $class_suffix);
 $bootstrap_version = $params->get('bootstrap_version', 'joomla');
 $load_bootstrap = false;
 if ($bootstrap_version === 'joomla') {
-    $bootstrap_version = version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 4;
+    $bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
     $load_bootstrap = true;
 } else {
 	$bootstrap_version = intval($bootstrap_version);
@@ -89,19 +89,9 @@ if (!empty($style_overrides)) {
 
 // advanced parameters
 
-$show_errors = $params->get('show_errors', 0);
-if ($params->get('site_mode', 'adv') == 'dev') {
-	$show_errors = 1;
-} else if ($params->get('site_mode', 'adv') == 'prod') {
-	$show_errors = 0;
-}
+$show_errors = Helper::isShowErrors($params);
 
-$clear_header_files_cache = $params->get('clear_header_files_cache', 1);
-if ($params->get('site_mode', 'adv') == 'dev') {
-	$clear_header_files_cache = 1;
-} else if ($params->get('site_mode', 'adv') == 'prod') {
-	$clear_header_files_cache = 0;
-}
+$clear_header_files_cache = Helper::IsClearHeaderCache($params);
 
 $inline_scripts = $params->get('inline_scripts', 0);
 
