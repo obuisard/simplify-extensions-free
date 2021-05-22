@@ -20,7 +20,7 @@ if ($remove_whitespaces) {
 
 	<?php if ($show_errors && !empty($general_errors)) : ?>
 		<?php foreach ($general_errors as $error) : ?>
-			<div class="<?php echo SYWUtilities::getBootstrapProperty('alertalert-'.$error[1], $bootstrap_version); ?>">
+			<div class="<?php echo SYWUtilities::getBootstrapProperty('alert alert-'.$error[1], $bootstrap_version); ?>">
     			<?php echo $error[0]; ?>
 			</div>
     	<?php endforeach; ?>

@@ -17,7 +17,7 @@ $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 $bootstrap_version = isset($displayData['bootstrap_version']) ? intval($displayData['bootstrap_version']) : 5;
 $load_bootstrap = isset($displayData['load_bootstrap']) ? $displayData['load_bootstrap'] : true;
 if ($load_bootstrap) {
-	//SYWStylesheets::loadBootstrapModals(); // the CSS may be missing ?
+	//SYWStylesheets::loadBootstrapModals(); // the CSS may be missing ? NO, present in SCSS
 	HTMLHelper::_('bootstrap.modal');
 }
 
@@ -29,7 +29,7 @@ $height = isset($displayData['height']) ? $displayData['height'] : '400';
 $title = isset($displayData['title']) ? $displayData['title'] : Text::_('MOD_WEBLINKLOGO_MODAL_TITLE');
 
 if ($bootstrap_version > 0) {
-	SYWLibraries::instantiateBootstrapModal($selector, array('default_title' => $title), $bootstrap_version);
+	SYWLibraries::instantiateBootstrapModal($selector, array('default_title' => $title, 'height' => $height), $bootstrap_version);
 	SYWStylesheets::loadBootstrapModalsCss($selector, array('width' => $width), $bootstrap_version);
 } else {
 	SYWLibraries::instantiatePureModal($selector);
@@ -87,7 +87,7 @@ if ($bootstrap_version > 0) {
             		<iframe class="iframe" height="<?php echo $height; ?>" style="display: block; width: 100%; border: 0; max-height: none; overflow: auto"></iframe>
             	</div>
             	<div class="modal-footer">
-            		<button class="btn btn-secondary" data-<?php echo ($bootstrap_version >= 5 ? 'bs-' : '') ?>dismiss="modal"><?php echo Text::_('MOD_WEBLINKLOGO_CLOSE'); ?></button>
+            		<button class="btn btn-secondary" data-<?php echo ($bootstrap_version >= 5 ? 'bs-' : '') ?>dismiss="modal" aria-hidden="true"><?php echo Text::_('MOD_WEBLINKLOGO_CLOSE'); ?></button>
             	</div>
     		</div>
     	</div>
