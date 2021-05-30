@@ -20,13 +20,13 @@ class Version
 	static $RELEASE = '2.0.0';
 
 	/** @var  string  Release date. */
-	static $RELDATE = '21-Jan-2018';
+	static $RELDATE = '28-Mar-2021';
 
 	/** @var  string  Copyright Notice. */
 	static $COPYRIGHT = 'Copyright (C) 2011 Simplify Your Web, Inc. All rights reserved.';
 
 	/** @var  string  Link text. */
-	static $URL = '<a href="http://www.simplifyyourweb.com">SimplifyYourWeb.com</a>.';
+	static $URL = '<a href="https://simplifyyourweb.com">SimplifyYourWeb.com</a>.';
 
 	/**
 	 * Compares two a "PHP standardized" version number against the current library version.
@@ -49,5 +49,5 @@ class Version
 	{
 		return self::$RELEASE;
 	}
-	
+
 }

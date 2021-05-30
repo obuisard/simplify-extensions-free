@@ -51,33 +51,33 @@ class GDTestField extends FormField
 
 			if (in_array('gif', $this->supportedtypes)) {
 				if (imagetypes() & IMG_GIF) {
-					$html .= '<span class="badge badge-success">GIF '.lcfirst(Text::_('JENABLED')).'</span> ';
+					$html .= '<span class="badge bg-success">GIF '.lcfirst(Text::_('JENABLED')).'</span> ';
 				} else {
-					$html .= '<span class="badge badge-warning">GIF '.lcfirst(Text::_('JDISABLED')).'</span> ';
+					$html .= '<span class="badge bg-warning">GIF '.lcfirst(Text::_('JDISABLED')).'</span> ';
 				}
 			}
 
 			if (in_array('jpg', $this->supportedtypes)) {
 				if (imagetypes() & IMG_JPG) {
-					$html .= '<span class="badge badge-success">JPG '.lcfirst(Text::_('JENABLED')).'</span> ';
+					$html .= '<span class="badge bg-success">JPG '.lcfirst(Text::_('JENABLED')).'</span> ';
 				} else {
-					$html .= '<span class="badge badge-warning">JPG '.lcfirst(Text::_('JDISABLED')).'</span> ';
+					$html .= '<span class="badge bg-warning">JPG '.lcfirst(Text::_('JDISABLED')).'</span> ';
 				}
 			}
 
 			if (in_array('png', $this->supportedtypes)) {
 				if (imagetypes() & IMG_PNG) {
-					$html .= '<span class="badge badge-success">PNG '.lcfirst(Text::_('JENABLED')).'</span> ';
+					$html .= '<span class="badge bg-success">PNG '.lcfirst(Text::_('JENABLED')).'</span> ';
 				} else {
-					$html .= '<span class="badge badge-warning">PNG '.lcfirst(Text::_('JDISABLED')).'</span> ';
+					$html .= '<span class="badge bg-warning">PNG '.lcfirst(Text::_('JDISABLED')).'</span> ';
 				}
 			}
 
 			if (in_array('webp', $this->supportedtypes)) {
 				if (imagetypes() & IMG_WEBP) {
-					$html .= ' <span class="badge badge-success">WEBP '.lcfirst(Text::_('JENABLED')).'</span> ';
+					$html .= ' <span class="badge bg-success">WEBP '.lcfirst(Text::_('JENABLED')).'</span> ';
 				} else {
-					$html .= ' <span class="badge badge-warning">WEBP '.lcfirst(Text::_('JDISABLED')).'</span> ';
+					$html .= ' <span class="badge bg-warning">WEBP '.lcfirst(Text::_('JDISABLED')).'</span> ';
 				}
 			}
 

@@ -36,7 +36,7 @@ class ExtensionVersionField extends FormField
 
 		//$version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/components/com_trombinoscopeextended/trombinoscopeextended.xml')->version);
 
-		$html .= '<span class="badge badge-dark">'.$this->version.'</span>';
+		$html .= '<span class="badge bg-dark">'.$this->version.'</span>';
 
 		$html .= '</div>';
 

@@ -118,15 +118,10 @@ class SYWImageFilePreviewField extends FormField
 
                 $html .= '<div class="input-group">';
 
-                if ($this->clear) {
-                    $html .= '<div class="input-group-append">';
-                }
-
                 $html .= '<input id="'.$this->id.'_filename" type="text" disabled="disabled" value="'.end($parts).'" />';
 
                 if ($this->clear) {
                     $html .= '<a href="#" onclick="jQuery(\'#' . $this->id . '_filename\').val(\'\'); jQuery(\'#' . $this->id . '\').val(\'\'); return false;" class="btn">' . Text::_('JACTION_DELETE') . '</a>';
-                    $html .= '</div>';
                 }
 
                 $html .= '</div>';

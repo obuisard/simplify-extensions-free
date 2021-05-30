@@ -39,7 +39,7 @@ class SYWOnlineHelpField extends FormField
 		$html[] = !empty($this->syw_description) ? '<td style="background-color: transparent">'.Text::_($this->syw_description).'</td>' : '';
 		if ($this->url) {
 			$html[] = '<td style="text-align: right; background-color: transparent">';
-			$html[] = '<a href="'.$this->url.'" target="_blank" class="btn btn-info btn-sm"><i class="SYWicon-local-library"></i> <span>'.Text::_('JHELP').'</span></a>';
+			$html[] = '<a href="'.$this->url.'" target="_blank" class="btn btn-info btn-sm"><i class="SYWicon-local-library" aria-hidden="true"></i> <span>'.Text::_('JHELP').'</span></a>';
 			$html[] = '</td>';
 		}
 		$html[] = '</tr></table>';

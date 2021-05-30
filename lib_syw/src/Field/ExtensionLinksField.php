@@ -39,7 +39,7 @@ class ExtensionLinksField extends FormField
 	    $output = '';
 
 	    $output .= '<a class="btn btn-dark hasTooltip' . ($class == '' ? '' : ' ' . $class) . '" style="margin: 0 10px 10px 0" title="'.HTMLHelper::_('tooltipText', Text::_($label), rtrim(Text::_($description), '.'), 0).'" href="'.$link.'" target="_blank">';
-	    $output .= '<i class="'.$icon.'" style="font-size: 2em; padding: 5px; vertical-align: middle"></i>';
+	    $output .= '<i class="'.$icon.'" style="font-size: 2em; padding: 5px; vertical-align: middle" aria-hidden="true"></i>';
 	    $output .= '</a>';
 
 	    return $output;
@@ -95,11 +95,11 @@ class ExtensionLinksField extends FormField
 		if ($this->review) {
 
 		    $description = rtrim(Text::_('LIB_SYW_EXTENSIONLINK_REVIEW_DESC'), '.');
-		    $description .= ' <i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
-		    $description .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
-		    $description .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
-		    $description .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
-		    $description .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
+		    $description .= ' <i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle" aria-hidden="true"></i>';
+		    $description .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle" aria-hidden="true"></i>';
+		    $description .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle" aria-hidden="true"></i>';
+		    $description .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle" aria-hidden="true"></i>';
+		    $description .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle" aria-hidden="true"></i>';
 
 		    $html .= self::getButton($this->review, 'SYWicon-thumb-up', 'LIB_SYW_EXTENSIONLINK_REVIEW_LABEL', $description);
 		}

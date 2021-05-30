@@ -42,24 +42,18 @@ class SYWPrefixedTextField extends FormField
 
 		if ($this->prefix) {
 
-		    $html .= '<div class="input-group-prepend">';
-
 			if ($this->icon) {
 			    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
 				$html .= '<span class="input-group-text"><i class="'.$this->icon.'"></i></span>';
 			}
 
 			$html .= '<span class="input-group-text">'.$this->prefix.'</span>';
-
-			$html .= '</div>';
 		}
 
 		$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'"'.$class.$style.$size.$this->maxLength.$hint.' />';
 
 		if ($this->postfix) {
-		    $html .= '<div class="input-group-append">';
 			$html .= '<div class="input-group-text">'.$this->postfix.'</div>';
-			$html .= '</div>';
 		}
 
 		$html .= '</div>';

@@ -14,13 +14,19 @@ use Joomla\Database\Exception\ExecutionFailureException;
 class Fields
 {
 	/**
+	 * Cache for field parameters
+	 * @var array
+	 */
+	protected static $fields = array();
+	
+	/**
 	 *
 	 * @param string $item_id
 	 * @param string $field_id
 	 * @param boolean $include_params
 	 * @return array or array of value arrays
 	 */
-	public static function getCustomFieldValues($field_id, $item_id, $include_params = false)
+	public static function getCustomFieldValues($field_id, $item_id, $include_params = false, $force_multiple_array = false)
 	{
 		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
@@ -40,16 +46,53 @@ class Fields
 		}
 
 		$db->setQuery($query);
+		
+		$results = array();
 
 		try {
 			$results = $db->loadAssocList();
-			if (count($results) == 1) {
-				return $results[0];
-			}
 		} catch (ExecutionFailureException $e) {
-			//Factory::getApplication()->enqueueMessage(JText::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 			return null;
 		}
+		
+		if (!$force_multiple_array && count($results) == 1) {
+			return $results[0];
+		}
+		
+		return $results;
+	}
+
+	/**
+	 * 
+	 * @param unknown $field_id
+	 * @return array of parameters
+	 */
+	public static function getCustomFieldParams($field_id)
+	{
+		if (isset(static::$fields[$field_id])) {
+			return static::$fields[$field_id];
+		}
+		
+		$db = Factory::getDbo();
+		$query = $db->getQuery(true);
+		
+		$query->select($db->quoteName(array('f.label', 'f.name', 'f.params', 'f.fieldparams', 'f.context', 'f.type', 'f.default_value'), array('title', 'alias', 'fieldoptions', 'fieldparams', 'context', 'type', 'default_value')));
+		
+		$query->from($db->quoteName('#__fields', 'f'));
+		$query->where($db->quoteName('f.id').' = ' . $field_id);
+		
+		$db->setQuery($query);
+		
+		$results = array();
+		
+		try {
+			$results = $db->loadAssoc();			
+			static::$fields[$field_id] = $results;
+		} catch (ExecutionFailureException $e) {
+			return null;
+		}
+		
+		return $results;
 	}
 
 }

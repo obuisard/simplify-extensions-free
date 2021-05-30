@@ -32,9 +32,9 @@ class ExtensionConnectField extends FormField
 
 		$html = '<div style="padding-top: 5px; overflow: inherit">';
 
-		$html .= '<a class="btn btn-sm btn-info hasTooltip" style="margin: 0 2px; background-color: #02b0e8; border-color: #02b0e8" title="@simplifyyourweb" href="https://twitter.com/simplifyyourweb" target="_blank"><i class="SYWicon-twitter">&nbsp;</i>Twitter</a>';
-		$html .= '<a class="btn btn-sm btn-info hasTooltip" style="margin: 0 2px; background-color: #43609c; border-color: #43609c" title="simplifyyourweb" href="https://www.facebook.com/simplifyyourweb" target="_blank"><i class="SYWicon-facebook">&nbsp;</i>Facebook</a>';
-		$html .= '<a class="btn btn-sm btn-warning" style="margin: 0 2px; background-color: #ff8f00; border-color: #ff8f00" href="https://simplifyyourweb.com/latest-news?format=feed&amp;type=rss" target="_blank"><i class="SYWicon-rss">&nbsp;</i>News feed</a>';
+		$html .= '<a class="btn btn-sm btn-info hasTooltip" style="margin: 0 2px; background-color: #02b0e8; border-color: #02b0e8" title="@simplifyyourweb" href="https://twitter.com/simplifyyourweb" target="_blank"><i class="SYWicon-twitter" aria-hidden="true">&nbsp;</i>Twitter</a>';
+		$html .= '<a class="btn btn-sm btn-info hasTooltip" style="margin: 0 2px; background-color: #43609c; border-color: #43609c" title="simplifyyourweb" href="https://www.facebook.com/simplifyyourweb" target="_blank"><i class="SYWicon-facebook" aria-hidden="true">&nbsp;</i>Facebook</a>';
+		$html .= '<a class="btn btn-sm btn-info" style="margin: 0 2px; background-color: #ff8f00; border-color: #ff8f00" href="https://simplifyyourweb.com/latest-news?format=feed&amp;type=rss" target="_blank"><i class="SYWicon-rss" aria-hidden="true">&nbsp;</i>News feed</a>';
 
 		$html .= '</div>';
 

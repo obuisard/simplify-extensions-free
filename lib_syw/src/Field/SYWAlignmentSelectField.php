@@ -68,19 +68,20 @@ class SYWAlignmentSelectField extends DynamicSingleSelect
         	$lang->load('lib_syw.sys', JPATH_SITE);
         	
         	$this->direction = isset($this->element['direction']) ? (string)$this->element['direction'] : 'horizontal';
+        	$remove_values = isset($this->element['removevalues']) ? explode(',', (string)$this->element['removevalues']) : array();
         	$this->width = 50;
         	$this->height = 50;
 
             $this->items = array();
             if ($this->direction === 'horizontal') {
-            	$this->items['fs'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_START'), 'image' => 'valign_start');
-            	$this->items['c'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_CENTER'), 'image' => 'valign_center');
-            	$this->items['fe'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_END'), 'image' => 'valign_end');
+            	if (!in_array('fs', $remove_values)) { $this->items['fs'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_START'), 'image' => 'valign_start'); }
+            	if (!in_array('c', $remove_values)) { $this->items['c'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_CENTER'), 'image' => 'valign_center'); }
+            	if (!in_array('fe', $remove_values)) { $this->items['fe'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_END'), 'image' => 'valign_end'); }
             } else {
-            	$this->items['s'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_STRETCH'), 'image' => 'col_valign_stretch');
-	            $this->items['fs'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_START'), 'image' => 'col_valign_start');
-	            $this->items['c'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_CENTER'), 'image' => 'col_valign_center');
-	            $this->items['fe'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_END'), 'image' => 'col_valign_end');
+            	if (!in_array('s', $remove_values)) { $this->items['s'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_STRETCH'), 'image' => 'col_valign_stretch'); }
+            	if (!in_array('fs', $remove_values)) { $this->items['fs'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_START'), 'image' => 'col_valign_start'); }
+            	if (!in_array('c', $remove_values)) { $this->items['c'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_CENTER'), 'image' => 'col_valign_center'); }
+            	if (!in_array('fe', $remove_values)) { $this->items['fe'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_END'), 'image' => 'col_valign_end'); }
             }
         }
 

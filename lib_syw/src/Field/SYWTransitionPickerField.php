@@ -73,8 +73,8 @@ class SYWTransitionPickerField extends FormField
         $transitionlist = '';
         foreach ($transitions as $transition_item) {
             $transition_item = str_replace('hvr-', '', $transition_item);
-            $transitionlist .= '<li class="dropdown-item" data-transition="'.$transition_item.'">';
-            $transitionlist .= '<a href="#" class="badge hasTooltip hvr-'.$transition_item.'" style="display: inline-block; padding: 8px; font-size: 1em" title="'.$transition_item.'" onclick="return false;" title="'.$transition_item.'">';
+            $transitionlist .= '<li data-transition="'.$transition_item.'">';
+            $transitionlist .= '<a href="#" class="dropdown-item badge bg-light text-dark hasTooltip hvr-'.$transition_item.'" style="display: inline-block; padding: 8px; font-size: 1em" title="'.$transition_item.'" onclick="return false;" title="'.$transition_item.'">';
 
             if (!empty($image)) {
                 $transitionlist .= '<img src="'.URI::root().$image.'" alt="'.$transition_item.'"><span style="margin-left: 10px">'.$transition_item.'</span>';
@@ -100,7 +100,7 @@ class SYWTransitionPickerField extends FormField
         foreach ($transitiongrouplist as $i => $transitiongrouplist_item) {
             $li_transitions .= self::getTransitionGroup($transitiongrouplist_item, $image, $icon);
             if ($i < count($transitiongrouplist) - 1) {
-                $li_transitions .= '<li class="dropdown-header"></li>';
+                $li_transitions .= '<li><hr class="dropdown-divider"></li>';
             }
         }
 
@@ -137,17 +137,17 @@ class SYWTransitionPickerField extends FormField
         $script .= '         jQuery("#'.$this->id.'_disabled").val(jQuery("#'.$this->id.'").val());';
         $script .= '         jQuery("#'.$this->id.'_select li a").each(function() {';
         $script .= '             if (jQuery(this).parent().attr(\'data-transition\') == jQuery("#'.$this->id.'").val()) {';
-        $script .= '                  jQuery(this).addClass("badge-primary");';
+        $script .= '                  jQuery(this).addClass("bg-primary");';
         $script .= '             }';
         $script .= '         });';
         $script .= '    }';
 
-        //$script .= '    jQuery("#'.$this->id.'_select li a").hover(function() { jQuery(this).addClass("badge-warning") }, function() { jQuery(this).removeClass("badge-warning") });';
+        //$script .= '    jQuery("#'.$this->id.'_select li a").hover(function() { jQuery(this).addClass("bg-warning") }, function() { jQuery(this).removeClass("bg-warning") });';
 
         $script .= '    jQuery("#'.$this->id.'_select li").click(function() {';
         // de-select the previous value
         $script .= '         jQuery("#'.$this->id.'_select li a").each(function() {';
-        $script .= '              jQuery(this).removeClass("badge-primary");';
+        $script .= '              jQuery(this).removeClass("bg-primary");';
         $script .= '         });';
         //
         $script .= '         jQuery("#'.$this->id.'").val(jQuery(this).attr(\'data-transition\'));';
@@ -156,8 +156,8 @@ class SYWTransitionPickerField extends FormField
             $script .= '         jQuery("#'.$this->id.'_global").removeClass("btn-primary");';
             $script .= '         jQuery("#'.$this->id.'_global").removeClass("active");';
         }
-        $script .= '         jQuery(this).children(":first").addClass("badge-primary");';
-        //$script .= '         jQuery(this).children(":first").removeClass("badge-inverse");';
+        $script .= '         jQuery(this).children(":first").addClass("bg-primary");';
+        //$script .= '         jQuery(this).children(":first").removeClass("bg-inverse");';
         $script .= '    });';
         $script .= '    jQuery("#'.$this->id.'_none").click(function() {';
         $script .= '         jQuery("#'.$this->id.'").val("none");';
@@ -166,8 +166,8 @@ class SYWTransitionPickerField extends FormField
             $script .= '         jQuery("#'.$this->id.'_global").removeClass("btn-primary");';
             $script .= '         jQuery("#'.$this->id.'_global").removeClass("active");';
         }
-        $script .= '         jQuery("#'.$this->id.'_select li a").removeClass("badge-primary");';
-        //$script .= '         jQuery("#'.$this->id.'_select li a").addClass("badge-inverse");';
+        $script .= '         jQuery("#'.$this->id.'_select li a").removeClass("bg-primary");';
+        //$script .= '         jQuery("#'.$this->id.'_select li a").addClass("bg-inverse");';
         $script .= '    });';
         if ($this->use_global) {
             $script .= '    jQuery("#'.$this->id.'_global").click(function() {';
@@ -175,8 +175,8 @@ class SYWTransitionPickerField extends FormField
             $script .= '         jQuery("#'.$this->id.'_disabled").val("");';
             $script .= '         jQuery("#'.$this->id.'_global").addClass("btn-primary");';
             $script .= '         jQuery("#'.$this->id.'_global").addClass("active");';
-            $script .= '         jQuery("#'.$this->id.'_select li a").removeClass("badge-primary");';
-            //$script .= '         jQuery("#'.$this->id.'_select li a").addClass("badge-inverse");';
+            $script .= '         jQuery("#'.$this->id.'_select li a").removeClass("bg-primary");';
+            //$script .= '         jQuery("#'.$this->id.'_select li a").addClass("bg-inverse");';
             $script .= '    });';
         }
         $script .= '});';
@@ -193,23 +193,22 @@ class SYWTransitionPickerField extends FormField
         $icon = isset($this->icon) ? $this->icon : 'SYWicon-stack-overflow';
 
         $html .= '<div class="input-group">';
-        $html .= '    <div class="input-group-prepend"><span class="input-group-text"><i class="'.$icon.'"></i></span></div>';
-        $html .= '    <input type="text" class="form-control" name="'.$this->name.'_disabled" id="'.$this->id.'_disabled"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" disabled="disabled" />';
+        	$html .= '<span class="input-group-text"><i class="'.$icon.'" aria-hidden="true"></i></span>';
+        	$html .= '<input type="text" class="form-control" name="'.$this->name.'_disabled" id="'.$this->id.'_disabled"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" disabled="disabled" />';
 
-        $html .= '    <input type="hidden" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" />';
+        	$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" />';
 
-        $html .= '    <div class="btn-group" style="display:inline-block;vertical-align:middle">';
-        $html .= '        <button id="'.$this->id.'_caret" style="border-radius:0;margin-left:-1px;min-width:auto" class="btn btn-secondary dropdown-toggle hasTooltip" data-toggle="dropdown" title="' . Text::_('LIB_SYW_TRANSITIONPICKER_SELECTTRANSITION') . '">';
-        //$html .= '            <span class="caret" style="margin-bottom:auto"></span>';
-        $html .= '        </button>';
-        $html .= '        <ul id="'.$this->id.'_select" class="dropdown-menu" style="min-width: 250px; max-height: 200px; overflow: auto">';
+        	$html .= '<div class="dropdown">';
+        		$html .= '<button type="button" id="'.$this->id.'_caret" style="border-radius:0" class="btn btn-primary dropdown-toggle hasTooltip" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent" title="' . Text::_('LIB_SYW_TRANSITIONPICKER_SELECTTRANSITION') . '">';
+        		$html .= '</button>';
+        		$html .= '<ul id="'.$this->id.'_select" class="dropdown-menu dropdown-menu-end" style="min-width: 250px; max-height: 200px; overflow: auto">';
 
         if (isset($this->transitions)) {
             $transitions = explode(",", $this->transitions);
             foreach ($transitions as $transition_item) {
                 $transition_item = str_replace('hvr-', '', $transition_item); // just in case
-                $html .= '<li class="dropdown-item" data-transition="'.$transition_item.'">';
-                $html .= '<a href="#" class="badge hvr-'.$transition_item.'" style="display: inline-block; padding: 8px; font-size: 1em" title="'.$transition_item.'" onclick="return false;">';
+                $html .= '<li data-transition="'.$transition_item.'">';
+                $html .= '<a href="#" class="dropdown-item badge bg-light text-dark hvr-'.$transition_item.'" style="display: inline-block; padding: 8px; font-size: 1em" title="'.$transition_item.'" aria-label="'.$transition_item.'" onclick="return false;">';
 
                 if (!empty($this->sampleimage)) {
                     $html .= '<img src="'.URI::root().$this->sampleimage.'" alt="'.$transition_item.'" title="'.$transition_item.'"><span style="margin-left: 10px">'.$transition_item.'</span>';
@@ -227,17 +226,15 @@ class SYWTransitionPickerField extends FormField
             foreach ($transitiongroups as $i => $transitiongroup_item) {
                 $html .= self::getTransitionGroup($transitiongroup_item, $this->sampleimage, $this->sampleicon);
                 if ($i < count($transitiongroups) - 1) {
-                    $html .= '<li class="dropdown-header"></li>';
+                    $html .= '<li><hr class="dropdown-divider"></li>';
                 }
             }
         } else {
             $html .= self::getTransitions($this->sampleimage, $this->sampleicon); // TODO use jQuery append
         }
 
-        $html .= '        </ul>';
-        $html .= '    </div>';
-
-        $html .= '<div class="input-group-append">';
+        $html .= '</ul>';
+        $html .= '</div>';
 
         if ($this->use_global) {
             $class = 'btn hasTooltip';
@@ -247,9 +244,7 @@ class SYWTransitionPickerField extends FormField
             $html .= '    <button type="button" id="'.$this->id.'_global" class="'.$class.'" title="'.Text::_('JGLOBAL_USE_GLOBAL').'"><span>'.Text::_('JGLOBAL_USE_GLOBAL').'</span></button>';
         }
 
-        $html .= '    <button type="button" id="'.$this->id.'_none" class="btn btn-secondary hasTooltip" title="' . Text::_('JLIB_FORM_BUTTON_CLEAR') . '"><i class="icon-remove"></i></a>';
-
-        $html .= '</div>';
+        $html .= '    <button type="button" id="'.$this->id.'_none" class="btn btn-secondary hasTooltip" title="' . Text::_('JCLEAR') . '" aria-label="' . Text::_('JCLEAR') . '"><i class="icon-remove"></i></button>';
 
         $html .= '</div>';
 
