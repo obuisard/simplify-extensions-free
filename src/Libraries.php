@@ -13,7 +13,6 @@ use Joomla\CMS\Factory;
 class Libraries
 {
 	static $purePajinateLoaded = false;
-	static $lazysizesLoaded = false;
 	static $tinySliderLoaded = false;
 	static $tingleLoaded = false;
 
@@ -26,8 +25,8 @@ class Libraries
 	static $jqcmousewheelLoaded = false;
 	static $jqctransitLoaded = false;
 
-	static $highresLoaded = array();
 	static $instantiatePureModalLoaded = array();
+	static $instantiateBootstrapModalLoaded = array();
 
 	static $compareLoaded = false;
 
@@ -174,8 +173,10 @@ class Libraries
 		self::loadTingle($remote, $defer, $async);
 	}
 
-	/*
-	 * loads the code that instantiates and sets up the modals written in pure Javascript
+	/**
+	 * Loads the code that instantiates and sets up the modals written in pure Javascript
+	 *
+	 * @param string $selector
 	 */
 	static function instantiatePureModal($selector = 'modal')
 	{
@@ -185,6 +186,7 @@ class Libraries
 
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
+
 		$close_label = Text::_('LIB_SYW_MODAL_CLOSE');
 
 		$selector_variable = str_replace('-', '_', $selector); // javascript does not like - in the name
@@ -246,6 +248,114 @@ JS;
 	}
 
 	/**
+	 * Loads the code that instantiates and sets up the modals for Bootstrap
+	 *
+	 * @param string $selector
+	 * @param array $attributes
+	 * @param number $bootstrap_version
+	 */
+	static function instantiateBootstrapModal($selector = 'modal', $attributes = array('default_title' => ''), $bootstrap_version = 5)
+	{
+		if (in_array($selector, self::$instantiateBootstrapModalLoaded)) {
+			return;
+		}
+
+		if ($bootstrap_version < 5) {
+			$inline_js = <<< JS
+				jQuery(document).ready(function($) {
+				
+					$('.{$selector}').on('click', function () {
+						var dataTitle = $(this).attr('data-modaltitle');
+						if (typeof (dataTitle) !== 'undefined' && dataTitle !== null) {
+							$('#{$selector}').find('.modal-title').text(dataTitle);
+						}
+						var dataURL = $(this).attr('href');
+						$('#{$selector}').find('.iframe').attr('src', dataURL);
+					});
+					
+					$('#{$selector}').on('show.bs.modal', function() {
+						$('body').addClass('modal-open');
+						var event = document.createEvent('Event');
+						event.initEvent('modalopen', true, true);
+						document.dispatchEvent(event);
+JS;
+			
+			if (isset($attributes['height'])) {
+				$inline_js .= <<< JS
+					}).on('shown.bs.modal', function() {
+						var modal_body = $(this).find('.modal-body');
+						modal_body.css({'max-height': {$attributes['height']}});
+						var padding = parseInt(modal_body.css('padding-top')) + parseInt(modal_body.css('padding-bottom'));
+						modal_body.find('.iframe').css({'height': ({$attributes['height']} - padding)});
+JS;
+			}
+			
+			$inline_js .= <<< JS
+				}).on('hide.bs.modal', function () {
+					$(this).find('.modal-title').text('{$attributes['default_title']}');
+					var modal_body = $(this).find('.modal-body');
+					modal_body.css({'max-height': 'initial'});
+					modal_body.find('.iframe').attr('src', 'about:blank');
+					$('body').removeClass('modal-open');
+					var event = document.createEvent('Event');
+					event.initEvent('modalclose', true, true);
+					document.dispatchEvent(event);
+				});
+				
+			});
+JS;
+		} else {
+			// event.relatedTarget : elt that triggered the call
+
+			$inline_js = <<< JS
+				document.addEventListener("readystatechange", function(event) {
+					if (event.target.readyState === "complete") {
+					
+						var modal = document.getElementById("{$selector}");
+					
+						modal.addEventListener("show.bs.modal", function (event) {						
+							var link = event.relatedTarget;
+							if (typeof (link) !== "undefined" && link !== null) {
+								var dataTitle = link.getAttribute("data-modaltitle");
+								if (typeof (dataTitle) !== "undefined" && dataTitle !== null) {
+									this.querySelector(".modal-title").innerText = dataTitle;
+								}
+								var dataURL = link.getAttribute("href");
+								this.querySelector(".iframe").setAttribute("src", dataURL);
+							}					
+							document.querySelector("body").classList.add("modal-open");
+							var event = document.createEvent("Event"); 
+							event.initEvent("modalopen", true, true); 
+							document.dispatchEvent(event);
+						}, this);
+						
+						modal.addEventListener("shown.bs.modal", function (event) {
+							var modal_body = this.querySelector(".modal-body");
+						}, this);
+						
+						modal.addEventListener("hide.bs.modal", function (event) {
+							this.querySelector(".modal-title").innerText = "{$attributes['default_title']}";
+							var modal_body = this.querySelector(".modal-body");
+							modal_body.querySelector(".iframe").setAttribute("src", "about:blank");
+							document.querySelector("body").classList.remove("modal-open");
+							var event = document.createEvent("Event"); 
+							event.initEvent("modalclose", true, true); 
+							document.dispatchEvent(event);
+						}, this);
+					}
+				});
+JS;
+		}
+
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
+		$wam->addInlineScript(self::compress($inline_js));
+		//Factory::getDocument()->addScriptDeclaration(self::compress($inline_js));
+
+		self::$instantiateBootstrapModalLoaded[] = $selector;
+	}
+
+	/**
 	 * Load Owl Carousel (jQuery plugin)
 	 * v2.3.4
 	 * https://github.com/OwlCarousel2/OwlCarousel2
@@ -285,40 +395,6 @@ JS;
 		}
 
 		self::$jq_owlLoaded = true;
-	}
-
-	/**
-	 * Load Lazysizes (pure javascript)
-	 * v5.2.0
-	 * https://github.com/aFarkas/lazysizes
-	 */
-	static function loadLazysizes($remote = false, $defer = false, $async = false)
-	{
-		if (self::$lazysizesLoaded) {
-			return;
-		}
-
-		$minified = (JDEBUG) ? '' : '.min';
-
-		$attributes = array();
-		if ($defer) {
-			$attributes['defer'] = true;
-		}
-		if ($async) {
-			$attributes['async'] = 'async';
-		}
-
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-
-		if ($remote) {
-			$wam->registerAndUseScript('syw.lazysizes', 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.0/lazysizes.min.js', [], $attributes);
-			//$doc->addScript('https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.0/lazysizes.min.js'); // only minified version
-		} else {
-			$wam->registerAndUseScript('syw.lazysizes', 'syw/lazysizes/lazysizes' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes);
-			//HTMLHelper::script('syw/lazysizes/lazysizes' . $minified . '.js', array('relative' => true, 'version' => 'auto'), $attributes);
-		}
-
-		self::$lazysizesLoaded = true;
 	}
 
 	/**
@@ -498,61 +574,6 @@ JS;
 		//HTMLHelper::script('syw/carousel/jquery.transit.min.js', array('relative' => true, 'version' => 'auto'), $attributes);
 
 		self::$jqctransitLoaded = true;
-	}
-
-	/**
-	 * add lazyload class when on high resolution devices only
-	 * @param string $selector
-	 * @param boolean $lazyload
-	 * @param string $lazyload_image
-	 */
-	static function triggerLazysizes($selector = 'img', $lazyload = false, $lazyload_image = '')
-	{
-		if (in_array($selector, self::$highresLoaded)) {
-			return;
-		}
-
-		$javascript = array();
-
-		$javascript[] = 'document.addEventListener("readystatechange", function(event) { ';
-			$javascript[] = 'if (event.target.readyState == "complete") { ';
-
-				$javascript[] = 'var elements = document.querySelectorAll("' . $selector . '[data-src]"); ';
-
-				$javascript[] = 'if (window.devicePixelRatio > 1) { '; // undefined > 1 results in false (IE < 11 do not support the property)
-
-					$javascript[] = 'for (var i = 0; i < elements.length; i++) { ';
-						$javascript[] = 'el = elements[i]; ';
-						$javascript[] = 'if (el.classList) { el.classList.add("lazyload"); } else { el.className += " lazyload" } ';
-						if ($lazyload && $lazyload_image) {
-							$javascript[] = 'el.setAttribute("src", "' . $lazyload_image . '"); ';
-						}
-					$javascript[] = '} ';
-
-				$javascript[] = '}';
-
-				if ($lazyload && $lazyload_image) {
-					$javascript[] = ' else {';
-
-						$javascript[] = 'for (var i = 0; i < elements.length; i++) { ';
-							$javascript[] = 'el = elements[i]; ';
-							$javascript[] = 'if (el.classList) { el.classList.add("lazyload"); } else { el.className += " lazyload" } ';
-							$javascript[] = 'el.setAttribute("data-src", el.getAttribute("src")); ';
-							$javascript[] = 'el.setAttribute("src", "' . $lazyload_image . '"); ';
-						$javascript[] = '} ';
-
-					$javascript[] = '}';
-				}
-
-			$javascript[] = '} ';
-		$javascript[] = '}); ';
-
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-
-		$wam->addInlineScript(implode($javascript));
-		//Factory::getDocument()->addScriptDeclaration(implode($javascript));
-
-		self::$highresLoaded[] = $selector;
 	}
 
 	/**

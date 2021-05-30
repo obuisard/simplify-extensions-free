@@ -19,7 +19,7 @@ class SYWFontPickerField extends FormField
 
 	protected function getFontTag($fontfamily)
 	{
-		return '<li class="dropdown-item"><a class="standardfont_'.$this->id.'" style="font-family: '.htmlspecialchars($fontfamily).'" href="#" onclick="return false;">'.$fontfamily.'</a></li>';
+		return '<li><a class="dropdown-item standardfont_'.$this->id.'" style="font-family: '.htmlspecialchars($fontfamily).'" href="#" onclick="return false;">'.$fontfamily.'</a></li>';
 	}
 
 	protected function getSerifFontFamilies()
@@ -117,48 +117,40 @@ class SYWFontPickerField extends FormField
 
 		$html = '<div class="input-group">';
 
-			$html .= '<div class="input-group-prepend"><span class="input-group-text"><i class="SYWicon-font"></i></span></div>';
+			$html .= '<span class="input-group-text"><i class="SYWicon-font" aria-hidden="true"></i></span>';
 
 			$html .= '<input id="'.$this->id.'" name="'.$this->name.'" class="form-control" type="text" value="'.htmlspecialchars($this->value).'" style="font-family:'.htmlspecialchars($this->value).'" />';
 
-			$html .= '<div class="btn-group" style="display:inline-block;vertical-align:middle">';
-				$html .= '<button style="border-radius:0;margin-left:-1px;min-width:auto" class="btn btn-secondary dropdown-toggle hasTooltip" data-toggle="dropdown" title="' . Text::_('LIB_SYW_FONTPICKER_SELECTFONT') . '">';
+			$html .= '<div class="dropdown">';
+				$html .= '<button type="button" id="dropdownMenu'.$this->id.'" class="btn btn-primary dropdown-toggle hasTooltip" style="border-radius:0" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent" title="' . Text::_('LIB_SYW_FONTPICKER_SELECTFONT') . '">';
 					//$html .= '<span class="caret" style="margin-bottom:auto"></span>';
 				$html .= '</button>';
-				$html .= '<ul class="dropdown-menu" style="max-height: 200px; overflow-x: hidden; overflow-y: auto;">';
+				$html .= '<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenu'.$this->id.'" style="max-height: 200px; overflow-x: hidden; overflow-y: auto">';
 
-		// if use global
-		//$html .= '<li><a href="#" onclick="';
-		//$html .= '        document.getElementById(\'' . $this->id . '\').value=\''.JText::_('JGLOBAL_USE_GLOBAL').'\';';
-		//$html .= '        document.getElementById(\'' . $this->id . '\').setStyle(\'font-family\', \'inherit\');';
-		//$html .= '        return false;';
-		//$html .= '">'.JText::_('JGLOBAL_USE_GLOBAL').'</a></li>';
+					$html .= '<li><a class="dropdown-item googlefont_'.$this->id.'" href="#" onclick="return false;">' . Text::_('LIB_SYW_FONTPICKER_GOOGLEFONTFORMAT') . '</a></li>';
 
-					$html .= '<li class="dropdown-item"><a class="googlefont_'.$this->id.'" href="#" onclick="return false;">"Google font", fallback, fonts</a></li>';
-
-					$html .= '<li class="dropdown-header">Serif</li>';
+					$html .= '<li><h6 class="dropdown-header">Serif</h6></li>';
 					$html .= self::getSerifFontFamilies();
 
-					$html .= '<li class="dropdown-header">Sans-Serif</li>';
+					$html .= '<li><h6 class="dropdown-header">Sans-Serif</h6></li>';
 					$html .= self::getSansSerifFontFamilies();
 
-					$html .= '<li class="dropdown-header">Cursive</li>';
+					$html .= '<li><h6 class="dropdown-header">Cursive</h6></li>';
 					$html .= self::getCursiveFontFamilies();
 
-					$html .= '<li class="dropdown-header">Fantasy</li>';
+					$html .= '<li><h6 class="dropdown-header">Fantasy</h6></li>';
 					$html .= self::getFantasyFontFamilies();
 
-					$html .= '<li class="dropdown-header">Monospace</li>';
+					$html .= '<li><h6 class="dropdown-header">Monospace</h6></li>';
 					$html .= self::getMonospaceFontFamilies();
 
 				$html .= '</ul>';
 			$html .= '</div>';
-			$html .= '<div class="input-group-append">';
-			     $html .= '<button type="button" class="btn btn-secondary hasTooltip clear_'.$this->id.'" title="' . Text::_('JLIB_FORM_BUTTON_CLEAR') . '"' . '><i class="icon-remove"></i></button>';
-		    $html .= '</div>';
+			$html .= '<button type="button" class="btn btn-secondary hasTooltip clear_'.$this->id.'" title="' . Text::_('JCLEAR') . '" aria-label="' . Text::_('JCLEAR') . '"><i class="icon-remove"></i></button>';
+
 		$html .= '</div>';
 		$html .= '<span class="help-block">'.Text::_('LIB_SYW_FONTPICKER_GOOGLEFONTLINKHELP').'</span><br />';
-		$html .= '<a href="http://www.google.com/webfonts" target="_blank">'.Text::_('LIB_SYW_FONTPICKER_GOOGLEFONTLINK').'</a>';
+		$html .= '<a href="https://fonts.google.com/" target="_blank">'.Text::_('LIB_SYW_FONTPICKER_GOOGLEFONTLINK').'</a>';
 
 		return $html;
 	}

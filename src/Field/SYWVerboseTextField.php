@@ -54,13 +54,13 @@ class SYWVerboseTextField extends FormField
 
 		if ($this->icon) {
 		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
-			$html .= '<div class="input-group-prepend"><span class="input-group-text"><i class="'.$this->icon.'"></i></span></div>';
+			$html .= '<span class="input-group-text"><i class="'.$this->icon.'"></i></span>';
 		}
 
 		$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'"'.$class.$style.$size.$this->maxLength.$hint.' />';
 
 		if ($this->unit) {
-			$html .= '<div class="input-group-append"><span class="input-group-text">'.$this->unit.'</span></div>';
+			$html .= '<span class="input-group-text">'.$this->unit.'</span>';
 		}
 
 		$html .= '</div>';

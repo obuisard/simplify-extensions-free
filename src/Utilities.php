@@ -114,222 +114,252 @@ class Utilities
 	}
 
 	/*
-	 * Bootstrap conversion function (handles Bootstrap 2,3 and 4)
+	 * Bootstrap conversion function (handles Bootstrap 2, 3, 4 and 5)
 	 * returns default class if Bootstrap version is unknown (or 0)
 	 */
-	static function getBootstrapProperty($property, $bootstrap_version = 2)
+	static function getBootstrapProperty($property_string, $bootstrap_version = 5)
 	{
 		$bootstrap_version = intval($bootstrap_version);
-	    switch ($property) {
 
-	        // buttons
+		$properties = explode(' ', $property_string); // may get properties like 'label label-info'
 
-	        case 'btn': return 'btn'; break; // exists for all versions
+		$converted_properties = array();
 
-	        case 'btn-default': // no default in B2 nor B4
-	        	if ($bootstrap_version == 0 || $bootstrap_version == 3) { return 'btn-default'; }
-	            break;
-	        case 'btn-primary': return 'btn-primary'; break;
-	        case 'btn-secondary': // not in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'btn-secondary'; }
-	            break;
-	        case 'btn-info': return 'btn-info'; break;
-	        case 'btn-warning': return 'btn-warning'; break;
-	        case 'btn-danger': return 'btn-danger'; break;
-	        case 'btn-success': return 'btn-success'; break;
-	        case 'btn-link': return 'btn-link'; break;
-	        case 'btn-inverse': // no inverse for B3 and B4
-	        	if ($bootstrap_version == 0 || $bootstrap_version == 2) { return 'btn-inverse'; }
-	            break;
-	        case 'btn-light': // not in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'btn-light'; }
-	            break;
-	        case 'btn-dark': // not in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'btn-dark'; }
-	            break;
-	        case 'btn-block': return 'btn-block'; break;
-	        case 'btn-large':
-	            if ($bootstrap_version == 2) { return 'btn-large'; }
-	            return 'btn-lg';
-	            break;
-	        case 'btn-small':
-	            if ($bootstrap_version == 2) { return 'btn-small'; }
-	            return 'btn-sm';
-	            break;
-	        case 'btn-mini': // no xs in B4
-	            if ($bootstrap_version == 2) { return 'btn-mini'; }
-	            if ($bootstrap_version == 0 || $bootstrap_version == 3) { return 'btn-xs'; }
-	            return 'btn-sm';
-	            break;
+		foreach ($properties as $property) {
+			switch ($property) {
 
-	        // labels
+				// buttons
 
-	        case 'label':
-	        	if ($bootstrap_version < 4) { return 'label'; }
-	            return 'badge';
-	            break;
-	        case 'label-default': // no default in B2 nor B4
-	        	if ($bootstrap_version == 0 || $bootstrap_version == 3) { return 'label-default'; }
-	            break;
-	        case 'label-primary': // no primary in B2
-	        	if ($bootstrap_version == 0 || $bootstrap_version == 3) { return 'label-primary'; }
-	            if ($bootstrap_version >= 4) { return 'badge-primary'; }
-	            break;
-	        case 'label-secondary': // not in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'badge-secondary'; }
-	            break;
-	        case 'label-info':
-	            if ($bootstrap_version < 4) { return 'label-info'; }
-	            return 'badge-info';
-	            break;
-	        case 'label-warning':
-	            if ($bootstrap_version < 4) { return 'label-warning'; }
-	            return 'badge-warning';
-	            break;
-	        case 'label-important':
-	            if ($bootstrap_version == 2) { return 'label-important'; }
-	            if ($bootstrap_version == 0 || $bootstrap_version == 3) { return 'label-danger'; }
-	            return 'badge-danger';
-	            break;
-	        case 'label-success':
-	            if ($bootstrap_version < 4) { return 'label-success'; }
-	            return 'badge-success';
-	            break;
-	        case 'label-inverse': // no inverse for B3 and B4
-	        	if ($bootstrap_version == 0 || $bootstrap_version == 2) { return 'label-inverse'; }
-	            break;
-	        case 'label-light': // not in B2 nor B3
-	        	if ($bootstrap_version == 0) { return 'label-light'; }
-	            if ($bootstrap_version >= 4) { return 'badge-light'; }
-	            break;
-	        case 'label-dark': // not in B2 nor B3
-	        	if ($bootstrap_version == 0) { return 'label-dark'; }
-	            if ($bootstrap_version >= 4) { return 'badge-dark'; }
-	            break;
+				case 'btn': $converted_properties[] = 'btn'; break; // exists for all versions
 
-	        // badges-pills
+				case 'btn-default': // no default in B2, B4 nor B5
+					if ($bootstrap_version == 0 || $bootstrap_version == 3) { $converted_properties[] = 'btn-default'; }
+					break;
+				case 'btn-primary': $converted_properties[] = 'btn-primary'; break;
+				case 'btn-secondary': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version >= 4) { $converted_properties[] = 'btn-secondary'; }
+					break;
+				case 'btn-info': $converted_properties[] = 'btn-info'; break;
+				case 'btn-warning': $converted_properties[] = 'btn-warning'; break;
+				case 'btn-danger': $converted_properties[] = 'btn-danger'; break;
+				case 'btn-success': $converted_properties[] = 'btn-success'; break;
+				case 'btn-link': $converted_properties[] = 'btn-link'; break;
+				case 'btn-inverse': // no inverse for B3, B4 and B5
+					if ($bootstrap_version == 0 || $bootstrap_version == 2) { $converted_properties[] = 'btn-inverse'; }
+					break;
+				case 'btn-light': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version >= 4) { $converted_properties[] = 'btn-light'; }
+					break;
+				case 'btn-dark': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version >= 4) { $converted_properties[] = 'btn-dark'; }
+					break;
+		        case 'btn-block': // removed in B5
+		        	if ($bootstrap_version <= 4) { $converted_properties[] = 'btn-block'; } else { $converted_properties[] = 'w-100'; }
+					break;
+				case 'btn-large':
+		        	if ($bootstrap_version == 2) { $converted_properties[] = 'btn-large'; } else { $converted_properties[] = 'btn-lg'; }
+					break;
+				case 'btn-small':
+		        	if ($bootstrap_version == 2) { $converted_properties[] = 'btn-small'; } else { $converted_properties[] = 'btn-sm'; }
+					break;
+		        case 'btn-mini': // no xs in B4 nor B5
+		        	if ($bootstrap_version == 2) { $converted_properties[] = 'btn-mini'; }
+		        	if ($bootstrap_version == 0 || $bootstrap_version == 3) { $converted_properties[] = 'btn-xs'; }
+		        	if ($bootstrap_version >= 4) { $converted_properties[] = 'btn-sm'; }
+					break;
 
-	        case 'badge':
-	        	if ($bootstrap_version < 4) { return 'badge'; }
-	            return 'badge badge-pill';
-	            break;
-	        case 'badge-default': // no default in B2, B3 nor B4
-	        	if ($bootstrap_version == 0) { return 'badge-default'; }
-	        	break;
-	        case 'badge-primary': // no primary in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'badge-primary'; }
-	            break;
-	        case 'badge-secondary': // not in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'badge-secondary'; }
-	            break;
-	        case 'badge-info': // not in B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version == 2 || $bootstrap_version >= 4) { return 'badge-info'; }
-	            break;
-	        case 'badge-warning': // not in B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version == 2 || $bootstrap_version >= 4) { return 'badge-warning'; }
-	            break;
-	        case 'badge-important': // not in B3
-	            if ($bootstrap_version == 2) { return 'badge-important'; }
-	            if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'badge-danger'; }
-	            break;
-	        case 'badge-success': // not in B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version == 2 || $bootstrap_version >= 4) { return 'badge-success'; }
-	            break;
-	        case 'badge-inverse': // no inverse for B3 and B4
-	        	if ($bootstrap_version == 0 || $bootstrap_version == 2) { return 'badge-inverse'; }
-	            break;
-	        case 'badge-light': // not in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'badge-light'; }
-	            break;
-	        case 'badge-dark': // not in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'badge-dark'; }
-	            break;
+					// labels
 
-	        // alerts
+				case 'label':
+		        	if ($bootstrap_version < 4) { $converted_properties[] = 'label'; } else { $converted_properties[] = 'badge'; }
+					break;
+				case 'label-default': // no default in B2, B4 nor B5
+					if ($bootstrap_version == 0 || $bootstrap_version == 3) { $converted_properties[] = 'label-default'; }
+					break;
+				case 'label-primary': // no primary in B2
+					if ($bootstrap_version == 0 || $bootstrap_version == 3) { $converted_properties[] = 'label-primary'; }
+					if ($bootstrap_version == 4) { $converted_properties[] = 'badge-primary'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-primary'; }
+					break;
+				case 'label-secondary': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version == 4) { $converted_properties[] = 'badge-secondary'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-secondary'; }
+					break;
+				case 'label-info':
+					if ($bootstrap_version < 4) { $converted_properties[] = 'label-info'; }
+					if ($bootstrap_version == 4) { $converted_properties[] = 'badge-info'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-info text-dark'; }
+					break;
+				case 'label-warning':
+					if ($bootstrap_version < 4) { $converted_properties[] = 'label-warning'; }
+					if ($bootstrap_version == 4) { $converted_properties[] = 'badge-warning'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-warning text-dark'; }
+					break;
+				case 'label-important':
+					if ($bootstrap_version == 0 || $bootstrap_version == 2) { $converted_properties[] = 'label-important'; }
+					if ($bootstrap_version == 3) { $converted_properties[] = 'label-danger'; }
+					if ($bootstrap_version == 4) { $converted_properties[] = 'badge-danger'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-danger'; }
+					break;
+				case 'label-success':
+					if ($bootstrap_version < 4) { $converted_properties[] = 'label-success'; }
+					if ($bootstrap_version == 4) { $converted_properties[] = 'badge-success'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-success'; }
+					break;
+				case 'label-inverse': // no inverse for B3, B4 and B5
+					if ($bootstrap_version == 0 || $bootstrap_version == 2) { $converted_properties[] = 'label-inverse'; }
+					break;
+				case 'label-light': // not in B2 nor B3
+					if ($bootstrap_version == 0) { $converted_properties[] = 'label-light'; }
+					if ($bootstrap_version == 4) { $converted_properties[] = 'badge-light'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-light text-dark'; }
+					break;
+				case 'label-dark': // not in B2 nor B3
+					if ($bootstrap_version == 0) { $converted_properties[] = 'label-dark'; }
+					if ($bootstrap_version == 4) { $converted_properties[] = 'badge-dark'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-dark'; }
+					break;
 
-	        case 'alert': return 'alert'; break; // exists for all versions
+					// badges-pills
 
-	        case 'alert-primary': // not in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'alert-primary'; }
-	            break;
-	        case 'alert-secondary': // not in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'alert-secondary'; }
-	            break;
-	        case 'alert-info': return 'alert-info'; break;
-	        case 'alert-success': return 'alert-success'; break;
-	        case 'alert-warning': // no B2
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 3) { return 'alert-warning'; }
-	            break;
-	        case 'alert-error':
-	            if ($bootstrap_version == 2) { return 'alert-error'; }
-	            return 'alert-danger';
-	            break;
-	        case 'alert-light': // not in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'alert-light'; }
-	            break;
-	        case 'alert-dark': // not in B2 nor B3
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'alert-dark'; }
-	            break;
+				case 'badge':
+					if ($bootstrap_version < 4) { $converted_properties[] = 'badge'; }
+					if ($bootstrap_version == 4) { $converted_properties[] = 'badge badge-pill'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'badge rounded-pill'; }
+					break;
+				case 'badge-default': // no default in B2, B3, B4 or B5
+					if ($bootstrap_version == 0) { $converted_properties[] = 'badge-default'; }
+					break;
+				case 'badge-primary': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version == 4) { $converted_properties[] = 'badge-primary'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-primary'; }
+					break;
+				case 'badge-secondary': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version == 4) { $converted_properties[] = 'badge-secondary'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-secondary'; }
+					break;
+				case 'badge-info': // not in B3
+					if ($bootstrap_version == 0 || $bootstrap_version == 2 || $bootstrap_version == 4) { $converted_properties[] = 'badge-info'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-info text-dark'; }
+					break;
+				case 'badge-warning': // not in B3
+					if ($bootstrap_version == 0 || $bootstrap_version == 2 || $bootstrap_version == 4) { $converted_properties[] = 'badge-warning'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-warning text-dark'; }
+					break;
+				case 'badge-important': // not in B3
+					if ($bootstrap_version == 0 || $bootstrap_version == 2) { $converted_properties[] = 'badge-important'; }
+					if ($bootstrap_version == 4) { $converted_properties[] = 'badge-danger'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-danger'; }
+					break;
+				case 'badge-success': // not in B3
+					if ($bootstrap_version == 0 || $bootstrap_version == 2 || $bootstrap_version == 4) { $converted_properties[] = 'badge-success'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-success'; }
+					break;
+				case 'badge-inverse': // no inverse for B3, B4 and B5
+					if ($bootstrap_version == 0 || $bootstrap_version == 2) { $converted_properties[] = 'badge-inverse'; }
+					break;
+				case 'badge-light': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version == 4) { $converted_properties[] = 'badge-light'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-light text-dark'; }
+					break;
+				case 'badge-dark': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version == 4) { $converted_properties[] = 'badge-dark'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-dark'; }
+					break;
 
-	        // pagination
+					// alerts
 
-	        case 'pagination': return 'pagination'; break; // exists for all versions
+				case 'alert': $converted_properties[] = 'alert'; break; // exists for all versions
 
-	        case 'pagination-large':
-	            if ($bootstrap_version == 2) { return 'pagination-large'; }
-	            return 'pagination-lg';
-	            break;
-	        case 'pagination-small':
-	            if ($bootstrap_version == 2) { return 'pagination-small'; }
-	            return 'pagination-sm';
-	            break;
-	        case 'pagination-mini':
-	            if ($bootstrap_version == 0) { return 'pagination-xs'; }
-	            if ($bootstrap_version == 2) { return 'pagination-mini'; }
-	            return 'pagination-sm';
-	            break;
-	        case 'pagination-left':
-	        	if ($bootstrap_version == 0) { return 'pagination-left'; }
-	        	break;
-	        case 'pagination-center':
-	        	if ($bootstrap_version == 0) { return 'pagination-center'; }
-	            if ($bootstrap_version >= 4) { return 'justify-content-center'; }
-	            break;
-	        case 'pagination-right':
-	        	if ($bootstrap_version == 0) { return 'pagination-right'; }
-	            if ($bootstrap_version >= 4) { return 'justify-content-end'; }
-	            break;
+				case 'alert-primary': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version >= 4) { $converted_properties[] = 'alert-primary'; }
+					break;
+				case 'alert-secondary': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version >= 4) { $converted_properties[] = 'alert-secondary'; }
+					break;
+				case 'alert-info': $converted_properties[] = 'alert-info'; break;
+				case 'alert-success': $converted_properties[] = 'alert-success'; break;
+				case 'alert-warning': // no B2
+					if ($bootstrap_version == 0 || $bootstrap_version >= 3) { $converted_properties[] = 'alert-warning'; }
+					break;
+				case 'alert-error':
+		        	if ($bootstrap_version == 0 || $bootstrap_version == 2) { $converted_properties[] = 'alert-error'; } else { $converted_properties[] = 'alert-danger'; }
+					break;
+				case 'alert-light': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version >= 4) { $converted_properties[] = 'alert-light'; }
+					break;
+				case 'alert-dark': // not in B2 nor B3
+					if ($bootstrap_version == 0 || $bootstrap_version >= 4) { $converted_properties[] = 'alert-dark'; }
+					break;
 
-	        // align
+					// pagination
 
-	        case 'float-right':
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'float-right'; }
-	            return 'pull-right';
-	            break;
+				case 'pagination': $converted_properties[] = 'pagination'; break; // exists for all versions
 
-	        case 'float-left':
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'float-left'; }
-	            return 'pull-left';
-	            break;
+				case 'pagination-large':
+		        	if ($bootstrap_version == 2) { $converted_properties[] = 'pagination-large'; } else { $converted_properties[] = 'pagination-lg'; }
+					break;
+				case 'pagination-small':
+		        	if ($bootstrap_version == 2) { $converted_properties[] = 'pagination-small'; } else { $converted_properties[] = 'pagination-sm'; }
+					break;
+				case 'pagination-mini':
+		        	if ($bootstrap_version == 0) { $converted_properties[] = 'pagination-xs'; }
+		        	if ($bootstrap_version == 2) { $converted_properties[] = 'pagination-mini'; }
+		        	if ($bootstrap_version >= 3) { $converted_properties[] = 'pagination-sm'; }
+					break;
+				case 'pagination-left': // not in Bootstrap
+					if ($bootstrap_version == 0) { $converted_properties[] = 'pagination-left'; }
+					break;
+				case 'pagination-center': // not in B2 nor B3
+					if ($bootstrap_version == 0) { $converted_properties[] = 'pagination-center'; }
+					if ($bootstrap_version >= 4) { $converted_properties[] = 'justify-content-center'; }
+					break;
+				case 'pagination-right': // not in B2 nor B3
+					if ($bootstrap_version == 0) { $converted_properties[] = 'pagination-right'; }
+					if ($bootstrap_version >= 4) { $converted_properties[] = 'justify-content-end'; }
+					break;
 
-	        case 'float-none':
-	        	if ($bootstrap_version == 0 || $bootstrap_version >= 4) { return 'float-none'; }
-	            break;
+					// align
 
-	        // clearfix exists for all versions
+				case 'float-right':
+					if ($bootstrap_version == 2 || $bootstrap_version == 3) { $converted_properties[] = 'pull-right'; }
+					if ($bootstrap_version == 0 || $bootstrap_version == 4) { $converted_properties[] = 'float-right'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'float-end'; }
+					break;
+				case 'float-left':
+					if ($bootstrap_version == 2 || $bootstrap_version == 3) { $converted_properties[] = 'pull-left'; }
+					if ($bootstrap_version == 0 || $bootstrap_version == 4) { $converted_properties[] = 'float-left'; }
+					if ($bootstrap_version == 5) { $converted_properties[] = 'float-start'; }
+					break;
+				case 'float-none':
+					if ($bootstrap_version == 0 || $bootstrap_version >= 4) { $converted_properties[] = 'float-none'; }
+					break;
 
-	        // hidden on the phone
+					// clearfix exists for all versions
 
-	        case 'hidden-phone':
-	        	switch ($bootstrap_version) {
-	        		case 0: case 2: return 'hidden-phone'; break;
-	        		case 3: return 'hidden-xs'; break;
-	        		default: return 'd-none d-sm-block'; break;
-	        	}
-	        	break;
-	    }
+					// visibility
 
-	    return '';
+				case 'visually-hidden':
+					switch ($bootstrap_version) {
+						case 0: case 2: $converted_properties[] = 'element-invisible'; break;
+						case 3: case 4: $converted_properties[] = 'sr-only'; break;
+						case 5: $converted_properties[] = 'visually-hidden'; break;
+					}
+					break;
+
+					// hidden on the phone
+
+				case 'hidden-phone':
+					switch ($bootstrap_version) {
+						case 0: case 2: $converted_properties[] = 'hidden-phone'; break;
+						case 3: $converted_properties[] = 'hidden-xs'; break;
+						default: $converted_properties[] = 'd-none d-sm-block'; break;
+					}
+					break;
+			}
+		}
+
+		return implode(' ', $converted_properties);
 	}
 
 	/**

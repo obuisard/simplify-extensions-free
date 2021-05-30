@@ -67,7 +67,7 @@ class SYWVerboseTextUnitsField extends ListField
 
 		if ($this->icon) {
 		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
-			$html .= '<div class="input-group-prepend"><span class="input-group-text"><i class="'.$this->icon.'"></i></span></div>';
+			$html .= '<span class="input-group-text"><i class="'.$this->icon.'"></i></span>';
 		}
 
 		$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'" value="'.htmlspecialchars($this->values['value'], ENT_COMPAT, 'UTF-8').'"'.$class.$style.$size.$this->maxLength.$hint.' />';
@@ -77,7 +77,7 @@ class SYWVerboseTextUnitsField extends ListField
 			$unit_selection = explode(',', $this->units);
 
 			if (count($unit_selection) == 1) {
-				$html .= '<div class="input-group-append"><span class="input-group-text">'.$this->units.'</span></div>';
+				$html .= '<span class="input-group-text">'.$this->units.'</span>';
 			} else {
 
 				HTMLHelper::_('bootstrap.tooltip');
@@ -87,28 +87,31 @@ class SYWVerboseTextUnitsField extends ListField
 					$this->values['unit'] = $this->value[1];
 				}
 
-				$script = 'jQuery(document).ready(function () {';
-					$script .= 'jQuery(\'.unit_'.$this->id.'\').click(function() { ';
-						$script .= 'var unit = jQuery(this).text();';
-						$script .= 'jQuery(\'#'.$this->id.'_unit\').val(unit);';
-						$script .= 'jQuery(\'#'.$this->id.'_unit_text\').html(unit);';
-					$script .= '}); ';
-				$script .= '});';
-
-				$wam->addInlineScript($script);
+				$wam->addInlineScript('
+					document.addEventListener("readystatechange", function(event) {
+						if (event.target.readyState == "complete") {
+							let units = document.querySelectorAll(".unit_' . $this->id . '");
+							for (let i = 0; i < units.length; i++) {
+								units[i].addEventListener("click", function(event) {
+									document.getElementById("' . $this->id . '_unit").value = this.textContent;
+									document.getElementById("' . $this->id . '_unit_text").innerHTML = this.textContent;
+								});
+							}
+						}
+					});
+				');
 
 				$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'_unit" value="'.$this->values['unit'].'" size="3" />';
 
-				$html .= '<div class="input-group-append">';
-				$html .= '<button class="btn btn-secondary dropdown-toggle hasTooltip" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="'.Text::_('LIB_SYW_VERBOSETEXT_UNIT').'">';
-				$html .= '<span id="'.$this->id.'_unit_text">'.$this->values['unit'].'</span>&nbsp;';
-				$html .= '<span class="caret" style="margin-bottom:auto"></span>';
-				$html .= '</button>';
-				$html .= '<div class="dropdown-menu">';
-				foreach ($unit_selection as $unit) {
-					$html .= '<li><a class="dropdown-item unit_'.$this->id.'" href="#" onclick="return false;">'.$unit.'</a></li>';
-				}
-				$html .= '</div>';
+				$html .= '<div class="dropdown">';
+					$html .= '<button type="button" id="'.$this->id.'_ddb" class="btn btn-primary dropdown-toggle hasTooltip" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="'.Text::_('LIB_SYW_VERBOSETEXT_UNIT').'">';
+						$html .= '<span id="'.$this->id.'_unit_text">'.$this->values['unit'].'</span>';
+					$html .= '</button>';
+					$html .= '<ul class="dropdown-menu" aria-labelledby="'.$this->id.'_ddb">';
+					foreach ($unit_selection as $unit) {
+						$html .= '<li><a class="dropdown-item unit_'.$this->id.'" href="#" onclick="return false;">'.$unit.'</a></li>';
+					}
+					$html .= '</ul>';
 				$html .= '</div>';
 			}
 		}

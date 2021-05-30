@@ -61,7 +61,7 @@ class SYWColorPickerField extends FormField
 		}
 
 		if (!empty($icon)) {
-			$html .= '<div class="input-group-prepend"><span class="input-group-text"><i class="'.$icon.'"></i></span></div>';
+			$html .= '<span class="input-group-text"><i class="'.$icon.'"></i></span>';
 		}
 
 		$data_rgba = '';
@@ -81,10 +81,6 @@ class SYWColorPickerField extends FormField
 			$html .= '<input style="height:auto" type="text" name="visible_'.$this->name.'" id="visible_'.$this->id.'"'.' value="'.htmlspecialchars($color, ENT_COMPAT, 'UTF-8').'"'.' class="form-control minicolors"'.$direction.$data_rgba.$disabled.' />';
 		}
 
-		if ($this->use_global || $this->allow_transparency) {
-		    $html .= '<div class="input-group-append">';
-		}
-
 		if ($this->use_global) {
 			$class = 'btn hasTooltip';
 			if (empty($this->value)) {
@@ -94,11 +90,7 @@ class SYWColorPickerField extends FormField
 		}
 
 		if ($this->allow_transparency) {
-			$html .= '<button type="button" id="a_'.$this->id.'" class="btn btn-secondary hasTooltip" title="'.Text::_('JLIB_FORM_BUTTON_CLEAR').'"><i class="icon-remove"></i></button>';
-		}
-
-		if ($this->use_global || $this->allow_transparency) {
-		    $html .= '</div>';
+			$html .= '<button type="button" id="a_'.$this->id.'" class="btn btn-secondary hasTooltip" title="'.Text::_('JCLEAR').'" aria-label="' . Text::_('JCLEAR') . '"><i class="icon-remove"></i></button>';
 		}
 
 		$html .= '</div>';

@@ -6,29 +6,31 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die;
+defined( '_JEXEC' ) or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
-class SYWSpacingSelectField extends DynamicSingleSelect
+class SYWShadowSelectField extends DynamicSingleSelect
 {
-	public $type = 'SYWSpacingSelect';
+    public $type = 'SYWShadowSelect';
 
-	protected $items;
+    protected $direction;
+    protected $items;
 
     protected function getOptions()
     {
         $options = array();
 
-		$lang = Factory::getLanguage();
-		$lang->load('lib_syw.sys', JPATH_SITE);
+        $lang = Factory::getLanguage();
+        $lang->load('lib_syw.sys', JPATH_SITE);
 
-		$imagefolder = URI::root(true) . '/media/syw/images/alignment/';
+        $imagefolder = URI::root(true) . '/media/syw/images/shadows/';
 
         if ($this->use_global) {
+
         	$component  = Factory::getApplication()->input->getCmd('option');
         	if ($component == 'com_menus') { // we are in the context of a menu item
         		$uri = new URI($this->form->getData()->get('link'));
@@ -48,8 +50,8 @@ class SYWSpacingSelectField extends DynamicSingleSelect
         	}
         }
 
-		foreach ($this->items as $key => $value) {
-			$options[] = array($key, $value['label'], '', $imagefolder . $value['image'] . '.png');
+        foreach ($this->items as $key => $value) {
+        	$options[] = array($key, $value['label'], '', $imagefolder . $value['image'] . '.png');
         }
 
         return $options;
@@ -64,16 +66,17 @@ class SYWSpacingSelectField extends DynamicSingleSelect
         	$lang = Factory::getLanguage();
         	$lang->load('lib_syw.sys', JPATH_SITE);
 
-            $this->width = 50;
-            $this->height = 50;
+            $this->width = 90;
+            $this->height = 90;
 
             $this->items = array();
-            $this->items['fs'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_START'), 'image' => 'start');
-            $this->items['c'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_CENTER'), 'image' => 'center');
-            $this->items['fe'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_END'), 'image' => 'end');
-            $this->items['sb'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEBETWEEN'), 'image' => 'spacebetween');
-            $this->items['sa'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEAROUND'), 'image' => 'spacearound');
-            $this->items['se'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEEVENLY'), 'image' => 'spaceevenly');
+            $this->items['none'] = array('label' => Text::_('JNONE'), 'image' => 'shadow_none');
+            $this->items['ss'] = array('label' => Text::_('LIB_SYW_SHADOW_VALUE_SOFTSMALL'), 'image' => 'shadow_ss'); // soft small
+            $this->items['sm'] = array('label' => Text::_('LIB_SYW_SHADOW_VALUE_SOFTMEDIUM'), 'image' => 'shadow_sm'); // soft medium
+            $this->items['sl'] = array('label' => Text::_('LIB_SYW_SHADOW_VALUE_SOFTLARGE'), 'image' => 'shadow_sl'); // soft large
+            $this->items['s'] = array('label' => Text::_('LIB_SYW_SHADOW_VALUE_SMALL'), 'image' => 'shadow_s'); // small
+            $this->items['m'] = array('label' => Text::_('LIB_SYW_SHADOW_VALUE_MEDIUM'), 'image' => 'shadow_m'); // medium
+            $this->items['l'] = array('label' => Text::_('LIB_SYW_SHADOW_VALUE_LARGE'), 'image' => 'shadow_l'); // large
         }
 
         return $return;

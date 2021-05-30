@@ -499,11 +499,11 @@ class SYWIconPickerField extends FormField
 		foreach ($icons as $index => $icon_item) {
 
 			if ($index == count($icons) - 1) {
-				$iconlist .= '<li class="dropdown-item" style="width: auto; display: inline-block; border: none; margin: 2px 2px 10px 2px;" data-SYWicon="'.$icon_item.'">';
+				$iconlist .= '<li style="width: auto; display: inline-block; border: none; margin: 2px 2px 10px 2px;" data-SYWicon="'.$icon_item.'">';
 			} else {
-				$iconlist .= '<li class="dropdown-item" style="width: auto; display: inline-block; border: none; margin: 2px;" data-SYWicon="'.$icon_item.'">';
+				$iconlist .= '<li style="width: auto; display: inline-block; border: none; margin: 2px;" data-SYWicon="'.$icon_item.'">';
 			}
-			$iconlist .= '<a href="#" class="badge hvr-grow hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a>';
+			$iconlist .= '<a href="#" class="dropdown-item badge bg-light text-dark hvr-grow hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a>';
 			$iconlist .= '</li>';
 		}
 
@@ -520,7 +520,7 @@ class SYWIconPickerField extends FormField
 	    }
 
 		foreach ($icongrouplist as $icongrouplist_item) {
-		    $iconlist .= '<li class="dropdown-header"><span>'.Text::_('LIB_SYW_ICONPICKER_ICONGROUP_'.strtoupper($icongrouplist_item)).'</span></li>';
+		    $iconlist .= '<li><h6 class="dropdown-header">'.Text::_('LIB_SYW_ICONPICKER_ICONGROUP_'.strtoupper($icongrouplist_item)).'</h6></li>';
 		    $iconlist .= self::getIconGroup($icongrouplist_item);
 		}
 
@@ -548,7 +548,7 @@ class SYWIconPickerField extends FormField
 			$script .= 'if (jQuery(\'#' . $this->id . '\').val() != "") { ';
 				$script .= 'jQuery("#'.$this->id.'_select li a").each(function() { ';
 					$script .= 'if (jQuery(this).parent().attr(\'data-SYWicon\') == jQuery(\'#' . $this->id . '\').val()) { ';
-						$script .= 'jQuery(this).addClass("badge-primary"); ';
+						$script .= 'jQuery(this).addClass("bg-primary"); ';
 					$script .= '} ';
 				$script .= '}); ';
 			$script .= '} ';
@@ -556,7 +556,7 @@ class SYWIconPickerField extends FormField
 			$script .= 'jQuery("#'.$this->id.'_select li").click(function() { ';
 				// de-select the previous value
 				$script .= 'jQuery("#'.$this->id.'_select li a").each(function() { ';
-					$script .= 'jQuery(this).removeClass("badge-primary"); ';
+					$script .= 'jQuery(this).removeClass("bg-primary"); ';
 				$script .= '}); ';
 				//
 				$script .= 'jQuery(\'#' . $this->id . '\').val(jQuery(this).attr(\'data-SYWicon\')); ';
@@ -564,7 +564,7 @@ class SYWIconPickerField extends FormField
 				//if ($this->buttonrole == 'default') {
 					//$script .= 'jQuery("#'.$this->id.'_default").removeClass("btn-primary"); ';
 				//}
-				$script .= 'jQuery(this).children(":first").addClass("badge-primary"); ';
+				$script .= 'jQuery(this).children(":first").addClass("bg-primary"); ';
 			$script .= '}); ';
 
 			$script .= 'jQuery("#'.$this->id.'_default").click(function() { ';
@@ -579,16 +579,16 @@ class SYWIconPickerField extends FormField
 				//if ($this->buttonrole == 'default') {
 					//$script .= 'jQuery("#'.$this->id.'_default").addClass("btn-primary"); ';
 				//}
-				$script .= 'jQuery("#'.$this->id.'_select li a").removeClass("badge-primary"); ';
+				$script .= 'jQuery("#'.$this->id.'_select li a").removeClass("bg-primary"); ';
 			$script .= '}); ';
 
 			$script .= 'jQuery("#'.$this->id.'").change(function() { ';
 				$script .= 'jQuery(\'#' . $this->id . '_icon\').attr(\'class\', \'SYWicon-\' + jQuery("#'.$this->id.'").val()); ';
 
 				$script .= 'jQuery("#'.$this->id.'_select li a").each(function() { ';
-				    $script .= 'jQuery(this).removeClass("badge-primary"); ';
+				    $script .= 'jQuery(this).removeClass("bg-primary"); ';
 				    $script .= 'if (jQuery(this).parent().attr(\'data-SYWicon\') == jQuery(\'#' . $this->id . '\').val()) { ';
-				        $script .= 'jQuery(this).addClass("badge-primary"); ';
+				        $script .= 'jQuery(this).addClass("bg-primary"); ';
 				    $script .= '} ';
 				$script .= '}); ';
 			$script .= '}); ';
@@ -602,12 +602,12 @@ class SYWIconPickerField extends FormField
 		$html .= '<div class="input-group">';
 
  		if (!empty($this->value)) {
- 			$html .= '<div class="input-group-prepend"><span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->value.'"></i></span></div>';
+ 			$html .= '<span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->value.'" aria-hidden="true"></i></span>';
  		} else {
 			if (empty($this->default)) {
-				$html .= '<div class="input-group-prepend"><span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->emptyicon.'"></i></span></div>';
+				$html .= '<span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->emptyicon.'" aria-hidden="true"></i></span>';
 			} else {
-				$html .= '<div class="input-group-prepend"><span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->default.'"></i></span></div>';
+				$html .= '<span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->default.'" aria-hidden="true"></i></span>';
 			}
  		}
 
@@ -618,21 +618,21 @@ class SYWIconPickerField extends FormField
 			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" readonly="readonly" class="form-control" />';
 		}
 
-		$html .= '<div class="btn-group" style="display:inline-block;vertical-align:middle">';
-			$html .= '<button id="'.$this->id.'_caret"'.($this->disabled ? ' disabled="disabled"' : '').' style="border-radius:0;margin-left:-1px;min-width:auto" class="btn btn-secondary dropdown-toggle hasTooltip" data-toggle="dropdown" title="' . Text::_('LIB_SYW_ICONPICKER_SELECTICON') . '">';
+		$html .= '<div class="dropdown">';
+			$html .= '<button type="button" id="'.$this->id.'_caret"'.($this->disabled ? ' disabled="disabled"' : '').' style="border-radius:0" class="btn btn-primary dropdown-toggle hasTooltip" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent" title="' . Text::_('LIB_SYW_ICONPICKER_SELECTICON') . '">';
 				//$html .= '<span class="caret" style="margin-bottom:auto"></span>';
 			$html .= '</button>';
-			$html .= '<ul id="'.$this->id.'_select" class="dropdown-menu" style="min-width: 220px; max-height: 200px; overflow: auto;">';
+			$html .= '<ul id="'.$this->id.'_select" class="dropdown-menu dropdown-menu-end" style="min-width: 250px; max-height: 200px; overflow: auto;">';
 
 		if (isset($this->icons)) {
 			$icons = explode(",", $this->icons);
 			foreach ($icons as $icon_item) {
-				$html .= '<li class="dropdown-item" style="width: auto; display: inline-block; border: none; margin: 2px;" data-SYWicon="'.$icon_item.'"><a href="#" class="badge hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a></li>';
+				$html .= '<li style="width: auto; display: inline-block; border: none; margin: 2px;" data-SYWicon="'.$icon_item.'"><a href="#" class="dropdown-item badge bg-light text-dark hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" aria-label="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a></li>';
 			}
 		} else if (isset($this->icongroups)) {
 			$icongroups = explode(",", $this->icongroups);
 			foreach ($icongroups as $icongroup_item) {
-				$html .= '<li class="dropdown-header"><span>'.Text::_('LIB_SYW_ICONPICKER_ICONGROUP_'.strtoupper($icongroup_item)).'</span></li>';
+				$html .= '<li><h6 class="dropdown-header">'.Text::_('LIB_SYW_ICONPICKER_ICONGROUP_'.strtoupper($icongroup_item)).'</h6></li>';
 				$html .= self::getIconGroup($icongroup_item);
 			}
 		} else {
@@ -642,12 +642,10 @@ class SYWIconPickerField extends FormField
 		$html .= '</ul>';
 		$html .= '</div>';
 
-		$html .= '<div class="input-group-append">';
-
 		$default_class_extra = '';
 		//if (empty($this->value) || (!empty($this->default) && $this->default == $this->value)) {
 			if ($this->buttonrole == 'default') {
-				$default_class_extra = ' btn-primary';
+				$default_class_extra = ' btn-secondary';
 			}
 		//}
 
@@ -655,15 +653,13 @@ class SYWIconPickerField extends FormField
 		    $default_class_extra = ' btn-secondary';
 		}
 
-		$html .= '<button type="button" id="'.$this->id.'_default"'.($this->disabled ? ' disabled="disabled"' : '').' class="btn'.$default_class_extra.' hasTooltip" title="'.htmlspecialchars($this->buttonlabel, ENT_COMPAT, 'UTF-8').'">';
+		$html .= '<button type="button" id="'.$this->id.'_default"'.($this->disabled ? ' disabled="disabled"' : '').' class="btn'.$default_class_extra.' hasTooltip" title="' . htmlspecialchars($this->buttonlabel, ENT_COMPAT, 'UTF-8') . '" aria-label="' . htmlspecialchars($this->buttonlabel, ENT_COMPAT, 'UTF-8') . '">';
 		if ($this->buttonrole == 'clear') {
 			$html .= '<i class="icon-remove"></i>';
 		} else {
 			$html .= $this->buttonlabel;
 		}
-		$html .= '</a>';
-
-		$html .= '</div>';
+		$html .= '</button>';
 
 		$html .= '</div>';
 

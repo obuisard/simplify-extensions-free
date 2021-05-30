@@ -215,15 +215,13 @@ class SYWCardinalTextField extends ListField
 		$html .= '<div class="input-group'. $tooltip .'"'. $title .'>';
 
 		if ($this->icons[$cardinal_point]) {
-			$html .= '<div class="input-group-prepend">';
 			$html .= '<span class="input-group-text"><i class="'.$this->icons[$cardinal_point].'"></i></span>';
-			$html .= '</div>';
 		}
 
 		$html .= '<input type="text" name="'.$this->name.'" value="'.htmlspecialchars($this->values[$cardinal_point], ENT_COMPAT, 'UTF-8').'"'.$class.$style.$size.$maxLength.$hint.' />';
 
 		if ($this->unit) {
-			$html .= '<div class="input-group-append"><span class="input-group-text">'.$this->unit.'</span></div>';
+			$html .= '<span class="input-group-text">'.$this->unit.'</span>';
 		}
 
 		$html .= '</div>';

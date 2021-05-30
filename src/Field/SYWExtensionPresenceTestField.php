@@ -87,10 +87,10 @@ class SYWExtensionPresenceTestField extends FormField
 		    if (Folder::exists(JPATH_ADMINISTRATOR . '/components/'.$this->extensionelement)) {
 		        if (ComponentHelper::isEnabled((string)$this->extensionelement)) {
 		            $alert = ' success';
-		            $html .= '<span class="badge badge-success">'.Text::_('JENABLED').'</span>'; // index.php?option=com_installer&view=manage&filter_status=1&filter_type=component
+		            $html .= '<span class="badge bg-success">'.Text::_('JENABLED').'</span>'; // index.php?option=com_installer&view=manage&filter_status=1&filter_type=component
 		        } else {
 		            $alert = ' '.$this->alertlevel;
-		            $html .= '<span class="badge badge-warning">'.Text::_('JDISABLED').'</span>'; // index.php?option=com_installer&view=manage&filter_status=0&filter_type=component
+		            $html .= '<span class="badge bg-warning">'.Text::_('JDISABLED').'</span>'; // index.php?option=com_installer&view=manage&filter_status=0&filter_type=component
 		        }
 		    } else {
 		        $missing_extension = true;

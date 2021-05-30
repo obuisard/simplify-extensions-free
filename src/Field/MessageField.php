@@ -30,7 +30,7 @@ class MessageField extends FormField
 
 		if ($this->message_type == 'example' || $this->message_type == 'fieldneutral' || $this->message_type == 'fieldwarning' || $this->message_type == 'fielderror' || $this->message_type == 'fieldinfo') {
 			if ($this->badge) {
-				return '<span class="badge badge-' . $this->badge_type . '">' . $this->badge . '</span><br />' . parent::getLabel();
+				return '<span class="badge bg-' . $this->badge_type . '">' . $this->badge . '</span><br />' . parent::getLabel();
 			} else {
 				return parent::getLabel();
 			}
@@ -81,7 +81,7 @@ class MessageField extends FormField
 			    }
 
 			    if ($style_label) {
-			        $style_label = ' badge-'.$style_label;
+			        $style_label = ' bg-'.$style_label;
 			    }
 
 			    $html .= '<span class="badge' . $style_label . '">' . $message_label . '</span>&nbsp;';

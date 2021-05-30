@@ -6,29 +6,31 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die;
+defined( '_JEXEC' ) or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
-class SYWSpacingSelectField extends DynamicSingleSelect
+class SYWLayoutSelectField extends DynamicSingleSelect
 {
-	public $type = 'SYWSpacingSelect';
+    public $type = 'SYWLayoutSelect';
 
-	protected $items;
+    protected $direction;
+    protected $items;
 
     protected function getOptions()
     {
         $options = array();
 
-		$lang = Factory::getLanguage();
-		$lang->load('lib_syw.sys', JPATH_SITE);
+        $lang = Factory::getLanguage();
+        $lang->load('lib_syw.sys', JPATH_SITE);
 
-		$imagefolder = URI::root(true) . '/media/syw/images/alignment/';
+        $imagefolder = URI::root(true) . '/media/syw/images/alignment/';
 
         if ($this->use_global) {
+
         	$component  = Factory::getApplication()->input->getCmd('option');
         	if ($component == 'com_menus') { // we are in the context of a menu item
         		$uri = new URI($this->form->getData()->get('link'));
@@ -48,8 +50,8 @@ class SYWSpacingSelectField extends DynamicSingleSelect
         	}
         }
 
-		foreach ($this->items as $key => $value) {
-			$options[] = array($key, $value['label'], '', $imagefolder . $value['image'] . '.png');
+        foreach ($this->items as $key => $value) {
+        	$options[] = array($key, $value['label'], '', $imagefolder . $value['image'] . '.png');
         }
 
         return $options;
@@ -66,14 +68,16 @@ class SYWSpacingSelectField extends DynamicSingleSelect
 
             $this->width = 50;
             $this->height = 50;
+            
+            $v_value = isset($this->element['v_value']) ? (string)$this->element['v_value'] : 'v';
+            $h_value = isset($this->element['h_value']) ? (string)$this->element['h_value'] : 'h';
+            
+            $v_label = isset($this->element['v_label']) ? (string)$this->element['v_label'] : 'LIB_SYW_CONFIGURATION_VALUE_COLUMN';
+            $h_label = isset($this->element['h_label']) ? (string)$this->element['h_label'] : 'LIB_SYW_CONFIGURATION_VALUE_ROW';
 
             $this->items = array();
-            $this->items['fs'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_START'), 'image' => 'start');
-            $this->items['c'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_CENTER'), 'image' => 'center');
-            $this->items['fe'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_END'), 'image' => 'end');
-            $this->items['sb'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEBETWEEN'), 'image' => 'spacebetween');
-            $this->items['sa'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEAROUND'), 'image' => 'spacearound');
-            $this->items['se'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEEVENLY'), 'image' => 'spaceevenly');
+            $this->items[$v_value] = array('label' => Text::_($v_label), 'image' => 'layout_vertical');
+            $this->items[$h_value] = array('label' => Text::_($h_label), 'image' => 'layout_horizontal');
         }
 
         return $return;

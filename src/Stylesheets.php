@@ -16,7 +16,8 @@ class Stylesheets
 	static $twodtransitionsLoaded = false;
 	static $bgtransitionsLoaded = false;
 	static $bootstrapmodalsLoaded = false;
-	static $puremodalsLoaded = false;
+	static $puremodalscssLoaded = false;
+	static $bootstrapmodalscssLoaded = array();
 	static $accessibleVisibilityLoaded = false;
 
 	static $transitionGrowLoaded = false;
@@ -2004,7 +2005,7 @@ CSS;
 	}
 
 	/**
-	 * Load the CSS needed for modals when Bootstrap is missing (CSS for Bootstrap 2)
+	 * Load the CSS needed for modals when Bootstrap is missing (CSS for Bootstrap 4)
 	 */
 	static function loadBootstrapModals()
 	{
@@ -2021,12 +2022,12 @@ CSS;
 	    self::$bootstrapmodalsLoaded = true;
 	}
 
-	/*
+	/**
 	 * Loads the CSS needed for pure modals
 	 */
 	static function loadPureModalsCss()
 	{
-		if (self::$puremodalsLoaded) {
+		if (self::$puremodalscssLoaded) {
 			return;
 		}
 
@@ -2055,7 +2056,50 @@ CSS;
 		$wam->addInlineStyle(self::compress($inline_css));
 		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
 
-		self::$puremodalsLoaded = true;
+		self::$puremodalscssLoaded = true;
+	}
+
+	/**
+	 * Loads the CSS needed for Bootstrap modals
+	 *
+	 * @param string $selector
+	 * @param array $attributes
+	 * @param number $bootstrap_version
+	 */
+	static function loadBootstrapModalsCss($selector = 'modal', $attributes = array('width' => '600'), $bootstrap_version = 5)
+	{
+		if (self::$bootstrapmodalscssLoaded) {
+			return;
+		}
+
+		if ($bootstrap_version < 3) {
+			$inline_css = <<< CSS
+				@media (min-width: 768px) {
+					#{$selector} {
+						max-width: 80%;
+						left: 50%;
+						margin-left: auto;
+						-webkit-transform: translate(-50%); -ms-transform: translate(-50%); transform: translate(-50%);
+						width: {$attributes['width']}px;
+					}
+				}			
+CSS;
+		} else {
+			$inline_css = <<< CSS
+				@media (min-width: 768px) {
+					#{$selector} .modal-dialog {
+						width: 80%;
+						max-width: {$attributes['width']}px;
+					}
+				}
+CSS;
+		}
+
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+		$wam->addInlineStyle(self::compress($inline_css));
+		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+
+		self::$bootstrapmodalscssLoaded = true;
 	}
 
 	/**

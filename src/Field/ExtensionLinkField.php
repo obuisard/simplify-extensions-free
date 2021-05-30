@@ -53,9 +53,9 @@ class ExtensionLinkField extends FormField
 		if ($this->link) {
 			$html .= '<a class="btn btn-dark btn-sm hasTooltip" title="'.Text::_($title).'" href="'.$this->link.'" target="_blank">';
 		} else {
-			$html .= '<span class="badge badge-secondary hasTooltip" title="'.Text::_($title).'">';
+			$html .= '<span class="badge bg-secondary hasTooltip" title="'.Text::_($title).'">';
 		}
-		$html .= '<i class="'.$icon.'" style="font-size: 2em; vertical-align: middle"></i>';
+		$html .= '<i class="'.$icon.'" style="font-size: 2em; vertical-align: middle" aria-hidden="true"></i>';
 		if ($this->link) {
 			$html .= '</a>';
 		} else {
@@ -115,11 +115,11 @@ class ExtensionLinkField extends FormField
 		if ($this->link_type == 'review') {
 			$html = rtrim($html, '.');
 			$html .= ' <a href="'.$this->link.'" target="_blank" style="text-decoration: none; vertical-align: text-bottom">';
-			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
-			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
-			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
-			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i>';
-			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle"></i></a> .';
+			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle" aria-hidden="true"></i>';
+			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle" aria-hidden="true"></i>';
+			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle" aria-hidden="true"></i>';
+			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle" aria-hidden="true"></i>';
+			$html .= '<i class="SYWicon-star" style="font-size: 1.1em; color: #f7c41f; vertical-align: middle" aria-hidden="true"></i></a> .';
 		}
 
 		$html .= '</div>';
