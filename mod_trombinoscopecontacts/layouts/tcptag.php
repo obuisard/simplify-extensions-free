@@ -9,7 +9,6 @@ defined('JPATH_BASE') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
-use SYW\Library\Utilities as SYWUtilities;
 
 $bootstrap_version = isset($displayData['bootstrap_version']) ? intval($displayData['bootstrap_version']) : 5;
 
@@ -18,8 +17,7 @@ $link = isset($displayData['link']) ? $displayData['link'] : '';
 $onclick = isset($displayData['onclick']) ? $displayData['onclick'] : '';
 
 $tag_params = new Registry($tag->params);
-$default_classes = SYWUtilities::getBootstrapProperty('label label-info', $bootstrap_version);
-$tag_class = $tag_params->get('tag_link_class', $default_classes);
+$tag_class = $tag_params->get('tag_link_class', '');
 
 if (Factory::getLanguage()->hasKey($tag->title)) {
 	$tag->title = Text::_($tag->title);

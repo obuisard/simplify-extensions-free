@@ -359,7 +359,7 @@ if ($carousel_configuration != 'none') {
 	        if ($pagination_size) {
 	            $extra_pagination_classes .= ' ' . SYWUtilities::getBootstrapProperty('pagination-'.$pagination_size, $bootstrap_version);
 	        }
-	    } else { // Bootstrap 3, 4 or 5
+	    } else if ($bootstrap_version > 2) { // Bootstrap 3, 4 or 5
 	        $extra_pagination_ul_class_attribute = ' class="pagination';
 	        if ($pagination_size) {
 	            $extra_pagination_ul_class_attribute .= ' ' . SYWUtilities::getBootstrapProperty('pagination-'.$pagination_size, $bootstrap_version);
@@ -380,7 +380,6 @@ if ($carousel_configuration != 'none') {
 	if ($generate_inline_scripts) {
 
 		$wam->addInlineScript($cache_anim_js->getBuffer());
-		//$doc->addScriptDeclaration($cache_anim_js->getBuffer());
 
 	} else {
 
@@ -388,7 +387,6 @@ if ($carousel_configuration != 'none') {
 
 		if ($result) {
 			$wam->registerAndUseScript('tc.animation_' . $module->id . $rtl_suffix, $cache_anim_js->getCachePath() . '/animation_' . $module->id . $rtl_suffix . '.js', [], ['defer' => true]);
-			//$doc->addScript(Uri::base(true) . '/media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js', [], ['defer' => true]);
 		}
 	}
 
@@ -404,7 +402,6 @@ if ($show_picture && $photo_align != 't' && $min_card_flip_width) {
 	Helper::loadFlipCards();
 	$cache_js = new JSFileCache('mod_trombinoscopecontacts', $params);
 	$wam->addInlineScript($cache_js->getBuffer());
-	//$doc->addScriptDeclaration($cache_js->getBuffer());
 }
 
 // styles
@@ -445,7 +442,6 @@ if (File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/substitute_s
 
 	if ($result) {
 		$wam->registerAndUseStyle('tc.style_' . $module->id, $cache_css->getCachePath() . '/style_' . $module->id . '.css');
-		//$doc->addStyleSheet(Uri::base(true) . '/media/cache/mod_trombinoscopecontacts/style_' . $module->id . '.css');
 	}
 
 	Helper::loadCommonStylesheet();

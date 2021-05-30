@@ -217,7 +217,7 @@ abstract class Helper
 	{
 		$bootstrap_version = $params->get('bootstrap_version', 'joomla');
 		if ($bootstrap_version === 'joomla') {
-			return 5; // version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
+			return 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
 		}
 		return intval($bootstrap_version);
 	}
@@ -401,9 +401,19 @@ abstract class Helper
 						}
 					}
 
-					if (empty($tags) /*&& $params->get('tags_inex', 1)*/) { // won't return any contact if no contact has been associated to any tag (TODO when include tags only)
+					if (empty($tags) && $params->get('tags_inex', 1)) { // won't return any contact if no contact has been associated to any tag
 						return array();
 					}
+				} else if ($params->get('include_tag_children', 0)) { // get tag children
+					
+					$tagTreeArray = array();
+					$helper_tags = new TagsHelper();
+					
+					foreach ($tags as $tag) {
+						$helper_tags->getTagTreeArray($tag, $tagTreeArray);
+					}
+					
+					$tags = array_unique(array_merge($tags, $tagTreeArray));
 				}
 			}
 
@@ -531,7 +541,8 @@ abstract class Helper
 
 			$categories = self::getCategories($params->get('cat', array()), $params->get('includesubcat', 'no'), $params->get('levelsubcategories', 1));
 			if ($categories != '') {
-				$query->where('cd.catid IN ('.$categories.')');
+				$test_type = $params->get('cat_inex', 1) ? 'IN' : 'NOT IN';
+				$query->where('cd.catid ' . $test_type . ' ('.$categories.')');
 			}
 
 			// include
@@ -563,18 +574,35 @@ abstract class Helper
 			// filter by tags
 
 			if (!empty($tags)) {
-
+				
 				$tags_to_match = implode(',', $tags);
-
-				$query->select('COUNT(t.id) AS tags_count');
+				
+				$query->select('COUNT(tags.id) AS tags_count');
 				$query->join('INNER', $db->quoteName('#__contentitem_tag_map', 'm').' ON '.$db->quoteName('m.content_item_id').' = '.$db->quoteName('cd.id').' AND '.$db->quoteName('m.type_alias').' = '.$db->quote('com_contact.contact'));
-				$query->join('INNER', $db->quoteName('#__tags', 't') . ' ON '.$db->quoteName('m.tag_id').' = '.$db->quoteName('t.id'));
-				$query->where($db->quoteName('t.id').' IN ('.$tags_to_match.')');
-				$query->where($db->quoteName('t.access').' IN ('.$groups.')');
-				$query->where($db->quoteName('t.published').' = 1');
-
-				if ($params->get('tags_match', 'any') == 'all') {
-					$query->having('COUNT('.$db->quoteName('t.id').') = '.count($tags));
+				$query->join('INNER', $db->quoteName('#__tags', 'tags') . ' ON '.$db->quoteName('m.tag_id').' = '.$db->quoteName('tags.id'));
+				
+				$query->where($db->quoteName('tags.access').' IN ('.$groups.')');
+				$query->where($db->quoteName('tags.published').' = 1');
+				
+				$test_type = $params->get('tags_inex', 1) ? 'IN' : 'NOT IN';
+				$query->where($db->quoteName('tags.id').' ' . $test_type . ' ('.$tags_to_match.')');
+				
+				if ($params->get('tags_inex', 1)) {
+					if ($params->get('tags_match', 'any') == 'all') {
+						$query->having('COUNT('.$db->quoteName('tags.id').') = '.count($tags));
+					}
+				} else {
+					$query->select('tags_per_items.tag_count_per_item');
+					
+					// subquery gets all the tags for all items - VERY INNEFICIENT
+					$subquery = 'SELECT mm.content_item_id AS content_id, COUNT(tt.id) AS tag_count_per_item FROM #__contentitem_tag_map AS mm';
+					$subquery .= ' INNER JOIN #__tags AS tt ON mm.tag_id = tt.id';
+					$subquery .= ' WHERE tt.access IN ('.$groups.') AND tt.published = 1 AND mm.type_alias = \'com_contact.contact\' GROUP BY content_id';
+					
+					$query->join('INNER', '(' . $subquery . ') AS tags_per_items ON tags_per_items.content_id = cd.id');
+					
+					// we keep items that have the same amount of tags before and after removals
+					$query->having('COUNT('.$db->quoteName('tags.id').') = '.$db->quoteName('tags_per_items.tag_count_per_item'));
 				}
 
 				$query->group($db->quoteName('cd.id'));
@@ -2434,7 +2462,6 @@ abstract class Helper
 		$minified = (JDEBUG) ? '' : '.min';
 
 		$wam->registerAndUseScript('tc.flipcards', 'mod_trombinoscopecontacts/flipcards' . $minified . '.js', ['relative' => true, 'version' => 'auto']); // no defer
-		//Factory::getDocument()->addScript(Uri::base(true) . '/media/mod_trombinoscopecontacts/js/flipcards' . $minified . '.js');
 
 		self::$flipScriptLoaded = true;
 	}
@@ -2453,7 +2480,6 @@ abstract class Helper
 		$minified = (JDEBUG) ? '' : '-min';
 
 		$wam->registerAndUseStyle('tc.common_styles', 'mod_trombinoscopecontacts/common_styles' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-		//Factory::getDocument()->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscopecontacts/css/common_styles' . $minified . '.css');
 
 		self::$commonStylesLoaded = true;
 	}
@@ -2477,10 +2503,8 @@ abstract class Helper
 
 		if (!File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css') || JDEBUG) {
 			$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
-			//$doc->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles.css');
 		} else {
 			$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
-			//$doc->addStyleSheet(Uri::base(true) . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css');
 		}
 
 		self::$userStylesLoaded = true;
