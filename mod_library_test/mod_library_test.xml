@@ -118,6 +118,11 @@
 					label="Text" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
+				<!-- SYWVerboseTextUnits -->
+				<field name="textunits" type="sywverbosetextunits" default="" size="4" units="px,em" defaultunit="px" icon="SYWicon-timer" 
+					label="Text" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
 				<!-- Tags -->
 				<field name="tags" type="tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select"
 					label="Tags" 
@@ -238,6 +243,16 @@
 					label="Loader" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />				
 					
+				<!-- SYWShadowSelect -->
+				<field name="shadow" type="sywshadowselect" default="none" 
+					label="Shadow" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
+				<!-- SYWLayoutSelect -->
+				<field name="layout" type="sywlayoutselect" default="h" 
+					label="Layout" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
 				<!-- SYWSpacingSelect -->	
 				<field name="spacing" type="sywspacingselect" default="c" 
 						label="Spacing" 
@@ -255,23 +270,18 @@
 					
 				<!-- SYWImageFilterPicker -->
 				<field name="filter" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a" global="true"
-					label="Image Filter" 
+					label="Image Filter (GD)" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
 				<!-- SYWImageFilterPicker -->
 				<field name="filter2" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a" cssfilters="true" gdfilters="false" 
-					label="Image Filter" 
+					label="Image Filter (CSS)" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
 					
 				<!-- SYWImageFilterPicker -->
 				<field name="filter3" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a" extended="true" cssfilters="true" gdfilters="true" 
 					label="Image Filter" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
-				
-				<!-- SYWImageFilterMultiPicker -->
-				<field name="filter4" type="sywimagefiltermultipicker" default="none" selectionmax="2" filters="blur,sharpen,duotone,sepia,grayscale,sketch,pixelate,negate,emboss,edgedetect" selectedcolor="#fc930a" 
-					label="Image Filter (2 choices)" 
-					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />					
 					
 				<field name="image_filters" type="subform" formsource="modules/mod_library_test/forms/fields/imagefilters.xml" multiple="true" max="2"
 					default="{'filter':'none'}"
