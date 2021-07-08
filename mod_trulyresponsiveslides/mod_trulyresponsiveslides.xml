@@ -6,8 +6,8 @@
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
-	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>1.14.0</version>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
+	<version>2.2.0</version>
 	<description>MOD_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrulyResponsiveSlides</namespace>
 	
@@ -37,6 +37,8 @@
 		<language tag="fa-IR">language/fa-IR/fa-IR.mod_trulyresponsiveslides.sys.ini</language>
 		<language tag="fr-FR">language/fr-FR/fr-FR.mod_trulyresponsiveslides.ini</language>
 		<language tag="fr-FR">language/fr-FR/fr-FR.mod_trulyresponsiveslides.sys.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.mod_trulyresponsiveslides.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.mod_trulyresponsiveslides.sys.ini</language>
 		<language tag="nl-NL">language/nl-NL/nl-NL.mod_trulyresponsiveslides.ini</language>
 		<language tag="nl-NL">language/nl-NL/nl-NL.mod_trulyresponsiveslides.sys.ini</language>
 		<language tag="pl-PL">language/pl-PL/pl-PL.mod_trulyresponsiveslides.ini</language>
@@ -54,7 +56,7 @@
 			
 			<fieldset name="basic" label="MOD_TRULYRESPONSIVESLIDER_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 								
-				<field type="extensionversion" version="1.14.0" />
+				<field type="extensionversion" version="2.2.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_TRULYRESPONSIVESLIDES_TRANSLATORS" />
@@ -69,11 +71,11 @@
 					demo="http://demo3.simplifyyourweb.com/truly-responsive-slides" 
 					review="https://extensions.joomla.org/extensions/extension/photos-a-images/slideshow/truly-responsive-slides" 
 					donate="https://simplifyyourweb.com/free-products/truly-responsive-slides" />
-
-<!-- 				<field type="sywextensionpresencetest" condition="true" title="Truly Responsive Slides Pro" description="MOD_TRULYRESPONSIVESLIDES_INFO_PROVERSION"  -->
-<!-- 					extensiontype="component" extensionelement="com_trulyresponsiveslidespro" -->
-<!-- 					imagesrc="media/mod_trulyresponsiveslides/images/logo_pro.png" -->
-<!-- 					downloadlink="https://simplifyyourweb.com/downloads/truly-responsive-slides-pro" downloadtext="MOD_TRULYRESPONSIVESLIDES_INFO_PROVERSIONDOWLOAD" /> -->
+					
+				<field type="sywextensionpresencetest" title="Truly Responsive Slides Pro" description="MOD_TRULYRESPONSIVESLIDES_INFO_PROVERSION" 
+					extensiontype="component" extensionelement="com_trulyresponsiveslidespro"
+					imagesrc="media/mod_trulyresponsiveslides/images/logo_pro.png"
+					downloadlink="https://simplifyyourweb.com/downloads/truly-responsive-slides-pro" downloadtext="MOD_TRULYRESPONSIVESLIDES_INFO_PROVERSIONDOWLOAD" />
 								
 <!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
 			</fieldset>
@@ -262,8 +264,7 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="slider_arrows" label="MOD_TRULYRESPONSIVESLIDER_ARROWS_LABEL">				 
-<!-- 				 <field type="title" title="MOD_TRULYRESPONSIVESLIDER_ARROWS_LABEL" /> -->
+				<fieldset name="slider_arrows" label="MOD_TRULYRESPONSIVESLIDER_ARROWS_LABEL">
 				 
 					 <field name="arrow_c" type="sywcolorpicker" default="#000000" icon="SYWicon-format-color-text" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_COLOR_LABEL" 
@@ -285,7 +286,6 @@
 				</fieldset>
 				
 				<fieldset name="slider_thumbnails" label="MOD_TRULYRESPONSIVESLIDER_THUMBNAILS_LABEL">
-<!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_THUMBNAILS_LABEL" showon="animation!:basic" />						 -->
 				
 					<field name="thumb_w" type="sywverbosetext" default="80" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="animation!:basic" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBNAIL_WIDTH_LABEL" 
@@ -324,7 +324,6 @@
 				</fieldset>
 			
 				<fieldset name="slide_caption" label="MOD_TRULYRESPONSIVESLIDER_CAPTION_LABEL">
-<!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_CAPTION_LABEL" />		 -->
 					
 					<field name="caption_top" type="sywverbosetext" default="7" filter="integer" size="4" maxlength="2" unit="%" icon="SYWicon-keyboard-arrow-up" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CAPTIONTOP_LABEL" 
@@ -382,7 +381,6 @@
 				</fieldset>
 				
 				<fieldset name="slide_mobile" label="MOD_TRULYRESPONSIVESLIDER_MOBILE_LABEL">
-<!-- 				<field type="subtitle" title="MOD_TRULYRESPONSIVESLIDER_MOBILE_LABEL" /> -->
 					
 					<field name="out_captions" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_OUTCAPTIONS_LABEL" 
@@ -396,8 +394,7 @@
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_OUTCAPTIONCLASS_DESC" />
 				</fieldset>
 				
-				<fieldset name="slide_background" label="MOD_TRULYRESPONSIVESLIDER_BACKGROUNDIMAGE_LABEL">			
-<!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_BACKGROUNDIMAGE_LABEL" /> -->
+				<fieldset name="slide_background" label="MOD_TRULYRESPONSIVESLIDER_BACKGROUNDIMAGE_LABEL">
 				
 					<field name="default_bg" type="media" default=""
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_DEFAULTBGIMAGE_LABEL" 
@@ -419,11 +416,22 @@
 						
 					<field name="img_h" type="sywverbosetext" default="600" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGE_HEIGHT_LABEL" 
-						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGE_HEIGHT_DESC" />	
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGE_HEIGHT_DESC" />
+				
+					<field name="qualitybg_jpg" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYJPG_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYJPG_DESC" />
+						
+					<field name="qualitybg_png" type="sywverbosetext" default="2" filter="integer" size="8" maxlength="1" min="0" max="9" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYPNG_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYPNG_DESC" />
+						
+					<field name="qualitybg_webp" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYWEBP_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYWEBP_DESC" />
 				</fieldset>
 				
-				<fieldset name="slide_breakpoints" label="MOD_TRULYRESPONSIVESLIDER_RESPONSIVEIMAGES_LABEL">		
-<!-- 					<field type="subtitle" title="MOD_TRULYRESPONSIVESLIDER_RESPONSIVEIMAGES_LABEL" /> -->
+				<fieldset name="slide_breakpoints" label="MOD_TRULYRESPONSIVESLIDER_RESPONSIVEIMAGES_LABEL">
 					
 					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"  
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_BREAKPOINTS_LABEL" 
@@ -439,7 +447,6 @@
 				</fieldset>
 				
 				<fieldset name="tooltips_target" label="MOD_TRULYRESPONSIVESLIDER_TOOLTIPTARGET_LABEL">
-<!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_TOOLTIPTARGET_LABEL" /> -->
 			
 					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETICON_LABEL" 
@@ -474,7 +481,6 @@
 				</fieldset>
 				
 				<fieldset name="tooltips_tooltip" label="MOD_TRULYRESPONSIVESLIDER_TOOLTIP_LABEL">
-<!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_TOOLTIP_LABEL" /> -->
 				
 					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TOOLTIPCOLOR_LABEL" 
@@ -497,9 +503,11 @@
 					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/transitions" />
 				</fieldset>
 				
-				<field name="type" type="transitionselect" default="fade" 
-					label="MOD_TRULYRESPONSIVESLIDER_FIELD_TYPE_LABEL" 
-					description="MOD_TRULYRESPONSIVESLIDER_FIELD_TYPE_DESC" />
+				<fieldset name="animation_transition" label="MOD_TRULYRESPONSIVESLIDER_ANIMATION_FIELDSET_LABEL">
+				
+					<field name="type" type="transitionselect" default="fade" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TYPE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TYPE_DESC" />
 				
 <!-- 				<field name="direction" type="radio" default="horizontal" layout="joomla.form.field.radio.switcher"  -->
 <!-- 					label="MOD_TRULYRESPONSIVESLIDER_FIELD_DIRECTION_LABEL"  -->
@@ -508,33 +516,35 @@
 <!-- 					<option value="vertical">MOD_TRULYRESPONSIVESLIDER_VERTICAL</option> -->
 <!-- 				</field> -->
 				
-				<field name="autostart" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
-					label="MOD_TRULYRESPONSIVESLIDER_FIELD_AUTOSTART_LABEL" 
-					description="MOD_TRULYRESPONSIVESLIDER_FIELD_AUTOSTART_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="pauseonslide" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
-					label="MOD_TRULYRESPONSIVESLIDER_FIELD_PAUSEONSLIDE_LABEL" 
-					description="MOD_TRULYRESPONSIVESLIDER_FIELD_PAUSEONSLIDE_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				
-				<field name="loop" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
-					label="MOD_TRULYRESPONSIVESLIDER_FIELD_LOOP_LABEL" 
-					description="MOD_TRULYRESPONSIVESLIDER_FIELD_LOOP_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				
-				<field name="speed" type="sywverbosetext" default="1000" filter="integer" size="4" unit="ms" icon="SYWicon-timer" 
-					label="MOD_TRULYRESPONSIVESLIDER_FIELD_SPEED_LABEL" 
-					description="MOD_TRULYRESPONSIVESLIDER_FIELD_SPEED_DESC" />
-									
-				<field name="interval" type="sywverbosetext" default="6000" filter="integer"  size="4" unit="ms" icon="SYWicon-timer"
-					label="MOD_TRULYRESPONSIVESLIDER_FIELD_INTERVAL_LABEL" 
-					description="MOD_TRULYRESPONSIVESLIDER_FIELD_INTERVAL_DESC" />			
+					<field name="autostart" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_AUTOSTART_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_AUTOSTART_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+
+					<field name="pauseonslide" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_PAUSEONSLIDE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_PAUSEONSLIDE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="loop" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_LOOP_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_LOOP_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="speed" type="sywverbosetext" default="1000" filter="integer" size="4" unit="ms" icon="SYWicon-timer" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_SPEED_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_SPEED_DESC" />
+										
+					<field name="interval" type="sywverbosetext" default="6000" filter="integer"  size="4" unit="ms" icon="SYWicon-timer"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_INTERVAL_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_INTERVAL_DESC" />
+				</fieldset>
 			</fieldset>
 					
 			<fieldset name="advanced" description="MOD_TRULYRESPONSIVESLIDER_ADVANCED_FIELDSET_DESC">
@@ -543,8 +553,6 @@
 
 					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/advanced" />
 				</fieldset>
-			
-<!-- 				<field type="message" text="MOD_TRULYRESPONSIVESLIDER_INFO_JQUERYVERSIONREQUIRED" style="info" /> -->
 				
 				<fieldset name="advanced_general" label="MOD_TRULYRESPONSIVESLIDER_ADVANCED_FIELDSET_LABEL">
 				
@@ -584,9 +592,7 @@
 				</fieldset>
 				
 				<fieldset name="advanced_pictures" label="MOD_TRULYRESPONSIVESLIDER_PICTURES_LABEL">
-<!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_PICTURES_LABEL" /> -->
 				
-<!-- 				<field type="message" text="MOD_TRULYRESPONSIVESLIDER_FIELD_GDTEST_LABEL" style="warning" /> -->
 					<field type="gdtest" supportedtypes="jpg,png,webp" message="MOD_TRULYRESPONSIVESLIDER_FIELD_GDTEST_LABEL" />	
 						
 					<field type="message" text="MOD_TRULYRESPONSIVESLIDER_INFO_CLEARCACHE" style="info" showon="site_mode:adv" />
@@ -605,10 +611,16 @@
 						<option value="images">MOD_TRULYRESPONSIVESLIDER_VALUE_IMAGESDIRECTORY</option>
 						<option value="cache">MOD_TRULYRESPONSIVESLIDER_VALUE_CACHEDIRECTORY</option>
 					</field>
+				
+					<field name="fallback_imagetype" type="list" default="png" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_WEBPFALLBACKIMAGETYPE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_WEBPFALLBACKIMAGETYPE_DESC">
+						<option value="png">.png</option>
+						<option value="jpg">.jpg</option>
+					</field>				
 				</fieldset>
 						
-				<fieldset name="advanced_headers" label="MOD_TRULYRESPONSIVESLIDER_HEADERFILES_LABEL">	
-<!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_HEADERFILES_LABEL" />	 -->
+				<fieldset name="advanced_headers" label="MOD_TRULYRESPONSIVESLIDER_HEADERFILES_LABEL">
 				
 					<field name="style_overrides" type="editor" rows="10" default="" editor="codemirror|none" filter="raw" buttons="false" syntax="css" 
 		            	label="MOD_TRULYRESPONSIVESLIDER_FIELD_STYLEOVERRIDES_LABEL" 
@@ -658,8 +670,7 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="advanced_module" label="MOD_TRULYRESPONSIVESLIDER_MODULE_LABEL">		
-<!-- 				<field type="title" title="MOD_TRULYRESPONSIVESLIDER_MODULE_LABEL" />				 -->
+				<fieldset name="advanced_module" label="MOD_TRULYRESPONSIVESLIDER_MODULE_LABEL">
 				
 					<field name="show_on_mobile" type="list" default="1" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_SHOWONMOBILE_LABEL"

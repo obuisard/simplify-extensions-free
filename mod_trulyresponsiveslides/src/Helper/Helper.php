@@ -114,6 +114,29 @@ class Helper
 		}
 		$tmp_path = SYWCache::getTmpPath($thumb_path, $subdirectory);
 
+		$quality_jpg = $params->get('qualitybg_jpg', 80);
+		$quality_png = $params->get('qualitybg_png', 2);
+		$quality_webp = $params->get('qualitybg_webp', 80);
+		
+		if ($quality_jpg > 100) {
+		    $quality_jpg = 100;
+		}
+		if ($quality_jpg < 0) {
+		    $quality_jpg = 0;
+		}
+		if ($quality_png > 9) {
+		    $quality_png = 9;
+		}
+		if ($quality_png < 0) {
+		    $quality_png = 0;
+		}
+		if ($quality_webp > 100) {
+		    $quality_webp = 100;
+		}
+		if ($quality_webp < 0) {
+		    $quality_webp = 0;
+		}
+
 		$extensions = get_loaded_extensions();
 		if (!in_array('gd', $extensions)) {
 			return false;
@@ -128,8 +151,6 @@ class Helper
 				} else { // re-create the image if original image has a different size than the slider
 
 					$image = new SYWImage($images_path.$image_item);
-
-					$quality = 80;
 
 					if (is_null($image->getImagePath())) {
 						//$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCED_ERROR_IMAGEFILEDOESNOTEXIST', $original_image_src);
@@ -146,16 +167,22 @@ class Helper
 								File::delete(JPATH_ROOT.'/'.$imgfilename.'.'.$imageext); // remove potential thumbnail otherwise it will be used instead of the original
 							}
 						} else {
-// 							switch ($imageext){
-// 								case 'jpg': case 'jpeg': $quality = 100; break; // 0 to 100
-// 								case 'png': $quality = 0; break; // compression: 0 to 9
-// 								case 'webp': $quality = 100; break; // 0 to 100
-// 								default : $quality = -1; break;
-// 							}
+
+						    switch ($imageext){
+						        case 'jpg': case 'jpeg': $quality = $quality_jpg; break; // 0 to 100
+						        case 'png': $quality = round(11.111111 * (9 - $quality_png)); break; // compression: 0 to 9
+						        case 'webp': $quality = $quality_webp; break; // 0 to 100
+						        default : $quality = -1; break;
+						    }
 
 							if ($image->toThumbnail($imgfilename . '.' . $imageext, '', $img_width, $img_height, true, $quality)) {
-								if ($image->getImageMimeType() === 'image/webp') { // create fallback
-									$image->toThumbnail($imgfilename . '.png', 'image/png', $img_width, $img_height, true, $quality);
+							    if ($image->getImageMimeType() === 'image/webp') { // create fallback
+							        
+							        if ($params->get('fallback_imagetype', 'png') == 'png') {
+								        $image->toThumbnail($imgfilename . '.png', 'image/png', $img_width, $img_height, true, round(11.111111 * (9 - $quality_png)));
+							        } else {
+							            $image->toThumbnail($imgfilename . '.jpg', 'image/jpeg', $img_width, $img_height, true, $quality_jpg);
+							        }
 								}
 							}
 						}
@@ -243,7 +270,12 @@ class Helper
 
 						if ($image->toThumbnail($thumbfilename . '.' . $imageext, '', $thumb_width, $thumb_height, $crop_picture, $quality)) {
 							if ($image->getImageMimeType() === 'image/webp') { // create fallback
-								$image->toThumbnail($thumbfilename . '.png', 'image/png', $thumb_width, $thumb_height, $crop_picture, $quality);
+							    
+							    if ($params->get('fallback_imagetype', 'png') == 'png') {
+							        $image->toThumbnail($thumbfilename . '.png', 'image/png', $thumb_width, $thumb_height, $crop_picture, round(11.111111 * (9 - $quality_png)));
+							    } else {
+							        $image->toThumbnail($thumbfilename . '.jpg', 'image/jpeg', $thumb_width, $thumb_height, $crop_picture, $quality_jpg);
+							    }
 							}
 						}
 					}

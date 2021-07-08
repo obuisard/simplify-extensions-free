@@ -8,9 +8,10 @@ namespace SYW\Module\TrulyResponsiveSlides\Site\Helper;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
@@ -283,6 +284,13 @@ class ArticlesHelper
 			$registry = new Registry();
 			$registry->loadString($item->images);
 			$item->images = $registry->toArray();
+			
+			// clean image URLs
+			
+			if (isset($item->images['image_fulltext']) && $item->images['image_fulltext']) {
+                $fulltext_image_object = HTMLHelper::cleanImageURL($item->images['image_fulltext']);
+                $item->images['image_fulltext'] = $fulltext_image_object->url;
+			}
 
 			// Convert the urls field to an array
 			$registry = new Registry();

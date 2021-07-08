@@ -19,7 +19,7 @@ use SYW\Library\Libraries as SYWLibraries;
 use SYW\Library\Utilities as SYWUtilities;
 use SYW\Module\TrulyResponsiveSlides\Site\Cache\CSSFileCache;
 use SYW\Module\TrulyResponsiveSlides\Site\Cache\JSAnimationFileCache;
-use SYW\Module\TrulyResponsiveSlides\Site\Helper;
+use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
 
 	if ($layout != 'articles') {
 		$errors[] = array(Text::_('MOD_TRULYRESPONSIVESLIDER_ERROR_WRONGLAYOUT'), 'error');

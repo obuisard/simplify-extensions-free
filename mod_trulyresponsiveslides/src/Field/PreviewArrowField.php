@@ -83,7 +83,7 @@ class PreviewArrowField extends FormField
 
 		$html = '';
 
-		$html .= '<div style="width: 84px; padding: 20px; background-color: #fbfbfb; border: 2px dashed #ccc; border-radius: 10px">';
+		$html .= '<div style="width: 84px; padding: 20px; background-color: #fbfbfb; border: 2px dashed #ccc; -webkit-border-radius: 10px; border-radius: 10px; box-sizing: initial">';
 
 			$html .= '<div id="preview_arrow_left" class="preview_arrow" style="display: inline-block; width: 32px; height: 32px; vertical-align: middle; text-align: center; cursor: pointer">';
 				$html .= '<i class="SYWicon-keyboard-arrow-left" style="font-size: 32px; line-height: 32px"></i>';

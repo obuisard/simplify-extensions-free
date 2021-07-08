@@ -12,7 +12,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use SYW\Module\TrulyResponsiveSlides\Site\Cache\CSSFileCache;
 use SYW\Module\TrulyResponsiveSlides\Site\Cache\JSAnimationFileCache;
-use SYW\Module\TrulyResponsiveSlides\Site\Helper;
+use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
 use SYW\Library\Utilities as SYWUtilities;
 
 	if ($layout != 'images') {

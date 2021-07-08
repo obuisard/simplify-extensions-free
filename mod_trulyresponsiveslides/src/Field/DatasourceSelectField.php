@@ -8,24 +8,41 @@ namespace SYW\Module\TrulyResponsiveSlides\Site\Field;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Uri\Uri;
+use SYW\Library\Field\DynamicSingleSelect;
 use SYW\Library\K2 as SYWK2;
 
-class DatasourceSelectField extends ListField
+class DatasourceSelectField extends DynamicSingleSelect
 {
 	public $type = 'DatasourceSelect';
 
 	protected function getOptions()
 	{
-		$options = array();
-
-		$options[] = HTMLHelper::_('select.option', 'k2', Text::_('MOD_TRULYRESPONSIVESLIDER_VALUE_K2ITEMS'), 'value', 'text', $disable = !SYWK2::exists());
-
-		$options = array_merge(parent::getOptions(), $options);
-
-		return $options;
+	    $options = parent::getOptions();
+	    
+	    $options[] = array('k2', Text::_('MOD_TRULYRESPONSIVESLIDER_VALUE_K2ITEMS'), '', '', '', !SYWK2::exists());
+	    
+	    $imagefolder = '/media/mod_trulyresponsiveslides/images/datasources';
+	    
+	    foreach ($options as &$option) {
+	        
+	        $option[3] = Uri::root(true).$imagefolder.'/'.$option[0].'.png';
+	    }
+	    
+	    return $options;
+	}
+	
+	public function setup(\SimpleXMLElement $element, $value, $group = null)
+	{
+	    $return = parent::setup($element, $value, $group);
+	    
+	    if ($return) {
+	        $this->width = 100;
+	        $this->height = 100;
+	    }
+	    
+	    return $return;
 	}
 }
 ?>
