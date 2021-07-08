@@ -44,7 +44,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 	/**
 	 * Available languages
 	 */
-	protected $availableLanguages = array('en-GB', 'fa-IR', 'fr-FR', 'nl-NL', 'pl-PL', 'ru-RU', 'sl-SI', 'tr-TR');
+	protected $availableLanguages = array('de-DE', 'en-GB', 'fa-IR', 'fr-FR', 'ja-JP', 'nl-NL', 'pl-PL', 'ru-RU', 'sl-SI', 'tr-TR');
 
 	/**
 	 * Extensions library link for download
@@ -136,7 +136,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 
         echo '<p style="margin: 10px 0 20px 0">';
         echo HTMLHelper::image('mod_trulyresponsiveslides/logo.png', 'Truly Responsive Slides', null, true);
-        echo '<br /><br /><span class="badge badge-dark">'.Text::sprintf('PKG_TRULYRESPONSIVESLIDES_VERSION', $this->release).'</span>';
+        echo '<br /><br /><span class="badge bg-dark">'.Text::sprintf('PKG_TRULYRESPONSIVESLIDES_VERSION', $this->release).'</span>';
         echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
         echo '</p>';
 
@@ -199,11 +199,26 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 		return true;
 	}
 
+	private function moveFile($file, $source, $destination, $minified_version = '.min')
+	{
+		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
+		}
+
+		$file_pieces = explode('.', $file); // assumes only one . in file name
+		$file_pieces[0] .= $minified_version;
+		$file = implode('.', $file_pieces);
+
+		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
+		}
+	}
+
 	private function removeFiles()
 	{
 		if (!empty($this->deleteFiles)) {
 			foreach ($this->deleteFiles as $filename) {
-				if (File::exists($filename) && !File::delete($filename)) {
+				if (File::exists(JPATH_SITE . $filename) && !File::delete(JPATH_SITE . $filename)) {
 					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
 				}
 			}
@@ -211,7 +226,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 
 		if (!empty($this->deleteFolders)) {
 			foreach ($this->deleteFolders as $folder) {
-				if (Folder::exists(JPATH_ROOT.$folder) && !Folder::delete(JPATH_ROOT.$folder)) {
+				if (Folder::exists(JPATH_ROOT . $folder) && !Folder::delete(JPATH_ROOT . $folder)) {
 					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
 				}
 			}

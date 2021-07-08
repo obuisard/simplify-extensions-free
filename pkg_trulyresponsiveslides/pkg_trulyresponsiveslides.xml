@@ -9,7 +9,7 @@
 	<url>http://www.simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>https://simplifyyourweb.com/</packagerurl>
-	<version>1.14.0</version>
+	<version>2.2.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/trulyresponsiveslides/changelog.xml</changelogurl>
 	<description>PKG_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description> 
 	
@@ -22,6 +22,7 @@
 		<language tag="en-GB">language/en-GB/en-GB.pkg_trulyresponsiveslides.sys.ini</language>
 		<language tag="fa-IR">language/fa-IR/fa-IR.pkg_trulyresponsiveslides.sys.ini</language>
 		<language tag="fr-FR">language/fr-FR/fr-FR.pkg_trulyresponsiveslides.sys.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.pkg_trulyresponsiveslides.sys.ini</language>
 		<language tag="nl-NL">language/nl-NL/nl-NL.pkg_trulyresponsiveslides.sys.ini</language>
 		<language tag="pl-PL">language/pl-PL/pl-PL.pkg_trulyresponsiveslides.sys.ini</language>
 		<language tag="ru-RU">language/ru-RU/ru-RU.pkg_trulyresponsiveslides.sys.ini</language>
