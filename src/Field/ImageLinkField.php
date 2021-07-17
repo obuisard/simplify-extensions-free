@@ -27,7 +27,7 @@ class ImageLinkField extends FormField
 	{
 		$html = '';
 
-		HTMLHelper::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
 		$html .= '<div>';
 

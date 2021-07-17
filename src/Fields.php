@@ -24,7 +24,7 @@ class Fields
 	 * @param string $item_id
 	 * @param string $field_id
 	 * @param boolean $include_params
-	 * @return array or array of value arrays
+	 * @return string, array or array of value arrays
 	 */
 	public static function getCustomFieldValues($field_id, $item_id, $include_params = false, $force_multiple_array = false)
 	{
@@ -56,10 +56,14 @@ class Fields
 		}
 		
 		if (!$force_multiple_array && count($results) == 1) {
-			return $results[0];
+		    if ($include_params) {
+		        return $results[0]; // return array ('value', 'title', 'alias', 'fieldoptions', 'fieldparams')
+		    } else {
+		        return $results[0]['value']; // return value string
+		    }
 		}
 		
-		return $results;
+		return $results; // return multi-dimensional array
 	}
 
 	/**

@@ -503,7 +503,7 @@ class SYWIconPickerField extends FormField
 			} else {
 				$iconlist .= '<li style="width: auto; display: inline-block; border: none; margin: 2px;" data-SYWicon="'.$icon_item.'">';
 			}
-			$iconlist .= '<a href="#" class="dropdown-item badge bg-light text-dark hvr-grow hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a>';
+			$iconlist .= '<a href="#" class="dropdown-item badge bg-light text-dark hvr-radial-out hasTooltip" style="padding: 8px; font-size: 1.4em" title="'.$icon_item.'" onclick="return false;"><i class="SYWicon-'.$icon_item.'"></i></a>';
 			$iconlist .= '</li>';
 		}
 
@@ -534,7 +534,7 @@ class SYWIconPickerField extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
-		HTMLHelper::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
 		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
 
@@ -618,11 +618,11 @@ class SYWIconPickerField extends FormField
 			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" readonly="readonly" class="form-control" />';
 		}
 
-		$html .= '<div class="dropdown">';
-			$html .= '<button type="button" id="'.$this->id.'_caret"'.($this->disabled ? ' disabled="disabled"' : '').' style="border-radius:0" class="btn btn-primary dropdown-toggle hasTooltip" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent" title="' . Text::_('LIB_SYW_ICONPICKER_SELECTICON') . '">';
-				//$html .= '<span class="caret" style="margin-bottom:auto"></span>';
+		$html .= '<div class="btn-group">';
+			$html .= '<button type="button" id="'.$this->id.'_caret"'.($this->disabled ? ' disabled="disabled"' : '').' style="border-radius:0" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">';
+			$html .= '<span class="visually-hidden">' . Text::_('LIB_SYW_ICONPICKER_SELECTICON') . '</span>'; // can't have tooltip on dropdown
 			$html .= '</button>';
-			$html .= '<ul id="'.$this->id.'_select" class="dropdown-menu dropdown-menu-end" style="min-width: 250px; max-height: 200px; overflow: auto;">';
+			$html .= '<ul id="'.$this->id.'_select" class="dropdown-menu dropdown-menu-end" aria-labelledby="'.$this->id.'_caret" style="min-width: 250px; max-height: 200px; overflow: auto;">';
 
 		if (isset($this->icons)) {
 			$icons = explode(",", $this->icons);

@@ -28,7 +28,7 @@ class ExtensionConnectField extends FormField
 	protected function getInput()
 	{
 	    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
-		HTMLHelper::_('bootstrap.tooltip');
+	    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
 		$html = '<div style="padding-top: 5px; overflow: inherit">';
 

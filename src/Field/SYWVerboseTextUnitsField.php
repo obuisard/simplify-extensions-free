@@ -80,7 +80,7 @@ class SYWVerboseTextUnitsField extends ListField
 				$html .= '<span class="input-group-text">'.$this->units.'</span>';
 			} else {
 
-				HTMLHelper::_('bootstrap.tooltip');
+			    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
 				$this->values['unit'] = $this->default_unit;
 				if (is_array($this->value)) {
@@ -103,8 +103,8 @@ class SYWVerboseTextUnitsField extends ListField
 
 				$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'_unit" value="'.$this->values['unit'].'" size="3" />';
 
-				$html .= '<div class="dropdown">';
-					$html .= '<button type="button" id="'.$this->id.'_ddb" class="btn btn-primary dropdown-toggle hasTooltip" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="'.Text::_('LIB_SYW_VERBOSETEXT_UNIT').'">';
+				$html .= '<div class="btn-group">';
+					$html .= '<button type="button" id="'.$this->id.'_ddb" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
 						$html .= '<span id="'.$this->id.'_unit_text">'.$this->values['unit'].'</span>';
 					$html .= '</button>';
 					$html .= '<ul class="dropdown-menu" aria-labelledby="'.$this->id.'_ddb">';

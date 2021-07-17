@@ -29,7 +29,7 @@ class ExtensionLinkField extends FormField
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
 		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
-		HTMLHelper::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
 		switch ($this->link_type) {
 			case 'forum': $icon="SYWicon-chat"; $title = 'LIB_SYW_EXTENSIONLINK_FORUM_LABEL'; break;

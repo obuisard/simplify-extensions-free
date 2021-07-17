@@ -38,7 +38,7 @@ class ExtensionLinksField extends FormField
 	{
 	    $output = '';
 
-	    $output .= '<a class="btn btn-dark hasTooltip' . ($class == '' ? '' : ' ' . $class) . '" style="margin: 0 10px 10px 0" title="'.HTMLHelper::_('tooltipText', Text::_($label), rtrim(Text::_($description), '.'), 0).'" href="'.$link.'" target="_blank">';
+	    $output .= '<a class="hasTooltip btn btn-dark' . ($class == '' ? '' : ' ' . $class) . '" style="margin: 0 10px 10px 0" title="'.HTMLHelper::_('tooltipText', Text::_($label), rtrim(Text::_($description), '.'), 0).'" href="'.$link.'" target="_blank">';
 	    $output .= '<i class="'.$icon.'" style="font-size: 2em; padding: 5px; vertical-align: middle" aria-hidden="true"></i>';
 	    $output .= '</a>';
 
@@ -49,6 +49,8 @@ class ExtensionLinksField extends FormField
 	{
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
+
+		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
 		$html = '<div>';
 

@@ -138,10 +138,10 @@ abstract class HeaderFilesCache
 		$path = '';
 
 		if ($include_root) {
-			$path = JPATH_SITE;
+			$path = JPATH_SITE . '/';
 		}
 
-		$path .= '/media/cache';
+		$path .= 'media/cache';
 
 		if (SYWCache::isFolderReady($path, $this->extension)) {
 			return $path . '/' . $this->extension;

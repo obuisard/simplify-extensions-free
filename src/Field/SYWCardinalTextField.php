@@ -39,7 +39,7 @@ class SYWCardinalTextField extends ListField
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
 		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]); // TODO if icons to show
-		HTMLHelper::_('bootstrap.tooltip'); // TODO if tooltips to show
+		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
 		$size = !empty($this->size) ? ' size="' . $this->size . '"' : '';
 		$style = empty($size) ? '' : ' style="width:auto"';

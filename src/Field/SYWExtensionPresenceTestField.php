@@ -40,7 +40,7 @@ class SYWExtensionPresenceTestField extends FormField
 	{
 	    $html = '';
 
-	    HTMLHelper::_('bootstrap.tooltip');
+	    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
 	    //$html .= '<div>';
 
@@ -77,10 +77,10 @@ class SYWExtensionPresenceTestField extends FormField
 		    } else {
 		        if (PluginHelper::isEnabled((string)$this->extensionfolder, (string)$this->extensionelement)) {
 		            $alert = ' success';
-    		        $html .= '<a class="btn btn-secondary btn-sm" href="index.php?option=com_plugins&view=plugins&filter_folder='.$this->extensionfolder.'&filter_element='.$this->extensionelement.'&filter_enabled=1">'.Text::_('LIB_SYW_SYWEXTENSIONTEST_DISABLEPLUGIN').'</a>';
+    		        $html .= '<a class="btn btn-secondary btn-sm" href="index.php?option=com_plugins&view=plugins&filter[folder]='.$this->extensionfolder.'&filter[element]='.$this->extensionelement.'&filter[enabled]=1">'.Text::_('LIB_SYW_SYWEXTENSIONTEST_DISABLEPLUGIN').'</a>';
     		    } else {
     		        $alert = ' '.$this->alertlevel;
-    		        $html .= '<a class="btn btn-primary btn-sm" href="index.php?option=com_plugins&view=plugins&filter_folder='.$this->extensionfolder.'&filter_element='.$this->extensionelement.'&filter_enabled=0">'.Text::_('LIB_SYW_SYWEXTENSIONTEST_ENABLEPLUGIN').'</a>';
+    		        $html .= '<a class="btn btn-primary btn-sm" href="index.php?option=com_plugins&view=plugins&filter[folder]='.$this->extensionfolder.'&filter[element]='.$this->extensionelement.'&filter[enabled]=0">'.Text::_('LIB_SYW_SYWEXTENSIONTEST_ENABLEPLUGIN').'</a>';
     		    }
 		    }
 		} else if ($this->extensiontype == 'component') {
