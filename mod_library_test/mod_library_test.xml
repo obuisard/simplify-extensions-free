@@ -6,7 +6,7 @@
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
-	<authorUrl>www.simplifyyourweb.com</authorUrl>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
 	<version>2.0.0</version>
 	<description>MOD_LIBRARY_TEST_XML_DESCRIPTION</description>
 	<media folder="media" destination="mod_library_test">
@@ -49,7 +49,7 @@
 			<fieldset name="info" label="MOD_LIBRARY_TEST_INFO_FIELDSET_LABEL">				
 								
 				<!-- SYWOnlineHelp -->
-				<field type="sywonlinehelp" url="http://www.simplifyyourweb.com/documentation" class="alert alert-info"
+				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation" class="alert alert-info"
 					sywdescription="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 								
 				<!-- ImageLink -->
@@ -110,8 +110,6 @@
 				<field name="facebook" type="sywprefixedtext" default="" size="10" prefix="facebook/profile/" postfix="/com" icon="SYWicon-facebook" 
 					label="Prefixed" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
-				
-				<!-- SYWSubform -->
 				
 				<!-- SYWVerboseText -->
 				<field name="text" type="sywverbosetext" default="900" filter="integer" size="4" unit="ms" icon="SYWicon-timer" 
