@@ -436,6 +436,20 @@ class Utilities
 		$extensions_needing_fallbacks = array('webp', 'avif');
 		$mime_types = array('jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif', 'webp' => 'image/webp', 'avif' => 'image/avif');
 		$possible_fallback_extensions = array('png', 'jpg');
+			
+		// clean the src path and grab useful info
+		// src may be something like images/default.png#joomlaImage://local-images/default.png?width=500&height=500
+		
+		$image_object = HTMLHelper::cleanImageURL($src);
+		$src = $image_object->url;
+		
+		if (!isset($attributes['width']) && $image_object->attributes['width'] > 0) {
+		    $attributes['width'] = $image_object->attributes['width'];
+		}
+		
+		if (!isset($attributes['height']) && $image_object->attributes['height'] > 0) {
+		    $attributes['height'] = $image_object->attributes['height'];
+		}		
 
 		// get the image extension and the image path from $src
 		$source_path = File::stripExt($src);

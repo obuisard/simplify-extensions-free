@@ -30,7 +30,7 @@ class SYWColorPickerField extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
-		HTMLHelper::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
 		$html = '';
 
@@ -85,8 +85,10 @@ class SYWColorPickerField extends FormField
 			$class = 'btn hasTooltip';
 			if (empty($this->value)) {
 				$class .= ' btn-primary active';
+			} else {
+			    $class .= ' btn-outline-primary';
 			}
-			$html .= '<button type="button" id="global_'.$this->id.'" class="'.$class.'" title="'.Text::_('JGLOBAL_USE_GLOBAL').'><span>'.Text::_('JGLOBAL_USE_GLOBAL').'</span></button>';
+			$html .= '<button type="button" id="global_'.$this->id.'" class="'.$class.'" title="'.Text::_('JGLOBAL_USE_GLOBAL').'"><span>'.Text::_('JGLOBAL_USE_GLOBAL').'</span></button>';
 		}
 
 		if ($this->allow_transparency) {
@@ -109,7 +111,7 @@ class SYWColorPickerField extends FormField
 			if ($this->use_global) {
 				$script .= 'jQuery("#global_'.$this->id.'").click(function() {';
 				$script .= 'jQuery("#visible_'.$this->id.'").parent().find("span").first().children().css("background-color","transparent");';
-				$script .= 'if (jQuery("#global_'.$this->id.'").hasClass("btn-primary")) { jQuery("#global_'.$this->id.'").removeClass("btn-primary") } else { jQuery("#global_'.$this->id.'").addClass("btn-primary"); }';
+				$script .= 'if (jQuery("#global_'.$this->id.'").hasClass("btn-primary")) { jQuery("#global_'.$this->id.'").removeClass("btn-primary"); jQuery("#global_'.$this->id.'").addClass("btn-outline-primary"); } else { jQuery("#global_'.$this->id.'").addClass("btn-primary"); jQuery("#global_'.$this->id.'").removeClass("btn-outline-primary"); }';
 				$script .= 'if (jQuery("#global_'.$this->id.'").hasClass("active")) { jQuery("#global_'.$this->id.'").removeClass("active") } else { jQuery("#global_'.$this->id.'").addClass("active"); }';
 				if ($this->allow_transparency) {
 					$script .= 'if (jQuery("#global_'.$this->id.'").hasClass("btn-primary")) { jQuery("#visible_'.$this->id.'").val(""); jQuery("#'.$this->id.'").val(""); jQuery("#visible_'.$this->id.'").prop("disabled", true) } else { jQuery("#'.$this->id.'").val("transparent"); jQuery("#visible_'.$this->id.'").prop("disabled", false) }';

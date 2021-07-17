@@ -114,7 +114,7 @@ class SYWTransitionPickerField extends FormField
         $lang = Factory::getLanguage();
         $lang->load('lib_syw.sys', JPATH_SITE);
 
-        HTMLHelper::_('bootstrap.tooltip');
+        HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
         HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
         if (isset($this->transitions) || (isset($this->transitiongroups) && strpos($this->transitiongroups, '2d') !== false) || (!isset($this->transitions) && !isset($this->transitiongroups))) {
@@ -155,6 +155,7 @@ class SYWTransitionPickerField extends FormField
         if ($this->use_global) {
             $script .= '         jQuery("#'.$this->id.'_global").removeClass("btn-primary");';
             $script .= '         jQuery("#'.$this->id.'_global").removeClass("active");';
+            $script .= '         jQuery("#'.$this->id.'_global").addClass("btn-outline-primary");';
         }
         $script .= '         jQuery(this).children(":first").addClass("bg-primary");';
         //$script .= '         jQuery(this).children(":first").removeClass("bg-inverse");';
@@ -165,6 +166,7 @@ class SYWTransitionPickerField extends FormField
         if ($this->use_global) {
             $script .= '         jQuery("#'.$this->id.'_global").removeClass("btn-primary");';
             $script .= '         jQuery("#'.$this->id.'_global").removeClass("active");';
+            $script .= '         jQuery("#'.$this->id.'_global").addClass("btn-outline-primary");';
         }
         $script .= '         jQuery("#'.$this->id.'_select li a").removeClass("bg-primary");';
         //$script .= '         jQuery("#'.$this->id.'_select li a").addClass("bg-inverse");';
@@ -175,6 +177,7 @@ class SYWTransitionPickerField extends FormField
             $script .= '         jQuery("#'.$this->id.'_disabled").val("");';
             $script .= '         jQuery("#'.$this->id.'_global").addClass("btn-primary");';
             $script .= '         jQuery("#'.$this->id.'_global").addClass("active");';
+            $script .= '         jQuery("#'.$this->id.'_global").removeClass("btn-outline-primary");';
             $script .= '         jQuery("#'.$this->id.'_select li a").removeClass("bg-primary");';
             //$script .= '         jQuery("#'.$this->id.'_select li a").addClass("bg-inverse");';
             $script .= '    });';
@@ -198,10 +201,11 @@ class SYWTransitionPickerField extends FormField
 
         	$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" />';
 
-        	$html .= '<div class="dropdown">';
-        		$html .= '<button type="button" id="'.$this->id.'_caret" style="border-radius:0" class="btn btn-primary dropdown-toggle hasTooltip" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent" title="' . Text::_('LIB_SYW_TRANSITIONPICKER_SELECTTRANSITION') . '">';
+        	$html .= '<div class="btn-group">';
+        		$html .= '<button type="button" id="'.$this->id.'_caret" style="border-radius:0" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">';
+        		$html .= '<span class="visually-hidden">' . Text::_('LIB_SYW_TRANSITIONPICKER_SELECTTRANSITION') . '</span>'; // can't have tooltip on dropdown
         		$html .= '</button>';
-        		$html .= '<ul id="'.$this->id.'_select" class="dropdown-menu dropdown-menu-end" style="min-width: 250px; max-height: 200px; overflow: auto">';
+        		$html .= '<ul id="'.$this->id.'_select" class="dropdown-menu dropdown-menu-end" aria-labelledby="'.$this->id.'_caret" style="min-width: 250px; max-height: 200px; overflow: auto">';
 
         if (isset($this->transitions)) {
             $transitions = explode(",", $this->transitions);
@@ -240,6 +244,8 @@ class SYWTransitionPickerField extends FormField
             $class = 'btn hasTooltip';
             if (empty($this->value)) {
                 $class .= ' btn-primary active';
+            } else {
+                $class .= ' btn-outline-primary';
             }
             $html .= '    <button type="button" id="'.$this->id.'_global" class="'.$class.'" title="'.Text::_('JGLOBAL_USE_GLOBAL').'"><span>'.Text::_('JGLOBAL_USE_GLOBAL').'</span></button>';
         }

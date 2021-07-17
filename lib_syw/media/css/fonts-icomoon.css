@@ -7,6 +7,7 @@
 		url('fonts/IcoMoon.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
+	font-display: auto;
 }
 
 [class^="SYWicon-icomoon-"]:before, 

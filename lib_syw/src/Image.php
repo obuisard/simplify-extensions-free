@@ -334,6 +334,8 @@ class Image
 				if (!$this->image) {
 					$this->image = null;
 				}
+				
+				// orientation test makes sense here ?
 			} else {
 				// allow image file names with spaces
 				$from_path = str_replace('%20', ' ', $from_path);
@@ -369,6 +371,13 @@ class Image
 
 						if (!$this->image) {
 							$this->image = null;
+						} else {
+							
+							$orientation_angle = $this->getOrientationAngleFix($from_path);
+							
+							if ($orientation_angle > 0) {
+								$this->image = imagerotate($this->image, $orientation_angle, 0); // will it break under PHP 8 ?
+							}
 						}
 					}
 				}
@@ -400,6 +409,39 @@ class Image
 				$this->image_height = imagesy($this->image);
 			}
 		}
+	}
+
+	/*
+	 * Get the orientation of the image to fix it if necessary (for instance, after import from a mobile device)
+	 */
+	protected static function getOrientationAngleFix($filename)
+	{		
+		$angle = 0;
+		
+		if (function_exists('exif_read_data')) {
+			
+			$exif = @exif_read_data($filename);
+			
+			if ($exif && isset($exif['Orientation'])) {
+									
+				switch ($exif['Orientation']) 
+				{						
+					case 3: // 180 rotate left
+						$angle = 180;					
+						break;
+					
+					case 6: // 270 rotate left
+						$angle = 270;
+						break;
+						
+					case 8: // 90 rotate left
+						$angle = 90;
+						break;
+				}
+			}
+		}
+		
+		return $angle;
 	}
 
 	/*

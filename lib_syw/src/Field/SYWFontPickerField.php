@@ -93,7 +93,7 @@ class SYWFontPickerField extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
-		HTMLHelper::_('bootstrap.tooltip');
+		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
 		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
 
@@ -121,9 +121,9 @@ class SYWFontPickerField extends FormField
 
 			$html .= '<input id="'.$this->id.'" name="'.$this->name.'" class="form-control" type="text" value="'.htmlspecialchars($this->value).'" style="font-family:'.htmlspecialchars($this->value).'" />';
 
-			$html .= '<div class="dropdown">';
-				$html .= '<button type="button" id="dropdownMenu'.$this->id.'" class="btn btn-primary dropdown-toggle hasTooltip" style="border-radius:0" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent" title="' . Text::_('LIB_SYW_FONTPICKER_SELECTFONT') . '">';
-					//$html .= '<span class="caret" style="margin-bottom:auto"></span>';
+			$html .= '<div class="btn-group">';
+				$html .= '<button type="button" id="dropdownMenu'.$this->id.'" class="btn btn-secondary dropdown-toggle" style="border-radius:0" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">';
+				$html .= '<span class="visually-hidden">' . Text::_('LIB_SYW_FONTPICKER_SELECTFONT') . '</span>';
 				$html .= '</button>';
 				$html .= '<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenu'.$this->id.'" style="max-height: 200px; overflow-x: hidden; overflow-y: auto">';
 

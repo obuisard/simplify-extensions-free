@@ -8,8 +8,8 @@ namespace SYW\Library\Field;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -42,7 +42,7 @@ class ImageRadioField extends FormField
         $options = $this->getOptions();
 
         HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
-        HTMLHelper::_('bootstrap.tooltip');
+        HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
         // Build the radio field output.
         foreach ($options as $i => $option) {

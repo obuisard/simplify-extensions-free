@@ -25,7 +25,7 @@ class K2ElementItem extends K2Element
         $db = Factory::getDBO();
         $doc = Factory::getDocument();
 
-        HTMLHelper::_('bootstrap.tooltip');
+        HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 
         Table::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_k2/tables');
         $item = Table::getInstance('K2Item', 'Table');
