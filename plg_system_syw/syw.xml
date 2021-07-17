@@ -4,9 +4,9 @@
 	<author>Olivier Buisard</author>
 	<creationDate>2018-3-24</creationDate>
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
-	<license>GNU General Public License version 3 or later</license>
+	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
-	<authorUrl>www.simplifyyourweb.com</authorUrl>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
 	<version>2.0.0</version>
 	<description>PLG_SYSTEM_SYW_XML_DESCRIPTION</description>
 	<languages>		
