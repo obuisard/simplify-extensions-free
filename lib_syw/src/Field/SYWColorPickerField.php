@@ -24,15 +24,28 @@ class SYWColorPickerField extends FormField
 	protected $rgba;
 
 	protected function getInput()
-	{
-		$doc = Factory::getDocument();
+	{	    
+	    $html = '';
+	    
+	    $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
 		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
+		HTMLHelper::_('jquery.framework');
+		
+		// 		$wam->registerAndUseScript('minicolors', 'vendor/minicolors/jquery.minicolors.min.js', ['relative' => true, 'version' => 'auto']);
+		// 		$wam->registerAndUseStyle('minicolors', 'vendor/minicolors/jquery.minicolors.css', ['relative' => true, 'version' => 'auto']);
+		// 		$wam->registerAndUseScript('field.color-adv', 'system/fields/color-field-adv-init.min.js', ['relative' => true, 'version' => 'auto']);
 
-		$html = '';
+		$wam->usePreset('minicolors')
+            ->useScript('field.color-adv');
+		
+		$icon = isset($this->icon) ? $this->icon : '';
+		if (!empty($icon)) {
+		    $wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
+		}
 
 		$color = strtolower($this->value);
 
@@ -43,16 +56,6 @@ class SYWColorPickerField extends FormField
 		}
 
 		$direction = $lang->isRtl() ? ' dir="ltr" style="text-align:right"' : '';
-
-		HTMLHelper::_('jquery.framework');
-		HTMLHelper::_('script', 'vendor/minicolors/jquery.minicolors.min.js', ['version' => 'auto', 'relative' => true]);
-		HTMLHelper::_('stylesheet', 'vendor/minicolors/jquery.minicolors.css', ['version' => 'auto', 'relative' => true]);
-		HTMLHelper::_('script', 'system/fields/color-field-adv-init.min.js', ['version' => 'auto', 'relative' => true]);
-
-		$icon = isset($this->icon) ? $this->icon : '';
-		if (!empty($icon)) {
-		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
-		}
 
 		if ($icon || $this->allow_transparency || $this->use_global) {
 		    $html .= '<div class="input-group">';
@@ -130,7 +133,7 @@ class SYWColorPickerField extends FormField
 
 			$script .= '});';
 
-			$doc->addScriptDeclaration($script);
+			$wam->addInlineScript($script);
 		}
 
 		return $html;

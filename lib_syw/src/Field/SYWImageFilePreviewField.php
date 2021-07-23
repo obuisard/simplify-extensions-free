@@ -94,7 +94,13 @@ class SYWImageFilePreviewField extends FormField
 
                     // clear button
                     if ($this->clear) {
-                        $html .= '<br /><br /><a href="#" onclick="jQuery(\'#' . $this->id . '_preview\').find(\'.image_preview\').hide(); jQuery(\'#' . $this->id . '\').val(\'\'); jQuery(\'#' . $this->id . '_preview\').find(\'.no_preview\').show(); return false;" class="btn btn-small">' . Text::_('JACTION_DELETE') . '</a>';
+                        
+                        $onclick = 'document.getElementById("' . $this->id . '_preview").querySelector(".image_preview").style.display = "none";';
+                        $onclick .= 'document.getElementById("' . $this->id . '").value = "";';
+                        $onclick .= 'document.getElementById("' . $this->id . '_preview").querySelector(".no_preview").style.display = "block";';
+                        $onclick .= 'return false;';
+                        
+                        $html .= '<br /><br /><a href="#" onclick="' . $onclick . '" class="btn btn-small">' . Text::_('JACTION_DELETE') . '</a>';
                     }
 
                     $html .= '</div>';
@@ -121,7 +127,12 @@ class SYWImageFilePreviewField extends FormField
                 $html .= '<input id="'.$this->id.'_filename" type="text" disabled="disabled" value="'.end($parts).'" />';
 
                 if ($this->clear) {
-                    $html .= '<a href="#" onclick="jQuery(\'#' . $this->id . '_filename\').val(\'\'); jQuery(\'#' . $this->id . '\').val(\'\'); return false;" class="btn">' . Text::_('JACTION_DELETE') . '</a>';
+                    
+                    $onclick = 'document.getElementById("' . $this->id . '_filename").value = "";';
+                    $onclick .= 'document.getElementById("' . $this->id . '").value = "";';
+                    $onclick .= 'return false;';
+                    
+                    $html .= '<a href="#" onclick="' . $onclick . '" class="btn">' . Text::_('JACTION_DELETE') . '</a>';
                 }
 
                 $html .= '</div>';

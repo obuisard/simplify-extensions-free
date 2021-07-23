@@ -9,13 +9,14 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
 
 class Stylesheets
 {
-	static $animateLoaded = false;
-	static $twodtransitionsLoaded = false;
-	static $bgtransitionsLoaded = false;
-	static $bootstrapmodalsLoaded = false;
+// 	static $animateLoaded = false;
+// 	static $twodtransitionsLoaded = false;
+// 	static $bgtransitionsLoaded = false;
+// 	static $bootstrapmodalsLoaded = false;
 	static $puremodalscssLoaded = false;
 	static $bootstrapmodalscssLoaded = array();
 	static $accessibleVisibilityLoaded = false;
@@ -53,38 +54,78 @@ class Stylesheets
 	static $transitionShutterOutHorizontalLoaded = false;
 	static $transitionShutterInVerticalLoaded = false;
 	static $transitionShutterOutVerticalLoaded = false;
+	
+	/**
+	 * The web asset manager
+	 */
+	protected static $wam;
+	
+	/**
+	 * The plugin params
+	 */
+	protected static $plugin_params;
+	
+	/**
+	 * Get the web asset manager
+	 * @return object
+	 */
+	protected static function getWebAssetManager()
+	{
+	    if (self::$wam == null) {
+	        self::$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+	    }
+	    
+	    return self::$wam;
+	}
+	
+	/**
+	 * Get the plugin params
+	 * @return object
+	 */
+	protected static function getPluginParams()
+	{
+	    if (self::$plugin_params == null) {
+	        if (PluginHelper::isEnabled('system', 'syw')) {
+	            $plugin = PluginHelper::getPlugin('system', 'syw');
+	            self::$plugin_params = json_decode($plugin->params);
+	        }
+	    }
+	    
+	    return self::$plugin_params;
+	}
 
 	/**
 	 * Load the animate stylesheet
 	 * v3.7.2
 	 * https://github.com/daneden/animate.css
 	 */
-	static function loadAnimate($remote = false)
+	public static function loadAnimate($remote = false)
 	{
-		if (self::$animateLoaded) {
-			return;
-		}
+// 		if (self::$animateLoaded) {
+// 			return;
+// 		}
 
-		$minified = (JDEBUG) ? '' : '.min';
-
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+	    $minified = (defined('JDEBUG') && JDEBUG) ? '' : '.min';
+	    
+	    $attributes = array();
+	    if (Factory::getApplication()->isClient('site') && isset(self::getPluginParams()->lazy_stylesheets) && self::getPluginParams()->lazy_stylesheets > 0) {
+	        $attributes['rel'] = 'lazy-stylesheet';
+	    }
 
 		if ($remote) {
-			$wam->registerAndUseStyle('syw.animate', 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate' . $minified . '.css');
-			//Factory::getDocument()->addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate' . $minified . '.css');
+		    self::getWebAssetManager()->registerAndUseStyle('syw.animate', 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate' . $minified . '.css', [], $attributes);
 		} else {
-			$wam->registerAndUseStyle('syw.animate', 'syw/animate' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-			//HTMLHelper::stylesheet('syw/animate' . $minified . '.css', array('relative' => true, 'version' => 'auto'));
+		    self::getWebAssetManager()->registerAndUseStyle('syw.animate', 'syw/animate' . $minified . '.css', ['relative' => true, 'version' => 'auto'], $attributes);
 		}
 
-		self::$animateLoaded = true;
+// 		self::$animateLoaded = true;
 	}
 
 	/*
 	 * Get the transition method to call
 	 * for instance the transition name 'back-pulse' or 'hvr-back-pulse' will return 'loadTransitionBackPulse'
 	 */
-	static function getTransitionMethod($transition)
+	public static function getTransitionMethod($transition)
 	{
 		$transition = str_replace('hvr-', '', $transition);
 		return 'loadTransition'.str_replace(' ', '', ucwords(str_replace('-', ' ', $transition)));
@@ -116,10 +157,8 @@ class Stylesheets
   transform: scale(1.1);
 }
 CSS;
-
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionGrowLoaded = true;
 	}
@@ -150,9 +189,8 @@ CSS;
   transform: scale(0.9);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionShrinkLoaded = true;
 	}
@@ -209,9 +247,8 @@ CSS;
   animation-iteration-count: infinite;
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionPulseLoaded = true;
 	}
@@ -260,9 +297,8 @@ CSS;
   animation-direction: alternate;
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionPulseGrowLoaded = true;
 	}
@@ -311,9 +347,8 @@ CSS;
   animation-direction: alternate;
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionPulseShrinkLoaded = true;
 	}
@@ -370,9 +405,8 @@ CSS;
   animation-iteration-count: 1;
 }	
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionPushLoaded = true;
 	}
@@ -419,9 +453,8 @@ CSS;
   animation-iteration-count: 1;
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionPopLoaded = true;
 	}
@@ -452,9 +485,8 @@ CSS;
   transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionBounceInLoaded = true;
 	}
@@ -485,9 +517,8 @@ CSS;
   transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionBounceOutLoaded = true;
 	}
@@ -518,9 +549,8 @@ CSS;
   transform: rotate(4deg);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionRotateLoaded = true;
 	}
@@ -551,9 +581,8 @@ CSS;
   transform: scale(1.1) rotate(4deg);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionGrowRotateLoaded = true;
 	}
@@ -650,9 +679,8 @@ CSS;
   animation-iteration-count: 1;
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionWobbleVerticalLoaded = true;
 	}
@@ -749,9 +777,8 @@ CSS;
   animation-iteration-count: 1;
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionWobbleHorizontalLoaded = true;
 	}
@@ -808,9 +835,8 @@ CSS;
   animation-iteration-count: infinite;
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionBuzzLoaded = true;
 	}
@@ -947,9 +973,8 @@ CSS;
   animation-iteration-count: 1;
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionBuzzOutLoaded = true;
 	}
@@ -981,9 +1006,8 @@ CSS;
   color: white;
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionFadeLoaded = true;
 	}
@@ -1037,9 +1061,8 @@ CSS;
   color: white;
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionBackPulseLoaded = true;
 	}
@@ -1094,9 +1117,8 @@ CSS;
   transform: scaleX(1);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionSweepToRightLoaded = true;
 	}
@@ -1151,9 +1173,8 @@ CSS;
   transform: scaleX(1);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionSweepToLeftLoaded = true;
 	}
@@ -1208,9 +1229,8 @@ CSS;
   transform: scaleY(1);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionSweepToBottomLoaded = true;
 	}
@@ -1265,9 +1285,8 @@ CSS;
   transform: scaleY(1);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionSweepToTopLoaded = true;
 	}
@@ -1324,9 +1343,8 @@ CSS;
   transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionBounceToRightLoaded = true;
 	}
@@ -1383,9 +1401,8 @@ CSS;
   transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionBounceToLeftLoaded = true;
 	}
@@ -1442,9 +1459,8 @@ CSS;
   transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionBounceToBottomLoaded = true;
 	}
@@ -1501,9 +1517,8 @@ CSS;
   transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionBounceToTopLoaded = true;
 	}
@@ -1559,9 +1574,8 @@ CSS;
   transform: scale(2);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionRadialOutLoaded = true;
 	}
@@ -1617,9 +1631,8 @@ CSS;
   transform: scale(0);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionRadialInLoaded = true;
 	}
@@ -1673,9 +1686,8 @@ CSS;
   transform: scale(0);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionRectangleInLoaded = true;
 	}
@@ -1729,9 +1741,8 @@ CSS;
   transform: scale(1);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionRectangleOutLoaded = true;
 	}
@@ -1787,9 +1798,8 @@ CSS;
   transform: scaleX(0);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionShutterInHorizontalLoaded = true;
 	}
@@ -1845,9 +1855,8 @@ CSS;
   transform: scaleX(1);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionShutterOutHorizontalLoaded = true;
 	}
@@ -1903,9 +1912,8 @@ CSS;
   transform: scaleY(0);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionShutterInVerticalLoaded = true;
 	}
@@ -1961,9 +1969,8 @@ CSS;
   transform: scaleY(1);
 }
 CSS;
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$transitionShutterOutVerticalLoaded = true;
 	}
@@ -1973,17 +1980,20 @@ CSS;
 	 */
 	static function load2DTransitions()
 	{
-		if (self::$twodtransitionsLoaded) {
-			return;
-		}
+// 		if (self::$twodtransitionsLoaded) {
+// 			return;
+// 		}
 
-		$minified = (JDEBUG) ? '' : '-min';
+	    $minified = (defined('JDEBUG') && JDEBUG) ? '' : '-min';
+	    
+	    $attributes = array();
+	    if (Factory::getApplication()->isClient('site') && isset(self::getPluginParams()->lazy_stylesheets) && self::getPluginParams()->lazy_stylesheets > 0) {
+	        $attributes['rel'] = 'lazy-stylesheet';
+	    }
+		
+	    self::getWebAssetManager()->registerAndUseStyle('syw.transitions.2d', 'syw/2d-transitions' . $minified . '.css', ['relative' => true, 'version' => 'auto'], $attributes);
 
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->registerAndUseStyle('syw.2dtransitions', 'syw/2d-transitions' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-		//HTMLHelper::stylesheet('syw/2d-transitions-min.css', array('relative' => true, 'version' => 'auto'));
-
-		self::$twodtransitionsLoaded = true;
+// 		self::$twodtransitionsLoaded = true;
 	}
 
 	/**
@@ -1991,35 +2001,36 @@ CSS;
 	 */
 	static function loadBGTransitions()
 	{
-		if (self::$bgtransitionsLoaded) {
-			return;
-		}
+// 		if (self::$bgtransitionsLoaded) {
+// 			return;
+// 		}
 
-		$minified = (JDEBUG) ? '' : '-min';
+	    $minified = (defined('JDEBUG') && JDEBUG) ? '' : '-min';
+	    
+	    $attributes = array();
+	    if (Factory::getApplication()->isClient('site') && isset(self::getPluginParams()->lazy_stylesheets) && self::getPluginParams()->lazy_stylesheets > 0) {
+	        $attributes['rel'] = 'lazy-stylesheet';
+	    }
+		
+	    self::getWebAssetManager()->registerAndUseStyle('syw.transitions.bg', 'syw/bg-transitions' . $minified . '.css', ['relative' => true, 'version' => 'auto'], $attributes);
 
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->registerAndUseStyle('syw.bgtransitions', 'syw/bg-transitions' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-		//HTMLHelper::stylesheet('syw/bg-transitions-min.css', array('relative' => true, 'version' => 'auto'));
-
-		self::$bgtransitionsLoaded = true;
+// 		self::$bgtransitionsLoaded = true;
 	}
 
 	/**
-	 * Load the CSS needed for modals when Bootstrap is missing (CSS for Bootstrap 4)
+	 * Load the CSS needed for modals when Bootstrap CSS is missing (CSS for Bootstrap 4)
 	 */
 	static function loadBootstrapModals()
 	{
-		if (self::$bootstrapmodalsLoaded) {
-	        return;
-		}
+// 		if (self::$bootstrapmodalsLoaded) {
+// 	        return;
+// 		}
 
-		$minified = (JDEBUG) ? '' : '-min';
+		$minified = (defined('JDEBUG') && JDEBUG) ? '' : '-min';
+		
+		self::getWebAssetManager()->registerAndUseStyle('syw.bootstrap.modal', 'syw/bootstrap-modals' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
 
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->registerAndUseStyle('syw.bootstrap.modal', 'syw/bootstrap-modals' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-	    //HTMLHelper::stylesheet('syw/bootstrap-modals-min.css', array('relative' => true, 'version' => 'auto'));
-
-	    self::$bootstrapmodalsLoaded = true;
+// 	    self::$bootstrapmodalsLoaded = true;
 	}
 
 	/**
@@ -2051,10 +2062,8 @@ CSS;
 				border-top: 1px solid #eee; text-align: right;
 			}
 CSS;
-
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$puremodalscssLoaded = true;
 	}
@@ -2094,10 +2103,8 @@ CSS;
 				}
 CSS;
 		}
-
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$wam->addInlineStyle(self::compress($inline_css));
-		//Factory::getDocument()->addStyleDeclaration(self::compress($inline_css));
+		
+		self::getWebAssetManager()->addInlineStyle(self::compress($inline_css));
 
 		self::$bootstrapmodalscssLoaded = true;
 	}
@@ -2110,10 +2117,8 @@ CSS;
 	    if (self::$accessibleVisibilityLoaded) {
 	        return;
 	    }
-
-	    $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-	    $wam->addInlineStyle('.element-invisible { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); }');
-	    //Factory::getDocument()->addStyleDeclaration('.element-invisible { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); }');
+	    
+	    self::getWebAssetManager()->addInlineStyle('.element-invisible { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); }');
 
 	    self::$accessibleVisibilityLoaded = true;
 	}

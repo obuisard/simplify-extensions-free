@@ -8,8 +8,8 @@ namespace SYW\Library\Field;
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 
 class SYWOnlineHelpField extends FormField
@@ -29,7 +29,9 @@ class SYWOnlineHelpField extends FormField
 
 	protected function getInput()
 	{
-	    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+	    $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+	    
+	    $wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
 
 		$html = array();
 

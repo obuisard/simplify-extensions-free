@@ -43,7 +43,7 @@ class Cache
 				return false;
 			}
 		} else {
-			if (defined('JDEBUG') && \JDEBUG) {
+			if (defined('JDEBUG') && JDEBUG) {
 				Log::add('SYWCache:getFileContent() - curl extension missing and allow_url_fopen unset', Log::WARNING, 'syw'); // avoid too much logging
 			}
 			return false;
@@ -129,7 +129,7 @@ class Cache
 				//}
 			} else {
 				$trouble_in_paradise = true;
-				if (defined('JDEBUG') && \JDEBUG) {
+				if (defined('JDEBUG') && JDEBUG) {
 					Log::add('SYWCache:getCachedFilePath() - Cannot cache content', Log::WARNING, 'syw');
 				}
 			}

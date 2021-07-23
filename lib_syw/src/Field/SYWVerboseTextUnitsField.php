@@ -66,7 +66,8 @@ class SYWVerboseTextUnitsField extends ListField
 		$html .= '<div class="input-group">';
 
 		if ($this->icon) {
-		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+		    $wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
+		    
 			$html .= '<span class="input-group-text"><i class="'.$this->icon.'"></i></span>';
 		}
 
@@ -81,6 +82,7 @@ class SYWVerboseTextUnitsField extends ListField
 			} else {
 
 			    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
+			    HTMLHelper::_('bootstrap.dropdown', '.dropdown-toggle'); 
 
 				$this->values['unit'] = $this->default_unit;
 				if (is_array($this->value)) {

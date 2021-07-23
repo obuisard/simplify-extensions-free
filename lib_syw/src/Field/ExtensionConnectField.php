@@ -27,8 +27,11 @@ class ExtensionConnectField extends FormField
 
 	protected function getInput()
 	{
-	    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+	    $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+	    
 	    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
+	    
+	    $wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
 
 		$html = '<div style="padding-top: 5px; overflow: inherit">';
 

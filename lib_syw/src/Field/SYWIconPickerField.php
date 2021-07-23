@@ -12,6 +12,7 @@ use Joomla\CMS\Form\FormField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
+use SYW\Library\Stylesheets as SYWStylesheets;
 
 class SYWIconPickerField extends FormField
 {
@@ -535,87 +536,205 @@ class SYWIconPickerField extends FormField
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
 		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
+		HTMLHelper::_('bootstrap.dropdown', '.dropdown-toggle'); 
 
-		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+		$wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
 
 		if ($this->icomoon) {
-		    HTMLHelper::_('stylesheet', 'syw/fonts-icomoon-min.css', ['version' => 'auto', 'relative' => true]);
+		    $wam->registerAndUseStyle('syw.font.icomoon', 'syw/fonts-icomoon-min.css', ['relative' => true, 'version' => 'auto']);
 		}
+		
+		$transition_method = SYWStylesheets::getTransitionMethod('hvr-radial-out');
+		SYWStylesheets::$transition_method();
+		
+		$wam->addInlineScript('
+			document.addEventListener("readystatechange", function(event) {
+				if (event.target.readyState == "complete") {
+		    
+                    let select_' . $this->id . ' = document.getElementById("' . $this->id . '_select");
+                    if (select_' . $this->id . ' != null) {
+                        let options_' . $this->id . ' = select_' . $this->id . '.querySelectorAll("li[data-SYWicon]");
+    		            let input_' . $this->id . ' = document.getElementById("' . $this->id . '");
+                        let icon_' . $this->id . ' = document.getElementById("' . $this->id . '_icon");
+		    
+                        if (input_' . $this->id . '.value != "") {
+                            let entry_value = select_' . $this->id . '.querySelector("li[data-SYWicon=\'' . $this->value . '\']");
+                            if (entry_value != null) {
+                                entry_value.querySelector("a").classList.add("bg-primary", "text-light");
+                                entry_value.querySelector("a").classList.remove("bg-light", "text-dark");
+                            }
+                        }
+		    
+                        for (let i = 0; i < options_' . $this->id . '.length; i++) {
+                            options_' . $this->id . '[i].addEventListener("click", function(event) {
+		    
+                                if (input_' . $this->id . '.value != "") {
+                                    let entry_value = select_' . $this->id . '.querySelector("li[data-SYWicon=" + input_' . $this->id . '.value + "]");
+                                    if (entry_value != null) {
+                                        entry_value.querySelector("a").classList.remove("bg-primary", "text-light");
+                                        entry_value.querySelector("a").classList.add("bg-light", "text-dark");
+                                    }
+                                }
+		    
+                                this.querySelector("a").classList.add("bg-primary", "text-light");
+                                this.querySelector("a").classList.remove("bg-light", "text-dark");
 
-		$script = 'jQuery(document).ready(function () { ';
+                                let selected_icon = this.getAttribute("data-SYWicon");
+                                input_' . $this->id . '.value = selected_icon;
+                                icon_' . $this->id . '.setAttribute("class", "SYWicon-" + selected_icon);
+                            });
+                        }
+		    
+                        document.getElementById("' . $this->id . '_default").addEventListener("click", function(event) {
+                            if (input_' . $this->id . '.value != "") {
+                                let entry_value = select_' . $this->id . '.querySelector("li[data-SYWicon=" + input_' . $this->id . '.value + "]");
+                                if (entry_value != null) {
+                                    entry_value.querySelector("a").classList.remove("bg-primary", "text-light");
+                                    entry_value.querySelector("a").classList.add("bg-light", "text-dark");
+                                }
+                            }
+                            ' . (empty($this->default) ? '
+                            input_' . $this->id . '.value = "";
+                            icon_' . $this->id . '.setAttribute("class", "SYWicon-' . $this->emptyicon . '");
+                            ' : '
+                            input_' . $this->id . '.value = "' . $this->default . '";
+                            icon_' . $this->id . '.setAttribute("class", "SYWicon-' . $this->default . '");
+                            ') . '
+                        });
+		    
+                        ' . ($this->editable ? '
+                        input_' . $this->id . '.addEventListener("change", function(event) {
+                            if (this.value != "") {
+                            
+                                icon_' . $this->id . '.setAttribute("class", "SYWicon-" + this.value);
+                            
+                                for (let i = 0; i < options_' . $this->id . '.length; i++) {
+                                    if (this.value == options_' . $this->id . '[i].getAttribute("data-SYWicon")) {
+                                        options_' . $this->id . '[i].querySelector("a").classList.add("bg-primary", "text-light");
+                                        options_' . $this->id . '[i].querySelector("a").classList.remove("bg-light", "text-dark");
+                                    } else {
+                                        options_' . $this->id . '[i].querySelector("a").classList.remove("bg-primary", "text-light");
+                                        options_' . $this->id . '[i].querySelector("a").classList.add("bg-light", "text-dark");
+                                    }
+                                }
+                            } else {
+                                ' . (empty($this->default) ? '
+                                icon_' . $this->id . '.setAttribute("class", "SYWicon-' . $this->emptyicon . '");
+                                ' : '
+                                input_' . $this->id . '.value = "' . $this->default . '";
+                                icon_' . $this->id . '.setAttribute("class", "SYWicon-' . $this->default . '");
+                                ') . '
+                            
+                                for (let i = 0; i < options_' . $this->id . '.length; i++) {
+                                    options_' . $this->id . '[i].querySelector("a").classList.remove("bg-primary", "text-light");
+                                    options_' . $this->id . '[i].querySelector("a").classList.add("bg-light", "text-dark");
+                                }
+                            }
+                        });
+                        ' : '
+                        ') . '
+                    }
+		    
+                    document.addEventListener("subform-row-add", function(e) {
+                        let sywip = e.detail.row.querySelector(".iconpicker");                        
+                        if (sywip != null) {
+                            let sywip_options = sywip.querySelectorAll("li[data-SYWicon]");
+                            let sywip_input = sywip.querySelector("input[data-name=input-icon]");
+                            let sywip_icon = sywip.querySelector("i[data-name=icon]");
+		    
+                            for (let i = 0; i < sywip_options.length; i++) {
+                                sywip_options[i].addEventListener("click", function(event) {
+		    
+                                    if (sywip_input.value != "") {
+                                        let entry_value = sywip.querySelector("li[data-SYWicon=" + sywip_input.value + "]");
+                                        if (entry_value != null) {
+                                            entry_value.querySelector("a").classList.remove("bg-primary", "text-light");
+                                            entry_value.querySelector("a").classList.add("bg-light", "text-dark");
+                                        }
+                                    }
+		    
+                                    this.querySelector("a").classList.add("bg-primary", "text-light");
+                                    this.querySelector("a").classList.remove("bg-light", "text-dark");
 
-			// after load, select the saved value
-			$script .= 'if (jQuery(\'#' . $this->id . '\').val() != "") { ';
-				$script .= 'jQuery("#'.$this->id.'_select li a").each(function() { ';
-					$script .= 'if (jQuery(this).parent().attr(\'data-SYWicon\') == jQuery(\'#' . $this->id . '\').val()) { ';
-						$script .= 'jQuery(this).addClass("bg-primary"); ';
-					$script .= '} ';
-				$script .= '}); ';
-			$script .= '} ';
-
-			$script .= 'jQuery("#'.$this->id.'_select li").click(function() { ';
-				// de-select the previous value
-				$script .= 'jQuery("#'.$this->id.'_select li a").each(function() { ';
-					$script .= 'jQuery(this).removeClass("bg-primary"); ';
-				$script .= '}); ';
-				//
-				$script .= 'jQuery(\'#' . $this->id . '\').val(jQuery(this).attr(\'data-SYWicon\')); ';
-				$script .= 'jQuery(\'#' . $this->id . '_icon\').attr(\'class\', \'SYWicon-\' + jQuery(this).attr(\'data-SYWicon\')); ';
-				//if ($this->buttonrole == 'default') {
-					//$script .= 'jQuery("#'.$this->id.'_default").removeClass("btn-primary"); ';
-				//}
-				$script .= 'jQuery(this).children(":first").addClass("bg-primary"); ';
-			$script .= '}); ';
-
-			$script .= 'jQuery("#'.$this->id.'_default").click(function() { ';
-				$script .= 'jQuery(\'#' . $this->id . '_icon\').attr(\'class\', \'\'); ';
-				if (empty($this->default)) {
-					$script .= 'jQuery(\'#' . $this->id . '\').val(\'\'); ';
-					$script .= 'jQuery(\'#' . $this->id . '_icon\').attr(\'class\', \'SYWicon-'.$this->emptyicon.'\'); ';
-				} else {
-					$script .= 'jQuery(\'#' . $this->id . '\').val(\''.$this->default.'\'); ';
-					$script .= 'jQuery(\'#' . $this->id . '_icon\').attr(\'class\', \'SYWicon-'.$this->default.'\'); ';
-				}
-				//if ($this->buttonrole == 'default') {
-					//$script .= 'jQuery("#'.$this->id.'_default").addClass("btn-primary"); ';
-				//}
-				$script .= 'jQuery("#'.$this->id.'_select li a").removeClass("bg-primary"); ';
-			$script .= '}); ';
-
-			$script .= 'jQuery("#'.$this->id.'").change(function() { ';
-				$script .= 'jQuery(\'#' . $this->id . '_icon\').attr(\'class\', \'SYWicon-\' + jQuery("#'.$this->id.'").val()); ';
-
-				$script .= 'jQuery("#'.$this->id.'_select li a").each(function() { ';
-				    $script .= 'jQuery(this).removeClass("bg-primary"); ';
-				    $script .= 'if (jQuery(this).parent().attr(\'data-SYWicon\') == jQuery(\'#' . $this->id . '\').val()) { ';
-				        $script .= 'jQuery(this).addClass("bg-primary"); ';
-				    $script .= '} ';
-				$script .= '}); ';
-			$script .= '}); ';
-
-		$script .= '}); ';
-
-		$wam->addInlineScript($script);
+                                    let selected_icon = this.getAttribute("data-SYWicon");		    
+                                    sywip_input.value = selected_icon;
+                                    sywip_icon.setAttribute("class", "SYWicon-" + selected_icon);
+                                });
+                            }
+		    
+                            sywip.querySelector("button[data-name=default-icon]").addEventListener("click", function(event) {
+                                if (sywip_input.value != "") {
+                                    let entry_value = sywip.querySelector("li[data-SYWicon=" + sywip_input.value + "]");
+                                    if (entry_value != null) {
+                                        entry_value.querySelector("a").classList.remove("bg-primary", "text-light");
+                                        entry_value.querySelector("a").classList.add("bg-light", "text-dark");
+                                    }
+                                }
+                                ' . (empty($this->default) ? '
+                                sywip_input.value = "";
+                                sywip_icon.setAttribute("class", "SYWicon-' . $this->emptyicon . '");
+                                ' : '
+                                sywip_input.value = "' . $this->default . '";
+                                sywip_icon.setAttribute("class", "SYWicon-' . $this->default . '");
+                                ') . '
+                            });
+		    
+                            ' . ($this->editable ? '
+                            sywip_input.addEventListener("change", function(event) {
+                                if (this.value != "") {
+                                
+                                    sywip_icon.setAttribute("class", "SYWicon-" + this.value);
+                                
+                                    for (let i = 0; i < sywip_options.length; i++) {
+                                        if (this.value == sywip_options[i].getAttribute("data-SYWicon")) {
+                                            sywip_options[i].querySelector("a").classList.add("bg-primary", "text-light");
+                                            sywip_options[i].querySelector("a").classList.remove("bg-light", "text-dark");
+                                        } else {
+                                            sywip_options[i].querySelector("a").classList.remove("bg-primary", "text-light");
+                                            sywip_options[i].querySelector("a").classList.add("bg-light", "text-dark");
+                                        }
+                                    }
+                                } else {
+                                    ' . (empty($this->default) ? '
+                                    sywip_icon.setAttribute("class", "SYWicon-' . $this->emptyicon . '");
+                                    ' : '
+                                    sywip_input.value = "' . $this->default . '";
+                                    sywip_icon.setAttribute("class", "SYWicon-' . $this->default . '");
+                                    ') . '
+                                
+                                    for (let i = 0; i < sywip_options.length; i++) {
+                                        sywip_options[i].querySelector("a").classList.remove("bg-primary", "text-light");
+                                        sywip_options[i].querySelector("a").classList.add("bg-light", "text-dark");
+                                    }
+                                }
+                            });
+                            ' : '
+                            ') . '
+                        }
+                    });
+                }
+			});
+		');
 
 		$html = '';
 
-		$html .= '<div class="input-group">';
+		$html .= '<div class="iconpicker input-group">';
 
  		if (!empty($this->value)) {
- 			$html .= '<span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->value.'" aria-hidden="true"></i></span>';
+ 			$html .= '<span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->value.'" data-name="icon" aria-hidden="true"></i></span>';
  		} else {
 			if (empty($this->default)) {
-				$html .= '<span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->emptyicon.'" aria-hidden="true"></i></span>';
+				$html .= '<span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->emptyicon.'" data-name="icon" aria-hidden="true"></i></span>';
 			} else {
-				$html .= '<span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->default.'" aria-hidden="true"></i></span>';
+				$html .= '<span class="input-group-text"><i id="'.$this->id.'_icon" class="SYWicon-'.$this->default.'" data-name="icon" aria-hidden="true"></i></span>';
 			}
  		}
 
  		if ($this->editable) {
-			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" class="form-control" />';
+			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' data-name="input-icon" value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" class="form-control" />';
 		} else {
 			//$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" />';
-			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" readonly="readonly" class="form-control" />';
+			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' data-name="input-icon" value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" readonly="readonly" class="form-control" />';
 		}
 
 		$html .= '<div class="btn-group">';
@@ -653,7 +772,7 @@ class SYWIconPickerField extends FormField
 		    $default_class_extra = ' btn-secondary';
 		}
 
-		$html .= '<button type="button" id="'.$this->id.'_default"'.($this->disabled ? ' disabled="disabled"' : '').' class="btn'.$default_class_extra.' hasTooltip" title="' . htmlspecialchars($this->buttonlabel, ENT_COMPAT, 'UTF-8') . '" aria-label="' . htmlspecialchars($this->buttonlabel, ENT_COMPAT, 'UTF-8') . '">';
+		$html .= '<button type="button" data-name="default-icon" id="'.$this->id.'_default"'.($this->disabled ? ' disabled="disabled"' : '').' class="btn'.$default_class_extra.' hasTooltip" title="' . htmlspecialchars($this->buttonlabel, ENT_COMPAT, 'UTF-8') . '" aria-label="' . htmlspecialchars($this->buttonlabel, ENT_COMPAT, 'UTF-8') . '">';
 		if ($this->buttonrole == 'clear') {
 			$html .= '<i class="icon-remove"></i>';
 		} else {

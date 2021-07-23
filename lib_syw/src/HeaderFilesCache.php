@@ -102,7 +102,7 @@ abstract class HeaderFilesCache
 		if (File::exists($cache_path.'/'.$output_file)) {
 			$content = @file_get_contents(URI::base().'cache/'.$this->extension.'/'.$output_file);
 			if ($content === false) {
-				if (defined('JDEBUG') && \JDEBUG) {
+				if (defined('JDEBUG') && JDEBUG) {
 					Log::add('SYWHeaderFilesCache:cache() - Warning with file_get_contents - Cannot check content footprint', Log::WARNING, 'syw');
 				}
 			} else if (md5($content) == $this->footprint) { // no need to re_create the file because there are no changes
