@@ -9,7 +9,6 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die ;
 
 use Joomla\CMS\Form\FormField;
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
@@ -27,6 +26,8 @@ class SYWVerboseTextField extends FormField
 	protected function getInput()
 	{
 		$html = '';
+		
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
@@ -53,7 +54,8 @@ class SYWVerboseTextField extends FormField
 		$html .= '<div class="input-group">';
 
 		if ($this->icon) {
-		    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+		    $wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
+		    
 			$html .= '<span class="input-group-text"><i class="'.$this->icon.'"></i></span>';
 		}
 

@@ -12,7 +12,6 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
-use SYW\Library\Field\DynamicSingleSelect;
 
 class SYWAlignmentSelectField extends DynamicSingleSelect
 {
@@ -74,6 +73,7 @@ class SYWAlignmentSelectField extends DynamicSingleSelect
 
             $this->items = array();
             if ($this->direction === 'horizontal') {
+                if (!in_array('s', $remove_values)) { $this->items['s'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_STRETCH'), 'image' => 'valign_stretch'); }
             	if (!in_array('fs', $remove_values)) { $this->items['fs'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_START'), 'image' => 'valign_start'); }
             	if (!in_array('c', $remove_values)) { $this->items['c'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_CENTER'), 'image' => 'valign_center'); }
             	if (!in_array('fe', $remove_values)) { $this->items['fe'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_END'), 'image' => 'valign_end'); }

@@ -64,7 +64,10 @@ class MessageField extends FormField
 				case 'warning': case 'fieldwarning': $style = 'warning'; $style_label = 'warning'; break;
 				case 'error': case 'fielderror': $style = 'danger'; $style_label = 'danger'; break;
 				case 'info': case 'fieldinfo': $style = 'info'; $style_label = 'info'; break;
-				case 'neutral': case 'fieldneutral': break;
+				case 'neutral': case 'fieldneutral': $style = 'light'; $style_label = 'light'; break;
+				case 'dark': case 'fielddark': $style = 'dark'; $style_label = 'dark'; break;
+				case 'primary': case 'fieldprimary': $style = 'primary'; $style_label = 'primary'; break;
+				case 'secondary': case 'fieldsecondary': $style = 'secondary'; $style_label = 'secondary'; break;
 				default: $style = 'success'; $style_label = 'success'; /* message, success */
 			}
 
@@ -109,7 +112,12 @@ class MessageField extends FormField
 			$this->message_type = isset($this->element['style']) ? trim((string)$this->element['style']) : 'info';
 			$this->message = isset($this->element['text']) ? trim((string)$this->element['text']) : '';
 			$this->badge_type = isset($this->element['badgetype']) ? trim((string)$this->element['badgetype']) : 'danger';
+			if ($this->badge_type == 'light') {
+			    $this->badge_type .= ' text-dark';
+			}
+			
 			$this->badge = isset($this->element['badge']) ? trim((string)$this->element['badge']) : '';
+			$this->badge = Text::_($this->badge);
 		}
 
 		return $return;

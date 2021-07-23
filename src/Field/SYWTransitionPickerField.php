@@ -115,76 +115,107 @@ class SYWTransitionPickerField extends FormField
         $lang->load('lib_syw.sys', JPATH_SITE);
 
         HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
+        HTMLHelper::_('bootstrap.dropdown', '.dropdown-toggle'); 
 
-        HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+        $wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
+        
         if (isset($this->transitions) || (isset($this->transitiongroups) && strpos($this->transitiongroups, '2d') !== false) || (!isset($this->transitions) && !isset($this->transitiongroups))) {
-            HTMLHelper::_('stylesheet', 'syw/2d-transitions-min.css', ['version' => 'auto', 'relative' => true]);
+            $wam->registerAndUseStyle('syw.transitions.2d', 'syw/2d-transitions-min.css', ['relative' => true, 'version' => 'auto']);
         }
+        
         if (isset($this->transitions) || (isset($this->transitiongroups) && strpos($this->transitiongroups, 'background') !== false) || (!isset($this->transitions) && !isset($this->transitiongroups))) {
-            HTMLHelper::_('stylesheet', 'syw/bg-transitions-min.css', ['version' => 'auto', 'relative' => true]);
+            $wam->registerAndUseStyle('syw.transitions.bg', 'syw/bg-transitions-min.css', ['relative' => true, 'version' => 'auto']);
         }
+        
+        $wam->addInlineScript('
+			document.addEventListener("readystatechange", function(event) {
+				if (event.target.readyState == "complete") {
 
-        $script = 'jQuery(document).ready(function () {';
-
-        // after load, select the saved value
-        $script .= '    if (jQuery("#'.$this->id.'").val() == "") {';
-        $script .= '         jQuery("#'.$this->id.'_disabled").val("");';
-        $script .= '    }';
-        $script .= '    if (jQuery("#'.$this->id.'").val() == "none") {';
-        $script .= '         jQuery("#'.$this->id.'_disabled").val("'.Text::_('JNONE').'");';
-        $script .= '    }';
-        $script .= '    if (jQuery("#'.$this->id.'").val() != "" && jQuery("#'.$this->id.'").val() != "none") {';
-        $script .= '         jQuery("#'.$this->id.'_disabled").val(jQuery("#'.$this->id.'").val());';
-        $script .= '         jQuery("#'.$this->id.'_select li a").each(function() {';
-        $script .= '             if (jQuery(this).parent().attr(\'data-transition\') == jQuery("#'.$this->id.'").val()) {';
-        $script .= '                  jQuery(this).addClass("bg-primary");';
-        $script .= '             }';
-        $script .= '         });';
-        $script .= '    }';
-
-        //$script .= '    jQuery("#'.$this->id.'_select li a").hover(function() { jQuery(this).addClass("bg-warning") }, function() { jQuery(this).removeClass("bg-warning") });';
-
-        $script .= '    jQuery("#'.$this->id.'_select li").click(function() {';
-        // de-select the previous value
-        $script .= '         jQuery("#'.$this->id.'_select li a").each(function() {';
-        $script .= '              jQuery(this).removeClass("bg-primary");';
-        $script .= '         });';
-        //
-        $script .= '         jQuery("#'.$this->id.'").val(jQuery(this).attr(\'data-transition\'));';
-        $script .= '         jQuery("#'.$this->id.'_disabled").val(jQuery(this).attr(\'data-transition\'));';
-        if ($this->use_global) {
-            $script .= '         jQuery("#'.$this->id.'_global").removeClass("btn-primary");';
-            $script .= '         jQuery("#'.$this->id.'_global").removeClass("active");';
-            $script .= '         jQuery("#'.$this->id.'_global").addClass("btn-outline-primary");';
-        }
-        $script .= '         jQuery(this).children(":first").addClass("bg-primary");';
-        //$script .= '         jQuery(this).children(":first").removeClass("bg-inverse");';
-        $script .= '    });';
-        $script .= '    jQuery("#'.$this->id.'_none").click(function() {';
-        $script .= '         jQuery("#'.$this->id.'").val("none");';
-        $script .= '         jQuery("#'.$this->id.'_disabled").val("'.Text::_('JNONE').'");';
-        if ($this->use_global) {
-            $script .= '         jQuery("#'.$this->id.'_global").removeClass("btn-primary");';
-            $script .= '         jQuery("#'.$this->id.'_global").removeClass("active");';
-            $script .= '         jQuery("#'.$this->id.'_global").addClass("btn-outline-primary");';
-        }
-        $script .= '         jQuery("#'.$this->id.'_select li a").removeClass("bg-primary");';
-        //$script .= '         jQuery("#'.$this->id.'_select li a").addClass("bg-inverse");';
-        $script .= '    });';
-        if ($this->use_global) {
-            $script .= '    jQuery("#'.$this->id.'_global").click(function() {';
-            $script .= '         jQuery("#'.$this->id.'").val("");';
-            $script .= '         jQuery("#'.$this->id.'_disabled").val("");';
-            $script .= '         jQuery("#'.$this->id.'_global").addClass("btn-primary");';
-            $script .= '         jQuery("#'.$this->id.'_global").addClass("active");';
-            $script .= '         jQuery("#'.$this->id.'_global").removeClass("btn-outline-primary");';
-            $script .= '         jQuery("#'.$this->id.'_select li a").removeClass("bg-primary");';
-            //$script .= '         jQuery("#'.$this->id.'_select li a").addClass("bg-inverse");';
-            $script .= '    });';
-        }
-        $script .= '});';
-
-        $wam->addInlineScript($script);
+                    let select_' . $this->id . ' = document.getElementById("' . $this->id . '_select");
+                    if (select_' . $this->id . ' != null) {
+                        let options_' . $this->id . ' = select_' . $this->id . '.querySelectorAll("li[data-transition]");
+                        let input_' . $this->id . ' = document.getElementById("' . $this->id . '");
+                        let input_disabled_' . $this->id . ' = document.getElementById("' . $this->id . '_disabled");
+                        ' . ($this->use_global ? '
+                        let global_' . $this->id . ' = document.getElementById("' . $this->id . '_global");
+                        ' : '
+                        ') . '
+                
+                        if (input_' . $this->id . '.value == "") {
+                            input_disabled_' . $this->id . '.value = "";
+                        } else if (input_' . $this->id . '.value == "none") {
+                            input_disabled_' . $this->id . '.value = "' . Text::_('JNONE') . '";
+                        } else {
+                            input_disabled_' . $this->id . '.value = input_' . $this->id . '.value;
+    
+                            let entry_value = select_' . $this->id . '.querySelector("li[data-transition=\'' . $this->value . '\']");
+                            entry_value.querySelector("a").classList.add("bg-primary", "text-light");
+                            entry_value.querySelector("a").classList.remove("bg-light", "text-dark");
+                        }
+    
+                        for (let i = 0; i < options_' . $this->id . '.length; i++) {
+                            options_' . $this->id . '[i].addEventListener("click", function(event) {
+    
+                                if (input_' . $this->id . '.value != "" && input_' . $this->id . '.value != "none") {
+                                    let entry_value = select_' . $this->id . '.querySelector("li[data-transition=" + input_' . $this->id . '.value + "]");
+                                    entry_value.querySelector("a").classList.remove("bg-primary", "text-light");
+                                    entry_value.querySelector("a").classList.add("bg-light", "text-dark");
+                                }
+    
+                                this.querySelector("a").classList.add("bg-primary", "text-light");
+                                this.querySelector("a").classList.remove("bg-light", "text-dark");
+    
+                                let selected_transition = this.getAttribute("data-transition");
+                                input_' . $this->id . '.value = selected_transition;
+                                document.getElementById("' . $this->id . '_disabled").value = selected_transition;
+    
+                                ' . ($this->use_global ? '
+                                global_' . $this->id . '.classList.remove("btn-primary", "active");
+                                global_' . $this->id . '.classList.add("btn-outline-primary");
+                                ' : '
+                                ') . '
+                            });
+                        }
+    
+                        document.getElementById("' . $this->id . '_none").addEventListener("click", function(event) {
+    
+                            if (input_' . $this->id . '.value != "" && input_' . $this->id . '.value != "none") {
+                                let entry_value = select_' . $this->id . '.querySelector("li[data-transition=" + input_' . $this->id . '.value + "]");
+                                entry_value.querySelector("a").classList.remove("bg-primary", "text-light");
+                                entry_value.querySelector("a").classList.add("bg-light", "text-dark");
+                            }
+    
+                            input_' . $this->id . '.value = "none";
+                            input_disabled_' . $this->id . '.value = "' . Text::_('JNONE') . '";
+    
+                            ' . ($this->use_global ? '
+                            global_' . $this->id . '.classList.remove("btn-primary", "active");
+                            global_' . $this->id . '.classList.add("btn-outline-primary");
+                            ' : '
+                            ') . '
+                        });
+    
+                        ' . ($this->use_global ? '
+                        global_' . $this->id . '.addEventListener("click", function(event) {
+    
+                            if (input_' . $this->id . '.value != "" && input_' . $this->id . '.value != "none") {
+                                let entry_value = select_' . $this->id . '.querySelector("li[data-transition=" + input_' . $this->id . '.value + "]");
+                                entry_value.querySelector("a").classList.remove("bg-primary", "text-light");
+                                entry_value.querySelector("a").classList.add("bg-light", "text-dark");
+                            }
+    
+                            input_' . $this->id . '.value = "";
+                            input_disabled_' . $this->id . '.value = "";
+    
+                            this.classList.add("btn-primary", "active");
+                            this.classList.remove("btn-outline-primary");
+                        });
+                        ' : '
+                        ') . '
+                    }
+                }
+			});
+		');
 
         $html = '';
 
@@ -234,7 +265,7 @@ class SYWTransitionPickerField extends FormField
                 }
             }
         } else {
-            $html .= self::getTransitions($this->sampleimage, $this->sampleicon); // TODO use jQuery append
+            $html .= self::getTransitions($this->sampleimage, $this->sampleicon);
         }
 
         $html .= '</ul>';

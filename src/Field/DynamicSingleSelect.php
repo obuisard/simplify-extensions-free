@@ -45,20 +45,21 @@ class DynamicSingleSelect extends ListField
 		$wam->addInlineScript('
 			document.addEventListener("readystatechange", function(event) {
 				if (event.target.readyState == "complete") {
-					let my_object = document.getElementById("' . $this->id . '_elements");
-					if (my_object != null) {
-						let input_field = document.getElementById("' . $this->id . '_id");
-						let enabled_children = my_object.querySelectorAll(".element.enabled");
-						for (let i = 0; i < enabled_children.length; i++) {
-							if (enabled_children[i].getAttribute("data-option") == "' . $this->value . '") {
-								enabled_children[i].classList.add("selected");
+					let my_object_' . $this->id . ' = document.getElementById("' . $this->id . '_elements");
+					if (my_object_' . $this->id . ' != null) {                        
+                        let input_' . $this->id . ' = document.getElementById("' . $this->id . '_id");						
+						let enabled_' . $this->id . ' = my_object_' . $this->id . '.querySelectorAll(".element.enabled");
+
+						for (let i = 0; i < enabled_' . $this->id . '.length; i++) {
+							if (enabled_' . $this->id . '[i].getAttribute("data-option") == "' . $this->value . '") {
+								enabled_' . $this->id . '[i].classList.add("selected");
 							}
 
-							enabled_children[i].addEventListener("click", function(event) {
-								input_field.value = this.getAttribute("data-option");
-								input_field.dispatchEvent(new Event("change"));
-								for (let j = 0; j < enabled_children.length; j++) {
-									enabled_children[j].classList.remove("selected");
+							enabled_' . $this->id . '[i].addEventListener("click", function(event) {
+								input_' . $this->id . '.value = this.getAttribute("data-option");
+								input_' . $this->id . '.dispatchEvent(new Event("change"));
+								for (let j = 0; j < enabled_' . $this->id . '.length; j++) {
+									enabled_' . $this->id . '[j].classList.remove("selected");
 								}
 								this.classList.add("selected");
 							});
@@ -66,23 +67,26 @@ class DynamicSingleSelect extends ListField
 					}
 
 					document.addEventListener("subform-row-add", function(e) {
-						let enabled_children = e.detail.row.querySelectorAll(".element.enabled");
-
-						for (let i = 0; i < enabled_children.length; i++) {
-							if (enabled_children[i].getAttribute("data-option") == "' . $this->default . '") {
-								enabled_children[i].classList.add("selected");
-							}
-
-							enabled_children[i].addEventListener("click", function(event) {
-								let inputfield = this.parentNode.parentNode.querySelector("input");
-								inputfield.value = this.getAttribute("data-option");
-								inputfield.dispatchEvent(new Event("change"));
-								for (let j = 0; j < enabled_children.length; j++) {
-									enabled_children[j].classList.remove("selected");
-								}
-								this.classList.add("selected");
-							});
-						}
+                        let sywd = e.detail.row.querySelector(".dynamicfield");
+                        if (sywd != null) {
+    						let sywd_enabled = sywd.querySelectorAll(".element.enabled");
+    
+    						for (let i = 0; i < sywd_enabled.length; i++) {
+    							if (sywd_enabled[i].getAttribute("data-option") == "' . $this->default . '") {
+    								sywd_enabled[i].classList.add("selected");
+    							}
+    
+    							sywd_enabled[i].addEventListener("click", function(event) {
+    								let inputfield = this.parentNode.parentNode.querySelector("input");
+    								inputfield.value = this.getAttribute("data-option");
+    								inputfield.dispatchEvent(new Event("change"));
+    								for (let j = 0; j < sywd_enabled.length; j++) {
+    									sywd_enabled[j].classList.remove("selected");
+    								}
+    								this.classList.add("selected");
+    							});
+    						}
+                        }
 					});
 				}
 			});

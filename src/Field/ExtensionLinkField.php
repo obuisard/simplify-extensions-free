@@ -24,12 +24,15 @@ class ExtensionLinkField extends FormField
 	protected function getLabel()
 	{
 		$html = '';
+		
+		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$lang = Factory::getLanguage();
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
-		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
 		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
+		
+		$wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
 
 		switch ($this->link_type) {
 			case 'forum': $icon="SYWicon-chat"; $title = 'LIB_SYW_EXTENSIONLINK_FORUM_LABEL'; break;

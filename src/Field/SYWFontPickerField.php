@@ -94,26 +94,38 @@ class SYWFontPickerField extends FormField
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
 		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
+		HTMLHelper::_('bootstrap.dropdown', '.dropdown-toggle'); 
 
-		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+		$wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
+		
+		$wam->addInlineScript('
+			document.addEventListener("readystatechange", function(event) {
+				if (event.target.readyState == "complete") {
 
-		$script = 'jQuery(document).ready(function () {';
-			$script .= 'jQuery(\'.standardfont_'.$this->id.'\').click(function() { ';
-				$script .= 'var fontfamily = jQuery(this).text();';
-				$script .= 'jQuery(\'#'.$this->id.'\').val(fontfamily);';
-				$script .= 'jQuery(\'#'.$this->id.'\').css(\'font-family\', fontfamily);';
-			$script .= '}); ';
-			$script .= 'jQuery(\'.googlefont_'.$this->id.'\').click(function() { ';
-				$script .= 'var fontfamily = jQuery(this).text();';
-				$script .= 'jQuery(\'#'.$this->id.'\').val(fontfamily);';
-				$script .= 'jQuery(\'#'.$this->id.'\').css(\'font-family\', \'inherit\');';
-			$script .= '}); ';
-			$script .= 'jQuery(\'.clear_'.$this->id.'\').click(function() { ';
-				$script .= 'jQuery(\'#'.$this->id.'\').val(\'\');';
-			$script .= '}); ';
-		$script .= '});';
+                    var standard_fonts = document.querySelectorAll(".standardfont_' . $this->id . '");
+                    for (let i = 0; i < standard_fonts.length; i++) {
+                        standard_fonts[i].addEventListener("click", function(event) {
+                            let font_family = this.textContent;
+                            document.getElementById("' . $this->id . '").value = font_family;
+                            document.getElementById("' . $this->id . '").style.fontFamily = font_family;
+                        });
+                    }
 
-		$wam->addInlineScript($script);
+                    var google_fonts = document.querySelectorAll(".googlefont_' . $this->id . '");
+                    for (let i = 0; i < google_fonts.length; i++) {
+                        google_fonts[i].addEventListener("click", function(event) {
+                            let font_family = this.textContent;
+                            document.getElementById("' . $this->id . '").value = font_family;
+                            document.getElementById("' . $this->id . '").style.fontFamily = "inherit";
+                        });
+                    }
+
+                    document.getElementById("clear_' . $this->id . '").addEventListener("click", function(event) {
+                        document.getElementById("' . $this->id . '").value = "";
+                    });
+                }
+			});
+		');
 
 		$html = '<div class="input-group">';
 
@@ -146,7 +158,7 @@ class SYWFontPickerField extends FormField
 
 				$html .= '</ul>';
 			$html .= '</div>';
-			$html .= '<button type="button" class="btn btn-secondary hasTooltip clear_'.$this->id.'" title="' . Text::_('JCLEAR') . '" aria-label="' . Text::_('JCLEAR') . '"><i class="icon-remove"></i></button>';
+			$html .= '<button id="clear_' . $this->id . '" type="button" class="btn btn-secondary hasTooltip" title="' . Text::_('JCLEAR') . '" aria-label="' . Text::_('JCLEAR') . '"><i class="icon-remove"></i></button>';
 
 		$html .= '</div>';
 		$html .= '<span class="help-block">'.Text::_('LIB_SYW_FONTPICKER_GOOGLEFONTLINKHELP').'</span><br />';

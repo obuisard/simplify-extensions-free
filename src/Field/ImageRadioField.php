@@ -40,9 +40,12 @@ class ImageRadioField extends FormField
 
         // Get the field options.
         $options = $this->getOptions();
+        
+        $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
-        HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
         HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
+        
+        $wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
 
         // Build the radio field output.
         foreach ($options as $i => $option) {
