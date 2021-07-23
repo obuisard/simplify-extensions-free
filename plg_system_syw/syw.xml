@@ -13,7 +13,7 @@
 <!-- 		<language tag="bg-BG">language/bg-BG/bg-BG.plg_system_syw.sys.ini</language>	 -->
 <!-- 		<language tag="cs-CZ">language/cs-CZ/cs-CZ.plg_system_syw.sys.ini</language> -->
 <!-- 		<language tag="da-DK">language/da-DK/da-DK.plg_system_syw.sys.ini</language> -->
-<!-- 		<language tag="de-DE">language/de-DE/de-DE.plg_system_syw.sys.ini</language> -->
+		<language tag="de-DE">language/de-DE/de-DE.plg_system_syw.sys.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.plg_system_syw.sys.ini</language>
 		<language tag="en-US">language/en-US/en-US.plg_system_syw.sys.ini</language>
 <!-- 		<language tag="es-ES">language/es-ES/es-ES.plg_system_syw.sys.ini</language> -->
@@ -21,7 +21,7 @@
 <!-- 		<language tag="fi-FI">language/fi-FI/fi-FI.plg_system_syw.sys.ini</language> -->
 		<language tag="fr-FR">language/fr-FR/fr-FR.plg_system_syw.sys.ini</language>
 <!-- 		<language tag="hu-HU">language/hu-HU/hu-HU.plg_system_syw.sys.ini</language> -->
-<!-- 		<language tag="it-IT">language/it-IT/it-IT.plg_system_syw.sys.ini</language> -->
+		<language tag="it-IT">language/it-IT/it-IT.plg_system_syw.sys.ini</language>
 <!-- 		<language tag="ja-JP">language/ja-JP/ja-JP.plg_system_syw.sys.ini</language> -->
 <!-- 		<language tag="nl-NL">language/nl-NL/nl-NL.plg_system_syw.sys.ini</language> -->
 <!-- 		<language tag="pl-PL">language/pl-PL/pl-PL.plg_system_syw.sys.ini</language> -->
@@ -37,6 +37,16 @@
 		<filename>license.txt</filename>
 	</files>
 	<config>
-		<fields name="params" />
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="lazy_stylesheets" type="list" default="no" 
+					label="PLG_SYSTEM_SYW_FIELD_LAZYLOADSTYLESHEETS_LABEL" 
+					description="PLG_SYSTEM_SYW_FIELD_LAZYLOADSTYLESHEETS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+					<option value="2">PLG_SYSTEM_SYW_VALUE_ADDSUPPORT</option>
+				</field>					
+			</fieldset>
+		</fields>
    </config>
 </extension>
