@@ -6,13 +6,15 @@
 	<packagename>sywlibrary</packagename>
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
-	<url>http://www.simplifyyourweb.com/</url>
+	<url>https://simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
 	<version>2.0.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/sywlibrary/changelog.xml</changelogurl>
-	<description>PKG_SYWLIBRARY_XML_DESCRIPTION</description> 
+	<description>PKG_SYWLIBRARY_XML_DESCRIPTION</description>
+	<blockChildUninstall>true</blockChildUninstall>
 	<scriptfile>installer.php</scriptfile>
+	<variant>free</variant>
 	<languages>	
 		<language tag="bg-BG">language/bg-BG/bg-BG.pkg_sywlibrary.sys.ini</language>	
 		<language tag="cs-CZ">language/cs-CZ/cs-CZ.pkg_sywlibrary.sys.ini</language>
@@ -36,8 +38,8 @@
 		<language tag="tr-TR">language/tr-TR/tr-TR.pkg_sywlibrary.sys.ini</language>
 	</languages>
  	<files folder="packages">
-		<file type="library" id="sywlibrary">lib_syw.zip</file>
-		<file type="plugin" id="sywlibrary" group="system">plg_system_syw.zip</file>
+		<file type="library" id="syw">lib_syw.zip</file>
+		<file type="plugin" id="syw" group="system">plg_system_syw.zip</file>
 	</files>
 	<updateservers>
 		<server type="extension" priority="1" name="SimplifyYourWeb Extensions Library updater">https://updates.simplifyyourweb.com/free/sywlibrary/sywlibrary-pkg-update.xml</server>

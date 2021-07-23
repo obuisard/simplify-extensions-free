@@ -133,7 +133,7 @@ class Pkg_SYWLibraryInstallerScript
 
  		$plugin_is_enable = $this->enableExtension('plugin', 'syw', 'system');
  		if (!$plugin_is_enable) {
- 			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_SYWLIBRARY_WARNING_ENABLEPLUGIN') . '</div>';
+ 			echo '<div class="alert alert-warning"><a href="index.php?option=com_plugins&view=plugins&filter[folder]=system&filter[element]=syw&filter[enabled]=0">' . Text::sprintf('PKG_SYWLIBRARY_WARNING_ENABLEPLUGIN') . '</a></div>';
  		}
 
  		if ($action == 'update') {
@@ -142,6 +142,10 @@ class Pkg_SYWLibraryInstallerScript
 
 			//Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_SYWLIBRARY_WARNING_RELEASENOTES', self::$changelog_link), 'warning');
  			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_SYWLIBRARY_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
+ 		
+            // remove the old update site
+ 		
+ 			$this->removeUpdateSite('library', 'syw', '', 'http://www.barejoomlatemplates.com/autoupdates/sywlibrary/sywlibrary-update.xml');
  		}
 
  		$this->removeFiles();
@@ -210,6 +214,93 @@ class Pkg_SYWLibraryInstallerScript
 		}
 
 		return true;
+	}
+	
+	private function removeUpdateSite($type, $element, $folder = '', $location = '')
+	{
+	    $db = Factory::getDBO();
+	    
+	    $query = $db->getQuery(true);
+	    
+	    $query->select('extension_id');
+	    $query->from('#__extensions');
+	    $query->where($db->quoteName('type').'='.$db->quote($type));
+	    $query->where($db->quoteName('element').'='.$db->quote($element));
+	    if ($folder) {
+	        $query->where($db->quoteName('folder').'='.$db->quote($folder));
+	    }
+	    
+	    $db->setQuery($query);
+	    
+	    $extension_id = '';
+	    try {
+	        $extension_id = $db->loadResult();
+	    } catch (ExecutionFailureException $e) {
+	        Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	        return false;
+	    }
+	    
+	    if ($extension_id) {
+	        
+	        $query->clear();
+	        
+	        $query->select('update_site_id');
+	        $query->from('#__update_sites_extensions');
+	        $query->where($db->quoteName('extension_id').'='.$db->quote($extension_id));
+	        
+	        $db->setQuery($query);
+	        
+	        $updatesite_id = array(); // can have several results
+	        try {
+	            $updatesite_id = $db->loadColumn();
+	        } catch (ExecutionFailureException $e) {
+	            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	            return false;
+	        }
+	        
+	        if (empty($updatesite_id)) {
+	            return false;
+	        } else if (count($updatesite_id) == 1) {
+	            
+	            $query->clear();
+	            
+	            $query->delete($db->quoteName('#__update_sites'));
+	            $query->where($db->quoteName('update_site_id').' = '.$db->quote($updatesite_id[0]));
+	            
+	            $db->setQuery($query);
+	            
+	            try {
+	                $db->execute();
+	            } catch (ExecutionFailureException $e) {
+	                Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	                return false;
+	            }
+	        } else { // several update sites exist for the same extension therefore we need to specify which to delete
+	            
+	            if ($location) {
+	                $query->clear();
+	                
+	                $query->delete($db->quoteName('#__update_sites'));
+	                $query->where($db->quoteName('update_site_id').' IN ('.implode(',', $updatesite_id).')');
+	                $query->where($db->quoteName('location').' = '.$db->quote($location));
+	                
+	                $db->setQuery($query);
+	                
+	                try {
+	                    $db->execute();
+	                } catch (ExecutionFailureException $e) {
+	                    Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	                    return false;
+	                }
+	            } else {
+	                return false;
+	            }
+	        }
+	    } else {
+	        return false;
+	    }
+	    
+	    return true;
 	}
 
 }
