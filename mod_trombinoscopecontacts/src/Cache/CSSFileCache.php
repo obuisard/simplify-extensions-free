@@ -8,6 +8,7 @@ namespace SYW\Module\TrombinoscopeContacts\Site\Cache;
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\HTML\HTMLHelper;
 use SYW\Library\HeaderFilesCache;
 
 class CSSFileCache extends HeaderFilesCache
@@ -66,7 +67,13 @@ class CSSFileCache extends HeaderFilesCache
 		$space_between_cards = $params->get('card_spacebetween', '5');
 		$variables[] = 'space_between_cards';
 
-		$bgimage = $params->get('bgimage', '');
+		$bgimage = $params->get('bgimage', '');		
+		
+		if ($bgimage) {
+		    $image_object = HTMLHelper::cleanImageURL($bgimage);
+		    $bgimage = $image_object->url;
+		}		
+		
 		$variables[] = 'bgimage';
 
 		$bgcolor1 = trim($params->get('bgcolor1', ''));

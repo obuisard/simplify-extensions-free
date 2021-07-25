@@ -218,7 +218,7 @@ if ($remove_whitespaces) {
     							<?php if (isset($item->individual_bg) && $item->individual_bg) : ?>
     								<div class="individualbg">
     									<div class="innerindividualbg">
-    										<?php echo SYWUtilities::getImageElement($item->individual_bg, '', null, ($carousel_configuration != 'none') ? false : true); ?>
+    										<?php echo SYWUtilities::getImageElement($item->individual_bg, $item->individual_bg_alt, null, ($carousel_configuration != 'none') ? false : true); ?>
     									</div>
     								</div>
     							<?php endif; ?>

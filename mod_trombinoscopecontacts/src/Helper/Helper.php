@@ -22,6 +22,7 @@ use Joomla\Component\Contact\Site\Helper\RouteHelper as ContactRouteHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
 use SYW\Library\Cache as SYWCache;
+use SYW\Library\Fields as SYWFields;
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Tags as SYWTags;
 use SYW\Library\Text as SYWText;
@@ -543,6 +544,10 @@ abstract class Helper
 			if ($categories != '') {
 				$test_type = $params->get('cat_inex', 1) ? 'IN' : 'NOT IN';
 				$query->where('cd.catid ' . $test_type . ' ('.$categories.')');
+			} else {
+				if (!$params->get('cat_inex', 1)) {
+					return array(); // if all categories excluded, then there should be no result
+				}
 			}
 
 			// include
@@ -722,29 +727,36 @@ abstract class Helper
 			$item->firstpart = self::_substring_index(trim($item->name), ' ', 1);
 			$item->secondpart = self::_substring_index(self::_substring_index(trim($item->name), ' ', 2), ' ', -1);
 			$item->lastpart = self::_substring_index(trim($item->name), ' ', -1);
-
+			
 			// keep original image (needed if showing picture in popup)
-			$item->original_image = $item->image;
+			$item->original_image = '';
+			if ($item->image) {
+			    $image_object = HTMLHelper::cleanImageURL($item->image);
+			    $item->original_image = $image_object->url;
+			}
 
 			if (self::isShowPicture($params)) {
 
 				$picture_output = '';
 				
-				if ($item->image) {
+				if ($item->original_image) {
 					if (self::isCropPicture($params)) {
-						$picture_output = self::getCroppedImage($module->id, $item->id, $item->image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
+					    $picture_output = self::getCroppedImage($module->id, $item->id, $item->original_image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
 					} else {
-						$picture_output = (File::exists(JPATH_SITE . '/' . $item->image)) ? $item->image : 'error';
+					    $picture_output = (File::exists(JPATH_SITE . '/' . $item->original_image)) ? $item->original_image : 'error';
 					}
 				}
 				
 				if ($picture_output == 'error' || $picture_output == '') {
 					$default_image = $params->get('d_pic', '');
 					if ($default_image) {
+					    
+					    $default_image_object = HTMLHelper::cleanImageURL($default_image);					    
+					    
 						if (self::isCropPicture($params)) {
-							$picture_output = self::getCroppedImage($module->id, 'default', $default_image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
+						    $picture_output = self::getCroppedImage($module->id, 'default', $default_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
 						} else {
-							$picture_output = (File::exists(JPATH_SITE . '/' . $default_image)) ? $default_image : 'error';
+						    $picture_output = (File::exists(JPATH_SITE . '/' . $default_image_object->url)) ? $default_image_object->url : 'error';
 						}
 					}
 				}
@@ -752,10 +764,13 @@ abstract class Helper
 				if ($picture_output == 'error' || $picture_output == '') {
 					$global_image = self::getContactGlobalParams()->get('default_image');
 					if ($global_image) {
+					    
+					    $global_image_object = HTMLHelper::cleanImageURL($global_image);	
+					    
 						if (self::isCropPicture($params)) {
-							$picture_output = self::getCroppedImage($module->id, 'global', $global_image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
+						    $picture_output = self::getCroppedImage($module->id, 'global', $global_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
 						} else {
-							$picture_output = (File::exists(JPATH_SITE . '/' . $global_image)) ? $global_image : 'error';
+						    $picture_output = (File::exists(JPATH_SITE . '/' . $global_image_object->url)) ? $global_image_object->url : 'error';
 						}
 					}
 				}
@@ -783,36 +798,24 @@ abstract class Helper
 
 			$individual_bg_option = $params->get('individual_bg_pic', '');
 			if ($individual_bg_option) {
+			    
+			    $item->individual_bg = '';
+			    $item->individual_bg_alt = '';
+			    
 				if ($individual_bg_option == 'def_bg') { // default bg picture selected
 					if ($params->get('d_bg_pic', '')) {
-						$item->individual_bg = $params->get('d_bg_pic');
+					    $default_image_object = HTMLHelper::cleanImageURL($params->get('d_bg_pic'));
+					    $item->individual_bg = $default_image_object->url;
 					}
 				} else if ($individual_bg_option == 'pic') { // contact picture selected
-					if (!empty($item->image)) {
+					if ($item->image) {
 						$item->individual_bg = $item->image;
 					} else if ($params->get('d_bg_pic', '')) {
-						$item->individual_bg = $params->get('d_bg_pic');
+					    $default_image_object = HTMLHelper::cleanImageURL($params->get('d_bg_pic'));
+					    $item->individual_bg = $default_image_object->url;
 					}
-				} else {
-					$query->clear();
-
-					$query->select($db->quoteName('value'));
-					$query->from($db->quoteName('#__fields_values'));
-					$query->where($db->quoteName('field_id').' = '.$individual_bg_option);
-					$query->where($db->quoteName('item_id').' = '.$item->id);
-
-					$db->setQuery($query);
-
-					$item->individual_bg = '';
-					try {
-						$item->individual_bg = $db->loadResult();
-					} catch (ExecutionFailureException $e) {
-						Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
-					}
-
-					if (empty($item->individual_bg) && $params->get('d_bg_pic', '')) {
-						$item->individual_bg = $params->get('d_bg_pic');
-					}
+				} else {				    
+				    // PRO version only
 				}
 			}
 		}

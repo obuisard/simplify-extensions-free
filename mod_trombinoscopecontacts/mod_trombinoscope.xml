@@ -6,7 +6,7 @@
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
-	<authorUrl>www.simplifyyourweb.com</authorUrl>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
 	<version>4.6.0</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
@@ -78,7 +78,7 @@
 					review="http://extensions.joomla.org/extensions/extension/directory-a-documentation/address-book/trombinoscope-contacts" 
 					donate="https://simplifyyourweb.com/free-products/trombinoscope" />
 				
-				<field type="sywextensionpresencetest" title="Trombinoscope Contacts Pro" description="MOD_TROMBINOSCOPE_INFO_PROVERSION" 
+				<field type="sywextensionpresencetest" title="Trombinoscope Contacts Pro" message="MOD_TROMBINOSCOPE_INFO_PROVERSION" 
 					extensiontype="component" extensionelement="com_trombinoscopeextended"
 					imagesrc="media/mod_trombinoscopecontacts/images/logo_pro.png"
 					downloadlink="https://simplifyyourweb.com/downloads/trombinoscope-contacts-pro" downloadtext="MOD_TROMBINOSCOPE_INFO_PROVERSIONDOWLOAD" />
@@ -829,7 +829,7 @@
 						label="MOD_TROMBINOSCOPE_FIELD_LABELNAME_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_LABELNAME_DESC" />
 						
-					<field name="name_icon" type="sywiconpicker" default="user" showon="s_name_lbl:2" 
+					<field name="name_icon" type="sywiconpicker" default="person" showon="s_name_lbl:2" 
 						label="MOD_TROMBINOSCOPE_FIELD_ICONNAME_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_ICONNAME_DESC" />
 						
@@ -1215,7 +1215,7 @@
 						<option value="cache">MOD_TROMBINOSCOPE_VALUE_CACHEDIRECTORY</option>
 					</field>
 					
-					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" description="MOD_TROMBINOSCOPE_INFO_AUTORESETPLUGIN" 
+					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" message="MOD_TROMBINOSCOPE_INFO_AUTORESETPLUGIN" 
 						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset"
 						imagesrc="media/mod_trombinoscopecontacts/images/logo_autoreset_small.png"
 						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" />
