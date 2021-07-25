@@ -96,7 +96,7 @@ class Pkg_JQueryEasyInstallerScript
 		$this->release = $installer->getManifest()->version;
 
 		// make sure the library is installed and that it is compatible with the extension
-		return $this->installOrUpdateLibrary();
+		return $this->installOrUpdateLibrary($installer);
 	}
 
 	/**
@@ -332,24 +332,29 @@ class Pkg_JQueryEasyInstallerScript
 	    return true;
 	}
 
-	private function installOrUpdateLibrary()
+	private function installOrUpdateLibrary($installer)
 	{
 		// install the library and its plugin if missing or outdated
 
 		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-			if (!Folder::exists(JPATH_ROOT . '/libraries/syw')) {
-				if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-					return false;
-				}
-			}
+// 			if (!Folder::exists(JPATH_ROOT . '/libraries/syw')) {
+// 				if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
+// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+// 					return false;
+// 				}
+// 			}
 
-			if (!Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-					return false;
-				}
-			}
+// 			if (!Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
+// 				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
+// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+// 					return false;
+// 				}
+// 			}
+		    
+		    if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
+		        Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+		        return false;
+		    }
 
 			Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
 		} else {
@@ -357,26 +362,31 @@ class Pkg_JQueryEasyInstallerScript
 			$library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
 			if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
 
-				if (!$this->installOrUpdatePackage($installer, 'lib_syw', 'update')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-					return false;
-				}
+// 				if (!$this->installOrUpdatePackage($installer, 'lib_syw', 'update')) {
+// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
+// 					return false;
+// 				}
 
-				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw', 'update')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-					return false;
-				}
+// 				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw', 'update')) {
+// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
+// 					return false;
+// 				}
+			    
+			    if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary', 'update')) {
+			        Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
+			        return false;
+			    }
 
 				Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_UPDATED', $this->minimumLibrary), 'message');
 			}
 		}
 
-		if (!PluginHelper::isEnabled('system', 'syw')) {
-			if (!$this->enableExtension('plugin', 'syw', 'system')) {
-				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_COULDNOTENABLEPLUGINFORLIBRARY'), 'error');
-				return false;
-			}
-		}
+// 		if (!PluginHelper::isEnabled('system', 'syw')) {
+// 			if (!$this->enableExtension('plugin', 'syw', 'system')) {
+// 				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_COULDNOTENABLEPLUGINFORLIBRARY'), 'error');
+// 				return false;
+// 			}
+// 		}
 
 		return true;
 	}

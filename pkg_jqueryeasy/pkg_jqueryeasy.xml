@@ -11,12 +11,10 @@
  	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
 	<version>4.0.2</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/jqueryeasy/changelog.xml</changelogurl>
-	<description>PKG_JQUERYEASY_XML_DESCRIPTION</description> 
-	
-	<scriptfile>installer.php</scriptfile>
-	
-	<variant>free</variant>
-	
+	<description>PKG_JQUERYEASY_XML_DESCRIPTION</description>
+	<blockChildUninstall>true</blockChildUninstall>
+	<scriptfile>installer.php</scriptfile>	
+	<variant>free</variant>	
 	<languages>		
 		<language tag="bg-BG">language/bg-BG/bg-BG.pkg_jqueryeasy.sys.ini</language>
 	  	<language tag="de-DE">language/de-DE/de-DE.pkg_jqueryeasy.sys.ini</language>
@@ -34,8 +32,6 @@
 	   	<language tag="uk-UA">language/uk-UA/uk-UA.pkg_jqueryeasy.sys.ini</language>
 	</languages>
  	<files folder="packages">
-<!--  		<file type="library" id="sywlibrary">lib_syw.zip</file> -->
-<!-- 		<file type="plugin" id="syw" group="system">plg_system_syw.zip</file> -->
 		<file type="plugin" id="jqueryeasy" group="system">plg_system_jqueryeasy.zip</file>
 	</files>	
 	<updateservers>
