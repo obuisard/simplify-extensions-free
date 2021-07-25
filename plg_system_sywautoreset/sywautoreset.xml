@@ -6,7 +6,7 @@
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
-	<authorUrl>www.simplifyyourweb.com</authorUrl>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
 	<version>1.4.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/sywautoreset/changelog.xml</changelogurl>
 	<description>PLG_SYSTEM_SYWAUTORESET_XML_DESCRIPTION</description>
@@ -25,6 +25,8 @@
 		<language tag="en-GB">language/en-GB/en-GB.plg_system_sywautoreset.sys.ini</language>
 		<language tag="fr-FR">language/fr-FR/fr-FR.plg_system_sywautoreset.ini</language>
 		<language tag="fr-FR">language/fr-FR/fr-FR.plg_system_sywautoreset.sys.ini</language>
+		<language tag="it-IT">language/it-IT/it-IT.plg_system_sywautoreset.ini</language>
+		<language tag="it-IT">language/it-IT/it-IT.plg_system_sywautoreset.sys.ini</language>
 		<language tag="ja-JP">language/ja-JP/ja-JP.plg_system_sywautoreset.ini</language>
 		<language tag="ja-JP">language/ja-JP/ja-JP.plg_system_sywautoreset.sys.ini</language>
 		<language tag="nl-NL">language/nl-NL/nl-NL.plg_system_sywautoreset.ini</language>
