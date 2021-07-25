@@ -39,7 +39,7 @@ class Pkg_ArticleDetailsInstallerScript
 	/**
 	 * Minimum Joomla! version required to install the extension
 	 */
-	protected $minimumJoomla = '4.0.0-beta3';
+	protected $minimumJoomla = '4.0.0-beta7';
 
 	/**
 	 * Available languages
@@ -96,7 +96,7 @@ class Pkg_ArticleDetailsInstallerScript
 		$this->release = $installer->getManifest()->version;
 
 		// make sure the library is installed and that it is compatible with the extension
-		return $this->installOrUpdateLibrary();
+		return $this->installOrUpdateLibrary($installer);
 	}
 
 	/**
@@ -131,7 +131,7 @@ class Pkg_ArticleDetailsInstallerScript
 
 		echo '<p style="margin: 20px 0">';
 		echo HTMLHelper::image('plg_content_articledetails/logo.png', 'Article Details', null, true);
-		echo '<br /><br /><span class="badge badge-dark">'.Text::sprintf('PKG_ARTICLEDETAILS_VERSION', $this->release).'</span>';
+		echo '<br /><br /><span class="badge bg-dark">'.Text::sprintf('PKG_ARTICLEDETAILS_VERSION', $this->release).'</span>';
 		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
 		echo '</p>';
 
@@ -166,6 +166,19 @@ class Pkg_ArticleDetailsInstallerScript
 					$this->deleteFiles = array_merge($this->deleteFiles, $filenames);
 				}
 			}
+			
+			// +++ Migration Joomla 3 to Joomla 4
+			
+			// remove obsolete files
+			
+			$this->deleteFiles[] = '/plugins/content/articledetails/headerfilesmaster.php';
+			
+			$this->deleteFolders[] = '/plugins/content/articledetails/fields';
+			$this->deleteFolders[] = '/plugins/content/articledetails/helpers';
+			$this->deleteFolders[] = '/plugins/content/articledetails/images';
+			$this->deleteFolders[] = '/plugins/content/articledetails/styles';
+			
+			// +++ End Migration
 		}
 
 		$this->removeFiles();
@@ -173,11 +186,26 @@ class Pkg_ArticleDetailsInstallerScript
 		return true;
 	}
 
+	private function moveFile($file, $source, $destination, $minified_version = '.min')
+	{
+		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_ARTICLEDETAILS_ERROR_CANNOTMOVEFILE', $file), 'warning');
+		}
+
+		$file_pieces = explode('.', $file); // assumes only one . in file name
+		$file_pieces[0] .= $minified_version;
+		$file = implode('.', $file_pieces);
+
+		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_ARTICLEDETAILS_ERROR_CANNOTMOVEFILE', $file), 'warning');
+		}
+	}
+
 	private function removeFiles()
 	{
 		if (!empty($this->deleteFiles)) {
 			foreach ($this->deleteFiles as $filename) {
-				if (File::exists($filename) && !File::delete($filename)) {
+				if (File::exists(JPATH_SITE . $filename) && !File::delete(JPATH_SITE . $filename)) {
 					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_ARTICLEDETAILS_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
 				}
 			}
@@ -185,7 +213,7 @@ class Pkg_ArticleDetailsInstallerScript
 
 		if (!empty($this->deleteFolders)) {
 			foreach ($this->deleteFolders as $folder) {
-				if (Folder::exists(JPATH_ROOT.$folder) && !Folder::delete(JPATH_ROOT.$folder)) {
+				if (Folder::exists(JPATH_ROOT . $folder) && !Folder::delete(JPATH_ROOT . $folder)) {
 					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_ARTICLEDETAILS_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
 				}
 			}
@@ -279,11 +307,11 @@ class Pkg_ArticleDetailsInstallerScript
 		return true;
 	}
 
-	private function installOrUpdatePackage($parent, $package_name, $installation_type = 'install')
+	private function installOrUpdatePackage($installer, $package_name, $installation_type = 'install')
 	{
 		// Get the path to the package
 
-		$sourcePath = $parent->getParent()->getPath('source');
+	    $sourcePath = $installer->getParent()->getPath('source');
 		$sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
 
 		// Extract and install the package
@@ -334,23 +362,28 @@ class Pkg_ArticleDetailsInstallerScript
 		return true;
 	}
 
-	private function installOrUpdateLibrary()
+	private function installOrUpdateLibrary($installer)
 	{
 		// install the library and its plugin if missing or outdated
 
 		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-			if (!Folder::exists(JPATH_ROOT . '/libraries/syw')) {
-				if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-					return false;
-				}
-			}
+// 			if (!Folder::exists(JPATH_ROOT . '/libraries/syw')) {
+// 				if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
+// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+// 					return false;
+// 				}
+// 			}
 
-			if (!Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-					return false;
-				}
+// 			if (!Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
+// 				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
+// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+// 					return false;
+// 				}
+// 			}
+			
+			if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
+			    Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+			    return false;
 			}
 
 			Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
@@ -359,26 +392,31 @@ class Pkg_ArticleDetailsInstallerScript
 			$library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
 			if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
 
-				if (!$this->installOrUpdatePackage($installer, 'lib_syw', 'update')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-					return false;
-				}
+// 				if (!$this->installOrUpdatePackage($installer, 'lib_syw', 'update')) {
+// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
+// 					return false;
+// 				}
 
-				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw', 'update')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-					return false;
-				}
+// 				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw', 'update')) {
+// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
+// 					return false;
+// 				}
+
+			    if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary', 'update')) {
+			        Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
+			        return false;
+			    }
 
 				Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_UPDATED', $this->minimumLibrary), 'message');
 			}
 		}
 
-		if (!PluginHelper::isEnabled('system', 'syw')) {
-			if (!$this->enableExtension('plugin', 'syw', 'system')) {
-				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_COULDNOTENABLEPLUGINFORLIBRARY'), 'error');
-				return false;
-			}
-		}
+// 		if (!PluginHelper::isEnabled('system', 'syw')) {
+// 			if (!$this->enableExtension('plugin', 'syw', 'system')) {
+// 				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_COULDNOTENABLEPLUGINFORLIBRARY'), 'error');
+// 				return false;
+// 			}
+// 		}
 
 		return true;
 	}

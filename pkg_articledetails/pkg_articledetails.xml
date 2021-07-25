@@ -9,14 +9,12 @@
 	<url>http://www.simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
-	<version>5.5.0</version>
+	<version>5.6.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/articledetails/changelog.xml</changelogurl>
-	<description>PKG_ARTICLEDETAILS_XML_DESCRIPTION</description> 
-	
+	<description>PKG_ARTICLEDETAILS_XML_DESCRIPTION</description>
+	<blockChildUninstall>true</blockChildUninstall>
 	<scriptfile>installer.php</scriptfile>
-	
 	<variant>free</variant>
-	
 	<languages>
 		<language tag="de-DE">language/de-DE/de-DE.pkg_articledetails.sys.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.pkg_articledetails.sys.ini</language>
