@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="content" method="upgrade">
 	<name>PLG_CONTENT_ARTICLEDETAILS</name>
-	<version>6.0.0</version>
+	<version>5.6.0</version>
 	<creationDate>09/24/2015</creationDate>
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>	
 	<author>Olivier Buisard</author>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
-	<authorUrl>www.simplifyyourweb.com</authorUrl>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
 	<description>PLG_CONTENT_ARTICLEDETAILS_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Plugin\Content\ArticleDetails</namespace>
 	<media folder="media" destination="plg_content_articledetails">
@@ -55,7 +55,7 @@
 		
 			<fieldset name="basic" label="PLG_CONTENT_ARTICLEDETAILS_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 				
-				<field type="extensionversion" version="6.0.0" />
+				<field type="extensionversion" version="5.6.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_CONTENT_ARTICLEDETAILS_TRANSLATORS" />
@@ -70,10 +70,10 @@
 					donate="https://simplifyyourweb.com/free-products/article-details"
 					review="http://extensions.joomla.org/extensions/extension/news-display/content-infos/article-details" />
 			
-<!-- 				<field type="sywextensionpresencetest" title="Article Details Profiles" description="PLG_CONTENT_ARTICLEDETAILS_INFO_PROVERSION"  -->
-<!-- 					extensiontype="component" extensionelement="com_articledetailsprofiles" -->
-<!-- 					imagesrc="media/plg_content_articledetails/images/logo_pro.png" -->
-<!-- 					downloadlink="https://simplifyyourweb.com/downloads/article-details-profiles" downloadtext="PLG_CONTENT_ARTICLEDETAILS_INFO_PROVERSIONDOWLOAD" />		 -->
+				<field type="sywextensionpresencetest" title="Article Details Profiles" message="PLG_CONTENT_ARTICLEDETAILS_INFO_PROVERSION" 
+					extensiontype="component" extensionelement="com_articledetailsprofiles"
+					imagesrc="media/plg_content_articledetails/images/logo_pro.png"
+					downloadlink="https://simplifyyourweb.com/downloads/article-details-profiles" downloadtext="PLG_CONTENT_ARTICLEDETAILS_INFO_PROVERSIONDOWLOAD" />		
 	           				
 <!-- 				<field type="sywlibtest" minversion="1.5.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" />	 -->
 			</fieldset>
