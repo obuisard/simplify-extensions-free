@@ -75,7 +75,7 @@ class plgfieldssywiconInstallerScript
 		$this->release = $installer->getManifest()->version;
 
 		// make sure the library is installed and that it is compatible with the extension
-		return $this->installOrUpdateLibrary();
+		return $this->installOrUpdateLibrary($installer);
 	}
 
 	/**
@@ -91,7 +91,7 @@ class plgfieldssywiconInstallerScript
 
 		echo '<p style="margin: 10px 0 20px 0">';
 		//echo HTMLHelper::image('plg_fields_sywicon/logo.png', 'SYW Icon', null, true);
-		echo '<br /><br /><span class="badge badge-dark">'.Text::sprintf('PLG_FIELDS_SYWICON_VERSION', $this->release).'</span>';
+		echo '<br /><br /><span class="badge bg-dark">'.Text::sprintf('PLG_FIELDS_SYWICON_VERSION', $this->release).'</span>';
 		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
 		echo '</p>';
 
@@ -127,11 +127,11 @@ class plgfieldssywiconInstallerScript
 	 */
 	public function uninstall($parent) {}
 
-	private function installOrUpdatePackage($parent, $package_name, $installation_type = 'install')
+	private function installOrUpdatePackage($installer, $package_name, $installation_type = 'install')
 	{
 		// Get the path to the package
 
-		$sourcePath = $parent->getParent()->getPath('source');
+	    $sourcePath = $installer->getParent()->getPath('source');
 		$sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
 
 		// Extract and install the package
@@ -182,7 +182,7 @@ class plgfieldssywiconInstallerScript
 		return true;
 	}
 
-	private function installOrUpdateLibrary()
+	private function installOrUpdateLibrary($installer)
 	{
 		// install the library and its plugin if missing or outdated
 
