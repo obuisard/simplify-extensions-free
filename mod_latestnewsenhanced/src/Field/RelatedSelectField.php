@@ -28,9 +28,9 @@ class RelatedSelectField extends ListField
 		}
 
 		// test the fields folder first to avoid message warning that the component is missing
-// 		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler') && ComponentHelper::isEnabled('com_comprofiler')) {
-// 			$options[] = HTMLHelper::_('select.option', 'cb_user_profile', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_RELATEDTOCBUSERPROFILE') . ' (Pro)', 'value', 'text', $disable = true );
-// 		}
+		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler') && ComponentHelper::isEnabled('com_comprofiler')) {
+			$options[] = HTMLHelper::_('select.option', 'cb_user_profile', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_RELATEDTOCBUSERPROFILE') . ' (Pro)', 'value', 'text', $disable = true );
+		}
 
 		// Merge any additional options in the XML definition.
 		$options = array_merge(parent::getOptions(), $options);

@@ -888,6 +888,7 @@ class K2Helper
 
 			$crop_picture = $params->get('crop_pic', 0);
 
+			$create_highres_images = false;
 			$lazyload = $params->get('lazyload', false);
 
 			$allow_remote = $params->get('allow_remote', true);
@@ -1100,18 +1101,23 @@ class K2Helper
 
 			if ($show_image) {
 
-				$thumbnails_exist = false;
+				//$thumbnails_exist = false;
 				$filename = '';
+				$image_width = 0;
+				$image_height = 0;
+				
+				// note: original images are not cached, therefore looking thru article content will be inefficient
 
 				if (!$clear_cache && $params->get('create_thumb', 1)) {
-					$thumbnails_exist_tmp = Helper::thumbnailExists($module->id, $item->id, $tmp_path);
-					if ($thumbnails_exist_tmp != false) {
-						$filename = $thumbnails_exist_tmp;
-						$thumbnails_exist = true;
+				    $thumbnail_src = Helper::thumbnailExists($module->id, $item->id, $tmp_path, $create_highres_images);
+				    if ($thumbnail_src !== false) {
+				        $filename = $thumbnail_src; // found a corresponding thumbnail
+						//$thumbnails_exist = true;
 					}
 				}
 
-				if (!$thumbnails_exist) {
+				if (empty($filename)) {
+				    //if (!$thumbnails_exist) {
 					// thumbnail(s) do not exist
 
 					$imagesrc = '';
@@ -1169,14 +1175,24 @@ class K2Helper
 						if ($default_picture) {
 							$imagesrc = $default_picture;
 							$used_default_image = true;
+						} else {
+						    $imagesrc = '';
 						}
 					}
 
 					if ($imagesrc) { // found an image
-						if (!$params->get('create_thumb', 1) || $head_width <= 0 || $head_height <= 0) {
+					    
+					    $image_object = HTMLHelper::cleanImageURL($imagesrc);
+					    $imagesrc = $image_object->url;
+					    
+					    if (!$params->get('create_thumb', 1) || $head_width <= 0 || $head_height <= 0) { // no thumbnails are created, use the original image
 					        $filename = $imagesrc;
+					        
+					        $image_width = $image_object->attributes['width'];
+					        $image_height = $image_object->attributes['height'];
+					        
 					    } else {
-					    	$result_array = Helper::getImageFromSrc($module->id, $item->id, $imagesrc, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, false, $allow_remote);
+					        $result_array = Helper::getImageFromSrc($module->id, $item->id, $imagesrc, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote);
 
     						if (!empty($result_array[0])) {
     							$filename = $result_array[0];
@@ -1185,7 +1201,10 @@ class K2Helper
     						if (!empty($result_array[1])) {
     							// if error for the file found, try and use the default image instead
     							if (!$used_default_image && $default_picture) { // if the default image was the one chosen, no use to retry
-    								$result_array = Helper::getImageFromSrc($module->id, $item->id, $default_picture, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, false, $allow_remote);
+    							    
+    							    $default_image_object = HTMLHelper::cleanImageURL($default_picture);
+    							    
+    							    $result_array = Helper::getImageFromSrc($module->id, $item->id, $default_image_object->url, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote);
 
     								if (!empty($result_array[0])) {
     									$filename = $result_array[0];
@@ -1201,9 +1220,9 @@ class K2Helper
 					    }
 					}
 
-					if ($filename && empty($item->error)) {
-						$thumbnails_exist = true;
-					}
+// 					if ($filename && empty($item->error)) {
+// 						$thumbnails_exist = true;
+// 					}
 				}
 
 				if ($filename) {
@@ -1211,6 +1230,8 @@ class K2Helper
 					$img_attributes = array();
 					if ($crop_picture && $head_width > 0 && $head_height > 0) {
 						$img_attributes = array('width' => $head_width, 'height' => $head_height);
+					} else if ($image_width > 0 && $image_height > 0) {
+					    $img_attributes = array('width' => $image_width, 'height' => $image_height);
 					}
 					
 					$extra_attributes = trim($params->get('image_attributes', ''));
@@ -1221,7 +1242,7 @@ class K2Helper
 						}
 					}
 
-					$item->imagetag = SYWUtilities::getImageElement($filename, $item->title, $img_attributes, $lazyload);
+					$item->imagetag = SYWUtilities::getImageElement($filename, $item->title, $img_attributes, $lazyload, $create_highres_images);
 				}
 			}
 

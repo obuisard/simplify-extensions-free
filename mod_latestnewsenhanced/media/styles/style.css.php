@@ -95,10 +95,14 @@ header("Content-type: text/css; charset=UTF-8");
 		    	-webkit-box-align: end;
 		    	-ms-flex-align: end;
 		    	align-items: flex-end;
-		    <?php else : ?>
+		    <?php elseif ($items_valign_row == 'c') : ?>
 		    	-webkit-box-align: center;
 		    	-ms-flex-align: center;
 		    	align-items: center;
+		    <?php else : ?>
+		    	-webkit-box-align: stretch;
+		    	-ms-flex-align: stretch;
+		    	align-items: stretch;
 			<?php endif; ?>
 		<?php endif; ?>
 	}
@@ -130,6 +134,12 @@ header("Content-type: text/css; charset=UTF-8");
     	<?php endif; ?>
 	}
 
+		<?php if ($horizontal && $items_valign_row == 's') : ?>
+			<?php echo $suffix; ?> .news {
+				height: 100%;
+			}
+		<?php endif; ?>
+
 			<?php if (($bgcolor_body && $bgcolor_body != 'transparent') || $border_width_body > 0 || $border_radius_body > 0 || $shadow_body != 'none' || $padding_body > 0 || $font_color_body) : ?>
 				<?php echo $suffix; ?> .innernews {
 					<?php if ($bgcolor_body && $bgcolor_body != 'transparent') : ?>
@@ -152,31 +162,61 @@ header("Content-type: text/css; charset=UTF-8");
 						-webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
 						box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
 						margin: 6px;
+						
+						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+							height: calc(100% - 12px);
+						<?php endif; ?>						
+						
 					<?php endif; ?>
 					<?php if ($shadow_body == 'm') : ?>
 						-webkit-box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),0 1px 10px 0 rgba(0,0,0,0.12),0 2px 4px -1px rgba(0,0,0,0.3);
 						box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),0 1px 10px 0 rgba(0,0,0,0.12),0 2px 4px -1px rgba(0,0,0,0.3);
 						margin: 11px;
+						
+						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+							height: calc(100% - 22px);
+						<?php endif; ?>						
+						
 					<?php endif; ?>
 					<?php if ($shadow_body == 'l') : ?>
 						-webkit-box-shadow: 0 8px 17px 2px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12),0 5px 5px -3px rgba(0,0,0,0.2);
 						box-shadow: 0 8px 17px 2px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12),0 5px 5px -3px rgba(0,0,0,0.2);
 						margin: 27px;
+						
+						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+							height: calc(100% - 54px);
+						<?php endif; ?>
+						
 					<?php endif; ?>
 					<?php if ($shadow_body == 'ss') : ?>
 						-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
 						box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
 						margin: 5px;
+						
+						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+							height: calc(100% - 10px);
+						<?php endif; ?>
+						
 					<?php endif; ?>
 					<?php if ($shadow_body == 'sm') : ?>
 						-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
 						box-shadow: 1px 1px 10px rgba(51, 51, 51, 0.2);
 						margin: 11px;
+						
+						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+							height: calc(100% - 22px);
+						<?php endif; ?>						
+						
 					<?php endif; ?>
 					<?php if ($shadow_body == 'sl') : ?>
 						-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
 						box-shadow: 1px 1px 15px rgba(51, 51, 51, 0.2);
 						margin: 16px;
+						
+						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+							height: calc(100% - 32px);
+						<?php endif; ?>						
+						
 					<?php endif; ?>
 					<?php if ($padding_body > 0) : ?>
 						padding: <?php echo $padding_body; ?>px;

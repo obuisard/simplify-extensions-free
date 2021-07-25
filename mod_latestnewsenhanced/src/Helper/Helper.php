@@ -15,7 +15,6 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
-use SYW\Library\Fonts as SYWFonts;
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Libraries as SYWLibraries;
 
@@ -430,9 +429,6 @@ class Helper
 		$html = "";
 
 		if ($show_icon) {
-
-			SYWFonts::loadIconFont();
-
 			$icon = empty($icon) ? $default_icon : $icon;
 			$html .= '<i class="SYWicon-'.$icon.'"></i>';
 		}
@@ -588,8 +584,6 @@ class Helper
 								$info_block .= Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_FROMUSERS', $item->vote_count);
 								//$info_block .= $item->vote.'/5 '.Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_FROMUSERS', $item->vote_count);
 							} else { // use stars
-
-								SYWFonts::loadIconFont();
 
 								$whole = intval($item->vote);
 

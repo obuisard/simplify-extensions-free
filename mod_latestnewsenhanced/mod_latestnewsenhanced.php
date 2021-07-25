@@ -16,8 +16,9 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use SYW\Library\Fonts as SYWFonts;
 use SYW\Library\K2 as SYWK2;
-use SYW\Library\Utilities as SYWUtilities;
+use SYW\Library\Libraries as SYWLibraries;
 use SYW\Library\Stylesheets as SYWStylesheets;
+use SYW\Library\Utilities as SYWUtilities;
 use SYW\Module\LatestNewsEnhanced\Site\Cache\CSSFileCache;
 use SYW\Module\LatestNewsEnhanced\Site\Cache\JSAnimationFileCache;
 use SYW\Module\LatestNewsEnhanced\Site\Helper\CalendarHelper as LNECalendarHelper;
@@ -130,6 +131,10 @@ if (empty($list)) { // $list can be an empty array
 
 	$generate_inline_scripts = $params->get('inline_scripts', 0);
 	$load_remotely = $params->get('remote_libraries', 0);
+	
+	if ($params->get('load_icon_font', 1)) {
+	    SYWFonts::loadIconFont();
+	}
 
 	// link
 
@@ -499,8 +504,6 @@ if (empty($list)) { // $list can be an empty array
 
 	if ($animation) {
 
-		//HTMLHelper::_('jquery.framework');
-
 		LNEHelper::loadAnimationLibrary($animation, $load_remotely);
 
 		$pagination_position_type = $params->get('pagination_pos', 'below');
@@ -538,10 +541,6 @@ if (empty($list)) { // $list can be an empty array
 		switch ($params->get('pagination')) {
 			case 'pn': case 'ppn': case 'psn': $arrows = true; break;
 			default: $arrows = false;
-		}
-
-		if ($arrows && (empty($label_prev) || empty($label_next))) {
-			SYWFonts::loadIconFont();
 		}
 
 		// end - to only load icon font when necessary
@@ -631,10 +630,6 @@ if (empty($list)) { // $list can be an empty array
 		if (File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/common_user_styles.css') || File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/common_user_styles-min.css')) {
 			LNEHelper::loadUserStylesheet();
 		}
-	}
-
-	if ($params->get('allow_edit', 0)) {
-		SYWFonts::loadIconFont();
 	}
 
 	// call the layout

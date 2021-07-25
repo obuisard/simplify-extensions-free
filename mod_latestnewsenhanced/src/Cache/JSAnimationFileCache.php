@@ -13,8 +13,6 @@ use SYW\Library\HeaderFilesCache;
 use SYW\Library\Utilities as SYWUtilities;
 use SYW\Module\LatestNewsEnhanced\Site\Helper\Helper;
 
-require_once (dirname(__FILE__).'/helpers/helper.php');
-
 class JSAnimationFileCache extends HeaderFilesCache
 {
 	public function __construct($extension, $params = null)

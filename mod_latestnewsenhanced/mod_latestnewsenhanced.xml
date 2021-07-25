@@ -6,8 +6,8 @@
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
-	<authorUrl>www.simplifyyourweb.com</authorUrl>
-	<version>6.0.0</version>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
+	<version>6.1.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -67,7 +67,7 @@
 			
 			<fieldset name="basic" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="6.0.0" />
+				<field type="extensionversion" version="6.1.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_LATESTNEWSENHANCED_TRANSLATORS" />
@@ -82,11 +82,11 @@
 					demo="http://demo3.simplifyyourweb.com/latest-news-enhanced"
 					review="http://extensions.joomla.org/extensions/extension/news-display/articles-display/latest-news-enhanced"
 					donate="https://simplifyyourweb.com/free-products/latest-news-enhanced" />				
-				
-<!-- 				<field type="sywextensionpresencetest" title="Latest News Enhanced Pro" description="MOD_LATESTNEWSENHANCED_INFO_PROVERSION"  -->
-<!-- 					extensiontype="component" extensionelement="com_latestnewsenhancedpro" -->
-<!-- 					imagesrc="media/mod_latestnewsenhanced/images/logo_pro.png" -->
-<!-- 					downloadlink="https://simplifyyourweb.com/downloads/latest-news-enhanced-pro" downloadtext="MOD_LATESTNEWSENHANCED_INFO_PROVERSIONDOWLOAD" /> -->
+
+				<field type="sywextensionpresencetest" title="Latest News Enhanced Pro" message="MOD_LATESTNEWSENHANCED_INFO_PROVERSION" 
+					extensiontype="component" extensionelement="com_latestnewsenhancedpro"
+					imagesrc="media/mod_latestnewsenhanced/images/logo_pro.png"
+					downloadlink="https://simplifyyourweb.com/downloads/latest-news-enhanced-pro" downloadtext="MOD_LATESTNEWSENHANCED_INFO_PROVERSIONDOWLOAD" />
 				
 <!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
 			</fieldset>
@@ -453,10 +453,12 @@
 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_OVERALLSIZES" style="warning" />
 				
 					<field name="items_w" type="sywverbosetext" default="" filter="string" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMS_WIDTH_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMS_WIDTH_DESC" />				
 									
 					<field name="items_h" type="sywverbosetext" default="" filter="string" size="4" unit="px" icon="SYWicon-swap-vert" 
+						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMS_HEIGHT_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMS_HEIGHT_DESC" />
 				</fieldset>
@@ -471,10 +473,12 @@
 				<fieldset name="layout_allitems" label="MOD_LATESTNEWSENHANCEDEXTENDED_ITEM_LABEL">
 				
 					<field name="item_w" type="sywverbosetext" default="100" filter="integer" size="4" 
+						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEM_WIDTH_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEM_WIDTH_DESC" />
 						
-					<field name="item_w_u" type="radio" default="percent" layout="joomla.form.field.radio.switcher"
+					<field name="item_w_u" type="radio" default="percent" layout="joomla.form.field.radio.switcher" 
+						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEM_WIDTH_UNIT_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEM_WIDTH_UNIT_DESC">
 						<option value="px">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PIXELS</option>
@@ -482,10 +486,12 @@
 					</field>
 					
 					<field name="min_item_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MIN_ITEM_WIDTH_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MIN_ITEM_WIDTH_DESC" />
 								
 					<field name="max_item_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MAX_ITEM_WIDTH_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MAX_ITEM_WIDTH_DESC" />
 				</fieldset>
@@ -505,16 +511,18 @@
 	<!-- 				<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_MESSAGE_HEADCALENDARSECTION" style="info" showon="head_type:calendar" /> -->
 					
 	<!-- 				<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_MESSAGE_HEADIMAGESECTION" style="info" showon="head_type:image" /> -->
-									
+
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="head_type:image,allimagesasc,allimagesdesc" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEARCHFULLTEXT_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEARCHFULLTEXT_DESC" />
 					
 					<field name="head_w" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,calendar" 
+						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_WIDTH_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_WIDTH_DESC" />
 						
 					<field name="head_h" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,calendar" 
+						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_HEIGHT_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_HEIGHT_DESC" />
 						
@@ -704,16 +712,18 @@
 					</field>
 					
 <!-- 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
-					
+
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOITEMBYDEFAULT_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOITEMBYDEFAULT_DESC" />
 	
 					<field name="popup_x" type="sywverbosetext" default="600" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="link_to:modal" 
+		    			parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POPUPX_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POPUPX_DESC" />
 						
 					<field name="popup_y" type="sywverbosetext" default="500" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="link_to:modal" 
+		    			parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POPUPY_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POPUPY_DESC" />
 					
@@ -1161,7 +1171,6 @@
 						<option value="1">JYES</option>
 					</field>					
 					
-<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_GDTEST_LABEL" style="warning" showon="create_thumb:1" /> -->
 					<field type="gdtest" supportedtypes="gif,jpg,png,webp" message="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_GDTEST_LABEL" showon="create_thumb:1" />		
 						
 					<field name="crop_pic" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="create_thumb:1" 
@@ -1191,7 +1200,6 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYWEBP_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYWEBP_DESC" />				
 							  
-<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWURLFOPENTEST_LABEL" style="warning" showon="create_thumb:1" /> -->
 					<field type="phpsettingtest" setting="allow_url_fopen" message="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWURLFOPENTEST_LABEL" showon="create_thumb:1" />
 					
 					<field name="allow_remote" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="create_thumb:1"  
@@ -1429,9 +1437,7 @@
 				
 					<field name="separator" type="text" default="" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEPARATOR_LABEL"
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEPARATOR_DESC" />	
-					
-					<!-- <field type="title" title="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATIONBLOCK_LABEL" /> -->
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEPARATOR_DESC" />
 					
 					<field name="ad_place" type="list" default="1" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INFORMATIONPOSITION_LABEL" 
@@ -1516,8 +1522,6 @@
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ANIMATION_DESC" />
 					
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />	
-				
-				<!-- <field type="subtitle" title="MOD_LATESTNEWSENHANCEDEXTENDED_PARAMETERS_LABEL" /> -->
 				
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DIRECTION_LABEL"
@@ -1643,8 +1647,6 @@
 					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/advanced" />
 				</fieldset>
 				
-<!-- 				<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_JQUERYVERSIONREQUIRED" style="info" /> -->
-
 				<fieldset name="advanced_general" label="MOD_LATESTNEWSENHANCEDEXTENDED_ADVANCED_FIELDSET_LABEL">
 				
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
@@ -1683,6 +1685,13 @@
 						<option value="0">JNO</option>
 						<option value="1">JYES</option>
 					</field>
+				
+					<field name="load_icon_font" type="radio" default="1" layout="joomla.form.field.radio.switcher"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LOADICONFONT_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LOADICONFONT_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
 					
 					<field name="force_itemid" type="menuitem" default="" published="1" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FORCEITEMID_LABEL"
@@ -1693,8 +1702,6 @@
 				
 				<fieldset name="advanced_pictures" label="MOD_LATESTNEWSENHANCEDEXTENDED_PICTURES_LABEL">
 				
-				<!-- <field type="subtitle" title="MOD_LATESTNEWSENHANCEDEXTENDED_PICTURES_LABEL" /> -->
-								
 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_CLEARCACHE" style="info" showon="site_mode:adv" />
 						
 					<field name="clear_cache" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
@@ -1712,13 +1719,16 @@
 						<option value="cache">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CACHEDIRECTORY</option>
 					</field>
 					
-					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" description="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_AUTORESETPLUGIN" 
+					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" message="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_AUTORESETPLUGIN" 
 						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset"
 						imagesrc="media/mod_latestnewsenhanced/images/logo_autoreset_small.png"
 						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" />
 				</fieldset>
 						
 				<fieldset name="advanced_headers" label="MOD_LATESTNEWSENHANCEDEXTENDED_STYLESHEETSANDSCRIPTS_LABEL">
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOADSTYLESHEETS_TXT" style="fieldneutral" badge="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOADSTYLESHEETS_BADGE" badgetype="light"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOADSTYLESHEETS_LABEL" />
 	            
 		            <field name="inline_scripts" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INLINESCRIPTS_LABEL" 

@@ -19,8 +19,8 @@ class ListFreeField extends ListField
 		$options = parent::getOptions();
 
 		foreach ($options as $option) {
-			if ($option->disable == true) {
-				$option->text = $option->text . ' (Pro)';
+			if ($option->disable) {
+				$option->text .= ' (Pro)';
 			}
 		}
 
