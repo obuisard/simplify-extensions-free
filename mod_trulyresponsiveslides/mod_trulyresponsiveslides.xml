@@ -72,7 +72,7 @@
 					review="https://extensions.joomla.org/extensions/extension/photos-a-images/slideshow/truly-responsive-slides" 
 					donate="https://simplifyyourweb.com/free-products/truly-responsive-slides" />
 					
-				<field type="sywextensionpresencetest" title="Truly Responsive Slides Pro" description="MOD_TRULYRESPONSIVESLIDES_INFO_PROVERSION" 
+				<field type="sywextensionpresencetest" title="Truly Responsive Slides Pro" message="MOD_TRULYRESPONSIVESLIDES_INFO_PROVERSION" 
 					extensiontype="component" extensionelement="com_trulyresponsiveslidespro"
 					imagesrc="media/mod_trulyresponsiveslides/images/logo_pro.png"
 					downloadlink="https://simplifyyourweb.com/downloads/truly-responsive-slides-pro" downloadtext="MOD_TRULYRESPONSIVESLIDES_INFO_PROVERSIONDOWLOAD" />
