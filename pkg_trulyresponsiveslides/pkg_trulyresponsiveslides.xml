@@ -11,12 +11,10 @@
  	<packagerurl>https://simplifyyourweb.com/</packagerurl>
 	<version>2.2.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/trulyresponsiveslides/changelog.xml</changelogurl>
-	<description>PKG_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description> 
-	
-	<scriptfile>installer.php</scriptfile>
-	
-	<variant>free</variant>
-	
+	<description>PKG_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description>
+	<blockChildUninstall>true</blockChildUninstall>
+	<scriptfile>installer.php</scriptfile>	
+	<variant>free</variant>	
 	<languages>
 		<language tag="de-DE">language/de-DE/de-DE.pkg_trulyresponsiveslides.sys.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.pkg_trulyresponsiveslides.sys.ini</language>
@@ -30,7 +28,7 @@
 		<language tag="tr-TR">language/tr-TR/tr-TR.pkg_trulyresponsiveslides.sys.ini</language>
 	</languages>
  	<files folder="packages">
-		<file type="module" id="trulyresponsiveslides" client="site">mod_trulyresponsiveslides.zip</file>
+		<file type="module" id="mod_trulyresponsiveslides" client="site">mod_trulyresponsiveslides.zip</file>
 	</files>
 	<updateservers>
 		<server type="extension" priority="1" name="Truly Responsive Slides auto updater">https://updates.simplifyyourweb.com/free/trulyresponsiveslides/trulyresponsiveslides-pkg-update.xml</server>
