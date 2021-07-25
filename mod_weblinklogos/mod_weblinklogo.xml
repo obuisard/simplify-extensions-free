@@ -6,7 +6,7 @@
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
-	<authorUrl>www.simplifyyourweb.com</authorUrl>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
 	<version>3.1.0</version>
 	<description>MOD_WEBLINKLOGO_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\WeblinkLogos</namespace>
@@ -70,15 +70,15 @@
 					review="http://extensions.joomla.org/extensions/extension/directory-a-documentation/weblinks/weblink-logos" 
 					donate="https://simplifyyourweb.com/free-products/weblink-logos" />
 									
-				<field type="sywextensionpresencetest" title="Weblinks" description="MOD_WEBLINKLOGO_INFO_WEBLINKSCOMPONENT" alertlevel="warning" 
+				<field type="sywextensionpresencetest" title="Weblinks" message="MOD_WEBLINKLOGO_INFO_WEBLINKSCOMPONENT" alertlevel="warning" 
 					extensiontype="component" extensionelement="com_weblinks"
 					imagesrc="media/mod_weblinklogos/images/logo_weblinks.png"
 					downloadlink="http://extensions.joomla.org/extensions/extension/official-extensions/weblinks" />	
 				
-<!--				<field type="sywextensionpresencetest" title="Weblink Logos Pro" description="MOD_WEBLINKLOGO_INFO_PROVERSION" -->
-<!--					extensiontype="component" extensionelement="com_weblinklogospro"-->
-<!--					imagesrc="media/mod_weblinklogos/images/logo_pro.png"-->
-<!--					downloadlink="https://simplifyyourweb.com/downloads/weblink-logos-pro" downloadtext="MOD_WEBLINKLOGO_INFO_PROVERSIONDOWLOAD" />-->
+				<field type="sywextensionpresencetest" title="Weblink Logos Pro" message="MOD_WEBLINKLOGO_INFO_PROVERSION"
+					extensiontype="component" extensionelement="com_weblinklogospro"
+					imagesrc="media/mod_weblinklogos/images/logo_pro.png"
+					downloadlink="https://simplifyyourweb.com/downloads/weblink-logos-pro" downloadtext="MOD_WEBLINKLOGO_INFO_PROVERSIONDOWLOAD" />
 
 <!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
 			</fieldset>
@@ -245,7 +245,7 @@
 						label="MOD_WEBLINKLOGO_FIELD_ITEMSALIGNMENT_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_ITEMSALIGNMENT_DESC" />
 					
-					<field name="items_valign" type="sywalignmentselect" default="fs" showon="logos_layout:grid"
+					<field name="items_valign" type="sywalignmentselect" default="fs" removevalues="s" showon="logos_layout:grid"
 						label="MOD_WEBLINKLOGO_FIELD_ITEMSVALIGNMENT_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_ITEMSVALIGNMENT_DESC" />
 					
@@ -811,7 +811,7 @@
 <!-- 					<field type="message" text="MOD_WEBLINKLOGO_FIELD_GDTEST_LABEL" style="warning" /> -->
 					<field type="gdtest" supportedtypes="gif,jpg,png,webp" message="MOD_WEBLINKLOGO_FIELD_GDTEST_LABEL" />
 					
-					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" description="MOD_WEBLINKLOGO_INFO_AUTORESETPLUGIN" 
+					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" message="MOD_WEBLINKLOGO_INFO_AUTORESETPLUGIN" 
 						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset"
 						imagesrc="media/mod_weblinklogos/images/logo_autoreset_small.png"
 						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" />	

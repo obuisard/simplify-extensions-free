@@ -12,6 +12,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
@@ -478,7 +479,10 @@ class Helper
 			$item->alt_second = ''; // $item->title;
 			$item->caption_second = $item->title;
 			if (isset($images->image_first)) {
-				$item->image_first = $images->image_first;
+			    
+			    $image_object = HTMLHelper::cleanImageURL($images->image_first);
+			    $item->image_first = $image_object->url;
+				
 				if (!empty($images->image_first_alt)) {
 					$item->alt_first = $images->image_first_alt;
 				}
@@ -487,7 +491,10 @@ class Helper
 				}
 			}
 			if (isset($images->image_second)) {
-				$item->image_second = $images->image_second;
+			    
+			    $image_object = HTMLHelper::cleanImageURL($images->image_second);
+			    $item->image_second = $image_object->url;
+			    
 				if (!empty($images->image_second_alt)) {
 					$item->alt_second = $images->image_second_alt;
 				}
@@ -498,7 +505,8 @@ class Helper
 
 			if (empty($item->image_first)) {
 				if ($params->get('d_logo', '') != '') {
-					$item->image_first = $params->get('d_logo');
+					$default_image_object = HTMLHelper::cleanImageURL($params->get('d_logo', ''));
+					$item->image_first = $default_image_object->url;
 				} else {
 
 					$show_errors = self::isShowErrors($params);
