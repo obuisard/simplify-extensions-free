@@ -9,11 +9,12 @@
 	<url>http://www.simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>https://simplifyyourweb.com/</packagerurl>
-	<version>5.0.0</version>
+	<version>4.6.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/trombinoscopecontacts/changelog.xml</changelogurl>
-	<description>PKG_TROMBINOSCOPE_XML_DESCRIPTION</description> 
-	<variant>free</variant>
+	<description>PKG_TROMBINOSCOPE_XML_DESCRIPTION</description>
+	<blockChildUninstall>true</blockChildUninstall>
 	<scriptfile>installer.php</scriptfile>
+	<variant>free</variant>
 	<languages>
 		<language tag="cs-CZ">language/cs-CZ/cs-CZ.pkg_trombinoscope.sys.ini</language>
 		<language tag="da-DK">language/da-DK/da-DK.pkg_trombinoscope.sys.ini</language>
@@ -30,7 +31,7 @@
 		<language tag="tr-TR">language/tr-TR/tr-TR.pkg_trombinoscope.sys.ini</language>
 	</languages>
  	<files folder="packages">
-		<file type="module" id="trombinoscope" client="site">mod_trombinoscopecontacts.zip</file>
+		<file type="module" id="mod_trombinoscope" client="site">mod_trombinoscopecontacts.zip</file>
 	</files>
    <updateservers>
 		<server type="extension" priority="1" name="Trombinoscope Contacts auto updater">https://updates.simplifyyourweb.com/free/trombinoscope/trombinoscope-v3-update.xml</server>
