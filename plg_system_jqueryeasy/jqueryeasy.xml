@@ -6,7 +6,7 @@
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
-	<authorUrl>www.simplifyyourweb.com</authorUrl>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
 	<version>4.0.3</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Plugin\System\JqueryEasy</namespace>
@@ -75,7 +75,7 @@
 					donate="https://simplifyyourweb.com/downloads/jquery-easy"
 					review="http://extensions.joomla.org/extensions/extension/core-enhancements/performance/jquery-easy" />
 
- 				<field type="sywextensionpresencetest" title="jQuery Easy Profiles" description="PLG_SYSTEM_JQUERYEASY_INFO_PROVERSION"
+ 				<field type="sywextensionpresencetest" title="jQuery Easy Profiles" message="PLG_SYSTEM_JQUERYEASY_INFO_PROVERSION"
  					extensiontype="component" extensionelement="com_jqueryeasyprofiles"
  					imagesrc="media/plg_system_jqueryeasy/images/logo_pro.png"
  					downloadlink="https://simplifyyourweb.com/downloads/jquery-easy-profiles" downloadtext="PLG_SYSTEM_JQUERYEASY_INFO_PROVERSIONDOWLOAD" />
@@ -221,7 +221,7 @@
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYVERSION_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYVERSION_DESC">
 		            	<option value="3.6#slim" disabled="true">3.6.x slim</option>
-		            	<option value="3.6">3.5.x</option>
+		            	<option value="3.6">3.6.x</option>
 		            	<option value="3.5#slim" disabled="true">3.5.x slim</option>
 		            	<option value="3.5">3.5.x</option>
 		            	<option value="3.4#slim" disabled="true">3.4.x slim</option>

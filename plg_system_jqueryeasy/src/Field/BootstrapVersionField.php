@@ -40,7 +40,7 @@ class BootstrapVersionField extends FormField
 		}
 
 		$html .= '<div class="bootstrapversion alert alert-info" style="margin: 0">';
-		$html .= '  <span>'.Text::sprintf('MOD_JQUERYEASYPROFILE_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Bootstrap '.$version).'</span>';
+		$html .= '  <span>'.Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Bootstrap '.$version).'</span>';
 		$html .= '</div>';
 
 		$url = 'https://api.cdnjs.com/libraries/twitter-bootstrap?fields=version';
@@ -60,8 +60,8 @@ class BootstrapVersionField extends FormField
 								json_version.classList.add("badge", "bg-info");
 								json_version.innerText = data.version;
 
-								const the_version = document.createTextNode("' . Text::_('MOD_JQUERYEASYPROFILE_FIELD_LATESTAVAILABLEVERSION_LABEL') . ' ");
-								const the_source = document.createTextNode(" (' . Text::_('MOD_JQUERYEASYPROFILE_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL') . ' Cloudflare)");
+								const the_version = document.createTextNode("' . Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL') . ' ");
+								const the_source = document.createTextNode(" (' . Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL') . ' Cloudflare)");
 
 								let the_div = document.querySelector(".' . $div . '");
 								the_div.appendChild(the_version);

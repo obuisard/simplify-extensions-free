@@ -27,7 +27,7 @@ class BootstrapSelectField extends DynamicSingleSelect
 		$path = URI::root(true) . '/media/plg_system_jqueryeasy/images';
 
 		$options[] = array(0, Text::_('JNO'), '', $path . '/select_no.png');
-		$options[] = array(1, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_BOOTSTRAP') . ' (Pro)', '', $path . '/select_bootstrap.png', '', 'disabled');
+		$options[] = array(1, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_BOOTSTRAP') . ' (Pro)', '', $path . '/select_bootstrap.png', '', 'disabled', 'Pro');
 
 		return $options;
 	}
