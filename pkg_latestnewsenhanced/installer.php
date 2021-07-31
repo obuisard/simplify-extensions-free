@@ -195,6 +195,11 @@ class Pkg_LatestNewsEnhancedInstallerScript
 	        
 	        // +++ Migration Joomla 3 to Joomla 4
 	        
+	        // move user files (substitutes)
+	        
+	        $this->moveFile('common_user_styles.css', '/modules/mod_latestnewsenhanced/styles', '/media/mod_latestnewsenhanced/css', '-min');
+	        $this->moveFile('substitute_styles.css', '/modules/mod_latestnewsenhanced/styles', '/media/mod_latestnewsenhanced/css', '-min');
+	        
 	        // remove obsolete files
 	        
 	        $this->deleteFiles[] = '/modules/mod_latestnewsenhanced/headerfilesmaster.php';
