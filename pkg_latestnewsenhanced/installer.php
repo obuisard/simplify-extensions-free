@@ -206,6 +206,8 @@ class Pkg_LatestNewsEnhancedInstallerScript
 	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/js';
 	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/styles';
 	        
+	        $this->deleteFolders[] = '/cache/mod_latestnewsenhanced';
+	        
 	        // +++ End Migration
 	    }
 
