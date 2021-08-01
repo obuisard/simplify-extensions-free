@@ -1571,6 +1571,8 @@ abstract class Helper
 			    if ($value) {
     				$value_is_link = true;
     				//$show_link = true;
+    				
+    				$value = rtrim($value, '/');
 
     				if (!Uri::isInternal($value)) {
     				    $target = '_blank';
@@ -1709,6 +1711,9 @@ abstract class Helper
 				$value = trim($item_params->get('link' . str_replace('_sw', '', $info_details['name']), ''));
 				$class = 'fieldlink' . str_replace('_sw', '', $info_details['name']);
 				if ($value) {
+				    
+				    $value = rtrim($value, '/');
+				    
 				    if (!$params->get('protocol', true)) {
 				        $substitute_value = self::remove_protocol($value);
 				    }
