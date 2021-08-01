@@ -40,7 +40,7 @@ class Pkg_TrombinoscopeInstallerScript
 	/**
 	 * Minimum Joomla! version required to install the extension
 	 */
-	protected $minimumJoomla = '4.0.0-beta7';
+	protected $minimumJoomla = '4.0.0-rc4';
 
 	/**
 	 * Available languages
@@ -213,28 +213,30 @@ class Pkg_TrombinoscopeInstallerScript
 				if ($filenames != false) {
 					$this->deleteFiles = array_merge($this->deleteFiles, $filenames);
 				}
-			}
+			}		
+			
+			// +++ Migration Joomla 3 to Joomla 4
+			
+			// move user files (substitutes)
+			
+			$this->moveFile('common_user_styles.css', '/modules/mod_trombinoscope/themes', '/media/mod_trombinoscopecontacts/css', '-min');
+			$this->moveFile('substitute_styles.css', '/modules/mod_trombinoscope/themes', '/media/mod_trombinoscopecontacts/css', '-min');
+			
+			// remove obsolete files
+			
+			$this->deleteFiles[] = '/modules/mod_trombinoscope/headerfilesmaster.php';
+			$this->deleteFiles[] = '/modules/mod_trombinoscope/helper.php';
+			
+			$this->deleteFolders[] = '/modules/mod_trombinoscope/fields';
+			$this->deleteFolders[] = '/modules/mod_trombinoscope/images';
+			$this->deleteFolders[] = '/modules/mod_trombinoscope/themes'; // could contain user made theme files or additional downloads
+			
+			$this->deleteFolders[] = '/media/syw_trombinoscopecontacts'; // could contain user made theme files or additional downloads
+			
+			$this->deleteFolders[] = '/cache/mod_trombinoscopecontacts';
+			
+			// +++ End Migration
 		}
-
-		// +++ Migration Joomla 3 to Joomla 4
-
-		// move user files (substitutes)
-
-		$this->moveFile('common_user_styles.css', '/modules/mod_trombinoscope/themes', '/media/mod_trombinoscopecontacts/css', '-min');
-		$this->moveFile('substitute_styles.css', '/modules/mod_trombinoscope/themes', '/media/mod_trombinoscopecontacts/css', '-min');
-
-		// remove obsolete files
-
-		$this->deleteFiles[] = '/modules/mod_trombinoscope/headerfilesmaster.php';
-		$this->deleteFiles[] = '/modules/mod_trombinoscope/helper.php';
-
-		$this->deleteFolders[] = '/modules/mod_trombinoscope/fields';
-		$this->deleteFolders[] = '/modules/mod_trombinoscope/images';
-		$this->deleteFolders[] = '/modules/mod_trombinoscope/themes'; // could contain user made theme files or additional downloads
-
-		$this->deleteFolders[] = '/media/syw_trombinoscopecontacts'; // could contain user made theme files or additional downloads
-
-		// +++ End Migration
 
 		$this->removeFiles();
 
