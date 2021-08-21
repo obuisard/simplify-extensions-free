@@ -40,7 +40,7 @@ class Pkg_WeblinkLogosInstallerScript
 	/**
 	 * Minimum Joomla! version required to install the extension
 	 */
-	protected $minimumJoomla = '4.0.0-beta3';
+	protected $minimumJoomla = '4.0.0';
 
 	/**
 	 * Available languages
@@ -103,17 +103,17 @@ class Pkg_WeblinkLogosInstallerScript
 			return false;
 		}
 
-		$this->extension = $installer->getName();
-		$this->release = $installer->getManifest()->version;
-
 		// check if Weblinks component is present
 
 		if (!Folder::exists(JPATH_ROOT.'/components/com_weblinks')) {
 
 			$message = Text::_('PKG_WEBLINKLOGOS_MISSING_WEBLINKSCOMPONENT').'.<br /><a href="'.$this->weblinksDownloadLink.'" target="_blank">'.Text::_('PKG_WEBLINKLOGOS_DOWNLOAD_WEBLINKSCOMPONENT').'</a>.';
 			Factory::getApplication()->enqueueMessage($message, 'error');
-			return false;
+			//return false;
 		}
+		
+		$this->extension = $installer->getName();
+		$this->release = $installer->getManifest()->version;
 
 		// make sure the library is installed and that it is compatible with the extension
 		return $this->installOrUpdateLibrary($installer);
@@ -150,7 +150,7 @@ class Pkg_WeblinkLogosInstallerScript
 		}
 
    		echo '<p style="margin: 10px 0 20px 0">';
-   		echo HTMLHelper::image('mod_weblinklogo/logo.png', 'Weblink Logos', null, true);
+   		echo HTMLHelper::image('mod_weblinklogos/logo.png', 'Weblink Logos', null, true);
    		echo '<br /><br /><span class="badge bg-dark">'.Text::sprintf('PKG_WEBLINKLOGOS_VERSION', $this->release).'</span>';
    		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
    		echo '</p>';
@@ -172,7 +172,7 @@ class Pkg_WeblinkLogosInstallerScript
      	$images_path = $media_params->get('image_path', 'images');
 
      	foreach ($imagefiles as $imagefile) {
-     	    $src = JPATH_ROOT.'/media/mod_weblinklogo/images/'.$imagefile;
+     	    $src = JPATH_ROOT.'/media/mod_weblinklogos/images/'.$imagefile;
      	    $dest = JPATH_ROOT.'/'.$images_path.'/'.$imagefile;
 
      		if (!File::copy($src, $dest)) {
@@ -226,6 +226,26 @@ class Pkg_WeblinkLogosInstallerScript
 					$this->deleteFiles = array_merge($this->deleteFiles, $filenames);
 				}
 			}
+			
+			// +++ Migration Joomla 3 to Joomla 4
+			
+			// move user files (substitutes)
+			
+			$this->moveFile('common_user_styles.css', '/modules/mod_weblinklogo/styles', '/media/mod_weblinklogo/css', '-min');
+			$this->moveFile('substitute_styles.css', '/modules/mod_weblinklogo/styles', '/media/mod_weblinklogo/css', '-min');
+			
+			// remove obsolete files
+			
+			$this->deleteFiles[] = '/modules/mod_weblinklogo/headerfilesmaster.php';
+			$this->deleteFiles[] = '/modules/mod_weblinklogo/helper.php';
+			
+			$this->deleteFolders[] = '/modules/mod_weblinklogo/fields';
+			$this->deleteFolders[] = '/modules/mod_weblinklogo/images';
+			$this->deleteFolders[] = '/modules/mod_weblinklogo/styles';
+
+			$this->deleteFolders[] = '/cache/mod_weblinklogos';
+			
+			// +++ End Migration
  		}
 
  		$this->removeFiles();
