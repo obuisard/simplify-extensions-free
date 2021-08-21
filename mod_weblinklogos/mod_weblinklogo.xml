@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>3.1.0</version>
+	<version>4.3.0</version>
 	<description>MOD_WEBLINKLOGO_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\WeblinkLogos</namespace>
 	
@@ -54,7 +54,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\WeblinkLogos\Site\Field">
 			<fieldset name="basic" label="MOD_WEBLINKLOGO_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="3.1.0" />
+				<field type="extensionversion" version="4.3.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_WEBLINKLOGO_TRANSLATORS" />
@@ -255,7 +255,7 @@
 					
 					<field type="message" text="MOD_WEBLINKLOGO_WARNING_ALIGNMENTFORANIMATIONS" style="warning" />
 				
-					<field name="layout" type="modulelayout"
+					<field name="layout" type="modulelayout" class="form-select" 
 						label="JFIELD_ALT_LAYOUT_LABEL"
 						description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
 						
@@ -819,6 +819,9 @@
 						
 				<fieldset name="advanced_headers" label="MOD_WEBLINKLOGO_STYLESHEETSANDSCRIPTS_LABEL">	    
 <!-- 	            <field type="subtitle" title="MOD_WEBLINKLOGO_STYLESHEETSANDSCRIPTS_LABEL" />	 -->
+
+					<field type="message" text="MOD_WEBLINKLOGO_FIELD_LAZYLOADSTYLESHEETS_TXT" style="fieldneutral" badge="MOD_WEBLINKLOGO_FIELD_LAZYLOADSTYLESHEETS_BADGE" badgetype="light"
+						label="MOD_WEBLINKLOGO_FIELD_LAZYLOADSTYLESHEETS_LABEL" />
 	            
 		            <field name="inline_scripts" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_WEBLINKLOGO_FIELD_INLINESCRIPTS_LABEL" 
