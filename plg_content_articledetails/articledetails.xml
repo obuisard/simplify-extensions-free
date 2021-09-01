@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="content" method="upgrade">
 	<name>PLG_CONTENT_ARTICLEDETAILS</name>
-	<version>5.6.0</version>
+	<version>5.6.1</version>
 	<creationDate>09/24/2015</creationDate>
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>	
@@ -55,7 +55,7 @@
 		
 			<fieldset name="basic" label="PLG_CONTENT_ARTICLEDETAILS_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 				
-				<field type="extensionversion" version="5.6.0" />
+				<field type="extensionversion" version="5.6.1" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_CONTENT_ARTICLEDETAILS_TRANSLATORS" />
@@ -75,7 +75,7 @@
 					imagesrc="media/plg_content_articledetails/images/logo_pro.png"
 					downloadlink="https://simplifyyourweb.com/downloads/article-details-profiles" downloadtext="PLG_CONTENT_ARTICLEDETAILS_INFO_PROVERSIONDOWLOAD" />		
 	           				
-<!-- 				<field type="sywlibtest" minversion="1.5.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" />	 -->
+<!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" />	 -->
 			</fieldset>
 			
 			<fieldset name="selection" label="PLG_CONTENT_ARTICLEDETAILS_SELECTION_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_SELECTION_FIELDSET_DESC">
@@ -114,7 +114,6 @@
 				</fieldset>
 				
 				<fieldset name="categorylayout_listview" label="PLG_CONTENT_ARTICLEDETAILS_CATEGORYLAYOUT_FIELDSET_LABEL">
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_LISTVIEW_LABEL" /> -->
 				
 					<field name="disable_in_list_views" type="radio" default="0" layout="joomla.form.field.radio.switcher"
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ENABLEINLISTVIEWS_LABEL" 
@@ -161,7 +160,6 @@
 				</fieldset>
 					
 				<fieldset name="categorylayout_listviewmobile" label="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL">
-<!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL" showon="disable_in_list_views:0" /> -->
 	
 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="disable_in_list_views:0" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_CENTERINTROIMAGE_LABEL" 
@@ -177,9 +175,6 @@
 				</fieldset>
 				
 				<fieldset name="articlelayout_articleviewheader" label="PLG_CONTENT_ARTICLEDETAILS_HEADER_LABEL">
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_ARTICLEVIEW_LABEL" /> -->
-				
-<!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_HEADER_LABEL" /> -->
 					
 					<field name="head_type" type="headselect" default="none" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADTYPE_LABEL" 
@@ -216,8 +211,7 @@
 					</field>
 				</fieldset>
 						
-				<fieldset name="articlelayout_articleviewfooter" label="PLG_CONTENT_ARTICLEDETAILS_FOOTER_LABEL">				
-<!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_FOOTER_LABEL" /> -->
+				<fieldset name="articlelayout_articleviewfooter" label="PLG_CONTENT_ARTICLEDETAILS_FOOTER_LABEL">	
 					
 					<field name="footer_head_type" type="headselect" default="none" location="footer" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADTYPE_LABEL" 
@@ -239,7 +233,6 @@
 				</fieldset>
 				
 				<fieldset name="articlelayout_articleviewfootermobile" label="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL">
-<!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL" /> -->
 					
 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_CENTERFULLIMAGE_LABEL" 
@@ -298,7 +291,6 @@
 				</fieldset>
 				
 				<fieldset name="calendar_content" label="PLG_CONTENT_ARTICLEDETAILS_CONTENT_LABEL">
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_CONTENT_LABEL" /> -->
 				
 					<field name="pos_1" type="list" default="w" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSITION1_LABEL" 
@@ -358,7 +350,6 @@
 				</fieldset>
 				
 				<fieldset name="calendar_format" label="PLG_CONTENT_ARTICLEDETAILS_FORMAT_LABEL">
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_FORMAT_LABEL" /> -->
 				
 					<field name="fmt_w" type="list" default="D" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_WEEKDAYFORMAT_LABEL" 
@@ -385,7 +376,6 @@
 				</fieldset>				
 				
 				<fieldset name="calendar_style" label="PLG_CONTENT_ARTICLEDETAILS_STYLE_LABEL">
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_STYLE_LABEL" /> -->
 					
 					<field name="cal_style" type="calendarselect" default="original" disabledtitle="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_OPTIONONLYAVAILABLEINCOMMERCIALVERSION"
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_STYLE_LABEL"
@@ -418,8 +408,7 @@
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_FONTSIZEREFERENCE_DESC" />
 				</fieldset>
 				
-				<fieldset name="calendar_style_top" label="PLG_CONTENT_ARTICLEDETAILS_CALENDARTOPCOLORS_LABEL">					
-<!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_CALENDARTOPCOLORS_LABEL" /> -->
+				<fieldset name="calendar_style_top" label="PLG_CONTENT_ARTICLEDETAILS_CALENDARTOPCOLORS_LABEL">
 					
 					<field name="c2" type="sywcolorpicker" default="#494949" icon="SYWicon-format-color-text" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_COLOR2_LABEL" 
@@ -432,8 +421,7 @@
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR22_DESC" />
 				</fieldset>
 						
-				<fieldset name="calendar_style_overal" label="PLG_CONTENT_ARTICLEDETAILS_CALENDARCOLORS_LABEL">				
-<!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_CALENDARCOLORS_LABEL" />					 -->
+				<fieldset name="calendar_style_overal" label="PLG_CONTENT_ARTICLEDETAILS_CALENDARCOLORS_LABEL">
 						
 					<field name="c1" type="sywcolorpicker" default="#3D3D3D" icon="SYWicon-format-color-text" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_COLOR1_LABEL" 
@@ -446,8 +434,7 @@
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR12_DESC" />
 				</fieldset>
 						
-				<fieldset name="calendar_style_bottom" label="PLG_CONTENT_ARTICLEDETAILS_CALENDARBOTTOMCOLORS_LABEL">						
-<!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_CALENDARBOTTOMCOLORS_LABEL" /> -->
+				<fieldset name="calendar_style_bottom" label="PLG_CONTENT_ARTICLEDETAILS_CALENDARBOTTOMCOLORS_LABEL">
 					
 					<field name="c3" type="sywcolorpicker" default="#494949" icon="SYWicon-format-color-text" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_COLOR3_LABEL" 
@@ -478,7 +465,6 @@
 				</fieldset>
 									
 				<fieldset name="header_title" label="PLG_CONTENT_ARTICLEDETAILS_ARTICLETITLE_LABEL">
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_ARTICLETITLE_LABEL" />	 -->
 					
 					<field name="t_tag" type="list" default="2" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_TITLETAG_LABEL" 
@@ -492,8 +478,7 @@
 					</field>
 				</fieldset>
 					
-				<fieldset name="header_before_title" label="PLG_CONTENT_ARTICLEDETAILS_VALUE_BEFORETITLE">				
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_VALUE_BEFORETITLE" /> -->
+				<fieldset name="header_before_title" label="PLG_CONTENT_ARTICLEDETAILS_VALUE_BEFORETITLE">
 					
 					<field name="before_title_information_blocks" type="subform" formsource="plugins/content/articledetails/forms/fields/information_views.xml" multiple="true" max="3"
 						default="{'show_icons':'0','icon':'','prepend':'','append':'','info':'none','extra_classes':'','new_line':'0','showing_in':'','access':'1'}"
@@ -503,8 +488,7 @@
 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_UNLIMITEDELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" />					
 				</fieldset>
 				
-				<fieldset name="header_after_title" label="PLG_CONTENT_ARTICLEDETAILS_VALUE_AFTERTITLE">					
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_VALUE_AFTERTITLE" />	 -->								
+				<fieldset name="header_after_title" label="PLG_CONTENT_ARTICLEDETAILS_VALUE_AFTERTITLE">							
 					
 					<field name="after_title_information_blocks" type="subform" formsource="plugins/content/articledetails/forms/fields/information_views.xml" multiple="true" max="9"
 						default="{'show_icons':'0','icon':'','prepend':'','append':'','info':'none','extra_classes':'','new_line':'0','showing_in':'','access':'1'}"
@@ -570,9 +554,6 @@
 				</fieldset>
 				
 				<fieldset name="details_date" label="PLG_CONTENT_ARTICLEDETAILS_DATETIME_LABEL">
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_SPECIFICS_LABEL" /> -->
-								
-<!-- 				<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_DATE_LABEL" /> -->
 				
 					<field name="show_d" type="list" default="date" 
 			           	label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWDATE_LABEL" 
@@ -585,9 +566,7 @@
 									
 					<field name="d_format" type="sywverbosetext" default="d F Y" filter="raw" translateHint="false" hint="d F Y" help="PLG_CONTENT_ARTICLEDETAILS_INFO_FORMATINFO" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_DATEFORMAT_LABEL" 
-						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_DATEFORMAT_DESC" />	
-						
-<!-- 					<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_TIME_LABEL" /> -->
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_DATEFORMAT_DESC" />
 					
 					<field name="t_format" type="sywverbosetext" default="H:i" filter="raw" translateHint="false" hint="H:i" help="PLG_CONTENT_ARTICLEDETAILS_INFO_FORMATINFO" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_TIMEFORMAT_LABEL" 
@@ -595,7 +574,6 @@
 				</fieldset>
 				
 				<fieldset name="details_rating" label="PLG_CONTENT_ARTICLEDETAILS_RATINGVOTE_LABEL">
-<!-- 				<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_RATINGVOTE_LABEL" /> -->
 				
 					<field name="show_rating" type="list" default="text" 
 			           	label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWRATING_LABEL" 
@@ -610,7 +588,6 @@
 				</fieldset>
 				
 				<fieldset name="details_keywords" label="PLG_CONTENT_ARTICLEDETAILS_SPECIFICS_KEYWORDS_LABEL">
-<!-- 				<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_SPECIFICS_KEYWORDS_LABEL" /> -->
 				
 					<field name="distinct_keywords" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_DISTINCTKEYWORDS_LABEL" 
@@ -636,7 +613,6 @@
 				</fieldset>
 				
 				<fieldset name="details_tags" label="PLG_CONTENT_ARTICLEDETAILS_SPECIFICS_TAGS_LABEL">
-<!-- 				<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_SPECIFICS_TAGS_LABEL" /> -->
 				
 					<field name="order_tags" type="list" default="none" 
 			           	label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ORDERTAGS_LABEL" 
@@ -682,7 +658,6 @@
 				</fieldset>
 				
 				<fieldset name="details_links" label="PLG_CONTENT_ARTICLEDETAILS_SPECIFICS_LINKS_LABEL">
-<!-- 				<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_SPECIFICS_LINKS_LABEL" /> -->
 				
 					<field name="show_icon_links" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWICONS_LABEL" 
@@ -708,7 +683,6 @@
 				</fieldset>
 				
 				<fieldset name="details_sharing" label="PLG_CONTENT_ARTICLEDETAILS_SHARING_LABEL">
-<!-- 				<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_SHARING_LABEL" /> -->
 				
 					<field name="share_color" type="list" default="none" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHARECOLOR_LABEL" 
@@ -787,7 +761,6 @@
 				</fieldset>
 				
 				<fieldset name="advanced_stylesoverrides" label="PLG_CONTENT_ARTICLEDETAILS_STYLEOVERRIDES_LABEL">
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_STYLEOVERRIDES_LABEL" /> -->
 				
 					<field name="style_overrides" type="editor" rows="10" default="" editor="codemirror|none" filter="raw" buttons="false" syntax="css"
 		            	label="PLG_CONTENT_ARTICLEDETAILS_FIELD_STYLEOVERRIDES_LABEL" 
@@ -800,7 +773,6 @@
 		        </fieldset>
 	            	
 	            <fieldset name="advanced_elementsoverrides" label="PLG_CONTENT_ARTICLEDETAILS_ELEMENTSOVERRIDES_LABEL">
-<!-- 	            <field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILS_ELEMENTSOVERRIDES_LABEL" /> -->
 	            
 		            <field name="autohide_title" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_AUTOHIDETITLE_LABEL" 
@@ -859,14 +831,15 @@
 				</fieldset>
 				
 				<fieldset name="advanced_pictures" label="PLG_CONTENT_ARTICLEDETAILS_PICTURES_LABEL">
-<!-- 					<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_PICTURES_LABEL" /> -->
 	
 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
 				</fieldset>
 						
 				<fieldset name="advanced_headers" label="PLG_CONTENT_ARTICLEDETAILS_HEADERFILES_LABEL">
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_HEADERFILES_LABEL" showon="site_mode:adv" />	 -->
 							
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_FIELD_LAZYLOADSTYLESHEETS_TXT" style="fieldneutral" badge="PLG_CONTENT_ARTICLEDETAILS_FIELD_LAZYLOADSTYLESHEETS_BADGE" badgetype="light"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_LAZYLOADSTYLESHEETS_LABEL" />
+
 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_INFO_CLEARHEADERFILESCACHE" style="info" showon="site_mode:adv" />
 				
 					<field name="clear_header_files_cache" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
@@ -878,7 +851,6 @@
 				</fieldset>
 				
 				<fieldset name="advanced_mobile" label="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL">
-<!-- 				<field type="title" title="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL" /> -->
 
 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_BREAKPOINT_LABEL" 
