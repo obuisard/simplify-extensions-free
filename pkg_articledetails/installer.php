@@ -178,6 +178,8 @@ class Pkg_ArticleDetailsInstallerScript
 			$this->deleteFolders[] = '/plugins/content/articledetails/images';
 			$this->deleteFolders[] = '/plugins/content/articledetails/styles';
 			
+			$this->deleteFolders[] = '/cache/plg_content_articledetails';
+			
 			// +++ End Migration
 		}
 
