@@ -192,6 +192,24 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 	 				$this->deleteFiles = array_merge($this->deleteFiles, $filenames);
 	 			}
 			}
+			
+			// +++ Migration Joomla 3 to Joomla 4
+			
+			// remove obsolete files
+			
+			$this->deleteFiles[] = '/modules/mod_trulyresponsiveslides/headerfilesmaster.php';
+			
+			$this->deleteFolders[] = '/modules/mod_trulyresponsiveslides/css';
+			$this->deleteFolders[] = '/modules/mod_trulyresponsiveslides/fields';
+			$this->deleteFolders[] = '/modules/mod_trulyresponsiveslides/helpers';
+			$this->deleteFolders[] = '/modules/mod_trulyresponsiveslides/images';
+			$this->deleteFolders[] = '/modules/mod_trulyresponsiveslides/js';
+			
+			$this->deleteFolders[] = '/media/syw_trulyresponsiveslides'; // could contain user made theme files or additional downloads
+			
+			$this->deleteFolders[] = '/cache/mod_trulyresponsiveslides';
+			
+			// +++ End Migration
 		}
 
 		$this->removeFiles();
