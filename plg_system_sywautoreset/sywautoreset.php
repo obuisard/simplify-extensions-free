@@ -23,17 +23,28 @@ use Joomla\Utilities\ArrayHelper;
  */
 class plgSystemSYWAutoReset extends CMSPlugin
 {
+    protected $app;
+    
     protected $autoloadLanguage = true;
 
     protected $filter_names = array('blur', 'duotone', 'edgedetect', 'emboss', 'grayscale', 'negate', 'pixelate', 'sepia', 'sharpen', 'sketch');
-
+        
+    public function __construct(&$subject, $config)
+    {
+        parent::__construct($subject, $config);
+        
+        if (!$this->app) {
+            $this->app = Factory::getApplication();
+        }
+    }
+    
     public function onUserAfterSave($data, $isNew, $result, $error)
     {    	
     	if ($isNew) {
     		return true;
     	}
     	
-        if (Factory::getApplication()->isAdmin()) {
+    	if (!$this->app->isClient('site')) {
             return true;
         }
 
@@ -402,18 +413,18 @@ class plgSystemSYWAutoReset extends CMSPlugin
                 if (File::exists($filename)) {
                     if (File::delete($filename)) {
                         $some_files_deleted = true; // deleted the file
-                        if ($this->params->get('verbose', 0) == 1 || (Factory::getApplication()->isAdmin() && $this->params->get('verbose', 0) == 2) || (Factory::getApplication()->isSite() && $this->params->get('verbose', 0) == 3)) {
+                        if ($this->params->get('verbose', 0) == 1 || ($this->app->isClient('administrator') && $this->params->get('verbose', 0) == 2) || ($this->app->isClient('site') && $this->params->get('verbose', 0) == 3)) {
                             Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_SYWAUTORESET_INFO_FILEDELETED', str_replace('\\', '/', str_replace(JPATH_ROOT, '', $filename))), 'message');
                         }
                     } else {
-                    	if ($this->params->get('verbose', 0) == 1 || (Factory::getApplication()->isAdmin() && $this->params->get('verbose', 0) == 2) || (Factory::getApplication()->isSite() && $this->params->get('verbose', 0) == 3)) {
+                        if ($this->params->get('verbose', 0) == 1 || ($this->app->isClient('administrator') && $this->params->get('verbose', 0) == 2) || ($this->app->isClient('site') && $this->params->get('verbose', 0) == 3)) {
                             Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_SYWAUTORESET_ERROR_DELETINGFILE', str_replace('\\', '/', str_replace(JPATH_ROOT, '', $filename))), 'warning');
                         }
                     }
                 }
             }
 
-            if ($some_files_deleted && ($this->params->get('verbose', 0) == 1 || (Factory::getApplication()->isAdmin() && $this->params->get('verbose', 0) == 2) || (Factory::getApplication()->isSite() && $this->params->get('verbose', 0) == 3))) {
+            if ($some_files_deleted && ($this->params->get('verbose', 0) == 1 || ($this->app->isClient('administrator') && $this->params->get('verbose', 0) == 2) || ($this->app->isClient('site') && $this->params->get('verbose', 0) == 3))) {
                 Factory::getApplication()->enqueueMessage(Text::_('PLG_SYSTEM_SYWAUTORESET_INFO_IMAGECACHECLEARED'), 'message');
             }
 

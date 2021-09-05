@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>1.4.0</version>
+	<version>1.4.1</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/sywautoreset/changelog.xml</changelogurl>
 	<description>PLG_SYSTEM_SYWAUTORESET_XML_DESCRIPTION</description>
 	<scriptfile>installer.php</scriptfile>
@@ -41,7 +41,7 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic" addfieldprefix="SYW\Library\Field">				
-				<field type="extensionversion" version="1.4.0" />
+				<field type="extensionversion" version="1.4.1" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_SYWAUTORESET_TRANSLATORS" />
