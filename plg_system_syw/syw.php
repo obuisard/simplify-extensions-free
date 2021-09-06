@@ -26,15 +26,15 @@ class plgSystemSYW extends CMSPlugin
 	public function onAfterInitialise()
 	{
 		if (Folder::exists(JPATH_ROOT.'/libraries/syw/src')) {
-			JLoader::registerNamespace('SYW\\Library', JPATH_LIBRARIES.'/syw/src', false, false, 'psr4');
+			\JLoader::registerNamespace('SYW\\Library', JPATH_LIBRARIES.'/syw/src', false, false, 'psr4');
 		}
 
 		if (Folder::exists(JPATH_ROOT.'/libraries/syw/src/Field')) {
-			JLoader::registerNamespace('SYW\\Library\\Field', JPATH_LIBRARIES.'/syw/src/Field', false, false, 'psr4');
+			\JLoader::registerNamespace('SYW\\Library\\Field', JPATH_LIBRARIES.'/syw/src/Field', false, false, 'psr4');
 		}
 
 		if (Folder::exists(JPATH_ROOT.'/libraries/syw/src/Vendor')) {
-			JLoader::registerNamespace('SYW\\Library\\Vendor', JPATH_LIBRARIES.'/syw/src/Vendor', false, false, 'psr4');
+			\JLoader::registerNamespace('SYW\\Library\\Vendor', JPATH_LIBRARIES.'/syw/src/Vendor', false, false, 'psr4');
 		}
 	}
 	
