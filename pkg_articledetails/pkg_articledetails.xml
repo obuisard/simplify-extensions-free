@@ -6,10 +6,10 @@
 	<packagename>articledetails</packagename>
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
-	<url>http://www.simplifyyourweb.com/</url>
+	<url>https://simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
- 	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
-	<version>5.6.1</version>
+ 	<packagerurl>https://simplifyyourweb.com/</packagerurl>
+	<version>5.6.2</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/articledetails/changelog.xml</changelogurl>
 	<description>PKG_ARTICLEDETAILS_XML_DESCRIPTION</description>
 	<blockChildUninstall>true</blockChildUninstall>

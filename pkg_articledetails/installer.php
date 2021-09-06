@@ -13,7 +13,6 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
@@ -34,12 +33,12 @@ class Pkg_ArticleDetailsInstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.0.0';
+	protected $minimumLibrary = '2.0.1';
 
 	/**
 	 * Minimum Joomla! version required to install the extension
 	 */
-	protected $minimumJoomla = '4.0.0-beta7';
+	protected $minimumJoomla = '4.0.0';
 
 	/**
 	 * Available languages
