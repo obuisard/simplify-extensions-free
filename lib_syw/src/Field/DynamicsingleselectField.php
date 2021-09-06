@@ -13,9 +13,9 @@ use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 
-class DynamicSingleSelect extends ListField
+class DynamicsingleselectField extends ListField
 {
-	public $type = 'DynamicSingleSelect';
+	public $type = 'Dynamicsingleselect';
 
 	protected $use_global;
 	protected $noelement;

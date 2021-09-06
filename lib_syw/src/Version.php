@@ -17,10 +17,10 @@ class Version
 	static $PRODUCT = 'SimplifyYourWeb Extensions Library';
 
 	/** @var  string  Release version. */
-	static $RELEASE = '2.0.0';
+	static $RELEASE = '2.0.1';
 
 	/** @var  string  Release date. */
-	static $RELDATE = '28-Mar-2021';
+	static $RELDATE = '22-Aug-2021';
 
 	/** @var  string  Copyright Notice. */
 	static $COPYRIGHT = 'Copyright (C) 2011 Simplify Your Web, Inc. All rights reserved.';
