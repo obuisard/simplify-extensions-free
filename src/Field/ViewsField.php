@@ -8,13 +8,13 @@ namespace SYW\Library\Field;
 
 defined('_JEXEC') or die ;
 
-use Joomla\CMS\Form\Field\GroupedListField;
+use Joomla\CMS\Form\Field\GroupedlistField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Factory;
 use Joomla\Database\Exception\ExecutionFailureException;
 
-class ViewsField extends GroupedListField
+class ViewsField extends GroupedlistField
 {
 	public $type = 'Views';
 

@@ -243,7 +243,7 @@ class Image
 							$this->image_width = $width;
 							$this->image_height = $height;
 
-							$this->copy_resource($this->image, $original_image, 0, 0, $x, $y, $width, $height, $w, $h);
+							$this->copy_resource($this->image, $original_image, $width, $height, 0, 0, $x, $y, $w, $h);
 						}
 					}
 				}
@@ -308,7 +308,7 @@ class Image
 									$this->image_width = $width;
 									$this->image_height = $height;
 
-									$this->copy_resource($this->image, $original_image, 0, 0, $x, $y, $width, $height, $w, $h);
+									$this->copy_resource($this->image, $original_image, $width, $height, 0, 0, $x, $y, $w, $h);
 								}
 							}
 
@@ -513,7 +513,7 @@ class Image
 	 * @param number $source_width
 	 * @param number $source_height
 	 */
-	protected function copy_resource($target, $source, $origin_x = 0, $origin_y = 0, $source_origin_x = 0, $source_origin_y = 0, $width, $height, $source_width = 0, $source_height = 0)
+	protected function copy_resource($target, $source, $width, $height, $origin_x = 0, $origin_y = 0, $source_origin_x = 0, $source_origin_y = 0, $source_width = 0, $source_height = 0)
 	{
 		if ($this->image_mimetype === 'image/gif') {
 
@@ -941,7 +941,7 @@ class Image
 		$thumbnail = imagecreatetruecolor($thumbnail_width, $thumbnail_height);
 		if ($thumbnail !== false) {
 
-			$this->copy_resource($thumbnail, $this->image, 0, 0, $x, $y, $thumbnail_width, $thumbnail_height, $w, $h);
+		    $this->copy_resource($thumbnail, $this->image, $thumbnail_width, $thumbnail_height, 0, 0, $x, $y, $w, $h);
 
 			if (!is_null($filter)) {
 				$this->apply_filters($thumbnail, $filter);

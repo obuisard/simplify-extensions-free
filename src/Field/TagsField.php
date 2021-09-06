@@ -9,13 +9,10 @@ namespace SYW\Library\Field;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
-
-FormHelper::loadFieldClass('list');
 
 class TagsField extends ListField
 {

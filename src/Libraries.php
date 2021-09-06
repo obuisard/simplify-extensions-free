@@ -52,29 +52,16 @@ class Libraries
 
 	/**
 	 * Load purePajinate (pure javascript)
-	 * v1.0.0
+	 * v1.0.2
 	 * https://github.com/obuisard/purePajinate
 	 * IE10+ compatible
 	 */
 	static function loadPurePajinate($remote = false, $defer = false, $async = false)
 	{
-// 		if (self::$purePajinateLoaded) {
-// 			return;
-// 		}
-
-		$minified = (defined('JDEBUG') && JDEBUG) ? '' : '.min';
-
-		$attributes = array();
-		if ($defer) {
-			$attributes['defer'] = true;
-		}
-		if ($async) {
-			$attributes['async'] = 'async';
-		}
+    	$minified = (defined('JDEBUG') && JDEBUG) ? '' : '.min';
 		
-		self::getWebAssetManager()->registerAndUseScript('syw.purepajinate', 'syw/purepajinate/purePajinate' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes);
-
-// 		self::$purePajinateLoaded = true;
+		self::getWebAssetManager()->registerAndUseScript('syw.purepajinate', 'syw/purepajinate/purePajinate' . $minified . '.js', ['relative' => true, 'version' => 'auto'], ['type' => 'module']);
+		self::getWebAssetManager()->registerAndUseScript('syw.purepajinate-es5', 'syw/purepajinate/purePajinate-es5' . $minified . '.js', ['relative' => true, 'version' => 'auto'], ['nomodule' => true, 'defer' => true]);
 	}
 
 	/*
