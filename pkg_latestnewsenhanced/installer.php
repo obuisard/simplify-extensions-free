@@ -34,12 +34,12 @@ class Pkg_LatestNewsEnhancedInstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.0.0';
+	protected $minimumLibrary = '2.0.1';
 
 	/**
 	 * Minimum Joomla! version required to install the extension
 	 */
-	protected $minimumJoomla = '4.0.0-rc4';
+	protected $minimumJoomla = '4.0.0';
 
 	/**
 	 * Available languages
