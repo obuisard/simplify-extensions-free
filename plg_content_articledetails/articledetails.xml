@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="content" method="upgrade">
 	<name>PLG_CONTENT_ARTICLEDETAILS</name>
-	<version>5.6.1</version>
+	<version>5.6.2</version>
 	<creationDate>09/24/2015</creationDate>
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>	
@@ -55,7 +55,7 @@
 		
 			<fieldset name="basic" label="PLG_CONTENT_ARTICLEDETAILS_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 				
-				<field type="extensionversion" version="5.6.1" />
+				<field type="extensionversion" version="5.6.2" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_CONTENT_ARTICLEDETAILS_TRANSLATORS" />

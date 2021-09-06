@@ -34,16 +34,24 @@ use SYW\Plugin\Content\ArticleDetails\Helper\Helper;
 
 class plgContentArticleDetails extends CMSPlugin
 {
+    protected $app;
+    
     protected $autoloadLanguage = true;
+    
     protected $_library_loaded = true;
+    
     protected $_syntax_exists;
 
 	public function __construct(&$subject, $config)
 	{
 	    parent::__construct($subject, $config);
+	    
+	    if (!$this->app) {
+	        $this->app = Factory::getApplication();
+	    }
 
 	    if (!PluginHelper::isEnabled('system', 'syw')) {
-	        Factory::getApplication()->enqueueMessage(Text::_('PLG_CONTENT_ARTICLEDETAILS_WARNING_MISSINGLIBRARY'), 'error');
+	        $this->app->enqueueMessage(Text::_('PLG_CONTENT_ARTICLEDETAILS_WARNING_MISSINGLIBRARY'), 'error');
 	        $this->_library_loaded = false;
 	        return;
 	    }
@@ -144,7 +152,7 @@ class plgContentArticleDetails extends CMSPlugin
 
 			$this->_syntax_exists = true;
 
-			$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+			$wam = $this->app->getDocument()->getWebAssetManager();
 
 			// add styles
 
@@ -193,7 +201,7 @@ class plgContentArticleDetails extends CMSPlugin
 			return $html;
 		}
 
-		$view = Factory::getApplication()->input->getCmd('view', '');
+		$view = $this->app->input->getCmd('view', '');
 
 		if ($view != 'article') {
 			if ($this->params->get('disable_in_list_views', false)) {
@@ -205,7 +213,7 @@ class plgContentArticleDetails extends CMSPlugin
 
 			if ($this->_foundCategory($row->catid)) {
 
-				$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+				$wam = $this->app->getDocument()->getWebAssetManager();
 
 				// heads
 
@@ -276,7 +284,7 @@ class plgContentArticleDetails extends CMSPlugin
 			return $html;
 		}
 
-		$view = Factory::getApplication()->input->getCmd('view', '');
+		$view = $this->app->input->getCmd('view', '');
 
 		if ($view == 'article') {
 
@@ -299,7 +307,6 @@ class plgContentArticleDetails extends CMSPlugin
 		$head_output = '';
 
 		$db = Factory::getDbo();
-		$app = Factory::getApplication();
 
 		$bootstrap_version = $this->params->get('bootstrap_version', 'joomla');
 		$load_bootstrap = false;
@@ -409,7 +416,7 @@ class plgContentArticleDetails extends CMSPlugin
 		// title
 
 		$edit_addition = '';
-		if ($params->get('access-edit') && !$app->input->getBool('print') /*&& !$params->get('popup')*/) {
+		if ($params->get('access-edit') && !$this->app->input->getBool('print') /*&& !$params->get('popup')*/) {
 
 			if ($bootstrap_version > 0) {
 				HTMLHelper::_('bootstrap.tooltip');
@@ -427,7 +434,7 @@ class plgContentArticleDetails extends CMSPlugin
 
 		if ($params->get('ad_show_title') && !empty($row->title)) {
 			if ( $view == 'category' || $view == 'featured') {
-				if ($params->get('link_titles') && $params->get('access-view') && !$app->input->getBool('print')) {
+				if ($params->get('link_titles') && $params->get('access-view') && !$this->app->input->getBool('print')) {
 					$output .= '<h'.$title_html_tag.' class="article_title"><a href="'.$row->link.'">'.$row->title.'</a>'.$edit_addition.'</h'.$title_html_tag.'>';
 				} else {
 					$output .= '<h'.$title_html_tag.' class="article_title">'.$row->title.$edit_addition.'</h'.$title_html_tag.'>';
