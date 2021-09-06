@@ -146,6 +146,11 @@ class Pkg_SYWLibraryInstallerScript
             // remove the old update site
  		
  			$this->removeUpdateSite('library', 'syw', '', 'http://www.barejoomlatemplates.com/autoupdates/sywlibrary/sywlibrary-update.xml');
+ 			
+ 			// files to remove
+ 			
+ 			$this->deleteFiles[] = '/media/syw/js/purepajinate/purePajinate.es6.js';
+ 			$this->deleteFiles[] = '/media/syw/js/purepajinate/purePajinate.es6.min.js';
  		}
 
  		$this->removeFiles();
