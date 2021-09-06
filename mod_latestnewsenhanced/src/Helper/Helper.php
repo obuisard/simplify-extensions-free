@@ -381,6 +381,42 @@ class Helper
 
 		return array('years' => $difference->y, 'months' => $difference->m, 'days' => $difference->d, 'hours' => $difference->h, 'mins' => $difference->i, 'secs' => $difference->s);
 	}
+	
+	static function isInfoTypeRequired($info_type, $params)
+	{
+	    if (in_array($info_type, self::getDetailsInfoTypes($params))) {
+	        return true;
+	    }
+	    
+	    return false;
+	}
+
+	/**
+	 * 
+	 * @param unknown $params
+	 * @param string $prefix
+	 * @param string $subform
+	 * @return array
+	 */
+	static function getDetailsInfoTypes($params, $prefix = '', $subform = 'information_blocks')
+	{
+	    $info_types = array();
+	    
+	    // get data from subform items
+	    
+	    if ($prefix.$subform) {
+	        $information_blocs = $params->get($prefix.$subform); // array of objects
+	        if (!empty($information_blocs) && is_object($information_blocs)) {
+	            foreach ($information_blocs as $information_bloc) {
+	                if ($information_bloc->info != 'none') {
+	                    $info_types[] = $information_bloc->info;
+	                }
+	            }
+	        }
+	    }
+	    
+	    return $info_types;
+	}
 
 	/**
 	 * Get detail parameters

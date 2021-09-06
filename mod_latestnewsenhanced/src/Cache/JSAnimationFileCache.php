@@ -148,10 +148,16 @@ class JSAnimationFileCache extends HeaderFilesCache
 		$prev_type = $params->get('prev_type', '');
 		$prev_label = ($prev_type == 'prev') ? Text::_('JPREV') : ($prev_type == 'label' ? trim($params->get('label_prev', '')) : '');
 		$variables[] = 'prev_label';
+		
+		$prev_aria_label = Text::_('JPREV');
+		$variables[] = 'prev_aria_label';
 
 		$next_type = $params->get('next_type', '');
 		$next_label = ($next_type == 'next') ? Text::_('JNEXT') : ($next_type == 'label' ? trim($params->get('label_next', '')) : '');
 		$variables[] = 'next_label';
+		
+		$next_aria_label = Text::_('JNEXT');
+		$variables[] = 'next_aria_label';
 
 		$symbols = false;
 		$arrows = false;

@@ -265,14 +265,14 @@ if ($bootstrap_version > 0) {
 										</h<?php echo $title_html_tag; ?>>
 									<?php else : ?>
 										<?php if (isset($item->link_edit)) : ?>
-											<h<?php echo $this->title_tag; ?> class="newstitle">
+											<h<?php echo $title_html_tag; ?> class="newstitle">
 											<?php if ($item->checked_out > 0 && $item->checked_out != Factory::getUser()->get('id')) : ?>
 												<?php $checkoutUser = Factory::getUser($item->checked_out); ?>
 												<span class="checked_out hasTooltip" title="<?php echo Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_CHECKED_OUT_BY', $checkoutUser->name); ?>"><i class="SYWicon-lock"></i></span>
 											<?php else : ?>
 												<a href="<?php echo $item->link_edit; ?>" class="edit hasTooltip" title="<?php echo Text::_('JGLOBAL_EDIT'); ?>"><i class="SYWicon-create"></i></a>
 											<?php endif; ?>
-											</h<?php echo $this->title_tag; ?>>
+											</h<?php echo $title_html_tag; ?>>
 										<?php endif; ?>
 									<?php endif; ?>
 									<?php if (!empty($info_block) && $info_block_placement == 1) : ?>
@@ -377,14 +377,14 @@ if ($bootstrap_version > 0) {
 										</h<?php echo $title_html_tag; ?>>
 									<?php else : ?>
 										<?php if (isset($item->link_edit)) : ?>
-											<h<?php echo $this->title_tag; ?> class="newstitle">
+											<h<?php echo $title_html_tag; ?> class="newstitle">
 											<?php if ($item->checked_out > 0 && $item->checked_out != Factory::getUser()->get('id')) : ?>
 												<?php $checkoutUser = Factory::getUser($item->checked_out); ?>
 												<span class="checked_out hasTooltip" title="<?php echo Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_CHECKED_OUT_BY', $checkoutUser->name); ?>"><i class="SYWicon-lock"></i></span>
 											<?php else : ?>
 												<a href="<?php echo $item->link_edit; ?>" class="edit hasTooltip" title="<?php echo Text::_('JGLOBAL_EDIT'); ?>"><i class="SYWicon-create"></i></a>
 											<?php endif; ?>
-											</h<?php echo $this->title_tag; ?>>
+											</h<?php echo $title_html_tag; ?>>
 										<?php endif; ?>
 									<?php endif; ?>
 								<?php endif; ?>

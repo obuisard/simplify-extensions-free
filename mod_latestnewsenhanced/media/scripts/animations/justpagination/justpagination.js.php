@@ -53,19 +53,20 @@ document.addEventListener("readystatechange", function(event) {
 			<?php else : ?>
 				<?php if (empty($prev_label)) : ?>
 					<?php if (!$horizontal && $pagination_position == 'around') : ?>
-						navLabelPrev: "<span class='SYWicon-arrow-up2'></span>",
+						navLabelPrev: "<span class='SYWicon-arrow-up2' aria-hidden='true'></span>",
 					<?php else : ?>
-						navLabelPrev: "<span class='SYWicon-arrow-left2'></span>",
+						navLabelPrev: "<span class='SYWicon-arrow-left2' aria-hidden='true'></span>",
 					<?php endif; ?>
 				<?php else : ?>
 					navLabelPrev: "<span><?php echo $prev_label ?></span>",
 				<?php endif; ?>
 				<?php if (empty($next_label)) : ?>
 					<?php if (!$horizontal && $pagination_position == 'around') : ?>
-						navLabelNext: "<span class='SYWicon-arrow-down2'></span>"
+						navLabelNext: "<span class='SYWicon-arrow-down2' aria-hidden='true'></span>",
 					<?php else : ?>
-						navLabelNext: "<span class='SYWicon-arrow-right2'></span>"
+						navLabelNext: "<span class='SYWicon-arrow-right2' aria-hidden='true'></span>",
 					<?php endif; ?>
+					navAriaLabelNext: "<?php echo $next_aria_label ?>"
 				<?php else : ?>
 					navLabelNext: "<span><?php echo $next_label ?></span>"
 				<?php endif; ?>

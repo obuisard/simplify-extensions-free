@@ -213,7 +213,7 @@ class K2Helper
 		$subquery2 .= ' ELSE ';
 		$subquery2 .= $c_id.' END AS cat_slug';
 
-		$query->select('DISTINCT a.id, a.title, a.alias, a.introtext, '.$fulltext_query.
+		$query->select('a.id, a.title, a.alias, a.introtext, '.$fulltext_query.
 
 			'CASE WHEN a.fulltext IS NULL OR a.fulltext = \'\' THEN 0 ELSE 1 END AS fulltexthascontent, '.
 
@@ -237,7 +237,7 @@ class K2Helper
 
 		// join over the categories
 		$query->select('c.name AS category_title, c.access AS category_access, c.alias AS cat_alias');
-		$query->join('INNER', '#__k2_categories AS c ON c.id = a.catid');
+		$query->join('LEFT', '#__k2_categories AS c ON c.id = a.catid');
 
 		$query->where('a.trash = 0');
 		$query->where('c.published = 1 AND c.trash = 0');
@@ -292,40 +292,75 @@ class K2Helper
 
 		switch ($params->get('use_range', 0))
 		{
-			case 1: // relative
-				$range_from = $params->get('range_from', 'now'); // now, day, week, month, year
-				$spread_from = $params->get('spread_from', 1);
-				$range_to = $params->get('range_to', 'week');
-				$spread_to = $params->get('spread_to', 1);
+		    case 1: // relative
+		        
+		        // parameters are reversed (backward compatibility from early on version)
+		        
+		        $range_from = $params->get('range_to', 'week'); // now, day, week, month, year options
+		        $spread_from = $params->get('spread_to', 1);
+		        $range_to = $params->get('range_from', 'now');
+		        $spread_to = $params->get('spread_from', 1);
+		        
+		        // test range 'from' and 'to' to see if it will be a future or a past range
+		        
+		        $from = 0;
+		        switch($range_from)
+		        {
+		            case 'day': $from += $spread_from; break;
+		            case 'week': $from += $spread_from * 7; break;
+		            case 'month': $from += $spread_from * 30; break; // arbitrary
+		            case 'year': $from += $spread_from * 365; break; // arbitrary
+		        }
+		        
+		        $to = 0;
+		        switch($range_to)
+		        {
+		            case 'day': $to += $spread_to; break;
+		            case 'week': $to += $spread_to * 7; break;
+		            case 'month': $to += $spread_to * 30; break; // arbitrary
+		            case 'year': $to += $spread_to * 365; break; // arbitrary
+		        }
+		        
+		        if ($from > $to) { // past dates
+		            
+		            $query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
+		            
+		            if ($range_to == 'now') {
+		                $query->where($dateField.' <= '.$nowDate);
+		            } else {
+		                $query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
+		            }
+		        } elseif ($from < $to) {
+		            
+		            if ($range_from == 'now') {
+		                $query->where($dateField.' >= '.$nowDate);
+		            } else {
+		                $query->where($dateField.' >= DATE_ADD('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
+		            }
+		            
+		            $query->where($dateField.'<= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
+		        } else {
+		            $query->where($dateField.' = '.$nowDate);
+		        }
 
-				if ($range_from == 'now') {
-					$query->where($dateField.' <= '.$nowDate);
-				} else {
-// 					if ($dateField != 'a.publish_down') {
-// 						$query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-// 					} else {
+// 				if ($range_from == 'now') {
+// 					$query->where($dateField.' <= '.$nowDate);
+// 				} else {
+// 					if ($postdate == 'finished' || $postdate == 'fin_pen' || $postdate == 'pending') {
 // 						$query->where($dateField.' <= DATE_ADD('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-// 					}
-					if ($postdate == 'finished' || $postdate == 'fin_pen' || $postdate == 'pending') {
-						$query->where($dateField.' <= DATE_ADD('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-					} else {
-						$query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-					}
-				}
-				if ($range_to == 'now') {
-					$query->where($dateField.' >= '.$nowDate);
-				} else {
-// 					if ($dateField != 'a.publish_down') {
-// 						$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
 // 					} else {
-// 						$query->where($dateField.' >= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
+// 						$query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
 // 					}
-					if ($postdate == 'finished' || $postdate == 'fin_pen' || $postdate == 'pending') {
-						$query->where($dateField.' >= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
-					} else {
-						$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
-					}
-				}
+// 				}
+// 				if ($range_to == 'now') {
+// 					$query->where($dateField.' >= '.$nowDate);
+// 				} else {
+// 					if ($postdate == 'finished' || $postdate == 'fin_pen' || $postdate == 'pending') {
+// 						$query->where($dateField.' >= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
+// 					} else {
+// 						$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
+// 					}
+// 				}
 			break;
 
 			case 2: // range
@@ -970,6 +1005,8 @@ class K2Helper
 		$when_no_date = $params->get('when_no_date', 0);
 		$items_with_no_date = array();
 
+		$requireVoteData = Helper::isInfoTypeRequired('rating', $params);
+
 		foreach ($items as $key => &$item) {
 
 			// date
@@ -1066,26 +1103,30 @@ class K2Helper
 			}
 
 			// rating (to avoid call to rating plugin, use $item->vote)
-
-			$query->clear();
-
-			$query->select('ROUND(v.rating_sum / v.rating_count, 1) AS rating');
-			$query->select($db->quoteName('v.rating_count', 'rating_count'));
-			$query->from($db->quoteName('#__k2_rating', 'v'));
-			$query->where($db->quoteName('v.itemID').' = '.$item->id);
-
-			$db->setQuery($query);
-
+			
 			$item->vote = '';
 			$item->vote_count = 0;
-			try {
-				$ratings = $db->loadObjectList();
-				foreach ($ratings as $rating) {
-					$item->vote = $rating->rating;
-					$item->vote_count = $rating->rating_count;
-				}
-			} catch (ExecutionFailureException $e) {
-				//$app->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+			
+			if ($requireVoteData) {
+
+    			$query->clear();
+    
+    			$query->select('ROUND(v.rating_sum / v.rating_count, 1) AS rating');
+    			$query->select($db->quoteName('v.rating_count', 'rating_count'));
+    			$query->from($db->quoteName('#__k2_rating', 'v'));
+    			$query->where($db->quoteName('v.itemID').' = '.$item->id);
+    
+    			$db->setQuery($query);
+    			
+    			try {
+    				$ratings = $db->loadObjectList();
+    				foreach ($ratings as $rating) {
+    					$item->vote = $rating->rating;
+    					$item->vote_count = $rating->rating_count;
+    				}
+    			} catch (ExecutionFailureException $e) {
+    				//$app->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+    			}
 			}
 
 			// tags
