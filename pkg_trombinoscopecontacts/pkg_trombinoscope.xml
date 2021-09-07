@@ -6,11 +6,11 @@
 	<packagename>trombinoscope</packagename>
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
-	<url>http://www.simplifyyourweb.com/</url>
+	<url>https://simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>https://simplifyyourweb.com/</packagerurl>
-	<version>4.6.1</version>
-	<changelogurl>https://updates.simplifyyourweb.com/free/trombinoscopecontacts/changelog.xml</changelogurl>
+	<version>4.6.2</version>
+	<changelogurl>https://updates.simplifyyourweb.com/free/trombinoscope/changelog.xml</changelogurl>
 	<description>PKG_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<blockChildUninstall>true</blockChildUninstall>
 	<scriptfile>installer.php</scriptfile>
