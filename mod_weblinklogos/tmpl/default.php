@@ -9,7 +9,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
-use Joomla\CMS\Uri\Uri;
 use SYW\Library\Libraries as SYWLibraries;
 use SYW\Library\Utilities as SYWUtilities;
 use SYW\Module\WeblinkLogos\Site\Helper\Helper;

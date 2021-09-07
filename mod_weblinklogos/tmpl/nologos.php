@@ -9,6 +9,8 @@ defined('_JEXEC') or die;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
+use SYW\Library\Libraries as SYWLibraries;
+use SYW\Library\Utilities as SYWUtilities;
 
 $modal_needed = false;
 
