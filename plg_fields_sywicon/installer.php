@@ -8,38 +8,22 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerHelper;
+use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
  * Script file of the menu icons content plugin
  */
-class plgfieldssywiconInstallerScript
+class plgfieldssywiconInstallerScript extends InstallerScript
 {
-	/**
-	 * The version number of the extension
-	 */
-	protected $release;
-
-	/**
-	 * The extension name
-	 */
-	protected $extension;
-
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.0.0';
-
-	/**
-	 * Minimum Joomla! version required to install the extension
-	 */
-	protected $minimumJoomla = '4.0.0-beta3';
-
+	protected $minimumLibrary = '2.0.1';
 	/**
 	 * Extensions library link for download
 	 */
@@ -51,10 +35,20 @@ class plgfieldssywiconInstallerScript
 	protected $changelogLink = 'https://simplifyyourweb.com/free-products/fields/syw-icon-field/file/282-syw-icon'; // TODO
 
 	/**
-	 * Called before an install/update/uninstall method
+	 * Extension script constructor
+	 */
+	public function __construct($installer)
+	{
+	    $this->extension = 'plg_fields_sywicon';
+	    $this->minimumJoomla = '4.0.0';
+	    //$this->minimumPhp = JOOMLA_MINIMUM_PHP; // not needed
+	}
+	
+	/**
+	 * Called before any type of action
 	 *
-	 * @param string     $action     Which action is happening (install|uninstall|discover_install|update)
-	 * @param Installer  $installer  The class calling this method
+	 * @param string $action Which action is happening (install|uninstall|discover_install|update)
+	 * @param InstallerAdapter $installer The class calling this method
 	 *
 	 * @return boolean True on success
 	 */
@@ -63,23 +57,42 @@ class plgfieldssywiconInstallerScript
 		if ($action === 'uninstall') {
 			return true;
 		}
-
-		// make sure we are under Joomla 4.0 or over
-
-		if (version_compare(JVERSION, $this->minimumJoomla, 'lt')) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', $this->minimumJoomla), 'error');
-			return false;
+		
+		// checks minimum PHP and Joomla versions and that an upgrade is performed
+		if (!parent::preflight($action, $installer)) {
+		    return false;
 		}
-
-		$this->extension = $installer->getName();
-		$this->release = $installer->getManifest()->version;
 
 		// make sure the library is installed and that it is compatible with the extension
 		return $this->installOrUpdateLibrary($installer);
 	}
+	
+	/**
+	 * method to install the component
+	 *
+	 * @return boolean True on success
+	 */
+	public function install($installer) {}
+	
+	/**
+	 * method to uninstall the component
+	 *
+	 * @return void
+	 */
+	public function uninstall($installer) {}
+	
+	/**
+	 * method to update the component
+	 *
+	 * @return boolean True on success
+	 */
+	public function update($installer) {}
 
 	/**
-	 * Called after an install/update/uninstall method
+	 * Called after any type of action
+	 *
+	 * @param string $action Which action is happening (install|uninstall|discover_install|update)
+	 * @param InstallerAdapter $installer The object responsible for running this script
 	 *
 	 * @return boolean True on success
 	 */
@@ -91,7 +104,7 @@ class plgfieldssywiconInstallerScript
 
 		echo '<p style="margin: 10px 0 20px 0">';
 		//echo HTMLHelper::image('plg_fields_sywicon/logo.png', 'SYW Icon', null, true);
-		echo '<br /><br /><span class="badge bg-dark">'.Text::sprintf('PLG_FIELDS_SYWICON_VERSION', $this->release).'</span>';
+		echo '<span class="badge bg-dark">'.Text::sprintf('PLG_FIELDS_SYWICON_VERSION', $this->release).'</span>';
 		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
 		echo '</p>';
 
@@ -101,52 +114,7 @@ class plgfieldssywiconInstallerScript
 
 			// upgrade warning
 
-			//Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_FIELDS_SYWICON_WARNING_RELEASENOTES', 'https://simplifyyourweb.com/free-products/fields/syw-icon-field/file/282-syw-icon'), 'warning');
 			echo '<div class="alert alert-warning">' . Text::sprintf('PLG_FIELDS_SYWICON_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
-		}
-
-		return true;
-	}
-
-	/**
-	 * Called on installation
-	 *
-	 * @return  boolean  True on success
-	 */
-	public function install($parent) {}
-
-	/**
-	 * Called on update
-	 *
-	 * @return  boolean  True on success
-	 */
-	public function update($parent) {}
-
-	/**
-	 * Called on uninstallation
-	 */
-	public function uninstall($parent) {}
-
-	private function installOrUpdatePackage($installer, $package_name, $installation_type = 'install')
-	{
-		// Get the path to the package
-
-	    $sourcePath = $installer->getParent()->getPath('source');
-		$sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
-
-		// Extract and install the package
-
-		$package = InstallerHelper::unpack($sourcePackage);
-		$tmpInstaller = new Installer();
-
-		try {
-			if ($installation_type == 'install') {
-				$installResult = $tmpInstaller->install($package['dir']);
-			} else {
-				$installResult = $tmpInstaller->update($package['dir']);
-			}
-		} catch (Exception $e) {
-			return false;
 		}
 
 		return true;
@@ -175,58 +143,62 @@ class plgfieldssywiconInstallerScript
 		try {
 			$db->execute();
 		} catch (ExecutionFailureException $e) {
-			//Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 			return false;
 		}
 
 		return true;
 	}
+	
+	private function installOrUpdatePackage($installer, $package_name, $installation_type = 'install')
+	{
+	    // Get the path to the package
+	    
+	    $sourcePath = $installer->getParent()->getPath('source');
+	    $sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
+	    
+	    // Extract and install the package
+	            
+        $package = InstallerHelper::unpack($sourcePackage);
+        if ($package === false || (is_array($package) && $package['type'] === false)) {
+            return false;
+        }
+	        
+        $tmpInstaller = new Installer();
+        
+        if ($installation_type === 'install') {
+            return $tmpInstaller->install($package['dir']);
+        } else {
+            return $tmpInstaller->update($package['dir']);
+        }
+	}
 
+	/**
+	 * Install the library and its plugin if missing or outdated
+	 */
 	private function installOrUpdateLibrary($installer)
 	{
-		// install the library and its plugin if missing or outdated
-
-		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-			if (!Folder::exists(JPATH_ROOT . '/libraries/syw')) {
-				if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-					return false;
-				}
-			}
-
-			if (!Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-					return false;
-				}
-			}
-
-			Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
-		} else {
-
-			$library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
-			if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
-
-				if (!$this->installOrUpdatePackage($installer, 'lib_syw', 'update')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-					return false;
-				}
-
-				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw', 'update')) {
-					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-					return false;
-				}
-
-				Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_UPDATED', $this->minimumLibrary), 'message');
-			}
-		}
-
-		if (!PluginHelper::isEnabled('system', 'syw')) {
-			if (!$this->enableExtension('plugin', 'syw', 'system')) {
-				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_COULDNOTENABLEPLUGINFORLIBRARY'), 'error');
-				return false;
-			}
-		}
+	    if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
+	        
+	        if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
+	            Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+	            return false;
+	        }
+	        
+	        Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
+	    } else {
+	        
+	        $library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
+	        if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
+	            
+	            if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary', 'update')) {
+	                Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
+	                return false;
+	            }
+	            
+	            Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_UPDATED', $this->minimumLibrary), 'message');
+	        }
+	    }
 
 		return true;
 	}

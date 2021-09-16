@@ -34,20 +34,10 @@
 	
 	<config>
 		<fields name="params" addfieldprefix="SYW\Library\Field">
-			<fieldset name="basic">			
-				
+			<fieldset name="basic">
 				<field type="extensionversion" version="1.1.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
-<!-- 				<field type="extensiontranslators" translators="PLG_CONTENT_MENUICON_TRANSLATORS" /> -->
-				
-<!-- 				<field type="sywlibtest" minversion="1.4.5" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
-				
-<!-- 				<field type="extensionlink" linktype="demo" link="http://demo3.simplifyyourweb.com" />	             -->
-<!-- 	            <field type="extensionlink" linktype="forum" link="https://simplifyyourweb.com/forum/template-companions" /> -->
-	            <field type="extensionlink" linktype="report" link="https://simplifyyourweb.com/support" />				
-				<field type="extensionlink" linktype="support" link="https://simplifyyourweb.com/support" />	
-	            <field type="extensionlink" linktype="donate" link="https://simplifyyourweb.com/free-products/fields/syw-icon-field" />		
 			</fieldset>
 		</fields>
 	</config>
