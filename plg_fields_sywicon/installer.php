@@ -32,7 +32,7 @@ class plgfieldssywiconInstallerScript extends InstallerScript
 	/**
 	 * Link to the change logs
 	 */
-	protected $changelogLink = 'https://simplifyyourweb.com/free-products/fields/syw-icon-field/file/282-syw-icon'; // TODO
+	protected $changelogLink = 'https://simplifyyourweb.com/free-products/fields/syw-icon-field/file/431-syw-icon';
 
 	/**
 	 * Extension script constructor
