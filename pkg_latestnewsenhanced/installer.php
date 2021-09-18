@@ -10,36 +10,22 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerHelper;
+use Joomla\CMS\Installer\InstallerScript;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
  * Script file for the packaged Latest News Enhanced module
  */
-class Pkg_LatestNewsEnhancedInstallerScript
+class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 {
-	/**
-	 * The version number of the extension
-	 */
-	protected $release;
-
-	/**
-	 * The extension name
-	 */
-	protected $extension;
-
 	/*
 	 * Minimum extensions library version required
 	 */
 	protected $minimumLibrary = '2.0.1';
-
-	/**
-	 * Minimum Joomla! version required to install the extension
-	 */
-	protected $minimumJoomla = '4.0.0';
 
 	/**
 	 * Available languages
@@ -54,7 +40,7 @@ class Pkg_LatestNewsEnhancedInstallerScript
 	/**
 	 * Link to the change logs
 	 */
-	protected $changelogLink = 'http://www.simplifyyourweb.com/free-products/latest-news-enhanced/file/162-latest-news-enhanced';
+	protected $changelogLink = 'https://simplifyyourweb.com/free-products/latest-news-enhanced/file/162-latest-news-enhanced';
 
 	/**
 	 * Link to the translation page
@@ -65,22 +51,22 @@ class Pkg_LatestNewsEnhancedInstallerScript
 	 * Link to the quick start page
 	 */
 	protected $quickstartLink = 'https://simplifyyourweb.com/documentation/latest-news/quickstart-guide';
-
+	
 	/**
-	 * A list of files to be deleted
+	 * Extension script constructor
 	 */
-	protected $deleteFiles = array();
+	public function __construct($installer)
+	{
+	    $this->extension = 'pkg_latestnewsenhanced';
+	    $this->minimumJoomla = '4.0.0';
+	    //$this->minimumPhp = JOOMLA_MINIMUM_PHP; // not needed
+	}
 
 	/**
-	 * A list of folders to be deleted
-	 */
-	protected $deleteFolders = array();
-
-	/**
-	 * Called before an install/update/uninstall method
+	 * Called before any type of action
 	 *
-	 * @param string     $action     Which action is happening (install|uninstall|discover_install|update)
-	 * @param Installer  $installer  The class calling this method
+	 * @param string $action Which action is happening (install|uninstall|discover_install|update)
+	 * @param InstallerAdapter $installer The class calling this method
 	 *
 	 * @return boolean True on success
 	 */
@@ -89,42 +75,42 @@ class Pkg_LatestNewsEnhancedInstallerScript
 		if ($action === 'uninstall') {
 			return true;
 		}
-
-		// make sure we are under Joomla 4.0 or over
-
-		if (version_compare(JVERSION, $this->minimumJoomla, 'lt')) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', $this->minimumJoomla), 'error');
-			return false;
+		
+		// checks minimum PHP and Joomla versions and that an upgrade is performed
+		if (!parent::preflight($action, $installer)) {
+		    return false;
 		}
-
-		$this->extension = $installer->getName();
-		$this->release = $installer->getManifest()->version;
 
 		// make sure the library is installed and that it is compatible with the extension
 		return $this->installOrUpdateLibrary($installer);
 	}
 
 	/**
-	 * Called on installation
+	 * method to install the component
 	 *
-	 * @return  boolean  True on success
+	 * @return boolean True on success
 	 */
 	public function install($installer) {}
 
 	/**
-	 * Called on uninstallation
+	 * method to uninstall the component
+	 *
+	 * @return void
 	 */
 	public function uninstall($installer) {}
 
 	/**
-	 * Called on update
+	 * method to update the component
 	 *
-	 * @return  boolean  True on success
+	 * @return boolean True on success
 	 */
 	public function update($installer) {}
 
 	/**
-	 * Called after an install/update/uninstall method
+	 * Called after any type of action
+	 *
+	 * @param string $action Which action is happening (install|uninstall|discover_install|update)
+	 * @param InstallerAdapter $installer The object responsible for running this script
 	 *
 	 * @return boolean True on success
 	 */
@@ -144,8 +130,7 @@ class Pkg_LatestNewsEnhancedInstallerScript
 
    	    $current_language = Factory::getLanguage()->getTag();
    	    if (!in_array($current_language, $this->availableLanguages)) {
-   	        //Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
-   	    	echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
+   	        echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
    	    }
 
    	    if ($action === 'install') {
@@ -155,7 +140,6 @@ class Pkg_LatestNewsEnhancedInstallerScript
 	   	    $message = Text::sprintf('PKG_LATESTNEWSENHANCED_INFO_LEARN', $this->quickstartLink);
 	   	    $message .= '<br /><br /><a href="' . $this->quickstartLink . '" target="_blank">' . HTMLHelper::image('mod_latestnewsenhanced/quickstart.png', 'Quick Start', null, true) . '</a>';
 
-	   	    //Factory::getApplication()->enqueueMessage($message, 'notice');
 	   	    echo '<div class="alert alert-info">' . $message . '</div>';
    	    }
 
@@ -163,7 +147,6 @@ class Pkg_LatestNewsEnhancedInstallerScript
 
 	        // update warning
 
-	    	//Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_WARNING_RELEASENOTES', $this->changelogLink), 'warning');
 	    	echo '<div class="alert alert-warning">' . Text::sprintf('PKG_LATESTNEWSENHANCED_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
 
 	    	// overrides warning
@@ -233,25 +216,6 @@ class Pkg_LatestNewsEnhancedInstallerScript
 
 		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
 			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_ERROR_CANNOTMOVEFILE', $file), 'warning');
-		}
-	}
-
-	private function removeFiles()
-	{
-		if (!empty($this->deleteFiles)) {
-			foreach ($this->deleteFiles as $filename) {
-				if (File::exists(JPATH_ROOT . $filename) && !File::delete(JPATH_ROOT . $filename)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
-				}
-			}
-		}
-
-		if (!empty($this->deleteFolders)) {
-			foreach ($this->deleteFolders as $folder) {
-				if (Folder::exists(JPATH_ROOT . $folder) && !Folder::delete(JPATH_ROOT . $folder)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
-				}
-			}
 		}
 	}
 
@@ -369,26 +333,53 @@ class Pkg_LatestNewsEnhancedInstallerScript
 	private function installOrUpdatePackage($installer, $package_name, $installation_type = 'install')
 	{
 	    // Get the path to the package
-
+	    
 	    $sourcePath = $installer->getParent()->getPath('source');
 	    $sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
-
+	    
 	    // Extract and install the package
-
+	    
 	    $package = InstallerHelper::unpack($sourcePackage);
-	    $tmpInstaller = new Installer();
-
-	    try {
-	        if ($installation_type == 'install') {
-	            $installResult = $tmpInstaller->install($package['dir']);
-	        } else {
-	            $installResult = $tmpInstaller->update($package['dir']);
-	        }
-	    } catch (Exception $e) {
-	        Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+	    if ($package === false || (is_array($package) && $package['type'] === false)) {
 	        return false;
 	    }
-
+	    
+	    $tmpInstaller = new Installer();
+	    
+	    if ($installation_type === 'install') {
+	        return $tmpInstaller->install($package['dir']);
+	    } else {
+	        return $tmpInstaller->update($package['dir']);
+	    }
+	}
+	
+	/**
+	 * Install the library and its plugin if missing or outdated
+	 */
+	private function installOrUpdateLibrary($installer)
+	{	    
+	    if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
+	        
+	        if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
+	            Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
+	            return false;
+	        }
+	        
+	        Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
+	    } else {
+	        
+	        $library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
+	        if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
+	            
+	            if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary', 'update')) {
+	                Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
+	                return false;
+	            }
+	            
+	            Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_UPDATED', $this->minimumLibrary), 'message');
+	        }
+	    }
+	    
 	    return true;
 	}
 
@@ -418,65 +409,6 @@ class Pkg_LatestNewsEnhancedInstallerScript
 		    Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
 			return false;
 		}
-
-		return true;
-	}
-
-	private function installOrUpdateLibrary($installer)
-	{
-		// install the library and its plugin if missing or outdated
-
-		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-// 			if (!Folder::exists(JPATH_ROOT . '/libraries/syw')) {
-// 				if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-// 					return false;
-// 				}
-// 			}
-
-// 			if (!Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-// 				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-// 					return false;
-// 				}
-// 			}
-			
-			if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
-			    Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-			    return false;
-			}
-
-			Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
-		} else {
-
-			$library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
-			if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
-
-// 				if (!$this->installOrUpdatePackage($installer, 'lib_syw', 'update')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-// 					return false;
-// 				}
-
-// 				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw', 'update')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-// 					return false;
-// 				}
-				
-				if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary', 'update')) {
-				    Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-				    return false;
-				}
-
-				Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_UPDATED', $this->minimumLibrary), 'message');
-			}
-		}
-
-// 		if (!PluginHelper::isEnabled('system', 'syw')) {
-// 			if (!$this->enableExtension('plugin', 'syw', 'system')) {
-// 				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_COULDNOTENABLEPLUGINFORLIBRARY'), 'error');
-// 				return false;
-// 			}
-// 		}
 
 		return true;
 	}
