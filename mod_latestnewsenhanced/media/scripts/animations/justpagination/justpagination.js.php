@@ -57,6 +57,7 @@ document.addEventListener("readystatechange", function(event) {
 					<?php else : ?>
 						navLabelPrev: "<span class='SYWicon-arrow-left2' aria-hidden='true'></span>",
 					<?php endif; ?>
+					navAriaLabelPrev: "<?php echo $prev_aria_label ?>",
 				<?php else : ?>
 					navLabelPrev: "<span><?php echo $prev_label ?></span>",
 				<?php endif; ?>
