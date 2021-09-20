@@ -29,7 +29,6 @@ class JqueryselectField extends DynamicsingleselectField
 		$options[] = array(0, Text::_('JNO'), '', $path . '/select_no.png');
 		$options[] = array(1, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_JQUERY'), '', $path . '/select_jquery.png');
 		$options[] = array(2, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_JQUERYUI'), '', $path . '/select_jquery_ui.png');
-		$options[] = array(3, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_JQUERYMOBILE') . ' (Pro)', '', $path . '/select_jquery_mobile.png', '', 'disabled', 'Pro');
 
 		return $options;
 	}
