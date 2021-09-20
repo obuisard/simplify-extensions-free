@@ -15,7 +15,7 @@ use SYW\Library\Field\DynamicsingleselectField;
 
 class BootstrapselectField extends DynamicsingleselectField
 {
-	public $type = 'BootstrapSelect';
+	public $type = 'Bootstrapselect';
 
 	protected function getOptions()
 	{
@@ -27,7 +27,7 @@ class BootstrapselectField extends DynamicsingleselectField
 		$path = URI::root(true) . '/media/plg_system_jqueryeasy/images';
 
 		$options[] = array(0, Text::_('JNO'), '', $path . '/select_no.png');
-		$options[] = array(1, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_BOOTSTRAP') . ' (Pro)', '', $path . '/select_bootstrap.png', '', 'disabled', 'Pro');
+		$options[] = array(1, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_BOOTSTRAP'), '', $path . '/select_bootstrap.png');
 
 		return $options;
 	}

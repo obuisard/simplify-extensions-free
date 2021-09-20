@@ -43,14 +43,6 @@ class CdnlinksField extends FormField
 
 			self::$libraries['jqueryui'] = $cdns;
 
-// 			$cdns = array();
-// 			$cdns['google'] = 'https://developers.google.com/speed/libraries/#jquery-mobile';
-// 			$cdns['microsoft'] = 'https://docs.microsoft.com/en-us/aspnet/ajax/cdn/overview#jQuery_Mobile_Releases_on_the_CDN_4';
-// 			$cdns['jquery'] = 'http://code.jquery.com/mobile/';
-// 			$cdns['cloudflare'] = 'https://cdnjs.com/libraries/jquery-mobile';
-
-// 			self::$libraries['jquery-mobile'] = $cdns;
-
 			$cdns = array();
 			$cdns['google'] = '';
 			$cdns['microsoft'] = 'https://docs.microsoft.com/en-us/aspnet/ajax/cdn/overview#jQuery_Migrate_Releases_on_the_CDN_1';
@@ -58,14 +50,22 @@ class CdnlinksField extends FormField
 			$cdns['cloudflare'] = 'https://cdnjs.com/libraries/jquery-migrate';
 
 			self::$libraries['migrate'] = $cdns;
-
-// 			$cdns = array();
-// 			$cdns['google'] = '';
-// 			$cdns['microsoft'] = 'https://docs.microsoft.com/en-us/aspnet/ajax/cdn/overview#Bootstrap_Releases_on_the_CDN_14';
-// 			$cdns['jquery'] = '';
-// 			$cdns['cloudflare'] = 'https://cdnjs.com/libraries/twitter-bootstrap';
-
-// 			self::$libraries['bootstrap'] = $cdns;
+			
+			$cdns = array();
+			$cdns['google'] = '';
+			$cdns['microsoft'] = 'https://docs.microsoft.com/en-us/aspnet/ajax/cdn/overview#Bootstrap_Releases_on_the_CDN_14';
+			$cdns['jquery'] = '';
+			$cdns['cloudflare'] = 'https://cdnjs.com/libraries/twitter-bootstrap';
+			
+			self::$libraries['bootstrap'] = $cdns;
+			
+			$cdns = array();
+			$cdns['google'] = '';
+			$cdns['microsoft'] = '';
+			$cdns['jquery'] = '';
+			$cdns['cloudflare'] = 'https://cdnjs.com/libraries/popper.js';
+			
+			self::$libraries['popper'] = $cdns;
 		}
 
 		return self::$libraries;
@@ -94,13 +94,13 @@ class CdnlinksField extends FormField
 				$chosen_cdn = 'jquery';
 			}
 
-// 			if ($this->library == 'jquery-mobile' && $chosen_cdn == 'google') { // missing structure-only option
-// 				$chosen_cdn = 'jquery';
-// 			}
-
-// 			if ($this->library == 'bootstrap' && ($chosen_cdn == 'google' || $chosen_cdn == 'jquery')) {
-// 				$chosen_cdn = 'cloudflare';
-// 			}
+ 			if ($this->library == 'bootstrap' && ($chosen_cdn == 'google' || $chosen_cdn == 'jquery')) {
+ 				$chosen_cdn = 'cloudflare';
+ 			}
+			
+			if ($this->library == 'popper') {
+			    $chosen_cdn = 'cloudflare';
+			}
 
 			$libraries = self::getLibraries();
 

@@ -11,12 +11,11 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\WebAsset\Exception\UnknownAssetException;
 
 class BootstrapversionField extends FormField
 {
 	public $type = 'Bootstrapversion';
-
-	static $versions = array('4.0' => '5.0.2');
 
 	protected function getLabel()
 	{
@@ -29,18 +28,22 @@ class BootstrapversionField extends FormField
 
 		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
-
-		$version = 'undefined';
-
-		$numbers = explode('.', JVERSION);
-		$joomla_release = $numbers[0].'.'.$numbers[1];
-
-		if (isset(self::$versions[$joomla_release])) {
-			$version = self::$versions[$joomla_release];
+		
+		try {
+    		$asset = Factory::getDocument()->getWebAssetManager()->getAsset('script', 'bootstrap.es5');
+    		$version = $asset->getVersion();
+		} catch (UnknownAssetException $e) {
+		    $version = 'none';
 		}
 
 		$html .= '<div class="bootstrapversion alert alert-info" style="margin: 0">';
-		$html .= '  <span>'.Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Bootstrap '.$version).'</span>';
+		if ($version === 'auto') {
+		    $html .= '  <span>'.Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_UNDETERMINEDVERSION_LABEL', 'Bootstrap '.$version).'</span>';
+		} else if ($version === 'none') {
+		    $html .= '  <span>'.Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISNOTPACKAGEDWITH_LABEL', 'Bootstrap').'</span>';
+		} else {
+		    $html .= '  <span>'.Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISPACKAGEDWITH_LABEL', 'Bootstrap '.$version).'</span>';
+		}
 		$html .= '</div>';
 
 		$url = 'https://api.cdnjs.com/libraries/twitter-bootstrap?fields=version';
@@ -61,7 +64,7 @@ class BootstrapversionField extends FormField
 								json_version.innerText = data.version;
 
 								const the_version = document.createTextNode("' . Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL') . ' ");
-								const the_source = document.createTextNode(" (' . Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL') . ' Cloudflare)");
+								const the_source = document.createTextNode(" (' . Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL', 'Cloudflare') . ')");
 
 								let the_div = document.querySelector(".' . $div . '");
 								the_div.appendChild(the_version);
