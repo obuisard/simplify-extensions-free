@@ -8,31 +8,17 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Installer\InstallerAdapter;
+use Joomla\CMS\Installer\InstallerScript;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
  * Script file for the SYW extensions library package
  */
-class Pkg_SYWLibraryInstallerScript
+class Pkg_SYWLibraryInstallerScript extends InstallerScript
 {
-	/**
-	 * The version number of the extension
-	 */
-	protected $release;
-
-	/**
-	 * The extension name
-	 */
-	protected $extension;
-
-	/**
-	 * Minimum Joomla! version required to install the extension
-	 */
-	protected $minimumJoomla = '4.0.0-rc4';
-
 	/**
 	 * Available languages
 	 */
@@ -49,60 +35,57 @@ class Pkg_SYWLibraryInstallerScript
 	protected $translationLink = 'https://simplifyyourweb.com/translators';
 
 	/**
-	 * A list of files to be deleted
+	 * Extension script constructor
 	 */
-	protected $deleteFiles = array();
-
+	public function __construct($installer)
+	{
+	    $this->extension = 'lib_syw';
+	    $this->minimumJoomla = '4.0.0';
+	    //$this->minimumPhp = JOOMLA_MINIMUM_PHP; // not needed
+	}
+	
 	/**
-	 * A list of folders to be deleted
-	 */
-	protected $deleteFolders = array();
-
-	/**
-	 * Called before an install/update/uninstall method
+	 * Called before any type of action
 	 *
-	 * @param string     $action     Which action is happening (install|uninstall|discover_install|update)
-	 * @param Installer  $installer  The class calling this method
+	 * @param string $action Which action is happening (install|uninstall|discover_install|update)
+	 * @param InstallerAdapter $installer The class calling this method
 	 *
 	 * @return boolean True on success
 	 */
 	public function preflight($action, $installer)
 	{
-		if ($action == 'uninstall') {
+		if ($action === 'uninstall') {
 			return true;
 		}
-
-		// make sure we are under Joomla 4.0 or over
-
-		if (version_compare(JVERSION, $this->minimumJoomla, 'lt')) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', $this->minimumJoomla), 'error');
-			return false;
+		
+		// checks minimum PHP and Joomla versions and that an upgrade is performed
+		if (!parent::preflight($action, $installer)) {
+		    return false;
 		}
-
-		$this->extension = $installer->getName();
-		$this->release = $installer->getManifest()->version;
 
 		return true;
 	}
 
 	/**
-	 * Called on installation
+	 * method to install the component
 	 *
-	 * @return  boolean  True on success
+	 * @return boolean True on success
 	 */
-	public function install($installer) { }
+	public function install($installer) {}
 
 	/**
-	 * Called on update
+	 * method to uninstall the component
 	 *
-	 * @return  boolean  True on success
+	 * @return void
 	 */
-	public function update($installer) { }
+	public function uninstall($installer) {}
 
 	/**
-	 * Called on uninstallation
+	 * method to update the component
+	 *
+	 * @return boolean True on success
 	 */
-	public function uninstall($installer) { }
+	public function update($installer) {}
 
 	/**
 	 * Called after an install/update/uninstall method
@@ -111,7 +94,7 @@ class Pkg_SYWLibraryInstallerScript
 	 */
 	public function postflight($action, $installer)
 	{
-		if ($action == 'uninstall') {
+		if ($action === 'uninstall') {
 			return true;
 		}
 
@@ -125,7 +108,6 @@ class Pkg_SYWLibraryInstallerScript
 
  		$current_language = Factory::getLanguage()->getTag();
  		if (!in_array($current_language, $this->availableLanguages)) {
- 			//Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this library.<br /><a href="' . self::$translation_link . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
  			echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
  		}
 
@@ -140,8 +122,7 @@ class Pkg_SYWLibraryInstallerScript
 
 			// update warning
 
-			//Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_SYWLIBRARY_WARNING_RELEASENOTES', self::$changelog_link), 'warning');
- 			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_SYWLIBRARY_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
+			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_SYWLIBRARY_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
  		
             // remove the old update site
  		
@@ -170,25 +151,6 @@ class Pkg_SYWLibraryInstallerScript
 
 		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
 			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_SYWLIBRARY_ERROR_CANNOTMOVEFILE', $file), 'warning');
-		}
-	}
-
-	private function removeFiles()
-	{
-		if (!empty($this->deleteFiles)) {
-			foreach ($this->deleteFiles as $filename) {
-				if (File::exists(JPATH_ROOT . $filename) && !File::delete(JPATH_ROOT . $filename)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_SYWLIBRARY_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
-				}
-			}
-		}
-
-		if (!empty($this->deleteFolders)) {
-			foreach ($this->deleteFolders as $folder) {
-				if (Folder::exists(JPATH_ROOT . $folder) && !Folder::delete(JPATH_ROOT . $folder)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_SYWLIBRARY_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
-				}
-			}
 		}
 	}
 

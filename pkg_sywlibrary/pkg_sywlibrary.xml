@@ -8,8 +8,8 @@
 	<license>GNU General Public License version 3 or later</license>
 	<url>https://simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
- 	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
-	<version>2.0.1</version>
+ 	<packagerurl>https://simplifyyourweb.com</packagerurl>
+	<version>2.0.2</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/sywlibrary/changelog.xml</changelogurl>
 	<description>PKG_SYWLIBRARY_XML_DESCRIPTION</description>
 	<blockChildUninstall>true</blockChildUninstall>
