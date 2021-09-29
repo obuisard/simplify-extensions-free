@@ -737,7 +737,7 @@ class SywiconpickerField extends FormField
 			$html .= '<input type="text" name="'.$this->name.'" id="'.$this->id.'"'.' data-name="input-icon" value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" readonly="readonly" class="form-control" />';
 		}
 
-		$html .= '<div class="btn-group">';
+		$html .= '<div class="btn-group" style="margin: 0">';
 			$html .= '<button type="button" id="'.$this->id.'_caret"'.($this->disabled ? ' disabled="disabled"' : '').' style="border-radius:0" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">';
 			$html .= '<span class="visually-hidden">' . Text::_('LIB_SYW_ICONPICKER_SELECTICON') . '</span>'; // can't have tooltip on dropdown
 			$html .= '</button>';
