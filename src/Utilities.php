@@ -168,7 +168,7 @@ class Utilities
 		        	if ($bootstrap_version >= 4) { $converted_properties[] = 'btn-sm'; }
 					break;
 
-					// labels
+				// labels
 
 				case 'label':
 		        	if ($bootstrap_version < 4) { $converted_properties[] = 'label'; } else { $converted_properties[] = 'badge'; }
@@ -220,7 +220,7 @@ class Utilities
 					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-dark'; }
 					break;
 
-					// badges-pills
+				// badges-pills
 
 				case 'badge':
 					if ($bootstrap_version < 4) { $converted_properties[] = 'badge'; }
@@ -267,7 +267,7 @@ class Utilities
 					if ($bootstrap_version == 5) { $converted_properties[] = 'bg-dark'; }
 					break;
 
-					// alerts
+				// alerts
 
 				case 'alert': $converted_properties[] = 'alert'; break; // exists for all versions
 
@@ -292,7 +292,7 @@ class Utilities
 					if ($bootstrap_version == 0 || $bootstrap_version >= 4) { $converted_properties[] = 'alert-dark'; }
 					break;
 
-					// pagination
+				// pagination
 
 				case 'pagination': $converted_properties[] = 'pagination'; break; // exists for all versions
 
@@ -319,7 +319,7 @@ class Utilities
 					if ($bootstrap_version >= 4) { $converted_properties[] = 'justify-content-end'; }
 					break;
 
-					// align
+				// align
 
 				case 'float-right':
 					if ($bootstrap_version == 2 || $bootstrap_version == 3) { $converted_properties[] = 'pull-right'; }
@@ -335,9 +335,9 @@ class Utilities
 					if ($bootstrap_version == 0 || $bootstrap_version >= 4) { $converted_properties[] = 'float-none'; }
 					break;
 
-					// clearfix exists for all versions
+				// clearfix exists for all versions
 
-					// visibility
+				// visibility
 
 				case 'visually-hidden':
 					switch ($bootstrap_version) {
@@ -347,13 +347,13 @@ class Utilities
 					}
 					break;
 
-					// hidden on the phone
+				// hidden on the phone (for tables)
 
 				case 'hidden-phone':
 					switch ($bootstrap_version) {
 						case 0: case 2: $converted_properties[] = 'hidden-phone'; break;
 						case 3: $converted_properties[] = 'hidden-xs'; break;
-						default: $converted_properties[] = 'd-none d-sm-block'; break;
+						default: $converted_properties[] = 'd-none d-sm-table-cell'; break;
 					}
 					break;
 			}
