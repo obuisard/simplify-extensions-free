@@ -12,34 +12,21 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerHelper;
+use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Language\Text;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
  * Script file for the Trombinoscope Contacts Pro Free module package
  */
-class Pkg_TrombinoscopeInstallerScript
+class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 {
-	/**
-	 * The version number of the extension
-	 */
-	protected $release;
-
-	/**
-	 * The extension name
-	 */
-	protected $extension;
-
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.0.1';
-
-	/**
-	 * Minimum Joomla! version required to install the extension
-	 */
-	protected $minimumJoomla = '4.0.0';
+	protected $minimumLibrary = '2.0.2';
 
 	/**
 	 * Available languages
@@ -54,7 +41,7 @@ class Pkg_TrombinoscopeInstallerScript
 	/**
 	 * Link to the change logs
 	 */
-	protected $changelogLink = 'http://www.simplifyyourweb.com/free-products/trombinoscope/file/384-trombinoscope-contacts';
+	protected $changelogLink = 'https://simplifyyourweb.com/free-products/trombinoscope/file/384-trombinoscope-contacts';
 
 	/**
 	 * Link to the translation page
@@ -67,20 +54,20 @@ class Pkg_TrombinoscopeInstallerScript
 	protected $quickstartLink = 'https://simplifyyourweb.com/documentation/trombinoscope-contacts/quickstart-guide';
 
 	/**
-	 * A list of files to be deleted
+	 * Extension script constructor
 	 */
-	protected $deleteFiles = array();
-
+	public function __construct($installer)
+	{
+	    $this->extension = 'pkg_trombinoscope';
+	    $this->minimumJoomla = '4.0.0';
+	    //$this->minimumPhp = JOOMLA_MINIMUM_PHP; // not needed
+	}
+	
 	/**
-	 * A list of folders to be deleted
-	 */
-	protected $deleteFolders = array();
-
-	/**
-	 * Called before an install/update/uninstall method
+	 * Called before any type of action
 	 *
-	 * @param string     $action     Which action is happening (install|uninstall|discover_install|update)
-	 * @param Installer  $installer  The class calling this method
+	 * @param string $action Which action is happening (install|uninstall|discover_install|update)
+	 * @param InstallerAdapter $installer The class calling this method
 	 *
 	 * @return boolean True on success
 	 */
@@ -89,42 +76,42 @@ class Pkg_TrombinoscopeInstallerScript
 		if ($action === 'uninstall') {
 			return true;
 		}
-
-		// make sure we are under Joomla 4.0 or over
-
-		if (version_compare(JVERSION, $this->minimumJoomla, 'lt')) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', $this->minimumJoomla), 'error');
-			return false;
+		
+		// checks minimum PHP and Joomla versions and that an upgrade is performed
+		if (!parent::preflight($action, $installer)) {
+		    return false;
 		}
-
-		$this->extension = $installer->getName();
-		$this->release = $installer->getManifest()->version;
 
 		// make sure the library is installed and that it is compatible with the extension
 		return $this->installOrUpdateLibrary($installer);
 	}
 
 	/**
-	 * Called on installation
+	 * method to install the component
 	 *
-	 * @return  boolean  True on success
+	 * @return boolean True on success
 	 */
-	public function install($installer) { }
+	public function install($installer) {}
 
 	/**
-	 * Called on update
+	 * method to uninstall the component
 	 *
-	 * @return  boolean  True on success
+	 * @return void
 	 */
-	public function update($installer) { }
+	public function uninstall($installer) {}
 
 	/**
-	 * Called on uninstallation
+	 * method to update the component
+	 *
+	 * @return boolean True on success
 	 */
-	public function uninstall($installer) { }
-
+	public function update($installer) {}
+	
 	/**
-	 * Called after an install/update/uninstall method
+	 * Called after any type of action
+	 *
+	 * @param string $action Which action is happening (install|uninstall|discover_install|update)
+	 * @param InstallerAdapter $installer The object responsible for running this script
 	 *
 	 * @return boolean True on success
 	 */
@@ -144,7 +131,6 @@ class Pkg_TrombinoscopeInstallerScript
 
      	$current_language = Factory::getLanguage()->getTag();
      	if (!in_array($current_language, $this->availableLanguages)) {
-     		//Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
      		echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
      	}
 
@@ -176,7 +162,6 @@ class Pkg_TrombinoscopeInstallerScript
      		$message = Text::sprintf('PKG_TROMBINOSCOPE_INFO_LEARN', $this->quickstartLink);
      		$message .= '<br /><br /><a href="' . $this->quickstartLink . '" target="_blank">' . HTMLHelper::image('mod_trombinoscopecontacts/quickstart.png', 'Quick Start', null, true) . '</a>';
 
-     		//Factory::getApplication()->enqueueMessage($message, 'notice');
      		echo '<div class="alert alert-info">' . $message . '</div>';
      	}
 
@@ -184,7 +169,6 @@ class Pkg_TrombinoscopeInstallerScript
 
 			// update warning
 
-			//Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TROMBINOSCOPE_WARNING_RELEASENOTES', $this->changelogLink), 'warning');
 			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_TROMBINOSCOPE_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
 
 			// overrides warning
@@ -216,24 +200,58 @@ class Pkg_TrombinoscopeInstallerScript
 			
 			// +++ Migration Joomla 3 to Joomla 4
 			
-			// move user files (substitutes)
+			// the old folders have not been removed on update so safe to do it here
+			if (Folder::exists(JPATH_SITE . '/modules/mod_trombinoscope/images')) {
 			
-			$this->moveFile('common_user_styles.css', '/modules/mod_trombinoscope/themes', '/media/mod_trombinoscopecontacts/css', '-min');
-			$this->moveFile('substitute_styles.css', '/modules/mod_trombinoscope/themes', '/media/mod_trombinoscopecontacts/css', '-min');
-			
-			// remove obsolete files
-			
-			$this->deleteFiles[] = '/modules/mod_trombinoscope/headerfilesmaster.php';
-			$this->deleteFiles[] = '/modules/mod_trombinoscope/helper.php';
-			
-			$this->deleteFolders[] = '/modules/mod_trombinoscope/fields';
-			$this->deleteFolders[] = '/modules/mod_trombinoscope/images';
-			$this->deleteFolders[] = '/modules/mod_trombinoscope/themes'; // could contain user made theme files or additional downloads
-			
-			$this->deleteFolders[] = '/media/syw_trombinoscopecontacts'; // could contain user made theme files or additional downloads
-			
-			$this->deleteFolders[] = '/cache/mod_trombinoscopecontacts';
-			
+    			// move user files (substitutes)
+    			
+    			$this->moveFile('common_user_styles.css', '/modules/mod_trombinoscope/themes', '/media/mod_trombinoscopecontacts/css', '-min');
+    			$this->moveFile('substitute_styles.css', '/modules/mod_trombinoscope/themes', '/media/mod_trombinoscopecontacts/css', '-min');
+    			
+    			// move known additional files (themes)
+    			// best to re-install (so it can be removed properly, if needed) but help the user here
+    			
+    			if (Folder::exists(JPATH_SITE . '/media/syw_trombinoscopecontacts/themes/canary')) {
+    			    
+    			    $this->copyFile('WebfontLicense.txt', '/media/syw_trombinoscopecontacts/themes/canary', '/media/mod_trombinoscopecontacts/css/fonts');
+    			    $this->copyFile('VerbBlack-webfont.eot', '/media/syw_trombinoscopecontacts/themes/canary', '/media/mod_trombinoscopecontacts/css/fonts');
+    			    $this->copyFile('VerbBlack-webfont.svg', '/media/syw_trombinoscopecontacts/themes/canary', '/media/mod_trombinoscopecontacts/css/fonts');
+    			    $this->copyFile('VerbBlack-webfont.ttf', '/media/syw_trombinoscopecontacts/themes/canary', '/media/mod_trombinoscopecontacts/css/fonts');
+    			    $this->copyFile('VerbBlack-webfont.woff', '/media/syw_trombinoscopecontacts/themes/canary', '/media/mod_trombinoscopecontacts/css/fonts');
+    			    
+    			    //$this->deleteFolders[] = '/media/syw_trombinoscopecontacts/themes/canary';
+    			    
+    			    if (Folder::exists(JPATH_SITE . '/modules/mod_trombinoscope/themes/canary')) {
+    			        
+    			        $this->copyFile('index.html', '/modules/mod_trombinoscope/themes/canary', '/media/mod_trombinoscopecontacts/styles/themes/canary');
+    			        $this->copyFile('style.css.php', '/modules/mod_trombinoscope/themes/canary', '/media/mod_trombinoscopecontacts/styles/themes/canary');
+    			        
+    			        if (File::exists(JPATH_SITE . '/modules/mod_trombinoscope/themes/canary/images/canary_card_landscape.png')
+    			            && $this->isFolderReady('/media/mod_trombinoscopecontacts/images/themes')) {
+    			            rename(JPATH_SITE . '/modules/mod_trombinoscope/themes/canary/images/canary_card_landscape.png', JPATH_SITE . '/media/mod_trombinoscopecontacts/images/themes/canary.png');
+    			        }
+    			    }
+    			}
+    			
+    			// delete old media folder
+    			// DO NOT REMOVE to allow users to move their own theme files
+    			
+    			//$this->deleteFolders[] = '/media/syw_trombinoscopecontacts';
+    			
+    			// remove data from /cache if coming from Joomla 3.10
+    			
+    			$this->deleteFolders[] = '/cache/mod_trombinoscopecontacts';
+    			
+    			// delete files and folders for module
+    			
+    			$this->deleteFolders[] = '/modules/mod_trombinoscope/fields';
+    			$this->deleteFolders[] = '/modules/mod_trombinoscope/images';
+    			//$this->deleteFolders[] = '/modules/mod_trombinoscope/themes'; // could contain user made theme files or additional downloads
+    			
+    			$this->deleteFiles[] = '/modules/mod_trombinoscope/headerfilesmaster.php';
+    			$this->deleteFiles[] = '/modules/mod_trombinoscope/helper.php';
+			}
+						
 			// +++ End Migration
 		}
 
@@ -241,39 +259,53 @@ class Pkg_TrombinoscopeInstallerScript
 
 		return true;
 	}
-
-	private function moveFile($file, $source, $destination, $minified_version = '.min')
+	
+	private function isFolderReady($extra_path)
 	{
-		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TROMBINOSCOPE_ERROR_CANNOTMOVEFILE', $file), 'warning');
-		}
-
-		$file_pieces = explode('.', $file); // assumes only one . in file name
-		$file_pieces[0] .= $minified_version;
-		$file = implode('.', $file_pieces);
-
-		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TROMBINOSCOPE_ERROR_CANNOTMOVEFILE', $file), 'warning');
-		}
+	    $path = JPATH_SITE;
+	    $folders = explode('/', trim($extra_path, '/'));
+	    
+	    foreach ($folders as $folder) {
+	        $path .= '/' . $folder;
+	        if (!Folder::exists($path)) {
+	            if (Folder::create($path)) {
+	            } else {
+	                return false;
+	            }
+	        }
+	    }
+	    
+	    return true;
 	}
-
-	private function removeFiles()
+	
+	private function moveFile($file, $source, $destination, $minified_version = '')
 	{
-		if (!empty($this->deleteFiles)) {
-			foreach ($this->deleteFiles as $filename) {
-				if (File::exists(JPATH_SITE . $filename) && !File::delete(JPATH_SITE . $filename)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TROMBINOSCOPE_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
-				}
-			}
-		}
-
-		if (!empty($this->deleteFolders)) {
-			foreach ($this->deleteFolders as $folder) {
-				if (Folder::exists(JPATH_ROOT . $folder) && !Folder::delete(JPATH_ROOT . $folder)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TROMBINOSCOPE_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
-				}
-			}
-		}
+	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	        if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TROMBINOSCOPE_ERROR_CANNOTMOVEFILE', $file), 'warning');
+	        }
+	    }
+	    
+	    if ($minified_version) {
+    	    $file_name = File::stripExt($file);
+    	    $file_extension = File::getExt($file);
+    	    $file = $file_name . $minified_version . '.' . $file_extension;
+    	    
+    	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+    	        if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+    	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TROMBINOSCOPE_ERROR_CANNOTMOVEFILE', $file), 'warning');
+    	        }
+    	    }
+	    }
+	}
+	
+	private function copyFile($file, $source, $destination)
+	{
+	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	        if (!$this->isFolderReady($destination) || !File::copy(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TROMBINOSCOPE_WARNING_COULDNOTCOPYFILE', $file), 'warning');
+	        }
+	    }
 	}
 
 	private function getDefaultTemplate()
@@ -389,27 +421,25 @@ class Pkg_TrombinoscopeInstallerScript
 
 	private function installOrUpdatePackage($installer, $package_name, $installation_type = 'install')
 	{
-		// Get the path to the package
-
+	    // Get the path to the package
+	    
 	    $sourcePath = $installer->getParent()->getPath('source');
-		$sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
-
-		// Extract and install the package
-
-		$package = InstallerHelper::unpack($sourcePackage);
-		$tmpInstaller = new Installer;
-
-		try {
-			if ($installation_type == 'install') {
-				$installResult = $tmpInstaller->install($package['dir']);
-			} else {
-				$installResult = $tmpInstaller->update($package['dir']);
-			}
-		} catch (\Exception $e) {
-			return false;
-		}
-
-		return true;
+	    $sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
+	    
+	    // Extract and install the package
+	    
+	    $package = InstallerHelper::unpack($sourcePackage);
+	    if ($package === false || (is_array($package) && $package['type'] === false)) {
+	        return false;
+	    }
+	    
+	    $tmpInstaller = new Installer();
+	    
+	    if ($installation_type === 'install') {
+	        return $tmpInstaller->install($package['dir']);
+	    } else {
+	        return $tmpInstaller->update($package['dir']);
+	    }
 	}
 
 	private function enableExtension($type, $element, $folder = '', $enable = true)
@@ -442,24 +472,12 @@ class Pkg_TrombinoscopeInstallerScript
 		return true;
 	}
 
+	/**
+	 * Install the library and its plugin if missing or outdated
+	 */
 	private function installOrUpdateLibrary($installer)
 	{
-		// install the library and its plugin if missing or outdated
-
 		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-// 			if (!Folder::exists(JPATH_ROOT . '/libraries/syw')) {
-// 				if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-// 					return false;
-// 				}
-// 			}
-
-// 			if (!Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-// 				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-// 					return false;
-// 				}
-// 			}
 		    
 		    if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
 		        Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
@@ -471,16 +489,6 @@ class Pkg_TrombinoscopeInstallerScript
 
 			$library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
 			if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
-
-// 				if (!$this->installOrUpdatePackage($installer, 'lib_syw', 'update')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-// 					return false;
-// 				}
-
-// 				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw', 'update')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-// 					return false;
-// 				}
 			    
 			    if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary', 'update')) {
 			        Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
@@ -490,13 +498,6 @@ class Pkg_TrombinoscopeInstallerScript
 				Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_UPDATED', $this->minimumLibrary), 'message');
 			}
 		}
-
-// 		if (!PluginHelper::isEnabled('system', 'syw')) {
-// 			if (!$this->enableExtension('plugin', 'syw', 'system')) {
-// 				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_COULDNOTENABLEPLUGINFORLIBRARY'), 'error');
-// 				return false;
-// 			}
-// 		}
 
 		return true;
 	}
