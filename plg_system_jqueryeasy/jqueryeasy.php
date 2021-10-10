@@ -60,8 +60,6 @@ class plgSystemJQueryEasy extends CMSPlugin
         
         if ($this->app->isClient('site')) {
             
-            //$this->_versioning = true; //$this->params->get('versioning', false);
-            
             $this->_enabled = true;
             
             $this->_cdn = 'google';
@@ -132,11 +130,7 @@ class plgSystemJQueryEasy extends CMSPlugin
         if ($this->_showreport) {
             $this->_verbose_array = array();
         }
-        
-        // versioning
-        
-        //$this->_versioning = true; // (defined('JDEBUG') && JDEBUG) ? false : true;
-        
+
         // protocole
         
         $protocole = $this->params->get('whichhttp' . $this->_suffix, 'https');
@@ -168,7 +162,7 @@ class plgSystemJQueryEasy extends CMSPlugin
         
         // jQuery
         
-        switch ($this->params->get('jqueryin' . $this->_suffix, 0)) {
+        switch ($this->params->get('jqueryinpage' . $this->_suffix, 0)) {
             case 1: $this->_usejQuery = true; break;
             case 2: $this->_usejQuery = true; $this->_usejQueryUI = true; break;
             default: break;
