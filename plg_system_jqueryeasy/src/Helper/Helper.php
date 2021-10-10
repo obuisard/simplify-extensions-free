@@ -15,35 +15,44 @@ use Joomla\CMS\Uri\Uri;
 
 class Helper
 {
-    static public function isEnabledOnPage($params, $suffix)
+    static public function isEnabledOnPage($params, $suffix = '')
     {
+        // enable the plugin for HTML pages only
         if (Factory::getDocument()->getType() !== 'html') {
             return false;
         }
         
         // disable plugin in selected templates
         
-        $templates_array = $params->get('templateid', array('none'));
+//         $templates_array = $params->get('templateid', array('none'));
         
-        if (!is_array($templates_array)) { // before the plugin is saved, the value is the string 'none'
-            $templates_array = explode(' ', $templates_array);
+//         if (!is_array($templates_array)) { // before the plugin is saved, the value is the string 'none'
+//             $templates_array = explode(' ', $templates_array);
+//         }
+        
+//         $array_of_template_values = array_count_values($templates_array);
+//         if (isset($array_of_template_values['none']) && $array_of_template_values['none'] > 0) { // 'none' was selected
+//             // keep the plugin enabled
+//         } else {
+//             if (Factory::getApplication()->getTemplate() !== 'system') {
+//                 if (in_array(Factory::getApplication()->getTemplate(true)->id, $templates_array)) {
+//                     return false;
+//                 }
+//             }
+//         }
+
+        $urls = $params->get('url_inex'.$suffix, '');
+        
+        if ($urls === '') {
+            return true;
         }
         
-        $array_of_template_values = array_count_values($templates_array);
-        if (isset($array_of_template_values['none']) && $array_of_template_values['none'] > 0) { // 'none' was selected
-            // keep the plugin enabled
-        } else {
-            if (Factory::getApplication()->getTemplate() !== 'system') {
-                if (in_array(Factory::getApplication()->getTemplate(true)->id, $templates_array)) {
-                    return false;
-                }
-            }
-        }
+        $url_paths = trim( (string) $params->get('url_inex_items'.$suffix, ''));
         
         // enable plugin only on the allowed pages
-        $includedPaths = trim( (string) $params->get('enableonlyin'.$suffix, ''));
-        if ($includedPaths) {
-            $paths = array_map('trim', (array) explode("\n", $includedPaths));
+        if ($url_paths && $urls === 1) {
+            
+            $paths = array_map('trim', (array) explode("\n", $url_paths));
             
             $found = false;
             foreach ($paths as $path) {
@@ -55,17 +64,17 @@ class Helper
             if (!$found) {
                 return false;
             }
-        } else {
-            // disable plugin in the listed pages
-            $excludedPaths = trim( (string) $params->get('disablein'.$suffix, ''));
-            if ($excludedPaths) {
-                $paths = array_map('trim', (array) explode("\n", $excludedPaths));
-                
-                foreach ($paths as $path) {
-                    $paths_compare = self::paths_are_identical(Uri::current(), $path);
-                    if ($paths_compare) {
-                        return false;
-                    }
+        }
+        
+        // disable plugin in the listed pages
+        if ($url_paths && $urls === 0) {
+            
+            $paths = array_map('trim', (array) explode("\n", $url_paths));
+            
+            foreach ($paths as $path) {
+                $paths_compare = self::paths_are_identical(Uri::current(), $path);
+                if ($paths_compare) {
+                    return false;
                 }
             }
         }
@@ -80,11 +89,13 @@ class Helper
             case 'jqueryui_js': return '([\\/a-zA-Z0-9_:\.~-]*)jquery[.-]*ui([0-9\.-]|latest|core|custom|min|pack)*?.js(.*?)';
             case 'noconflict_js': return '([\\/a-zA-Z0-9_:\.~-]*)jquery[.-]*no[.-]*[cC]onflict([0-9\.-]|min)*?.js(.*?)';
             case 'migrate_js': return '([\\/a-zA-Z0-9_:\.~-]*)jquery([0-9\.-])*?migrate([0-9\.-]|latest|core|min|pack)*?.js(.*?)';
+            case 'popper_js': return '([\\/a-zA-Z0-9_:\.~-]*)popper([0-9\.-]|min)*?js(.*?)';
+            case 'bootstrap_js': return '([\\/a-zA-Z0-9_:\.~-]*)bootstrap([0-9\.-]|bundle|min)*?js(.*?)';
             
             case 'jqueryui_css': return '([\\/a-zA-Z0-9_:\.~-]*)jquery[.-]*ui([0-9\.-]|latest|core|custom|min|pack)*?.css(.*?)';
+            case 'bootstrap_css': return '([\\/a-zA-Z0-9_:\.~-]*)bootstrap([a-zA-Z0-9\.-]|min)*?css(.*?)';
             
             case 'noconflict_declaration': return '[^};\n>]*(jQuery|\$)\.no[cC]onflict\(\s*(true|false|)\s*\);';
-            case 'caption_declaration': return '([\s\w();,\':\.-]*)JCaption([\s\w();,\':\.-]*)';
         }
         
         return $regexp;
@@ -190,65 +201,15 @@ class Helper
                     return $protocole.'//ajax.aspnetcdn.com/ajax/bootstrap/'.$version.'/css/bootstrap-reboot'.$extra.'.css';
                 }
                 return $protocole.'//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/'.$version.'/css/bootstrap-reboot'.$extra.'.css';
+
+            case 'bootstrap_utilities_css':
+            	if ($cdn == 'microsoft') {
+            		return $protocole.'//ajax.aspnetcdn.com/ajax/bootstrap/'.$version.'/css/bootstrap-utilities'.$extra.'.css';
+        		}
+            	return $protocole.'//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/'.$version.'/css/bootstrap-utilities'.$extra.'.css';
         }
         
         return '';
-    }
-    
-    static public function addScript($url, $versioning = false, $type = 'text/javascript', $defer = false, $async = false)
-    {
-        $options = array();
-        $attributes = array();
-        
-        if ($versioning) {
-            $options['version'] = 'auto';
-        }
-        
-        $attributes['defer'] = $defer;
-        $attributes['async'] = $async;
-        $attributes['type'] = $type;
-        
-        Factory::getDocument()->addScript($url, $options, $attributes);
-    }
-    
-    static public function addScriptDeclaration($declaration, $placeholder = '')
-    {
-        if ($declaration) {
-            if ($placeholder) {
-                Factory::getDocument()->addScriptDeclaration($placeholder);
-            } else {
-                Factory::getDocument()->addScriptDeclaration($declaration);
-            }
-        }
-    }
-    
-    static public function addStyleSheet($url, $versioning = false, $type = 'text/css', $media = null, $attribs = array())
-    {
-        $options = array();
-        $attributes = array();
-        
-        if ($versioning) {
-            $options['version'] = 'auto';
-        }
-        
-        $attributes['type'] = $type;
-        if (isset($media)) {
-            $attributes['media'] = $media;
-        }
-        $attributes = array_replace($attributes, $attribs);
-        
-        Factory::getDocument()->addStyleSheet($url, $options, $attributes);
-    }
-    
-    static public function addStyleDeclaration($declaration, $placeholder = '')
-    {
-        if ($declaration) {
-            if ($placeholder) {
-                Factory::getDocument()->addStyleDeclaration($placeholder);
-            } else {
-                Factory::getDocument()->addStyleDeclaration($declaration);
-            }
-        }
     }
     
     static public function getAdditionalScripts($script_param)
@@ -258,32 +219,6 @@ class Helper
         $js = trim((string) $script_param);
         if ($js) {
             return array_map('trim', (array) explode("\n", $js));
-        }
-        
-        return $script_paths;
-    }
-    
-    static public function prepare_supplement_scripts($supplement_scripts, $versioning = false, $add_placeholder = false)
-    {
-        $script_paths = array();
-        
-        foreach($supplement_scripts as $i => $supplement_script) {
-            
-            $script_paths[] = $supplement_script;
-            
-            if ($add_placeholder) {
-                
-                if (strpos($supplement_script, 'http') !== 0) {
-                    $supplement_script = Uri::root().ltrim($supplement_script, '/');
-                }
-                
-                $useversion = $versioning;
-                if (!Uri::isInternal($supplement_script)) {
-                    $useversion = false;
-                }
-                
-                self::addScript($i.'ADD_SCRIPT_HERE', $useversion);
-            }
         }
         
         return $script_paths;
@@ -301,33 +236,7 @@ class Helper
         return $stylesheet_paths;
     }
     
-    static public function prepare_supplement_stylesheets($supplement_stylesheets, $versioning = false, $add_placeholder = false)
-    {
-        $stylesheet_paths = array();
-        
-        foreach($supplement_stylesheets as $i => $supplement_stylesheet) {
-            
-            $stylesheet_paths[] = $supplement_stylesheet;
-            
-            if ($add_placeholder) {
-                
-                if (strpos($supplement_stylesheet, 'http') !== 0) {
-                    $supplement_stylesheet = Uri::root().ltrim($supplement_stylesheet, '/');
-                }
-                
-                $useversion = $versioning;
-                if (!Uri::isInternal($supplement_stylesheet)) {
-                    $useversion = false;
-                }
-                
-                self::addStyleSheet($i.'ADD_STYLESHEET_HERE', $useversion);
-            }
-        }
-        
-        return $stylesheet_paths;
-    }
-    
-    static public function paths_are_identical($url, $path, $use_backward_compatibility = false)
+    static public function paths_are_identical($url, $path)
     {
         $first_pos = (strpos($path, '*') === 0) ? true: false;
         $last_pos = (strrpos($path, '*') === (strlen($path) - 1)) ? true: false;
@@ -370,31 +279,38 @@ class Helper
      * search through array of strings BUT remove the only part that matches, not the whole string
      *
      * @param string $regexp
-     * @param array $container
-     * @return number of replacements done
+     * @param array|string $container
+     * @param string $replace
      */
     static public function search_and_replace($regexp, &$container, $replace = '')
     {
         $total_count = 0;
-        foreach ($container as $key => $value) {
-            $value = preg_replace('/' . $regexp . '/', $replace, $value, -1, $count);
-            $total_count += $count;
-            if (trim($value) == '') {
-                unset($container[$key]);
-                continue;
+        
+        if (is_array($container)) {
+            foreach ($container as $key => $value) {
+                $value = preg_replace('/' . $regexp . '/', $replace, $value, -1, $count);
+                $total_count += $count;
+                if (trim($value) == '') {
+                    unset($container[$key]);
+                    continue;
+                }
+                $container[$key] = $value;
             }
-            $container[$key] = $value;
+        } else {
+            $container = preg_replace('/' . $regexp . '/', $replace, $container, -1, $count);
+            $total_count += $count;
         }
         
         return $total_count;
     }
     
     /**
+     * specific search for noconflict code
      * 
-     * @param unknown $regexp
-     * @param unknown $container
-     * @param unknown $keep_var
-     * @param unknown $verbose
+     * @param string $regexp
+     * @param array|string $container
+     * @param boolean $keep_var
+     * @param array $verbose
      */
     static public function search_and_replace_noconflict($regexp, &$container, $keep_var, &$verbose)
     {
@@ -437,19 +353,7 @@ class Helper
                 
                 $number_of_deletions = 0;
                 
-                foreach ($matches as $match) {
-                    
-                    
-                    
-                    // test if nonce attribute exists
-                    // if it does, ignore (it's been previously checked)
-                    
-                    if (strpos($match, 'nonce=')) {
-                        continue;
-                    }
-                    
-                    
-                    
+                foreach ($matches as $match) {                    
                     $quoted_match = preg_quote($match[0], '#'); // prepares for regexp
                     if (!$keep_var) { // variable declarations included
                         $container = preg_replace('#'.$quoted_match.'#', '', $container, 1);
@@ -532,27 +436,71 @@ class Helper
             if (empty($ignore_files) && !$request_results) {
                 $container = preg_replace('#'.$regexp.'#', 'GARBAGE', $container, -1, $num_removed);
             } else {
-                $matches = array();
-                if (preg_match_all('#'.$regexp.'#', $container, $matches, PREG_SET_ORDER) >= 0) {
-                    foreach ($matches as $match) {
-                        $quoted_match = preg_quote($match[0], '/'); // prepares for regexp
-                        $ignore = false;
-                        foreach ($ignore_files as $ignore_file) {
-                            if (stripos($match[0], $ignore_file) !== false) { // library needs to be ignored for removal
-                                $ignore = true;
-                                if (!is_null($verbose)) {
-                                    $verbose[] = array('info', Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_IGNORE' . ($type == 'js' ? 'SCRIPT' : 'STYLESHEET'), $ignore_file));
-                                }
-                                break;
+                
+                // use so that if a file to ignore is found multiple times, it will keep the first occurence and remove the other ones
+                
+                $ignore_file_count = array();
+                foreach ($ignore_files as $ignore_file) {
+                    $ignore_file_count[$ignore_file] = 0;
+                }                
+                
+                $container = preg_replace_callback('#'.$regexp.'#', function ($matches) use ($ignore_files, &$ignore_file_count, &$verbose, $type, &$num_removed, &$removed) { 
+                    
+                    $ignore = false;
+                    foreach ($ignore_files as $ignore_file) {
+                        
+                        if (stripos($matches[0], $ignore_file) !== false && $ignore_file_count[$ignore_file] < 1) { // library needs to be ignored for removal
+                            $ignore = true;
+                            
+                            $ignore_file_count[$ignore_file]++;
+                            
+                            if (!is_null($verbose)) {
+                                $verbose[] = array('info', Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_IGNORE' . ($type == 'js' ? 'SCRIPT' : 'STYLESHEET'), $ignore_file));
                             }
-                        }
-                        if (!$ignore) { // remove the library
-                            $container = preg_replace('#'.$quoted_match.'#', 'GARBAGE', $container, 1);
-                            $num_removed++;
-                            $removed[] = ($type == 'js') ? rtrim(substr($match[0], 5), '"') : rtrim(substr($match[0], 6), '"');
+                            break;
                         }
                     }
-                }
+                    
+                    if ($ignore) {
+                        return $matches[0];
+                    }
+                    
+                    $num_removed++;
+                    $removed[] = ($type == 'js') ? rtrim(substr($matches[0], 5), '"') : rtrim(substr($matches[0], 6), '"');
+                    
+                    return 'GARBAGE';
+                    
+                }, $container, -1);
+                
+//                 $matches = array();
+//                 if (preg_match_all('#'.$regexp.'#', $container, $matches, PREG_SET_ORDER) >= 0) {
+//                     foreach ($matches as $match) {
+//                         $quoted_match = preg_quote($match[0], '/'); // prepares for regexp
+//                         $ignore = false;
+                        
+                        
+//                         $verbose[] = array('error', $match[0]);
+                        
+//                         foreach ($ignore_files as $ignore_file) {                       
+                            
+//                             if (stripos($match[0], $ignore_file) !== false && $ignore_file_count[$ignore_file] < 1) { // library needs to be ignored for removal
+//                                 $ignore = true;
+                                
+//                                 $ignore_file_count[$ignore_file]++; 
+                                
+//                                 if (!is_null($verbose)) {
+//                                     $verbose[] = array('info', Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_IGNORE' . ($type == 'js' ? 'SCRIPT' : 'STYLESHEET'), $ignore_file));
+//                                 }
+//                                 break;
+//                             }
+//                         }
+//                         if (!$ignore) { // remove the library
+//                             $container = preg_replace('#'.$quoted_match.'#', 'GARBAGE', $container, 1);
+//                             $num_removed++;
+//                             $removed[] = ($type == 'js') ? rtrim(substr($match[0], 5), '"') : rtrim(substr($match[0], 6), '"');
+//                         }
+//                     }
+//                 }
             }
         }
         
@@ -561,24 +509,6 @@ class Helper
         }
         
         return $num_removed;
-    }
-    
-    static public function single_replace($pattern, $replacement, $subject, &$verbose = array(), $message = array(), &$modified = false)
-    {
-        $result = '';
-        
-        if (!is_null($verbose)) {
-            $count = 0;
-            $result = preg_replace('#'.$pattern.'#', $replacement, $subject, -1, $count);
-            if ($count > 0) {
-                $verbose[] = $message;
-                $modified = true;
-            }
-        } else { // faster
-            $result = preg_replace('#'.$pattern.'#', $replacement, $subject, 1);
-        }
-        
-        return $result;
     }
     
     static public function report(&$verbose, $type, $message, $parameter_1 = null, $parameter_2 = null)
@@ -693,12 +623,35 @@ class Helper
         return implode('', $replacement).chr(13);
     }
     
+    //$root_path = (strpos($this->_jqpath, 'http') !== 0) ? $this->_root . Uri::root(true) . '/' . $this->_jqpath : $this->_jqpath;
+    //$new_scripts[$this->_jqpath] = array('type' => 'text/javascript', 'options' => (Uri::isInternal($root_path) ? ['version' => $version->getMediaVersion()] : array()));
+    
+    //var_dump($this->_root); // http://localhost:7878
+    //var_dump(Uri::root(true)); // /MyWork_4_x_free_test
+    //var_dump(JPATH_ROOT); // E:\wamp64\www\MyWork_4_x_free_test
+    
+    //var_dump($root_path); // http://localhost:7878/MyWork_4_x_free_test/media/vendor/jquery/js/jquery.js
+    //var_dump(Uri::isInternal($root_path)); // true  
+    
+    static public function isInternal($path)
+    {
+        $root = str_replace(Uri::root(true) . '/', '', Uri::root());
+        
+        $root_path = (strpos($path, 'http') !== 0) ? $root . Uri::root(true) . '/' . $path : $path;
+    
+        if (Uri::isInternal($root_path)) {
+            return true;
+        }
+        
+        return false;
+    }
+    
     static public function getJQueryPath($protocole, $compressed, $params, &$verbose, $cdn= 'google', $suffix = '')
     {
         $jQueryVersion = $params->get('jqueryversion'.$suffix, '1.8');
         
         if ($jQueryVersion == 'joomla') {
-            return 'media/vendor/jquery/js/jquery'.$compressed.'.js';
+            return 'joomla'; //'media/vendor/jquery/js/jquery'.$compressed.'.js';
         } else {
             if ($jQueryVersion == 'local') {
                 $localVersionPath = trim($params->get('localversion'.$suffix, ''));
@@ -745,7 +698,7 @@ class Helper
             
             if (!$migrate_is_unnecessary) {
                 if ($migrateVersion == 'joomla') {
-                    return 'media/vendor/jquery-migrate/js/jquery-migrate'.$compressed.'.js';
+                    return 'joomla'; //'media/vendor/jquery-migrate/js/jquery-migrate'.$compressed.'.js';
                 } else {
                     if ($migrateVersion == 'local') {
                         $localPathMigrate = trim($params->get('localpathmigrate'.$suffix, ''));
@@ -759,10 +712,6 @@ class Helper
                             self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_EMPTYLOCALFILE', 'Migrate');
                         }
                     } else {
-                        
-                        if ($migrateVersion == '3.0.0') { // for backward compatibility
-                            $migrateVersion = '3.0';
-                        }
                         
                         $migrateSubversion = trim($params->get('migratesubversion'.$suffix, ''));
                         
@@ -860,6 +809,191 @@ class Helper
         }
         
         return '';
+    }
+    
+    static public function getPopperPath($protocole, $compressed, $params, &$verbose, $cdn= 'google', $suffix = '')
+    {
+        $BootstrapVersion = $params->get('bootstrapversion'.$suffix, 'joomla');
+        
+        $bootstrap_library_types = $params->get('bootstraplibrarytypes'.$suffix, 'both');
+        
+        if ($bootstrap_library_types == 'both' || $bootstrap_library_types == 'js') {
+            
+            if (substr($BootstrapVersion, 0, 1) === '4' || substr($BootstrapVersion, 0, 1) === '5') { // Bootstrap 4 & 5
+                
+                $PopperVersion = $params->get('popperversion'.$suffix, 'none');
+                // no Joomla asset version, assume it's already included in package
+                
+                if ($PopperVersion != 'none' && !$params->get('loadbootstrapbundle'.$suffix, 0)) {
+                    
+                    $PopperSubversion = '.'.$params->get('poppersubversion'.$suffix, 0);
+                    
+                    return $protocole.'//cdnjs.cloudflare.com/ajax/libs/popper.js/'.$PopperVersion.$PopperSubversion.'/umd/popper'.$compressed.'.js';
+                }
+            }
+        }
+        
+        return '';
+    }
+    
+    static public function getBootstrapPaths($protocole, $compressed, $params, &$verbose, $cdn= 'google', $suffix = '')
+    {
+        $paths = array();
+        
+        $BootstrapVersion = $params->get('bootstrapversion'.$suffix, 'joomla');
+        
+        $bootstrap_library_types = $params->get('bootstraplibrarytypes'.$suffix, 'both');
+        
+        if ($bootstrap_library_types == 'both' || $bootstrap_library_types == 'js') {
+            if ($BootstrapVersion == 'joomla') {
+//                 $bundle = '';
+//                 if ($params->get('loadbootstrapbundle', 0)) {
+                    //$bundle = '.bundle'; // no bundle in framework
+//                 }
+                $paths['joomla'] = 'joomla'; //'/media/vendor/bootstrap/js/bootstrap-es5'.$bundle.$compressed.'.js';
+            } else {
+                if ($BootstrapVersion == 'local') {
+                    $localVersionPaths = trim( (string) $params->get('localbootstrapversionjs'.$suffix, ''));
+                    
+                    if ($localVersionPaths) {
+                        $localVersionPaths = array_map('trim', (array) explode("\n", $localVersionPaths));
+                        
+                        foreach ($localVersionPaths as $key => $localVersionPath) {
+                            
+                            if (File::exists(JPATH_ROOT.$localVersionPath)) {
+                                $paths['local' . $key] = $localVersionPath;
+                            } else {
+                                self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASYPROFILES_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
+                            }
+                        }
+                    } else {
+                        self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASYPROFILES_VERBOSE_EMPTYLOCALFILE', 'Bootstrap');
+                    }
+                } else {
+                    $BootstrapSubversion = trim($params->get('bootstrapsubversion'.$suffix, ''));
+                    
+                    $values_that_do_not_need_subversion = array('2.3.2');
+                    
+                    if (in_array($BootstrapVersion, $values_that_do_not_need_subversion)) {
+                        $BootstrapSubversion = '';
+                    } else if ($BootstrapSubversion == '') {
+                        $BootstrapSubversion = '0';
+                    }
+                    
+                    if ($BootstrapSubversion != '') {
+                        $BootstrapSubversion = '.'.$BootstrapSubversion;
+                    }
+                    
+                    $bundle = '';
+                    if (substr($BootstrapVersion, 0, 1) === '4' || substr($BootstrapVersion, 0, 1) === '5') { // Bootstrap 4 & 5
+                        if ($params->get('loadbootstrapbundle'.$suffix, 0)) {
+                            $bundle = '.bundle';
+                        }
+                    }
+                    
+                    $paths['cdn'] = self::getURL($cdn, 'bootstrap_js', $protocole, $BootstrapVersion.$BootstrapSubversion, $bundle.$compressed);
+                }
+            }
+        }
+        
+        return $paths;
+    }
+    
+    static public function getBootstrapCSSPaths($protocole, $compressed, $params, &$verbose, $cdn= 'google', $suffix = '')
+    {
+        $paths = array();
+        
+        $BootstrapVersion = $params->get('bootstrapversion'.$suffix, 'joomla');
+        
+        $bootstrap_library_types = $params->get('bootstraplibrarytypes'.$suffix, 'both');
+        
+        if ($bootstrap_library_types == 'both' || $bootstrap_library_types == 'css') {
+            if ($BootstrapVersion == 'joomla') {                
+//                 $bs_css_packages = $params->get('bootstrapcsspackages', '');
+//                 if (is_array($bs_css_packages) && !empty($bs_css_packages)) {
+//                     if (in_array('grid', $bs_css_packages)) {
+//                         $paths[] = '/media/vendor/bootstrap/css/bootstrap-grid'.$compressed.'.css';
+//                     }
+//                     if (in_array('reboot', $bs_css_packages)) {
+//                         $paths[] = '/media/vendor/bootstrap/css/bootstrap-reboot'.$compressed.'.css';
+//                     }
+                    
+                    // no utilities, even though Joomla uses B5 - included automatically in bootstrap.css
+                    
+//                 } else {
+                $paths['joomla'] = 'joomla'; //'/media/vendor/bootstrap/css/bootstrap'.$compressed.'.css';
+//                 }
+            } else {
+                if ($BootstrapVersion == 'local') {
+                    $localVersionPaths = trim( (string) $params->get('localbootstrapversioncss'.$suffix, ''));
+                    
+                    if ($localVersionPaths) {
+                        $localVersionPaths = array_map('trim', (array) explode("\n", $localVersionPaths));
+                        
+                        foreach ($localVersionPaths as $key => $localVersionPath) {
+                            if (File::exists(JPATH_ROOT.$localVersionPath)) {
+                                $paths['local' . $key] = $localVersionPath;
+                            } else {
+                                self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASYPROFILES_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
+                            }
+                        }
+                    } else {
+                        self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASYPROFILES_VERBOSE_EMPTYLOCALFILE', 'Bootstrap');
+                    }
+                } else {
+                    $BootstrapSubversion = trim($params->get('bootstrapsubversion'.$suffix, ''));
+                    
+                    $values_that_do_not_need_subversion = array('2.3.2');
+                    
+                    if (in_array($BootstrapVersion, $values_that_do_not_need_subversion)) {
+                        $BootstrapSubversion = '';
+                    } else if ($BootstrapSubversion == '') {
+                        $BootstrapSubversion = '0';
+                    }
+                    
+                    if ($BootstrapSubversion != '') {
+                        $BootstrapSubversion = '.'.$BootstrapSubversion;
+                    }
+                    
+                    if ($BootstrapVersion == '2.3.2') { // Bootstrap 2
+                        $paths['cdn'] = self::getURL($cdn, 'bootstrap_css', $protocole, $BootstrapVersion.$BootstrapSubversion, $compressed);
+                        $paths['cdn_extra'] = self::getURL($cdn, 'bootstrap_responsive_css', $protocole, $BootstrapVersion.$BootstrapSubversion, $compressed);
+                        // TODO glyph image under ..img/
+                    } else if (substr($BootstrapVersion, 0, 1) === '3') { // Bootstrap 3
+                        $paths['cdn'] = self::getURL($cdn, 'bootstrap_css', $protocole, $BootstrapVersion.$BootstrapSubversion, $compressed);
+                        if ($params->get('loadbootstraptheme'.$suffix, 0)) {
+                            $paths['cdn_extra'] = self::getURL($cdn, 'bootstrap_theme_css', $protocole, $BootstrapVersion.$BootstrapSubversion, $compressed);
+                        }
+                        // TODO glyph fonts under ..fonts/
+                    } else { // Bootstrap 4 & 5
+                        $bs_css_packages = $params->get('bootstrapcsspackages'.$suffix, '');
+                        
+                        $rtl = '';
+                        if ($params->get('bootstraprtl'.$suffix, 0) && substr($BootstrapVersion, 0, 1) === '5') {
+                            $rtl = '.rtl';
+                        }
+                        
+                        if (is_array($bs_css_packages) && !empty($bs_css_packages)) {
+                            if (in_array('grid', $bs_css_packages)) {
+                                $paths['grid'] = self::getURL($cdn, 'bootstrap_grid_css', $protocole, $BootstrapVersion.$BootstrapSubversion, $rtl.$compressed);
+                            }
+                            if (in_array('reboot', $bs_css_packages)) {
+                                $paths['reboot'] = self::getURL($cdn, 'bootstrap_reboot_css', $protocole, $BootstrapVersion.$BootstrapSubversion, $rtl.$compressed);
+                            }
+                            if (in_array('utilities', $bs_css_packages)) {
+                                if (substr($BootstrapVersion, 0, 1) === '5') {	// Bootstrap 5 only
+                                    $paths['utilities'] = self::getURL($cdn, 'bootstrap_utilities_css', $protocole, $BootstrapVersion.$BootstrapSubversion, $rtl.$compressed);
+                                }
+                            }
+                        } else {
+                            $paths['cdn'] = self::getURL($cdn, 'bootstrap_css', $protocole, $BootstrapVersion.$BootstrapSubversion, $rtl.$compressed);
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $paths;
     }
     
 }

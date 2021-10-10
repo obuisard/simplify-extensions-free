@@ -26,7 +26,7 @@ class JqueryselectionField extends DynamicsingleselectField
 
 		$path = URI::root(true) . '/media/plg_system_jqueryeasy/images';
 
-		$options[] = array(0, Text::_('JNO'), '', $path . '/select_no.png');
+		$options[] = array(0, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_IGNORE'), '', $path . '/select_no.png');
 		$options[] = array(1, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_JQUERY'), '', $path . '/select_jquery.png');
 		$options[] = array(2, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_JQUERYUI'), '', $path . '/select_jquery_ui.png');
 

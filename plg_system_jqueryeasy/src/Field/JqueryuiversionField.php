@@ -50,7 +50,7 @@ class JqueryuiversionField extends FormField
 								json_version.innerText = data.version;
 
 								const the_version = document.createTextNode("' . Text::_('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSION_LABEL') . ' ");
-								const the_source = document.createTextNode(" (' . Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCE_LABEL', 'Cloudflare') . ')");
+								const the_source = document.createTextNode(" (' . Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_LATESTAVAILABLEVERSIONSOURCEWITHPARAM_LABEL', 'Cloudflare') . ')");
 
 								let the_div = document.querySelector(".' . $div . '");
 								the_div.appendChild(the_version);

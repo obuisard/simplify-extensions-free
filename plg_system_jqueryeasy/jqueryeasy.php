@@ -7,12 +7,9 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
-use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\WebAsset\WebAssetItem;
-use SYW\Plugin\System\JqueryEasy\Helper\Helper;
 use Joomla\CMS\Version;
+use SYW\Plugin\System\JqueryEasy\Helper\Helper;
 
 /**
  * testing - put in <head> of the template
@@ -33,12 +30,26 @@ use Joomla\CMS\Version;
 
 class plgSystemJQueryEasy extends CMSPlugin
 {
+    /**
+     * Application object.
+     *
+     * @var    \Joomla\CMS\Application\CMSApplication
+     */
     protected $app;
     
+    /**
+     * Load the language file on instantiation.
+     *
+     * @var    boolean
+     */
     protected $autoloadLanguage = true;
     
-    static protected $loaded = [];
-    
+    /**
+     * Constructor.
+     *
+     * @param   object  &$subject  The object to observe.
+     * @param   array   $config    An optional associative array of configuration settings.
+     */
     public function __construct(&$subject, $config)
     {
         parent::__construct($subject, $config);
@@ -49,10 +60,9 @@ class plgSystemJQueryEasy extends CMSPlugin
         
         if ($this->app->isClient('site')) {
             
-            $this->_versioning = $this->params->get('versioning', false);
+            //$this->_versioning = true; //$this->params->get('versioning', false);
             
             $this->_enabled = true;
-            $this->_headonly = false;
             
             $this->_cdn = 'google';
             
@@ -64,6 +74,7 @@ class plgSystemJQueryEasy extends CMSPlugin
             
             $this->_usejQuery = false;
             $this->_usejQueryUI = false;
+            $this->_useBootstrap = false;
             
             $this->_jqpath = '';
             $this->_jqmigratepath = '';
@@ -72,13 +83,14 @@ class plgSystemJQueryEasy extends CMSPlugin
             $this->_jquipath = '';
             $this->_jquicsspath = '';
             
-            $this->_timeafterroute = 0;
-            $this->_timebeforerender = 0;
+            $this->_bootstrapjspath = array();
+            $this->_bootstrapcssspath = array();
+            $this->_popperpath = '';
+            
             $this->_timebeforecompilehead = 0;
             $this->_timeafterrender = 0;
             
-            $this->_root = str_replace(Uri::root(true) . '/', '', Uri::root());
-            $this->_suffix = 'frontend';
+            $this->_suffix = '';
         }
     }
     
@@ -89,140 +101,6 @@ class plgSystemJQueryEasy extends CMSPlugin
         }
         
         $this->_enabled = Helper::isEnabledOnPage($this->params, $this->_suffix);
-        
-        if (!$this->_enabled) {
-            return;
-        }
-        
-        $this->loadLanguage();
-        
-        $showreport = $this->params->get('showreport', 0);
-        
-        if ($showreport == 1 || $showreport == 3) {
-            $this->_showreport = true;
-        } else if ($showreport == 2 || $showreport == 4) { // only show report when Super User is logged in
-            $this->_showreport = Factory::getUser()->authorise('core.admin') ? true : false;
-        }
-        
-        if ($this->_showreport) {
-            $this->_verbose_array = array();
-        }
-        
-        $this->_headonly = $this->params->get('limittohead', 0);
-        
-        if ($this->_headonly) {
-            Helper::report($this->_verbose_array, 'message', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_MODIFICATIONSHEADONLY');
-        }
-        
-        $time_start = microtime(true);
-        
-        // BEGIN prepare spaces to fill with script
-        
-        $javascript = Helper::getAdditionalScripts($this->params->get('addjavascript' . $this->_suffix, ''));
-        if (!empty($javascript)) {
-            $this->_supplement_scripts = array_unique($javascript); //Helper::prepare_supplement_scripts(array_unique($javascript), $this->_versioning, ($this->_headonly ? false : true));
-        }
-        
-        // END prepare spaces to fill with scripts
-        
-        // BEGIN prepare spaces to fill with scripts declarations
-        
-        //         if (!$this->_headonly) {
-        //             Helper::addScriptDeclaration(trim((string) $this->params->get('addjavascriptdeclaration' . $this->_suffix, '')), 'ADD_SCRIPT_DECLARATION_HERE');
-        //         }
-        
-        // END prepare spaces to fill with scripts declarations
-        
-        // BEGIN prepare spaces to fill with stylesheets and stylesheets declarations
-        
-        $css = Helper::getAdditionalStylesheets($this->params->get('addcss' . $this->_suffix, ''));
-        if (!empty($css)) {
-            $this->_supplement_stylesheets = array_unique($css); //Helper::prepare_supplement_stylesheets(array_unique($css), $this->_versioning, ($this->_headonly ? false : true));
-        }
-        
-        //         if (!$this->_headonly) {
-        //             Helper::addStyleDeclaration(trim((string) $this->params->get('addcssdeclaration' . $this->_suffix, '')), 'ADD_STYLESHEET_DECLARATION_HERE');
-        //         }
-        
-        // END prepare spaces to fill with stylesheets and stylesheets declarations
-        
-        // protocole
-        
-        $protocole = $this->params->get('whichhttp' . $this->_suffix, 'https');
-        $protocole = ($protocole == 'none') ? '' : $protocole.':';
-        
-        // compression
-        
-        $compressed = '';
-        if ($this->params->get('compression' . $this->_suffix, 'compressed') == 'compressed' && !(defined('JDEBUG') && JDEBUG)) {
-            $compressed = '.min';
-        }
-        
-        // set jQuery variables
-        
-        switch ($this->params->get('jqueryin' . $this->_suffix, 0)) {
-            case 1: $this->_usejQuery = true; break;
-            case 2: $this->_usejQuery = true; $this->_usejQueryUI = true; break;
-            default: break;
-        }
-        
-        // jQuery
-        
-        if ($this->_usejQuery)
-        {
-            $this->_jqpath = Helper::getJQueryPath($protocole, $compressed, $this->params, $this->_verbose_array, $this->_cdn, $this->_suffix);
-            
-            //             if (!$this->_headonly && $this->_jqpath) {
-            //                 $root_path = (strpos($this->_jqpath, 'http') !== 0) ? $this->_root.$this->_jqpath : $this->_jqpath;
-            //                 Helper::addScript('JQEASY_JQLIB', (Uri::isInternal($root_path) ? $this->_versioning : false));
-            //             }
-            
-            // jQuery Migrate
-            
-            $this->_jqmigratepath = Helper::getMigratePath($protocole, $compressed, $this->params, $this->_verbose_array, $this->_cdn, $this->_suffix);
-            
-            //             if (!$this->_headonly && $this->_jqmigratepath) {
-            //                 $root_path = (strpos($this->_jqmigratepath, 'http') !== 0) ? $this->_root.$this->_jqmigratepath : $this->_jqmigratepath;
-            //                 Helper::addScript('JQEASY_JQMIGRATELIB', (Uri::isInternal($root_path) ? $this->_versioning : false));
-            //             }
-            
-            // no conflict path
-            
-            $addjQueryNoConflict = $this->params->get('addnoconflict' . $this->_suffix, 2);
-            if ($addjQueryNoConflict == 1) {
-                //                 if (!$this->_headonly) {
-                //                     Factory::getDocument()->addScriptDeclaration('JQEASY_JQNOCONFLICT');
-                //                 }
-            } else if ($addjQueryNoConflict == 2) {
-                $this->_jqnoconflictpath = 'media/plg_system_jqueryeasy/js/jquerynoconflict.js';
-                
-                //                 if (!$this->_headonly) {
-                //                     Helper::addScript('JQEASY_JQNOCONFLICT', $this->_versioning);
-                //                 }
-            }
-            
-            // jQuery UI
-            
-            if ($this->_usejQueryUI)
-            {
-                $this->_jquipath = Helper::getjQueryUIPath($protocole, $compressed, $this->params, $this->_verbose_array, $this->_cdn, $this->_suffix);
-                
-                //                 if (!$this->_headonly && $this->_jquipath) {
-                //                     $root_path = (strpos($this->_jquipath, 'http') !== 0) ? $this->_root.$this->_jquipath : $this->_jquipath;
-                //                     Helper::addScript('JQEASY_JQUILIB', (Uri::isInternal($root_path) ? $this->_versioning : false));
-                //                 }
-                
-                $this->_jquicsspath = Helper::getjQueryUICSSPath($protocole, $compressed, $this->params, $this->_verbose_array, $this->_cdn, $this->_suffix);
-                
-                //                 if (!$this->_headonly && $this->_jquicsspath) {
-                //                     $root_path = (strpos($this->_jquicsspath, 'http') !== 0) ? $this->_root.$this->_jquicsspath : $this->_jquicsspath;
-                //                     Helper::addStyleSheet('JQEASY_JQUICSS', (Uri::isInternal($root_path) ? $this->_versioning : false));
-                //                 }
-            } // END jQuery UI
-        } // END jQuery
-        
-        $time_end = microtime(true);
-        $this->_timeafterroute = $time_end - $time_start;
     }
     
     function onBeforeCompileHead()
@@ -237,409 +115,610 @@ class plgSystemJQueryEasy extends CMSPlugin
         
         $this->loadLanguage();
         
+        // timing starts
+        
         $time_start = microtime(true);
         
-        $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+        // report
         
-        $scripts = Factory::getDocument()->_scripts;
+        $showreport = $this->params->get('showreport', 0);
         
-        var_dump($scripts);
-        
-        $script_declarations = Factory::getDocument()->_script; // array of script declarations
-        if (!isset($script_declarations['text/javascript'])) {
-            $script_declarations['text/javascript'] = array(); // no longer a string!
+        if ($showreport == 1 || $showreport == 3) {
+            $this->_showreport = true;
+        } else if ($showreport == 2 || $showreport == 4) { // only show report when Super User is logged in
+            $this->_showreport = Factory::getUser()->authorise('core.admin') ? true : false;
         }
         
-        var_dump($script_declarations['text/javascript']);
-        
-        $styles = Factory::getDocument()->_styleSheets;
-        
-        var_dump($styles);
-        
-        $style_declarations = Factory::getDocument()->_style; // array of style declarations
-        if (!isset($style_declarations['text/css'])) {
-            $style_declarations['text/css'] = array(); // no longer a string!
+        if ($this->_showreport) {
+            $this->_verbose_array = array();
         }
         
-        var_dump($style_declarations['text/css']);
+        // versioning
         
-        $new_scripts = array();
-        $new_styles = array();
+        //$this->_versioning = true; // (defined('JDEBUG') && JDEBUG) ? false : true;
         
-        //if ($this->_headonly) {
+        // protocole
+        
+        $protocole = $this->params->get('whichhttp' . $this->_suffix, 'https');
+        $protocole = ($protocole == 'none') ? '' : $protocole.':';
+        
+        // compression
+        
+        $compressed = '';
+        if ($this->params->get('compression' . $this->_suffix, 'compressed') == 'compressed' && !(defined('JDEBUG') && JDEBUG)) {
+            $compressed = '.min';
+        }
+        
+        // STEP 1 - GET PATHS SET IN THE PLUGIN
+        // ====================================
+        
+        // get additional scripts
+        
+        $javascript = Helper::getAdditionalScripts($this->params->get('addjavascript' . $this->_suffix, ''));
+        if (!empty($javascript)) {
+            $this->_supplement_scripts = array_unique($javascript);
+        }
+        
+        // get additional stylesheets
+        
+        $css = Helper::getAdditionalStylesheets($this->params->get('addcss' . $this->_suffix, ''));
+        if (!empty($css)) {
+            $this->_supplement_stylesheets = array_unique($css);
+        }
         
         // jQuery
         
-        $do_not_add_libraries = false;
-        $do_not_add_stylesheets = false;
-        $move_unique_library = false;
-        $move_unique_libraryui = false;
-        $move_unique_cssui = false;
+        switch ($this->params->get('jqueryin' . $this->_suffix, 0)) {
+            case 1: $this->_usejQuery = true; break;
+            case 2: $this->_usejQuery = true; $this->_usejQueryUI = true; break;
+            default: break;
+        }
         
         if ($this->_usejQuery) {
+
+            $this->_jqpath = Helper::getJQueryPath($protocole, $compressed, $this->params, $this->_verbose_array, $this->_cdn, $this->_suffix);
             
-            $removejQueryNoConflict = $this->params->get('removenoconflict' . $this->_suffix, 1);
-            if ($removejQueryNoConflict == 1 || $removejQueryNoConflict == 2) {
-                
-                // remove all '...jQuery.noConflict(...);' or '... $.noConflict(...);'
-                
-                $regexp = Helper::getRegularExpression('declaration', 'noconflict');
-                
-                Helper::search_and_replace_noconflict($regexp, $script_declarations['text/javascript'], ($removejQueryNoConflict == 1 ? false : true), $this->_verbose_array);
-                
-                // remove potential jquery-noconflict.js (different combinations)
-                
-                $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'noconflict'), $scripts, $this->_verbose_array);
-                if ($number_removed > 0) {
-                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDNOCONFLICTSCRIPTS', $number_removed);
-                }
-            }
+            // jQuery Migrate
             
-            $replace_when_unique = $this->params->get('replacewhenunique' . $this->_suffix, 1);
-            $add_when_missing = $this->params->get('addwhenmissing' . $this->_suffix, 1);
+            $this->_jqmigratepath = Helper::getMigratePath($protocole, $compressed, $this->params, $this->_verbose_array, $this->_cdn, $this->_suffix);
             
-            // remove all references of the jQuery library except scripts to ignore
+            // no conflict path
             
-            $ignoreScripts = trim((string)$this->params->get('ignorescripts' . $this->_suffix, ''));
-            if ($ignoreScripts) {
-                $ignoreScripts = array_map('trim', (array) explode("\n", $ignoreScripts));
-            }
-            
-            $request_search_and_delete_results = ($add_when_missing && $replace_when_unique) ? false : true;
-            
-            $removed_scripts = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'jquery'), $scripts, $this->_verbose_array, $ignoreScripts, $request_search_and_delete_results);
-            
-            $number_removed = $request_search_and_delete_results ? count($removed_scripts) : $removed_scripts;
-            
-            if ($request_search_and_delete_results) {
-                if ($number_removed == 0 && !$add_when_missing) {
-                    $do_not_add_libraries = true;
-                    $do_not_add_stylesheets = true;
-                } else if ($number_removed == 1 && !$replace_when_unique) {
-                    $this->_jqpath = $removed_scripts[0];
-                    $move_unique_library = true;
-                    Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUELIBRARY', $this->_jqpath);
-                } else {
-                    if ($number_removed > 0) {
-                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERY', $number_removed);
-                    }
-                }
-            } else {
-                if ($number_removed > 0) {
-                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERY', $number_removed);
-                }
-            }
-            
-            // remove all references of Migrate scripts
-            
-            $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'migrate'), $scripts, $this->_verbose_array);
-            if ($number_removed > 0) {
-                Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDMIGRATE', $number_removed);
+            if ($this->params->get('addnoconflict' . $this->_suffix, 0)) {
+                $this->_jqnoconflictpath = 'media/plg_system_jqueryeasy/js/jquerynoconflict.js';
             }
             
             // jQuery UI
             
             if ($this->_usejQueryUI) {
+
+                $this->_jquipath = Helper::getjQueryUIPath($protocole, $compressed, $this->params, $this->_verbose_array, $this->_cdn, $this->_suffix);                
+                $this->_jquicsspath = Helper::getjQueryUICSSPath($protocole, $compressed, $this->params, $this->_verbose_array, $this->_cdn, $this->_suffix);
+            }
+        }
+        
+        // Bootstrap
+        
+        $this->_useBootstrap = $this->params->get('bootstrapinpage' . $this->_suffix, 0);
+        
+        if ($this->_useBootstrap) {
+            
+            $this->_popperpath = Helper::getPopperPath($protocole, $compressed, $this->params, $this->_verbose_array, $this->_cdn, $this->_suffix);            
+            $this->_bootstrapjspath = Helper::getBootstrapPaths($protocole, $compressed, $this->params, $this->_verbose_array, $this->_cdn, $this->_suffix);            
+            $this->_bootstrapcsspath = Helper::getBootstrapCSSPaths($protocole, $compressed, $this->params, $this->_verbose_array, $this->_cdn, $this->_suffix);
+        }        
+        
+        // STEP 2 - FIX AND REMOVE DUPLICATES IN CODE GOING THROUGH API
+        // ============================================================
+        
+        if ((int)$this->params->get('pagescan', 0) === 0 || (int)$this->params->get('pagescan', 0) === 2) {
+
+            $scripts = Factory::getDocument()->_scripts;
+            
+            //var_dump($scripts);
+            
+            $script_declarations = Factory::getDocument()->_script; // array of script declarations
+            if (!isset($script_declarations['text/javascript'])) {
+                $script_declarations['text/javascript'] = array(); // no longer a string!
+            }
+            
+            //var_dump($script_declarations['text/javascript']);
+            
+            $styles = Factory::getDocument()->_styleSheets;
+            
+            //var_dump($styles);
+            
+            $style_declarations = Factory::getDocument()->_style; // array of style declarations
+            if (!isset($style_declarations['text/css'])) {
+                $style_declarations['text/css'] = array(); // no longer a string!
+            }
+            
+            //var_dump($style_declarations['text/css']);
+            
+            $new_scripts = array();
+            $new_styles = array();
+                    
+            // jQuery
+            
+            if ($this->_usejQuery) {
                 
-                // remove all references of the jQuery UI library
+                // no conflict
                 
-                $request_search_and_delete_results = $replace_when_unique ? false : true;
-                
-                $removed_scripts = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'jqueryui'), $scripts, $this->_verbose_array, array(), $request_search_and_delete_results);
-                
-                $number_removed = $request_search_and_delete_results ? count($removed_scripts) : $removed_scripts;
-                
-                if ($request_search_and_delete_results) {
-                    // 				        if ($number_removed == 0 && !$add_when_missing) {
-                    //                             $do_not_add_libraries = true;
-                    //                         }
-                    if ($number_removed == 1 && !$replace_when_unique) {
-                        $this->_jquipath = $removed_scripts[0];
-                        $move_unique_libraryui = true;
-                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUELIBRARYUI', $this->_jquipath);
-                    } else {
-                        if ($number_removed > 0) {
-                            Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUI', $number_removed);
-                        }
+                if ($this->params->get('removenoconflict' . $this->_suffix, 0)) {
+                    
+                    // remove all '...jQuery.noConflict(...);' or '... $.noConflict(...);'
+                                    
+                    Helper::search_and_replace_noconflict(Helper::getRegularExpression('declaration', 'noconflict'), $script_declarations['text/javascript'], true, $this->_verbose_array);
+                    
+                    // remove potential jquery-noconflict.js (different combinations)
+                    
+                    $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'noconflict'), $scripts, $this->_verbose_array);
+                    if ($number_removed > 0) {
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDNOCONFLICTSCRIPTS', $number_removed);
                     }
-                } else {
+                }
+                
+                // remove all references of the jQuery library except scripts to ignore
+                
+                $ignoreScripts = trim((string)$this->params->get('ignorescripts' . $this->_suffix, ''));
+                if ($ignoreScripts) {
+                    $ignoreScripts = array_map('trim', (array) explode("\n", $ignoreScripts));
+                }
+                
+                $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'jquery'), $scripts, $this->_verbose_array, $ignoreScripts);
+    
+                if ($number_removed > 0) {
+                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERY', $number_removed);
+                }
+                
+                // remove all references of Migrate scripts
+                
+                $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'migrate'), $scripts, $this->_verbose_array);
+                
+                if ($number_removed > 0) {
+                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDMIGRATE', $number_removed);
+                }
+                
+                // jQuery UI
+                
+                if ($this->_usejQueryUI) {
+                    
+                    // remove all references of the jQuery UI library
+                    
+                    $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'jqueryui'), $scripts, $this->_verbose_array);
+                    
                     if ($number_removed > 0) {
                         Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUI', $number_removed);
                     }
-                }
-                
-                // remove all references of the jQuery UI stylesheets
-                
-                $removed_stylesheets = Helper::search_and_delete('css', Helper::getRegularExpression('css', 'jqueryui'), $styles, $this->_verbose_array, array(), $request_search_and_delete_results);
-                
-                $number_removed = $request_search_and_delete_results ? count($removed_stylesheets) : $removed_stylesheets;
-                
-                if ($request_search_and_delete_results) {
-                    // 				    if ($number_removed == 0 && !$add_when_missing) {
-                    // 				        $do_not_add_stylesheets = true;
-                    // 				    }
-                    if ($number_removed == 1 && !$replace_when_unique) {
-                        $this->_jquicsspath = $removed_stylesheets[0];
-                        $move_unique_cssui = true;
-                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUECSSUI', $this->_jquicsspath);
-                    } else {
-                        if ($number_removed > 0) {
-                            Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUICSS', $number_removed);
-                        }
-                    }
-                } else {
+                    
+                    // remove all references of the jQuery UI stylesheets
+                    
+                    $number_removed = Helper::search_and_delete('css', Helper::getRegularExpression('css', 'jqueryui'), $styles, $this->_verbose_array);
+                        
                     if ($number_removed > 0) {
                         Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUICSS', $number_removed);
                     }
+                    
                 }
                 
-            } // END if usejQueryUI
-            
-            // replace '$(document).ready(function()' or '$(document).ready(function($)' with 'jQuery(document).ready(function($)'
-            
-            if ($this->params->get('replacedocumentready' . $this->_suffix, 1)) {
-                //$script_declarations['text/javascript'] = preg_replace('#\$\(document\).ready\(function\([$]?\)#s', 'jQuery(document).ready(function($)', $script_declarations['text/javascript'], -1, $count);
+                // replace '$(document).ready(function()' or '$(document).ready(function($)' with 'jQuery(document).ready(function($)'
                 
-                $count = Helper::search_and_replace('\$\(document\).ready\(function\([$]?\)', $script_declarations['text/javascript'], 'jQuery(document).ready(function($)');
+                if ($this->params->get('replacedocumentready' . $this->_suffix, 1)) {
+                    
+                    $number_replaced = Helper::search_and_replace('\$\(document\).ready\(function\([$]?\)', $script_declarations['text/javascript'], 'jQuery(document).ready(function($)');
+                    
+                    if ($number_replaced > 0) {
+                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REPLACEDDOCUMENTREADY', $number_replaced);
+                    }
+                }
                 
-                if ($count > 0) {
-                    Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REPLACEDDOCUMENTREADY', $count);
+            } // END if usejQuery
+            
+            // Bootstrap
+            
+            if ($this->_useBootstrap) {
+            
+                $bootstrap_library_types = $this->params->get('bootstraplibrarytypes' . $this->_suffix, 'both');
+                
+                // Bootstrap js path(s)
+                
+                if ($bootstrap_library_types == 'both' || $bootstrap_library_types == 'js') {
+                    
+                    // Popper js path
+                    
+                    if (substr($this->params->get('bootstrapversion' . $this->_suffix, 'joomla'), 0, 1) === '4') { // Bootstrap 4
+                        
+                        // remove loaded Popper scripts, if any
+                        
+                        $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'popper'), $scripts, $this->_verbose_array);
+                        
+                        if ($number_removed > 0) {
+                            Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDPOPPERJS', $number_removed);
+                        }
+                    }
+                    
+                    // ignore the removal of some Bootstrap scripts
+                    
+                    $ignoreScripts = trim( (string) $this->params->get('ignorebootstrapscripts' . $this->_suffix, ''));
+                    if ($ignoreScripts) {
+                        $ignoreScripts = array_map('trim', (array) explode("\n", $ignoreScripts));
+                    }
+                    
+                    // remove loaded Bootstrap scripts, if any
+                    
+                    $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'bootstrap'), $scripts, $this->_verbose_array, $ignoreScripts);
+                    
+                    if ($number_removed > 0) {
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDBOOTSTRAPJS', $number_removed);
+                    }
+                }
+                
+                // Bootstrap css path(s)
+                
+                if ($bootstrap_library_types == 'both' || $bootstrap_library_types == 'css') {
+                    
+                    // ignore the removal of some Bootstrap stylesheets
+                    
+                    $ignoreStylesheets = trim( (string) $this->params->get('ignorebootstrapstylesheets' . $this->_suffix, ''));
+                    if ($ignoreStylesheets) {
+                        $ignoreStylesheets = array_map('trim', (array) explode("\n", $ignoreStylesheets));
+                    }
+                    
+                    // remove loaded Bootstrap styles, if any
+                    
+                    $number_removed = Helper::search_and_delete('css', Helper::getRegularExpression('css', 'bootstrap'), $styles, $this->_verbose_array, $ignoreStylesheets);
+                    
+                    if ($number_removed > 0) {
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDBOOTSTRAPCSS', $number_removed);
+                    }
+                }
+                
+            } // END if useBootstrap
+            
+            $remainingScripts = array();
+            
+            // remaining scripts from plugin
+            
+            $remainingScriptsParam = trim( (string) $this->params->get('stripremainingscripts' . $this->_suffix, ''));
+            if ($remainingScriptsParam) {
+                $remainingScripts = array_map('trim', (array) explode("\n", $remainingScriptsParam));
+            }
+            
+            // remove remaining scripts
+            
+            if (!empty($remainingScripts)) {
+                foreach ($remainingScripts as $remainingScript) {
+                    
+                    $number_removed = Helper::search_and_delete('js', preg_quote($remainingScript, '/'), $scripts, $this->_verbose_array);
+                    
+                    if ($number_removed > 0) {
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGSCRIPT', $remainingScript, $number_removed);
+                    }
                 }
             }
             
-        } // END if usejQuery
-        
-        $remainingScripts = array();
-        
-        // remaining scripts from plugin
-        
-        $remainingScriptsParam = trim( (string) $this->params->get('stripremainingscripts' . $this->_suffix, ''));
-        if ($remainingScriptsParam) {
-            $remainingScripts = array_map('trim', (array) explode("\n", $remainingScriptsParam));
-        }
-        
-        // remove remaining scripts
-        
-        if (!empty($remainingScripts)) {
-            foreach ($remainingScripts as $remainingScript) {
-                $quoted_script = preg_quote($remainingScript, '/'); // prepares for regexp
-                $results = preg_grep('/' . $quoted_script . '/', array_keys($scripts));
-                foreach ($results as $result) {
-                    unset($scripts[$result]);
+            $remainingStylesheets = array();
+            
+            // remaining styles from plugin
+            
+            $remainingStylesheetsParam = trim( (string) $this->params->get('stripremainingcss' . $this->_suffix, ''));
+            if ($remainingStylesheetsParam) {
+                $remainingStylesheets = array_map('trim', (array) explode("\n", $remainingStylesheetsParam));
+            }
+            
+            // remove remaining stylesheets
+            
+            if (!empty($remainingStylesheets)) {
+                foreach ($remainingStylesheets as $remainingStylesheet) {
+    
+                    $number_removed = Helper::search_and_delete('css', preg_quote($remainingStylesheet, '/'), $styles, $this->_verbose_array);
+                    
+                    if ($number_removed > 0) {
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGCSS', $remainingStylesheet, $number_removed);
+                    }
                 }
-                Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGSCRIPT', $remainingScript, count($results));
+            }
+            
+            Factory::getDocument()->_scripts = array_merge($new_scripts, $scripts);
+            //var_dump(Factory::getDocument()->_scripts);
+            
+            if (!empty($script_declarations['text/javascript'])) {
+                
+                Factory::getDocument()->_script['text/javascript'] = $script_declarations['text/javascript'];
+                
+                //var_dump(Factory::getDocument()->_script['text/javascript']);
+            } else {
+                // after removal of scripts, we may end up with nothing
+                if (isset(Factory::getDocument()->_script['text/javascript'])) {
+                    unset(Factory::getDocument()->_script['text/javascript']);
+                }
+            }
+            
+            Factory::getDocument()->_styleSheets = array_merge($new_styles, $styles);
+            //var_dump(Factory::getDocument()->_styleSheets);
+            
+            if (!empty($style_declarations['text/css'])) {
+                Factory::getDocument()->_style['text/css'] = $style_declarations['text/css'];
+                
+                //var_dump(Factory::getDocument()->_style['text/css']);
             }
         }
         
-        $remainingStylesheets = array();
+        // STEP 3 - ADD OR REPLACE
+        // =======================
         
-        // remaining styles from plugin
+        $version = new Version();
         
-        $remainingStylesheetsParam = trim( (string) $this->params->get('stripremainingcss' . $this->_suffix, ''));
-        if ($remainingStylesheetsParam) {
-            $remainingStylesheets = array_map('trim', (array) explode("\n", $remainingStylesheetsParam));
-        }
+        $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
         
-        // remove remaining stylesheets
-        
-        if (!empty($remainingStylesheets)) {
-            foreach ($remainingStylesheets as $remainingStylesheet) {
-                $quoted_stylesheet = preg_quote($remainingStylesheet, '/'); // prepares for regexp
-                $results = preg_grep('/' . $quoted_stylesheet . '/', array_keys($styles));
-                foreach ($results as $result) {
-                    unset($styles[$result]);
-                }
-                Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGCSS', $remainingStylesheet, count($results));
-            }
-        }
-        
-        // additions after cleanup
-        
-        $options = array();
-        if ($this->_versioning) {
-            $options['version'] = 'auto';
-        }
-        
-        // add all scripts
+        // add all scripts and styles
         
         if ($this->_usejQuery) {
             
-            // 	            $web_assets = $wam->getAssets('script');
-            // 	            foreach ($web_assets as $web_asset) {
-            
-            // 	            	$matches = array();
-            // 	            	if (preg_match_all('#' . Helper::getRegularExpression('js', 'jquery') . '#', $web_asset->getUri(false), $matches, PREG_SET_ORDER) > 0) {
-            // 	            		if ($web_asset->getName() != 'jquery') {
-            // 	            			$wam->disableScript($web_asset->getName()); // won't work if there are dependencies
-            // 	            		} else {
-            // 	            			$wam->registerScript('jquery', $this->_jqpath); // replace jquery with the new path
-            // 	            		}
-            // 	            	}
-            // 	            }
-            
-            //$new_asset = new WebAssetItem('jquery2', $this->_jqpath, ['type' => 'script'], ['src' => $this->_jqpath]);
-            //$wam->getRegistry()->add('script', $new_asset);
-            
-            //var_dump($wam->getAsset('script', 'jquery')->getOptions());
-            //exit();
-            
-            if ($this->_jqpath) {
-                if ($do_not_add_libraries) {
-                    
-                    
+            if ($this->_jqpath) {              
+                
+                if ($this->_jqpath === 'joomla') {
                     if ($wam->assetExists('script', 'jquery')) {
-                        $wam->disableScript('jquery'); // won't work if there are dependencies
+                        $asset = $wam->getAsset('script', 'jquery');
+                        $wam->useScript('jquery');
+                        
+                        Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERY', $asset->getUri());
                     }
+                } else {                        
+                    $wam->registerAndUseScript('jquery', $this->_jqpath, Helper::isInternal($this->_jqpath) ? ['version' => $version->getMediaVersion()] : ['version' => '']); // add jquery with the new path
                     
-                    
-                    Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NOJQUERYLIBRARIESADDED');
-                } else {
-                    $root_path = (strpos($this->_jqpath, 'http') !== 0) ? $this->_root . Uri::root(true) . '/' . $this->_jqpath : $this->_jqpath;
-                    //$new_scripts[$this->_jqpath] = array('type' => 'text/javascript', 'options' => (Uri::isInternal($root_path) ? $options : array()));
-                    
-                    //var_dump($this->_root); // http://localhost:7878
-                    //var_dump(Uri::root(true)); // /MyWork_4_x_free_test
-                    //var_dump(JPATH_ROOT); // E:\wamp64\www\MyWork_4_x_free_test
-                    
-                    //var_dump($root_path); // http://localhost:7878/MyWork_4_x_free_test/media/vendor/jquery/js/jquery.js
-                    //var_dump(Uri::isInternal($root_path)); // true
-                    
-                    $wam->registerAndUseScript('jquery', $this->_jqpath, Uri::isInternal($root_path) ? $options : ['version' => '']); // add or replace jquery with the new path
-                    
-                    
-                    if ($move_unique_library) {
-                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERY', $this->_jqpath);
-                    } else {
-                        Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERY', '<a href="'.$this->_jqpath.'" target="_blank">'.$this->_jqpath.'</a>');
-                    }
+                    Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERY', '<a href="'.$this->_jqpath.'" target="_blank">'.$this->_jqpath.'</a>');
                 }
+
             } else {
                 Helper::report($this->_verbose_array, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERY');
             }
             
-            if ($this->_jqmigratepath) {
-                if ($do_not_add_libraries) { // no need to add Migrate if jQuery is not even loaded
+            if ($this->_jqmigratepath) {                    
                     
-                    
-                    if ($wam->assetExists('script', 'jquery-migrate')) {
-                        $wam->disableScript('jquery-migrate');
+                if ($this->_jqmigratepath === 'joomla') {
+                    if ($wam->assetExists('script', 'jquery.migrate')) {
+                        $asset = $wam->getAsset('script', 'jquery.migrate');
+                        $wam->useScript('jquery.migrate');
+                        
+                        Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYMIGRATE', $asset->getUri());
                     }
-                    
-                    
-                    Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NOMIGRATEADDED');
                 } else {
-                    $root_path = (strpos($this->_jqmigratepath, 'http') !== 0) ? $this->_root . Uri::root(true) . '/' . $this->_jqmigratepath : $this->_jqmigratepath;
-                    //$new_scripts[$this->_jqmigratepath] = array('type' => 'text/javascript', 'options' => (Uri::isInternal($root_path) ? $options : array()));
-                    
-                    
-                    $wam->registerAndUseScript('jquery-migrate', $this->_jqmigratepath, Uri::isInternal($root_path) ? $options : ['version' => ''], [], ['jquery']);
-                    
+                    $wam->registerAndUseScript('jquery.migrate', $this->_jqmigratepath, Helper::isInternal($this->_jqmigratepath) ? ['version' => $version->getMediaVersion()] : ['version' => ''], [], ['jquery']);
                     
                     Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYMIGRATE', '<a href="'.$this->_jqmigratepath.'" target="_blank">'.$this->_jqmigratepath.'</a>');
                 }
             }
             
-            if ($this->params->get('addnoconflict' . $this->_suffix, 2) == 1) {
-                if ($do_not_add_libraries) {
-                    Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NONOCONFLICTDECLARATIONADDED');
-                } else {
-                    //$script_declarations['text/javascript'] = 'jQuery.noConflict(); ' . $script_declarations['text/javascript'];
+            if ($this->_jqnoconflictpath) {
+                
+                // use legacy asset, will probably be removed later
+                if ($wam->assetExists('script', 'jquery-noconflict')) {
+                    $asset = $wam->getAsset('script', 'jquery-noconflict');
+                    $wam->useScript('jquery-noconflict');
                     
+                    $this->_jqnoconflictpath = $asset->getUri(); // needed to prevent removal in whole page scan
                     
-                    $wam->addInlineScript('jQuery.noConflict(); ', [], [], ['jquery']);
-                    
-                    
-                    Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDNOCONFLICTDECLARATION');
-                }
-            } else if ($this->params->get('addnoconflict' . $this->_suffix, 2) == 2 && $this->_jqnoconflictpath) {
-                if ($do_not_add_libraries) {
-                    
-                    
-                    if ($wam->assetExists('script', 'jquery-noconflict')) {
-                        $wam->disableScript('jquery-noconflict');
-                    }
-                    
-                    
-                    Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NONOCONFLICTSCRIPTADDED');
-                } else {
-                    //$new_scripts[$this->_jqnoconflictpath] = array('type' => 'text/javascript', 'options' => $options);
-                    
-                    
-                    $wam->registerAndUseScript('jquery-noconflict', $this->_jqnoconflictpath, $options, [], ['jquery']);
-                    
-                    
+                    Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDNOCONFLICTSCRIPT', $this->_jqnoconflictpath);
+                } else {                
+                    $wam->registerAndUseScript('jquery-noconflict', $this->_jqnoconflictpath, ['version' => $version->getMediaVersion()], [], ['jquery']);
+                        
                     Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDNOCONFLICTSCRIPT', $this->_jqnoconflictpath);
                 }
             }
             
             if ($this->_usejQueryUI) {
+                
                 if ($this->_jquipath) {
-                    if ($do_not_add_libraries) {
                         
-                        
-                        if ($wam->assetExists('script', 'jquery-ui')) {
-                            $wam->disableScript('jquery-ui'); // won't work if there are dependencies
-                        }
-                        
-                        
-                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NOJQUERYUILIBRARYADDED');
-                    } else {
-                        $root_path = (strpos($this->_jquipath, 'http') !== 0) ? $this->_root . Uri::root(true) . '/' . $this->_jquipath : $this->_jquipath;
-                        //$new_scripts[$this->_jquipath] = array('type' => 'text/javascript', 'options' => (Uri::isInternal($root_path) ? $options : array()));
-                        
-                        
-                        $wam->registerAndUseScript('jquery-ui', $this->_jquipath, Uri::isInternal($root_path) ? $options : ['version' => ''], [], ['jquery']); // add or replace jquery ui with the new path
-                        
-                        
-                        if ($move_unique_libraryui) {
-                            Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERYUI', $this->_jquipath);
-                        } else {
-                            Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYUI', '<a href="'.$this->_jquipath.'" target="_blank">'.$this->_jquipath.'</a>');
-                        }
-                    }
+                    $wam->registerAndUseScript('jquery.ui', $this->_jquipath, Helper::isInternal($this->_jquipath) ? ['version' => $version->getMediaVersion()] : ['version' => ''], [], ['jquery']); // add jquery ui with the new path
+
+                    Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYUI', '<a href="'.$this->_jquipath.'" target="_blank">'.$this->_jquipath.'</a>');
                 } else {
                     Helper::report($this->_verbose_array, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERYUI');
                 }
-            }
-        }
-        
-        if (!empty($new_scripts)) {
-            Helper::report($this->_verbose_array, 'message', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REORDEREDLIBRARIES');
-        }
-        
-        // add all styles
-        
-        if ($this->_usejQuery) {
-            
-            if ($this->_usejQueryUI) {
+                
                 if ($this->_jquicsspath) {
-                    if ($do_not_add_stylesheets) {
-                        
-                        
-                        if ($wam->assetExists('style', 'jquery-ui')) {
-                            $wam->disableStyle('jquery-ui'); // won't work if there are dependencies
-                        }
-                        
-                        
-                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NOJQUERYUISTYLESHEETADDED');
-                    } else {
-                        $root_path = (strpos($this->_jquicsspath, 'http') !== 0) ? $this->_root . Uri::root(true) . '/' . $this->_jquicsspath : $this->_jquicsspath;
-                        //$new_styles[$this->_jquicsspath] = array('type' => 'text/css', 'options' => (Uri::isInternal($root_path) ? $options : array()));
-                        
-                        
-                        $wam->registerAndUseStyle('jquery-ui', $this->_jquicsspath, Uri::isInternal($root_path) ? $options : ['version' => ''], [], ['jquery']);
-                        
-                        
-                        if ($move_unique_cssui) {
-                            Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERYUICSS', $this->_jquicsspath);
-                        } else {
-                            Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYUICSS', '<a href="'.$this->_jquicsspath.'" target="_blank">'.$this->_jquicsspath.'</a>');
-                        }
-                    }
+                    
+                    $wam->registerAndUseStyle('jquery.ui', $this->_jquicsspath, Helper::isInternal($this->_jquicsspath) ? ['version' => $version->getMediaVersion()] : ['version' => '']);
+                    
+                    Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYUICSS', '<a href="'.$this->_jquicsspath.'" target="_blank">'.$this->_jquicsspath.'</a>');
                 } else {
                     if ($this->params->get('jqueryuitheme' . $this->_suffix, 'none') != 'none') {
                         Helper::report($this->_verbose_array, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERYUICSS');
                     }
+                }
+            }
+        }       
+        
+        if ($this->_useBootstrap) {            
+            
+            $bs_js_packages = array('alert', 'button', 'carousel', 'collapse', 'dropdown', 'modal', 'offcanvas', 'popover', 'scrollspy', 'tab', 'toast');
+            $bs_css_packages = array('grid', 'reboot', 'utilities');            
+            
+            $bootstrap_library_types = $this->params->get('bootstraplibrarytypes' . $this->_suffix, 'both');
+            if ($bootstrap_library_types == 'both' || $bootstrap_library_types == 'js') {
+                
+                if ($bootstrap_library_types == 'js') { // remove Bootstrap css assets
+                    
+                    foreach ($bs_css_packages as $package) { // to do first because of dependencies
+                        if ($wam->assetExists('style', 'bootstrap.css.' . $package)) {
+                            $wam->disableAsset('style', 'bootstrap.css.' . $package);
+                        }
+                    }
+                    
+                    if ($wam->assetExists('style', 'bootstrap.css')) {
+                        $wam->disableAsset('style', 'bootstrap.css');
+                    }
+                }
+                
+                if ($this->_popperpath) {
+                    
+                    $wam->registerAndUseScript('popper', $this->_popperpath, Helper::isInternal($this->_popperpath) ? ['version' => $version->getMediaVersion()] : ['version' => '']); // add popper with the new path
+                    
+                    Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDPOPPERJS', '<a href="'.$this->_popperpath.'" target="_blank">'.$this->_popperpath.'</a>');
+                }
+                
+                if (!empty($this->_bootstrapjspath)) {
+                    
+                    if (isset($this->_bootstrapjspath['joomla'])) {
+                        if ($wam->assetExists('script', 'bootstrap.es5')) {
+                            $asset = $wam->getAsset('script', 'bootstrap.es5');
+                            $wam->useScript('bootstrap.es5');
+                            
+                            Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDBOOTSTRAPJS', $asset->getUri());
+                        }
+                        
+                        // add the js packages if specifically requested (keeps the ones that are already on the page) // TODO improve
+                        
+                        $bs_js_packages_selected = $this->params->get('bootstrapjspackages' . $this->_suffix, '');
+                        if (!empty($bs_js_packages_selected) && is_array($bs_js_packages_selected)) {
+                            foreach ($bs_js_packages_selected as $package) {
+                                if ($wam->assetExists('script', 'bootstrap.' . $package)) {
+                                    $wam->useScript('bootstrap.' . $package);
+                                }
+                            }
+                        }
+                    } else {
+                        
+                        $dependencies = array('core');
+                        
+                        // make sure, if jQuery is present, that Bootstrap is loaded after jQuery (even if it does not require jQuery) and Popper
+                        if ($wam->assetExists('script', 'jquery')) {
+                            if ($wam->isAssetActive('script', 'jquery')) {
+                                $dependencies[] = 'jquery';
+                            }
+                        }
+                        if ($wam->assetExists('script', 'jquery-noconflict')) {
+                            if ($wam->isAssetActive('script', 'jquery-noconflict')) {
+                                $dependencies[] = 'jquery-noconflict';
+                            }
+                        }
+                        if ($wam->assetExists('script', 'jquery.migrate')) {
+                            if ($wam->isAssetActive('script', 'jquery.migrate')) {
+                                $dependencies[] = 'jquery.migrate';
+                            }
+                        }
+                        if ($wam->assetExists('script', 'popper')) {
+                            if ($wam->isAssetActive('script', 'popper')) {
+                                $dependencies[] = 'popper';
+                            }
+                        }
+                        
+                        if (isset($this->_bootstrapjspath['cdn'])) {
+                            
+                            $wam->registerAndUseScript('bootstrap.es5', $this->_bootstrapjspath['cdn'], ['version' => ''], [], $dependencies); // add bootstrap with the new cdn path
+                            
+                            // remove Bootstrap packages, included in the CDN version already
+                            
+                            foreach ($bs_js_packages as $package) {
+                                if ($wam->assetExists('script', 'bootstrap.' . $package)) {
+                                    $wam->disableAsset('script', 'bootstrap.' . $package);
+                                }
+                            }
+                            
+                            Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDBOOTSTRAPJS', '<a href="'.$this->_bootstrapjspath['cdn'].'" target="_blank">'.$this->_bootstrapjspath['cdn'].'</a>');
+                        
+                        } else { // local files
+                            
+                            // remove Bootstrap packages, included in the CDN version already
+                            
+                            foreach ($bs_js_packages as $package) { // to do first because of dependencies
+                                if ($wam->assetExists('script', 'bootstrap.' . $package)) {
+                                    $wam->disableAsset('script', 'bootstrap.' . $package);
+                                }
+                            }
+                            
+                            if ($wam->assetExists('script', 'bootstrap.es5')) {
+                                $wam->disableAsset('script', 'bootstrap.es5');
+                            }
+                            
+                            foreach ($this->_bootstrapjspath as $key => $bootstrapjspath) {
+                                
+                                $wam->registerAndUseScript('bootstrap.' . $key, $bootstrapjspath, ['version' => $version->getMediaVersion()], [], $dependencies);
+                                
+                                Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDBOOTSTRAPJS', '<a href="'.$bootstrapjspath.'" target="_blank">'.$bootstrapjspath.'</a>');
+                            }
+                        }
+                    }
+                } else {
+                    Helper::report($this->_verbose_array, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGBOOTSTRAPJS');
+                }
+            }
+            
+            $bootstrap_library_types = $this->params->get('bootstraplibrarytypes' . $this->_suffix, 'both');
+            if ($bootstrap_library_types == 'both' || $bootstrap_library_types == 'css') {
+                
+                if ($bootstrap_library_types == 'css') { // remove Bootstrap js assets
+                    
+                    foreach ($bs_js_packages as $package) { // to do first because of dependencies
+                        if ($wam->assetExists('script', 'bootstrap.' . $package)) {
+                            $wam->disableAsset('script', 'bootstrap.' . $package);
+                        }
+                    }
+                    
+                    if ($wam->assetExists('script', 'bootstrap.es5')) {
+                        $wam->disableAsset('script', 'bootstrap.es5');
+                    }
+                }
+                
+                if (!empty($this->_bootstrapcsspath)) {
+                    
+                    if (isset($this->_bootstrapcsspath['joomla'])) {
+                        if ($wam->assetExists('style', 'bootstrap.css')) {
+                            $asset = $wam->getAsset('style', 'bootstrap.css');
+                            $wam->useStyle('bootstrap.css');
+                            
+                            Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDBOOTSTRAPCSS', $asset->getUri());
+                        }
+                    } else if (isset($this->_bootstrapcsspath['cdn'])) {
+                        
+                        // if grid/reboot/utilities exist, disable bootstrap.css asset
+                        
+                        $disable_asset = false;
+                        foreach ($bs_css_packages as $package) {
+                            if (isset($this->_bootstrapcsspath[$package])) {
+                                
+                                $wam->registerAndUseStyle('bootstrap.css.' . $package, $this->_bootstrapcsspath[$package], ['version' => '']);
+                                
+                                Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDBOOTSTRAPCSS', '<a href="'.$this->_bootstrapcsspath[$package].'" target="_blank">'.$this->_bootstrapcsspath[$package].'</a>');
+                                
+                                $disable_asset = true;
+                            } else {
+                                // disable that asset
+                                
+                                if ($wam->assetExists('style', 'bootstrap.css.' . $package)) {
+                                    $wam->disableAsset('style', 'bootstrap.css.' . $package);
+                                }
+                            }
+                        }
+                        
+                        if ($disable_asset) {
+                            if ($wam->assetExists('style', 'bootstrap.css')) {
+                                $wam->disableAsset('style', 'bootstrap.css'); // TODO check: may not work because grid is dependent in joomla assets file (error ?)
+                            }
+                        } else {
+                            $wam->registerAndUseStyle('bootstrap.css', $this->_bootstrapcsspath['cdn'], ['version' => '']); // add bootstrap with the new cdn path
+                            
+                            Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDBOOTSTRAPCSS', '<a href="'.$this->_bootstrapcsspath['cdn'].'" target="_blank">'.$this->_bootstrapcsspath['cdn'].'</a>');
+                            
+                            if (isset($this->_bootstrapcsspath['cdn_extra'])) {
+                                $wam->registerAndUseStyle('bootstrap.css.extra', $this->_bootstrapcsspath['cdn_extra'], ['version' => '']);
+                                
+                                Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDBOOTSTRAPCSS', '<a href="'.$this->_bootstrapcsspath['cdn_extra'].'" target="_blank">'.$this->_bootstrapcsspath['cdn_extra'].'</a>');
+                            }
+                        }
+                        
+                    } else {
+                        foreach ($this->_bootstrapcsspath as $key => $bootstrapcsspath) {
+                            
+                            $wam->registerAndUseStyle('bootstrap.css.' . $key, $bootstrapcsspath, ['version' => $version->getMediaVersion()]);
+                            
+                            Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDBOOTSTRAPCSS', '<a href="'.$bootstrapcsspath.'" target="_blank">'.$bootstrapcsspath.'</a>');
+                        }
+                    }
+                } else {
+                    Helper::report($this->_verbose_array, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGBOOTSTRAPCSS');
                 }
             }
         }
@@ -647,12 +726,8 @@ class plgSystemJQueryEasy extends CMSPlugin
         // add all scripts
         
         foreach($this->_supplement_scripts as $i => $path) {
-            $root_path = (strpos($path, 'http') !== 0) ? Uri::root() . ltrim($path, '/') : $path;
-            //$new_scripts[$path] = array('type' => 'text/javascript', 'options' => (Uri::isInternal($root_path) ? $options : array()));
             
-            
-            $wam->registerAndUseScript('jqe-supplemental-script-' . $i, $path, Uri::isInternal($root_path) ? $options : ['version' => '']);
-            
+            $wam->registerAndUseScript('jqe-script.js.' . $i, $path, Helper::isInternal($path) ? ['version' => $version->getMediaVersion()] : ['version' => '']);            
             
             Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSCRIPT', $path);
         }
@@ -660,26 +735,18 @@ class plgSystemJQueryEasy extends CMSPlugin
         // add all styles
         
         foreach($this->_supplement_stylesheets as $i => $path) {
-            $root_path = (strpos($path, 'http') !== 0) ? Uri::root() . ltrim($path, '/') : $path;
-            //$new_styles[$path] = array('type' => 'text/css', 'options' => (Uri::isInternal($root_path) ? $options : array()));
             
-            
-            $wam->registerAndUseStyle('jqe-supplemental-style-' . $i, $path, Uri::isInternal($root_path) ? $options : ['version' => '']);
-            
+            $wam->registerAndUseStyle('jqe-style.css.' . $i, $path, Helper::isInternal($path) ? ['version' => $version->getMediaVersion()] : ['version' => '']);            
             
             Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSTYLESHEET', $path);
         }
         
         // add all script declarations
-        
-        // script declaration from plugin
+
         $javascript_declaration = trim( (string) $this->params->get('addjavascriptdeclaration' . $this->_suffix, ''));
         if (!empty($javascript_declaration)) {
-            //$script_declarations['text/javascript'] .= $javascript_declaration;
             
-            
-            $wam->addInlineScript($javascript_declaration);
-            
+            $wam->addInlineScript($javascript_declaration);            
             
             if ($this->_showreport) {
                 $lines = array_map('trim', (array) explode("\n", $javascript_declaration));
@@ -691,97 +758,14 @@ class plgSystemJQueryEasy extends CMSPlugin
         
         $css_declaration = trim( (string) $this->params->get('addcssdeclaration' . $this->_suffix, ''));
         if (!empty($css_declaration)) {
-            //$style_declarations['text/css'] .= $css_declaration;
-            
             
             $wam->addInlineStyle($css_declaration);
-            
             
             if ($this->_showreport) {
                 $lines = array_map('trim', (array) explode("\n", $css_declaration));
                 Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSTYLESHEETDECLARATION', $lines[0]);
             }
         }
-        
-        //         } else { // the whole document is scanned
-        
-        //             // make sure we start with all jQuery Easy scripts
-        
-        //             $scripts_jqeasy = array();
-        
-        //             foreach ($scripts as $url => $type) {
-        //                 if (preg_match('#JQEASY_#s', $url)) {
-        //                     $scripts_jqeasy[$url] = $type;
-        //                 }
-        //             }
-        
-        //             if (!empty($scripts_jqeasy)) {
-        
-        //                 foreach ($scripts_jqeasy as $url_jqeasy => $type_jqeasy) {
-        //                     $new_scripts[$url_jqeasy] = $type_jqeasy;
-        //                     unset($scripts[$url_jqeasy]);
-        //                 }
-        
-        //                 // then with all system scripts
-        
-        //                 $quoted_path = preg_quote('media/system/js/', '/');
-        //                 foreach ($scripts as $url => $type) {
-        //                     if (preg_match('#'.$quoted_path.'#s', $url)) {
-        //                         $new_scripts[$url] = $type;
-        //                         unset($scripts[$url]);
-        //                     }
-        //                 }
-        
-        //                 Helper::report($this->_verbose_array, 'message', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REORDEREDLIBRARIES');
-        //             }
-        //         }
-        
-        
-        $version = new Version();
-        
-        foreach ($scripts as $key => &$value) {
-            if ($value['options']['version'] == 'auto') {
-                $value['options']['version'] = $version->getMediaVersion() . '_jqetagged';
-            } else {
-                $value['options']['version'] .= '_jqetagged';
-            }
-        }
-        
-        Factory::getDocument()->_scripts = array_merge($new_scripts, $scripts);
-        
-        if (!empty($script_declarations['text/javascript'])) {
-            
-            Factory::getDocument()->_script['text/javascript'] = $script_declarations['text/javascript'];
-            
-            var_dump(Factory::getDocument()->_script['text/javascript']);
-        } else {
-            // after removal of scripts, we may end up with nothing
-            if (isset(Factory::getDocument()->_script['text/javascript'])) {
-                unset(Factory::getDocument()->_script['text/javascript']);
-            }
-        }
-        
-        foreach ($styles as $key => $value) {
-            if ($value['options']['version'] == 'auto') {
-                $value['options']['version'] = $version->getMediaVersion() . '_jqetagged';
-            } else {
-                $value['options']['version'] .= '_jqetagged';
-            }
-        }
-        
-        Factory::getDocument()->_styleSheets = array_merge($new_styles, $styles);
-        
-        if (!empty($style_declarations['text/css'])) {
-            Factory::getDocument()->_style['text/css'] = $style_declarations['text/css'];
-            
-            var_dump(Factory::getDocument()->_style['text/css']);
-        }
-        
-        // 	    var_dump(preg_replace('!\s+!', ' ', Factory::getDocument()->_script['text/javascript']));
-        //  	    var_dump(Factory::getDocument()->_scripts);
-        // 	    var_dump(preg_split('/;[\s]+/', Factory::getDocument()->_script['text/javascript']));
-        //  	    var_dump(Factory::getDocument()->_styleSheets);
-        //  	var_dump(Factory::getDocument()->_style['text/css']);
         
         $time_end = microtime(true);
         $this->_timebeforecompilehead = $time_end - $time_start;
@@ -801,93 +785,49 @@ class plgSystemJQueryEasy extends CMSPlugin
         
         $time_start = microtime(true);
         
-        $body = $this->app->getBody();
+        // scan the whole document page
         
-        if (!$this->_headonly) {
+        if ((int)$this->params->get('pagescan', 0) > 0) {            
             
-            // remove and store ALL script tags that have the data-asset-name attribute
-            // remove and store ALL link tags that have the data-asset-name attribute
-            
-            // remove and store all style tags that have the nonce attribute
-            // remove and store all script tags that have the nonce attribute
-            
-            // remove and store all script and link tags that have '_jqetagged' in the url
-            
-            
-            
-            // <script[^>]*(data-asset-name)[^>]*><\/script>
-            // <script[^>]*(nonce)[^>]*>[\s\S]*?[^(<\/script>)]*<\/script>
-            // <link[^>]*(data-asset-name)[^>]*>
-            // <style[^>]*(nonce)[^>]*>[\s\S]*?[^(<\/style>)]*<\/style>
-            
-            // <script[^>]*(_jqetagged)[^>]*><\/script>
-            // <link[^>]*(_jqetagged)[^>]*>
-            
-            //             $stored_scripts = array();
-            
-            //             if (preg_match_all('#<script[^>]*(data-asset-name)[^>]*><\/script>#', $body, $matches, PREG_SET_ORDER) > 0) {
-            //                 foreach ($matches as $match) {
-            //                     $stored_scripts[] = $match[0];
-            //                     $quoted_match = preg_quote($match[0], '#');
-            //                     $body = preg_replace('#'.$quoted_match.'#', '', $body, 1);
-            //                 }
-            //             }
-            
-            //             var_dump($stored_scripts);
-            
-            
-            
-            
-            
-            
+            switch ((int)$this->params->get('pagescan', 0)) {
+                case 1: // head only
+                    
+                    preg_match('/<head>([\s\S]*)<\/head>/s', $this->app->getBody(), $match);
+                    $body = $match[0]; // keep the tags
+                    
+                    break;
+                    
+                case 2: // API + body
+                    
+                    preg_match('/<body.*?>([\s\S]*)<\/body>/s', $this->app->getBody(), $match);
+                    $body = $match[0]; // keep the tags
+                    
+                    break;
+                    
+                default: // whole page scan
+                    
+                    $body = $this->app->getBody();
+            }
             
             $remove_empty_scripts = false;
             $remove_empty_links = false;
             
-            $remainingScriptsParam = trim( (string) $this->params->get('stripremainingscripts' . $this->_suffix, ''));
-            if ($remainingScriptsParam) {
-                $remainingScripts = array_map('trim', (array) explode("\n", $remainingScriptsParam));
-                if (!empty($remainingScripts)) {
-                    foreach ($remainingScripts as $script) {
-                        $quoted_script = preg_quote($script, '/'); // prepares for regexp
-                        $count = 0;
-                        $body = preg_replace('#<script[^>]*'.$quoted_script.'(?!([^>]*?)data-asset-name)[^>]*></script>#', '', $body, -1, $count); // leave assets untouched
-                        if ($count > 0) {
-                            Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGSCRIPT', $script, $count);
-                        }
-                    }
-                }
-            }
-            
-            $remainingStylesheetsParam = trim( (string) $this->params->get('stripremainingcss' . $this->_suffix, ''));
-            if ($remainingStylesheetsParam) {
-                $remainingStylesheets = array_map('trim', (array) explode("\n", $remainingStylesheetsParam));
-                if (!empty($remainingStylesheets)) {
-                    foreach ($remainingStylesheets as $stylesheet) {
-                        $quoted_stylesheet = preg_quote($stylesheet, '/'); // prepares for regexp
-                        $count = 0;
-                        $body = preg_replace('#<link[^>]*'.$quoted_stylesheet.'(?!([^>]*?)data-asset-name)[^>]*/>#', '', $body, -1, $count); // leave assets untouched
-                        if ($count > 0) {
-                            Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGCSS', $stylesheet, $count);
-                        }
-                    }
-                }
-            }
+            // jQuery
             
             if ($this->_usejQuery) {
                 
-                $removejQueryNoConflict = $this->params->get('removenoconflict' . $this->_suffix, 1);
-                if ($removejQueryNoConflict == 1 || $removejQueryNoConflict == 2) {
+                // no conflict
+                
+                if ($this->params->get('removenoconflict' . $this->_suffix, 0)) {
                     
                     // remove all '...jQuery.noConflict(...);' or '... $.noConflict(...);'
                     
-                    $regexp = Helper::getRegularExpression('declaration', 'noconflict');
-                    
-                    Helper::search_and_replace_noconflict($regexp, $body, ($removejQueryNoConflict == 1 ? false : true), $this->_verbose_array);
+                    Helper::search_and_replace_noconflict(Helper::getRegularExpression('declaration', 'noconflict'), $body, true, $this->_verbose_array);
                     
                     // remove potential jquery-noconflict.js (different combinations)
+                    // ignores the script added by the plugin 
                     
-                    $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'noconflict'), $body, $this->_verbose_array);
+                    $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'noconflict'), $body, $this->_verbose_array, [$this->_jqnoconflictpath]);
                     
                     if ($number_removed > 0) {
                         $remove_empty_scripts = true;
@@ -895,294 +835,228 @@ class plgSystemJQueryEasy extends CMSPlugin
                     }
                 }
                 
-                $do_not_add_libraries = false;
-                $do_not_add_stylesheets = false;
-                $move_unique_library = false;
+                // remove all references of the jQuery library except scripts to ignore
                 
-                $replace_when_unique = $this->params->get('replacewhenunique' . $this->_suffix, 1);
-                $add_when_missing = $this->params->get('addwhenmissing' . $this->_suffix, 1);
-                
-                // remove all other references to jQuery library except some
                 $ignoreScripts = trim( (string) $this->params->get('ignorescripts' . $this->_suffix, ''));
                 if ($ignoreScripts) {
                     $ignoreScripts = array_map('trim', (array) explode("\n", $ignoreScripts));
-                }
-                
-                $request_search_and_delete_results = ($add_when_missing && $replace_when_unique) ? false : true;
-                
-                $removed_scripts = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'jquery'), $body, $this->_verbose_array, $ignoreScripts, $request_search_and_delete_results);
-                
-                $number_removed = $request_search_and_delete_results ? count($removed_scripts) : $removed_scripts;
-                
-                if ($request_search_and_delete_results) {
-                    if ($number_removed == 0 && !$add_when_missing) {
-                        $do_not_add_libraries = true;
-                        $do_not_add_stylesheets = true;
-                        //Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NOJQUERYLIBRARIESADDED');
-                    } else if ($number_removed == 1 && !$replace_when_unique) {
-                        $this->_jqpath = $removed_scripts[0];
-                        $move_unique_library = true;
-                        $remove_empty_scripts = true;
-                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUELIBRARY', $this->_jqpath);
-                    } else {
-                        if ($number_removed > 0) {
-                            $remove_empty_scripts = true;
-                            foreach ($removed_scripts as $removed_script) {
-                                Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYLIBRARY', $removed_script);
-                            }
-                        }
-                    }
+                    $ignoreScripts[] = $this->_jqpath;
                 } else {
-                    if ($number_removed > 0) {
-                        $remove_empty_scripts = true;
-                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERY', $number_removed);
-                    }
+                    $ignoreScripts = array($this->_jqpath);
+                }                
+                
+                $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'jquery'), $body, $this->_verbose_array, $ignoreScripts);
+                
+                if ($number_removed > 0) {
+                    $remove_empty_scripts = true;
+                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERY', $number_removed);
                 }
                 
-                // use jQuery version set in the plugin
-                if ($this->_jqpath) {
-                    if ($do_not_add_libraries) {
-                        $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQLIB#', 'GARBAGE', $body, 1);
-                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NOJQUERYLIBRARIESADDED');
-                        $remove_empty_scripts = true;
-                    } else {
-                        $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQLIB#', $this->_jqpath, $body, 1);
-                        if ($move_unique_library) {
-                            Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERY', $this->_jqpath);
-                        } else {
-                            Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERY', '<a href="'.$this->_jqpath.'" target="_blank">'.$this->_jqpath.'</a>');
-                        }
-                    }
-                } else {
-                    Helper::report($this->_verbose_array, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERY');
-                }
+                // remove all references of Migrate scripts
                 
-                // remove all references to Migrate scripts
-                
-                $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'migrate'), $body, $this->_verbose_array);
-                
-                // TODO? replace when unique
+                $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'migrate'), $body, $this->_verbose_array, [$this->_jqmigratepath]);
                 
                 if ($number_removed > 0) {
                     $remove_empty_scripts = true;
                     Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDMIGRATE', $number_removed);
                 }
                 
-                // use jQuery Migrate
-                if ($this->_jqmigratepath) {
-                    if ($do_not_add_libraries) { // no need to add Migrate if jQuery is not even loaded
-                        $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQMIGRATELIB#', 'GARBAGE', $body, 1);
-                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NOMIGRATEADDED');
-                        $remove_empty_scripts = true;
-                    } else {
-                        $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQMIGRATELIB#', $this->_jqmigratepath, $body, 1);
-                        Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYMIGRATE', '<a href="'.$this->_jqmigratepath.'" target="_blank">'.$this->_jqmigratepath.'</a>');
-                    }
-                }
-                
-                // replace deleted occurences
-                $addjQueryNoConflict = $this->params->get('addnoconflict' . $this->_suffix, 2);
-                if ($addjQueryNoConflict == 1) {
-                    if ($do_not_add_libraries) {
-                        $body = preg_replace('#JQEASY_JQNOCONFLICT#', '', $body, 1);
-                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NONOCONFLICTDECLARATIONADDED');
-                    } else {
-                        $body = preg_replace('#JQEASY_JQNOCONFLICT#', 'jQuery.noConflict();', $body, 1); // add unique jQuery.noConflict();
-                        Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDNOCONFLICTDECLARATION');
-                    }
-                } elseif ($addjQueryNoConflict == 2) {
-                    if ($do_not_add_libraries) {
-                        $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQNOCONFLICT#', 'GARBAGE', $body, 1);
-                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NONOCONFLICTSCRIPTADDED');
-                        $remove_empty_scripts = true;
-                    } else {
-                        $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQNOCONFLICT#', $this->_jqnoconflictpath, $body, 1); // add jquerynoconflict.js
-                        Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDNOCONFLICTSCRIPT', $this->_jqnoconflictpath);
-                    }
-                }
-                
                 // replace '$(document).ready(function()' or '$(document).ready(function($)' with 'jQuery(document).ready(function($)'
+                
                 if ($this->params->get('replacedocumentready' . $this->_suffix, 1)) {
-                    $count = 0;
-                    $body = preg_replace('#\$\(document\).ready\(function\([$]?\)#s', 'jQuery(document).ready(function($)', $body, -1, $count);
-                    if ($count > 0) {
-                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REPLACEDDOCUMENTREADY', $count);
+                    
+                    $number_replaced = Helper::search_and_replace('\$\(document\).ready\(function\([$]?\)', $body, 'jQuery(document).ready(function($)');
+                    
+                    if ($number_replaced > 0) {
+                        Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REPLACEDDOCUMENTREADY', $number_replaced);
                     }
                 }
+                
+                // jQuery UI
                 
                 if ($this->_usejQueryUI) {
                     
-                    //$do_not_add_libraries = false;
-                    $move_unique_libraryui = false;
+                    // remove all references of the jQuery UI library
                     
-                    // remove all other references to jQuery UI library
+                    $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'jqueryui'), $body, $this->_verbose_array, [$this->_jquipath]);
                     
-                    $request_search_and_delete_results = $replace_when_unique ? false : true;
-                    
-                    $removed_scripts = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'jqueryui'), $body, $this->_verbose_array, array(), $request_search_and_delete_results);
-                    
-                    $number_removed = $request_search_and_delete_results ? count($removed_scripts) : $removed_scripts;
-                    
-                    if ($request_search_and_delete_results) {
-                        // 				    if ($number_removed == 0 && !$add_when_missing) {
-                        // 				        $do_not_add_libraries = true;
-                        // 				    }
-                        if ($number_removed == 1 && !$replace_when_unique) {
-                            $this->_jquipath = $removed_scripts[0];
-                            $move_unique_libraryui = true;
-                            $remove_empty_scripts = true;
-                            Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUELIBRARYUI', $this->_jquipath);
-                        } else {
-                            if ($number_removed > 0) {
-                                $remove_empty_scripts = true;
-                                foreach ($removed_scripts as $removed_script) {
-                                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUILIBRARY', $removed_script);
-                                }
-                            }
-                        }
-                    } else {
-                        if ($number_removed > 0) {
-                            $remove_empty_scripts = true;
-                            Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUI', $number_removed);
-                        }
+                    if ($number_removed > 0) {
+                        $remove_empty_scripts = true;
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUI', $number_removed);
                     }
                     
-                    // use jQuery UI version set in the plugin
-                    if ($this->_jquipath) {
-                        if ($do_not_add_libraries) {
-                            $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQUILIB#', 'GARBAGE', $body, 1);
-                            Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NOJQUERYUILIBRARYADDED');
-                            $remove_empty_scripts = true;
-                        } else {
-                            $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQUILIB#', $this->_jquipath, $body, 1);
-                            if ($move_unique_libraryui) {
-                                Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERYUI', $this->_jquipath);
-                            } else {
-                                Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYUI', '<a href="'.$this->_jquipath.'" target="_blank">'.$this->_jquipath.'</a>');
-                            }
-                        }
-                    } else {
-                        Helper::report($this->_verbose_array, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERYUI');
-                    }
+                    // remove all references of the jQuery UI stylesheets
                     
-                    // remove all other references to jQuery UI stylesheets
+                    $number_removed = Helper::search_and_delete('css', Helper::getRegularExpression('css', 'jqueryui'), $body, $this->_verbose_array, [$this->_jquicsspath]);
                     
-                    //$do_not_add_stylesheets = $do_not_add_libraries;
-                    $move_unique_cssui = false;
-                    
-                    $removed_stylesheets = Helper::search_and_delete('css', Helper::getRegularExpression('css', 'jqueryui'), $body, $this->_verbose_array, array(), $request_search_and_delete_results);
-                    
-                    $number_removed = $request_search_and_delete_results ? count($removed_stylesheets) : $removed_stylesheets;
-                    
-                    if ($request_search_and_delete_results) {
-                        // 				    if ($number_removed == 0 && !$add_when_missing) {
-                        // 				        $do_not_add_stylesheets = true;
-                        // 				    }
-                        if ($number_removed == 1 && !$replace_when_unique) {
-                            $this->_jquicsspath = $removed_stylesheets[0];
-                            $move_unique_cssui = true;
-                            $remove_empty_links = true;
-                            Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_KEEPINGUNIQUECSSUI', $this->_jquicsspath);
-                        } else {
-                            if ($number_removed > 0) {
-                                $remove_empty_links = true;
-                                foreach ($removed_stylesheets as $removed_stylesheet) {
-                                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUICSSLINK', $removed_stylesheet);
-                                }
-                            }
-                        }
-                    } else {
-                        if ($number_removed > 0) {
-                            $remove_empty_links = true;
-                            Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUICSS', $number_removed);
-                        }
-                    }
-                    
-                    // use jQuery UI CSS set in the plugin
-                    if ($this->_jquicsspath) {
-                        if ($do_not_add_stylesheets) {
-                            $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQUICSS#', 'GARBAGE', $body, 1);
-                            Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_NOJQUERYUISTYLESHEETADDED');
-                            $remove_empty_links = true;
-                        } else {
-                            $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)JQEASY_JQUICSS#', $this->_jquicsspath, $body, 1);
-                            if ($this->_showreport) {
-                                if ($move_unique_cssui) {
-                                    Helper::report($this->_verbose_array, 'info', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_MOVEDJQUERYUICSS', $this->_jquicsspath);
-                                } else {
-                                    Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDJQUERYUICSS', '<a href="'.$this->_jquicsspath.'" target="_blank">'.$this->_jquicsspath.'</a>');
-                                }
-                            }
-                        }
-                    } else {
-                        if ($this->params->get('jqueryuitheme' . $this->_suffix, 'none') != 'none') {
-                            Helper::report($this->_verbose_array, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ERRORADDINGJQUERYUICSS');
-                        }
+                    if ($number_removed > 0) {
+                        $remove_empty_links = true;
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDJQUERYUICSS', $number_removed);
                     }
                 }
-            } // END if $this->jQuery
+            }
+            
+            // Bootstrap
+            
+            if ($this->_useBootstrap) {
+                
+                $bootstrap_library_types = $this->params->get('bootstraplibrarytypes' . $this->_suffix, 'both');
+                
+                // Bootstrap js path(s)
+                
+                if ($bootstrap_library_types == 'both' || $bootstrap_library_types == 'js') {
+                    
+                    // Popper js path
+                    
+                    if (substr($this->params->get('bootstrapversion' . $this->_suffix, 'joomla'), 0, 1) === '4') { // Bootstrap 4
+                        
+                        // remove loaded Popper scripts, if any
+                        
+                        $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'popper'), $body, $this->_verbose_array, [$this->_popperpath]);
+                        
+                        if ($number_removed > 0) {
+                            $remove_empty_scripts = true;
+                            Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDPOPPERJS', $number_removed);
+                        }
+                    }
+                    
+                    // ignore the removal of some Bootstrap scripts
+                    
+                    $ignoreScripts = trim( (string) $this->params->get('ignorebootstrapscripts' . $this->_suffix, ''));
+                    if ($ignoreScripts) {
+                        $ignoreScripts = array_map('trim', (array) explode("\n", $ignoreScripts));
+                        $ignoreScripts = array_merge($this->_bootstrapjspath, $ignoreScripts);
+                    } else {
+                        $ignoreScripts = $this->_bootstrapjspath;
+                    }                    
+                    
+                    // remove loaded Bootstrap scripts, if any
+                    
+                    $number_removed = Helper::search_and_delete('js', Helper::getRegularExpression('js', 'bootstrap'), $body, $this->_verbose_array, $ignoreScripts);
+                    
+                    if ($number_removed > 0) {
+                        $remove_empty_scripts = true;
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDBOOTSTRAPJS', $number_removed);
+                    }                    
+                }
+                
+                // Bootstrap css path(s)
+                
+                if ($bootstrap_library_types == 'both' || $bootstrap_library_types == 'css') {
+                    
+                    // ignore the removal of some Bootstrap stylesheets
+                    
+                    $ignoreStylesheets = trim( (string) $this->params->get('ignorebootstrapstylesheets' . $this->_suffix, ''));
+                    if ($ignoreStylesheets) {
+                        $ignoreStylesheets = array_map('trim', (array) explode("\n", $ignoreStylesheets));
+                        $ignoreStylesheets = array_merge($this->_bootstrapcssspath, $ignoreStylesheets);
+                    } else {
+                        $ignoreStylesheets = $this->_bootstrapcssspath;
+                    }
+                    
+                    // remove loaded Bootstrap styles, if any
+                    
+                    $number_removed = Helper::search_and_delete('css', Helper::getRegularExpression('css', 'bootstrap'), $body, $this->_verbose_array, $ignoreStylesheets);
+                    
+                    if ($number_removed > 0) {
+                        $remove_empty_links = true;
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDBOOTSTRAPCSS', $number_removed);
+                    }
+                }
+            }
+            
+            $remainingScripts = array();
+            
+            // remaining scripts from plugin
+            
+            $remainingScriptsParam = trim( (string) $this->params->get('stripremainingscripts' . $this->_suffix, ''));
+            if ($remainingScriptsParam) {
+                $remainingScripts = array_map('trim', (array) explode("\n", $remainingScriptsParam));
+            }
+            
+            // remove remaining scripts            
+            
+            if (!empty($remainingScripts)) {
+                foreach ($remainingScripts as $remainingScript) {
+                    
+                    $number_removed = Helper::search_and_delete('js', preg_quote($remainingScript, '/'), $body, $this->_verbose_array);
+                    
+                    if ($number_removed > 0) {
+                        $remove_empty_scripts = true;
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGSCRIPT', $remainingScript, $number_removed);
+                    }
+                }
+            }
+            
+            $remainingStylesheets = array();
+            
+            // remaining styles from plugin
+            
+            $remainingStylesheetsParam = trim( (string) $this->params->get('stripremainingcss' . $this->_suffix, ''));
+            if ($remainingStylesheetsParam) {
+                $remainingStylesheets = array_map('trim', (array) explode("\n", $remainingStylesheetsParam));
+            }
+
+            if (!empty($remainingStylesheets)) {
+                foreach ($remainingStylesheets as $remainingStylesheet) {
+                    
+                    $number_removed = Helper::search_and_delete('css', preg_quote($remainingStylesheet, '/'), $body, $this->_verbose_array);
+                    
+                    if ($number_removed > 0) {
+                        $remove_empty_links = true;
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_STRIPPEDREMAININGCSS', $remainingStylesheet, $number_removed);
+                    }
+                }
+            }
             
             // remove all obsolete script tags
+            
             if ($remove_empty_scripts) {
-                $count = 0;
-                $body = preg_replace('#<script[^>]*GARBAGE[^>]*></script>#', '', $body, -1, $count); // remove newly empty scripts
-                if ($count > 0) {
-                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYSCRIPTTAGS', $count);
+                $number_removed = 0;
+                $body = preg_replace('#<script[^>]*GARBAGE[^>]*></script>#', '', $body, -1, $number_removed); // remove newly empty scripts
+                if ($number_removed > 0) {
+                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYSCRIPTTAGS', $number_removed);
                 }
             }
             
             // remove all obsolete link tags
+            
             if ($remove_empty_links) {
-                $count = 0;
-                $body = preg_replace('#<link[^>]*GARBAGE[^>]*/>#', '', $body, -1, $count); // remove newly empty stylesheets
-                if ($count > 0) {
-                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYLINKTAGS', $count);
+                $number_removed = 0;
+                $body = preg_replace('#<link[^>]*GARBAGE[^>]*/>#', '', $body, -1, $number_removed); // remove newly empty stylesheets
+                if ($number_removed > 0) {
+                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEDEMPTYLINKTAGS', $number_removed);
                 }
             }
             
-            // all scripts and stylesheets are added here instead of earlier so they don't get checked by the plugin
+            switch ((int)$this->params->get('pagescan', 0)) {
+                case 1: // head only
+                    
+                    // Remove blank lines
+                    
+                    $count = 0;
+                    $body = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $body, -1, $count); // gets all of the empty lines in the source and replaces them with a simple carriage return to preserve the content structure.
+                    if ($count > 0) {
+                        Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEBLANKLINES', $count);
+                    }
+                    
+                    $this->app->setBody(preg_replace('#<head>([\s\S]*)<\/head>#', $body, $this->app->getBody(), 1));
+                    
+                    break;
+                    
+                case 2: // API + body
+                    
+                    $this->app->setBody(preg_replace('#<body.*?>([\s\S]*)<\/body>#', $body, $this->app->getBody(), 1));
+                    
+                    break;
+                    
+                default: // whole page scan
+                    
+                    // TODO? get the head section and remove blank lines
+                    
+                    $this->app->setBody($body);
+            }            
             
-            if (!empty($this->_supplement_scripts)) {
-                foreach($this->_supplement_scripts as $path) {
-                    $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)ADD_SCRIPT_HERE#', $path, $body, 1);
-                    Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSCRIPT', $path);
-                }
-            }
-            
-            $javascript_declaration = trim( (string) $this->params->get('addjavascriptdeclaration' . $this->_suffix, ''));
-            if (!empty($javascript_declaration)) {
-                $body = preg_replace('#ADD_SCRIPT_DECLARATION_HERE#', $javascript_declaration, $body, 1);
-                if ($this->_showreport) {
-                    $lines = array_map('trim', (array) explode("\n", $javascript_declaration));
-                    Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSCRIPTDECLARATION', $lines[0]);
-                }
-            }
-            
-            if (!empty($this->_supplement_stylesheets)) {
-                foreach($this->_supplement_stylesheets as $path) {
-                    $body = preg_replace('#([\\/a-zA-Z0-9_:\.~-]*)ADD_STYLESHEET_HERE#', $path, $body, 1);
-                    Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSTYLESHEET', $path);
-                }
-            }
-            
-            $css_declaration = trim( (string) $this->params->get('addcssdeclaration' . $this->_suffix, ''));
-            if (!empty($css_declaration)) {
-                $body = preg_replace('#ADD_STYLESHEET_DECLARATION_HERE#', $css_declaration, $body, 1);
-                if ($this->_showreport) {
-                    $lines = array_map('trim', (array) explode("\n", $css_declaration));
-                    Helper::report($this->_verbose_array, 'added', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_ADDEDSTYLESHEETDECLARATION', $lines[0]);
-                }
-            }
-            
-            // Remove blank lines
-            
-            if ($this->params->get('removeblanklines' . $this->_suffix, 0)) {
-                $count = 0;
-                $body = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $body, -1, $count); // gets all of the empty lines in the source and replaces them with a simple carriage return to preserve the content structure.
-                if ($count > 0) {
-                    Helper::report($this->_verbose_array, 'deleted', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_REMOVEBLANKLINES', $count);
-                }
-            }
         } // END if changes to the whole page
         
         $time_end = microtime(true);
@@ -1191,16 +1065,18 @@ class plgSystemJQueryEasy extends CMSPlugin
         // show the report
         
         if ($this->_showreport) {
+            
             $showreport = $this->params->get('showreport', 0);
+            
             $this_show_in_modal = true;
             if ($showreport == 3 || $showreport == 4) {
                 $this_show_in_modal = false;
             }
-            $report = Helper::getReport($this->_verbose_array, $this->_timeafterroute + $this->_timebeforerender + $this->_timebeforecompilehead + $this->_timeafterrender, '', $this_show_in_modal);
-            $body = preg_replace('#</body>#', $report.'</body>', $body, 1);
-        }
-        
-        $this->app->setBody($body);
+            
+            $report = Helper::getReport($this->_verbose_array, $this->_timebeforecompilehead + $this->_timeafterrender, '', $this_show_in_modal);
+            
+            $this->app->setBody(preg_replace('#</body>#', $report.'</body>', $this->app->getBody(), 1));
+        }        
         
         return true;
     }

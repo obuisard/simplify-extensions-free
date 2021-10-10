@@ -13,9 +13,9 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use SYW\Library\Field\DynamicsingleselectField;
 
-class BootstrapselectField extends DynamicsingleselectField
+class BootstrapselectionField extends DynamicsingleselectField
 {
-	public $type = 'Bootstrapselect';
+	public $type = 'Bootstrapselection';
 
 	protected function getOptions()
 	{
@@ -26,7 +26,7 @@ class BootstrapselectField extends DynamicsingleselectField
 
 		$path = URI::root(true) . '/media/plg_system_jqueryeasy/images';
 
-		$options[] = array(0, Text::_('JNO'), '', $path . '/select_no.png');
+		$options[] = array(0, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_IGNORE'), '', $path . '/select_no.png');
 		$options[] = array(1, Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_BOOTSTRAP'), '', $path . '/select_bootstrap.png');
 
 		return $options;
