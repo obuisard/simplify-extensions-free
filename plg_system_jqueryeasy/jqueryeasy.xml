@@ -204,7 +204,7 @@
 			
 				<fieldset name="jquery_selection" label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYINFRONTEND_LABEL">
 								
-					<field name="jqueryin" type="jqueryselection" default="0" disabledtitle="PLG_SYSTEM_JQUERYEASY_MESSAGE_OPTIONONLYAVAILABLEINCOMMERCIALVERSION"
+					<field name="jqueryinpage" type="jqueryselection" default="0" disabledtitle="PLG_SYSTEM_JQUERYEASY_MESSAGE_OPTIONONLYAVAILABLEINCOMMERCIALVERSION"
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYINFRONTEND_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYINFRONTEND_DESC">
 		            </field>
