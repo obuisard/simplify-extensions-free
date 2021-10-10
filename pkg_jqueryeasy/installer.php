@@ -131,6 +131,14 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 			// update warning
 
 			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_JQUERYEASY_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
+			
+			// +++ Migration Joomla 3 to Joomla 4
+			
+			// delete media/syw_jqueryeasy
+			
+			$this->deleteFolders[] = '/media/syw_jqueryeasy';
+			
+			// +++ End Migration
 		}
 
 		$this->removeFiles();
