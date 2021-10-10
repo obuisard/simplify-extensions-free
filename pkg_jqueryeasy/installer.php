@@ -40,7 +40,7 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 	/**
 	 * Link to the change logs
 	 */
-	protected $changelogLink = 'https://simplifyyourweb.com/downloads/jquery-easy/file/314-jquery-easy';
+	protected $changelogLink = 'https://simplifyyourweb.com/downloads/jquery-easy/files/file/370-jquery-easy';
 
 	/**
 	 * Link to the translation page
