@@ -2,14 +2,14 @@
 <extension type="package" method="upgrade">
 	<name>PKG_JQUERYEASY</name>
 	<author>Olivier Buisard</author>
-	<creationDate>2018-3-14</creationDate>
+	<creationDate>09/18/2021</creationDate>
 	<packagename>jqueryeasy</packagename>
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
-	<url>http://www.simplifyyourweb.com/</url>
+	<url>https://simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
- 	<packagerurl>http://www.simplifyyourweb.com/</packagerurl>
-	<version>4.0.2</version>
+ 	<packagerurl>https://simplifyyourweb.com/</packagerurl>
+	<version>5.0.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/jqueryeasy/changelog.xml</changelogurl>
 	<description>PKG_JQUERYEASY_XML_DESCRIPTION</description>
 	<blockChildUninstall>true</blockChildUninstall>
