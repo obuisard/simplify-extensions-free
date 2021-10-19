@@ -134,9 +134,59 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 			
 			// +++ Migration Joomla 3 to Joomla 4
 			
-			// delete media/syw_jqueryeasy
-			
-			$this->deleteFolders[] = '/media/syw_jqueryeasy';
+			if (Folder::exists(JPATH_SITE . '/media/syw_jqueryeasy')) {
+			    
+    			// reset the few parameters that won't be reset upon migration
+    			
+    			$db = Factory::getDBO();
+    			$query = $db->getQuery(true);
+    			
+    			$query->select('params');
+    			$query->from('#__extensions');
+    			$query->where($db->quoteName('type').'='.$db->quote('plugin'));
+    			$query->where($db->quoteName('folder').'='.$db->quote('system'));
+    			$query->where($db->quoteName('element').'='.$db->quote('jqueryeasy'));
+    			
+    			$db->setQuery($query);
+    			
+    			$plugin_params = array();
+    			try {
+    			    $plugin_params = json_decode($db->loadResult(), true);
+    			} catch (ExecutionFailureException $e) {
+    			    Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+    			}
+    			
+    			$plugin_params['pagescan'] = '0';
+    			$plugin_params['showreport'] = '0';
+    			
+    			$plugin_params['device'] = '';
+    			$plugin_params['template_inex'] = '';
+    			$plugin_params['templateid'] = '';
+    			$plugin_params['wherecomponent_inex'] = '';
+    			$plugin_params['wherecomponent'] = '';
+    			$plugin_params['url_inex'] = '';
+    			$plugin_params['url_inex_items'] = '';
+    			
+    			$query->clear();
+    			
+    			$query->update('#__extensions');
+    			$query->set($db->quoteName('params').'='.$db->quote(json_encode($plugin_params)));
+    			$query->where($db->quoteName('type').'='.$db->quote('plugin'));
+    			$query->where($db->quoteName('folder').'='.$db->quote('system'));
+    			$query->where($db->quoteName('element').'='.$db->quote('jqueryeasy'));
+    			
+    			$db->setQuery($query);
+    			
+    			try {
+    			    $db->execute();
+    			} catch (ExecutionFailureException $e) {
+    			    Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+    			}
+    			
+    			// delete media/syw_jqueryeasy
+    			
+    			$this->deleteFolders[] = '/media/syw_jqueryeasy';
+			}
 			
 			// +++ End Migration
 		}
