@@ -15,71 +15,132 @@ use Joomla\CMS\Uri\Uri;
 
 class Helper
 {
-    static public function isEnabledOnPage($params, $suffix = '')
+    static public function isEnabledOnPage($application, $params, $suffix = '')
     {
+//         if (!$application->isClient('site')) {
+//             return false;
+//         }
+        
         // enable the plugin for HTML pages only
         if (Factory::getDocument()->getType() !== 'html') {
             return false;
         }
         
-        // disable plugin in selected templates
-        
-//         $templates_array = $params->get('templateid', array('none'));
-        
-//         if (!is_array($templates_array)) { // before the plugin is saved, the value is the string 'none'
-//             $templates_array = explode(' ', $templates_array);
-//         }
-        
-//         $array_of_template_values = array_count_values($templates_array);
-//         if (isset($array_of_template_values['none']) && $array_of_template_values['none'] > 0) { // 'none' was selected
-//             // keep the plugin enabled
-//         } else {
-//             if (Factory::getApplication()->getTemplate() !== 'system') {
-//                 if (in_array(Factory::getApplication()->getTemplate(true)->id, $templates_array)) {
-//                     return false;
-//                 }
-//             }
-//         }
-
-        $urls = $params->get('url_inex'.$suffix, '');
-        
-        if ($urls === '') {
-            return true;
+        if ($application->getTemplate() === 'system') {
+            return false;
         }
         
-        $url_paths = trim( (string) $params->get('url_inex_items'.$suffix, ''));
+        // device selection
         
-        // enable plugin only on the allowed pages
-        if ($url_paths && $urls === 1) {
+//         if (($params->get('device'.$suffix, '') === 'desktop' && $is_mobile) || ($params->get('device'.$suffix, '') === 'mobile' && !$is_mobile)) {
+//             return false;
+//         }
+        
+        // template selection
+        
+        $templates_inex = $params->get('template_inex'.$suffix, '');
+        
+        if ($templates_inex !== '') {
             
-            $paths = array_map('trim', (array) explode("\n", $url_paths));
+            $templates = self::getParamValues($params->get('templateid'.$suffix, array()));
             
-            $found = false;
-            foreach ($paths as $path) {
-                $paths_compare = self::paths_are_identical(Uri::current(), $path);
-                if ($paths_compare) {
-                    $found = true;
+            if ($templates) {
+                
+                if ((int)$templates_inex === 1) { // include : use the plugin if in template
+                    
+                    if (!in_array($application->getTemplate(true)->id, $templates)) {
+                        return false;
+                    }
+                } else { // exclude : plugin is excluded if in template
+                    
+                    if (in_array($application->getTemplate(true)->id, $templates)) {
+                        return false;
+                    }
                 }
             }
-            if (!$found) {
-                return false;
+        }
+        
+        // component selection
+        
+        $components_inex = $params->get('wherecomponent_inex'.$suffix, '');
+        
+        if ($components_inex !== '') {
+            
+            $components = self::getParamValues($params->get('wherecomponent'.$suffix, array()));
+            
+            if ($components) {
+                
+                if ((int)$components_inex === 1) { // include : use the plugin if on extension's page
+                    
+                    if (!in_array($application->input->get('option', ''), $components)) {
+                        return false;
+                    }
+                } else { // exclude : plugin is excluded if on extension's page
+                    
+                    if (in_array($application->input->get('option', ''), $components)) {
+                        return false;
+                    }
+                }
             }
         }
         
-        // disable plugin in the listed pages
-        if ($url_paths && $urls === 0) {
+        // page selection
+
+        $urls_inex = $params->get('url_inex'.$suffix, '');
+        
+        if ($urls_inex !== '') {
             
-            $paths = array_map('trim', (array) explode("\n", $url_paths));
+            $url_paths = trim( (string) $params->get('url_inex_items'.$suffix, ''));
             
-            foreach ($paths as $path) {
-                $paths_compare = self::paths_are_identical(Uri::current(), $path);
-                if ($paths_compare) {
+            if ($url_paths) {
+                
+                if ((int)$urls_inex === 1) { // include : use the plugin if on a page
+                    
+                    $paths = array_map('trim', (array) explode("\n", $url_paths));
+                    
+                    foreach ($paths as $path) {
+                        if (self::paths_are_identical(Uri::current(), $path)) {
+                        
+                            return true;
+                        }
+                    }
+                    
                     return false;
+                    
+                } else { // exclude: plugin is excluded if on a page
+                    
+                    $paths = array_map('trim', (array) explode("\n", $url_paths));
+                    
+                    foreach ($paths as $path) {
+                        if (self::paths_are_identical(Uri::current(), $path)) {
+                            
+                            return false;
+                        }
+                    }
                 }
             }
         }
         
         return true;
+    }
+    
+    static public function getParamValues($array_of_elements = array())
+    {
+        if (isset($array_of_elements) && !empty($array_of_elements)) {
+            
+            if (!is_array($array_of_elements)) { // before the plugin is saved, the value is a string
+                $array_of_elements = trim($array_of_elements) !== '' ? array($array_of_elements) : array();
+            }
+            
+            $array_of_element_values = array_count_values($array_of_elements);
+            if (isset($array_of_element_values['all']) && $array_of_element_values['all'] > 0) { // 'all' was selected
+                return array();
+            } else {
+                return $array_of_elements;
+            }
+        }
+        
+        return array();
     }
     
     static public function getRegularExpression($type, $name)
@@ -90,7 +151,7 @@ class Helper
             case 'noconflict_js': return '([\\/a-zA-Z0-9_:\.~-]*)jquery[.-]*no[.-]*[cC]onflict([0-9\.-]|min)*?.js(.*?)';
             case 'migrate_js': return '([\\/a-zA-Z0-9_:\.~-]*)jquery([0-9\.-])*?migrate([0-9\.-]|latest|core|min|pack)*?.js(.*?)';
             case 'popper_js': return '([\\/a-zA-Z0-9_:\.~-]*)popper([0-9\.-]|min)*?js(.*?)';
-            case 'bootstrap_js': return '([\\/a-zA-Z0-9_:\.~-]*)bootstrap([0-9\.-]|bundle|min)*?js(.*?)';
+            case 'bootstrap_js': return '([\\/a-zA-Z0-9_:\.~-]*)bootstrap([a-zA-Z0-9\.-]|bundle|min)*?js(.*?)';
             
             case 'jqueryui_css': return '([\\/a-zA-Z0-9_:\.~-]*)jquery[.-]*ui([0-9\.-]|latest|core|custom|min|pack)*?.css(.*?)';
             case 'bootstrap_css': return '([\\/a-zA-Z0-9_:\.~-]*)bootstrap([a-zA-Z0-9\.-]|min)*?css(.*?)';
@@ -282,13 +343,13 @@ class Helper
      * @param array|string $container
      * @param string $replace
      */
-    static public function search_and_replace($regexp, &$container, $replace = '')
+    static public function search_and_replace($regexp, &$container, $replace = '', $limit = -1)
     {
         $total_count = 0;
         
         if (is_array($container)) {
             foreach ($container as $key => $value) {
-                $value = preg_replace('/' . $regexp . '/', $replace, $value, -1, $count);
+                $value = preg_replace('/' . $regexp . '/', $replace, $value, $limit, $count);
                 $total_count += $count;
                 if (trim($value) == '') {
                     unset($container[$key]);
@@ -297,7 +358,7 @@ class Helper
                 $container[$key] = $value;
             }
         } else {
-            $container = preg_replace('/' . $regexp . '/', $replace, $container, -1, $count);
+            $container = preg_replace('#' . $regexp . '#', $replace, $container, $limit, $count);
             $total_count += $count;
         }
         
@@ -863,11 +924,11 @@ class Helper
                             if (File::exists(JPATH_ROOT.$localVersionPath)) {
                                 $paths['local' . $key] = $localVersionPath;
                             } else {
-                                self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASYPROFILES_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
+                                self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
                             }
                         }
                     } else {
-                        self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASYPROFILES_VERBOSE_EMPTYLOCALFILE', 'Bootstrap');
+                        self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_EMPTYLOCALFILE', 'Bootstrap');
                     }
                 } else {
                     $BootstrapSubversion = trim($params->get('bootstrapsubversion'.$suffix, ''));
@@ -934,11 +995,11 @@ class Helper
                             if (File::exists(JPATH_ROOT.$localVersionPath)) {
                                 $paths['local' . $key] = $localVersionPath;
                             } else {
-                                self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASYPROFILES_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
+                                self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
                             }
                         }
                     } else {
-                        self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASYPROFILES_VERBOSE_EMPTYLOCALFILE', 'Bootstrap');
+                        self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_EMPTYLOCALFILE', 'Bootstrap');
                     }
                 } else {
                     $BootstrapSubversion = trim($params->get('bootstrapsubversion'.$suffix, ''));

@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>5.0.1</version>
+	<version>5.0.2</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Plugin\System\JqueryEasy</namespace>
 	
@@ -61,7 +61,7 @@
 		
 			<fieldset name="basic" label="PLG_SYSTEM_JQUERYEASY_INFORMATION_LABEL" addfieldprefix="SYW\Library\Field">
 				
-				<field type="extensionversion" version="5.0.1" />
+				<field type="extensionversion" version="5.0.2" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_JQUERYEASY_TRANSLATORS" />
@@ -75,10 +75,10 @@
 					donate="https://simplifyyourweb.com/downloads/jquery-easy"
 					review="http://extensions.joomla.org/extensions/extension/core-enhancements/performance/jquery-easy" />
 
-<!--  				<field type="sywextensionpresencetest" title="jQuery Easy Profiles" message="PLG_SYSTEM_JQUERYEASY_INFO_PROVERSION" -->
-<!--  					extensiontype="component" extensionelement="com_jqueryeasyprofiles" -->
-<!--  					imagesrc="media/plg_system_jqueryeasy/images/logo_pro.png" -->
-<!--  					downloadlink="https://simplifyyourweb.com/downloads/jquery-easy-profiles" downloadtext="PLG_SYSTEM_JQUERYEASY_INFO_PROVERSIONDOWLOAD" /> -->
+ 				<field type="sywextensionpresencetest" title="jQuery Easy Profiles" message="PLG_SYSTEM_JQUERYEASY_INFO_PROVERSION"
+ 					extensiontype="component" extensionelement="com_jqueryeasyprofiles"
+ 					imagesrc="media/plg_system_jqueryeasy/images/logo_pro.png"
+ 					downloadlink="https://simplifyyourweb.com/downloads/jquery-easy-profiles" downloadtext="PLG_SYSTEM_JQUERYEASY_INFO_PROVERSIONDOWLOAD" />
 				
 <!-- 				<field type="jchoptimizetest" />				 -->
 			</fieldset>
@@ -92,12 +92,12 @@
 
 				<fieldset name="general" label="PLG_SYSTEM_JQUERYEASY_GENERALOPTIONS_LABEL">
 					
-					<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
-						label="PLG_SYSTEM_JQUERYEASY_FIELD_CDNCHOICE_LABEL"
-						description="PLG_SYSTEM_JQUERYEASY_FIELD_CDNCHOICE_DESC" />
+<!-- 					<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"  -->
+<!-- 						label="PLG_SYSTEM_JQUERYEASY_FIELD_CDNCHOICE_LABEL" -->
+<!-- 						description="PLG_SYSTEM_JQUERYEASY_FIELD_CDNCHOICE_DESC" /> -->
 <!-- 					<field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_CHECKCDNDOCONLINE" label="PLG_SYSTEM_JQUERYEASY_HELP_LABEL" /> -->
 	            	
-	            	<field name="pagescan" type="list" default="0" 
+	            	<field name="pagescan" type="list" default="1" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_PAGESCAN_LABEL"
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_PAGESCAN_DESC">
 	                	<option value="0">PLG_SYSTEM_JQUERYEASY_VALUE_PAGESCAN_API</option>
@@ -106,11 +106,11 @@
 	                	<option value="3">PLG_SYSTEM_JQUERYEASY_VALUE_PAGESCAN_HEADBODY</option>
 	            	</field>
 		            
-		            <field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+		            <field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="pagescan:0"
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_MINIMIZESCRIPTDECLARATIONS_LABEL"
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_MINIMIZESCRIPTDECLARATIONS_DESC" />
 	            
-	            	<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+	            	<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="pagescan:0"
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_MINIMIZESTYLEDECLARATIONS_LABEL"
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_MINIMIZESTYLEDECLARATIONS_DESC" />
 		        </fieldset>
@@ -152,27 +152,53 @@
 				<fieldset name="narrowed_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
 
 					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/jquery-easy/narrow-selection" />
-				</fieldset>				
-				
+				</fieldset>
+
 				<fieldset name="narrowed_device" label="PLG_SYSTEM_JQUERYEASY_FIELDSET_DEVICES_LABEL">
-				
-					<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+
+<!-- 					<field name="device" type="list" default=""  -->
+<!-- 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_DEVICES_LABEL"  -->
+<!-- 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_DEVICES_DESC"> -->
+<!-- 		                <option value="">PLG_SYSTEM_JQUERYEASY_VALUE_IGNORE</option> -->
+<!-- 		                <option value="mobile">PLG_SYSTEM_JQUERYEASY_FIELD_DEVICE_MOBILE_VALUE</option> -->
+<!-- 		                <option value="desktop">PLG_SYSTEM_JQUERYEASY_FIELD_DEVICE_DESKTOP_VALUE</option> -->
+<!-- 		            </field> -->
+		            
+		            <field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_DEVICES_LABEL"
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_DEVICES_DESC" />
 				</fieldset>								
 				
-<!-- 				<fieldset name="narrowed_template" label="PLG_SYSTEM_JQUERYEASY_FIELDSET_TEMPLATES_LABEL"> -->
+				<fieldset name="narrowed_template" label="PLG_SYSTEM_JQUERYEASY_FIELDSET_TEMPLATES_LABEL">
 				
-<!-- 					<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"  -->
-<!-- 						label="PLG_SYSTEM_JQUERYEASY_FIELD_TEMPLATES_LABEL" -->
-<!-- 						description="PLG_SYSTEM_JQUERYEASY_FIELD_TEMPLATES_DESC" /> -->
-<!-- 				</fieldset>				 -->
+					<field name="template_inex" type="list" class="form-select-color-state" default="" 
+						label="PLG_SYSTEM_JQUERYEASY_FIELD_TEMPLATESINEX_LABEL"
+						description="PLG_SYSTEM_JQUERYEASY_FIELD_TEMPLATESINEX_DESC">
+						<option value="">PLG_SYSTEM_JQUERYEASY_VALUE_IGNORE</option>
+						<option value="1">PLG_SYSTEM_JQUERYEASY_VALUE_INCLUDE</option>
+						<option value="0">PLG_SYSTEM_JQUERYEASY_VALUE_EXCLUDE</option>
+					</field>
+	
+					<field name="templateid" type="templates" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select" showon="template_inex:0,1"
+						label="PLG_SYSTEM_JQUERYEASY_FIELD_TEMPLATEITEMS_LABEL" 
+						description="PLG_SYSTEM_JQUERYEASY_FIELD_TEMPLATEITEMS_DESC">
+					</field>
+				</fieldset>
 				
 				<fieldset name="narrowed_extension" label="PLG_SYSTEM_JQUERYEASY_FIELDSET_EXTENSION_LABEL">
 							            
-					<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
-						label="PLG_SYSTEM_JQUERYEASY_FIELD_EXTENSION_LABEL"
-						description="PLG_SYSTEM_JQUERYEASY_FIELD_EXTENSION_DESC" />
+					<field name="wherecomponent_inex" type="list" class="form-select-color-state" default="" 
+						label="PLG_SYSTEM_JQUERYEASY_FIELD_EXTENSIONINEX_LABEL"
+						description="PLG_SYSTEM_JQUERYEASY_FIELD_EXTENSIONINEX_DESC">
+						<option value="">PLG_SYSTEM_JQUERYEASY_VALUE_IGNORE</option>
+						<option value="1">PLG_SYSTEM_JQUERYEASY_VALUE_INCLUDE</option>
+						<option value="0">PLG_SYSTEM_JQUERYEASY_VALUE_EXCLUDE</option>
+					</field>
+	
+					<field name="wherecomponent" type="sql" default="" key_field="element" value_field="element" multiple="multiple" layout="joomla.form.field.list-fancy-select" showon="wherecomponent_inex:0,1"
+						query="SELECT element FROM #__extensions WHERE type='component' AND enabled=1 ORDER BY element"
+						label="PLG_SYSTEM_JQUERYEASY_FIELD_EXTENSIONITEMS_LABEL"
+						description="PLG_SYSTEM_JQUERYEASY_FIELD_EXTENSIONITEMS_DESC" />
 				</fieldset>
 				
 				<fieldset name="narrowed_url" label="PLG_SYSTEM_JQUERYEASY_FIELDSET_URL_LABEL">
@@ -201,7 +227,7 @@
 
 					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/jquery-easy/jquery-options" />
 				</fieldset>
-			
+
 				<fieldset name="jquery_selection" label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYINFRONTEND_LABEL">
 								
 					<field name="jqueryinpage" type="jqueryselection" default="0" disabledtitle="PLG_SYSTEM_JQUERYEASY_MESSAGE_OPTIONONLYAVAILABLEINCOMMERCIALVERSION"
@@ -360,27 +386,9 @@
 					
 					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_BOOTSTRAPREQUIREMENT" showon="bootstrapinpage:1" />
 					
-					<field name="bootstrapversion" type="list" default="joomla" showon="bootstrapinpage:1" 
+					<field name="bootstrapversion" type="bootstrapselect" default="5.1" showon="bootstrapinpage:1" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_BOOTSTRAPVERSION_LABEL" 
-		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_BOOTSTRAPVERSION_DESC">
-		                <option value="joomla">PLG_SYSTEM_JQUERYEASY_VALUE_JOOMLA</option>
-		                <option value="local">PLG_SYSTEM_JQUERYEASY_VALUE_LOCAL</option>
-	            		<option value="5.1">5.1.x</option>
-	            		<option value="5.0">5.0.x</option>
-	            		<option value="4.6">4.6.x</option>
-		            	<option value="4.5">4.5.x</option>
-		            	<option value="4.4">4.4.x</option>
-		            	<option value="4.3">4.3.x</option>
-		            	<option value="4.2">4.2.x</option>
-		            	<option value="4.1">4.1.x</option>
-		            	<option value="4.0">4.0.x</option>
-		            	<option value="3.4">3.4.x</option>
-		            	<option value="3.3">3.3.x</option>
-		            	<option value="3.2">3.2.x</option>
-		            	<option value="3.1">3.1.x</option>
-		            	<option value="3.0">3.0.x</option>
-		            	<option value="2.3.2">2.3.2</option>
-		            </field>
+		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_BOOTSTRAPVERSION_DESC" />
 	            
 		            <field name="bootstrapsubversion" type="sywprefixedtext" prefix="x.x." default="" size="4" showon="bootstrapinpage:1[AND]bootstrapversion!:joomla,local,2.3.2" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_BOOTSTRAPSUBVERSION_LABEL" 
