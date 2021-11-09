@@ -20,7 +20,7 @@ use SYW\Module\LatestNewsEnhanced\Site\Helper\ContentHelper as LNEContentHelper;
 use SYW\Module\LatestNewsEnhanced\Site\Helper\Helper as LNEHelper;
 
 if ($bootstrap_version > 0) {
-	HTMLHelper::_('bootstrap.tooltip');
+    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 }
 ?>
 <?php if ($datasource != 'articles') : ?>

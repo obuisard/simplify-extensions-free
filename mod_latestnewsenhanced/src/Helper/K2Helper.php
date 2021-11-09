@@ -20,6 +20,7 @@ use Joomla\Database\Exception\ExecutionFailureException;
 use SYW\Library\Cache as SYWCache;
 use SYW\Library\Text as SYWText;
 use SYW\Library\Utilities as SYWUtilities;
+use SYW\Library\Version as SYWVersion;
 
 require_once (JPATH_SITE.'/components/com_k2/helpers/route.php');
 require_once (JPATH_SITE.'/components/com_k2/helpers/permissions.php');
@@ -30,7 +31,7 @@ class K2Helper
 	/**
 	 *
 	 * @param unknown $params
-	 * @param unknown $items
+	 * @param list of objects $items
 	 * @throws \Exception
 	 * @return array of categories (id, description, article count)
 	 */
@@ -927,6 +928,8 @@ class K2Helper
 			$lazyload = $params->get('lazyload', false);
 
 			$allow_remote = $params->get('allow_remote', true);
+			
+			$thumbnail_mime_type = $params->get('thumb_mime_type', '');
 
 			$maintain_height = $params->get('maintain_height', 0);
 			$head_width = $params->get('head_w', 64);
@@ -941,6 +944,7 @@ class K2Helper
 			$quality_jpg = $params->get('quality_jpg', 100);
 			$quality_png = $params->get('quality_png', 0);
 			$quality_webp = $params->get('quality_webp', 80);
+			$quality_avif = $params->get('quality_avif', 80);
 
 			if ($quality_jpg > 100) {
 				$quality_jpg = 100;
@@ -962,8 +966,15 @@ class K2Helper
 			if ($quality_webp < 0) {
 				$quality_webp = 0;
 			}
+			
+			if ($quality_avif > 100) {
+			    $quality_avif = 100;
+			}
+			if ($quality_avif < 0) {
+			    $quality_avif = 0;
+			}
 
-			$image_qualities = array('jpg' => $quality_jpg, 'png' => $quality_png, 'webp' => $quality_webp);
+			$image_qualities = array('jpg' => $quality_jpg, 'png' => $quality_png, 'webp' => $quality_webp, 'avif' => $quality_avif);
 
 			$clear_cache = Helper::IsClearPictureCache($params);
 
@@ -977,6 +988,8 @@ class K2Helper
 
 			if ($clear_cache) {
 				Helper::clearThumbnails($module->id, $tmp_path);
+				
+				SYWVersion::refreshMediaVersion('mod_latestnewsenhanced_' . $module->id);
 			}
 		}
 
@@ -1233,19 +1246,22 @@ class K2Helper
 					        $image_height = $image_object->attributes['height'];
 					        
 					    } else {
-					        $result_array = Helper::getImageFromSrc($module->id, $item->id, $imagesrc, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote);
+					        $result_array = Helper::getImageFromSrc($module->id, $item->id, $imagesrc, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
 
     						if (!empty($result_array[0])) {
     							$filename = $result_array[0];
     						}
 
     						if (!empty($result_array[1])) {
+    						    
+    						    $item->error[] = $result_array[1];
+    						    
     							// if error for the file found, try and use the default image instead
     							if (!$used_default_image && $default_picture) { // if the default image was the one chosen, no use to retry
     							    
     							    $default_image_object = HTMLHelper::cleanImageURL($default_picture);
     							    
-    							    $result_array = Helper::getImageFromSrc($module->id, $item->id, $default_image_object->url, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote);
+    							    $result_array = Helper::getImageFromSrc($module->id, $item->id, $default_image_object->url, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
 
     								if (!empty($result_array[0])) {
     									$filename = $result_array[0];
@@ -1254,8 +1270,6 @@ class K2Helper
     								if (!empty($result_array[1])) {
     									$item->error[] = $result_array[1];
     								}
-    							} else {
-    								$item->error[] = $result_array[1];
     							}
     						}
 					    }
@@ -1283,7 +1297,7 @@ class K2Helper
 						}
 					}
 
-					$item->imagetag = SYWUtilities::getImageElement($filename, $item->title, $img_attributes, $lazyload, $create_highres_images);
+					$item->imagetag = SYWUtilities::getImageElement($filename, $item->title, $img_attributes, $lazyload, $create_highres_images, null, true, SYWVersion::getMediaVersion('mod_latestnewsenhanced_' . $module->id));
 				}
 			}
 

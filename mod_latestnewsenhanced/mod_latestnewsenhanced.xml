@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.2.1</version>
+	<version>6.3.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -67,7 +67,7 @@
 			
 			<fieldset name="basic" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="6.2.1" />
+				<field type="extensionversion" version="6.3.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_LATESTNEWSENHANCED_TRANSLATORS" />
@@ -81,7 +81,7 @@
 					support="https://simplifyyourweb.com/support"
 					demo="http://demo3.simplifyyourweb.com/latest-news-enhanced"
 					review="http://extensions.joomla.org/extensions/extension/news-display/articles-display/latest-news-enhanced"
-					donate="https://simplifyyourweb.com/free-products/latest-news-enhanced" />				
+					donate="https://simplifyyourweb.com/free-products/latest-news-enhanced" />
 
 				<field type="sywextensionpresencetest" title="Latest News Enhanced Pro" message="MOD_LATESTNEWSENHANCED_INFO_PROVERSION" 
 					extensiontype="component" extensionelement="com_latestnewsenhancedpro"
@@ -99,6 +99,7 @@
 				</fieldset>
 								
 				<fieldset name="selection_source" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONSOURCE_FIELDSET_LABEL">
+				
 					<field name="datasource" type="datasourceselect" default="articles"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DATASOURCE_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DATASOURCE_DESC">	
@@ -115,8 +116,6 @@
 						<option value="2">MOD_LATESTNEWSENHANCEDEXTENDED_RELATEDBYTAG</option>
 						<option value="3">MOD_LATESTNEWSENHANCEDEXTENDED_RELATEDANYBYTAG</option>	
 					</field>
-					
-<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
 				</fieldset>
 								
 				<fieldset name="selection_categories" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONCATEGORIES_FIELDSET_LABEL">
@@ -202,7 +201,7 @@
 					
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGORDER_LABEL" 
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGORDER_DESC" />					
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGORDER_DESC" />
 				</fieldset>
 				
 				<fieldset name="selection_keywords" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONKEYWORDS_FIELDSET_LABEL">
@@ -503,15 +502,9 @@
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEADTYPE_DESC">
 						<option value="none">JNONE</option>
 					</field>
-	
-<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" />			 -->
 					
 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_MESSAGE_IMAGESELECTION" style="info" showon="datasource:k2" />
 					
-	<!-- 				<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_MESSAGE_HEADCALENDARSECTION" style="info" showon="head_type:calendar" /> -->
-					
-	<!-- 				<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_MESSAGE_HEADIMAGESECTION" style="info" showon="head_type:image" /> -->
-
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="head_type:image,allimagesasc,allimagesdesc" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEARCHFULLTEXT_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEARCHFULLTEXT_DESC" />
@@ -583,8 +576,6 @@
 						<option value="title">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TITLE</option>
 					</field>
 	
-<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
-	
 					<field name="letter_count_title" type="sywverbosetext" default="" filter="string" size="4" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LETTERCOUNTTITLE_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LETTERCOUNTTITLE_DESC" />
@@ -632,9 +623,7 @@
 						<option value="meta">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_METADESC</option>
 						<option value="metaintro">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_METADESCINTRO</option>
 					</field>
-	
-<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
-						
+
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWUNAUTHORIZEDTEXT_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWUNAUTHORIZEDTEXT_DESC" />
@@ -710,8 +699,6 @@
 						<option value="popup">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_POPUP</option>
 						<option value="inline" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INLINE</option>
 					</field>
-					
-<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
 
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOITEMBYDEFAULT_LABEL"
@@ -787,8 +774,6 @@
 						<option value="last">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LAST</option>
 						<option value="picture" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_OVERPICTURE</option>
 					</field>
-					
-<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
 									
 					<field name="link_cat_to" type="list" default="none" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOCATEGORY_LABEL" 
@@ -1155,8 +1140,6 @@
 						<option value="vr" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHADOW_VRIGHT</option>
 					</field>
 					
-<!-- 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
-					
 					<field name="hover_effect" type="sywtransitionpicker" default="none" transitiongroups="2d" icon="SYWicon-layers" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HOVEREFFECT_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICHOVEREFFECT_DESC" />
@@ -1169,10 +1152,16 @@
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATETHUMBNAILS_DESC">
 						<option value="0">JNO</option>
 						<option value="1">JYES</option>
-					</field>					
+					</field>
 					
-					<field type="gdtest" supportedtypes="gif,jpg,png,webp" message="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_GDTEST_LABEL" showon="create_thumb:1" />		
-						
+					<field type="imagelibrarytest" showon="create_thumb:1" />
+
+					<field name="thumb_mime_type" type="imagetypeselect" default="" showon="create_thumb:1"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_THUMBNAILMIMETYPE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_THUMBNAILMIMETYPE_DESC">
+						<option value="">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SAMEASORIGINAL</option>
+					</field>
+					
 					<field name="crop_pic" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="create_thumb:1" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CROPPICTURE_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CROPPICTURE_DESC">
@@ -1189,16 +1178,27 @@
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEFILTER_DESC" />
 					
 					<field name="quality_jpg" type="sywverbosetext" default="100" filter="integer" size="8" maxlength="3" min="0" max="100" showon="create_thumb:1" 
+						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYJPG_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYJPG_DESC" />
 						
 					<field name="quality_png" type="sywverbosetext" default="0" filter="integer" size="8" maxlength="1" min="0" max="9" showon="create_thumb:1" 
+						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYPNG_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYPNG_DESC" />
 				
 					<field name="quality_webp" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" showon="create_thumb:1" 
+						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYWEBP_LABEL" 
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYWEBP_DESC" />				
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYWEBP_DESC" />
+						
+					<field name="quality_avif" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" showon="create_thumb:1" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYAVIF_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYAVIF_DESC" />
+				</fieldset>
+				
+				<fieldset name="image_advanced" label="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGEADVANCED_FIELDSET_LABEL">
 							  
 					<field type="phpsettingtest" setting="allow_url_fopen" message="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWURLFOPENTEST_LABEL" showon="create_thumb:1" />
 					
@@ -1208,9 +1208,6 @@
 						<option value="0">JNO</option>
 						<option value="1">JYES</option>
 					</field>
-				</fieldset>
-				
-				<fieldset name="image_advanced" label="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGEADVANCED_FIELDSET_LABEL">
 				
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEHIGHRES_LABEL" 
@@ -1458,13 +1455,9 @@
 
 				<fieldset name="details_date" label="MOD_LATESTNEWSENHANCEDEXTENDED_DATETIME_LABEL">
 				
-<!-- 				<field type="subtitle" title="MOD_LATESTNEWSENHANCEDEXTENDED_DATE_LABEL" /> -->
-				
 					<field name="d_format" type="sywverbosetext" default="d F Y" filter="raw" translateHint="false" hint="d F Y" help="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_DATEFORMATINFO" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DATEFORMAT_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DATEFORMAT_DESC" />
-						
-	<!-- 				<field type="subtitle" title="MOD_LATESTNEWSENHANCEDEXTENDED_TIME_LABEL" /> -->
 					
 					<field name="t_format" type="sywverbosetext" default="H:i" filter="raw" translateHint="false" hint="H:i" help="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_DATEFORMATINFO" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TIMEFORMAT_LABEL" 
@@ -1571,8 +1564,6 @@
 	                    <option value="around">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AROUNDITEMS</option>
 	                    <option value="title" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_WITHTITLE</option>
 	                </field>
-	                
-	<!--                 <field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
 	                 
 	                <field name="pagination_align" type="list" default="center" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALIGNPAGINATION_LABEL" 
@@ -1729,7 +1720,7 @@
 					
 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOADSTYLESHEETS_TXT" style="fieldneutral" badge="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOADSTYLESHEETS_BADGE" badgetype="light"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOADSTYLESHEETS_LABEL" />
-	            
+
 		            <field name="inline_scripts" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INLINESCRIPTS_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INLINESCRIPTS_DESC">

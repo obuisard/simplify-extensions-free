@@ -20,7 +20,7 @@ use SYW\Module\LatestNewsEnhanced\Site\Helper\K2Helper as LNEK2Helper;
 use SYW\Module\LatestNewsEnhanced\Site\Helper\Helper as LNEHelper;
 
 if ($bootstrap_version > 0) {
-	HTMLHelper::_('bootstrap.tooltip');
+    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 }
 ?>
 <?php if ($datasource != 'k2') : ?>

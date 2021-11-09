@@ -16,7 +16,6 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use SYW\Library\Fonts as SYWFonts;
 use SYW\Library\K2 as SYWK2;
-use SYW\Library\Libraries as SYWLibraries;
 use SYW\Library\Stylesheets as SYWStylesheets;
 use SYW\Library\Utilities as SYWUtilities;
 use SYW\Module\LatestNewsEnhanced\Site\Cache\CSSFileCache;
@@ -84,7 +83,11 @@ if (empty($list)) { // $list can be an empty array
 
 	$show_errors = LNEHelper::isShowErrors($params);
 
-	$remove_whitespaces = LNEHelper::isRemoveWhitespaces($params);
+	$remove_whitespaces = LNEHelper::isRemoveWhitespaces($params);	
+	
+	if ($params->get('load_icon_font', 1)) {
+	    SYWFonts::loadIconFont();
+	}
 
 	$items_align = $params->get('align', 'v');
 
@@ -131,10 +134,6 @@ if (empty($list)) { // $list can be an empty array
 
 	$generate_inline_scripts = $params->get('inline_scripts', 0);
 	$load_remotely = $params->get('remote_libraries', 0);
-	
-	if ($params->get('load_icon_font', 1)) {
-	    SYWFonts::loadIconFont();
-	}
 
 	// link
 
