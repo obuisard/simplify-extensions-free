@@ -9,7 +9,7 @@
 	<url>https://simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>https://simplifyyourweb.com/</packagerurl>
-	<version>6.2.1</version>
+	<version>6.3.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/latestnewsenhanced/changelog.xml</changelogurl>
 	<description>PKG_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<blockChildUninstall>true</blockChildUninstall>

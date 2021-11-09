@@ -25,7 +25,7 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.0.1';
+	protected $minimumLibrary = '2.1.0';
 
 	/**
 	 * Available languages
@@ -40,7 +40,7 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 	/**
 	 * Link to the change logs
 	 */
-	protected $changelogLink = 'https://simplifyyourweb.com/free-products/latest-news-enhanced/file/162-latest-news-enhanced';
+	protected $changelogLink = 'https://simplifyyourweb.com/documentation/latest-news/installation/updating-older-versions';
 
 	/**
 	 * Link to the translation page
@@ -130,24 +130,21 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 
    	    $current_language = Factory::getLanguage()->getTag();
    	    if (!in_array($current_language, $this->availableLanguages)) {
-   	        echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
+   	        Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this component.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a> and get a license upgrade for your help!', 'info');
    	    }
 
    	    if ($action === 'install') {
 
 	   	    // link to Quickstart
 
-	   	    $message = Text::sprintf('PKG_LATESTNEWSENHANCED_INFO_LEARN', $this->quickstartLink);
-	   	    $message .= '<br /><br /><a href="' . $this->quickstartLink . '" target="_blank">' . HTMLHelper::image('mod_latestnewsenhanced/quickstart.png', 'Quick Start', null, true) . '</a>';
-
-	   	    echo '<div class="alert alert-info">' . $message . '</div>';
+   	        echo '<p><a class="btn btn-primary" href="' . $this->quickstartLink . '" target="_blank"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_LATESTNEWSENHANCED_BUTTON_QUICKSTART') . '</a></p>';
    	    }
 
 	    if ($action === 'update') {
 
 	        // update warning
 
-	    	echo '<div class="alert alert-warning">' . Text::sprintf('PKG_LATESTNEWSENHANCED_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
+	    	echo '<p><a class="btn btn-primary" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_LATESTNEWSENHANCED_BUTTON_UPDATENOTES') . '</a></p>';
 
 	    	// overrides warning
 
@@ -178,23 +175,29 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 	        
 	        // +++ Migration Joomla 3 to Joomla 4
 	        
-	        // move user files (substitutes)
+	        // the old folders have not been removed on update so safe to do it here
+	        if (Folder::exists(JPATH_SITE . '/modules/mod_latestnewsenhanced/images')) {
 	        
-	        $this->moveFile('common_user_styles.css', '/modules/mod_latestnewsenhanced/styles', '/media/mod_latestnewsenhanced/css', '-min');
-	        $this->moveFile('substitute_styles.css', '/modules/mod_latestnewsenhanced/styles', '/media/mod_latestnewsenhanced/css', '-min');
-	        
-	        // remove obsolete files
-	        
-	        $this->deleteFiles[] = '/modules/mod_latestnewsenhanced/headerfilesmaster.php';
-	        
-	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/animations';
-	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/fields';
-	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/helpers';
-	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/images';
-	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/js';
-	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/styles';
-	        
-	        $this->deleteFolders[] = '/cache/mod_latestnewsenhanced';
+    	        // move user files (substitutes)
+    	        
+    	        $this->moveFile('common_user_styles.css', '/modules/mod_latestnewsenhanced/styles', '/media/mod_latestnewsenhanced/css', '-min');
+    	        $this->moveFile('substitute_styles.css', '/modules/mod_latestnewsenhanced/styles', '/media/mod_latestnewsenhanced/css', '-min');
+    	        
+    	        // remove data from /cache if coming from Joomla 3.10
+    	        
+    	        $this->deleteFolders[] = '/cache/mod_latestnewsenhanced';
+    	        
+    	        // delete files and folders
+    	        
+    	        $this->deleteFiles[] = '/modules/mod_latestnewsenhanced/headerfilesmaster.php';
+    	        
+    	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/animations';
+    	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/fields';
+    	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/helpers';
+    	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/images';
+    	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/js';
+    	        $this->deleteFolders[] = '/modules/mod_latestnewsenhanced/styles';
+	        }
 	        
 	        // +++ End Migration
 	    }
@@ -203,20 +206,83 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 
 	    return true;
 	}
-
-	private function moveFile($file, $source, $destination, $minified_version = '.min')
+	
+	private function isFolderReady($extra_path)
 	{
-		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_ERROR_CANNOTMOVEFILE', $file), 'warning');
-		}
-
-		$file_pieces = explode('.', $file); // assumes only one . in file name
-		$file_pieces[0] .= $minified_version;
-		$file = implode('.', $file_pieces);
-
-		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_ERROR_CANNOTMOVEFILE', $file), 'warning');
-		}
+	    $path = JPATH_SITE;
+	    $folders = explode('/', trim($extra_path, '/'));
+	    
+	    foreach ($folders as $folder) {
+	        $path .= '/' . $folder;
+	        if (!Folder::exists($path)) {
+	            if (Folder::create($path)) {
+	            } else {
+	                return false;
+	            }
+	        }
+	    }
+	    
+	    return true;
+	}
+	
+	private function moveFile($file, $source, $destination, $minified_version = '')
+	{
+	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	        if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_ERROR_CANNOTMOVEFILE', $file), 'warning');
+	        }
+	    }
+	    
+	    if ($minified_version) {
+	        $file_name = File::stripExt($file);
+	        $file_extension = File::getExt($file);
+	        $file = $file_name . $minified_version . '.' . $file_extension;
+	        
+	        if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	            if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+	                Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_ERROR_CANNOTMOVEFILE', $file), 'warning');
+	            }
+	        }
+	    }
+	}
+	
+	private function copyFile($file, $source, $destination)
+	{
+	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	        if (!$this->isFolderReady($destination) || !File::copy(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_WARNING_COULDNOTCOPYFILE', $file), 'warning');
+	        }
+	    }
+	}
+	
+	private function enableExtension($type, $element, $folder = '', $enable = true)
+	{
+	    $db = Factory::getDBO();
+	    
+	    $query = $db->getQuery(true);
+	    
+	    $query->update($db->quoteName('#__extensions'));
+	    if ($enable) {
+	        $query->set($db->quoteName('enabled').' = 1');
+	    } else {
+	        $query->set($db->quoteName('enabled').' = 0');
+	    }
+	    $query->where($db->quoteName('type').' = '.$db->quote($type));
+	    $query->where($db->quoteName('element').' = '.$db->quote($element));
+	    if ($folder) {
+	        $query->where($db->quoteName('folder').' = '.$db->quote($folder));
+	    }
+	    
+	    $db->setQuery($query);
+	    
+	    try {
+	        $db->execute();
+	    } catch (ExecutionFailureException $e) {
+	        Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	        return false;
+	    }
+	    
+	    return true;
 	}
 
 	private function getDefaultTemplate()
@@ -368,8 +434,10 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 	        Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
 	    } else {
 	        
-	        $library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
-	        if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
+	        if (!SYW\Library\Version::isCompatible($this->minimumLibrary)) {
+	        
+// 	        $library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
+// 	        if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
 	            
 	            if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary', 'update')) {
 	                Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
@@ -381,36 +449,6 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 	    }
 	    
 	    return true;
-	}
-
-	private function enableExtension($type, $element, $folder = '', $enable = true)
-	{
-		$db = Factory::getDBO();
-
-		$query = $db->getQuery(true);
-
-		$query->update($db->quoteName('#__extensions'));
-		if ($enable) {
-			$query->set($db->quoteName('enabled').' = 1');
-		} else {
-			$query->set($db->quoteName('enabled').' = 0');
-		}
-		$query->where($db->quoteName('type').' = '.$db->quote($type));
-		$query->where($db->quoteName('element').' = '.$db->quote($element));
-		if ($folder) {
-			$query->where($db->quoteName('folder').' = '.$db->quote($folder));
-		}
-
-		$db->setQuery($query);
-
-		try {
-			$db->execute();
-		} catch (ExecutionFailureException $e) {
-		    Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
-			return false;
-		}
-
-		return true;
 	}
 
 }
