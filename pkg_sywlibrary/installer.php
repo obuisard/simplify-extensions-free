@@ -108,21 +108,17 @@ class Pkg_SYWLibraryInstallerScript extends InstallerScript
 
  		$current_language = Factory::getLanguage()->getTag();
  		if (!in_array($current_language, $this->availableLanguages)) {
- 			echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
+ 		    Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this component.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a> and get a license upgrade for your help!', 'info');
  		}
 
  		// enable the library plugin
 
  		$plugin_is_enable = $this->enableExtension('plugin', 'syw', 'system');
  		if (!$plugin_is_enable) {
- 			echo '<div class="alert alert-warning"><a href="index.php?option=com_plugins&view=plugins&filter[folder]=system&filter[element]=syw&filter[enabled]=0">' . Text::sprintf('PKG_SYWLIBRARY_WARNING_ENABLEPLUGIN') . '</a></div>';
+ 		    echo '<p><a class="btn btn-primary" href="index.php?option=com_plugins&view=plugins&filter[folder]=system&filter[element]=syw&filter[enabled]=0"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_SYWLIBRARY_WARNING_ENABLEPLUGIN') . '</a></p>';
  		}
 
  		if ($action == 'update') {
-
-			// update warning
-
-			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_SYWLIBRARY_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
  		
             // remove the old update site
  		
