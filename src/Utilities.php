@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Environment\Browser;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\Utilities\ArrayHelper;
 use SYW\Library\Vendor\MobileDetect;
 
 class Utilities
@@ -429,13 +430,23 @@ class Utilities
 	 * @param boolean check the file existence, use when full control over the creation of images
 	 * @return string the <picture> or <img> element
 	 */
-	public static function getImageElement($src, $alt, $attributes = array(), $lazy_load = false, $high_resolution = false, $breakpoints = null, $check_files = true)
+	public static function getImageElement($src, $alt, $attributes = array(), $lazy_load = false, $high_resolution = false, $breakpoints = null, $check_files = true, $version = '')
 	{
 		$html = '';
 
 		$extensions_needing_fallbacks = array('webp', 'avif');
 		$mime_types = array('jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif', 'webp' => 'image/webp', 'avif' => 'image/avif');
 		$possible_fallback_extensions = array('png', 'jpg');
+		
+		if ($version) {
+		    $version = '?' . $version; // stay homogeneous with the way Joomla adds versions (or use ?version=)
+		}
+		
+// 		$version = '';
+// 		$hash = hash_file('md5', JPATH_ROOT . '/' . $src);
+// 		if ($hash !== false) {
+// 		    $version = '?version=' . $hash;
+// 		}
 			
 		// clean the src path and grab useful info
 		// src may be something like images/default.png#joomlaImage://local-images/default.png?width=500&height=500
@@ -458,8 +469,7 @@ class Utilities
 		if (!$lazy_load) {
 			$attributes['loading'] = 'eager';
 		} else {
-			$attributes['loading'] = 'lazy'; // no need in Joomla 4, HTMLHelper forces 'lazy' by default if the attribute is missing
-			// make sure it is not removed from Joomla 4
+			$attributes['loading'] = 'lazy';
 		}
 
 		if (!empty($breakpoints)) {
@@ -504,9 +514,9 @@ class Utilities
 					}
 				}
 
-				$html .= '<source type="' . $mime_types[$source_extension] . '" media="(max-width: ' . $breakpoint . 'px)" srcset="' . $source_path . '_' . $breakpoint . '.' . $source_extension . ($source_highres_breakpoint ? ' 1x,' . $source_path . '_' . $breakpoint . '@2x.' . $source_extension . ' 2x' : '') . '">';
+				$html .= '<source type="' . $mime_types[$source_extension] . '" media="(max-width: ' . $breakpoint . 'px)" srcset="' . $source_path . '_' . $breakpoint . '.' . $source_extension . $version . ($source_highres_breakpoint ? ' 1x,' . $source_path . '_' . $breakpoint . '@2x.' . $source_extension . $version . ' 2x' : '') . '">';
 				if ($fallback_breakpoint) {
-					$html .= '<source type="' . $mime_types[$fallback_extension_breakpoint] . '" media="(max-width: ' . $breakpoint . 'px)" srcset="' . $source_path . '_' . $breakpoint . '.' . $fallback_extension_breakpoint . ($fallback_highres_breakpoint ? ' 1x,' . $source_path . '_' . $breakpoint . '@2x.' . $fallback_extension_breakpoint . ' 2x' : '') . '">';
+				    $html .= '<source type="' . $mime_types[$fallback_extension_breakpoint] . '" media="(max-width: ' . $breakpoint . 'px)" srcset="' . $source_path . '_' . $breakpoint . '.' . $fallback_extension_breakpoint . $version . ($fallback_highres_breakpoint ? ' 1x,' . $source_path . '_' . $breakpoint . '@2x.' . $fallback_extension_breakpoint . $version . ' 2x' : '') . '">';
 				}
 			}
 
@@ -547,20 +557,20 @@ class Utilities
 			}
 
 			if ($fallback) {
-				$html .= '<source type="' . $mime_types[$source_extension] . '" srcset="' . $src . ($source_highres ? ' 1x,' . $source_path . '@2x.' . $source_extension . ' 2x' : '') . '">';
+			    $html .= '<source type="' . $mime_types[$source_extension] . '" srcset="' . $src . $version . ($source_highres ? ' 1x,' . $source_path . '@2x.' . $source_extension . $version . ' 2x' : '') . '">';
 			}
 
 			if ($fallback) {
 				if ($fallback_highres) {
-					$attributes['srcset'] = $source_path . '@2x.' . $fallback_extension . ' 2x';
+				    $attributes['srcset'] = $source_path . '@2x.' . $fallback_extension . $version . ' 2x';
 				}
 			} else {
 				if ($source_highres) {
-					$attributes['srcset'] = $source_path . '@2x.' . $source_extension . ' 2x';
+				    $attributes['srcset'] = $source_path . '@2x.' . $source_extension . $version . ' 2x';
 				}
 			}
 
-			$html .= HTMLHelper::_('image', $fallback ? $source_path . '.' . $fallback_extension : $src, $alt, $attributes);
+            $html .= '<img src="' . ($fallback ? $source_path . '.' . $fallback_extension . $version : $src . $version) . '" alt="' . $alt . '" ' . trim(ArrayHelper::toString($attributes)) . '>';
 
 			$html .= '</picture>';
 
@@ -607,20 +617,20 @@ class Utilities
 			}
 
 			if ($fallback) {
-				$html .= '<source type="' . $mime_types[$source_extension] . '" srcset="' . $src . ($source_highres ? ' 1x,' . $source_path . '@2x.' . $source_extension . ' 2x' : '') . '">';
+			    $html .= '<source type="' . $mime_types[$source_extension] . '" srcset="' . $src . $version . ($source_highres ? ' 1x,' . $source_path . '@2x.' . $source_extension . $version . ' 2x' : '') . '">';
 			}
 
 			if ($fallback) {
 				if ($fallback_highres) {
-					$attributes['srcset'] = $source_path . '@2x.' . $fallback_extension . ' 2x';
+				    $attributes['srcset'] = $source_path . '@2x.' . $fallback_extension . $version . ' 2x';
 				}
 			} else {
 				if ($source_highres) {
-					$attributes['srcset'] = $source_path . '@2x.' . $source_extension . ' 2x';
+				    $attributes['srcset'] = $source_path . '@2x.' . $source_extension . $version . ' 2x';
 				}
 			}
 
-			$html .= HTMLHelper::_('image', $fallback ? $source_path . '.' . $fallback_extension : $src, $alt, $attributes);
+            $html .= '<img src="' . ($fallback ? $source_path . '.' . $fallback_extension . $version : $src . $version) . '" alt="' . $alt . '" ' . trim(ArrayHelper::toString($attributes)) . '>';
 
 			if ($fallback) {
 				$html .= '</picture>';
