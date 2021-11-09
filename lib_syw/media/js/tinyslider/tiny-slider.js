@@ -1125,6 +1125,8 @@ var tns = function(options) {
         hasGutter = hasOption('gutter');
 
     outerWrapper.className = classOuter;
+    outerWrapper.setAttribute('aria-roledescription', 'carousel');
+    outerWrapper.setAttribute('role', 'region');
     innerWrapper.className = classInner;
     outerWrapper.id = slideId + '-ow';
     innerWrapper.id = slideId + '-iw';
@@ -1136,6 +1138,8 @@ var tns = function(options) {
     if (autoWidth) { newContainerClasses += ' tns-autowidth'; }
     newContainerClasses += ' tns-' + options.axis;
     container.className += newContainerClasses;
+    
+    container.setAttribute('role', 'list');
 
     // add constrain layer for carousel
     if (carousel) {
@@ -1164,8 +1168,12 @@ var tns = function(options) {
       if (!item.id) { item.id = slideId + '-item' + i; }
       if (!carousel && animateNormal) { addClass(item, animateNormal); }
       setAttrs(item, {
+        'role': 'listitem',
         'aria-hidden': 'true',
-        'tabindex': '-1'
+        'aria-roledescription': 'slide',
+        'aria-label': '' + (i + 1) + ' of ' + slideItems.length,
+        'tabindex': '-1',
+        'style': 'visibility:hidden'
       });
     });
 
@@ -1450,7 +1458,7 @@ var tns = function(options) {
       if (autoplayButton) {
         setAttrs(autoplayButton, {'data-action': txt});
       } else if (options.autoplayButtonOutput) {
-        outerWrapper.insertAdjacentHTML(getInsertPosition(options.autoplayPosition), '<button type="button" data-action="' + txt + '">' + autoplayHtmlStrings[0] + txt + autoplayHtmlStrings[1] + autoplayText[0] + '</button>');
+        outerWrapper.insertAdjacentHTML(getInsertPosition(options.autoplayPosition), '<button type="button" data-action="' + txt + '" aria-label="' + txt + '">' + autoplayHtmlStrings[0] + txt + autoplayHtmlStrings[1] + autoplayText[0] + '</button>');
         autoplayButton = outerWrapper.querySelector('[data-action]');
       }
 
@@ -1491,7 +1499,7 @@ var tns = function(options) {
           // hide nav items by default
           navHtml += '<button type="button" data-nav="' + i +'" tabindex="-1" aria-controls="' + slideId + '" ' + hiddenStr + ' aria-label="' + navStr + (i + 1) +'"></button>';
         }
-        navHtml = '<div class="tns-nav" aria-label="Carousel Pagination">' + navHtml + '</div>';
+        navHtml = '<div class="tns-nav" role="group" aria-label="Carousel Pagination">' + navHtml + '</div>';
         outerWrapper.insertAdjacentHTML(getInsertPosition(options.navPosition), navHtml);
 
         navContainer = outerWrapper.querySelector('.tns-nav');
@@ -1515,6 +1523,7 @@ var tns = function(options) {
       setAttrs(navItems[navCurrentIndex], {'aria-label': navStr + (navCurrentIndex + 1) + navStrCurrent});
       removeAttrs(navItems[navCurrentIndex], 'tabindex');
       addClass(navItems[navCurrentIndex], navActiveClass);
+      navItems[navCurrentIndex].setAttribute('aria-disabled', 'true');
 
       // add events
       addEvents(navContainer, navEvents);
@@ -1525,7 +1534,7 @@ var tns = function(options) {
     // == controlsInit ==
     if (hasControls) {
       if (!controlsContainer && (!prevButton || !nextButton)) {
-        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="' + slideId +'">' + controlsText[0] + '</button><button type="button" data-controls="next" tabindex="-1" aria-controls="' + slideId +'">' + controlsText[1] + '</button></div>');
+        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" aria-label="previous slide" aria-controls="' + slideId +'">' + controlsText[0] + '</button><button type="button" data-controls="next" aria-label="next slide" aria-controls="' + slideId +'">' + controlsText[1] + '</button></div>');
 
         controlsContainer = outerWrapper.querySelector('.tns-controls');
       }
@@ -1679,7 +1688,6 @@ var tns = function(options) {
     if (responsive) {
       setBreakpointZone();
       bpChanged = breakpointZoneTem !== breakpointZone;
-      // if (hasRightDeadZone) { needContainerTransform = true; } // *?
       if (bpChanged) { events.emit('newBreakpointStart', info(e)); }
     }
 
@@ -1849,9 +1857,7 @@ var tns = function(options) {
       }
     }
     if (autoplayHoverPause !== autoplayHoverPauseTem) {
-      autoplayHoverPause ?
-        addEvents(container, hoverEvents) :
-        removeEvents(container, hoverEvents);
+      autoplayHoverPause ? addEvents(container, hoverEvents) : removeEvents(container, hoverEvents);
     }
     if (autoplayResetOnVisibility !== autoplayResetOnVisibilityTem) {
       autoplayResetOnVisibility ?
@@ -2374,17 +2380,16 @@ var tns = function(options) {
       // show slides
       if (i >= start && i <= end) {
         if (hasAttr(item, 'aria-hidden')) {
-          removeAttrs(item, ['aria-hidden', 'tabindex']);
+          removeAttrs(item, ['aria-hidden', 'style']);
           addClass(item, slideActiveClass);
+          setAttrs(item, { 'tabindex': '0' });
         }
       // hide slides
       } else {
         if (!hasAttr(item, 'aria-hidden')) {
-          setAttrs(item, {
-            'aria-hidden': 'true',
-            'tabindex': '-1'
-          });
+          setAttrs(item, { 'aria-hidden': 'true' });
           removeClass(item, slideActiveClass);
+          setAttrs(item, { 'tabindex': '-1', 'style': 'visibility: hidden;opacity: 0;transition: visibility 0s linear 800ms, opacity 800ms' });
         }
       }
     });
@@ -2437,10 +2442,12 @@ var tns = function(options) {
           'aria-label': navStr + (navCurrentIndexCached + 1)
         });
         removeClass(navPrev, navActiveClass);
+        navPrev.setAttribute('aria-disabled', 'false');
         
         setAttrs(navCurrent, {'aria-label': navStr + (navCurrentIndex + 1) + navStrCurrent});
         removeAttrs(navCurrent, 'tabindex');
         addClass(navCurrent, navActiveClass);
+        navCurrent.setAttribute('aria-disabled', 'true');
 
         navCurrentIndexCached = navCurrentIndex;
       }
