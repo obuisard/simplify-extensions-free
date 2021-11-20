@@ -26,7 +26,7 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.0.2';
+	protected $minimumLibrary = '2.1.1';
 
 	/**
 	 * Available languages
@@ -41,7 +41,7 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 	/**
 	 * Link to the change logs
 	 */
-	protected $changelogLink = 'https://simplifyyourweb.com/free-products/trombinoscope/file/384-trombinoscope-contacts';
+	protected $changelogLink = 'https://simplifyyourweb.com/documentation/trombinoscope-contacts/installation/updating-older-versions';
 
 	/**
 	 * Link to the translation page
@@ -131,7 +131,7 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 
      	$current_language = Factory::getLanguage()->getTag();
      	if (!in_array($current_language, $this->availableLanguages)) {
-     		echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
+     	    Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this component.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a> and get a license upgrade for your help!', 'info');
      	}
 
 		// move default silhouettes to /images
@@ -159,17 +159,14 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 
      		// link to Quickstart
 
-     		$message = Text::sprintf('PKG_TROMBINOSCOPE_INFO_LEARN', $this->quickstartLink);
-     		$message .= '<br /><br /><a href="' . $this->quickstartLink . '" target="_blank">' . HTMLHelper::image('mod_trombinoscopecontacts/quickstart.png', 'Quick Start', null, true) . '</a>';
-
-     		echo '<div class="alert alert-info">' . $message . '</div>';
+     		echo '<p><a class="btn btn-primary" href="' . $this->quickstartLink . '" target="_blank"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_TROMBINOSCOPE_BUTTON_QUICKSTART') . '</a></p>';
      	}
 
 		if ($action === 'update') {
 
 			// update warning
 
-			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_TROMBINOSCOPE_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
+			echo '<p><a class="btn btn-primary" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_TROMBINOSCOPE_BUTTON_UPDATENOTES') . '</a></p>';
 
 			// overrides warning
 
@@ -307,6 +304,36 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 	        }
 	    }
 	}
+	
+	private function enableExtension($type, $element, $folder = '', $enable = true)
+	{
+	    $db = Factory::getDBO();
+	    
+	    $query = $db->getQuery(true);
+	    
+	    $query->update($db->quoteName('#__extensions'));
+	    if ($enable) {
+	        $query->set($db->quoteName('enabled').' = 1');
+	    } else {
+	        $query->set($db->quoteName('enabled').' = 0');
+	    }
+	    $query->where($db->quoteName('type').' = '.$db->quote($type));
+	    $query->where($db->quoteName('element').' = '.$db->quote($element));
+	    if ($folder) {
+	        $query->where($db->quoteName('folder').' = '.$db->quote($folder));
+	    }
+	    
+	    $db->setQuery($query);
+	    
+	    try {
+	        $db->execute();
+	    } catch (ExecutionFailureException $e) {
+	        Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	        return false;
+	    }
+	    
+	    return true;
+	}
 
 	private function getDefaultTemplate()
 	{
@@ -440,36 +467,6 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 	    } else {
 	        return $tmpInstaller->update($package['dir']);
 	    }
-	}
-
-	private function enableExtension($type, $element, $folder = '', $enable = true)
-	{
-		$db = Factory::getDBO();
-
-		$query = $db->getQuery(true);
-
-		$query->update($db->quoteName('#__extensions'));
-		if ($enable) {
-			$query->set($db->quoteName('enabled').' = 1');
-		} else {
-			$query->set($db->quoteName('enabled').' = 0');
-		}
-		$query->where($db->quoteName('type').' = '.$db->quote($type));
-		$query->where($db->quoteName('element').' = '.$db->quote($element));
-		if ($folder) {
-			$query->where($db->quoteName('folder').' = '.$db->quote($folder));
-		}
-
-		$db->setQuery($query);
-
-		try {
-			$db->execute();
-		} catch (ExecutionFailureException $e) {
-			//Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
-			return false;
-		}
-
-		return true;
 	}
 
 	/**
