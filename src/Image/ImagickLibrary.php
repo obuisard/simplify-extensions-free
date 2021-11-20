@@ -108,12 +108,12 @@ class ImagickLibrary extends AbstractImageLibrary
     
     public function createThumbnail($mime_type, $image, $path, $target_origin_x = 0, $target_origin_y = 0, $source_origin_x = 0, $source_origin_y = 0, $target_width = 0, $target_height = 0, $source_width = 0, $source_height = 0, $quality = 75, $filter = null)
     {
-        $thumbnail = $image;
+        $thumbnail = clone $image;
         
         $this->crop_and_resize($thumbnail, $source_origin_x, $source_origin_y, $target_width, $target_height, $source_width, $source_height);
         
         if (!is_null($filter)) {
-            $this->apply_filters($image, $filter);
+            $this->apply_filters($thumbnail, $filter);
         }
         
         switch (strtolower($mime_type))
@@ -231,8 +231,11 @@ class ImagickLibrary extends AbstractImageLibrary
     {
         $image->cropImage($source_width, $source_height, $source_origin_x, $source_origin_y);
         
+        //$image->scaleImage($target_width, $target_height);
+        //$image->adaptiveResizeImage($target_width, $target_height);
+        
         $image->resizeImage($target_width, $target_height, \Imagick::FILTER_LANCZOS, 1);
-        //$image->thumbnailImage($target_width, $target_height); // produces bigger pngs
+        //$image->thumbnailImage($target_width, $target_height, false, true); // produces bigger pngs
     }
     
     /**
@@ -276,16 +279,6 @@ class ImagickLibrary extends AbstractImageLibrary
         } catch (\ImagickException $e) {
             //
         }
-    }
-
-    /**
-     * Returns name of current driver instance
-     *
-     * @return string
-     */
-    public function getDriverName()
-    {
-        return 'Imagick';
     }
     
     /**

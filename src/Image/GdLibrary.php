@@ -356,16 +356,6 @@ class GdLibrary extends AbstractImageLibrary
             case 'sharpen': imagefilter($image, IMG_FILTER_SMOOTH, -9); break;
         }
     }
-
-    /**
-     * Returns name of current driver instance
-     *
-     * @return string
-     */
-    public function getDriverName()
-    {
-        return 'GD';
-    }
     
     /**
      * Checks if GD library is available

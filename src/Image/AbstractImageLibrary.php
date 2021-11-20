@@ -25,14 +25,7 @@ abstract class AbstractImageLibrary
     abstract public function createFile($mime_type, $image, $path, $quality = 75, $filter = null);
     
     abstract public function createEncodedString($mime_type, $image, $quality = 75, $filter = null);
-    
-    /**
-     * Returns name of current driver instance
-     *
-     * @return string
-     */
-    abstract public function getDriverName();
-    
+       
     /**
      * Returns whether the library is available
      */
