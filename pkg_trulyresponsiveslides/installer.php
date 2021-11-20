@@ -8,38 +8,24 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerHelper;
+use Joomla\CMS\Installer\InstallerScript;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
  * Script file for the packaged Truly Responsive Slides module
  */
-class Pkg_TrulyResponsiveSlidesInstallerScript
+class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 {
-	/**
-	 * The version number of the extension
-	 */
-	protected $release;
-
-	/**
-	 * The extension name
-	 */
-	protected $extension;
-
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.0.1';
-
-	/**
-	 * Minimum Joomla! version required to install the extension
-	 */
-	protected $minimumJoomla = '4.0.0';
+	protected $minimumLibrary = '2.1.1';
 
 	/**
 	 * Available languages
@@ -54,7 +40,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 	/**
 	 * Link to the change logs
 	 */
-	protected $changelogLink = 'https://simplifyyourweb.com/free-products/truly-responsive-slides/file/369-truly-responsive-slides';
+	protected $changelogLink = 'https://simplifyyourweb.com/documentation/truly-responsive-slides/installation/updating-older-versions';
 
 	/**
 	 * Link to the translation page
@@ -67,67 +53,68 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 	protected $quickstartLink = 'https://simplifyyourweb.com/documentation/truly-responsive-slides/quickstart-guide';
 
 	/**
-	 * A list of files to be deleted
+	 * Extension script constructor
 	 */
-	protected $deleteFiles = array();
-
+	public function __construct($parent)
+	{
+	    $this->extension = 'pkg_trulyresponsiveslides';
+	    $this->minimumJoomla = '4.0.0';
+	    //$this->minimumPhp = JOOMLA_MINIMUM_PHP; // not needed
+	}
+	
 	/**
-	 * A list of folders to be deleted
-	 */
-	protected $deleteFolders = array();
-
-	/**
-	 * Called before an install/update/uninstall method
+	 * Called before any type of action
 	 *
-	 * @param string     $action     Which action is happening (install|uninstall|discover_install|update)
-	 * @param Installer  $installer  The class calling this method
+	 * @param string $action Which action is happening (install|uninstall|discover_install|update)
+	 * @param InstallerAdapter $installer The class calling this method
 	 *
 	 * @return boolean True on success
 	 */
 	public function preflight($action, $installer)
 	{
-		if ($action === 'uninstall') {
-			return true;
-		}
-
-		// make sure we are under Joomla 4.0 or over
-
-		if (version_compare(JVERSION, $this->minimumJoomla, 'lt')) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('JOOMLA_REQUIRED_VERSION', $this->minimumJoomla), 'error');
-			return false;
-		}
-
-		$this->extension = $installer->getName();
-		$this->release = $installer->getManifest()->version;
+	    if ($action === 'uninstall') {
+	        return true;
+	    }
+	    
+	    // checks minimum PHP and Joomla versions and that an upgrade is performed
+	    if (!parent::preflight($action, $installer)) {
+	        return false;
+	    }
 
 		// make sure the library is installed and that it is compatible with the extension
 		return $this->installOrUpdateLibrary($installer);
 	}
 
 	/**
-	 * Called on installation
+	 * method to install the component
 	 *
-	 * @return  boolean  True on success
+	 * @return boolean True on success
 	 */
 	public function install($installer) {}
 
 	/**
-	 * Called on update
+	 * method to uninstall the component
 	 *
-	 * @return  boolean  True on success
-	 */
-	public function update($installer) {}
-
-	/**
-	 * Called on uninstallation
+	 * @return void
 	 */
 	public function uninstall($installer) {}
 
 	/**
-	 * Called after an install/update/uninstall method
+	 * method to update the component
 	 *
 	 * @return boolean True on success
 	 */
+	public function update($installer) {}
+
+	/**
+	 * Called after any type of action
+	 *
+	 * @param string $action Which action is happening (install|uninstall|discover_install|update)
+	 * @param InstallerAdapter $installer The object responsible for running this script
+	 *
+	 * @return boolean True on success
+	 */
+	
 	public function postflight($action, $installer)
 	{
 		if ($action === 'uninstall') {
@@ -144,27 +131,21 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 
    		$current_language = Factory::getLanguage()->getTag();
    		if (!in_array($current_language, $this->availableLanguages)) {
-   			//Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>', 'notice');
-   			echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
+   		    Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this component.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a> and get a license upgrade for your help!', 'info');
    		}
 
    		if ($action === 'install') {
 
    			// link to Quickstart
 
-   			$message = Text::sprintf('PKG_TRULYRESPONSIVESLIDES_INFO_LEARN', $this->quickstartLink);
-   			$message .= '<br /><br /><a href="' . $this->quickstartLink . '" target="_blank">' . HTMLHelper::image('mod_trulyresponsiveslides/quickstart.png', 'Quick Start', null, true) . '</a>';
-
-   			//Factory::getApplication()->enqueueMessage($message, 'notice');
-   			echo '<div class="alert alert-info">' . $message . '</div>';
+   		    echo '<p><a class="btn btn-primary" href="' . $this->quickstartLink . '" target="_blank"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_TRULYRESPONSIVESLIDES_BUTTON_QUICKSTART') . '</a></p>';
    		}
 
 		if ($action === 'update') {
 
 			// update warning
 
-			//Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_WARNING_RELEASENOTES', $this->changelogLink), 'warning');
-			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_TRULYRESPONSIVESLIDES_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
+			echo '<p><a class="btn btn-primary" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_TRULYRESPONSIVESLIDES_BUTTON_UPDATENOTES') . '</a></p>';
 
 			// overrides warning
 
@@ -217,38 +198,82 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 		return true;
 	}
 
-	private function moveFile($file, $source, $destination, $minified_version = '.min')
+	private function isFolderReady($extra_path)
 	{
-		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
-		}
-
-		$file_pieces = explode('.', $file); // assumes only one . in file name
-		$file_pieces[0] .= $minified_version;
-		$file = implode('.', $file_pieces);
-
-		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
-			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
-		}
+	    $path = JPATH_SITE;
+	    $folders = explode('/', trim($extra_path, '/'));
+	    
+	    foreach ($folders as $folder) {
+	        $path .= '/' . $folder;
+	        if (!Folder::exists($path)) {
+	            if (Folder::create($path)) {
+	            } else {
+	                return false;
+	            }
+	        }
+	    }
+	    
+	    return true;
 	}
-
-	private function removeFiles()
+	
+	private function moveFile($file, $source, $destination, $minified_version = '')
 	{
-		if (!empty($this->deleteFiles)) {
-			foreach ($this->deleteFiles as $filename) {
-				if (File::exists(JPATH_SITE . $filename) && !File::delete(JPATH_SITE . $filename)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_DELETINGFILEFOLDER', $filename), 'warning');
-				}
-			}
-		}
-
-		if (!empty($this->deleteFolders)) {
-			foreach ($this->deleteFolders as $folder) {
-				if (Folder::exists(JPATH_ROOT . $folder) && !Folder::delete(JPATH_ROOT . $folder)) {
-					Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_DELETINGFILEFOLDER', $folder), 'warning');
-				}
-			}
-		}
+	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	        if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
+	        }
+	    }
+	    
+	    if ($minified_version) {
+	        $file_name = File::stripExt($file);
+	        $file_extension = File::getExt($file);
+	        $file = $file_name . $minified_version . '.' . $file_extension;
+	        
+	        if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	            if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+	                Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
+	            }
+	        }
+	    }
+	}
+	
+	private function copyFile($file, $source, $destination)
+	{
+	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	        if (!$this->isFolderReady($destination) || !File::copy(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
+	        }
+	    }
+	}
+	
+	private function enableExtension($type, $element, $folder = '', $enable = true)
+	{
+	    $db = Factory::getDBO();
+	    
+	    $query = $db->getQuery(true);
+	    
+	    $query->update($db->quoteName('#__extensions'));
+	    if ($enable) {
+	        $query->set($db->quoteName('enabled').' = 1');
+	    } else {
+	        $query->set($db->quoteName('enabled').' = 0');
+	    }
+	    $query->where($db->quoteName('type').' = '.$db->quote($type));
+	    $query->where($db->quoteName('element').' = '.$db->quote($element));
+	    if ($folder) {
+	        $query->where($db->quoteName('folder').' = '.$db->quote($folder));
+	    }
+	    
+	    $db->setQuery($query);
+	    
+	    try {
+	        $db->execute();
+	    } catch (ExecutionFailureException $e) {
+	        Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	        return false;
+	    }
+	    
+	    return true;
 	}
 
 	private function getDefaultTemplate()
@@ -364,47 +389,33 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 
 	private function installOrUpdatePackage($installer, $package_name, $installation_type = 'install')
 	{
-		// Get the path to the package
-
+	    // Get the path to the package
+	    
 	    $sourcePath = $installer->getParent()->getPath('source');
-		$sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
-
-		// Extract and install the package
-
-		$package = InstallerHelper::unpack($sourcePackage);
-		$tmpInstaller = new Installer();
-
-		try {
-			if ($installation_type == 'install') {
-				$installResult = $tmpInstaller->install($package['dir']);
-			} else {
-				$installResult = $tmpInstaller->update($package['dir']);
-			}
-		} catch (\Exception $e) {
-			return false;
-		}
-
-		return true;
+	    $sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
+	    
+	    // Extract and install the package
+	    
+	    $package = InstallerHelper::unpack($sourcePackage);
+	    if ($package === false || (is_array($package) && $package['type'] === false)) {
+	        return false;
+	    }
+	    
+	    $tmpInstaller = new Installer();
+	    
+	    if ($installation_type === 'install') {
+	        return $tmpInstaller->install($package['dir']);
+	    } else {
+	        return $tmpInstaller->update($package['dir']);
+	    }
 	}
 
+	/**
+	 * Install the library and its plugin if missing or outdated
+	 */
 	private function installOrUpdateLibrary($installer)
 	{
-		// install the library and its plugin if missing or outdated
-
 		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-// 			if (!Folder::exists(JPATH_ROOT . '/libraries/syw')) {
-// 				if (!$this->installOrUpdatePackage($installer, 'lib_syw')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-// 					return false;
-// 				}
-// 			}
-
-// 			if (!Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-// 				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
-// 					return false;
-// 				}
-// 			}
 		    
 		    if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
 		        Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
@@ -416,16 +427,6 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 
 			$library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
 			if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
-
-// 				if (!$this->installOrUpdatePackage($installer, 'lib_syw', 'update')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-// 					return false;
-// 				}
-
-// 				if (!$this->installOrUpdatePackage($installer, 'plg_system_syw', 'update')) {
-// 					Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
-// 					return false;
-// 				}
 			    
 			    if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary', 'update')) {
 			        Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
@@ -435,13 +436,6 @@ class Pkg_TrulyResponsiveSlidesInstallerScript
 				Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_UPDATED', $this->minimumLibrary), 'message');
 			}
 		}
-
-// 		if (!PluginHelper::isEnabled('system', 'syw')) {
-// 			if (!$this->enableExtension('plugin', 'syw', 'system')) {
-// 				Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_COULDNOTENABLEPLUGINFORLIBRARY'), 'error');
-// 				return false;
-// 			}
-// 		}
 
 		return true;
 	}
