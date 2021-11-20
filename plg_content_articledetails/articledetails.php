@@ -70,6 +70,11 @@ class plgContentArticleDetails extends CMSPlugin
 // 			return;
 // 		}
 
+	    // add missing info in case 'force showing' is enabled and some info is missing
+	    if (($context == 'com_content.article' || $context == 'com_content.category' || $context == 'com_content.featured') && $this->params->get('force_show', 0)) {
+	        $this->_addMissingInfo($row, $params); 
+	    }
+
 		if (!isset($row->text)) {
 			return;
 		}
@@ -419,7 +424,7 @@ class plgContentArticleDetails extends CMSPlugin
 		if ($params->get('access-edit') && !$this->app->input->getBool('print') /*&& !$params->get('popup')*/) {
 
 			if ($bootstrap_version > 0) {
-				HTMLHelper::_('bootstrap.tooltip');
+			    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 			}
 
 			if ($row->checked_out > 0 && $row->checked_out != Factory::getUser()->get('id')) {

@@ -183,14 +183,14 @@ class Helper
 		$bootstrap_version = $params->get('bootstrap_version', 'joomla');
 		$load_bootstrap = false;
 		if ($bootstrap_version === 'joomla') {
-			$bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
+			$bootstrap_version = 5;
 			$load_bootstrap = true;
 		} else {
 			$bootstrap_version = intval($bootstrap_version);
 		}
 
 		if ($bootstrap_version > 0) {
-			HTMLHelper::_('bootstrap.tooltip');
+		    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 		}
 
 		$db = Factory::getDbo();
@@ -216,6 +216,8 @@ class Helper
 		$info_block .= '<dd class="details">';
 		$has_info_from_previous_detail = false;
 
+		$force_show = $params->get('force_show', 0);
+
 		foreach ($infos as $key => $value) {
 
 			$extraclasses = $value['extra_classes'] ? ' ' . $value['extra_classes'] : '';
@@ -228,8 +230,8 @@ class Helper
 
 				case 'hits':
 
-					// TODO instead? if (isset($item->hits)) {
-					if ($item_params->get('show_hits')) {
+				    if (isset($item->hits) && ($item_params->get('show_hits') || $force_show)) {
+				        
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}
@@ -254,8 +256,8 @@ class Helper
 
 				case 'rating':
 
-					// TODO instead? if (isset($item->rating)) {
-					if ($item_params->get('ad_show_vote')) {
+				    if (isset($item->rating) && ($item_params->get('ad_show_vote') || $force_show)) {
+				        
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}
@@ -350,8 +352,8 @@ class Helper
 				case 'author':
 				case 'authorcb':
 
-					// TODO instead? if (isset($item->author)) {
-					if ($item_params->get('show_author')) {
+				    if (isset($item->author) && ($item_params->get('show_author') || $force_show)) {
+				        
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}
@@ -526,8 +528,8 @@ class Helper
 				break;
 
 				case 'parentcategory':
-					// TODO instead? if (isset($item->parent_title) && $item->parent_id != 1) {
-					if ($item_params->get('show_parent_category') && $item->parent_id != 1) { // do not show any parent info if the parent is root
+
+				    if (isset($item->parent_title) && $item->parent_id !== 1 && ($item_params->get('show_parent_category') || $force_show)) { // do not show any parent info if the parent is root
 
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
@@ -575,8 +577,9 @@ class Helper
 				break;
 
 				case 'category':
-					// TODO instead? if (isset($item->category_title)) {
-					if ($item_params->get('show_category')) {
+
+				    if (isset($item->category_title) && ($item_params->get('show_category') || $force_show)) {
+
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}
@@ -623,7 +626,9 @@ class Helper
 				break;
 
 				case 'combocategories':
-					if ($item_params->get('show_category')) {
+
+					if ($item_params->get('show_category') || $force_show) {
+					    
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}
@@ -634,7 +639,7 @@ class Helper
 
 						$info_block .= '<span class="detail_data">';
 
-						if ($item_params->get('show_parent_category') && $item->parent_id != 1) { // do not show any parent info if the parent is root
+						if (($item_params->get('show_parent_category') || $force_show) && $item->parent_id != 1) { // do not show any parent info if the parent is root
 							if ($item_params->get('link_parent_category') && !$app->input->getBool('print')) {
 								if ($view == 'article') {
 									if (!empty($item->parent_slug)) {
@@ -1210,7 +1215,7 @@ class Helper
 				case 'tags':
 				case 'linkedtags':
 
-					if ($item_params->get('ad_show_tags') && isset($item->tags) && !empty($item->tags->itemTags)) {
+				    if (isset($item->tags) && !empty($item->tags->itemTags) && ($item_params->get('ad_show_tags') || $force_show)) {
 
 						$item_tags = $item->tags->itemTags;
 
@@ -1403,6 +1408,7 @@ class Helper
 
 // 				case 'jcommentscount':
 // 				case 'linkedjcommentscount':
+
 // 					if (file_exists(JPATH_ROOT . '/components/com_jcomments/jcomments.php')) {
 
 // 						if ($has_info_from_previous_detail) {
@@ -1446,7 +1452,8 @@ class Helper
 // 				break;
 
 				case 'email':
-					if (/*$item_params->get('show_email_icon') &&*/ $item->link && !$app->input->getBool('print')) {
+
+				    if (/*$item_params->get('show_email_icon') &&*/$item->link && !$app->input->getBool('print')) {
 
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
@@ -1491,6 +1498,7 @@ class Helper
 				break;
 
 				case 'print':
+				    
 					if (/*$item_params->get('show_print_icon') &&*/ isset($item->slug) && !$app->input->getBool('print')) {
 						// only article and blog views get slug property
 
@@ -1536,7 +1544,8 @@ class Helper
 
 				case 'associations':
 
-					if (isset($item->associations) && !empty($item->associations) && $item_params->get('show_associations')) {
+				    if (isset($item->associations) && !empty($item->associations) && ($item_params->get('show_associations') || $force_show)) {
+				        
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}
