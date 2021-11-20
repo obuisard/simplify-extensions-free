@@ -138,7 +138,7 @@ class Image
 	            throw new \RuntimeException('Could not instantiate image library class');
 	        }
 	        
-	        $this->image_library = new $library_class;
+	        $this->image_library = new $library_class; // will raise error if library is not available
 	        
 	        $this->set_initial_memory_limit();
 	        if (is_bool($increase_memory_limit) && $increase_memory_limit) {
@@ -168,7 +168,7 @@ class Image
 	        }
 	    } catch (\RuntimeException $e) {
 	        $this->image = null;
-	        Log::add('Image:construct() - ' . $e, Log::ERROR, 'syw');
+	        Log::add('Image:construct() - ' . $e->getMessage(), Log::ERROR, 'syw');
 	    }
 	}
 	
@@ -199,7 +199,7 @@ class Image
 
 	/**
 	 * Get the image resource
-	 * @return NULL|resource
+	 * @return NULL|resource|object
 	 */
 	public function getImage()
 	{
@@ -596,6 +596,10 @@ class Image
 	public function toFile($to_path, $to_type = '', $quality = 75, $filter = null)
 	{
 		$creation_success = false;
+		
+		if (is_null($this->image)) {
+		    return $creation_success;
+		}
 
 		$mime_type = $to_type ? $to_type : $this->image_mimetype;
 
@@ -631,7 +635,11 @@ class Image
 	 * @return NULL|string the base64 encoded image
 	 */
 	public function toEncodedString($to_type = '', $quality = 75, $filter = null)
-	{
+	{	    
+	    if (is_null($this->image)) {
+	        return null;
+	    }
+	    
 		$mime_type = $to_type ? $to_type : $this->image_mimetype;
 
 		$raw_stream = $this->image_library->createEncodedString($mime_type, $this->image, $quality, $filter);
@@ -658,7 +666,11 @@ class Image
 	 */
 	public function toThumbnail($to_path, $to_type = '', $width = 80, $height = 80, $crop = true, $quality = 75, $filter = null, $high_resolution = false)
 	{
-		$creation_success = false;
+	    $creation_success = false;
+	    
+	    if (is_null($this->image)) {
+	        return $creation_success;
+	    }
 
 		$mime_type = $to_type ? $to_type : $this->image_mimetype;
 

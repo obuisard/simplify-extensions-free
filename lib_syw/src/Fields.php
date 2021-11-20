@@ -9,6 +9,7 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 class Fields
@@ -20,10 +21,11 @@ class Fields
 	protected static $fields = array();
 	
 	/**
+     * Get the values of a custom field for a specific item
 	 *
 	 * @param string $item_id
 	 * @param string $field_id
-	 * @param boolean $include_params
+	 * @param boolean $include_params - deprecated
 	 * @return string, array or array of value arrays
 	 */
 	public static function getCustomFieldValues($field_id, $item_id, $include_params = false, $force_multiple_array = false)
@@ -67,9 +69,10 @@ class Fields
 	}
 
 	/**
-	 * 
-	 * @param unknown $field_id
-	 * @return array of parameters
+     * Get the parameters of a custom field
+     *
+     * @param integer $field_id
+     * @return array of parameters
 	 */
 	public static function getCustomFieldParams($field_id)
 	{
@@ -99,5 +102,77 @@ class Fields
 		return $results;
 	}
 
+    /**
+     * For a custom field that has a list of items, translates the options and returns the coma separated list of values ready for display
+     *
+     * @param object $field
+     */
+    public static function prepareCustomFieldValueFromOptions(&$field)
+    {
+        $field_params = json_decode($field->fieldparams);
+        
+        if (isset($field_params->options) && is_object($field_params->options)) {
+            
+            $options = array();
+            
+            foreach ($field_params->options as $key => $value) {
+                $options[$value->value] = $value->name;
+            }
+            
+            $cfield_values = array();
+            
+            if (!is_array($field->value)) {
+                $field->value = array($field->value);
+            }
+            
+            foreach ($field->value as $result) {
+                if (!empty($options)) {
+                    if (isset($options[$result]) && trim($options[$result]) !== '') {
+                        if (Factory::getLanguage()->hasKey($options[$result])) {
+                            $cfield_values[] = Text::_($options[$result]);
+                        } else {
+                            $cfield_values[] = trim($options[$result]);
+                        }
+                    } else {
+                        //$cfield_val[] = ''; // could happen, for instance 3 values then get down to 2
+                    }
+                } else {
+                    if (trim($result) !== '') {
+                        $cfield_values[] = trim($result);
+                    }
+                }
+            }
+            
+            $field->value = implode(', ', $cfield_values);
+        }
+    }
+    
+    /**
+     * Prepares the value of a custom field for display
+     *
+     * @param string $context
+     * @param object $item
+     * @param object $field
+     */
+    public static function prepareCustomFieldValue($context, $item, &$field)
+    {
+        PluginHelper::importPlugin('fields');
+        
+        // Event allow plugins to modify the output of the field before it is prepared
+        Factory::getApplication()->triggerEvent('onCustomFieldsBeforePrepareField', array($context, $item, &$field));
+        
+        // Gathering the value for the field
+        $prepared_value = Factory::getApplication()->triggerEvent('onCustomFieldsPrepareField', array($context, $item, &$field));
+        
+        if (is_array($prepared_value)) {
+            $prepared_value = implode(' ', $prepared_value);
+        }
+        
+        // Event allow plugins to modify the output of the prepared field
+        Factory::getApplication()->triggerEvent('onCustomFieldsAfterPrepareField', array($context, $item, $field, &$prepared_value));
+        
+        $field->value = $prepared_value;
+    }
+    
 }
 ?>
