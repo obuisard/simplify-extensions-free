@@ -128,6 +128,15 @@ abstract class Helper
 	}
 
 	/**
+	 * Get the thumbnail preferred mime type
+	 * @return string the mime type
+	 */
+	public static function getThumbnailMimeType($params)
+	{
+	    return $params->get('thumb_mime_type', '');
+	}
+
+	/**
 	 * Get the image temporary path
 	 * @return string the path
 	 */
@@ -218,7 +227,7 @@ abstract class Helper
 	{
 		$bootstrap_version = $params->get('bootstrap_version', 'joomla');
 		if ($bootstrap_version === 'joomla') {
-			return 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
+			return 5;
 		}
 		return intval($bootstrap_version);
 	}
@@ -516,12 +525,6 @@ abstract class Helper
 			} else {
 				return null;
 			}
-// 		} else if ($selection == 'user') {
-// 			if ($user->id > 0) {
-// 				$query->where('cd.user_id='.$user->id);
-// 			} else {
-// 				return null;
-// 			}
 		} else {
 
 			if ($selection == 'user') {
@@ -741,7 +744,7 @@ abstract class Helper
 				
 				if ($item->original_image) {
 					if (self::isCropPicture($params)) {
-					    $picture_output = self::getCroppedImage($module->id, $item->id, $item->original_image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
+					    $picture_output = self::getCroppedImage($module->id, $item->id, $item->original_image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
 					} else {
 					    $picture_output = (File::exists(JPATH_SITE . '/' . $item->original_image)) ? $item->original_image : 'error';
 					}
@@ -754,7 +757,7 @@ abstract class Helper
 					    $default_image_object = HTMLHelper::cleanImageURL($default_image);					    
 					    
 						if (self::isCropPicture($params)) {
-						    $picture_output = self::getCroppedImage($module->id, 'default', $default_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
+						    $picture_output = self::getCroppedImage($module->id, 'default', $default_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
 						} else {
 						    $picture_output = (File::exists(JPATH_SITE . '/' . $default_image_object->url)) ? $default_image_object->url : 'error';
 						}
@@ -768,7 +771,7 @@ abstract class Helper
 					    $global_image_object = HTMLHelper::cleanImageURL($global_image);	
 					    
 						if (self::isCropPicture($params)) {
-						    $picture_output = self::getCroppedImage($module->id, 'global', $global_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params));
+						    $picture_output = self::getCroppedImage($module->id, 'global', $global_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
 						} else {
 						    $picture_output = (File::exists(JPATH_SITE . '/' . $global_image_object->url)) ? $global_image_object->url : 'error';
 						}
@@ -1879,36 +1882,42 @@ abstract class Helper
 	 *
 	 * @return the thumbnail path if no error, 'error' if error, the original path otherwise if conditions are not met to create the thumbnail
 	 */
-	public static function getCroppedImage($module_id, $item_id, $imagesrc, $tmp_path, $clear_cache, $head_width, $head_height, $crop_picture, $quality, $filter, $create_highres_images = false)
+	public static function getCroppedImage($module_id, $item_id, $imagesrc, $tmp_path, $clear_cache, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution = false, $thumbnail_mime_type = '')
 	{
-		$extensions = get_loaded_extensions();
-		if (!in_array('gd', $extensions)) {
-			return $imagesrc;
+	    if (!extension_loaded('gd') && !extension_loaded('imagick')) {
+	        return $imagesrc; // return the original
 		}
-
-// 		$imageext = explode('.', $imagesrc);
-// 		$imageext = $imageext[count($imageext) - 1];
-// 		$imageext = strtolower($imageext);
-
+		
 		$imageext = File::getExt($imagesrc);
+		$original_imageext = $imageext;
+		
+		switch ($thumbnail_mime_type) {
+		    case 'image/jpg': $imageext = 'jpg'; break;
+		    case 'image/png': $imageext = 'png'; break;
+		    case 'image/webp': $imageext = 'webp'; break;
+		    case 'image/avif': $imageext = 'avif';
+		}
 
 		$filename = $tmp_path.'/thumb_'.$module_id.'_'.$item_id.'.'.$imageext;
 		$filename_highres = $tmp_path.'/thumb_'.$module_id.'_'.$item_id.'@2x.'.$imageext;
-		if ((!$clear_cache && !$create_highres_images && File::exists(JPATH_ROOT . '/' . $filename))
-			|| (!$clear_cache && $create_highres_images && File::exists(JPATH_ROOT . '/' . $filename) && File::exists(JPATH_ROOT . '/' . $filename_highres))) {
+		
+		if ((!$clear_cache && !$create_high_resolution && File::exists(JPATH_ROOT . '/' . $filename))
+		    || (!$clear_cache && $create_high_resolution && File::exists(JPATH_ROOT . '/' . $filename) && File::exists(JPATH_ROOT . '/' . $filename_highres))) {
 
 			// thumbnail already exists
 
 		} else { // create the thumbnail
 
-			$image = new SYWImage($imagesrc);
+		    $image = new SYWImage($imagesrc);
+		    
+		    $creation_success = true;
 
 			if (is_null($image->getImagePath())) {
-				return 'error';
+			    $creation_success = false;
 			} else if (is_null($image->getImageMimeType())) {
-				return 'error';
+			    $creation_success = false;
 			} else if (is_null($image->getImage()) || $image->getImageWidth() == 0) {
-				return 'error';
+			    $creation_success = false;
 			} else {
 
 				// START find image compression plugin
@@ -1942,47 +1951,51 @@ abstract class Helper
 
 				// END find image compression plugin
 
-				$filters_output = array();
-
-				$filters = $filter["filters"];
-				foreach ($filters as $filter) {
-
-					switch ($filter) {
-						case 'sepia': $filters_output[] = IMG_FILTER_GRAYSCALE; $filters_output[] = array('type' => IMG_FILTER_COLORIZE, 'arg1' => 70, 'arg2' => 35, 'arg3' => 0); break;
-						case 'grayscale': $filters_output[] = IMG_FILTER_GRAYSCALE; break;
-						case 'sketch': $filters_output[] = IMG_FILTER_MEAN_REMOVAL; break;
-						case 'negate': $filters_output[] = IMG_FILTER_NEGATE; break;
-						case 'emboss': $filters_output[] = IMG_FILTER_EMBOSS; break;
-						case 'edgedetect': $filters_output[] = IMG_FILTER_EDGEDETECT; break;
-
-						//case 'duotone': $filters_output[] = array('type' => IMG_FILTER_COLORIZE, 'arg1' => 20, 'arg2' => 60, 'arg3' => 230); break; // needs color
-						case 'blur': $filters_output[] = IMG_FILTER_GAUSSIAN_BLUR; break;
-						//case 'pixelate': $filters_output[] = array('type' => IMG_FILTER_PIXELATE, 'arg1' => 8, 'arg2' => true); break; // needs pixel box size
-						case 'sharpen': $filters_output[] = array('type' => IMG_FILTER_SMOOTH, 'arg1' => -9); break;
-
-						default: // nothing
-					}
-				}
-
 				if (!is_null($compression_plugin)) {
-					$creation_success = $image->toThumbnail($filename_temp, '', $head_width, $head_height, $crop_picture, $quality, $filters_output, $create_highres_images);
-					if ($creation_success && $image->getImageMimeType() === 'image/webp') {
-						$creation_success = $image->toThumbnail($tmp_path.'/thumb_temp_'.$module_id.'_'.$item_id.'.png', 'image/png', $head_width, $head_height, $crop_picture, $quality, $filters_output, $create_highres_images);
-					}
+				    
+				    if ($image->toThumbnail($filename_temp, $thumbnail_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter["filters"], $create_high_resolution)) {
+					
+    				    if ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif') { // create fallback
+    					    
+    					    $fallback_extension = 'png';
+    					    $fallback_mime_type = 'image/png';
+    					    
+    					    // create fallback with original image mime type when the original is not webp or avif
+    					    if ($image->getImageMimeType() !== 'image/webp' && $image->getImageMimeType() !== 'image/avif') {
+    					        $fallback_extension = $original_imageext;
+    					        $fallback_mime_type = $image->getImageMimeType();
+    					    }
+    					    
+    					    $creation_success = $image->toThumbnail($tmp_path.'/thumb_temp_'.$module_id.'_'.$item_id.'.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter["filters"], $create_high_resolution);
+    					}
+				    } else {
+				        $creation_success = false;
+				    }
 				} else {
-					$creation_success = $image->toThumbnail($filename, '', $head_width, $head_height, $crop_picture, $quality, $filters_output, $create_highres_images);
-					if ($creation_success && $image->getImageMimeType() === 'image/webp') {
-						$creation_success = $image->toThumbnail($tmp_path.'/thumb_'.$module_id.'_'.$item_id.'.png', 'image/png', $head_width, $head_height, $crop_picture, $quality, $filters_output, $create_highres_images);
-					}
-				}
-
-				if (!$creation_success) {
-					return 'error';
+				    
+				    if ($image->toThumbnail($filename, $thumbnail_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter["filters"], $create_high_resolution)) {
+					
+    				    if ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif') { // create fallback
+    					    
+    					    $fallback_extension = 'png';
+    					    $fallback_mime_type = 'image/png';
+    					    
+    					    // create fallback with original image mime type when the original is not webp or avif
+    					    if ($image->getImageMimeType() !== 'image/webp' && $image->getImageMimeType() !== 'image/avif') {
+    					        $fallback_extension = $original_imageext;
+    					        $fallback_mime_type = $image->getImageMimeType();
+    					    }
+    					    
+    					    $creation_success = $image->toThumbnail($tmp_path.'/thumb_'.$module_id.'_'.$item_id.'.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter["filters"], $create_high_resolution);
+    					}
+				    } else {
+				        $creation_success = false;
+				    }
 				}
 
 				// START image compression
 
-				if (!is_null($compression_plugin)) {
+				if ($creation_success && !is_null($compression_plugin)) {
 
 					//$optimization_success = $dispatcher->trigger('onImageCompressionCompress', array($filename_temp, $filename));
 					$optimization_success = $compression_plugin->onImageCompressionCompress($filename_temp, $filename);
@@ -1994,7 +2007,7 @@ abstract class Helper
 						$compression_plugin->onImageCompressionFailure();
 					}
 
-					if ($create_highres_images) {
+					if ($create_high_resolution) {
 						//$optimization_highres_success = $dispatcher->trigger('onImageCompressionCompress', array($filename_highres_temp, $filename_highres));
 						$optimization_highres_success = $compression_plugin->onImageCompressionCompress($filename_highres_temp, $filename_highres);
 						if ($optimization_highres_success) {
@@ -2011,6 +2024,10 @@ abstract class Helper
 			}
 
 			$image->destroy();
+			
+			if (!$creation_success) {
+			    return 'error';
+			}
 		}
 
 		return $filename;

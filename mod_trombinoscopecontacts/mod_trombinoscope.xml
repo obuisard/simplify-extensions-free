@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.7.0</version>
+	<version>4.8.0</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -62,7 +62,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\TrombinoscopeContacts\Site\Field">			
 			<fieldset name="basic" label="MOD_TROMBINOSCOPE_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.7.0" />
+				<field type="extensionversion" version="4.8.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_TROMBINOSCOPE_TRANSLATORS" />
@@ -708,13 +708,18 @@
 	                    <option value="0">JNO</option>
 						<option value="1">JYES</option>
 					</field>
+					
+					<field type="imagelibrarytest" showon="s_pic:1[AND]crop_pic:1" />
+				
+					<field name="thumb_mime_type" type="imagetypeselect" default="" showon="s_pic:1[AND]crop_pic:1"
+						label="MOD_TROMBINOSCOPE_FIELD_THUMBNAILMIMETYPE_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_THUMBNAILMIMETYPE_DESC">
+						<option value="">MOD_TROMBINOSCOPE_VALUE_SAMEASORIGINAL</option>
+					</field>
 				
 					<field name="filter_original" type="sywimagefilterpicker" cssfilters="true" gdfilters="false" default="none" showon="s_pic:1[AND]crop_pic:0" 
 						label="MOD_TROMBINOSCOPE_FIELD_IMAGEFILTER_LABEL"
 						description="MOD_TROMBINOSCOPE_FIELD_IMAGEFILTERORIGINAL_DESC" />
-					
-<!-- 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_GDTEST" style="warning" showon="s_pic:1[AND]crop_pic:1" /> -->
-					<field type="gdtest" supportedtypes="gif,jpg,png,webp" message="MOD_TROMBINOSCOPE_MESSAGE_GDTEST" showon="s_pic:1[AND]crop_pic:1" />
 					
 					<field name="image_filters" type="subform" formsource="modules/mod_trombinoscope/forms/fields/imagefilters.xml" multiple="true" max="2" showon="s_pic:1[AND]crop_pic:1"
 						default="{'filter':'none'}"

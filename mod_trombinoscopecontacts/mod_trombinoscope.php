@@ -16,8 +16,9 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use SYW\Library\Fonts as SYWFonts;
 use SYW\Library\Libraries as SYWLibraries;
-use SYW\Library\Utilities as SYWUtilities;
 use SYW\Library\Stylesheets as SYWStylesheets;
+use SYW\Library\Utilities as SYWUtilities;
+use SYW\Library\Version as SYWVersion;
 use SYW\Module\TrombinoscopeContacts\Site\Cache\CSSFileCache;
 use SYW\Module\TrombinoscopeContacts\Site\Cache\JSAnimationFileCache;
 use SYW\Module\TrombinoscopeContacts\Site\Cache\JSFileCache;
@@ -180,6 +181,9 @@ $crop_picture = Helper::isCropPicture($params);
 $quality = Helper::getPictureQuality($params);
 
 $clear_cache = Helper::IsClearPictureCache($params);
+if ($clear_cache) {
+    SYWVersion::refreshMediaVersion('mod_trombinoscope_' . $module->id);
+}
 
 $tmp_path = Helper::getPictureTemporaryPath($params);
 
@@ -458,9 +462,6 @@ if ($picture_hover_type != 'none') {
 
 // handle high resolution images
 $create_highres_images = Helper::isCreateHighResolutionPicture($params);
-// if ($show_picture && $create_highres_images) {
-// 	SYWLibraries::loadLazysizes($load_remotely);
-// }
 
 // load icon font
 $load_icon_font = $params->get('load_icon_font', 1);
