@@ -79,7 +79,7 @@ class PreviewarrowField extends FormField
 		$script .= '});';
 
 		//Factory::getDocument()->addScriptDeclaration($script);
-		$wam->addInlineScript($script);
+		$wam->addInlineScript($script, [], [], ['jquery']);
 
 		$html = '';
 

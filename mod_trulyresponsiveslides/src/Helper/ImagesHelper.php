@@ -28,7 +28,7 @@ class ImagesHelper
 		$images = Folder::files($directory);
 		foreach($images as $image) {
 			$extension = strtolower(File::getExt($image));
-			if ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png' || $extension == 'webp') {
+			if ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png' || $extension == 'webp' || $extension == 'avif') {
 				$list[] = $image;
 			}
 		}
