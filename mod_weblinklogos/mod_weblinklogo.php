@@ -16,6 +16,7 @@ use SYW\Library\Fonts as SYWFonts;
 use SYW\Library\Libraries as SYWLibraries;
 use SYW\Library\Stylesheets as SYWStylesheets;
 use SYW\Library\Utilities as SYWUtilities;
+use SYW\Library\Version as SYWVersion;
 use SYW\Module\WeblinkLogos\Site\Cache\CSSFileCache;
 use SYW\Module\WeblinkLogos\Site\Cache\JSAnimationFileCache;
 use SYW\Module\WeblinkLogos\Site\Helper\Helper;
@@ -44,7 +45,7 @@ $wam = $app->getDocument()->getWebAssetManager();
 $bootstrap_version = $params->get('bootstrap_version', 'joomla');
 $load_bootstrap = false;
 if ($bootstrap_version === 'joomla') {
-    $bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
+    $bootstrap_version = 5;
     $load_bootstrap = true;
 } else {
 	$bootstrap_version = intval($bootstrap_version);
@@ -74,9 +75,14 @@ if (strpos($filter_hover, '_css') !== false) {
 	$filter_hover = 'none';
 }
 
-$quality_jpg = $params->get('quality_jpg', 100);
-$quality_png = $params->get('quality_png', 0);
+$thumbnail_mime_type = $params->get('thumb_mime_type', '');
+
+$allow_remote = true;
+
+$quality_jpg = $params->get('quality_jpg', 75);
+$quality_png = $params->get('quality_png', 3);
 $quality_webp = $params->get('quality_webp', 80);
+$quality_avif = $params->get('quality_avif', 80);
 
 if ($quality_jpg > 100) {
 	$quality_jpg = 100;
@@ -99,12 +105,18 @@ if ($quality_webp < 0) {
 	$quality_webp = 0;
 }
 
-$image_qualities = array('jpg' => $quality_jpg, 'png' => $quality_png, 'webp' => $quality_webp);
+if ($quality_avif > 100) {
+    $quality_avif = 100;
+}
+if ($quality_avif < 0) {
+    $quality_avif = 0;
+}
+
+$image_qualities = array('jpg' => $quality_jpg, 'png' => $quality_png, 'webp' => $quality_webp, 'avif' => $quality_avif);
 
 $hover_type = $params->get('hover_type', 'none'); // hover animation
 if ($hover_type != 'none') {
 	$hover_type = 'hvr-'.$hover_type;
-	//SYWStylesheets::load2DTransitions();
 	$transition_method = SYWStylesheets::getTransitionMethod($hover_type);
 	SYWStylesheets::$transition_method();
 } else {
@@ -130,6 +142,8 @@ $clear_cache = Helper::IsClearPictureCache($params);
 
 if ($clear_cache) {
 	Helper::clearThumbnails($tmp_path, $unique_filename_extra);
+	
+	SYWVersion::refreshMediaVersion('mod_weblinklogos_' . $module->id);
 }
 
 // links
@@ -206,11 +220,6 @@ $rtl_suffix = (Factory::getDocument()->getDirection() == 'rtl') ? '_rtl' : '';
 $carousel_configuration = $params->get('carousel_config', 'none');
 if ($carousel_configuration != 'none') {
 
-    jimport('syw.libraries', JPATH_LIBRARIES);
-
-	//HtmlHelper::_('jquery.framework');
-
-	//SYWLibraries::loadCarousel();
     SYWLibraries::loadTinySlider($load_remotely);
 
 	switch ($params->get('arrows', 'none')) {
@@ -277,7 +286,6 @@ if ($carousel_configuration != 'none') {
 
 	if ($generate_inline_scripts) {
 
-		//$doc->addScriptDeclaration($cache_anim_js->getBuffer());
 		$wam->addInlineScript($cache_anim_js->getBuffer());
 
 	} else {
@@ -285,7 +293,6 @@ if ($carousel_configuration != 'none') {
 		$result = $cache_anim_js->cache('animation_' . $module->id . $rtl_suffix . '.js', $clear_header_files_cache);
 
 		if ($result) {
-			//$doc->addScript(Uri::base(true).'/media/cache/mod_weblinklogos/animation_' . $module->id . $rtl_suffix . '.js');
 			$wam->registerAndUseScript('wl.animation_' . $module->id . $rtl_suffix, $cache_anim_js->getCachePath() . '/animation_' . $module->id . $rtl_suffix . '.js', [], ['defer' => true]);
 		}
 	}
@@ -319,7 +326,6 @@ if (File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/substitute_styles.css')
 	$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
 
 	if ($result) {
-		//$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_weblinklogos/style_'.$module->id.'.css');
 		$wam->registerAndUseStyle('wl.style_' . $module->id, $cache_css->getCachePath() . '/style_' . $module->id . '.css');
 	}
 

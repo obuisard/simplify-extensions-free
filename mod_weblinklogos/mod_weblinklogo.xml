@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.3.1</version>
+	<version>4.4.0</version>
 	<description>MOD_WEBLINKLOGO_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\WeblinkLogos</namespace>
 	
@@ -54,7 +54,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\WeblinkLogos\Site\Field">
 			<fieldset name="basic" label="MOD_WEBLINKLOGO_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.3.1" />
+				<field type="extensionversion" version="4.4.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_WEBLINKLOGO_TRANSLATORS" />
@@ -91,8 +91,7 @@
 				</fieldset>
 			
 				<fieldset name="selection_source" label="MOD_WEBLINKLOGO_SELECTIONSOURCE_FIELDSET_LABEL">
-<!-- 				<field type="title" title="MOD_WEBLINKLOGO_DYNAMIC_LABEL" /> -->
-				
+
 					<field name="related" type="list" default="0" 
 						label="MOD_WEBLINKLOGO_FIELD_RELATED_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_RELATED_DESC">
@@ -104,7 +103,6 @@
 				</fieldset>
 				
 				<fieldset name="selection_categories" label="MOD_WEBLINKLOGO_SELECTIONCATEGORIES_FIELDSET_LABEL">
-<!-- 				<field type="title" title="MOD_WEBLINKLOGO_STATIC_LABEL" />	 -->
 				
 					<field name="cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
 						label="MOD_WEBLINKLOGO_FIELD_CATEGORYFILTER_LABEL"
@@ -232,7 +230,6 @@
 				</fieldset>
 			
 				<fieldset name="layout_overall" label="MOD_WEBLINKLOGO_OVERALL_TITLE">
-<!-- 				<field type="title" title="MOD_WEBLINKLOGO_OVERALL_TITLE" /> -->
 			
 					<field name="logos_layout" type="radio" default="grid" layout="joomla.form.field.radio.switcher" 
 						label="MOD_WEBLINKLOGO_FIELD_LAYOUT_LABEL"
@@ -263,7 +260,6 @@
 				</fieldset>
 				
 				<fieldset name="layout_footnote" label="MOD_WEBLINKLOGO_FOOTNOTE_TITLE">
-<!-- 				<field type="subtitle" title="MOD_WEBLINKLOGO_FOOTNOTE_TITLE" /> -->
 				
 					<field name="footnote" type="text" default="" class="input-xxlarge" 
 						label="MOD_WEBLINKLOGO_FIELD_FOOTNOTE_LABEL"
@@ -273,7 +269,6 @@
 				</fieldset>				
 				
 				<fieldset name="layout_item" label="MOD_WEBLINKLOGO_ITEM_TITLE">
-<!-- 				<field type="title" title="MOD_WEBLINKLOGO_ITEM_TITLE" /> -->
 				
 					<field name="overall_width" type="sywverbosetext" default="" filter="string" size="4" unit="px" icon="SYWicon-swap-horiz" 
 						label="MOD_WEBLINKLOGO_FIELD_OVERALLWIDTH_LABEL" 
@@ -287,24 +282,27 @@
 					</field>
 					
 					<field name="margin_top" type="sywverbosetext" default="5" filter="integer" size="4" unit="px" icon="SYWicon-keyboard-arrow-up" 
+						parentclass="span-3-inline"
 						label="MOD_WEBLINKLOGO_FIELD_MARGINTOP_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_MARGINTOP_DESC" />
 					
 					<field name="margin_right" type="sywverbosetext" default="5" filter="integer" size="4" unit="px" icon="SYWicon-keyboard-arrow-right" 
+						parentclass="span-3-inline"
 						label="MOD_WEBLINKLOGO_FIELD_MARGINRIGHT_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_MARGINRIGHT_DESC" />
 					
 					<field name="margin_bottom" type="sywverbosetext" default="5" filter="integer" size="4" unit="px" icon="SYWicon-keyboard-arrow-down" 
+						parentclass="span-3-inline"
 						label="MOD_WEBLINKLOGO_FIELD_MARGINBOTTOM_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_MARGINBOTTOM_DESC" />				
 					
 					<field name="margin_left" type="sywverbosetext" default="5" filter="integer" size="4" unit="px" icon="SYWicon-keyboard-arrow-left" 
+						parentclass="span-3-inline"
 						label="MOD_WEBLINKLOGO_FIELD_MARGINLEFT_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_MARGINLEFT_DESC" />	
 				</fieldset>			
 				
 				<fieldset name="layout_logo" label="MOD_WEBLINKLOGO_LOGO_TITLE">
-<!-- 				<field type="subtitle" title="MOD_WEBLINKLOGO_LOGO_TITLE" /> -->
 				
 					<field name="logo_tooltip" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
 						label="MOD_WEBLINKLOGO_FIELD_LOGOTOOLTIP_LABEL" 
@@ -328,7 +326,6 @@
 				</fieldset>						
 				
 				<fieldset name="layout_text" label="MOD_WEBLINKLOGO_TEXT_TITLE">
-<!-- 				<field type="subtitle" title="MOD_WEBLINKLOGO_TEXT_TITLE" /> -->
 				
 					<field name="content_align" type="list" default="center" showon="logos_layout:grid" 
 						label="MOD_WEBLINKLOGO_FIELD_CONTENTALIGN_LABEL" 
@@ -497,8 +494,6 @@
 					<field name="card_border_c" type="sywcolorpicker" default="#ffffff" icon="SYWicon-format-color-text" 
 						label="MOD_WEBLINKLOGO_FIELD_CARDBORDERCOLOR_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_CARDBORDERCOLOR_DESC" />
-						
-	<!-- 				<field type="title" title="MOD_WEBLINKLOGO_OTHEROVERRIDES_LABEL" />				 -->
 					
 					<field name="styles" type="editor" rows="10" default="" editor="codemirror|none" filter="raw" buttons="false" syntax="css"
 		            	label="MOD_WEBLINKLOGO_FIELD_STYLES_LABEL" 
@@ -528,10 +523,12 @@
 					</field>
 					
 					<field name="popup_x" type="sywverbosetext" default="600" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="target:link,2,3" 
+						parentclass="span-3-inline"
 						label="MOD_WEBLINKLOGO_FIELD_POPUPX_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_POPUPX_DESC" />
 						
 					<field name="popup_y" type="sywverbosetext" default="400" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="target:link,2,3" 
+						parentclass="span-3-inline"
 						label="MOD_WEBLINKLOGO_FIELD_POPUPY_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_POPUPY_DESC" />
 					
@@ -566,10 +563,12 @@
 						description="MOD_WEBLINKLOGO_FIELD_DEFAULTLOGO_DESC" />			
 									
 					<field name="width" type="sywverbosetext" default="120" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						parentclass="span-3-inline"
 						label="MOD_WEBLINKLOGO_FIELD_WIDTH_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_WIDTH_DESC" />
 						
 					<field name="height" type="sywverbosetext" default="40" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" 
+						parentclass="span-3-inline"
 						label="MOD_WEBLINKLOGO_FIELD_HEIGHT_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_HEIGHT_DESC" />
 						
@@ -615,18 +614,34 @@
 						<option value="0">JNO</option>
 						<option value="1">JYES</option>
 					</field>
+
+					<field name="thumb_mime_type" type="imagetypeselect" default="" 
+						label="MOD_WEBLINKLOGO_FIELD_THUMBNAILMIMETYPE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_THUMBNAILMIMETYPE_DESC">
+						<option value="">MOD_WEBLINKLOGO_VALUE_SAMEASORIGINAL</option>
+					</field>
 				
-					<field name="quality_jpg" type="sywverbosetext" default="100" filter="integer" size="8" maxlength="3" min="0" max="100" 
+					<field name="quality_jpg" type="sywverbosetext" default="75" filter="integer" size="8" maxlength="3" min="0" max="100"   
+						parentclass="span-3-inline"
 						label="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYJPG_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYJPG_DESC" />
 						
-					<field name="quality_png" type="sywverbosetext" default="0" filter="integer" size="8" maxlength="1" min="0" max="9" 
+					<field name="quality_png" type="sywverbosetext" default="3" filter="integer" size="8" maxlength="1" min="0" max="9"   
+						parentclass="span-3-inline"
 						label="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYPNG_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYPNG_DESC" />
 						
-					<field name="quality_webp" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" 
+					<field name="quality_webp" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100"   
+						parentclass="span-3-inline"
 						label="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYWEBP_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYWEBP_DESC" />
+						
+					<field name="quality_avif" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100"   
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYAVIF_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYAVIF_DESC" />		
+							  	
+					<field type="imagelibrarytest" />
 				</fieldset>
 			</fieldset>
 			
@@ -779,10 +794,7 @@
 <!-- 				</field>	 -->
 				</fieldset>
 				
-				<fieldset name="advanced_pictures" label="MOD_WEBLINKLOGO_PICTURES_LABEL">	            				
-<!-- 				<field type="title" title="MOD_WEBLINKLOGO_CACHE_LABEL" /> -->
-				
-<!-- 				<field type="subtitle" title="MOD_WEBLINKLOGO_PICTURES_LABEL" />			 -->
+				<fieldset name="advanced_pictures" label="MOD_WEBLINKLOGO_PICTURES_LABEL">
 								
 					<field type="message" text="MOD_WEBLINKLOGO_INFO_CLEARCACHE" style="info" showon="site_mode:adv" />
 						
@@ -806,10 +818,7 @@
 						<option value="default">MOD_WEBLINKLOGO_VALUE_TEMPFOLDER</option>
 						<option value="images">MOD_WEBLINKLOGO_VALUE_IMAGESDIRECTORY</option>
 						<option value="cache">MOD_WEBLINKLOGO_VALUE_CACHEDIRECTORY</option>
-					</field>		
-							  	
-<!-- 					<field type="message" text="MOD_WEBLINKLOGO_FIELD_GDTEST_LABEL" style="warning" /> -->
-					<field type="gdtest" supportedtypes="gif,jpg,png,webp" message="MOD_WEBLINKLOGO_FIELD_GDTEST_LABEL" />
+					</field>
 					
 					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" message="MOD_WEBLINKLOGO_INFO_AUTORESETPLUGIN" 
 						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset"
@@ -817,8 +826,7 @@
 						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" />	
 				</fieldset>
 						
-				<fieldset name="advanced_headers" label="MOD_WEBLINKLOGO_STYLESHEETSANDSCRIPTS_LABEL">	    
-<!-- 	            <field type="subtitle" title="MOD_WEBLINKLOGO_STYLESHEETSANDSCRIPTS_LABEL" />	 -->
+				<fieldset name="advanced_headers" label="MOD_WEBLINKLOGO_STYLESHEETSANDSCRIPTS_LABEL">
 
 					<field type="message" text="MOD_WEBLINKLOGO_FIELD_LAZYLOADSTYLESHEETS_TXT" style="fieldneutral" badge="MOD_WEBLINKLOGO_FIELD_LAZYLOADSTYLESHEETS_BADGE" badgetype="light"
 						label="MOD_WEBLINKLOGO_FIELD_LAZYLOADSTYLESHEETS_LABEL" />
@@ -865,8 +873,7 @@
 					</field>
 				</fieldset>
 						
-				<fieldset name="advanced_module" label="MOD_WEBLINKLOGO_MODULE_LABEL">		
-<!-- 				<field type="title" title="MOD_WEBLINKLOGO_MODULE_LABEL" /> -->
+				<fieldset name="advanced_module" label="MOD_WEBLINKLOGO_MODULE_LABEL">
 				
 					<field name="show_on_mobile" type="list" default="1" 
 						label="MOD_WEBLINKLOGO_FIELD_SHOWONMOBILE_LABEL"

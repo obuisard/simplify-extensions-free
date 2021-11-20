@@ -19,6 +19,7 @@ use Joomla\CMS\Log\Log;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Registry\Registry;
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Tags as SYWTags;
 use SYW\Library\Text as SYWText;
@@ -31,7 +32,7 @@ class Helper
 	protected static $commonStylesLoaded = false;
 	protected static $userStylesLoaded = false;
 
-	protected static $image_extension_types = array('png', 'jpg', 'jpeg', 'gif', 'webp');
+	protected static $image_extension_types = array('png', 'jpg', 'jpeg', 'gif', 'webp', 'avif');
 
 	/**
 	 * Load the script that handles click feedback
@@ -64,7 +65,6 @@ class Helper
 // 			$script .= '}); ';
 // 		$script .= '});';
 
-		//$doc->addScriptDeclaration($script);
 		$wam->addInlineScript($script);
 
 // 		self::$clickScriptLoaded = true;
@@ -600,11 +600,11 @@ class Helper
 	* @param string $filter
 	* @param boolean $create_high_resolution
 	*
-	* @return the original image path if errors before thumbnail creation
+	* @return array the original image path if errors before thumbnail creation
 	*  or no thumbnail path if errors during thumbnail creation
 	*  or thumbnail path if no error
 	*/
-	static function getThumbnailPath($module_id, $item_id, $imagesrc, $tmp_path, $clear_cache, $head_width, $head_height, $crop_picture, $image_quality_array, $filter, $create_highres_images = false)
+	static function getThumbnailPath($module_id, $item_id, $imagesrc, $tmp_path, $clear_cache, $head_width, $head_height, $crop_picture, $image_quality_array, $filter, $create_highres_images = false, $allow_remote = true, $thumbnail_mime_type = '')
 	{
 		$result = array(null, null); // image link and error
 
@@ -616,9 +616,8 @@ class Helper
 			return $result;
 		}
 
-		$extensions = get_loaded_extensions();
-		if (!in_array('gd', $extensions)) {
-			// missing gd library
+		if (!extension_loaded('gd') && !extension_loaded('imagick')) {
+			// missing image library
 			$result[0] = $imagesrc;
 			$result[1] = Text::_('MOD_WEBLINKLOGO_ERROR_GDNOTLOADED');
 
@@ -634,11 +633,8 @@ class Helper
 		$url_array = explode("?", $imagesrc);
 		$imagesrc = $url_array[0];
 
-// 		$imageext = explode('.', $imagesrc);
-// 		$imageext = $imageext[count($imageext) - 1];
-// 		$imageext = strtolower($imageext);
-
 		$imageext = strtolower(File::getExt($imagesrc));
+		$original_imageext = $imageext;
 
 		if (!in_array($imageext, self::$image_extension_types)) {
 
@@ -670,28 +666,35 @@ class Helper
 
 		if (substr_count($imagesrc, 'http') > 0) {
 			// we have an external URL
-			if (!ini_get('allow_url_fopen')) {
+		    if (/*!ini_get('allow_url_fopen') || */!$allow_remote) {
 				$result[0] = $original_imagesrc;
 				$result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_EXTERNALURLNOTALLOWED', $imagesrc);
 
 				return $result;
 			}
 		}
+		
+		switch ($thumbnail_mime_type) {
+		    case 'image/jpg': $imageext = 'jpg'; break;
+		    case 'image/png': $imageext = 'png'; break;
+		    case 'image/webp': $imageext = 'webp'; break;
+		    case 'image/avif': $imageext = 'avif';
+		}
 
 		if ($filter == 'none' || strpos($filter, '_css') !== false) {
 			$filtername = '';
 		} else {
-			$filtername = '_'.$filter;
+			$filtername = '_' . $filter;
 		}
 
 		if (!empty($module_id)) {
-			$module_id = '_'.$module_id;
+			$module_id = '_' . $module_id;
 		}
 
-		$filename = $tmp_path.'/thumb'.$module_id.'_'.$item_id.$filtername.'.'.$imageext;
-		$filename_highres = $tmp_path.'/thumb'.$module_id.'_'.$item_id.$filtername.'@2x.'.$imageext;
-		if ((is_file(JPATH_ROOT.'/'.$filename) && !$clear_cache && !$create_highres_images)
-			|| (is_file(JPATH_ROOT.'/'.$filename) && !$clear_cache && $create_highres_images && is_file(JPATH_ROOT.'/'.$filename_highres))) {
+		$filename = $tmp_path . '/thumb' . $module_id . '_' . $item_id . $filtername . '.' . $imageext;
+		$filename_highres = $tmp_path . '/thumb' . $module_id . '_' . $item_id . $filtername . '@2x.' . $imageext;
+		if ((is_file(JPATH_ROOT . '/' . $filename) && !$clear_cache && !$create_highres_images)
+			|| (is_file(JPATH_ROOT . '/' . $filename) && !$clear_cache && $create_highres_images && is_file(JPATH_ROOT . '/' . $filename_highres))) {
 
 			// thumbnail(s) already exist
 
@@ -707,22 +710,7 @@ class Helper
 				$result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_UNSUPPORTEDFILETYPE', $imagesrc);
 			} else {
 
-				switch ($imageext){
-					case 'jpg': case 'jpeg': $quality = $image_quality_array['jpg']; break; // 0 to 100
-					case 'png': $quality = round(11.111111 * (9 - $image_quality_array['png'])); break; // compression: 0 to 9
-					case 'webp': $quality = $image_quality_array['webp']; break; // 0 to 100
-					default : $quality = -1; break;
-				}
-
-				switch ($filter) {
-					case 'sepia': $filter = array(IMG_FILTER_GRAYSCALE, array('type' => IMG_FILTER_COLORIZE, 'arg1' => 90, 'arg2' => 60, 'arg3' => 30)); break;
-					case 'grayscale': $filter = IMG_FILTER_GRAYSCALE; break;
-					case 'sketch': $filter = IMG_FILTER_MEAN_REMOVAL; break;
-					case 'negate': $filter = IMG_FILTER_NEGATE; break;
-					case 'emboss': $filter = IMG_FILTER_EMBOSS; break;
-					case 'edgedetect': $filter = IMG_FILTER_EDGEDETECT; break;
-					default: $filter = null; break;
-				}
+			    $quality = self::getImageQualityFromExt($imageext, $image_quality_array);
 
 				// negative values force the creation of the thumbnails with size of original image
 				// great to create high-res of original image and/or to use quality parameters to create an image with smaller file size
@@ -731,14 +719,27 @@ class Helper
 					$head_height = $image->getImageHeight();
 				}
 
-				$creation_success = $image->toThumbnail($filename, '', $head_width, $head_height, $crop_picture, $quality, $filter, $create_highres_images);
+				if ($image->toThumbnail($filename, $thumbnail_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_highres_images)) {
 
-				if ($creation_success && $image->getImageMimeType() === 'image/webp') { // create fallback
-					$creation_success = $image->toThumbnail($tmp_path . '/thumb' . $module_id . '_' . $item_id . $filtername . '.png', 'image/png', $head_width, $head_height, $crop_picture, $quality, $filter, $create_highres_images);
-				}
-
-				if (!$creation_success) {
-					$result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
+				    if ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif') { // create fallback
+    					
+				        $fallback_extension = 'png';
+				        $fallback_mime_type = 'image/png';
+				        
+				        // create fallback with original image mime type when the original is not webp or avif
+				        if ($image->getImageMimeType() !== 'image/webp' && $image->getImageMimeType() !== 'image/avif') {
+				            $fallback_extension = $original_imageext;
+				            $fallback_mime_type = $image->getImageMimeType();
+				        }
+				        
+				        $quality = self::getImageQualityFromExt($fallback_extension, $image_quality_array);
+				        
+				        if (!$image->toThumbnail($tmp_path . '/thumb' . $module_id . '_' . $item_id . $filtername . '.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_highres_images)) {
+				            $result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
+				        }
+    				}
+				} else {
+				    $result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
 				}
 			}
 
@@ -750,6 +751,20 @@ class Helper
 		}
 
 		return $result;
+	}
+	
+	static protected function getImageQualityFromExt($image_extension, $qualities = array('jpg' => 75, 'png' => 3, 'webp' => 80, 'avif' => 80))
+	{
+	    $quality = -1;
+	    
+	    switch ($image_extension){
+	        case 'jpg': case 'jpeg': $quality = $qualities['jpg']; break; // 0 to 100
+	        case 'png': $quality = round(11.111111 * (9 - $qualities['png'])); break; // compression: 0 to 9
+	        case 'webp': $quality = $qualities['webp']; break; // 0 to 100
+	        case 'avif': $quality = $qualities['avif']; // 0 to 100
+	    }
+	    
+	    return $quality;
 	}
 
 	/**
@@ -800,7 +815,6 @@ class Helper
 
 		$minified = (JDEBUG) ? '' : '-min';
 
-		//Factory::getDocument()->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/common_styles' . $minified . '.css');
 		$wam->registerAndUseStyle('wl.common_styles', 'mod_weblinklogos/common_styles' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
 
 		self::$commonStylesLoaded = true;
@@ -824,10 +838,8 @@ class Helper
 		}
 
 		if (!File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/'.$prefix.'_styles-min.css') || JDEBUG) {
-			//$doc->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/'.$prefix.'_styles.css');
 			$wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
 		} else {
-			//$doc->addStyleSheet(Uri::base(true).'/media/mod_weblinklogos/css/'.$prefix.'_styles-min.css');
 			$wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
 		}
 
@@ -913,7 +925,7 @@ class Helper
 
 			self::$weblinks_config_params = new Registry();
 
-			if (\JFile::exists(JPATH_ADMINISTRATOR . '/components/com_weblinks/config.xml')) {
+			if (File::exists(JPATH_ADMINISTRATOR . '/components/com_weblinks/config.xml')) {
 				self::$weblinks_config_params = ComponentHelper::getParams('com_weblinks');
 			}
 		}

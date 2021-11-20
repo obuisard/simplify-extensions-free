@@ -44,11 +44,11 @@ if ($remove_whitespaces) {
 		<div class="items_pagination top<?php echo $extra_pagination_classes; ?>">
 			<ul<?php echo $extra_pagination_ul_class_attribute; ?>>
 			<?php if ($arrow_prev_left) : ?>
-				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="prev_<?php echo $class_suffix; ?>" class="previous<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="SYWicon-arrow-left2"></span></a></li>
+				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="prev_<?php echo $class_suffix; ?>" class="previous<?php echo $extra_pagination_a_classes; ?>" href="#" aria-label="<?php echo Text::_('JPREV'); ?>" onclick="return false;"><span class="SYWicon-arrow-left2" aria-hidden="true"></span></a></li>
 			<?php endif; ?>
 
 			<?php if ($arrow_prev_top) : ?>
-				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="prev_<?php echo $class_suffix; ?>" class="previous<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="SYWicon-arrow-up2"></span></a></li>
+				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="prev_<?php echo $class_suffix; ?>" class="previous<?php echo $extra_pagination_a_classes; ?>" href="#" aria-label="<?php echo Text::_('JPREV'); ?>" onclick="return false;"><span class="SYWicon-arrow-up2" aria-hidden="true"></span></a></li>
 			<?php endif; ?>
 			</ul>
 		</div>
@@ -125,16 +125,16 @@ if ($remove_whitespaces) {
 		<div class="items_pagination bottom<?php echo $extra_pagination_classes; ?>">
 			<ul<?php echo $extra_pagination_ul_class_attribute; ?>>
 			<?php if ($arrow_prevnext_bottom) : ?>
-				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="prev_<?php echo $class_suffix; ?>" class="previous<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="<?php echo ($carousel_configuration == 'h' ? 'SYWicon-arrow-left2' : 'SYWicon-arrow-up2') ?>"></span></a></li><!--
-				 --><li<?php echo $extra_pagination_li_class_attribute; ?>><a id="next_<?php echo $class_suffix; ?>" class="next<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="<?php echo ($carousel_configuration == 'h' ? 'SYWicon-arrow-right2' : 'SYWicon-arrow-down2') ?>"></span></a></li>
+				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="prev_<?php echo $class_suffix; ?>" class="previous<?php echo $extra_pagination_a_classes; ?>" href="#" aria-label="<?php echo Text::_('JPREV'); ?>" onclick="return false;"><span class="<?php echo ($carousel_configuration == 'h' ? 'SYWicon-arrow-left2' : 'SYWicon-arrow-up2') ?>" aria-hidden="true"></span></a></li><!--
+				 --><li<?php echo $extra_pagination_li_class_attribute; ?>><a id="next_<?php echo $class_suffix; ?>" class="next<?php echo $extra_pagination_a_classes; ?>" href="#" aria-label="<?php echo Text::_('JNEXT'); ?>" onclick="return false;"><span class="<?php echo ($carousel_configuration == 'h' ? 'SYWicon-arrow-right2' : 'SYWicon-arrow-down2') ?>" aria-hidden="true"></span></a></li>
 			<?php endif; ?>
 
 			<?php if ($arrow_next_right) : ?>
-				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="next_<?php echo $class_suffix; ?>" class="next<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="SYWicon-arrow-right2"></span></a></li>
+				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="next_<?php echo $class_suffix; ?>" class="next<?php echo $extra_pagination_a_classes; ?>" href="#" aria-label="<?php echo Text::_('JNEXT'); ?>" onclick="return false;"><span class="SYWicon-arrow-right2" aria-hidden="true"></span></a></li>
 			<?php endif; ?>
 
 			<?php if ($arrow_next_bottom) : ?>
-				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="next_<?php echo $class_suffix; ?>" class="next<?php echo $extra_pagination_a_classes; ?>" href="#" onclick="return false;"><span class="SYWicon-arrow-down2"></span></a></li>
+				<li<?php echo $extra_pagination_li_class_attribute; ?>><a id="next_<?php echo $class_suffix; ?>" class="next<?php echo $extra_pagination_a_classes; ?>" href="#" aria-label="<?php echo Text::_('JNEXT'); ?>" onclick="return false;"><span class="SYWicon-arrow-down2" aria-hidden="true"></span></a></li>
 			<?php endif; ?>
 			</ul>
 		</div>
