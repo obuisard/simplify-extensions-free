@@ -632,7 +632,7 @@ class ContentHelper
 
 		$array_of_authors_values = array_count_values($authors_array);
 		if (isset($array_of_authors_values['all']) && $array_of_authors_values['all'] > 0) { // 'all' was selected
-			if ($params->get('allow_edit', 0)) {
+		    if ($params->get('allow_edit', 0) && (int)$user->get('id') > 0) {
 				if ($user->authorise('core.edit', 'com_content')) {
 					// logged user can see everyone's unpublished articles
 					$query->where('a.state IN (0, 1)');
@@ -646,7 +646,7 @@ class ContentHelper
 		} else if (isset($array_of_authors_values['auto']) && $array_of_authors_values['auto'] > 0) { // 'auto' was selected
 			$test_type = $include ? '=' : '<>';
 			$query->where('a.created_by ' .$test_type.' '.(int) $user->get('id'));
-			if ($include && $params->get('allow_edit', 0)) {
+			if ($include && $params->get('allow_edit', 0) && (int)$user->get('id') > 0) {
 				$query->where('a.state IN (0, 1)'); // show all articles for the logged author, published or not
 			} else {
 				$query->where('a.state = 1');
@@ -658,7 +658,7 @@ class ContentHelper
 				$query->where('a.created_by '.$test_type.' ('.$authors.')');
 			}
 
-			if ($params->get('allow_edit', 0)) {
+			if ($params->get('allow_edit', 0) && (int)$user->get('id') > 0) {
 				if ($user->authorise('core.edit', 'com_content')) {
 					// logged user can see everyone's unpublished articles
 					$query->where('a.state IN (0, 1)');
@@ -976,8 +976,8 @@ class ContentHelper
 
 			$filter = $params->get('filter', 'none');
 
-			$quality_jpg = $params->get('quality_jpg', 100);
-			$quality_png = $params->get('quality_png', 0);
+			$quality_jpg = $params->get('quality_jpg', 75);
+			$quality_png = $params->get('quality_png', 3);
 			$quality_webp = $params->get('quality_webp', 80);
 			$quality_avif = $params->get('quality_avif', 80);
 

@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.3.0</version>
+	<version>6.3.1</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -67,7 +67,7 @@
 			
 			<fieldset name="basic" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="6.3.0" />
+				<field type="extensionversion" version="6.3.1" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_LATESTNEWSENHANCED_TRANSLATORS" />
@@ -1177,12 +1177,12 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEFILTER_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEFILTER_DESC" />
 					
-					<field name="quality_jpg" type="sywverbosetext" default="100" filter="integer" size="8" maxlength="3" min="0" max="100" showon="create_thumb:1" 
+					<field name="quality_jpg" type="sywverbosetext" default="75" filter="integer" size="8" maxlength="3" min="0" max="100" showon="create_thumb:1" 
 						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYJPG_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYJPG_DESC" />
 						
-					<field name="quality_png" type="sywverbosetext" default="0" filter="integer" size="8" maxlength="1" min="0" max="9" showon="create_thumb:1" 
+					<field name="quality_png" type="sywverbosetext" default="3" filter="integer" size="8" maxlength="1" min="0" max="9" showon="create_thumb:1" 
 						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYPNG_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYPNG_DESC" />

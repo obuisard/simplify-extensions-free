@@ -173,23 +173,7 @@ class Helper
 			$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_UNSUPPORTEDFILETYPE', $imagesrc);
 		} else {
 
-			switch ($imageext){
-				case 'jpg': case 'jpeg': $quality = $image_quality_array['jpg']; break; // 0 to 100
-				case 'png': $quality = round(11.111111 * (9 - $image_quality_array['png'])); break; // compression: 0 to 9
-				case 'webp': $quality = $image_quality_array['webp']; break; // 0 to 100
-				case 'avif': $quality = $image_quality_array['avif']; break; // 0 to 100
-				default : $quality = -1;
-			}
-
-// 			switch ($filter) {
-// 				case 'sepia': $filter = array(IMG_FILTER_GRAYSCALE, array('type' => IMG_FILTER_COLORIZE, 'arg1' => 90, 'arg2' => 60, 'arg3' => 30)); break;
-// 				case 'grayscale': $filter = IMG_FILTER_GRAYSCALE; break;
-// 				case 'sketch': $filter = IMG_FILTER_MEAN_REMOVAL; break;
-// 				case 'negate': $filter = IMG_FILTER_NEGATE; break;
-// 				case 'emboss': $filter = IMG_FILTER_EMBOSS; break;
-// 				case 'edgedetect': $filter = IMG_FILTER_EDGEDETECT; break;
-// 				default: $filter = null;
-// 			}
+		    $quality = self::getImageQualityFromExt($imageext, $image_quality_array);
 
 			// negative values force the creation of the thumbnails with size of original image
 			// great to create high-res of original image and/or to use quality parameters to create an image with smaller file size
@@ -198,28 +182,27 @@ class Helper
 				$head_height = $image->getImageHeight();
 			}
 
-			$creation_success = $image->toThumbnail($filename, $thumbnail_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution);
-
-			if (!$creation_success) {
+			if ($image->toThumbnail($filename, $thumbnail_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution)) {
+    
+    			if ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif') { // create fallback
+    				
+    			    $fallback_extension = 'png';
+    			    $fallback_mime_type = 'image/png';
+    			    
+    			    // create fallback with original image mime type when the original is not webp or avif
+    			    if ($image->getImageMimeType() !== 'image/webp' && $image->getImageMimeType() !== 'image/avif') {
+    			        $fallback_extension = $original_imageext;
+    			        $fallback_mime_type = $image->getImageMimeType();
+    			    }
+    			    
+    			    $quality = self::getImageQualityFromExt($fallback_extension, $image_quality_array);
+                        
+    			    if (!$image->toThumbnail($tmp_path . '/thumb_' . $module_id . '_' . $item_id . '.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution)) {
+    					$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
+    				}
+    			}
+			} else {
 			    $result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
-			}
-
-			if ($creation_success && ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif')) { // create fallback
-				
-			    $fallback_extension = 'png';
-			    $fallback_mime_type = 'image/png';
-			    
-			    // create fallback with original image mime type when the original is not webp or avif
-			    if ($image->getImageMimeType() !== 'image/webp' && $image->getImageMimeType() !== 'image/avif') {
-			        $fallback_extension = $original_imageext;
-			        $fallback_mime_type = $image->getImageMimeType();
-			    }
-                    
-			    $creation_success = $image->toThumbnail($tmp_path . '/thumb_' . $module_id . '_' . $item_id . '.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution);
-
-				if (!$creation_success) {
-					$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
-				}
 			}
 		}
 
@@ -230,6 +213,20 @@ class Helper
 		}
 
 		return $result;
+	}
+	
+	static protected function getImageQualityFromExt($image_extension, $qualities = array('jpg' => 75, 'png' => 3, 'webp' => 80, 'avif' => 80))
+	{
+	    $quality = -1;
+	    
+	    switch ($image_extension){
+	        case 'jpg': case 'jpeg': $quality = $qualities['jpg']; break; // 0 to 100
+	        case 'png': $quality = round(11.111111 * (9 - $qualities['png'])); break; // compression: 0 to 9
+	        case 'webp': $quality = $qualities['webp']; break; // 0 to 100
+	        case 'avif': $quality = $qualities['avif']; // 0 to 100
+	    }
+	    
+	    return $quality;
 	}
 
 	/**
