@@ -746,7 +746,7 @@ abstract class Helper
 					if (self::isCropPicture($params)) {
 					    $picture_output = self::getCroppedImage($module->id, $item->id, $item->original_image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
 					} else {
-					    $picture_output = (File::exists(JPATH_SITE . '/' . $item->original_image)) ? $item->original_image : 'error';
+					    $picture_output = (File::exists(JPATH_SITE . '/' . $item->original_image) || !Uri::getInstance()->isInternal($item->original_image)) ? $item->original_image : 'error';
 					}
 				}
 				
