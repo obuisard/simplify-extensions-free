@@ -40,6 +40,7 @@ class PositionselectField extends DynamicsingleselectField
             $this->height = 62;
 
             $this->items = array();
+            $this->items['cc'] = array('label' => Text::_('MOD_TRULYRESPONSIVESLIDER_POSITION_VALUE_CC'), 'image' => 'position_cc');
             $this->items['c'] = array('label' => Text::_('MOD_TRULYRESPONSIVESLIDER_POSITION_VALUE_C'), 'image' => 'position_c');
             $this->items['s'] = array('label' => Text::_('MOD_TRULYRESPONSIVESLIDER_POSITION_VALUE_S'), 'image' => 'position_s');
             $this->items['se'] = array('label' => Text::_('MOD_TRULYRESPONSIVESLIDER_POSITION_VALUE_SE'), 'image' => 'position_se');

@@ -36,10 +36,10 @@ header("Content-type: text/css; charset=UTF-8");
 }
 
 #trs_<?php echo $suffix; ?> .flexslider {
-	background: #FFFFFF;
+	background: #fff;
 
 	<?php if ($border_width > 0) : ?>
-		border: <?php echo $border_width; ?>px solid #FFFFFF;
+		border: <?php echo $border_width; ?>px solid #fff;
 		-webkit-border-radius: 4px;
 		-moz-border-radius: 4px;
 		-o-border-radius: 4px;
@@ -228,7 +228,7 @@ header("Content-type: text/css; charset=UTF-8");
 	width: <?php echo (100 - $caption_left - $caption_right); ?>%;
 	height: <?php echo (100 - $caption_top - $caption_bottom); ?>%;
 
-	color: #FFFFFF;
+	color: #fff;
 	font-size: 0.85em;
 	line-height: 1.4em;
 }
@@ -253,6 +253,7 @@ header("Content-type: text/css; charset=UTF-8");
 	max-height: 100%;
 	overflow-y: auto;
 	overflow-x: hidden;
+	box-sizing: unset;
 
 	/* text-shadow: 4px 4px 8px #000; */
     /* filter: dropshadow(color=#000, offx=4, offy=4); */
@@ -263,6 +264,18 @@ header("Content-type: text/css; charset=UTF-8");
 
 #trs_<?php echo $suffix; ?> .flexslidercontainer .caption .innercaption.simple_caption {
 	text-align: center;
+}
+
+#trs_<?php echo $suffix; ?> .flexslidercontainer .caption .coordinate-cc,
+#trs_<?php echo $suffix; ?> .flexslidercontainer .caption .coordinate-cce,
+#trs_<?php echo $suffix; ?> .flexslidercontainer .caption .coordinate-ecc,
+#trs_<?php echo $suffix; ?> .flexslidercontainer .caption .coordinate-ccw,
+#trs_<?php echo $suffix; ?> .flexslidercontainer .caption .coordinate-wcc {
+	width: <?php echo (100 - $padding * 2); ?>%;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
 }
 
 #trs_<?php echo $suffix; ?> .flexslidercontainer .caption .coordinate-c,

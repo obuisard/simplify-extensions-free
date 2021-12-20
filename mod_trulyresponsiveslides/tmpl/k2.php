@@ -35,6 +35,10 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
         $wam = $app->getDocument()->getWebAssetManager();
 
         $default_bg_picture = $params->get('default_bg', '');
+        if ($default_bg_picture) {
+            $default_image_object = HTMLHelper::cleanImageURL($default_bg_picture);
+            $default_bg_picture = $default_image_object->url;
+        }
 
 		foreach ($list as $item) {
 
@@ -103,7 +107,7 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
             $caption_html_content = '';
 
             if (!empty($fulltext)) {
-                if (strpos($coordinate, 'w') !== false || $coordinate == 'n' || $coordinate == 's' || $coordinate == 'c') {
+                if (strpos($coordinate, 'w') !== false || $coordinate == 'n' || $coordinate == 's' || $coordinate == 'c' || $coordinate == 'cc') {
                     $caption_html_content = '<div class="caption_left">';
                     $caption_html_content .= $caption_category.$caption_title;
                     $caption_html_content .= '<div class="caption_content">'.$introtext.'</div>';
