@@ -255,8 +255,10 @@ class Helper
 				break;
 
 				case 'rating':
-
-				    if (isset($item->rating) && ($item_params->get('ad_show_vote') || $force_show)) {
+				    
+				    /* if no rating, still need to be able to show that there is none */
+				    
+				    if (/*isset($item->rating) && */($item_params->get('ad_show_vote') || $force_show)) {
 				        
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
