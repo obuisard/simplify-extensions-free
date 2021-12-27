@@ -25,7 +25,7 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.1.0';
+	protected $minimumLibrary = '2.1.1';
 
 	/**
 	 * Available languages
