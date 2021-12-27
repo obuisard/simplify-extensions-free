@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.3.1</version>
+	<version>6.4.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -67,7 +67,7 @@
 			
 			<fieldset name="basic" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="6.3.1" />
+				<field type="extensionversion" version="6.4.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_LATESTNEWSENHANCED_TRANSLATORS" />
@@ -198,10 +198,26 @@
 						<option value="all">JALL</option>
 						<option value="any">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ANY</option>
 					</field>
+
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="tags_match:any" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ANYMIN_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ANYMIN_DESC" />
+						
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="tags_match:any" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ANYMAX_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ANYMAX_DESC" />
 					
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGORDER_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGORDER_DESC" />
+				</fieldset>
+				
+				<fieldset name="selection_cfields" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONCUSTOMFIELDS_FIELDSET_LABEL">
+					
+					<field name="customfieldsfilter" type="subform" formsource="modules/mod_latestnewsenhanced/forms/fields/customfieldsfilter.xml" multiple="true" showon="datasource:articles"
+						default="{'field':'none','inex':'1','values':''}"
+	   					label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CUSTOMFIELDSFILTER_LABEL" 
+	   					description="MOD_LATESTNEWSENHANCEDEXTENDED_CUSTOMFIELDSFILTER_DESC" />
 				</fieldset>
 				
 				<fieldset name="selection_keywords" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONKEYWORDS_FIELDSET_LABEL">

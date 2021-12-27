@@ -23,6 +23,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use SYW\Library\Cache as SYWCache;
 use SYW\Library\Tags as SYWTags;
@@ -614,6 +615,95 @@ class ContentHelper
 			$query->group($db->quoteName('a.id'));
 		}
 
+		// custom field filters
+		
+		$customfield_filters_arrays = array();
+		
+		$customfield_filters = $params->get('customfieldsfilter'); // string (if default), array or object
+		
+		if (!empty($customfield_filters) && !is_string($customfield_filters)) {
+		    
+		    foreach ($customfield_filters as $customfield_filter) {
+		        
+		        $customfield_filter = (array)$customfield_filter;
+		        
+		        if ($customfield_filter['field'] !== 'none') {
+		            
+		            $values = explode(',', $customfield_filter['values']);
+		            foreach ($values as $key => $value) {
+		                $value = trim($value);
+		                if (empty($value)) {
+		                    unset($values[$key]);
+		                }
+		            }
+		            
+		            if (!empty($values)) {
+		                $customfield_filters_arrays[] = array('id' => $customfield_filter['field'], 'values' => $values, 'inex' => $customfield_filter['inex']);
+		            }
+		        }
+		    }
+		}
+		
+		if (!empty($customfield_filters_arrays)) {
+		    
+		    $article_id_arrays_from_cfields = array();
+		    
+		    foreach ($customfield_filters_arrays as $customfield_filter) {
+		            
+	            $subQuery = $db->getQuery(true);
+	            
+	            $subQuery->select("DISTINCT cfv.item_id"); // no unique results when joining with categories
+	            $subQuery->from("#__fields_values AS cfv");
+	            $subQuery->join('LEFT', '#__fields AS f ON f.id = cfv.field_id');
+	            $subQuery->where('(f.context IS NULL OR f.context = ' . $db->quote('com_content.article') . ')');
+	            $subQuery->where('(f.state IS NULL OR f.state = 1)');
+	            $subQuery->where('(f.access IS NULL OR f.access IN (' . $groups . '))');
+	            $subQuery->where($db->quoteName('cfv.field_id').' = ' . $db->quote($customfield_filter['id']));
+	            
+	            // any category for the field? if so, join with categories. If not, do not join
+	            if (!empty(FieldsHelper::getAssignedCategoriesTitles($customfield_filter['id']))) {
+    	            if (!isset($array_of_category_values['all']) && !isset($array_of_category_values['auto']) && !empty($categories_array)) {
+    	               $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');	               
+    	               $subQuery->where($db->quoteName('cfc.category_id') . ' ' . ($params->get('cat_inex', 1) ? 'IN' : 'NOT IN') . ' (' . implode(',', $categories_array) . ')');
+    	            }
+	            }
+	            
+	            if ($customfield_filter['inex']) {
+	               $subQuery->where($db->quoteName('cfv.value') . " = '" . implode("' OR " . $db->quoteName('cfv.value') . " = '", $customfield_filter['values']) . "'");
+	            } else {
+	                $subQuery->where($db->quoteName('cfv.value') . " <> '" . implode("' AND " . $db->quoteName('cfv.value') . " <> '", $customfield_filter['values']) . "'");
+	            }
+	            
+	            if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
+	                $subQuery->where('(f.language IS NULL OR f.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . '))');
+	            }
+	            
+	            $db->setQuery($subQuery);
+	            
+	            try {	                
+	                $article_id_arrays_from_cfields[] = $db->loadColumn();
+	            } catch (ExecutionFailureException $e) {
+	                Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	            }
+		    }
+		    
+	        if (!empty($article_id_arrays_from_cfields)) {
+	            
+	            // keep only the ids found in all the arrays
+	            if (count($article_id_arrays_from_cfields) > 1) {
+	                $article_ids = call_user_func_array('array_intersect', $article_id_arrays_from_cfields);
+	            } else {
+	                $article_ids = $article_id_arrays_from_cfields[0];
+	            }
+	            
+	            if (!empty($article_ids)) {
+	                $query->where('a.id IN (' . implode(",", $article_ids) . ')'); // include all articles that have custom field value(s) that correspond to the custom field value
+	            } else {
+	                $query->where('a.id = 0'); // no article having all values selected
+	            }
+	        }
+		}
+
 		// user filter
 
 		$include = $params->get('author_inex', 1);
@@ -698,7 +788,7 @@ class ContentHelper
 
 		// language filter
 
-		if ($params->get('filter_lang', 1) && $app->getLanguageFilter()) {
+		if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
 			$query->where('a.language IN ('.$db->quote(Factory::getLanguage()->getTag()).','.$db->quote('*').')');
 		}
 

@@ -672,7 +672,7 @@ class K2Helper
 
 		// language filter
 
-		if ($params->get('filter_lang', 1) && $app->getLanguageFilter()) {
+		if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
 			$query->where('a.language IN ('.$db->quote(Factory::getLanguage()->getTag()).','.$db->quote('*').')');
 		}
 

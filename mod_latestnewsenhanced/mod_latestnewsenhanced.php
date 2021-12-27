@@ -527,9 +527,13 @@ if (empty($list)) { // $list can be an empty array
 		$prev_type = $params->get('prev_type', '');
 		$label_prev = $prev_type == 'prev' ? Text::_('JPREV') : ($prev_type == 'label' ? trim($params->get('label_prev', '')) : '');
 
+		$prev_aria_label = Text::_('JPREV');
+		
 		$next_type = $params->get('next_type', '');
 		$label_next = $next_type == 'next' ? Text::_('JNEXT') : ($next_type == 'label' ? trim($params->get('label_next', '')) : '');
 
+		$next_aria_label = Text::_('JNEXT');
+		
 		$prev_next = true;
 		if ($pagination == 'p' || $pagination == 's') {
 			$prev_next = false;
