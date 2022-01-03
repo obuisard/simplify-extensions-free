@@ -14,11 +14,13 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Contact\Site\Helper\RouteHelper as ContactRouteHelper;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
 use SYW\Library\Cache as SYWCache;
@@ -615,6 +617,95 @@ abstract class Helper
 
 				$query->group($db->quoteName('cd.id'));
 			}
+			
+			// custom field filters
+			
+			$customfield_filters_arrays = array();
+			
+			$customfield_filters = $params->get('customfieldsfilter'); // string (if default), array or object
+			
+			if (!empty($customfield_filters) && !is_string($customfield_filters)) {
+			    
+			    foreach ($customfield_filters as $customfield_filter) {
+			        
+			        $customfield_filter = (array)$customfield_filter;
+			        
+			        if ($customfield_filter['field'] !== 'none') {
+			            
+			            $values = explode(',', $customfield_filter['values']);
+			            foreach ($values as $key => $value) {
+			                $value = trim($value);
+			                if (empty($value)) {
+			                    unset($values[$key]);
+			                }
+			            }
+			            
+			            if (!empty($values)) {
+			                $customfield_filters_arrays[] = array('id' => $customfield_filter['field'], 'values' => $values, 'inex' => $customfield_filter['inex']);
+			            }
+			        }
+			    }
+			}
+			
+			if (!empty($customfield_filters_arrays)) {
+			    
+			    $contact_id_arrays_from_cfields = array();
+			    
+			    foreach ($customfield_filters_arrays as $customfield_filter) {
+			        
+			        $subQuery = $db->getQuery(true);
+			        
+			        $subQuery->select("DISTINCT cfv.item_id"); // no unique results when joining with categories
+			        $subQuery->from("#__fields_values AS cfv");
+			        $subQuery->join('LEFT', '#__fields AS f ON f.id = cfv.field_id');
+			        $subQuery->where('(f.context IS NULL OR f.context = ' . $db->quote('com_contact.contact') . ')');
+			        $subQuery->where('(f.state IS NULL OR f.state = 1)');
+			        $subQuery->where('(f.access IS NULL OR f.access IN (' . $groups . '))');
+			        $subQuery->where($db->quoteName('cfv.field_id').' = ' . $db->quote($customfield_filter['id']));
+			        
+			        // any category for the field? if so, join with categories. If not, do not join
+			        if (!empty(FieldsHelper::getAssignedCategoriesTitles($customfield_filter['id']))) {
+			            if (!isset($array_of_category_values['all']) && !isset($array_of_category_values['auto']) && !empty($categories)) {
+			                $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');
+			                $subQuery->where($db->quoteName('cfc.category_id') . ' ' . ($params->get('cat_inex', 1) ? 'IN' : 'NOT IN') . ' (' . $categories . ')');
+			            }
+			        }
+			        
+			        if ($customfield_filter['inex']) {
+			            $subQuery->where($db->quoteName('cfv.value') . " = '" . implode("' OR " . $db->quoteName('cfv.value') . " = '", $customfield_filter['values']) . "'");
+			        } else {
+			            $subQuery->where($db->quoteName('cfv.value') . " <> '" . implode("' AND " . $db->quoteName('cfv.value') . " <> '", $customfield_filter['values']) . "'");
+			        }
+			        
+			        if ($params->get('filter_lang', 0) && Multilanguage::isEnabled()) {
+			            $subQuery->where('(f.language IS NULL OR f.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . '))');
+			        }
+			        
+			        $db->setQuery($subQuery);
+			        
+			        try {
+			            $contact_id_arrays_from_cfields[] = $db->loadColumn();
+			        } catch (ExecutionFailureException $e) {
+			            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+			        }
+			    }
+			    
+			    if (!empty($contact_id_arrays_from_cfields)) {
+			        
+			        // keep only the ids found in all the arrays
+			        if (count($contact_id_arrays_from_cfields) > 1) {
+			            $contact_ids = call_user_func_array('array_intersect', $contact_id_arrays_from_cfields);
+			        } else {
+			            $contact_ids = $contact_id_arrays_from_cfields[0];
+			        }
+			        
+			        if (!empty($contact_ids)) {
+			            $query->where('cd.id IN (' . implode(",", $contact_ids) . ')'); // include all articles that have custom field value(s) that correspond to the custom field value
+			        } else {
+			            $query->where('cd.id = 0'); // no article having all values selected
+			        }
+			    }
+			}
 
 			// featured switch
 
@@ -668,14 +759,25 @@ abstract class Helper
 						$query->order('cd.id ASC');
 					}
 					break;
-				case 'sna' : $query->order($db->escape('cd.sortname1').' ASC');
-				$query->order($db->escape('cd.sortname2').' ASC');
-				$query->order($db->escape('cd.sortname3').' ASC');
-				break;
-				case 'snd' : $query->order($db->escape('cd.sortname1').' DESC');
-				$query->order($db->escape('cd.sortname2').' DESC');
-				$query->order($db->escape('cd.sortname3').' DESC');
-				break;
+				case 'sna' : 
+				    $query->order($db->escape('cd.sortname1').' ASC');
+    				$query->order($db->escape('cd.sortname2').' ASC');
+    				$query->order($db->escape('cd.sortname3').' ASC');
+    				break;
+				case 'snd' : 
+				    $query->order($db->escape('cd.sortname1').' DESC');
+    				$query->order($db->escape('cd.sortname2').' DESC');
+    				$query->order($db->escape('cd.sortname3').' DESC');
+    				break;
+    				
+				case 'c_asc': $query->order('cd.created ASC'); break;
+				case 'c_dsc': $query->order('cd.created DESC'); break;
+				
+				case 'mc_asc': $query->order('CASE WHEN (cd.modified IS NULL) THEN cd.created ELSE cd.modified END ASC'); break;
+				case 'mc_dsc': $query->order('CASE WHEN (cd.modified IS NULL) THEN cd.created ELSE cd.modified END DESC'); break;
+				
+				case 'hit': $query->order('cd.hits DESC'); break; // popular (most hit)
+				
 				default : $query->order('cd.ordering ASC'); break;
 			}
 		}
@@ -697,7 +799,7 @@ abstract class Helper
 
 		// language filter
 
-		if ($params->get('filter_lang', 0) && $app->getLanguageFilter()) {
+		if ($params->get('filter_lang', 0) && Multilanguage::isEnabled()) {
 			$query->where('cd.language IN ('.$db->quote(Factory::getLanguage()->getTag()).','.$db->quote('*').')');
 		}
 
@@ -970,6 +1072,11 @@ abstract class Helper
 	        case 'st': return 'state';
 	        case 'p_c': return 'postcode';
 	        case 'cou': return 'country';
+	        
+	        case 'date_c': return 'created';
+	        case 'date_m': return array('created', 'modified');
+	        case 'hits': return 'hits';
+	        
 	        case 'misc':
 	            if ($params->get('t', 'info') == 'info') { // take misc
 	                return 'misc';
@@ -1709,6 +1816,39 @@ abstract class Helper
 				}
 				break;
 
+			case 'date_c' : // date created
+			    $value = HTMLHelper::_('date', $item->created, $params->get('d_format', 'd F Y'));
+			    $class = 'fieldcreated';
+			    if ($value) {
+			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_CREATED') : $fieldlabel;
+			        $icon_class = !empty($fieldicon) ? $fieldicon : 'calendar';
+			    }
+			    break;
+			    
+			case 'date_m' : // date modified - if null, use created
+			    
+			    $date_modified = $item->modified;
+			    if ($date_modified == Factory::getDbo()->getNullDate()) {
+			        $date_modified = $item->created;
+			    }
+			    
+			    $value = HTMLHelper::_('date', $date_modified, $params->get('d_format', 'd F Y'));
+			    $class = 'fieldmodified';
+			    if ($value) {
+			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_MODIFIED') : $fieldlabel;
+			        $icon_class = !empty($fieldicon) ? $fieldicon : 'calendar';
+			    }
+			    break;
+			    
+			case 'hits' : // hits
+			    $value = $item->hits;
+			    $class = 'fieldhits';
+			    if ($value) {
+			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_HITS') : $fieldlabel;
+			        $icon_class = !empty($fieldicon) ? $fieldicon : 'eye';
+			    }
+			    break;
+
 			case 'a': case 'b': case 'c': case 'd': case 'e': // links a .. e
 			case 'a_sw': case 'b_sw': case 'c_sw': case 'd_sw': case 'e_sw':
 				$value = trim($item_params->get('link' . str_replace('_sw', '', $info_details['name']), ''));
@@ -1880,7 +2020,7 @@ abstract class Helper
 	 * @param string $filter
 	 * @param boolean $create_high_resolution
 	 *
-	 * @return the thumbnail path if no error, 'error' if error, the original path otherwise if conditions are not met to create the thumbnail
+	 * @return String thumbnail path if no error, 'error' if error, the original path otherwise if conditions are not met to create the thumbnail
 	 */
 	public static function getCroppedImage($module_id, $item_id, $imagesrc, $tmp_path, $clear_cache, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution = false, $thumbnail_mime_type = '')
 	{
@@ -1937,6 +2077,8 @@ abstract class Helper
 						if ($available) {
 							$filename_temp = $tmp_path.'/thumb_temp_'.$module_id.'_'.$item_id.'.'.$imageext;
 							$filename_highres_temp = $tmp_path.'/thumb_temp_'.$module_id.'_'.$item_id.'@2x.'.$imageext;
+
+							// does not take into account fallbacks
 
 							$plugin = PluginHelper::getPlugin('imagecompression', $plugin_name);
 							$classname = 'plgImageCompression'.$plugin_name;

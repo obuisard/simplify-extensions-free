@@ -52,6 +52,11 @@ class FieldselectField extends GroupedlistField
 		//$groups[$group_name][] = HTMLHelper::_('select.option', 'f_a', Text::_('MOD_TROMBINOSCOPE_VALUE_FORMATTEDADDRESS'), 'value', 'text', $disable = false);
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'f_f_a', Text::_('MOD_TROMBINOSCOPE_VALUE_FULLYFORMATTEDADDRESS'), 'value', 'text', $disable = false);
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'cou', Text::_('MOD_TROMBINOSCOPE_VALUE_COUNTRY'), 'value', 'text', $disable = false);
+		
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'date_c', Text::_('MOD_TROMBINOSCOPE_VALUE_CREATEDDATE'), 'value', 'text', $disable=false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'date_m', Text::_('MOD_TROMBINOSCOPE_VALUE_MODIFIEDDATE'), 'value', 'text', $disable=false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'hits', Text::_('MOD_TROMBINOSCOPE_VALUE_HITS'), 'value', 'text', $disable=false);
+		
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'misc', Text::_('MOD_TROMBINOSCOPE_VALUE_MISC'), 'value', 'text', $disable = false);
 
 		// gender

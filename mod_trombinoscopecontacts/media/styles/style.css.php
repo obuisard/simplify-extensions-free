@@ -29,12 +29,6 @@ header("Content-type: text/css; charset=UTF-8");
 	<?php echo $prefix; ?> .groupheader,
 	<?php echo $prefix; ?> .heading-group {
 	    font-size: <?php echo $font_size; ?>px;
-
-	    <?php if ($card_width_unit == '%') : ?>
-			/*margin: 0 <?php echo $margin_in_perc; ?>%;*/
-		<?php else : ?>
-			/*margin: 0 <?php echo intval($space_between_cards / 2); ?>px;*/
-		<?php endif; ?>
 	}
 <?php endif; ?>
 

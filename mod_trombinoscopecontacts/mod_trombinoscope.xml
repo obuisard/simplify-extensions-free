@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.8.1</version>
+	<version>4.9.0</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -62,7 +62,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\TrombinoscopeContacts\Site\Field">			
 			<fieldset name="basic" label="MOD_TROMBINOSCOPE_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.8.1" />
+				<field type="extensionversion" version="4.9.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_TROMBINOSCOPE_TRANSLATORS" />
@@ -179,6 +179,14 @@
 					</field>
 				</fieldset>
 				
+				<fieldset name="selection_cfields" label="MOD_TROMBINOSCOPE_SELECTIONCUSTOMFIELDS_FIELDSET_LABEL">
+					
+					<field name="customfieldsfilter" type="subform" formsource="modules/mod_trombinoscope/forms/fields/customfieldsfilter.xml" multiple="true" showon="selection!:contact" 
+						default="{'field':'none','inex':'1','values':''}"
+	   					label="MOD_TROMBINOSCOPE_FIELD_CUSTOMFIELDSFILTER_LABEL" 
+	   					description="MOD_TROMBINOSCOPE_CUSTOMFIELDSFILTER_DESC" />
+				</fieldset>
+				
 				<fieldset name="selection_keywords" label="MOD_TROMBINOSCOPE_SELECTIONKEYWORDS_FIELDSET_LABEL">
 								
 					<field name="keys" type="text" default="" showon="selection!:contact" 
@@ -223,7 +231,12 @@
 						<option value="fnf_fa">MOD_TROMBINOSCOPE_VALUE_BYFORMATFIRST_ASC</option>
 						<option value="fnf_fd">MOD_TROMBINOSCOPE_VALUE_BYFORMATFIRST_DESC</option>
 						<option value="fnf_la">MOD_TROMBINOSCOPE_VALUE_BYFORMATLAST_ASC</option>	
-						<option value="fnf_ld">MOD_TROMBINOSCOPE_VALUE_BYFORMATLAST_DESC</option>						
+						<option value="fnf_ld">MOD_TROMBINOSCOPE_VALUE_BYFORMATLAST_DESC</option>
+						<option value="c_asc">MOD_TROMBINOSCOPE_VALUE_CREATED_ASC</option>
+						<option value="c_dsc">MOD_TROMBINOSCOPE_VALUE_CREATED_DESC</option>
+						<option value="mc_asc">MOD_TROMBINOSCOPE_VALUE_MODIFIED_ASC</option>
+						<option value="mc_dsc">MOD_TROMBINOSCOPE_VALUE_MODIFIED_DESC</option>
+						<option value="hit">MOD_TROMBINOSCOPE_VALUE_POPULAR</option>
 						<option value="random">MOD_TROMBINOSCOPE_VALUE_RANDOM</option>
 						<option value="manual">MOD_TROMBINOSCOPE_VALUE_MANUAL</option>
 					</field>
@@ -510,12 +523,9 @@
 						label="MOD_TROMBINOSCOPE_FIELD_BGCOLOR2_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_BGCOLOR2_DESC" />					
 						
-					<field name="card_shadow" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+					<field name="card_shadow" type="sywshadowselect" default="none"	
 						label="MOD_TROMBINOSCOPE_FIELD_CARDSHADOW_LABEL" 
-						description="MOD_TROMBINOSCOPE_FIELD_CARDSHADOW_DESC">
-	                    <option value="0">JNO</option>
-						<option value="1">JYES</option>
-					</field>
+						description="MOD_TROMBINOSCOPE_FIELD_CARDSHADOW_DESC" />
 					
 					<field name="card_r" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-rounded_corner" 
 						label="MOD_TROMBINOSCOPE_FIELD_CARDRADIUS_LABEL" 

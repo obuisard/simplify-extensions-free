@@ -82,8 +82,11 @@ class CSSFileCache extends HeaderFilesCache
 		$bgcolor2 = trim($params->get('bgcolor2', ''));
 		$variables[] = 'bgcolor2';
 
-		$card_shadow = $params->get('card_shadow', false);
+		$card_shadow = false; // $params->get('card_shadow', false); // for backward compatibility: will dismiss all shadow styles from themes
 		$variables[] = 'card_shadow';
+		
+		$shadow_body = $params->get('card_shadow', 'none');
+		$variables[] = 'shadow_body';
 
 		$card_radius = $params->get('card_r', 0);
 		$variables[] = 'card_radius';

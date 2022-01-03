@@ -40,12 +40,35 @@ header("Content-type: text/css; charset=UTF-8");
 		background-repeat: repeat;
 	<?php endif; ?>
 
-	<?php if ($card_shadow) : ?>
-		-moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-		-webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-		box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-
-		margin: 8px;
+	<?php if ($shadow_body == 's') : ?>
+		-webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+		box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+		margin: 6px;
+	<?php endif; ?>
+	<?php if ($shadow_body == 'm') : ?>
+		-webkit-box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),0 1px 10px 0 rgba(0,0,0,0.12),0 2px 4px -1px rgba(0,0,0,0.3);
+		box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),0 1px 10px 0 rgba(0,0,0,0.12),0 2px 4px -1px rgba(0,0,0,0.3);
+		margin: 11px;
+	<?php endif; ?>
+	<?php if ($shadow_body == 'l') : ?>
+		-webkit-box-shadow: 0 8px 17px 2px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12),0 5px 5px -3px rgba(0,0,0,0.2);
+		box-shadow: 0 8px 17px 2px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12),0 5px 5px -3px rgba(0,0,0,0.2);
+		margin: 27px;						
+	<?php endif; ?>
+	<?php if ($shadow_body == 'ss') : ?>
+		-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
+		box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
+		margin: 5px;						
+	<?php endif; ?>
+	<?php if ($shadow_body == 'sm') : ?>
+		-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
+		box-shadow: 1px 1px 10px rgba(51, 51, 51, 0.2);
+		margin: 11px;
+	<?php endif; ?>
+	<?php if ($shadow_body == 'sl') : ?>
+		-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
+		box-shadow: 1px 1px 15px rgba(51, 51, 51, 0.2);
+		margin: 16px;
 	<?php endif; ?>
 
 	<?php if ($card_radius > 0) : ?>
