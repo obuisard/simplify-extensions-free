@@ -250,11 +250,77 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 			}
 						
 			// +++ End Migration
+			
+			// data migration for changes in the parameters
+			
+			$this->migrateData();
 		}
 
 		$this->removeFiles();
 
 		return true;
+	}
+	
+	private function migrateData()
+	{
+	    $db = Factory::getDBO();
+	    
+	    $query = $db->getQuery(true);
+	    
+	    $query->select('id');
+	    $query->select('params');
+	    $query->from('#__modules');
+	    $query->where($db->quoteName('module').'='.$db->quote('mod_trombinoscope'));
+	    
+	    $db->setQuery($query);
+	    
+	    $tc_instances = array();
+	    try {
+	        $tc_instances = $db->loadObjectList();
+	    } catch (ExecutionFailureException $e) {
+	        //Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	        return false;
+	    }
+	    
+	    foreach ($tc_instances as $tc_instance) {
+	        
+	        $instance_params = json_decode($tc_instance->params, true);
+	        
+	        $changes_made = false;
+	        
+	        // move card shadow to new value
+	        
+	        if (isset($instance_params['card_shadow'])) {
+	            
+	            if (is_numeric($instance_params['card_shadow']) && intval($instance_params['card_shadow']) == 0) {
+	                $instance_params['card_shadow'] = 'none';	                
+	                $changes_made = true;
+	            } else if (is_numeric($instance_params['card_shadow']) && intval($instance_params['card_shadow']) == 1) {
+	                $instance_params['card_shadow'] = 'sm';	                
+	                $changes_made = true;
+	            }
+	        }
+	        
+	        if ($changes_made) {
+	            
+	            $query->clear();
+	            
+	            $query->update('#__modules');
+	            $query->set($db->quoteName('params').'='.$db->quote(json_encode($instance_params)));
+	            $query->where($db->quoteName('id').'='.$db->quote($tc_instance->id));
+	            
+	            $db->setQuery($query);
+	            
+	            try {
+	                $db->execute();
+	            } catch (ExecutionFailureException $e) {
+	                //Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+	                return false;
+	            }
+	        }
+	    }
+	    
+	    return true;
 	}
 	
 	private function isFolderReady($extra_path)
