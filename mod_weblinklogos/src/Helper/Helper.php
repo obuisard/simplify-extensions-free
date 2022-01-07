@@ -14,10 +14,12 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
 use SYW\Library\Image as SYWImage;
@@ -204,12 +206,14 @@ class Helper
 
 		// filter by categories
 
-		$categories = '';
 		$categories_array = $params->get('category', array());
 
 		$array_of_category_values = array_count_values($categories_array);
 		if (isset($array_of_category_values['all']) && $array_of_category_values['all'] > 0) { // 'all' was selected
 			// keep categories = ''
+		    if (!$params->get('cat_inex', 1)) {
+		        return array(); // if all categories excluded, then there should be no result
+		    }
 		} else {
 			// sub-category inclusion
 			$get_sub_categories = $params->get('includesubcategories', 'no');
@@ -237,13 +241,9 @@ class Helper
 			}
 
 			if (!empty($categories_array)) {
-				$categories = implode(',', $categories_array);
-			}
-		}
-
-		if (!empty($categories)) {
-			$test_type = $params->get('cat_inex', 1) ? 'IN' : 'NOT IN';
-			$query->where($db->quoteName('a.catid').' '.$test_type.' ('.$categories.')');
+				$test_type = $params->get('cat_inex', 1) ? 'IN' : 'NOT IN';
+			    $query->where($db->quoteName('a.catid').' '.$test_type.' ('.implode(',', $categories_array).')');
+		    }
 		}
 
 		$query->join('LEFT', $db->quoteName('#__categories', 'c').' ON '.$db->quoteName('c.id').' = '.$db->quoteName('a.catid'));
@@ -330,7 +330,7 @@ class Helper
 				$query->select('tags_per_items.tag_count_per_item');
 
 				// subquery gets all the tags for all items
-				$subquery = 'SELECT mm.content_item_id AS content_id, COUNT(tt.id) AS tag_count_per_item FROM #__contentitem_tag_map AS mm INNER JOIN #__tags AS tt ON mm.tag_id = tt.id WHERE tt.access IN ('.$groups.') AND tt.published = 1 AND mm.type_alias = \'com_content.article\' GROUP BY content_id';
+				$subquery = 'SELECT mm.content_item_id AS content_id, COUNT(tt.id) AS tag_count_per_item FROM #__contentitem_tag_map AS mm INNER JOIN #__tags AS tt ON mm.tag_id = tt.id WHERE tt.access IN ('.$groups.') AND tt.published = 1 AND mm.type_alias = \'com_weblinks.weblink\' GROUP BY content_id';
 				$query->join('INNER', '(' . $subquery . ') AS tags_per_items ON tags_per_items.content_id = a.id');
 
 				//if ($params->get('tags_match', 'any') == 'all') {
@@ -347,6 +347,95 @@ class Helper
 			}
 
 			$query->group($db->quoteName('a.id'));
+		}
+
+		// custom field filters
+		
+		$customfield_filters_arrays = array();
+		
+		$customfield_filters = $params->get('customfieldsfilter'); // string (if default), array or object
+		
+		if (!empty($customfield_filters) && !is_string($customfield_filters)) {
+		    
+		    foreach ($customfield_filters as $customfield_filter) {
+		        
+		        $customfield_filter = (array)$customfield_filter;
+		        
+		        if ($customfield_filter['field'] !== 'none') {
+		            
+		            $values = explode(',', $customfield_filter['values']);
+		            foreach ($values as $key => $value) {
+		                $value = trim($value);
+		                if (empty($value)) {
+		                    unset($values[$key]);
+		                }
+		            }
+		            
+		            if (!empty($values)) {
+		                $customfield_filters_arrays[] = array('id' => $customfield_filter['field'], 'values' => $values, 'inex' => $customfield_filter['inex']);
+		            }
+		        }
+		    }
+		}
+		
+		if (!empty($customfield_filters_arrays)) {
+		    
+		    $weblink_id_arrays_from_cfields = array();
+		    
+		    foreach ($customfield_filters_arrays as $customfield_filter) {
+		        
+		        $subQuery = $db->getQuery(true);
+		        
+		        $subQuery->select("DISTINCT cfv.item_id"); // no unique results when joining with categories
+		        $subQuery->from("#__fields_values AS cfv");
+		        $subQuery->join('LEFT', '#__fields AS f ON f.id = cfv.field_id');
+		        $subQuery->where('(f.context IS NULL OR f.context = ' . $db->quote('com_weblinks.weblink') . ')');
+		        $subQuery->where('(f.state IS NULL OR f.state = 1)');
+		        $subQuery->where('(f.access IS NULL OR f.access IN (' . $groups . '))');
+		        $subQuery->where($db->quoteName('cfv.field_id').' = ' . $db->quote($customfield_filter['id']));
+		        
+		        // any category for the field? if so, join with categories. If not, do not join
+		        if (!empty(FieldsHelper::getAssignedCategoriesTitles($customfield_filter['id']))) {
+		            if (!isset($array_of_category_values['all']) && !empty($categories_array)) {
+		                $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');
+		                $subQuery->where($db->quoteName('cfc.category_id') . ' ' . ($params->get('cat_inex', 1) ? 'IN' : 'NOT IN') . ' (' . implode(',', $categories_array) . ')');
+		            }
+		        }
+		        
+		        if ($customfield_filter['inex']) {
+		            $subQuery->where($db->quoteName('cfv.value') . " = '" . implode("' OR " . $db->quoteName('cfv.value') . " = '", $customfield_filter['values']) . "'");
+		        } else {
+		            $subQuery->where($db->quoteName('cfv.value') . " <> '" . implode("' AND " . $db->quoteName('cfv.value') . " <> '", $customfield_filter['values']) . "'");
+		        }
+		        
+		        if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
+		            $subQuery->where('(f.language IS NULL OR f.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . '))');
+		        }
+		        
+		        $db->setQuery($subQuery);
+		        
+		        try {
+		            $weblink_id_arrays_from_cfields[] = $db->loadColumn();
+		        } catch (ExecutionFailureException $e) {
+		            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+		        }
+		    }
+		    
+		    if (!empty($weblink_id_arrays_from_cfields)) {
+		        
+		        // keep only the ids found in all the arrays
+		        if (count($weblink_id_arrays_from_cfields) > 1) {
+		            $weblink_ids = call_user_func_array('array_intersect', $weblink_id_arrays_from_cfields);
+		        } else {
+		            $weblink_ids = $weblink_id_arrays_from_cfields[0];
+		        }
+		        
+		        if (!empty($weblink_ids)) {
+		            $query->where('a.id IN (' . implode(",", $weblink_ids) . ')'); // include all weblinks that have custom field value(s) that correspond to the custom field value
+		        } else {
+		            $query->where('a.id = 0'); // no weblink having all values selected
+		        }
+		    }
 		}
 
 		// Join over the users for the author and modified_by names.
@@ -369,7 +458,7 @@ class Helper
 
 		// filter by language
 
-		if ($params->get('filter_lang', 1) && $app->getLanguageFilter()) {
+		if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
 			$query->where($db->quoteName('a.language').' IN ('.$db->quote(Factory::getLanguage()->getTag()).','.$db->quote('*').')');
 		}
 

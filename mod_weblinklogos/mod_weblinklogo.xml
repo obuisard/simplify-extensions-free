@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.4.0</version>
+	<version>4.5.0</version>
 	<description>MOD_WEBLINKLOGO_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\WeblinkLogos</namespace>
 	
@@ -22,6 +22,7 @@
 		<filename module="mod_weblinklogo">mod_weblinklogo.php</filename>
 		<filename>index.html</filename>
 		<filename>license.txt</filename>
+		<folder>forms</folder>
 		<folder>layouts</folder>
 		<folder>src</folder>
 		<folder>tmpl</folder>
@@ -54,7 +55,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\WeblinkLogos\Site\Field">
 			<fieldset name="basic" label="MOD_WEBLINKLOGO_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.4.0" />
+				<field type="extensionversion" version="4.5.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_WEBLINKLOGO_TRANSLATORS" />
@@ -168,6 +169,14 @@
 						<option value="all">JALL</option>
 						<option value="any">MOD_WEBLINKLOGO_FIELD_VALUE_ANY</option>
 					</field>
+				</fieldset>
+				
+				<fieldset name="selection_cfields" label="MOD_WEBLINKLOGO_SELECTIONCUSTOMFIELDS_FIELDSET_LABEL">
+					
+					<field name="customfieldsfilter" type="subform" formsource="modules/mod_weblinklogo/forms/fields/customfieldsfilter.xml" multiple="true" 
+						default="{'field':'none','inex':'1','values':''}"
+	   					label="MOD_WEBLINKLOGO_FIELD_CUSTOMFIELDSFILTER_LABEL" 
+	   					description="MOD_WEBLINKLOGO_FIELD_CUSTOMFIELDSFILTER_DESC" />
 				</fieldset>
 
 				<fieldset name="selection_exin" label="MOD_WEBLINKLOGO_SELECTIONINEX_FIELDSET_LABEL">
