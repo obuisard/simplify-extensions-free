@@ -26,6 +26,8 @@ class plgSystemSYWAutoReset extends CMSPlugin
     protected $app;
     
     protected $autoloadLanguage = true;
+    
+    protected $contexts = array('com_content.article', 'com_content.form', 'com_k2.item', 'com_contact.contact', 'com_trombinoscopeextended.usercontact', 'com_weblinks.weblink', 'com_weblinklogospro.weblink');
 
     protected $filter_names = array('blur', 'duotone', 'edgedetect', 'emboss', 'grayscale', 'negate', 'pixelate', 'sepia', 'sharpen', 'sketch');
         
@@ -47,10 +49,6 @@ class plgSystemSYWAutoReset extends CMSPlugin
     	if (!$this->app->isClient('site')) {
             return true;
         }
-
-//         if (!isset($data->contact)) {
-//             return true;
-//         }
 
         if (PluginHelper::isEnabled('user', 'editcontactinprofile')) {
 
@@ -77,7 +75,7 @@ class plgSystemSYWAutoReset extends CMSPlugin
                     return true;
                 }
 
-                $categories_array = $this->params->get('contact_cat', array());
+                $categories_array = $this->params->get('contact_cat', array('none'));
 
                 $array_of_category_values = array_count_values($categories_array);
                 if (isset($array_of_category_values['none']) && $array_of_category_values['none'] > 0) { // 'none' was selected
@@ -119,67 +117,45 @@ class plgSystemSYWAutoReset extends CMSPlugin
 
                 $this->loadLanguage();
 
-                //if (function_exists('glob')) {
+                $filenames_to_delete = array();
 
-                    $filenames_to_delete = array();
-
-                    foreach ($paths as $path) {
-                        //$filenames = glob(JPATH_SITE.$path.'/*.{png,jpg,gif}', GLOB_BRACE);
-                        $filenames = Folder::files(JPATH_ROOT.$path, '.png|.jpg|.jpeg|.gif|.webp', false, true); // tests if the folder exists but returns warning
-                        if ($filenames != false) {
-                            $filenames_to_delete = array_merge($filenames_to_delete, $filenames);
-                        }
+                foreach ($paths as $path) {
+                    $filenames = Folder::files(JPATH_ROOT.$path, '.png|.jpg|.jpeg|.gif|.webp|.avif', false, true); // tests if the folder exists but returns warning
+                    if ($filenames != false) {
+                        $filenames_to_delete = array_merge($filenames_to_delete, $filenames);
                     }
+                }
 
-                    if (empty($filenames_to_delete)) {
-                        return true;
+                if (empty($filenames_to_delete)) {
+                    return true;
+                }
+
+                // try to find the specific item in the list of files
+
+                $filenames_for_item = array();
+
+                foreach ($filenames_to_delete as $filename) {
+
+                    $stripped_filename = strrchr($filename, '_'); // look for the last chunk after _ in the file name with result: _id.jpg or _id@2x.jpg
+
+                    $chunks = explode('.', $stripped_filename);
+                    if ((string)$contact_id === ltrim($chunks[0], '_')) {
+                        $filenames_for_item[] = $filename;
+                        $filenames_for_item[] = str_replace(".", "@2x.", $filename); // add the possible @2x file
                     }
+                }
 
-                    // try to find the specific item in the list of files
+                if (empty($filenames_for_item)) {
+                    return true;
+                }
 
-                    $filenames_for_item = array();
+                $filenames_to_delete = $filenames_for_item;
 
-                    foreach ($filenames_to_delete as $filename) {
+                $some_files_deleted = $this->deleteFiles($filenames_to_delete);
 
-                        $stripped_filename = strrchr($filename, '_'); // look for the last chunk after _ in the file name with result: _id.jpg or _id@2x.jpg
-
-                        $chunks = explode('.', $stripped_filename);
-                        if ((string)$contact_id === ltrim($chunks[0], '_')) {
-                            $filenames_for_item[] = $filename;
-                            $filenames_for_item[] = str_replace(".", "@2x.", $filename); // add the possible @2x file
-                        }
-                    }
-
-                    if (empty($filenames_for_item)) {
-                        return true;
-                    }
-
-                    $filenames_to_delete = $filenames_for_item;
-
-                    $some_files_deleted = false;
-                    foreach ($filenames_to_delete as $filename) {
-                        if (File::exists($filename)) {
-                            if (File::delete($filename)) {
-                                $some_files_deleted = true; // deleted the file
-                                if ($this->params->get('verbose', 0) != 0) {
-                                    Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_SYWAUTORESET_INFO_FILEDELETED', str_replace('\\', '/', str_replace(JPATH_ROOT, '', $filename))), 'message');
-                                }
-                            } else {
-                                if ($this->params->get('verbose', 0) != 0) {
-                                    Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_SYWAUTORESET_ERROR_DELETINGFILE', str_replace('\\', '/', str_replace(JPATH_ROOT, '', $filename))), 'warning');
-                                }
-                            }
-                        }
-                    }
-
-                    if ($some_files_deleted && $this->params->get('verbose', 0) != 0) {
-                        Factory::getApplication()->enqueueMessage(Text::_('PLG_SYSTEM_SYWAUTORESET_INFO_IMAGECACHECLEARED'), 'message');
-                    }
-
-                //} else {
-                    // could not delete files, can't use the plugin
-                    //JFactory::getApplication()->enqueueMessage(JText::_('PLG_SYSTEM_SYWAUTORESET_WARNING_CANNOTUSEPLUGIN'), 'warning');
-                //}
+                if ($some_files_deleted && ($this->params->get('verbose', 0) == 1 || ($this->app->isClient('site') && $this->params->get('verbose', 0) == 3))) {
+                    Factory::getApplication()->enqueueMessage(Text::_('PLG_SYSTEM_SYWAUTORESET_INFO_IMAGECACHECLEARED'), 'message');
+                }
             }
         }
 
@@ -192,15 +168,15 @@ class plgSystemSYWAutoReset extends CMSPlugin
     		return true;
     	}
     	
-    	if ($context != 'com_content.article' && $context != 'com_content.form' && $context != 'com_k2.item' && $context != 'com_contact.contact' && $context != 'com_trombinoscopeextended.usercontact' && $context != 'com_weblinks.weblink' && $context != 'com_weblinklogospro.weblink') {
-            return true;
+    	if (!in_array($context, $this->contexts)) {
+    	    return true;
         }
 
         // go through if article is in any of the categories selected
 
         if ($context == 'com_content.article' || $context == 'com_content.form') {
 
-            $categories_array = $this->params->get('article_cat', array());
+            $categories_array = $this->params->get('article_cat', array('none'));
 
             $array_of_category_values = array_count_values($categories_array);
             if (isset($array_of_category_values['none']) && $array_of_category_values['none'] > 0) { // 'none' was selected
@@ -239,7 +215,7 @@ class plgSystemSYWAutoReset extends CMSPlugin
             }
         } else if ($context == 'com_k2.item') {
 
-            $categories_array = $this->params->get('k2_cat', array());
+            $categories_array = $this->params->get('k2_cat', array('none'));
 
             $array_of_category_values = array_count_values($categories_array);
             if (isset($array_of_category_values['none']) && $array_of_category_values['none'] > 0) { // 'none' was selected
@@ -279,7 +255,7 @@ class plgSystemSYWAutoReset extends CMSPlugin
             }
         } else if ($context == 'com_contact.contact' || $context == 'com_trombinoscopeextended.usercontact') {
 
-            $categories_array = $this->params->get('contact_cat', array());
+            $categories_array = $this->params->get('contact_cat', array('none'));
 
             $array_of_category_values = array_count_values($categories_array);
             if (isset($array_of_category_values['none']) && $array_of_category_values['none'] > 0) { // 'none' was selected
@@ -318,7 +294,7 @@ class plgSystemSYWAutoReset extends CMSPlugin
             }
         } else if ($context == 'com_weblinks.weblink' || $context == 'com_weblinklogospro.weblink') {
 
-            $categories_array = $this->params->get('weblink_cat', array());
+            $categories_array = $this->params->get('weblink_cat', array('none'));
 
             $array_of_category_values = array_count_values($categories_array);
             if (isset($array_of_category_values['none']) && $array_of_category_values['none'] > 0) { // 'none' was selected
@@ -363,77 +339,80 @@ class plgSystemSYWAutoReset extends CMSPlugin
 
         $this->loadLanguage();
 
-        //if (function_exists('glob')) {
+        $filenames_to_delete = array();
 
-            $filenames_to_delete = array();
+        foreach ($paths as $path) {
+            $filenames = Folder::files(JPATH_ROOT.$path, '.png|.jpg|.jpeg|.gif|.webp|.avif', false, true); // tests if the folder exists but returns warning
+            if ($filenames != false) {
+                $filenames_to_delete = array_merge($filenames_to_delete, $filenames);
+            }
+        }
 
-            foreach ($paths as $path) {
-                //$filenames = glob(JPATH_SITE.$path.'/*.{png,jpg,gif}', GLOB_BRACE);
-                $filenames = Folder::files(JPATH_ROOT.$path, '.png|.jpg|.jpeg|.gif|.webp', false, true); // tests if the folder exists but returns warning
-                if ($filenames != false) {
-                    $filenames_to_delete = array_merge($filenames_to_delete, $filenames);
+        if (empty($filenames_to_delete)) {
+            return true;
+        }
+
+        // try to find the specific item in the list of files
+
+        $filenames_for_item = array();
+
+        foreach ($filenames_to_delete as $filename) {
+
+            if ($context == 'com_weblinks.weblink' || $context == 'com_weblinklogospro.weblink') {
+                $stripped_filename = $filename;
+                foreach ($this->filter_names as $filter_name) { // there are 1 or 2 filters in the file name AFTER the weblink id
+                    $stripped_filename = str_replace('_'.$filter_name, '', $stripped_filename);
                 }
+                
+                $stripped_filename = str_replace('_hover', '', $stripped_filename);
+                
+                $stripped_filename = strrchr($stripped_filename, '_'); // look for the last chunk after _ in the file name with result: _id.jpg or _id@2x.jpg
+            } else {
+                $stripped_filename = strrchr($filename, '_'); // look for the last chunk after _ in the file name with result: _id.jpg or _id@2x.jpg
             }
 
-            if (empty($filenames_to_delete)) {
-                return true;
+            $chunks = explode('.', $stripped_filename);
+            if ((string)$item->id === ltrim($chunks[0], '_')) {
+                $filenames_for_item[] = $filename;
+                $filenames_for_item[] = str_replace(".", "@2x.", $filename); // add the possible @2x file
             }
+        }
 
-            // try to find the specific item in the list of files
+        if (empty($filenames_for_item)) {
+            return true;
+        }
 
-            $filenames_for_item = array();
+        $filenames_to_delete = $filenames_for_item;
 
-            foreach ($filenames_to_delete as $filename) {
-
-                if ($context == 'com_weblinks.weblink' || $context == 'com_weblinklogospro.weblink') {
-                    $stripped_filename = $filename;
-                    foreach ($this->filter_names as $filter_name) { // there are 1 or 2 filters in the file name AFTER the weblink id
-                        $stripped_filename = str_replace ('_'.$filter_name, '', $stripped_filename);
-                    }
-                    $stripped_filename = strrchr($stripped_filename, '_'); // look for the last chunk after _ in the file name with result: _id.jpg or _id@2x.jpg
-                } else {
-                    $stripped_filename = strrchr($filename, '_'); // look for the last chunk after _ in the file name with result: _id.jpg or _id@2x.jpg
-                }
-
-                $chunks = explode('.', $stripped_filename);
-                if ((string)$item->id === ltrim($chunks[0], '_')) {
-                    $filenames_for_item[] = $filename;
-                    $filenames_for_item[] = str_replace(".", "@2x.", $filename); // add the possible @2x file
-                }
-            }
-
-            if (empty($filenames_for_item)) {
-                return true;
-            }
-
-            $filenames_to_delete = $filenames_for_item;
-
-            $some_files_deleted = false;
-            foreach ($filenames_to_delete as $filename) {
-                if (File::exists($filename)) {
-                    if (File::delete($filename)) {
-                        $some_files_deleted = true; // deleted the file
-                        if ($this->params->get('verbose', 0) == 1 || ($this->app->isClient('administrator') && $this->params->get('verbose', 0) == 2) || ($this->app->isClient('site') && $this->params->get('verbose', 0) == 3)) {
-                            Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_SYWAUTORESET_INFO_FILEDELETED', str_replace('\\', '/', str_replace(JPATH_ROOT, '', $filename))), 'message');
-                        }
-                    } else {
-                        if ($this->params->get('verbose', 0) == 1 || ($this->app->isClient('administrator') && $this->params->get('verbose', 0) == 2) || ($this->app->isClient('site') && $this->params->get('verbose', 0) == 3)) {
-                            Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_SYWAUTORESET_ERROR_DELETINGFILE', str_replace('\\', '/', str_replace(JPATH_ROOT, '', $filename))), 'warning');
-                        }
-                    }
-                }
-            }
-
-            if ($some_files_deleted && ($this->params->get('verbose', 0) == 1 || ($this->app->isClient('administrator') && $this->params->get('verbose', 0) == 2) || ($this->app->isClient('site') && $this->params->get('verbose', 0) == 3))) {
-                Factory::getApplication()->enqueueMessage(Text::_('PLG_SYSTEM_SYWAUTORESET_INFO_IMAGECACHECLEARED'), 'message');
-            }
-
-        //} else {
-            // could not delete files, can't use the plugin
-            //JFactory::getApplication()->enqueueMessage(JText::_('PLG_SYSTEM_SYWAUTORESET_WARNING_CANNOTUSEPLUGIN'), 'warning');
-        //}
+        $some_files_deleted = $this->deleteFiles($filenames_to_delete);
+        
+        if ($some_files_deleted && ($this->params->get('verbose', 0) == 1 || ($this->app->isClient('administrator') && $this->params->get('verbose', 0) == 2) || ($this->app->isClient('site') && $this->params->get('verbose', 0) == 3))) {
+            Factory::getApplication()->enqueueMessage(Text::_('PLG_SYSTEM_SYWAUTORESET_INFO_IMAGECACHECLEARED'), 'message');
+        }
 
         return true;
+    }
+    
+    protected function deleteFiles($filenames_to_delete) 
+    {
+        $some_files_deleted = false;
+        
+        foreach ($filenames_to_delete as $filename) {
+            if (File::exists($filename)) {
+                if (File::delete($filename)) {
+                    $some_files_deleted = true; // deleted the file
+                    if ($this->params->get('verbose', 0) == 1 || ($this->app->isClient('administrator') && $this->params->get('verbose', 0) == 2) || ($this->app->isClient('site') && $this->params->get('verbose', 0) == 3)) {
+                        Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_SYWAUTORESET_INFO_FILEDELETED', str_replace('\\', '/', str_replace(JPATH_ROOT, '', $filename))), 'message');
+                    }
+                } else {
+                    if ($this->params->get('verbose', 0) == 1 || ($this->app->isClient('administrator') && $this->params->get('verbose', 0) == 2) || ($this->app->isClient('site') && $this->params->get('verbose', 0) == 3)) {
+                        Factory::getApplication()->enqueueMessage(Text::sprintf('PLG_SYSTEM_SYWAUTORESET_ERROR_DELETINGFILE', str_replace('\\', '/', str_replace(JPATH_ROOT, '', $filename))), 'warning');
+                    }
+                }
+            }
+        }
+        
+        return $some_files_deleted;
     }
 
     protected function getPaths($context)

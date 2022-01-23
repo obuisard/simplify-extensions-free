@@ -63,7 +63,6 @@ class plgsystemsywautoresetInstallerScript
 		}
 
 		if (!Folder::exists(JPATH_ROOT.'/modules/mod_latestnewsenhanced')
-		    && !Folder::exists(JPATH_ROOT.'/modules/mod_latestnewsenhancedextended')
 			//&& !Folder::exists(JPATH_ROOT.'/modules/mod_trulyresponsiveslides')
 			//&& !Folder::exists(JPATH_ROOT.'/modules/mod_trulyresponsiveslider')
 		    && !Folder::exists(JPATH_ROOT.'/modules/mod_trombinoscope')
