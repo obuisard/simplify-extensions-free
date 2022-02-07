@@ -1,0 +1,10 @@
+{ 
+	"prefix" : "fas fa-",
+	"groups" : {
+		"other" : 
+		[ 
+			"bell",
+			"birthday-cake"
+		]
+	}
+}
