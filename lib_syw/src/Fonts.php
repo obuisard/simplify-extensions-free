@@ -73,6 +73,7 @@ class Fonts
 
 	    switch ($name) {
 	        case 'icomoon' : self::getWebAssetManager()->registerAndUseStyle('syw.font.icomoon', 'syw/fonts-icomoon' . $minified . '.css', ['relative' => true, 'version' => 'auto'], $attributes); break;
+	        case 'fontawesome' : self::getWebAssetManager()->useStyle('fontawesome'); break; // loads fontawesome and icomoon B/C from web asset, probably already loaded on the page
 	        default: self::getWebAssetManager()->registerAndUseStyle('syw.font', 'syw/fonts' . $minified . '.css', ['relative' => true, 'version' => 'auto'], $attributes);
 	    }
 

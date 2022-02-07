@@ -63,7 +63,7 @@ class SywverbosetextunitsField extends ListField
 
 		$class = !empty($this->class) ? 'class="form-control '.$this->class.'"' : 'class="form-control"';
 
-		$html .= '<div class="input-group">';
+		$html .= '<div class="textunitfield input-group">';
 
 		if ($this->icon) {
 		    $wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
@@ -99,6 +99,21 @@ class SywverbosetextunitsField extends ListField
 									document.getElementById("' . $this->id . '_unit_text").innerHTML = this.textContent;
 								});
 							}
+
+                            document.addEventListener("subform-row-add", function(e) {
+                                let sywvtu = e.detail.row.querySelector(".textunitfield");
+                                if (sywvtu != null) {
+                                    let sywvtu_unit_input = sywvtu.querySelector("input[type=\'hidden\']");
+                                    let sywvtu_unit_text = sywvtu.querySelector(".unittext");
+                                    let sywvtu_units = sywvtu.querySelectorAll(".dropdown-item");
+                                    for (let i = 0; i < sywvtu_units.length; i++) {
+								        sywvtu_units[i].addEventListener("click", function(event) {
+									       sywvtu_unit_input.value = this.textContent;
+									       sywvtu_unit_text.innerHTML = this.textContent;
+								        });
+                                    }
+                                }
+                            });
 						}
 					});
 				');
@@ -107,7 +122,7 @@ class SywverbosetextunitsField extends ListField
 
 				$html .= '<div class="btn-group">';
 					$html .= '<button type="button" id="'.$this->id.'_ddb" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-						$html .= '<span id="'.$this->id.'_unit_text">'.$this->values['unit'].'</span>';
+						$html .= '<span class="unittext" id="'.$this->id.'_unit_text">'.$this->values['unit'].'</span>';
 					$html .= '</button>';
 					$html .= '<ul class="dropdown-menu" aria-labelledby="'.$this->id.'_ddb">';
 					foreach ($unit_selection as $unit) {
