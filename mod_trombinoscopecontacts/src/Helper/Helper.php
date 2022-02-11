@@ -664,12 +664,12 @@ abstract class Helper
 			        $subQuery->where($db->quoteName('cfv.field_id').' = ' . $db->quote($customfield_filter['id']));
 			        
 			        // any category for the field? if so, join with categories. If not, do not join
-			        if (!empty(FieldsHelper::getAssignedCategoriesTitles($customfield_filter['id']))) {
-			            if (!isset($array_of_category_values['all']) && !isset($array_of_category_values['auto']) && !empty($categories)) {
-			                $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');
-			                $subQuery->where($db->quoteName('cfc.category_id') . ' ' . ($params->get('cat_inex', 1) ? 'IN' : 'NOT IN') . ' (' . $categories . ')');
-			            }
-			        }
+// 			        if (!empty(FieldsHelper::getAssignedCategoriesTitles($customfield_filter['id']))) {
+// 			            if (!isset($array_of_category_values['all']) && !isset($array_of_category_values['auto']) && !empty($categories)) {
+// 			                $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');
+// 			                $subQuery->where($db->quoteName('cfc.category_id') . ' ' . ($params->get('cat_inex', 1) ? 'IN' : 'NOT IN') . ' (' . $categories . ')');
+// 			            }
+// 			        }
 			        
 			        if ($customfield_filter['inex']) {
 			            $subQuery->where($db->quoteName('cfv.value') . " = '" . implode("' OR " . $db->quoteName('cfv.value') . " = '", $customfield_filter['values']) . "'");
@@ -935,37 +935,37 @@ abstract class Helper
 					switch ($order) {
 						case 'fnf_fa' : // follow the name format - order on 1st part (asc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortCascSascFasc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortCascFascSasc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortCascLascFasc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortCascFascLasc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortCascSascFasc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortCascFascSasc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortCascLascFasc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortCascFascLasc')); break;
 								default : break;
 							}
 							break;
 						case 'fnf_fd' : // follow the name format - order on 1st part (desc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortCascSdescFdesc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortCascFdescSdesc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortCascLdescFdesc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortCascFdescLdesc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortCascSdescFdesc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortCascFdescSdesc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortCascLdescFdesc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortCascFdescLdesc')); break;
 								default : break;
 							}
 							break;
 						case 'fnf_la' : // follow the name format - order on 2nd part (asc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortCascFascSasc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortCascSascFasc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortCascFascLasc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortCascLascFasc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortCascFascSasc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortCascSascFasc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortCascFascLasc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortCascLascFasc')); break;
 								default : break;
 							}
 							break;
 						case 'fnf_ld' : // follow the name format - order on 2nd part (desc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortCascFdescSdesc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortCascSdescFdesc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortCascFdescLdesc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortCascLdescFdesc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortCascFdescSdesc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortCascSdescFdesc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortCascFdescLdesc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortCascLdescFdesc')); break;
 								default : break;
 							}
 							break;
@@ -975,37 +975,37 @@ abstract class Helper
 					switch ($order) {
 						case 'fnf_fa' : // follow the name format - order on 1st part (asc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortCdescSascFasc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortCdescFascSasc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortCdescLascFasc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortCdescFascLasc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortCdescSascFasc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortCdescFascSasc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortCdescLascFasc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortCdescFascLasc')); break;
 								default : break;
 							}
 							break;
 						case 'fnf_fd' : // follow the name format - order on 1st part (desc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortCdescSdescFdesc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortCdescFdescSdesc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortCdescLdescFdesc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortCdescFdescLdesc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortCdescSdescFdesc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortCdescFdescSdesc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortCdescLdescFdesc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortCdescFdescLdesc')); break;
 								default : break;
 							}
 							break;
 						case 'fnf_la' : // follow the name format - order on 2nd part (asc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortCdescFascSasc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortCdescSascFasc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortCdescFascLasc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortCdescLascFasc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortCdescFascSasc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortCdescSascFasc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortCdescFascLasc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortCdescLascFasc')); break;
 								default : break;
 							}
 							break;
 						case 'fnf_ld' : // follow the name format - order on 2nd part (desc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortCdescFdescSdesc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortCdescSdescFdesc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortCdescFdescLdesc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortCdescLdescFdesc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortCdescFdescSdesc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortCdescSdescFdesc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortCdescFdescLdesc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortCdescLdescFdesc')); break;
 								default : break;
 							}
 							break;
@@ -1015,37 +1015,37 @@ abstract class Helper
 					switch ($order) {
 						case 'fnf_fa' : // follow the name format - order on 1st part (asc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortSascFasc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortFascSasc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortLascFasc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortFascLasc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortSascFasc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortFascSasc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortLascFasc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortFascLasc')); break;
 								default : break;
 							}
 							break;
 						case 'fnf_fd' : // follow the name format - order on 1st part (desc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortSdescFdesc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortFdescSdesc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortLdescFdesc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortFdescLdesc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortSdescFdesc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortFdescSdesc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortLdescFdesc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortFdescLdesc')); break;
 								default : break;
 							}
 							break;
 						case 'fnf_la' : // follow the name format - order on 2nd part (asc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortFascSasc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortSascFasc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortFascLasc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortLascFasc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortFascSasc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortSascFasc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortFascLasc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortLascFasc')); break;
 								default : break;
 							}
 							break;
 						case 'fnf_ld' : // follow the name format - order on 2nd part (desc)
 							switch ($format_style) {
-								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, "modTrombinoscopeHelper::sortFdescSdesc"); break;
-								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, "modTrombinoscopeHelper::sortSdescFdesc"); break;
-								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, "modTrombinoscopeHelper::sortFdescLdesc"); break;
-								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, "modTrombinoscopeHelper::sortLdescFdesc"); break;
+								case 'rsf' : case 'rcf' : case 'rsfd' : case 'rdsf' : usort($items, array(__CLASS__, 'sortFdescSdesc')); break;
+								case 'fsr' : case 'fcr' : case 'fdsr' : case 'fsrd' : usort($items, array(__CLASS__, 'sortSdescFdesc')); break;
+								case 'lsp' : case 'lcp' : case 'ldsp' : case 'lspd' : usort($items, array(__CLASS__, 'sortFdescLdesc')); break;
+								case 'psl' : case 'pcl' : case 'psld' : case 'pdsl' : usort($items, array(__CLASS__, 'sortLdescFdesc')); break;
 								default : break;
 							}
 							break;
