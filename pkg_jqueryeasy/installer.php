@@ -40,7 +40,7 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 	/**
 	 * Link to the change logs
 	 */
-	protected $changelogLink = 'https://simplifyyourweb.com/downloads/jquery-easy/files/file/370-jquery-easy';
+	protected $changelogLink = 'https://simplifyyourweb.com/documentation/jquery-easy/installation/updating-older-versions';
 
 	/**
 	 * Link to the translation page
@@ -123,14 +123,14 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 
  		$current_language = Factory::getLanguage()->getTag();
  		if (!in_array($current_language, $this->availableLanguages)) {
- 			echo '<div class="alert alert-info">The ' . Factory::getLanguage()->getName() . ' language is missing for this extension.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a>.</div>';
+ 		    Factory::getApplication()->enqueueMessage('The ' . Factory::getLanguage()->getName() . ' language is missing for this component.<br /><a href="' . $this->translationLink . '" target="_blank">Please consider contributing to its translation</a> and get a license upgrade for your help!', 'info');
  		}
 
 		if ($action === 'update') {
 
 			// update warning
 
-			echo '<div class="alert alert-warning">' . Text::sprintf('PKG_JQUERYEASY_WARNING_RELEASENOTES', $this->changelogLink) . '</div>';
+			echo '<p><a class="btn btn-primary" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_JQUERYEASY_BUTTON_UPDATENOTES') . '</a></p>';
 			
 			// +++ Migration Joomla 3 to Joomla 4
 			
