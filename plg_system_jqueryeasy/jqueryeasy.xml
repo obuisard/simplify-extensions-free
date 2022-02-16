@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>5.0.2</version>
+	<version>5.0.3</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Plugin\System\JqueryEasy</namespace>
 	
@@ -61,7 +61,7 @@
 		
 			<fieldset name="basic" label="PLG_SYSTEM_JQUERYEASY_INFORMATION_LABEL" addfieldprefix="SYW\Library\Field">
 				
-				<field type="extensionversion" version="5.0.2" />
+				<field type="extensionversion" version="5.0.3" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_JQUERYEASY_TRANSLATORS" />
@@ -296,6 +296,7 @@
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUIVERSION_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUIVERSION_DESC">
 		                <option value="local">PLG_SYSTEM_JQUERYEASY_VALUE_CUSTOMLOCAL</option>
+	            		<option value="1.13">1.13.x</option>
 		            	<option value="1.12">1.12.x</option>
 		            	<option value="1.11">1.11.x</option>
 		            	<option value="1.10">1.10.x</option>
@@ -304,11 +305,11 @@
 		                <option value="1.7">PLG_SYSTEM_JQUERYEASY_VALUE_LATESTUI17</option>
 		            </field>
 		            
-		            <field name="jqueryuisubversion" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinpage:2[AND]jqueryuiversion:1.7,1.8,1.9,1.10,1.11,1.12" 
+		            <field name="jqueryuisubversion" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinpage:2[AND]jqueryuiversion:1.7,1.8,1.9,1.10,1.11,1.12,1.13" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUISUBVERSION_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUISUBVERSION_DESC" />
 						
-					<field type="cdnlinks" library="jqueryui" showon="jqueryinpage:2[AND]jqueryuiversion:1.7,1.8,1.9,1.10,1.11,1.12" />
+					<field type="cdnlinks" library="jqueryui" showon="jqueryinpage:2[AND]jqueryuiversion:1.7,1.8,1.9,1.10,1.11,1.12,1.13" />
 					
 		            <field name="localuiversion" type="text" default="" size="50" showon="jqueryinpage:2[AND]jqueryuiversion:local" class="input-xxlarge" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALUIVERSION_LABEL" 
@@ -475,6 +476,7 @@
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_POPPERVERSION_DESC">	
 		            	<option value="none">JNONE</option>
 	            	
+	            		<option value="2.11">2.11.x</option>
 	            		<option value="2.10">2.10.x</option>
 	            		<option value="2.9">2.9.x</option>
 	            		<option value="2.8">2.8.x</option>
