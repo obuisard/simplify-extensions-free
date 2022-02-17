@@ -1236,8 +1236,8 @@ class Helper
 							// order tags
 
 							switch ($params->get('order_tags', 'none')) {
-								case 'console': usort($item_tags, "Helper::compare_tags_by_console"); break;
-								case 'alpha': usort($item_tags, "Helper::compare_tags_by_name"); break;
+							    case 'console': usort($item_tags, array(__CLASS__, 'compare_tags_by_console')); break;
+							    case 'alpha': usort($item_tags, array(__CLASS__, 'compare_tags_by_name')); break;
 							}
 
 							if ($has_info_from_previous_detail) {
