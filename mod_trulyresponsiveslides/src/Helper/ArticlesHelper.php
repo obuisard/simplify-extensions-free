@@ -208,12 +208,12 @@ class ArticlesHelper
 		        $subQuery->where($db->quoteName('cfv.field_id').' = ' . $db->quote($customfield_filter['id']));
 		        
 		        // any category for the field? if so, join with categories. If not, do not join
-		        if (!empty(FieldsHelper::getAssignedCategoriesTitles($customfield_filter['id']))) {
-		            if (!isset($array_of_category_values['all']) && !empty($categories_array)) {
-		                $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');
-		                $subQuery->where($db->quoteName('cfc.category_id') . ' ' . ($params->get('cat_inex', 1) ? 'IN' : 'NOT IN') . ' (' . implode(',', $categories_array) . ')');
-		            }
-		        }
+// 		        if (!empty(FieldsHelper::getAssignedCategoriesTitles($customfield_filter['id']))) {
+// 		            if (!isset($array_of_category_values['all']) && !empty($categories_array)) {
+// 		                $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');
+// 		                $subQuery->where($db->quoteName('cfc.category_id') . ' ' . ($params->get('cat_inex', 1) ? 'IN' : 'NOT IN') . ' (' . implode(',', $categories_array) . ')');
+// 		            }
+// 		        }
 		        
 		        if ($customfield_filter['inex']) {
 		            $subQuery->where($db->quoteName('cfv.value') . " = '" . implode("' OR " . $db->quoteName('cfv.value') . " = '", $customfield_filter['values']) . "'");

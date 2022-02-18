@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>2.4.0</version>
+	<version>2.4.1</version>
 	<description>MOD_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrulyResponsiveSlides</namespace>
 	
@@ -57,7 +57,7 @@
 			
 			<fieldset name="basic" label="MOD_TRULYRESPONSIVESLIDER_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 								
-				<field type="extensionversion" version="2.4.0" />
+				<field type="extensionversion" version="2.4.1" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_TRULYRESPONSIVESLIDES_TRANSLATORS" />

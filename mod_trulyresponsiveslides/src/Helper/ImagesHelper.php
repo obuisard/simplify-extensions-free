@@ -39,7 +39,7 @@ class ImagesHelper
 
 		$order = $params->get('images_sort', 'string');
 		switch ($order) {
-			case 'date': usort($list, "ImagesHelper::dateSort"); break; // sort files by date
+		    case 'date': usort($list, array(__CLASS__, 'dateSort')); break; // sort files by date
 			default: sort($list, SORT_STRING); break;
 		}
 
