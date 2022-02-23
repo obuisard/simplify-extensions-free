@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.5.0</version>
+	<version>4.5.1</version>
 	<description>MOD_WEBLINKLOGO_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\WeblinkLogos</namespace>
 	
@@ -55,7 +55,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\WeblinkLogos\Site\Field">
 			<fieldset name="basic" label="MOD_WEBLINKLOGO_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.5.0" />
+				<field type="extensionversion" version="4.5.1" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_WEBLINKLOGO_TRANSLATORS" />
