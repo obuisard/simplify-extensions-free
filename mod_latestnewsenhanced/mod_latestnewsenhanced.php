@@ -83,8 +83,8 @@ if (empty($list)) { // $list can be an empty array
 
 	$show_errors = LNEHelper::isShowErrors($params);
 
-	$remove_whitespaces = LNEHelper::isRemoveWhitespaces($params);	
-	
+	$remove_whitespaces = LNEHelper::isRemoveWhitespaces($params);
+
 	if ($params->get('load_icon_font', 1)) {
 	    SYWFonts::loadIconFont();
 	}
@@ -528,12 +528,12 @@ if (empty($list)) { // $list can be an empty array
 		$label_prev = $prev_type == 'prev' ? Text::_('JPREV') : ($prev_type == 'label' ? trim($params->get('label_prev', '')) : '');
 
 		$prev_aria_label = Text::_('JPREV');
-		
+
 		$next_type = $params->get('next_type', '');
 		$label_next = $next_type == 'next' ? Text::_('JNEXT') : ($next_type == 'label' ? trim($params->get('label_next', '')) : '');
 
 		$next_aria_label = Text::_('JNEXT');
-		
+
 		$prev_next = true;
 		if ($pagination == 'p' || $pagination == 's') {
 			$prev_next = false;
@@ -566,7 +566,7 @@ if (empty($list)) { // $list can be an empty array
 
 		if ($generate_inline_scripts) {
 
-			$wam->addInlineScript($cache_anim_js->getBuffer());
+			$wam->addInlineScript($cache_anim_js->getBuffer(true));
 
 		} else {
 

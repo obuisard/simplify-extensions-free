@@ -8,7 +8,7 @@
 defined('_JEXEC') or die;
 
 // Explicitly declare the type of content
-header("Content-type: text/css; charset=UTF-8");
+//header("Content-type: text/css; charset=UTF-8");
 ?>
 
 	<?php echo $suffix; ?> ul.latestnews-items {
@@ -24,7 +24,7 @@ header("Content-type: text/css; charset=UTF-8");
 	    	margin-left: auto;
 	    	margin-right: auto;
 	    <?php endif; ?>
-	    
+
 	    display: -webkit-box;
 		display: -ms-flexbox;
 		display: flex;
@@ -67,8 +67,8 @@ header("Content-type: text/css; charset=UTF-8");
 		<?php if (!$horizontal) : ?>
 			-webkit-flex-direction: column;
 			-ms-flex-direction: column;
-			flex-direction: column;  			
-   			
+			flex-direction: column;
+
    			<?php if ($items_valign_col == 'fs') : ?>
 		    	-webkit-box-align: start;
 		    	-ms-flex-align: start;
@@ -113,20 +113,20 @@ header("Content-type: text/css; charset=UTF-8");
 		<?php else : ?>
 			font-size: medium;
 		<?php endif; ?>
-		
+
 		-webkit-box-flex: 1;
 		-ms-flex: 1 1 auto;
 		flex: 1 1 auto;
-			
+
     	width: <?php echo $item_width; ?><?php echo $item_width_unit; ?>;
-    	
+
     	<?php if ($item_min_width) : ?>
 			min-width: <?php echo $item_min_width; ?>px;
 		<?php endif; ?>
 		<?php if ($item_max_width) : ?>
 			max-width: <?php echo $item_max_width; ?>px;
 		<?php endif; ?>
-		
+
     	<?php if ($item_width_unit == '%') : ?>
     		margin: <?php echo intval($space_between_items / 2); ?>px <?php echo $margin_in_perc; ?>%;
     	<?php else : ?>
@@ -162,65 +162,65 @@ header("Content-type: text/css; charset=UTF-8");
 						-webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
 						box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
 						margin: 6px;
-						
-						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+
+						<?php if ($horizontal && $items_valign_row == 's') : ?>
 							height: calc(100% - 12px);
-						<?php endif; ?>						
-						
+						<?php endif; ?>
+
 					<?php endif; ?>
 					<?php if ($shadow_body == 'm') : ?>
 						-webkit-box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),0 1px 10px 0 rgba(0,0,0,0.12),0 2px 4px -1px rgba(0,0,0,0.3);
 						box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),0 1px 10px 0 rgba(0,0,0,0.12),0 2px 4px -1px rgba(0,0,0,0.3);
 						margin: 11px;
-						
-						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+
+						<?php if ($horizontal && $items_valign_row == 's') : ?>
 							height: calc(100% - 22px);
-						<?php endif; ?>						
-						
+						<?php endif; ?>
+
 					<?php endif; ?>
 					<?php if ($shadow_body == 'l') : ?>
 						-webkit-box-shadow: 0 8px 17px 2px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12),0 5px 5px -3px rgba(0,0,0,0.2);
 						box-shadow: 0 8px 17px 2px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12),0 5px 5px -3px rgba(0,0,0,0.2);
 						margin: 27px;
-						
-						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+
+						<?php if ($horizontal && $items_valign_row == 's') : ?>
 							height: calc(100% - 54px);
 						<?php endif; ?>
-						
+
 					<?php endif; ?>
 					<?php if ($shadow_body == 'ss') : ?>
 						-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
 						box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
 						margin: 5px;
-						
-						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+
+						<?php if ($horizontal && $items_valign_row == 's') : ?>
 							height: calc(100% - 10px);
 						<?php endif; ?>
-						
+
 					<?php endif; ?>
 					<?php if ($shadow_body == 'sm') : ?>
 						-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
 						box-shadow: 1px 1px 10px rgba(51, 51, 51, 0.2);
 						margin: 11px;
-						
-						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+
+						<?php if ($horizontal && $items_valign_row == 's') : ?>
 							height: calc(100% - 22px);
-						<?php endif; ?>						
-						
+						<?php endif; ?>
+
 					<?php endif; ?>
 					<?php if ($shadow_body == 'sl') : ?>
 						-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
 						box-shadow: 1px 1px 15px rgba(51, 51, 51, 0.2);
 						margin: 16px;
-						
-						<?php if ($horizontal && $items_valign_row == 's') : ?>						
+
+						<?php if ($horizontal && $items_valign_row == 's') : ?>
 							height: calc(100% - 32px);
-						<?php endif; ?>						
-						
+						<?php endif; ?>
+
 					<?php endif; ?>
 					<?php if ($padding_body > 0) : ?>
 						padding: <?php echo $padding_body; ?>px;
-					<?php endif; ?>				
+					<?php endif; ?>
 					<?php if ($font_color_body) : ?>
 						color: <?php echo $font_color_body; ?>;
 					<?php endif; ?>
@@ -230,32 +230,32 @@ header("Content-type: text/css; charset=UTF-8");
 			<?php if ($link_color_body) : ?>
 				<?php echo $suffix; ?> .innernews a:not(.btn) {
 					color: <?php echo $link_color_body; ?>;
-				}			
+				}
 			<?php endif; ?>
-			
+
 			<?php if ($link_color_hover_body) : ?>
 				<?php echo $suffix; ?> .innernews a:not(.btn):hover,
 				<?php echo $suffix; ?> .innernews a:not(.btn):focus {
 					color: <?php echo $link_color_hover_body; ?>;
 					text-decoration: underline;
-				}			
-			<?php endif; ?>			
+				}
+			<?php endif; ?>
 
-				<?php if ($padding_head) : ?>			
+				<?php if ($padding_head) : ?>
 					<?php echo $suffix; ?> .newshead {
 						padding: <?php echo $padding_head; ?>px !important;
 					}
 				<?php endif; ?>
-				
-				<?php if ($padding_info) : ?>			
+
+				<?php if ($padding_info) : ?>
 					<?php echo $suffix; ?> .newsinfo,
 					<?php echo $suffix; ?> .newsinfooverhead {
 						padding: <?php echo $padding_info; ?>px !important;
 					}
-				<?php endif; ?>					
+				<?php endif; ?>
 
 			<?php if ($image) : ?>
-			
+
 				<?php if ($head_width <= 0 || $head_height <= 0) : ?>
 					<?php echo $suffix; ?> .newshead .picture {
 						overflow: hidden;
@@ -267,10 +267,10 @@ header("Content-type: text/css; charset=UTF-8");
 							background-color: <?php echo $bgcolor; ?>;
 						<?php endif; ?>
 					}
-					
+
 					<?php echo $suffix; ?> .newshead .nopicture {
 						display: none;
-					}			
+					}
 				<?php else : ?>
 					<?php echo $suffix; ?> .newshead .picture,
 					<?php echo $suffix; ?> .newshead .nopicture {
@@ -306,12 +306,12 @@ header("Content-type: text/css; charset=UTF-8");
     				width: 100%;
     				cursor: pointer;
 				}
-				
+
 				<?php echo $suffix; ?> .newshead .picture .innerpicture a:hover,
 				<?php echo $suffix; ?> .newshead .nopicture > a:hover {
 					text-decoration: none;
 				}
-	
+
 				<?php echo $suffix; ?> .newshead .picture img {
 					max-width: 100%;
 					max-height: 100%;
@@ -341,10 +341,10 @@ header("Content-type: text/css; charset=UTF-8");
 						height: <?php echo $head_height; ?>px;
 					}
 
-					<?php echo $suffix; ?> .newshead .calendar .position1, 
-					<?php echo $suffix; ?> .newshead .calendar .position2, 
-					<?php echo $suffix; ?> .newshead .calendar .position3, 
-					<?php echo $suffix; ?> .newshead .calendar .position4, 
+					<?php echo $suffix; ?> .newshead .calendar .position1,
+					<?php echo $suffix; ?> .newshead .calendar .position2,
+					<?php echo $suffix; ?> .newshead .calendar .position3,
+					<?php echo $suffix; ?> .newshead .calendar .position4,
 					<?php echo $suffix; ?> .newshead .calendar .position5 {
 						display: block;
 					}

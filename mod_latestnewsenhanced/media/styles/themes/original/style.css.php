@@ -8,7 +8,7 @@
 defined('_JEXEC') or die;
 
 // Explicitly declare the type of content
-header("Content-type: text/css; charset=UTF-8");
+//header("Content-type: text/css; charset=UTF-8");
 ?>
 
 <?php echo $suffix; ?> ul.latestnews-items li.latestnews-item.active {
@@ -25,7 +25,7 @@ header("Content-type: text/css; charset=UTF-8");
 			margin: 0 0 0 8px;
 		}
 
-			<?php if ($head_align) : ?>	
+			<?php if ($head_align) : ?>
 				<?php echo $suffix; ?> .text_top .newshead > div,
 				<?php echo $suffix; ?> .text_bottom .newshead > div {
 					<?php if ($head_align == 'left') : ?>
@@ -36,7 +36,7 @@ header("Content-type: text/css; charset=UTF-8");
 						margin: 0 auto;
 					<?php endif; ?>
 				}
-			<?php endif; ?>	
+			<?php endif; ?>
 
 		<?php echo $suffix; ?> .head_left .newsinfooverhead,
 		<?php echo $suffix; ?> .head_right .newsinfooverhead,

@@ -8,7 +8,7 @@
 defined('_JEXEC') or die;
 
 // Explicitly declare the type of content
-header("Content-type: text/css; charset=UTF-8");
+//header("Content-type: text/css; charset=UTF-8");
 
 // Marine color scheme
 
@@ -36,23 +36,23 @@ header("Content-type: text/css; charset=UTF-8");
 
 	<?php echo $suffix; ?> .innernews {
 		background-color: var(--primaryColor);
-		
+
 		background: -webkit-linear-gradient(left, var(--primaryColor) 0%,#57bc90 100%);
 		background: linear-gradient(to right, var(--primaryColor) 0%,#57bc90 100%);
-		
+
 		color: var(--textColor);
 		border-color: var(--primaryColor);
 	}
-	
+
 	<?php echo $suffix; ?> .innernews a:not(.btn) {
 		color: var(--linkColor);
-	}	
-	
+	}
+
 	<?php echo $suffix; ?> .innernews a:not(.btn):hover,
 	<?php echo $suffix; ?> .innernews a:not(.btn):focus {
 		color: var(--linkHoverColor);
 	}
-	
+
 	<?php echo $suffix; ?> .innernews a.btn.btn-theme {
 		background-color: var(--buttonColor);
 		background-image: none;
@@ -60,36 +60,36 @@ header("Content-type: text/css; charset=UTF-8");
 		border-color: transparent;
 		text-shadow: none;
 	}
-	
+
 	<?php echo $suffix; ?> .innernews a.btn.btn-theme:hover,
 	<?php echo $suffix; ?> .innernews a.btn.btn-theme:focus {
 		background-color: var(--buttonHoverColor);
 		color: #fff;
 	}
-	
+
 	<?php echo $suffix; ?> .newsextra {
 		color: var(--textColor);
 	}
-	
+
 	<?php echo $suffix; ?> .over_head .newsextra {
 		color: var(--textOverColor);
 	}
-	
+
 	<?php echo $suffix; ?> .newsextra [class^="SYWicon-"],
 	<?php echo $suffix; ?> .newsextra [class*=" SYWicon-"] {
 	    color: var(--iconColor);
 	}
-	
+
 	<?php echo $suffix; ?> .over_head .newsextra [class^="SYWicon-"],
 	<?php echo $suffix; ?> .over_head .newsextra [class*=" SYWicon-"] {
 	    color: var(--iconOverColor);
 	}
-	
+
 	<?php echo $suffix; ?> .innernews .bg-theme {
 		background-color: var(--labelColor);
 		color: #fff!important;
 	}
-	
+
 	<?php echo $suffix; ?> .newshead .picture,
 	<?php echo $suffix; ?> .newshead .nopicture,
 	<?php echo $suffix; ?> .newshead .calendar,

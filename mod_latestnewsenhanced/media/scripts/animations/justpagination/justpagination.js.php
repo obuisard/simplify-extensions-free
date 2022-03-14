@@ -8,7 +8,7 @@
 defined('_JEXEC') or die;
 
 // Explicitly declare the type of content
-header("Content-type: text/javascript; charset=UTF-8");
+//header("Content-type: text/javascript; charset=UTF-8");
 
 // DO NOT ADD COMMENTS TO THE CODE -  IT WILL PREVENT COMPRESSION
 ?>

@@ -151,12 +151,12 @@ class Helper
 				return $result;
 			}
 		}
-		
+
 		switch ($thumbnail_mime_type) {
 		    case 'image/jpg': $imageext = 'jpg'; break;
 		    case 'image/png': $imageext = 'png'; break;
 		    case 'image/webp': $imageext = 'webp'; break;
-		    case 'image/avif': $imageext = 'avif'; 
+		    case 'image/avif': $imageext = 'avif';
 		}
 
 		$filename = $tmp_path . '/thumb_' . $module_id . '_' . $item_id . '.' . $imageext;
@@ -183,20 +183,20 @@ class Helper
 			}
 
 			if ($image->toThumbnail($filename, $thumbnail_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution)) {
-    
+
     			if ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif') { // create fallback
-    				
+
     			    $fallback_extension = 'png';
     			    $fallback_mime_type = 'image/png';
-    			    
+
     			    // create fallback with original image mime type when the original is not webp or avif
     			    if ($image->getImageMimeType() !== 'image/webp' && $image->getImageMimeType() !== 'image/avif') {
     			        $fallback_extension = $original_imageext;
     			        $fallback_mime_type = $image->getImageMimeType();
     			    }
-    			    
+
     			    $quality = self::getImageQualityFromExt($fallback_extension, $image_quality_array);
-                        
+
     			    if (!$image->toThumbnail($tmp_path . '/thumb_' . $module_id . '_' . $item_id . '.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution)) {
     					$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
     				}
@@ -214,18 +214,18 @@ class Helper
 
 		return $result;
 	}
-	
+
 	static protected function getImageQualityFromExt($image_extension, $qualities = array('jpg' => 75, 'png' => 3, 'webp' => 80, 'avif' => 80))
 	{
 	    $quality = -1;
-	    
+
 	    switch ($image_extension){
 	        case 'jpg': case 'jpeg': $quality = $qualities['jpg']; break; // 0 to 100
 	        case 'png': $quality = round(11.111111 * (9 - $qualities['png'])); break; // compression: 0 to 9
 	        case 'webp': $quality = $qualities['webp']; break; // 0 to 100
 	        case 'avif': $quality = $qualities['avif']; // 0 to 100
 	    }
-	    
+
 	    return $quality;
 	}
 
@@ -308,7 +308,7 @@ class Helper
 	/**
 	* Create the first part of the <a> tag
 	*/
-	static function getHtmlATag($module, $item, $follow = true, $tooltip = true, $popup_width = '600', $popup_height = '500', $css_classes = '', $anchors = '', $add_aria_label = false)
+	static function getHtmlATag($module, $item, $follow = true, $tooltip = true, $popup_width = '600', $popup_height = '500', $css_classes = '', $anchors = '', $add_aria_label = true)
 	{
 		$module_params = json_decode($module->params);
 
@@ -325,7 +325,7 @@ class Helper
 	/*
 	 * for B/C
 	 */
-	static function getATag($item, $follow = true, $tooltip = true, $popup_width = '600', $popup_height = '500', $css_classes = '', $anchors = '', $module_id = 0, $add_aria_label = false, $bootstrap_version = 2)
+	static function getATag($item, $follow = true, $tooltip = true, $popup_width = '600', $popup_height = '500', $css_classes = '', $anchors = '', $module_id = 0, $add_aria_label = true, $bootstrap_version = 2)
 	{
 		$attribute_title = '';
 		$attribute_class = '';
@@ -398,18 +398,18 @@ class Helper
 
 		return array('years' => $difference->y, 'months' => $difference->m, 'days' => $difference->d, 'hours' => $difference->h, 'mins' => $difference->i, 'secs' => $difference->s);
 	}
-	
+
 	static function isInfoTypeRequired($info_type, $params)
 	{
 	    if (in_array($info_type, self::getDetailsInfoTypes($params))) {
 	        return true;
 	    }
-	    
+
 	    return false;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param object $params
 	 * @param string $prefix
 	 * @param string $subform
@@ -418,9 +418,9 @@ class Helper
 	static function getDetailsInfoTypes($params, $prefix = '', $subform = 'information_blocks')
 	{
 	    $info_types = array();
-	    
+
 	    // get data from subform items
-	    
+
 	    if ($prefix.$subform) {
 	        $information_blocs = $params->get($prefix.$subform); // array of objects
 	        if (!empty($information_blocs) && is_object($information_blocs)) {
@@ -431,7 +431,7 @@ class Helper
 	            }
 	        }
 	    }
-	    
+
 	    return $info_types;
 	}
 

@@ -37,10 +37,10 @@ class CSSFileCache extends HeaderFilesCache
 
 		$items_align = $params->get('items_align', 'c');
 		$variables[] = 'items_align';
-		
+
 		$items_valign_row = $params->get('items_valign_h', 'fs');
 		$variables[] = 'items_valign_row';
-		
+
 		$items_valign_col = $params->get('items_valign_v', 'c');
 		$variables[] = 'items_valign_col';
 
@@ -96,53 +96,53 @@ class CSSFileCache extends HeaderFilesCache
 		$variables[] = 'maintain_height';
 
 		$bgcolor_body = trim($params->get('bgcolor', '')) != '' ? trim($params->get('bgcolor')) : 'transparent';
-		$variables[] = 'bgcolor_body';		
-		
+		$variables[] = 'bgcolor_body';
+
 		$border_width_body = $params->get('item_border_w', 0);
 		$variables[] = 'border_width_body';
-		
+
 		$border_color_body = trim($params->get('item_border_c', ''));
 		$variables[] = 'border_color_body';
-		
+
 		$border_radius_body = $params->get('item_border_r', 0);
 		$variables[] = 'border_radius_body';
-		
+
 		$shadow_body = $params->get('item_shadow', 'none');
 		$variables[] = 'shadow_body';
-		
+
 		$padding_body = $params->get('d_to_b', 0);
 		$variables[] = 'padding_body';
-		
+
 		$padding_head = trim($params->get('space_head', ''));
 		$variables[] = 'padding_head';
-		
+
 		$padding_info = trim($params->get('space_body', ''));
-		$variables[] = 'padding_info';		
-		
+		$variables[] = 'padding_info';
+
 		$content_align = $params->get('content_align', '');
 		$variables[] = 'content_align';
-		
+
 		$font_color_body = trim($params->get('item_color', ''));
 		if ($font_color_body == 'transparent') {
 			$font_color_body = '';
 		}
 		$variables[] = 'font_color_body';
-		
+
 		$link_color_body = trim($params->get('item_l_color', ''));
 		if ($link_color_body == 'transparent') {
 			$link_color_body = '';
 		}
 		$variables[] = 'link_color_body';
-		
+
 		$link_color_hover_body = trim($params->get('item_l_color_h', ''));
 		if ($link_color_hover_body == 'transparent') {
 			$link_color_hover_body = '';
 		}
 		$variables[] = 'link_color_hover_body';
-		
+
 		$force_title_one_line = $params->get('force_one_line', 0);
 		$variables[] = 'force_title_one_line';
-		
+
 		$font_ref_body = $params->get('f_r_body', 14);
 		$variables[] = 'font_ref_body';
 
@@ -177,11 +177,11 @@ class CSSFileCache extends HeaderFilesCache
 		// head
 
 		$head_align = $params->get('head_align', '');
-		
+
 		if (in_array($params->get('text_align', 'r'), array('l', 'r', 'lr', 'rl'))) {
 			$head_align = '';
 		}
-		
+
 		$variables[] = 'head_align';
 
 		$head_width = $params->get('head_w', 64);
@@ -334,7 +334,7 @@ class CSSFileCache extends HeaderFilesCache
 //		}
 
 		// set the header
-		$this->sendHttpHeaders('css');
+		//$this->sendHttpHeaders('css');
 
 		if ($colortheme) {
 			include JPATH_ROOT . '/media/mod_latestnewsenhanced/styles/colors/'.$colortheme.'/style.css.php';
