@@ -536,27 +536,27 @@ class SywiconpickerField extends FormField
 		$lang->load('lib_syw.sys', JPATH_SITE);
 
 		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
-		HTMLHelper::_('bootstrap.dropdown', '.dropdown-toggle'); 
+		HTMLHelper::_('bootstrap.dropdown', '.dropdown-toggle');
 
 		$wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
 
 		if ($this->icomoon) {
 		    $wam->registerAndUseStyle('syw.font.icomoon', 'syw/fonts-icomoon-min.css', ['relative' => true, 'version' => 'auto']);
 		}
-		
+
 		$transition_method = SYWStylesheets::getTransitionMethod('hvr-radial-out');
 		SYWStylesheets::$transition_method();
-		
+
 		$wam->addInlineScript('
 			document.addEventListener("readystatechange", function(event) {
 				if (event.target.readyState == "complete") {
-		    
+
                     let select_' . $this->id . ' = document.getElementById("' . $this->id . '_select");
                     if (select_' . $this->id . ' != null) {
                         let options_' . $this->id . ' = select_' . $this->id . '.querySelectorAll("li[data-SYWicon]");
     		            let input_' . $this->id . ' = document.getElementById("' . $this->id . '");
                         let icon_' . $this->id . ' = document.getElementById("' . $this->id . '_icon");
-		    
+
                         if (input_' . $this->id . '.value != "") {
                             let entry_value = select_' . $this->id . '.querySelector("li[data-SYWicon=\'' . $this->value . '\']");
                             if (entry_value != null) {
@@ -564,18 +564,18 @@ class SywiconpickerField extends FormField
                                 entry_value.querySelector("a").classList.remove("bg-light", "text-dark");
                             }
                         }
-		    
+
                         for (let i = 0; i < options_' . $this->id . '.length; i++) {
                             options_' . $this->id . '[i].addEventListener("click", function(event) {
-		    
+
                                 if (input_' . $this->id . '.value != "") {
-                                    let entry_value = select_' . $this->id . '.querySelector("li[data-SYWicon=" + input_' . $this->id . '.value + "]");
+                                    let entry_value = select_' . $this->id . '.querySelector("li[data-SYWicon=\'" + input_' . $this->id . '.value + "\']");
                                     if (entry_value != null) {
                                         entry_value.querySelector("a").classList.remove("bg-primary", "text-light");
                                         entry_value.querySelector("a").classList.add("bg-light", "text-dark");
                                     }
                                 }
-		    
+
                                 this.querySelector("a").classList.add("bg-primary", "text-light");
                                 this.querySelector("a").classList.remove("bg-light", "text-dark");
 
@@ -584,10 +584,10 @@ class SywiconpickerField extends FormField
                                 icon_' . $this->id . '.setAttribute("class", "SYWicon-" + selected_icon);
                             });
                         }
-		    
+
                         document.getElementById("' . $this->id . '_default").addEventListener("click", function(event) {
                             if (input_' . $this->id . '.value != "") {
-                                let entry_value = select_' . $this->id . '.querySelector("li[data-SYWicon=" + input_' . $this->id . '.value + "]");
+                                let entry_value = select_' . $this->id . '.querySelector("li[data-SYWicon=\'" + input_' . $this->id . '.value + "\']");
                                 if (entry_value != null) {
                                     entry_value.querySelector("a").classList.remove("bg-primary", "text-light");
                                     entry_value.querySelector("a").classList.add("bg-light", "text-dark");
@@ -601,13 +601,13 @@ class SywiconpickerField extends FormField
                             icon_' . $this->id . '.setAttribute("class", "SYWicon-' . $this->default . '");
                             ') . '
                         });
-		    
+
                         ' . ($this->editable ? '
                         input_' . $this->id . '.addEventListener("change", function(event) {
                             if (this.value != "") {
-                            
+
                                 icon_' . $this->id . '.setAttribute("class", "SYWicon-" + this.value);
-                            
+
                                 for (let i = 0; i < options_' . $this->id . '.length; i++) {
                                     if (this.value == options_' . $this->id . '[i].getAttribute("data-SYWicon")) {
                                         options_' . $this->id . '[i].querySelector("a").classList.add("bg-primary", "text-light");
@@ -624,7 +624,7 @@ class SywiconpickerField extends FormField
                                 input_' . $this->id . '.value = "' . $this->default . '";
                                 icon_' . $this->id . '.setAttribute("class", "SYWicon-' . $this->default . '");
                                 ') . '
-                            
+
                                 for (let i = 0; i < options_' . $this->id . '.length; i++) {
                                     options_' . $this->id . '[i].querySelector("a").classList.remove("bg-primary", "text-light");
                                     options_' . $this->id . '[i].querySelector("a").classList.add("bg-light", "text-dark");
@@ -634,37 +634,37 @@ class SywiconpickerField extends FormField
                         ' : '
                         ') . '
                     }
-		    
+
                     document.addEventListener("subform-row-add", function(e) {
-                        let sywip = e.detail.row.querySelector(".iconpicker");                        
+                        let sywip = e.detail.row.querySelector(".iconpicker");
                         if (sywip != null) {
                             let sywip_options = sywip.querySelectorAll("li[data-SYWicon]");
                             let sywip_input = sywip.querySelector("input[data-name=input-icon]");
                             let sywip_icon = sywip.querySelector("i[data-name=icon]");
-		    
+
                             for (let i = 0; i < sywip_options.length; i++) {
                                 sywip_options[i].addEventListener("click", function(event) {
-		    
+
                                     if (sywip_input.value != "") {
-                                        let entry_value = sywip.querySelector("li[data-SYWicon=" + sywip_input.value + "]");
+                                        let entry_value = sywip.querySelector("li[data-SYWicon=\'" + sywip_input.value + "\']");
                                         if (entry_value != null) {
                                             entry_value.querySelector("a").classList.remove("bg-primary", "text-light");
                                             entry_value.querySelector("a").classList.add("bg-light", "text-dark");
                                         }
                                     }
-		    
+
                                     this.querySelector("a").classList.add("bg-primary", "text-light");
                                     this.querySelector("a").classList.remove("bg-light", "text-dark");
 
-                                    let selected_icon = this.getAttribute("data-SYWicon");		    
+                                    let selected_icon = this.getAttribute("data-SYWicon");
                                     sywip_input.value = selected_icon;
                                     sywip_icon.setAttribute("class", "SYWicon-" + selected_icon);
                                 });
                             }
-		    
+
                             sywip.querySelector("button[data-name=default-icon]").addEventListener("click", function(event) {
                                 if (sywip_input.value != "") {
-                                    let entry_value = sywip.querySelector("li[data-SYWicon=" + sywip_input.value + "]");
+                                    let entry_value = sywip.querySelector("li[data-SYWicon=\'" + sywip_input.value + "\']");
                                     if (entry_value != null) {
                                         entry_value.querySelector("a").classList.remove("bg-primary", "text-light");
                                         entry_value.querySelector("a").classList.add("bg-light", "text-dark");
@@ -678,13 +678,13 @@ class SywiconpickerField extends FormField
                                 sywip_icon.setAttribute("class", "SYWicon-' . $this->default . '");
                                 ') . '
                             });
-		    
+
                             ' . ($this->editable ? '
                             sywip_input.addEventListener("change", function(event) {
                                 if (this.value != "") {
-                                
+
                                     sywip_icon.setAttribute("class", "SYWicon-" + this.value);
-                                
+
                                     for (let i = 0; i < sywip_options.length; i++) {
                                         if (this.value == sywip_options[i].getAttribute("data-SYWicon")) {
                                             sywip_options[i].querySelector("a").classList.add("bg-primary", "text-light");
@@ -701,7 +701,7 @@ class SywiconpickerField extends FormField
                                     sywip_input.value = "' . $this->default . '";
                                     sywip_icon.setAttribute("class", "SYWicon-' . $this->default . '");
                                     ') . '
-                                
+
                                     for (let i = 0; i < sywip_options.length; i++) {
                                         sywip_options[i].querySelector("a").classList.remove("bg-primary", "text-light");
                                         sywip_options[i].querySelector("a").classList.add("bg-light", "text-dark");
@@ -802,6 +802,14 @@ class SywiconpickerField extends FormField
 			$this->buttonrole = isset($this->element['buttonrole']) ? Text::_((string)$this->element['buttonrole']) : 'default';
 			$this->buttonlabel = isset($this->element['buttonlabel']) ? Text::_((string)$this->element['buttonlabel']) : ($this->buttonrole == 'clear' ? Text::_('JCLEAR') : Text::_('JDEFAULT'));
 			$this->emptyicon = isset($this->element['emptyicon']) ? (string)$this->element['emptyicon'] : ($this->buttonrole == 'default' ? 'question' : '');
+
+			if (!empty($this->value)) {
+				$this->value = str_replace('SYWicon-', '', $this->value);
+
+				if (strpos($this->value, 'icon-') !== false) {
+					$this->value = str_replace('icon-', 'icomoon-', $this->value);
+				}
+			}
 		}
 
 		return $return;

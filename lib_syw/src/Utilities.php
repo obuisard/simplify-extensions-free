@@ -437,30 +437,30 @@ class Utilities
 		$extensions_needing_fallbacks = array('webp', 'avif');
 		$mime_types = array('jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif', 'webp' => 'image/webp', 'avif' => 'image/avif');
 		$possible_fallback_extensions = array('png', 'jpg');
-		
+
 		if ($version) {
 		    $version = '?' . $version; // stay homogeneous with the way Joomla adds versions (or use ?version=)
 		}
-		
+
 // 		$version = '';
 // 		$hash = hash_file('md5', JPATH_ROOT . '/' . $src);
 // 		if ($hash !== false) {
 // 		    $version = '?version=' . $hash;
 // 		}
-			
+
 		// clean the src path and grab useful info
 		// src may be something like images/default.png#joomlaImage://local-images/default.png?width=500&height=500
-		
+
 		$image_object = HTMLHelper::cleanImageURL($src);
 		$src = $image_object->url;
-		
+
 		if (!isset($attributes['width']) && $image_object->attributes['width'] > 0) {
 		    $attributes['width'] = $image_object->attributes['width'];
 		}
-		
+
 		if (!isset($attributes['height']) && $image_object->attributes['height'] > 0) {
 		    $attributes['height'] = $image_object->attributes['height'];
-		}		
+		}
 
 		// get the image extension and the image path from $src
 		$source_path = File::stripExt($src);
@@ -638,6 +638,45 @@ class Utilities
 		}
 
 		return $html;
+	}
+
+	/**
+	 * Replace old icon name (missing SYWicon- prefix) with the prefixed counterpart
+	 * for B/C compatibility with old way of getting icons
+	 *
+	 * icomoon-tada returns icon-tada
+	 * tada returns SYWicon-tada
+	 * fas fa-tada remains unchanged because 'fas fa' is part of the prefixes that are ignored
+	 *
+	 * @param string $icon
+	 * @param array $ignore_prefix
+	 * @return string
+	 */
+	public static function getIconFullname($icon, $ignore_prefix = array())
+	{
+		if (empty($icon))
+		{
+			return $icon;
+		}
+
+		$icon_full_name = $icon;
+
+		$temp_value = explode('-', $icon);
+
+		$ignore = array_merge(array('SYWicon', 'icon', 'bi bi', 'fa fa', 'fas fa', 'fal fa', 'fab fa', 'far fa', 'fad fa'), $ignore_prefix);
+
+		if (!in_array($temp_value[0], $ignore))
+		{
+			$count_replacements = 0;
+			$icon_full_name = str_replace('icomoon-', 'icon-', $icon, $count_replacements);
+
+			if ($count_replacements <= 0)
+			{
+				$icon_full_name = 'SYWicon-' . $icon;
+			}
+		}
+
+		return $icon_full_name;
 	}
 
 }

@@ -168,7 +168,7 @@ class ImageradioField extends FormField
             	// global value unknown (happens when global config has not yet been saved), take the biggest image height to ensure all radio fields have the same height
             	if ($this->use_global && empty($global_value)) {
             		$image_info = @getimagesize(URI::root() . $tmp->image);
-            		if ($image_info[1] > $this->image_height) {
+            		if ($image_info && isset($image_info[1]) && $image_info[1] > $this->image_height) {
             			$this->image_height = $image_info[1];
             		}
             	}

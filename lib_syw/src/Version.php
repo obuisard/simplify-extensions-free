@@ -20,17 +20,17 @@ class Version
     const PRODUCT = 'SimplifyYourWeb Extensions Library';
 
 	/** @var  string  Release version. */
-    const RELEASE = '2.2.0';
+    const RELEASE = '2.2.1';
 
 	/** @var  string  Release date. */
-    const RELDATE = '9-Jan-2022';
+    const RELDATE = '14-Mar-2022';
 
 	/** @var  string  Copyright Notice. */
     const COPYRIGHT = 'Copyright (C) 2011 Simplify Your Web, Inc. All rights reserved.';
 
 	/** @var  string  Link text. */
     const URL = '<a href="https://simplifyyourweb.com">SimplifyYourWeb.com</a>.';
-    
+
     /**
      * the media version for each extension used
      * @var array
@@ -58,10 +58,10 @@ class Version
 	{
 		return self::RELEASE;
 	}
-	
+
 	/**
 	 * Generate a media version string for assets
-	 * 
+	 *
 	 * @param string the extension to create the version for
 	 * @return  string
 	 */
@@ -69,7 +69,7 @@ class Version
 	{
 	    return md5($extension . (new Date)->toSql());
 	}
-	
+
 	/**
 	 * Gets a media version which is used to append to extension's media files.
 	 *
@@ -77,28 +77,28 @@ class Version
 	 * @return  string  The media version
 	 */
 	public static function getMediaVersion(string $extension)
-	{	    
+	{
 	    if (self::$extensions_version === null) {
 	        self::$extensions_version = json_decode(LibraryHelper::getParams('syw')->get('mediaversions', ''), true);
 	    }
-	    
-	    if (!isset(self::$extensions_version[$extension]) || JDEBUG) {	        
+
+	    if (!isset(self::$extensions_version[$extension]) || JDEBUG) {
             self::setMediaVersion($extension, self::generateMediaVersion($extension));
 	    }
-	    
+
         return self::$extensions_version[$extension];
 	}
-	
+
 	/**
 	 * Function to refresh the media version
-	 * 
+	 *
 	 * @param string the extension to create the version for
 	 */
 	public static function refreshMediaVersion(string $extension)
 	{
 	    self::setMediaVersion($extension, self::generateMediaVersion($extension));
 	}
-	
+
 	/**
 	 * Sets the media version which is used to append to extension's media files.
 	 *
@@ -109,14 +109,14 @@ class Version
     protected static function setMediaVersion(string $extension, string $mediaVersion)
 	{
 	    $params = LibraryHelper::getParams('syw');
-            
+
 		$extensions_version = json_decode($params->get('mediaversions', ''), true);
 		$extensions_version[$extension] = $mediaVersion;
-            
+
 		$params->set('mediaversions', json_encode($extensions_version));
-            
+
 		LibraryHelper::saveParams('syw', $params);
-            
+
 		self::$extensions_version = $extensions_version;
 	}
 
