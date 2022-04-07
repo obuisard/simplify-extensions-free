@@ -6,15 +6,32 @@
 <!-- 			<field name="default_value" type="sywiconpicker" default=""  -->
 <!-- 				label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ICONFIELD_LABEL"  -->
 <!-- 				description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ICONFIELD_DESC" />	 -->	
+
 			<field name="icon_list" type="note" class="alert alert-info" 
 				label="PLG_FIELDS_SYWICON_ICONLIST_LABEL" 
 				description="PLG_FIELDS_SYWICON_ICONLIST_DESC" />
-			<field name="icon_editable" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+				
+			<field name="universal" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+				label="PLG_FIELDS_SYWICON_UNIVERSALPICKER_LABEL"
+				description="PLG_FIELDS_SYWICON_UNIVERSALPICKER_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+				
+			<field name="icon_editable" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="universal:0"
 				label="PLG_FIELDS_SYWICON_EDITABLENAME_LABEL"
 				description="PLG_FIELDS_SYWICON_EDITABLENAME_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			
+			<field name="icon_syw" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="universal:1"
+				label="PLG_FIELDS_SYWICON_INCLUDESYWICONS_LABEL"
+				description="PLG_FIELDS_SYWICON_INCLUDESYWICONS_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			
 			<field name="icon_icomoon" type="radio" default="0" layout="joomla.form.field.radio.switcher"
 				label="PLG_FIELDS_SYWICON_INCLUDEICOMOON_LABEL"
 				description="PLG_FIELDS_SYWICON_INCLUDEICOMOON_DESC">

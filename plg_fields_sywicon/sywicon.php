@@ -31,21 +31,51 @@ class PlgFieldsSYWIcon extends \Joomla\Component\Fields\Administrator\Plugin\Fie
 	{
 		$fieldNode = parent::onCustomFieldsPrepareDom($field, $parent, $form);
 
-		if (!$fieldNode) {
+		if (!$fieldNode)
+		{
 			return $fieldNode;
 		}
 
 		FormHelper::addFieldPrefix('SYW\Library\Field');
 
-		$fieldNode->setAttribute('type', 'sywiconpicker');
-		$fieldNode->setAttribute('buttonrole', 'clear');
+		if ($field->fieldparams->get('universal', 0))
+		{
+			$fieldNode->setAttribute('type', 'sywuniversaliconpicker');
 
-		if ($field->fieldparams->get('icon_editable', 0)) {
-		    $fieldNode->setAttribute('editable', 'true');
+			$sets = array();
+
+			if ($field->fieldparams->get('icon_syw', 0))
+			{
+				$sets[] = 'syw';
+			}
+
+			if ($field->fieldparams->get('icon_icomoon', 0))
+			{
+				$sets[] = 'icomoon';
+			}
+
+			if (!empty($sets))
+			{
+				$fieldNode->setAttribute('iconsets', implode(',', $sets));
+			}
+
+			$fieldNode->setAttribute('bcmode', 'true');
+			$fieldNode->setAttribute('buttonrole', 'clear');
 		}
+		else
+		{
+			$fieldNode->setAttribute('type', 'sywiconpicker');
+			$fieldNode->setAttribute('buttonrole', 'clear');
 
-		if ($field->fieldparams->get('icon_icomoon', 0)) {
-		    $fieldNode->setAttribute('icomoon', 'true');
+			if ($field->fieldparams->get('icon_editable', 0))
+			{
+			    $fieldNode->setAttribute('editable', 'true');
+			}
+
+			if ($field->fieldparams->get('icon_icomoon', 0))
+			{
+			    $fieldNode->setAttribute('icomoon', 'true');
+			}
 		}
 
 		return $fieldNode;

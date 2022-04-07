@@ -23,7 +23,7 @@ class plgfieldssywiconInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.0.1';
+	protected $minimumLibrary = '2.2.1';
 	/**
 	 * Extensions library link for download
 	 */
@@ -43,7 +43,7 @@ class plgfieldssywiconInstallerScript extends InstallerScript
 	    $this->minimumJoomla = '4.0.0';
 	    //$this->minimumPhp = JOOMLA_MINIMUM_PHP; // not needed
 	}
-	
+
 	/**
 	 * Called before any type of action
 	 *
@@ -57,7 +57,7 @@ class plgfieldssywiconInstallerScript extends InstallerScript
 		if ($action === 'uninstall') {
 			return true;
 		}
-		
+
 		// checks minimum PHP and Joomla versions and that an upgrade is performed
 		if (!parent::preflight($action, $installer)) {
 		    return false;
@@ -66,21 +66,21 @@ class plgfieldssywiconInstallerScript extends InstallerScript
 		// make sure the library is installed and that it is compatible with the extension
 		return $this->installOrUpdateLibrary($installer);
 	}
-	
+
 	/**
 	 * method to install the component
 	 *
 	 * @return boolean True on success
 	 */
 	public function install($installer) {}
-	
+
 	/**
 	 * method to uninstall the component
 	 *
 	 * @return void
 	 */
 	public function uninstall($installer) {}
-	
+
 	/**
 	 * method to update the component
 	 *
@@ -149,23 +149,23 @@ class plgfieldssywiconInstallerScript extends InstallerScript
 
 		return true;
 	}
-	
+
 	private function installOrUpdatePackage($installer, $package_name, $installation_type = 'install')
 	{
 	    // Get the path to the package
-	    
+
 	    $sourcePath = $installer->getParent()->getPath('source');
 	    $sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
-	    
+
 	    // Extract and install the package
-	            
+
         $package = InstallerHelper::unpack($sourcePackage);
         if ($package === false || (is_array($package) && $package['type'] === false)) {
             return false;
         }
-	        
+
         $tmpInstaller = new Installer();
-        
+
         if ($installation_type === 'install') {
             return $tmpInstaller->install($package['dir']);
         } else {
@@ -179,23 +179,23 @@ class plgfieldssywiconInstallerScript extends InstallerScript
 	private function installOrUpdateLibrary($installer)
 	{
 	    if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-	        
+
 	        if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
 	            Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
 	            return false;
 	        }
-	        
+
 	        Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_INSTALLED', $this->minimumLibrary), 'message');
 	    } else {
-	        
+
 	        $library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
 	        if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
-	            
+
 	            if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary', 'update')) {
 	                Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
 	                return false;
 	            }
-	            
+
 	            Factory::getApplication()->enqueueMessage(Text::sprintf('SYWLIBRARY_UPDATED', $this->minimumLibrary), 'message');
 	        }
 	    }

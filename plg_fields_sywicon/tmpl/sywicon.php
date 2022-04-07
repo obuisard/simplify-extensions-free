@@ -7,22 +7,60 @@
 defined('_JEXEC') or die;
 
 use SYW\Library\Fonts as SYWFonts;
+use SYW\Library\Utilities as SYWUtilities;
 
 $value = $field->value;
 
-if ($value == '') {
+if ($value == '')
+{
 	return;
 }
 
-$icon_prefix = 'SYW';
-$load_icomoon = false;
+if ($field->fieldparams->get('universal', 0))
+{
+	$value = SYWUtilities::getIconFullName($value); // backward compatibility with old picker
 
-if (strpos($value, 'icomoon') !== false) {
-    $value = str_replace('icomoon-', '', $value);
-    $icon_prefix = '';
-    $load_icomoon = true;
+	if (strpos($value, 'SYWicon-') !== false)
+	{
+		SYWFonts::loadIconFont();
+	}
+	else if (strpos($value, 'icon-') !== false || strpos($value, 'fa-') !== false)
+	{
+		SYWFonts::loadIconFont('fontawesome'); // icomoon is supported through the fontawesome asset
+	}
+}
+else
+{
+	$contains_prefix = false;
+
+	if (strpos($value, 'SYWicon-') !== false)
+	{
+		SYWFonts::loadIconFont();
+		$contains_prefix = true;
+	}
+	else if (strpos($value, 'icon-') !== false || strpos($value, 'fa-') !== false)
+	{
+		SYWFonts::loadIconFont('fontawesome'); // icomoon is supported through the fontawesome asset
+		$contains_prefix = true;
+	}
+
+	// old picker values
+
+	if (!$contains_prefix)
+	{
+		if (strpos($value, 'icomoon') !== false)
+		{
+			$value = str_replace('icomoon-', 'icon-', $value);
+
+			SYWFonts::loadIconFont('fontawesome'); // icomoon is supported through the fontawesome asset
+		}
+		else
+		{
+			$value = 'SYWicon-' . $value;
+
+			SYWFonts::loadIconFont();
+		}
+	}
 }
 
-SYWFonts::loadIconFont(!$load_icomoon, $load_icomoon); // LOADS even when not supposed to show 'display' = 0
-
-echo '<i class="'.$icon_prefix.'icon-'.$value.'"></i>';
+echo '<i class="' . $value . '"></i>';
