@@ -8,7 +8,7 @@
 defined('_JEXEC') or die;
 
 // Explicitly declare the type of content
-header("Content-type: text/css; charset=UTF-8");
+//header("Content-type: text/css; charset=UTF-8");
 ?>
 
 .articledetails {

@@ -70,7 +70,7 @@ class CSSPrintFileCache extends HeaderFilesCache
 // 		}
 
 		// set the header
-		$this->sendHttpHeaders('css');
+		//$this->sendHttpHeaders('css');
 
 		include JPATH_ROOT . '/media/plg_content_articledetails/styles/print.css.php';
 		if ($calendar) {

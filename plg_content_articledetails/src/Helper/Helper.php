@@ -231,7 +231,7 @@ class Helper
 				case 'hits':
 
 				    if (isset($item->hits) && ($item_params->get('show_hits') || $force_show)) {
-				        
+
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}
@@ -255,11 +255,11 @@ class Helper
 				break;
 
 				case 'rating':
-				    
+
 				    /* if no rating, still need to be able to show that there is none */
-				    
+
 				    if (/*isset($item->rating) && */($item_params->get('ad_show_vote') || $force_show)) {
-				        
+
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}
@@ -355,7 +355,7 @@ class Helper
 				case 'authorcb':
 
 				    if (isset($item->author) && ($item_params->get('show_author') || $force_show)) {
-				        
+
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}
@@ -630,7 +630,7 @@ class Helper
 				case 'combocategories':
 
 					if ($item_params->get('show_category') || $force_show) {
-					    
+
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}
@@ -1500,7 +1500,7 @@ class Helper
 				break;
 
 				case 'print':
-				    
+
 					if (/*$item_params->get('show_print_icon') &&*/ isset($item->slug) && !$app->input->getBool('print')) {
 						// only article and blog views get slug property
 
@@ -1547,7 +1547,7 @@ class Helper
 				case 'associations':
 
 				    if (isset($item->associations) && !empty($item->associations) && ($item_params->get('show_associations') || $force_show)) {
-				        
+
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}

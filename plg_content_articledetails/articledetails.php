@@ -25,7 +25,6 @@ use Joomla\Component\Content\Site\Helper\AssociationHelper as ContentAssociation
 use Joomla\Component\Content\Site\Helper\RouteHelper as ContentRouteHelper;
 use Joomla\Registry\Registry;
 use SYW\Component\TrombinoscopeExtended\Site\Helper\RouteHelper as TrombinoscopeExtendedRouteHelper;
-use SYW\Library\Cache as SYWCache;
 use SYW\Library\Fonts as SYWFonts;
 use SYW\Plugin\Content\ArticleDetails\Cache\CSSFileCache;
 use SYW\Plugin\Content\ArticleDetails\Cache\CSSPrintFileCache;
@@ -35,17 +34,17 @@ use SYW\Plugin\Content\ArticleDetails\Helper\Helper;
 class plgContentArticleDetails extends CMSPlugin
 {
     protected $app;
-    
+
     protected $autoloadLanguage = true;
-    
+
     protected $_library_loaded = true;
-    
+
     protected $_syntax_exists;
 
 	public function __construct(&$subject, $config)
 	{
 	    parent::__construct($subject, $config);
-	    
+
 	    if (!$this->app) {
 	        $this->app = Factory::getApplication();
 	    }
@@ -72,7 +71,7 @@ class plgContentArticleDetails extends CMSPlugin
 
 	    // add missing info in case 'force showing' is enabled and some info is missing
 	    if (($context == 'com_content.article' || $context == 'com_content.category' || $context == 'com_content.featured') && $this->params->get('force_show', 0)) {
-	        $this->_addMissingInfo($row, $params); 
+	        $this->_addMissingInfo($row, $params);
 	    }
 
 		if (!isset($row->text)) {
@@ -162,7 +161,7 @@ class plgContentArticleDetails extends CMSPlugin
 			// add styles
 
 			if ($this->params->get('load_icon_font', true)) {
-				SYW\Library\Fonts::loadIconFont();
+				SYWFonts::loadIconFont();
 			}
 
 			$additional_inline_styles = Helper::getInlineStyles($this->params);
@@ -651,7 +650,7 @@ class plgContentArticleDetails extends CMSPlugin
 		}
 
 		if (!isset($row->associations) && $params->get('show_associations')) {
-			$row->associations = AssociationRouteHelper::displayAssociations($row->id);
+			$row->associations = ContentAssociationHelper::displayAssociations($row->id);
 		}
 	}
 
