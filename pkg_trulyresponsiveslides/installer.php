@@ -25,7 +25,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.1.1';
+	protected $minimumLibrary = '2.2.1';
 
 	/**
 	 * Available languages
@@ -61,7 +61,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	    $this->minimumJoomla = '4.0.0';
 	    //$this->minimumPhp = JOOMLA_MINIMUM_PHP; // not needed
 	}
-	
+
 	/**
 	 * Called before any type of action
 	 *
@@ -75,7 +75,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	    if ($action === 'uninstall') {
 	        return true;
 	    }
-	    
+
 	    // checks minimum PHP and Joomla versions and that an upgrade is performed
 	    if (!parent::preflight($action, $installer)) {
 	        return false;
@@ -114,7 +114,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	 *
 	 * @return boolean True on success
 	 */
-	
+
 	public function postflight($action, $installer)
 	{
 		if ($action === 'uninstall') {
@@ -173,23 +173,23 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	 				$this->deleteFiles = array_merge($this->deleteFiles, $filenames);
 	 			}
 			}
-			
+
 			// +++ Migration Joomla 3 to Joomla 4
-			
+
 			// remove obsolete files
-			
+
 			$this->deleteFiles[] = '/modules/mod_trulyresponsiveslides/headerfilesmaster.php';
-			
+
 			$this->deleteFolders[] = '/modules/mod_trulyresponsiveslides/css';
 			$this->deleteFolders[] = '/modules/mod_trulyresponsiveslides/fields';
 			$this->deleteFolders[] = '/modules/mod_trulyresponsiveslides/helpers';
 			$this->deleteFolders[] = '/modules/mod_trulyresponsiveslides/images';
 			$this->deleteFolders[] = '/modules/mod_trulyresponsiveslides/js';
-			
+
 			$this->deleteFolders[] = '/media/syw_trulyresponsiveslides'; // could contain user made theme files or additional downloads
-			
+
 			$this->deleteFolders[] = '/cache/mod_trulyresponsiveslides';
-			
+
 			// +++ End Migration
 		}
 
@@ -202,7 +202,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	{
 	    $path = JPATH_SITE;
 	    $folders = explode('/', trim($extra_path, '/'));
-	    
+
 	    foreach ($folders as $folder) {
 	        $path .= '/' . $folder;
 	        if (!Folder::exists($path)) {
@@ -212,10 +212,10 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	            }
 	        }
 	    }
-	    
+
 	    return true;
 	}
-	
+
 	private function moveFile($file, $source, $destination, $minified_version = '')
 	{
 	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
@@ -223,12 +223,12 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
 	        }
 	    }
-	    
+
 	    if ($minified_version) {
 	        $file_name = File::stripExt($file);
 	        $file_extension = File::getExt($file);
 	        $file = $file_name . $minified_version . '.' . $file_extension;
-	        
+
 	        if (File::exists(JPATH_SITE . $source . '/' . $file)) {
 	            if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
 	                Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
@@ -236,7 +236,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	        }
 	    }
 	}
-	
+
 	private function copyFile($file, $source, $destination)
 	{
 	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
@@ -245,13 +245,13 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	        }
 	    }
 	}
-	
+
 	private function enableExtension($type, $element, $folder = '', $enable = true)
 	{
 	    $db = Factory::getDBO();
-	    
+
 	    $query = $db->getQuery(true);
-	    
+
 	    $query->update($db->quoteName('#__extensions'));
 	    if ($enable) {
 	        $query->set($db->quoteName('enabled').' = 1');
@@ -263,16 +263,16 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	    if ($folder) {
 	        $query->where($db->quoteName('folder').' = '.$db->quote($folder));
 	    }
-	    
+
 	    $db->setQuery($query);
-	    
+
 	    try {
 	        $db->execute();
 	    } catch (ExecutionFailureException $e) {
 	        Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 	        return false;
 	    }
-	    
+
 	    return true;
 	}
 
@@ -390,19 +390,19 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	private function installOrUpdatePackage($installer, $package_name, $installation_type = 'install')
 	{
 	    // Get the path to the package
-	    
+
 	    $sourcePath = $installer->getParent()->getPath('source');
 	    $sourcePackage = $sourcePath . '/packages/'.$package_name.'.zip';
-	    
+
 	    // Extract and install the package
-	    
+
 	    $package = InstallerHelper::unpack($sourcePackage);
 	    if ($package === false || (is_array($package) && $package['type'] === false)) {
 	        return false;
 	    }
-	    
+
 	    $tmpInstaller = new Installer();
-	    
+
 	    if ($installation_type === 'install') {
 	        return $tmpInstaller->install($package['dir']);
 	    } else {
@@ -416,7 +416,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	private function installOrUpdateLibrary($installer)
 	{
 		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
-		    
+
 		    if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
 		        Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
 		        return false;
@@ -427,7 +427,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 
 			$library_version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/manifests/libraries/syw.xml')->version);
 			if (!version_compare($library_version, $this->minimumLibrary, 'ge')) {
-			    
+
 			    if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary', 'update')) {
 			        Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_UPDATEFAILED').'<br />'.Text::_('SYWLIBRARY_UPDATE'), 'error');
 			        return false;
