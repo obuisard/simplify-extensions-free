@@ -146,7 +146,7 @@ class CSSFileCache extends HeaderFilesCache
 // 		}
 
 		// set the header
-		$this->sendHttpHeaders('css');
+		//$this->sendHttpHeaders('css');
 
 		include JPATH_ROOT . '/media/mod_trulyresponsiveslides/styles/style.css.php';
 

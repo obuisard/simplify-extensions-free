@@ -8,18 +8,17 @@
 defined('_JEXEC') or die;
 
 // Explicitly declare the type of content
-header("Content-type: text/css; charset=UTF-8");
+//header("Content-type: text/css; charset=UTF-8");
 
 /**
-* issues IE8
-* border module (no shadows or radius) -> ok
-* .flex-direction-nav .flex-next/prev opacities work in IE8 -> ok
-* .flex-control-paging -> squares instead of round (no border radius) -> ok
-*
 * TODO
 * change behavior of arrows when window size > 860 (from flexslider.css)
 */
 ?>
+
+#trs_<?php echo $suffix; ?>_loader {
+	text-align: center;
+}
 
 /* flexslider overrides */
 
@@ -91,7 +90,8 @@ header("Content-type: text/css; charset=UTF-8");
 }
 
 #trs_<?php echo $suffix; ?> .flex-direction-nav a::before {
-    font-family: "SYWfont";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
     font-size: 32px;
     line-height: 32px;
     color: <?php echo $arrows_c; ?>;
@@ -102,11 +102,11 @@ header("Content-type: text/css; charset=UTF-8");
 }
 
 #trs_<?php echo $suffix; ?> .flex-direction-nav a.flex-next::before {
-    content: "\e768";
+    content: "\f105";
 }
 
 #trs_<?php echo $suffix; ?> .flex-direction-nav a.flex-prev::before {
-    content: "\e767";
+    content: "\f104";
 }
 
 #trs_<?php echo $suffix; ?> .flex-direction-nav a {
@@ -254,9 +254,6 @@ header("Content-type: text/css; charset=UTF-8");
 	overflow-y: auto;
 	overflow-x: hidden;
 	box-sizing: unset;
-
-	/* text-shadow: 4px 4px 8px #000; */
-    /* filter: dropshadow(color=#000, offx=4, offy=4); */
 
 	background-color: <?php echo $opacity_color; ?>; /* fallback color */
 	background-color: rgba(<?php echo $o_c_r; ?>, <?php echo $o_c_g; ?>, <?php echo $o_c_b; ?>, <?php echo (1 - $opacity / 100); ?>);

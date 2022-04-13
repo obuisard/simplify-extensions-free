@@ -27,7 +27,7 @@ class JSAnimationFileCache extends HeaderFilesCache
 		$this->params = compact($variables);
 	}
 
-	public function getBuffer($include_declaration = false)
+	public function getBuffer($include_declaration = false, $inline = false)
 	{
 		// get all necessary parameters
 		extract($this->params);
@@ -39,7 +39,9 @@ class JSAnimationFileCache extends HeaderFilesCache
 		// 		}
 
 		// set the header
-		$this->sendHttpHeaders('js');
+// 		if (!$inline) {
+// 			$this->sendHttpHeaders('js');
+// 		}
 
 		if ($include_declaration) {
 			echo $this->declaration;

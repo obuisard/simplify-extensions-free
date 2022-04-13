@@ -10,7 +10,6 @@ defined('_JEXEC') or die ;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
-use Joomla\CMS\HTML\HTMLHelper;
 
 /*
  * Preview for Truly Responsive Slides arrows
@@ -23,74 +22,72 @@ class PreviewarrowField extends FormField
 	{
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
-	    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+		$wam->useStyle('fontawesome');
 
-		// a little over-complicated because having a radius, a bg transparent and no shadow leaves some traces
-		$script = 'jQuery(document).ready(function () {';
-			$script .= 'var preview_color = jQuery(\'#jform_params_arrow_c\').val(); ';
-			$script .= 'if (preview_color != \'\') { ';
-				$script .= 'jQuery(\'.preview_arrow i\').css(\'color\', preview_color); ';
-			$script .= '} ';
-			$script .= 'jQuery(\'#jform_params_arrow_c\').change(function() { ';
-				$script .= 'jQuery(\'.preview_arrow i\').css(\'color\', jQuery(\'#jform_params_arrow_c\').val()); ';
-			$script .= '}); ';
+		$wam->addInlineScript('
+			document.addEventListener("readystatechange", function(event) {
+				if (event.target.readyState == "complete") {
 
-			$script .= 'var preview_bgcolor = jQuery(\'#jform_params_arrow_bgc\').val(); ';
-			$script .= 'if (preview_bgcolor != \'\') {';
-				$script .= 'jQuery(\'.preview_arrow\').css(\'background-color\', preview_bgcolor); ';
-			$script .= '} ';
+					let preview = document.querySelectorAll(".preview_arrow");
 
-			$script .= 'jQuery(\'#a_jform_params_arrow_bgc\').click(function() { ';
-				$script .= 'jQuery(\'.preview_arrow\').css(\'background-color\', \'transparent\'); ';
-				$script .= 'if (jQuery(\'#jform_params_arrow_shadow\').val() == 0) { ';
-					$script .= 'jQuery(\'.preview_arrow\').css(\'border-radius\', \'0px\'); ';
-				$script .= '}; ';
-			$script .= '}); ';
+					preview.forEach(function (el) {
+						el.style.backgroundColor = document.getElementById("jform_params_arrow_bgc").value;
+						el.querySelector("i").style.color = document.getElementById("jform_params_arrow_c").value;
+						el.style.borderRadius = document.getElementById("jform_params_arrow_bgr").value + "px";
+						el.style.boxShadow = "0 0 " + document.getElementById("jform_params_arrow_shadow").value + "px #000";
+					});
 
-			$script .= 'jQuery(\'#visible_jform_params_arrow_bgc\').change(function() { ';
-				$script .= 'jQuery(\'.preview_arrow\').css(\'border-radius\', jQuery(\'#jform_params_arrow_bgr\').val() + \'px\'); ';
-				$script .= 'jQuery(\'.preview_arrow\').css(\'background-color\', jQuery(\'#jform_params_arrow_bgc\').val()); ';
-			$script .= '}); ';
+					document.getElementById("a_jform_params_arrow_bgc").addEventListener("click", function(event) {
+						document.querySelectorAll(".preview_arrow").forEach(function (el) {
+							el.style.backgroundColor = "transparent";
+						});
+					});
 
-			$script .= 'if (preview_bgcolor == \'\' && jQuery(\'#jform_params_arrow_shadow\').val() == 0) {';
-				$script .= 'jQuery(\'.preview_arrow\').css(\'border-radius\', \'0px\'); ';
-			$script .= '} else { ';
-				$script .= 'jQuery(\'.preview_arrow\').css(\'border-radius\', jQuery(\'#jform_params_arrow_bgr\').val() + \'px\'); ';
-			$script .= '} ';
-			$script .= 'jQuery(\'#jform_params_arrow_bgr\').change(function() { ';
-				$script .= 'if ((jQuery(\'#jform_params_arrow_bgc\').val() == \'\' || jQuery(\'#jform_params_arrow_bgc\').val() == \'transparent\') && jQuery(\'#jform_params_arrow_shadow\').val() == 0) {';
-					$script .= 'jQuery(\'.preview_arrow\').css(\'border-radius\', \'0px\'); ';
-				$script .= '} else { ';
-					$script .= 'jQuery(\'.preview_arrow\').css(\'border-radius\', jQuery(\'#jform_params_arrow_bgr\').val() + \'px\'); ';
-				$script .= '} ';
-			$script .= '}); ';
+					document.getElementById("visible_jform_params_arrow_bgc").addEventListener("change", function(event) {
+						document.querySelectorAll(".preview_arrow").forEach(function (el) {
+							el.style.backgroundColor = document.getElementById("jform_params_arrow_bgc").value;
+						});
+					});
 
-			$script .= 'jQuery(\'.preview_arrow\').css(\'box-shadow\', \'0 0 \' + jQuery(\'#jform_params_arrow_shadow\').val() + \'px #000\'); ';
-			$script .= 'jQuery(\'#jform_params_arrow_shadow\').change(function() { ';
-				$script .= 'if ((jQuery(\'#jform_params_arrow_bgc\').val() == \'\' || jQuery(\'#jform_params_arrow_bgc\').val() == \'transparent\') && jQuery(\'#jform_params_arrow_shadow\').val() == 0) {';
-					$script .= 'jQuery(\'.preview_arrow\').css(\'border-radius\', \'0px\'); ';
-				$script .= '} else { ';
-					$script .= 'jQuery(\'.preview_arrow\').css(\'border-radius\', jQuery(\'#jform_params_arrow_bgr\').val() + \'px\'); ';
-				$script .= '} ';
-				$script .= 'jQuery(\'.preview_arrow\').css(\'box-shadow\', \'0 0 \' + jQuery(\'#jform_params_arrow_shadow\').val() + \'px #000\'); ';
-			$script .= '}); ';
+					document.getElementById("jform_params_arrow_c").addEventListener("change", function(event) {
+						if (event.target.value != "") {
+							document.querySelectorAll(".preview_arrow i").forEach(function (el) {
+								el.style.color = event.target.value;
+							});
+						}
+					});
 
-			$script .= 'jQuery(\'.preview_arrow\').hover(function() { jQuery(this).css(\'opacity\', \'.7\'); } , function() { jQuery(this).css(\'opacity\', \'1\'); }); ';
-		$script .= '});';
+					document.getElementById("jform_params_arrow_bgr").addEventListener("change", function(event) {
+						if (event.target.value != "") {
+							document.querySelectorAll(".preview_arrow").forEach(function (el) {
+								el.style.borderRadius = event.target.value + "px";
+							});
+						}
+					});
 
-		//Factory::getDocument()->addScriptDeclaration($script);
-		$wam->addInlineScript($script, [], [], ['jquery']);
+					document.getElementById("jform_params_arrow_shadow").addEventListener("change", function(event) {
+						if (event.target.value != "") {
+							document.querySelectorAll(".preview_arrow").forEach(function (el) {
+								el.style.boxShadow = "0 0 " + event.target.value + "px #000";
+							});
+						}
+					});
+				}
+			});
+		');
+
+		$wam->addInlineStyle('.preview_arrow { opacity: 1 } .preview_arrow:hover { opacity: 0.7 }');
 
 		$html = '';
 
 		$html .= '<div style="width: 84px; padding: 20px; background-color: #fbfbfb; border: 2px dashed #ccc; -webkit-border-radius: 10px; border-radius: 10px; box-sizing: initial">';
 
 			$html .= '<div id="preview_arrow_left" class="preview_arrow" style="display: inline-block; width: 32px; height: 32px; vertical-align: middle; text-align: center; cursor: pointer">';
-				$html .= '<i class="SYWicon-keyboard-arrow-left" style="font-size: 32px; line-height: 32px"></i>';
+				$html .= '<i class="fas fa-angle-left" style="font-size: 32px; line-height: 32px"></i>';
 			$html .= '</div>';
 
 			$html .= '<div id="preview_arrow_right" class="preview_arrow" style="margin-left: 20px; display: inline-block; width: 32px; height: 32px; vertical-align: middle; text-align: center; cursor: pointer">';
-				$html .= '<i class="SYWicon-keyboard-arrow-right" style="font-size: 32px; line-height: 32px"></i>';
+				$html .= '<i class="fas fa-angle-right" style="font-size: 32px; line-height: 32px"></i>';
 			$html .= '</div>';
 
 		$html .= '</div>';

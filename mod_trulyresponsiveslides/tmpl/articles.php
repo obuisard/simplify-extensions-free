@@ -8,9 +8,9 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Uri\Uri;
@@ -160,8 +160,12 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
             }
 
 			// get the content and format it
-            $introtext = trim($item->introtext);
-            $fulltext = trim($item->fulltext);
+
+            Helper::parseCustomFields($item->introtext, $item);
+            Helper::parseCustomFields($item->fulltext, $item);
+
+            $introtext = HTMLHelper::_('content.prepare', trim($item->introtext));
+            $fulltext = HTMLHelper::_('content.prepare', trim($item->fulltext));
 
             // TODO trim the tags to make sure there is actual content?
 
@@ -245,7 +249,6 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
 		$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
 
 		if ($result) {
-			//$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_trulyresponsiveslides/style_'.$module->id.'.css');
 			$wam->registerAndUseStyle('trs.style_' . $module->id, $cache_css->getCachePath() . '/style_' . $module->id . '.css');
 		}
 
@@ -273,13 +276,11 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
 		$cache_js->addDeclaration($scriptDeclaration, 'js');
 
 		if ($inline_scripts) {
-			//$doc->addScriptDeclaration($cache_js->getBuffer(true));
-			$wam->addInlineScript($cache_js->getBuffer(true));
+			$wam->addInlineScript($cache_js->getBuffer(true, true));
 		} else {
 			$result = $cache_js->cache('animation_'.$module->id.'.js', $clear_header_files_cache);
 
 			if ($result) {
-				//$doc->addScript(Uri::base(true).'/media/cache/mod_trulyresponsiveslides/animation_'.$module->id.'.js');
 				$wam->registerAndUseScript('trs.animation_' . $module->id, $cache_js->getCachePath() . '/animation_' . $module->id . '.js', [], ['defer' => true]);
 			}
 		}

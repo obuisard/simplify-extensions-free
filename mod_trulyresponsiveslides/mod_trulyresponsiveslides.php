@@ -98,7 +98,8 @@ $inline_scripts = $params->get('inline_scripts', 0);
 // loading of libraries
 
 HTMLHelper::_('jquery.framework');
-SYWFonts::loadIconFont();
+
+SYWFonts::loadIconFont('fontawesome');
 
 Helper::load_flexslider($load_remotely);
 
