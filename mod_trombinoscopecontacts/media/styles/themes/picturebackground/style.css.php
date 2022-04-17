@@ -8,7 +8,7 @@
 defined('_JEXEC') or die;
 
 // Explicitly declare the type of content
-header("Content-type: text/css; charset=UTF-8");
+//header("Content-type: text/css; charset=UTF-8");
 
 // conditions:
 // bg image and contact picture must be square
@@ -71,12 +71,12 @@ header("Content-type: text/css; charset=UTF-8");
 	<?php if ($shadow_body == 'l') : ?>
 		-webkit-box-shadow: 0 8px 17px 2px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12),0 5px 5px -3px rgba(0,0,0,0.2);
 		box-shadow: 0 8px 17px 2px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12),0 5px 5px -3px rgba(0,0,0,0.2);
-		margin: 27px;						
+		margin: 27px;
 	<?php endif; ?>
 	<?php if ($shadow_body == 'ss') : ?>
 		-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
 		box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);
-		margin: 5px;						
+		margin: 5px;
 	<?php endif; ?>
 	<?php if ($shadow_body == 'sm') : ?>
 		-webkit-box-shadow: 1px 1px 4px rgba(51, 51, 51, 0.2);

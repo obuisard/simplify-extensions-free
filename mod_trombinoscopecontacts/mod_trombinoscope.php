@@ -383,7 +383,7 @@ if ($carousel_configuration != 'none') {
 
 	if ($generate_inline_scripts) {
 
-		$wam->addInlineScript($cache_anim_js->getBuffer());
+		$wam->addInlineScript($cache_anim_js->getBuffer(true));
 
 	} else {
 
@@ -405,7 +405,7 @@ if ($carousel_configuration != 'none') {
 if ($show_picture && $photo_align != 't' && $min_card_flip_width) {
 	Helper::loadFlipCards();
 	$cache_js = new JSFileCache('mod_trombinoscopecontacts', $params);
-	$wam->addInlineScript($cache_js->getBuffer());
+	$wam->addInlineScript($cache_js->getBuffer(true));
 }
 
 // styles

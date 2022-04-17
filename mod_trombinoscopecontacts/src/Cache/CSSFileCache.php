@@ -67,13 +67,13 @@ class CSSFileCache extends HeaderFilesCache
 		$space_between_cards = $params->get('card_spacebetween', '5');
 		$variables[] = 'space_between_cards';
 
-		$bgimage = $params->get('bgimage', '');		
-		
+		$bgimage = $params->get('bgimage', '');
+
 		if ($bgimage) {
 		    $image_object = HTMLHelper::cleanImageURL($bgimage);
 		    $bgimage = $image_object->url;
-		}		
-		
+		}
+
 		$variables[] = 'bgimage';
 
 		$bgcolor1 = trim($params->get('bgcolor1', ''));
@@ -84,7 +84,7 @@ class CSSFileCache extends HeaderFilesCache
 
 		$card_shadow = false; // $params->get('card_shadow', false); // for backward compatibility: will dismiss all shadow styles from themes
 		$variables[] = 'card_shadow';
-		
+
 		$shadow_body = $params->get('card_shadow', 'none');
 		$variables[] = 'shadow_body';
 
@@ -283,7 +283,7 @@ class CSSFileCache extends HeaderFilesCache
 		//		}
 
 		// set the header
-		$this->sendHttpHeaders('css');
+		//$this->sendHttpHeaders('css');
 
 		include JPATH_ROOT . '/media/mod_trombinoscopecontacts/styles/style.css.php';
 		include JPATH_ROOT . '/media/mod_trombinoscopecontacts/styles/themes/' . $theme . '/style.css.php';

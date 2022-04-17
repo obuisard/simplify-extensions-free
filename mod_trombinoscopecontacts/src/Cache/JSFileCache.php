@@ -30,7 +30,7 @@ class JSFileCache extends HeaderFilesCache
 		$this->params = compact($variables);
 	}
 
-	public function getBuffer()
+	public function getBuffer($inline = false)
 	{
 		// get all necessary parameters
 		extract($this->params);
@@ -42,7 +42,9 @@ class JSFileCache extends HeaderFilesCache
 		// 		}
 
 		// set the header
-		$this->sendHttpHeaders('js');
+// 		if (!$inline) {
+// 			$this->sendHttpHeaders('js');
+// 		}
 
 		//echo 'document.addEventListener("DOMContentLoaded", function() { ';
 
