@@ -23,11 +23,12 @@ class MigrateselectField extends ListField
 
 		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
-		
+
 		if (Factory::getApplication()->getDocument()->getWebAssetManager()->assetExists('script', 'jquery-migrate')) {
 		    $options[] = HTMLHelper::_('select.option', 'joomla', Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_JOOMLA'), 'value', 'text', $disable = false);
 		}
 		$options[] = HTMLHelper::_('select.option', 'local', Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_LOCAL'), 'value', 'text', $disable = false);
+		$options[] = HTMLHelper::_('select.option', '3.4', '3.4.x', 'value', 'text', $disable = false);
 		$options[] = HTMLHelper::_('select.option', '3.3', '3.3.x', 'value', 'text', $disable = false);
 		$options[] = HTMLHelper::_('select.option', '3.2', '3.2.x', 'value', 'text', $disable = false);
 		$options[] = HTMLHelper::_('select.option', '3.1', '3.1.x', 'value', 'text', $disable = false);

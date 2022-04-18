@@ -183,30 +183,6 @@ class Helper
                 }
                 return $protocole.'//code.jquery.com/jquery-migrate-'.$version.$extra.'.js';
 
-            case 'mobile_js':
-                if ($cdn == 'cloudflare') {
-                    return $protocole.'//cdnjs.cloudflare.com/ajax/libs/jquery-mobile/'.$version.'/jquery.mobile'.$extra.'.js';
-                } else if ($cdn == 'microsoft') {
-                    return $protocole.'//ajax.aspnetcdn.com/ajax/jquery.mobile/'.$version.'/jquery.mobile-'.$version.$extra.'.js';
-                }
-                return $protocole.'//code.jquery.com/mobile/'.$version.'/jquery.mobile-'.$version.$extra.'.js';
-
-            case 'mobile_default_css':
-                if ($cdn == 'cloudflare') {
-                    return $protocole.'//cdnjs.cloudflare.com/ajax/libs/jquery-mobile/'.$version.'/jquery.mobile'.$extra.'.css';
-                } else if ($cdn == 'microsoft') {
-                    return $protocole.'//ajax.aspnetcdn.com/ajax/jquery.mobile/'.$version.'/jquery.mobile-'.$version.$extra.'.css';
-                }
-                return $protocole.'//code.jquery.com/mobile/'.$version.'/jquery.mobile-'.$version.$extra.'.css';
-
-            case 'mobile_css':
-                if ($cdn == 'cloudflare') {
-                    return $protocole.'//cdnjs.cloudflare.com/ajax/libs/jquery-mobile/'.$version.'/jquery.mobile.structure'.$extra.'.css';
-                } else if ($cdn == 'microsoft') {
-                    return $protocole.'//ajax.aspnetcdn.com/ajax/jquery.mobile/'.$version.'/jquery.mobile.structure-'.$version.$extra.'.css';
-                }
-                return $protocole.'//code.jquery.com/mobile/'.$version.'/jquery.mobile.structure-'.$version.$extra.'.css';
-
             case 'jqueryui_js':
                 if ($cdn == 'google') {
                     return $protocole.'//ajax.googleapis.com/ajax/libs/jqueryui/'.$version.'/jquery-ui'.$extra.'.js';

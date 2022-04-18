@@ -32,6 +32,7 @@ class CdnlinksField extends FormField
 			$cdns['microsoft'] = 'https://docs.microsoft.com/en-us/aspnet/ajax/cdn/overview#jQuery_Releases_on_the_CDN_0';
 			$cdns['jquery'] = 'http://code.jquery.com/jquery';
 			$cdns['cloudflare'] = 'https://cdnjs.com/libraries/jquery';
+			$cdns['jsdelivr'] = 'https://www.jsdelivr.com/package/npm/jquery';
 
 			self::$libraries['jquery'] = $cdns;
 
@@ -40,6 +41,7 @@ class CdnlinksField extends FormField
 			$cdns['microsoft'] = 'https://docs.microsoft.com/en-us/aspnet/ajax/cdn/overview#jQuery_UI_Releases_on_the_CDN_2';
 			$cdns['jquery'] = 'http://code.jquery.com/ui/';
 			$cdns['cloudflare'] = 'https://cdnjs.com/libraries/jqueryui';
+			$cdns['jsdelivr'] = 'https://www.jsdelivr.com/package/npm/jquery-ui-dist';
 
 			self::$libraries['jqueryui'] = $cdns;
 
@@ -48,6 +50,7 @@ class CdnlinksField extends FormField
 			$cdns['microsoft'] = 'https://docs.microsoft.com/en-us/aspnet/ajax/cdn/overview#jQuery_Migrate_Releases_on_the_CDN_1';
 			$cdns['jquery'] = 'http://code.jquery.com/jquery';
 			$cdns['cloudflare'] = 'https://cdnjs.com/libraries/jquery-migrate';
+			$cdns['jsdelivr'] = 'https://www.jsdelivr.com/package/npm/jquery-migrate';
 
 			self::$libraries['migrate'] = $cdns;
 			
@@ -56,6 +59,7 @@ class CdnlinksField extends FormField
 			$cdns['microsoft'] = 'https://docs.microsoft.com/en-us/aspnet/ajax/cdn/overview#Bootstrap_Releases_on_the_CDN_14';
 			$cdns['jquery'] = '';
 			$cdns['cloudflare'] = 'https://cdnjs.com/libraries/twitter-bootstrap';
+			$cdns['jsdelivr'] = 'https://www.jsdelivr.com/package/npm/bootstrap';
 			
 			self::$libraries['bootstrap'] = $cdns;
 			
@@ -64,6 +68,7 @@ class CdnlinksField extends FormField
 			$cdns['microsoft'] = '';
 			$cdns['jquery'] = '';
 			$cdns['cloudflare'] = 'https://cdnjs.com/libraries/popper.js';
+			$cdns['jsdelivr'] = 'https://www.jsdelivr.com/package/npm/@popperjs/core';
 			
 			self::$libraries['popper'] = $cdns;
 		}

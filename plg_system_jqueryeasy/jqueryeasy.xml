@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>5.0.3</version>
+	<version>5.0.4</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Plugin\System\JqueryEasy</namespace>
 	
@@ -61,7 +61,7 @@
 		
 			<fieldset name="basic" label="PLG_SYSTEM_JQUERYEASY_INFORMATION_LABEL" addfieldprefix="SYW\Library\Field">
 				
-				<field type="extensionversion" version="5.0.3" />
+				<field type="extensionversion" version="5.0.4" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_JQUERYEASY_TRANSLATORS" />
@@ -272,14 +272,14 @@
 		            	<option value="none">JNONE</option>
 					</field>
 					
-					<field name="migratesubversion" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinpage:1,2[AND]migrateversion:3.0.0,3.1,3.2,3.3" 
+					<field name="migratesubversion" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinpage:1,2[AND]migrateversion:3.0.0,3.1,3.2,3.3,3.4" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_MIGRATESUBVERSION_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_MIGRATESUBVERSION_DESC" />
 					
-					<field type="cdnlinks" library="migrate" showon="jqueryinpage:1,2[AND]migrateversion:1.2.1,1.3.0,1.4.1,3.0.0,3.1,3.2,3.3" />
+					<field type="cdnlinks" library="migrate" showon="jqueryinpage:1,2[AND]migrateversion:1.2.1,1.3.0,1.4.1,3.0.0,3.1,3.2,3.3,3.4" />
 					
 					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERYMIGRATE" showon="jqueryinpage:1,2[AND]migrateversion:1.4.1" />
-					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERYMIGRATE3" showon="jqueryinpage:1,2[AND]migrateversion:3.0.0,3.1,3.2,3.3" />
+					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERYMIGRATE3" showon="jqueryinpage:1,2[AND]migrateversion:3.0.0,3.1,3.2,3.3,3.4" />
 						
 					<field name="localpathmigrate" type="text" default="" size="50" showon="jqueryinpage:1,2[AND]migrateversion:local" class="input-xxlarge" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALPATHMIGRATE_LABEL" 
