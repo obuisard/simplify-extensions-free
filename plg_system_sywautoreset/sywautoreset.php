@@ -24,28 +24,28 @@ use Joomla\Utilities\ArrayHelper;
 class plgSystemSYWAutoReset extends CMSPlugin
 {
     protected $app;
-    
+
     protected $autoloadLanguage = true;
-    
+
     protected $contexts = array('com_content.article', 'com_content.form', 'com_k2.item', 'com_contact.contact', 'com_trombinoscopeextended.usercontact', 'com_weblinks.weblink', 'com_weblinklogospro.weblink');
 
     protected $filter_names = array('blur', 'duotone', 'edgedetect', 'emboss', 'grayscale', 'negate', 'pixelate', 'sepia', 'sharpen', 'sketch');
-        
+
     public function __construct(&$subject, $config)
     {
         parent::__construct($subject, $config);
-        
+
         if (!$this->app) {
             $this->app = Factory::getApplication();
         }
     }
-    
+
     public function onUserAfterSave($data, $isNew, $result, $error)
-    {    	
+    {
     	if ($isNew) {
     		return true;
     	}
-    	
+
     	if (!$this->app->isClient('site')) {
             return true;
         }
@@ -76,6 +76,10 @@ class plgSystemSYWAutoReset extends CMSPlugin
                 }
 
                 $categories_array = $this->params->get('contact_cat', array('none'));
+
+                if (!is_array($categories_array)) { // before the plugin is saved, the value is the string 'none'
+                	$categories_array = explode(' ', $categories_array);
+                }
 
                 $array_of_category_values = array_count_values($categories_array);
                 if (isset($array_of_category_values['none']) && $array_of_category_values['none'] > 0) { // 'none' was selected
@@ -163,11 +167,11 @@ class plgSystemSYWAutoReset extends CMSPlugin
     }
 
     public function onContentBeforeSave($context, $item, $isNew)
-    {    	
+    {
     	if ($isNew) {
     		return true;
     	}
-    	
+
     	if (!in_array($context, $this->contexts)) {
     	    return true;
         }
@@ -176,7 +180,11 @@ class plgSystemSYWAutoReset extends CMSPlugin
 
         if ($context == 'com_content.article' || $context == 'com_content.form') {
 
-            $categories_array = $this->params->get('article_cat', array('none'));
+        	$categories_array = $this->params->get('article_cat', array('none'));
+
+        	if (!is_array($categories_array)) { // before the plugin is saved, the value is the string 'none'
+        		$categories_array = explode(' ', $categories_array);
+        	}
 
             $array_of_category_values = array_count_values($categories_array);
             if (isset($array_of_category_values['none']) && $array_of_category_values['none'] > 0) { // 'none' was selected
@@ -215,7 +223,11 @@ class plgSystemSYWAutoReset extends CMSPlugin
             }
         } else if ($context == 'com_k2.item') {
 
-            $categories_array = $this->params->get('k2_cat', array('none'));
+        	$categories_array = $this->params->get('k2_cat', array('none'));
+
+        	if (!is_array($categories_array)) { // before the plugin is saved, the value is the string 'none'
+        		$categories_array = explode(' ', $categories_array);
+        	}
 
             $array_of_category_values = array_count_values($categories_array);
             if (isset($array_of_category_values['none']) && $array_of_category_values['none'] > 0) { // 'none' was selected
@@ -255,7 +267,11 @@ class plgSystemSYWAutoReset extends CMSPlugin
             }
         } else if ($context == 'com_contact.contact' || $context == 'com_trombinoscopeextended.usercontact') {
 
-            $categories_array = $this->params->get('contact_cat', array('none'));
+        	$categories_array = $this->params->get('contact_cat', array('none'));
+
+        	if (!is_array($categories_array)) { // before the plugin is saved, the value is the string 'none'
+        		$categories_array = explode(' ', $categories_array);
+        	}
 
             $array_of_category_values = array_count_values($categories_array);
             if (isset($array_of_category_values['none']) && $array_of_category_values['none'] > 0) { // 'none' was selected
@@ -294,7 +310,11 @@ class plgSystemSYWAutoReset extends CMSPlugin
             }
         } else if ($context == 'com_weblinks.weblink' || $context == 'com_weblinklogospro.weblink') {
 
-            $categories_array = $this->params->get('weblink_cat', array('none'));
+        	$categories_array = $this->params->get('weblink_cat', array('none'));
+
+        	if (!is_array($categories_array)) { // before the plugin is saved, the value is the string 'none'
+        		$categories_array = explode(' ', $categories_array);
+        	}
 
             $array_of_category_values = array_count_values($categories_array);
             if (isset($array_of_category_values['none']) && $array_of_category_values['none'] > 0) { // 'none' was selected
@@ -363,9 +383,9 @@ class plgSystemSYWAutoReset extends CMSPlugin
                 foreach ($this->filter_names as $filter_name) { // there are 1 or 2 filters in the file name AFTER the weblink id
                     $stripped_filename = str_replace('_'.$filter_name, '', $stripped_filename);
                 }
-                
+
                 $stripped_filename = str_replace('_hover', '', $stripped_filename);
-                
+
                 $stripped_filename = strrchr($stripped_filename, '_'); // look for the last chunk after _ in the file name with result: _id.jpg or _id@2x.jpg
             } else {
                 $stripped_filename = strrchr($filename, '_'); // look for the last chunk after _ in the file name with result: _id.jpg or _id@2x.jpg
@@ -385,18 +405,18 @@ class plgSystemSYWAutoReset extends CMSPlugin
         $filenames_to_delete = $filenames_for_item;
 
         $some_files_deleted = $this->deleteFiles($filenames_to_delete);
-        
+
         if ($some_files_deleted && ($this->params->get('verbose', 0) == 1 || ($this->app->isClient('administrator') && $this->params->get('verbose', 0) == 2) || ($this->app->isClient('site') && $this->params->get('verbose', 0) == 3))) {
             Factory::getApplication()->enqueueMessage(Text::_('PLG_SYSTEM_SYWAUTORESET_INFO_IMAGECACHECLEARED'), 'message');
         }
 
         return true;
     }
-    
-    protected function deleteFiles($filenames_to_delete) 
+
+    protected function deleteFiles($filenames_to_delete)
     {
         $some_files_deleted = false;
-        
+
         foreach ($filenames_to_delete as $filename) {
             if (File::exists($filename)) {
                 if (File::delete($filename)) {
@@ -411,7 +431,7 @@ class plgSystemSYWAutoReset extends CMSPlugin
                 }
             }
         }
-        
+
         return $some_files_deleted;
     }
 
