@@ -41,7 +41,7 @@ $class_suffix = $module->id;
 $params->set('suffix', $class_suffix);
 
 $urlPath = Uri::base().'modules/mod_trombinoscope/';
-//$doc = Factory::getDocument();
+$doc = Factory::getDocument();
 $app = Factory::getApplication();
 $wam = $app->getDocument()->getWebAssetManager();
 

@@ -6,6 +6,7 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
@@ -317,7 +318,7 @@ if ($remove_whitespaces) {
     								<div class="personlinks">
     									<div class="personlink go">
     										<a href="<?php echo $link; ?>"<?php echo $link_attributes; ?><?php echo Helper::getClassAttribute(false, $link_classes); ?>>
-    											<?php if ($doc->getDirection() == 'rtl') : ?>
+    											<?php if (Factory::getDocument()->getDirection() == 'rtl') : ?>
     												<i class="icon SYWicon-arrow-left" aria-hidden="true"></i><span><?php echo $link_label; ?></span>
     											<?php else : ?>
     												<i class="icon SYWicon-arrow-right" aria-hidden="true"></i><span><?php echo $link_label; ?></span>
