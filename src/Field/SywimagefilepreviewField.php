@@ -43,10 +43,65 @@ class SywimagefilepreviewField extends FormField
 
     protected function getInput()
     {
-        $html = '';
+    	$html = '';
 
         $lang = Factory::getLanguage();
         $lang->load('lib_syw.sys', JPATH_SITE);
+
+        $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+
+		if ($this->show_preview) {
+			$wam->addInlineScript('
+				document.addEventListener("readystatechange", function(event) {
+					if (event.target.readyState == "complete") {
+						document.getElementById("' . $this->id . '_file").addEventListener("change", on' . $this->id . 'FileSelected, false);
+						function on' . $this->id . 'FileSelected (input) {
+							if (input.target.files[0]) {
+								file = input.target.files[0];
+								file_path = (window.URL || window.webkitURL).createObjectURL(file);
+								let reader = new FileReader();
+								reader.readAsDataURL(file);
+								reader.onloadend = function(evt) {
+									if (evt.target.readyState == FileReader.DONE) {
+										let image_preview = document.querySelector("#' . $this->id . '_preview img");
+										if (image_preview != null) {
+											image_preview.setAttribute("src", file_path);
+											document.getElementById("' . $this->id . '_preview").querySelector(".image_preview").style.display = "block";
+											document.getElementById("' . $this->id . '_preview").querySelector(".no_preview").style.display = "none";
+											let filename = document.querySelector("#' . $this->id . '_preview .file_name");
+											if (filename != null) {
+												filename.textContent = file.name;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				});
+			');
+		} else {
+			$wam->addInlineScript('
+				document.addEventListener("readystatechange", function(event) {
+					if (event.target.readyState == "complete") {
+						document.getElementById("' . $this->id . '_file").addEventListener("change", on' . $this->id . 'FileSelected, false);
+						function on' . $this->id . 'FileSelected (input) {
+							if (input.target.files[0]) {
+								file = input.target.files[0];
+								file_path = (window.URL || window.webkitURL).createObjectURL(file);
+								let reader = new FileReader();
+								reader.readAsDataURL(file);
+								reader.onloadend = function(evt) {
+									if (evt.target.readyState == FileReader.DONE) {
+										document.getElementById("' . $this->id . '_filename").value = file.name;
+									}
+								}
+							}
+						}
+					}
+				});
+			');
+		}
 
         // Initialize some field attributes.
         $accept = $this->element['accept'] ? ' accept="' . (string) $this->element['accept'] . '"' : ' accept=".gif,.jpg,.png"';
@@ -74,13 +129,11 @@ class SywimagefilepreviewField extends FormField
 
             $html .= '<div id="'.$this->id.'_preview" style="'.$style.' overflow: auto; border: 1px solid #ccc; border-radius: 3px; padding: 10px; margin-top: 5px; text-align: center">';
 
-                if (!empty($path)) {
+			$html .= '<div class="image_preview" style="display: ' . (empty($path) ? 'none' : 'block') . '">';
 
-                	$html .= '<div class="image_preview">';
+			$parts = explode('/', $path);
 
-                	$parts = explode('/', $path);
-
-                    $html .= '<img src="'.Uri::root().$path.'" alt="'.end($parts).'" style="max-width: 100%">';
+			$html .= '<img src="'.Uri::root().$path.'" alt="'.end($parts).'" style="max-width: 100%">';
 
 //                 $extensions_needing_fallbacks = array('webp', 'avif');
 //                 $image_extension = JFile::getExt($path);
@@ -88,54 +141,51 @@ class SywimagefilepreviewField extends FormField
 //                 	$html .= '<br /><br /><span style="font-size: .8em">'.JText::_('LIB_SYW_IMAGEPREVIEW_PREVIEWMAYNOTBEAVAILABLE').'</span>';
 //                 }
 
-                    if ($this->show_name) {
-                        $html .= '<br /><br /><span class="file_name">'.end($parts).'</span>';
-                    }
+			if ($this->show_name) {
+				$html .= '<br /><br /><span class="file_name">'.end($parts).'</span>';
+			}
 
-                    // clear button
-                    if ($this->clear) {
-                        
-                        $onclick = 'document.getElementById("' . $this->id . '_preview").querySelector(".image_preview").style.display = "none";';
-                        $onclick .= 'document.getElementById("' . $this->id . '").value = "";';
-                        $onclick .= 'document.getElementById("' . $this->id . '_preview").querySelector(".no_preview").style.display = "block";';
-                        $onclick .= 'return false;';
-                        
-                        $html .= '<br /><br /><a href="#" onclick="' . $onclick . '" class="btn btn-small">' . Text::_('JACTION_DELETE') . '</a>';
-                    }
+			// clear button
+			if ($this->clear) {
 
-                    $html .= '</div>';
+				$onclick = 'document.getElementById(\'' . $this->id . '_preview\').querySelector(\'.image_preview\').style.display = \'none\';';
+				$onclick .= 'document.getElementById(\'' . $this->id . '\').value = \'\';';
+				$onclick .= 'document.getElementById(\'' . $this->id . '_file\').value = \'\';';
+				$onclick .= 'document.getElementById(\'' . $this->id . '_preview\').querySelector(\'.no_preview\').style.display = \'block\';';
+				$onclick .= 'return false;';
 
-                    if ($this->clear) {
-                        $html .= '<div class="no_preview" style="display: none">';
-                            $html .= '<span>'.Text::_('LIB_SYW_IMAGEPREVIEW_NOPREVIEW').'</span>';
-                        $html .= '</div>';
-                    }
+				$html .= '<br /><br /><button onclick="' . $onclick . '" class="btn btn-sm btn-danger">' . Text::_('JACTION_DELETE') . '</button>';
+			}
 
-                } else {
-                    // no preview available
-                    $html .= '<span>'.Text::_('LIB_SYW_IMAGEPREVIEW_NOPREVIEW').'</span>';
-                }
+			$html .= '</div>';
 
-            $html .= '</div>';
-        } else {
-                $html .= '<br /><br />';
+			$html .= '<div class="no_preview" style="display: ' . (empty($path) ? 'block' : 'none') . '">';
+				$html .= '<span>'.Text::_('LIB_SYW_IMAGEPREVIEW_NOPREVIEW').'</span>';
+			$html .= '</div>';
 
-                $parts = explode('/', $path);
+			$html .= '</div>';
+		} else {
+			$html .= '<br /><br />';
 
-                $html .= '<div class="input-group">';
+			$parts = explode('/', $path);
 
-                $html .= '<input id="'.$this->id.'_filename" type="text" disabled="disabled" value="'.end($parts).'" />';
+			if ($this->clear) {
+				$html .= '<div class="input-group">';
+			}
 
-                if ($this->clear) {
-                    
-                    $onclick = 'document.getElementById("' . $this->id . '_filename").value = "";';
-                    $onclick .= 'document.getElementById("' . $this->id . '").value = "";';
-                    $onclick .= 'return false;';
-                    
-                    $html .= '<a href="#" onclick="' . $onclick . '" class="btn">' . Text::_('JACTION_DELETE') . '</a>';
-                }
+			$html .= '<input id="'.$this->id.'_filename" class="form-control" type="text" disabled="disabled" value="'.end($parts).'" />';
 
-                $html .= '</div>';
+			if ($this->clear) {
+
+				$onclick = 'document.getElementById(\'' . $this->id . '_filename\').value = \'\';';
+				$onclick .= 'document.getElementById(\'' . $this->id . '\').value = \'\';';
+				$onclick .= 'document.getElementById(\'' . $this->id . '_file\').value = \'\';';
+				$onclick .= 'return false;';
+
+				$html .= '<button onclick="' . $onclick . '" class="btn btn-sm btn-danger">' . Text::_('JACTION_DELETE') . '</button>';
+				
+				$html .= '</div>';
+			}
         }
 
         return $html;

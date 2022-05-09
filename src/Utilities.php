@@ -16,26 +16,54 @@ use SYW\Library\Vendor\MobileDetect;
 
 class Utilities
 {
-	static $isMobile = null;
+	static $mobile_detector = null;
+	static $is_mobile = null;
+	static $is_tablet = null;
+
 	static $SVGSprites = array();
 
 	/*
 	 * Determines if the device is mobile
 	 */
-	static function isMobile($use_joomla_library = false)
+	static public function isMobile($use_joomla_library = false)
 	{
-		if (!isset(self::$isMobile)) {
+		if (!isset(self::$is_mobile)) {
 
 			if ($use_joomla_library) {
 				$browser = Browser::getInstance();
-				self::$isMobile = $browser->isMobile();
+				self::$is_mobile = $browser->isMobile();
 			} else {
-				$detect = new MobileDetect;
-				self::$isMobile = $detect->isMobile();
+				self::$is_mobile = self::getMobileDetector()->isMobile();
 			}
 		}
 
-		return self::$isMobile;
+		return self::$is_mobile;
+	}
+
+	/*
+	 * Determines if the device is a tablet
+	 */
+	static public function isTablet()
+	{
+		if (!isset(self::$is_tablet)) {
+			self::$is_tablet = self::getMobileDetector()->isTablet();
+		}
+
+		return self::$is_tablet;
+	}
+
+	/**
+	 * Get the mobile detector object
+	 *
+	 * @return \SYW\Library\Vendor\MobileDetect
+	 */
+	static protected function getMobileDetector()
+	{
+		if (!isset(self::$mobile_detector)) {
+			self::$mobile_detector = new MobileDetect;
+		}
+
+		return self::$mobile_detector;
 	}
 
 	/*
