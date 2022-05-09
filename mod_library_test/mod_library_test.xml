@@ -190,9 +190,46 @@
 					label="Icon" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
-				<field name="icon2" type="sywiconpicker" default="" 
+				<field name="icon2" type="sywiconpicker" default="" editable="true"
 					label="Icon" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
+					
+					
+					
+					
+					
+					
+				<!-- SYWUniversalIconPicker -->
+				<field name="iconuniv" type="sywuniversaliconpicker" default="" iconsets="syw,icomoon"
+					label="Icon Universal" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWUniversalIconPicker -->
+				<field name="iconuniv2" type="sywuniversaliconpicker" default="" iconsets="syw,icomoon"
+					icons="fas fa-bell,SYWicon-print,icon-mail"
+					label="Icon Universal" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWUniversalIconPicker -->
+				<field name="iconuniv3" type="sywuniversaliconpicker" default="" iconsets="syw,icomoon"
+					icongroups="accessibility,social"
+					label="Icon Universal" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
+					
+				<!-- SYWUniversalIconPicker -->
+				<field name="iconuniv4" type="sywuniversaliconpicker" default="" 
+					label="Icon Universal" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
+					
+					
+					
+					
+					
+					
+					
+					
+					
 				
 				<!-- SYWTransitionPicker -->
 				<field name="hovereffect" type="sywtransitionpicker" default="none" transitiongroups="2d" icon="SYWicon-layers" 
