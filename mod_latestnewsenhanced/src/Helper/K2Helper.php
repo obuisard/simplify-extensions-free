@@ -294,16 +294,16 @@ class K2Helper
 		switch ($params->get('use_range', 0))
 		{
 		    case 1: // relative
-		        
+
 		        // parameters are reversed (backward compatibility from early on version)
-		        
+
 		        $range_from = $params->get('range_to', 'week'); // now, day, week, month, year options
 		        $spread_from = $params->get('spread_to', 1);
 		        $range_to = $params->get('range_from', 'now');
 		        $spread_to = $params->get('spread_from', 1);
-		        
+
 		        // test range 'from' and 'to' to see if it will be a future or a past range
-		        
+
 		        $from = 0;
 		        switch($range_from)
 		        {
@@ -312,7 +312,7 @@ class K2Helper
 		            case 'month': $from += $spread_from * 30; break; // arbitrary
 		            case 'year': $from += $spread_from * 365; break; // arbitrary
 		        }
-		        
+
 		        $to = 0;
 		        switch($range_to)
 		        {
@@ -321,47 +321,52 @@ class K2Helper
 		            case 'month': $to += $spread_to * 30; break; // arbitrary
 		            case 'year': $to += $spread_to * 365; break; // arbitrary
 		        }
-		        
-		        if ($from > $to) { // past dates
-		            
-		            $query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-		            
-		            if ($range_to == 'now') {
-		                $query->where($dateField.' <= '.$nowDate);
-		            } else {
-		                $query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
-		            }
-		        } elseif ($from < $to) {
-		            
-		            if ($range_from == 'now') {
-		                $query->where($dateField.' >= '.$nowDate);
-		            } else {
-		                $query->where($dateField.' >= DATE_ADD('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-		            }
-		            
-		            $query->where($dateField.'<= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
-		        } else {
-		            $query->where($dateField.' = '.$nowDate);
+
+		        if ($from < 0 && $to < 0 && $from <= $to) {
+		        	// dates in the past (-3 to -2 months for instance)
+		        	$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.abs($spread_from).' '.$range_from.')');
+		        	$query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.abs($spread_to).' '.$range_to.')');
 		        }
 
-// 				if ($range_from == 'now') {
-// 					$query->where($dateField.' <= '.$nowDate);
-// 				} else {
-// 					if ($postdate == 'finished' || $postdate == 'fin_pen' || $postdate == 'pending') {
-// 						$query->where($dateField.' <= DATE_ADD('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-// 					} else {
-// 						$query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-// 					}
-// 				}
-// 				if ($range_to == 'now') {
-// 					$query->where($dateField.' >= '.$nowDate);
-// 				} else {
-// 					if ($postdate == 'finished' || $postdate == 'fin_pen' || $postdate == 'pending') {
-// 						$query->where($dateField.' >= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
-// 					} else {
-// 						$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
-// 					}
-// 				}
+		        if ($from < 0 && $to == 0) {
+		        	// dates in the past (the last 2 months for instance)
+		        	$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.abs($spread_from).' '.$range_from.')');
+		        	$query->where($dateField.' <= '.$nowDate);
+		        }
+
+		        if ($from < 0 && $to > 0) {
+		        	// dates in the past and in the future (the last month to the next 2 months for instance)
+		        	$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.abs($spread_from).' '.$range_from.')');
+		        	$query->where($dateField.' <= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
+		        }
+
+		        if ($from >= 0 && $to >= 0) {
+		        	if ($from > $to) {
+		        		// past dates
+		        		$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
+		        		if ($to == 0) {
+		        			$query->where($dateField.' <= '.$nowDate);
+		        		} else {
+		        			$query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
+		        		}
+		        	} elseif ($from < $to) {
+		        		// future dates
+		        		$query->where($dateField.' <= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
+		        		if ($from == 0) {
+		        			$query->where($dateField.' >= '.$nowDate);
+		        		} else {
+		        			$query->where($dateField.' >= DATE_ADD('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
+		        		}
+		        	} else {
+		        		// $from and $to are equal
+		        		if ($to == 0) {
+		        			$query->where($dateField.' = '.$nowDate);
+		        		} else {
+		        			$query->where($dateField.' = DATE_ADD('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
+		        		}
+		        	}
+		        }
+
 			break;
 
 			case 2: // range
@@ -928,7 +933,7 @@ class K2Helper
 			$lazyload = $params->get('lazyload', false);
 
 			$allow_remote = $params->get('allow_remote', true);
-			
+
 			$thumbnail_mime_type = $params->get('thumb_mime_type', '');
 
 			$maintain_height = $params->get('maintain_height', 0);
@@ -966,7 +971,7 @@ class K2Helper
 			if ($quality_webp < 0) {
 				$quality_webp = 0;
 			}
-			
+
 			if ($quality_avif > 100) {
 			    $quality_avif = 100;
 			}
@@ -988,7 +993,7 @@ class K2Helper
 
 			if ($clear_cache) {
 				Helper::clearThumbnails($module->id, $tmp_path);
-				
+
 				SYWVersion::refreshMediaVersion('mod_latestnewsenhanced_' . $module->id);
 			}
 		}
@@ -1067,7 +1072,7 @@ class K2Helper
 
 				//$item->linktarget = '';
 				$item->isinternal = true;
-				
+
 				$item->linktitle = $item->title;
 
 				$link_string = K2HelperRoute::getItemRoute($item->slug, $item->cat_slug);
@@ -1116,21 +1121,21 @@ class K2Helper
 			}
 
 			// rating (to avoid call to rating plugin, use $item->vote)
-			
+
 			$item->vote = '';
 			$item->vote_count = 0;
-			
+
 			if ($requireVoteData) {
 
     			$query->clear();
-    
+
     			$query->select('ROUND(v.rating_sum / v.rating_count, 1) AS rating');
     			$query->select($db->quoteName('v.rating_count', 'rating_count'));
     			$query->from($db->quoteName('#__k2_rating', 'v'));
     			$query->where($db->quoteName('v.itemID').' = '.$item->id);
-    
+
     			$db->setQuery($query);
-    			
+
     			try {
     				$ratings = $db->loadObjectList();
     				foreach ($ratings as $rating) {
@@ -1159,7 +1164,7 @@ class K2Helper
 				$filename = '';
 				$image_width = 0;
 				$image_height = 0;
-				
+
 				// note: original images are not cached, therefore looking thru article content will be inefficient
 
 				if (!$clear_cache && $params->get('create_thumb', 1)) {
@@ -1235,16 +1240,16 @@ class K2Helper
 					}
 
 					if ($imagesrc) { // found an image
-					    
+
 					    $image_object = HTMLHelper::cleanImageURL($imagesrc);
 					    $imagesrc = $image_object->url;
-					    
+
 					    if (!$params->get('create_thumb', 1) || $head_width <= 0 || $head_height <= 0) { // no thumbnails are created, use the original image
 					        $filename = $imagesrc;
-					        
+
 					        $image_width = $image_object->attributes['width'];
 					        $image_height = $image_object->attributes['height'];
-					        
+
 					    } else {
 					        $result_array = Helper::getImageFromSrc($module->id, $item->id, $imagesrc, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
 
@@ -1253,14 +1258,14 @@ class K2Helper
     						}
 
     						if (!empty($result_array[1])) {
-    						    
+
     						    $item->error[] = $result_array[1];
-    						    
+
     							// if error for the file found, try and use the default image instead
     							if (!$used_default_image && $default_picture) { // if the default image was the one chosen, no use to retry
-    							    
+
     							    $default_image_object = HTMLHelper::cleanImageURL($default_picture);
-    							    
+
     							    $result_array = Helper::getImageFromSrc($module->id, $item->id, $default_image_object->url, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
 
     								if (!empty($result_array[0])) {
@@ -1288,7 +1293,7 @@ class K2Helper
 					} else if ($image_width > 0 && $image_height > 0) {
 					    $img_attributes = array('width' => $image_width, 'height' => $image_height);
 					}
-					
+
 					$extra_attributes = trim($params->get('image_attributes', ''));
 					if ($extra_attributes) {
 						$xml = new \SimpleXMLElement('<element ' . $extra_attributes . ' />');

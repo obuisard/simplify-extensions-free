@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.5.1</version>
+	<version>6.6.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -67,7 +67,7 @@
 			
 			<fieldset name="basic" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="6.5.1" />
+				<field type="extensionversion" version="6.6.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_LATESTNEWSENHANCED_TRANSLATORS" />
@@ -269,7 +269,7 @@
 			  	
 				<fieldset name="selection_dates" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONDATES_FIELDSET_LABEL">
 								
-					<field name="post_d" type="list" default="published" 
+					<field name="post_d" type="dateselect" default="published" 
 			           	label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSTDATE_LABEL" 
 			           	description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSTDATE_DESC">
 						<option value="created">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CREATED</option>
@@ -374,7 +374,7 @@
 				
 				<fieldset name="selection_order" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONORDER_FIELDSET_LABEL">
 							
-					<field name="order" type="list" default="p_dsc" 
+					<field name="order" type="listfree" default="p_dsc" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ORDERING_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ORDERING_DESC">
 						<option value="o_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ORDERDESC</option>
@@ -388,7 +388,9 @@
 						<option value="f_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FINISHINGDESC</option>
 						<option value="f_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FINISHINGASC</option>
 						<option value="mc_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TOUCHEDDESC</option>
-						<option value="mc_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TOUCHEDASC</option>					
+						<option value="mc_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TOUCHEDASC</option>
+						<option value="cfield_dsc" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CUSTOMFIELDDATEDESC</option>
+						<option value="cfield_asc" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CUSTOMFIELDDATEASC</option>
 						<option value="random">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RANDOM</option>
 						<option value="hit">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_HIT</option>
 						<option value="title_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TITLEDESC</option>

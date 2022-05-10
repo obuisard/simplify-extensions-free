@@ -309,16 +309,16 @@ class ContentHelper
 		switch ($params->get('use_range', 0))
 		{
 		    case 1: // relative
-		        
+
 		        // parameters are reversed (backward compatibility from early on version)
-		        
+
 		        $range_from = $params->get('range_to', 'week'); // now, day, week, month, year options
 		        $spread_from = $params->get('spread_to', 1);
 		        $range_to = $params->get('range_from', 'now');
 		        $spread_to = $params->get('spread_from', 1);
-		        
+
 		        // test range 'from' and 'to' to see if it will be a future or a past range
-		        
+
 		        $from = 0;
 		        switch($range_from)
 		        {
@@ -327,7 +327,7 @@ class ContentHelper
 		            case 'month': $from += $spread_from * 30; break; // arbitrary
 		            case 'year': $from += $spread_from * 365; break; // arbitrary
 		        }
-		        
+
 		        $to = 0;
 		        switch($range_to)
 		        {
@@ -336,47 +336,52 @@ class ContentHelper
 		            case 'month': $to += $spread_to * 30; break; // arbitrary
 		            case 'year': $to += $spread_to * 365; break; // arbitrary
 		        }
-		        
-		        if ($from > $to) { // past dates
-		            
-		            $query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-		            
-		            if ($range_to == 'now') {
-		                $query->where($dateField.' <= '.$nowDate);
-		            } else {
-		                $query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
-		            }
-		        } elseif ($from < $to) {
-		            
-		            if ($range_from == 'now') {
-		                $query->where($dateField.' >= '.$nowDate);
-		            } else {
-		                $query->where($dateField.' >= DATE_ADD('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-		            }
-		            
-		            $query->where($dateField.'<= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
-		        } else {
-		            $query->where($dateField.' = '.$nowDate);
+
+		        if ($from < 0 && $to < 0 && $from <= $to) {
+		        	// dates in the past (-3 to -2 months for instance)
+		        	$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.abs($spread_from).' '.$range_from.')');
+		        	$query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.abs($spread_to).' '.$range_to.')');
 		        }
 
-// 				if ($range_from == 'now') {
-// 					$query->where($dateField.' <= '.$nowDate);
-// 				} else {
-// 					if ($postdate == 'finished' || $postdate == 'fin_pen' || $postdate == 'pending') {
-// 						$query->where($dateField.' <= DATE_ADD('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-// 					} else {
-// 						$query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
-// 					}
-// 				}
-// 				if ($range_to == 'now') {
-// 					$query->where($dateField.' >= '.$nowDate);
-// 				} else {
-// 					if ($postdate == 'finished' || $postdate == 'fin_pen' || $postdate == 'pending') {
-// 						$query->where($dateField.' >= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
-// 					} else {
-// 						$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
-// 					}
-// 				}
+		        if ($from < 0 && $to == 0) {
+		        	// dates in the past (the last 2 months for instance)
+		        	$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.abs($spread_from).' '.$range_from.')');
+		        	$query->where($dateField.' <= '.$nowDate);
+		        }
+
+		        if ($from < 0 && $to > 0) {
+		        	// dates in the past and in the future (the last month to the next 2 months for instance)
+		        	$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.abs($spread_from).' '.$range_from.')');
+		        	$query->where($dateField.' <= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
+		        }
+
+		        if ($from >= 0 && $to >= 0) {
+		        	if ($from > $to) {
+		        		// past dates
+		        		$query->where($dateField.' >= DATE_SUB('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
+		        		if ($to == 0) {
+		        			$query->where($dateField.' <= '.$nowDate);
+		        		} else {
+		        			$query->where($dateField.' <= DATE_SUB('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
+		        		}
+		        	} elseif ($from < $to) {
+		        		// future dates
+		        		$query->where($dateField.' <= DATE_ADD('.$nowDate.', INTERVAL '.$spread_to.' '.$range_to.')');
+		        		if ($from == 0) {
+		        			$query->where($dateField.' >= '.$nowDate);
+		        		} else {
+		        			$query->where($dateField.' >= DATE_ADD('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
+		        		}
+		        	} else {
+		        		// $from and $to are equal
+		        		if ($to == 0) {
+		        			$query->where($dateField.' = '.$nowDate);
+		        		} else {
+		        			$query->where($dateField.' = DATE_ADD('.$nowDate.', INTERVAL '.$spread_from.' '.$range_from.')');
+		        		}
+		        	}
+		        }
+
 			break;
 
 			case 2: // range
@@ -616,19 +621,19 @@ class ContentHelper
 		}
 
 		// custom field filters
-		
+
 		$customfield_filters_arrays = array();
-		
+
 		$customfield_filters = $params->get('customfieldsfilter'); // string (if default), array or object
-		
+
 		if (!empty($customfield_filters) && !is_string($customfield_filters)) {
-		    
+
 		    foreach ($customfield_filters as $customfield_filter) {
-		        
+
 		        $customfield_filter = (array)$customfield_filter;
-		        
+
 		        if ($customfield_filter['field'] !== 'none') {
-		            
+
 		            $values = explode(',', $customfield_filter['values']);
 		            foreach ($values as $key => $value) {
 		                $value = trim($value);
@@ -636,22 +641,22 @@ class ContentHelper
 		                    unset($values[$key]);
 		                }
 		            }
-		            
+
 		            if (!empty($values)) {
 		                $customfield_filters_arrays[] = array('id' => $customfield_filter['field'], 'values' => $values, 'inex' => $customfield_filter['inex']);
 		            }
 		        }
 		    }
 		}
-		
+
 		if (!empty($customfield_filters_arrays)) {
-		    
+
 		    $article_id_arrays_from_cfields = array();
-		    
+
 		    foreach ($customfield_filters_arrays as $customfield_filter) {
-		            
+
 	            $subQuery = $db->getQuery(true);
-	            
+
 	            $subQuery->select("DISTINCT cfv.item_id"); // no unique results when joining with categories
 	            $subQuery->from("#__fields_values AS cfv");
 	            $subQuery->join('LEFT', '#__fields AS f ON f.id = cfv.field_id');
@@ -659,43 +664,43 @@ class ContentHelper
 	            $subQuery->where('(f.state IS NULL OR f.state = 1)');
 	            $subQuery->where('(f.access IS NULL OR f.access IN (' . $groups . '))');
 	            $subQuery->where($db->quoteName('cfv.field_id').' = ' . $db->quote($customfield_filter['id']));
-	            
+
 	            // any category for the field? if so, join with categories. If not, do not join
 // 	            if (!empty(FieldsHelper::getAssignedCategoriesTitles($customfield_filter['id']))) {
 //     	            if (!isset($array_of_category_values['all']) && !isset($array_of_category_values['auto']) && !empty($categories_array)) {
-//     	               $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');	               
+//     	               $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');
 //     	               $subQuery->where($db->quoteName('cfc.category_id') . ' ' . ($params->get('cat_inex', 1) ? 'IN' : 'NOT IN') . ' (' . implode(',', $categories_array) . ')');
 //     	            }
 // 	            }
-	            
+
 	            if ($customfield_filter['inex']) {
 	               $subQuery->where($db->quoteName('cfv.value') . " = '" . implode("' OR " . $db->quoteName('cfv.value') . " = '", $customfield_filter['values']) . "'");
 	            } else {
 	                $subQuery->where($db->quoteName('cfv.value') . " <> '" . implode("' AND " . $db->quoteName('cfv.value') . " <> '", $customfield_filter['values']) . "'");
 	            }
-	            
+
 	            if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
 	                $subQuery->where('(f.language IS NULL OR f.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . '))');
 	            }
-	            
+
 	            $db->setQuery($subQuery);
-	            
-	            try {	                
+
+	            try {
 	                $article_id_arrays_from_cfields[] = $db->loadColumn();
 	            } catch (ExecutionFailureException $e) {
 	                Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 	            }
 		    }
-		    
+
 	        if (!empty($article_id_arrays_from_cfields)) {
-	            
+
 	            // keep only the ids found in all the arrays
 	            if (count($article_id_arrays_from_cfields) > 1) {
 	                $article_ids = call_user_func_array('array_intersect', $article_id_arrays_from_cfields);
 	            } else {
 	                $article_ids = $article_id_arrays_from_cfields[0];
 	            }
-	            
+
 	            if (!empty($article_ids)) {
 	                $query->where('a.id IN (' . implode(",", $article_ids) . ')'); // include all articles that have custom field value(s) that correspond to the custom field value
 	            } else {
@@ -1053,7 +1058,7 @@ class ContentHelper
 			$lazyload = $params->get('lazyload', false);
 
 			$allow_remote = $params->get('allow_remote', true);
-			
+
 			$thumbnail_mime_type = $params->get('thumb_mime_type', '');
 
 			$maintain_height = $params->get('maintain_height', 0);
@@ -1091,7 +1096,7 @@ class ContentHelper
 			if ($quality_webp < 0) {
 				$quality_webp = 0;
 			}
-			
+
 			if ($quality_avif > 100) {
 			    $quality_avif = 100;
 			}
@@ -1113,7 +1118,7 @@ class ContentHelper
 
 			if ($clear_cache) {
 				Helper::clearThumbnails($module->id, $tmp_path);
-				
+
 				SYWVersion::refreshMediaVersion('mod_latestnewsenhanced_' . $module->id);
 			}
 		}
@@ -1303,7 +1308,7 @@ class ContentHelper
 				$filename = '';
 				$image_width = 0;
 				$image_height = 0;
-				
+
 				// note: original images are not cached, therefore looking thru article content will be inefficient
 
 				if (!$clear_cache && $params->get('create_thumb', 1)) {
@@ -1394,16 +1399,16 @@ class ContentHelper
 					}
 
 					if ($imagesrc) { // found an image
-					    
+
 					    $image_object = HTMLHelper::cleanImageURL($imagesrc);
 					    $imagesrc = $image_object->url;
-					    
+
 						if (!$params->get('create_thumb', 1) || $head_width <= 0 || $head_height <= 0) { // no thumbnails are created, use the original image
 					        $filename = $imagesrc;
-					        
+
 					        $image_width = $image_object->attributes['width'];
 					        $image_height = $image_object->attributes['height'];
-					        
+
 					    } else {
 					        $result_array = Helper::getImageFromSrc($module->id, $item->id, $imagesrc, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
 
@@ -1412,9 +1417,9 @@ class ContentHelper
     						}
 
     						if (!empty($result_array[1])) {
-    						    
+
     						    $item->error[] = $result_array[1];
-    						    
+
     							// if error for the file found, try and use the default image instead
     						    if (!$used_default_image && $default_picture) { // if the default image was the one chosen, no use to retry
 
@@ -1447,7 +1452,7 @@ class ContentHelper
 					} else if ($image_width > 0 && $image_height > 0) {
 					    $img_attributes = array('width' => $image_width, 'height' => $image_height);
 					}
-					
+
 					$extra_attributes = trim($params->get('image_attributes', ''));
 					if ($extra_attributes) {
 						$xml = new \SimpleXMLElement('<element ' . $extra_attributes . ' />');
