@@ -213,7 +213,7 @@ class CSSFileCache extends HeaderFilesCache
 		//		}
 
 		// set the header
-		$this->sendHttpHeaders('css');
+		//$this->sendHttpHeaders('css');
 
 		include JPATH_ROOT . '/media/mod_weblinklogos/styles/style.css.php';
 

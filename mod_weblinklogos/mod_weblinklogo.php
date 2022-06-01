@@ -142,7 +142,7 @@ $clear_cache = Helper::IsClearPictureCache($params);
 
 if ($clear_cache) {
 	Helper::clearThumbnails($tmp_path, $unique_filename_extra);
-	
+
 	SYWVersion::refreshMediaVersion('mod_weblinklogos_' . $module->id);
 }
 
@@ -286,7 +286,7 @@ if ($carousel_configuration != 'none') {
 
 	if ($generate_inline_scripts) {
 
-		$wam->addInlineScript($cache_anim_js->getBuffer());
+		$wam->addInlineScript($cache_anim_js->getBuffer(true));
 
 	} else {
 
