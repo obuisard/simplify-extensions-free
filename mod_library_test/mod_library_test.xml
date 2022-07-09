@@ -112,13 +112,23 @@
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 				
 				<!-- SYWVerboseText -->
-				<field name="text" type="sywverbosetext" default="900" filter="integer" size="4" unit="ms" icon="SYWicon-timer" 
+				<field name="text" type="sywverbosetext" default="900" filter="integer" size="4" unit="ms" icon="SYWicon-timer" help="This is the help"
 					label="Text" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWVerboseText pre/post -->
+				<field name="text_prefix" type="sywverbosetext" default="" filter="string" size="10" prefix="facebook/profile/" postfix="/com" icon="SYWicon-facebook" 
+					label="Text pre/post" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
+				<!-- SYWVerboseText range -->
+				<field name="text_range" type="sywverbosetext" default="" filter="integer" min="600" max="900" unit="ms" icon="SYWicon-timer" 
+					label="Text range" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
 				<!-- SYWVerboseTextUnits -->
 				<field name="textunits" type="sywverbosetextunits" default="" size="4" units="px,em" defaultunit="px" icon="SYWicon-timer" 
-					label="Text" 
+					label="Text units" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
 				<!-- Tags -->
@@ -158,9 +168,7 @@
 					label="Color" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
 					
-					
-					
-					
+				<!-- Joomla color -->					
 					
 				<field name="colorpickerjoomla" type="color" default="transparent" 
 					preview="true" control="simple" split="4"
@@ -175,10 +183,7 @@
 				<field name="colorpickerjoomla3" type="color" default="hsl(214,63%,20%)" 
 					preview="true" control="slider" format="hue" saveFormat="hsl"
 					label="Color Joomla" 
-					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
-					
-					
-					
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />					
 					
 				<!-- SYWFontPicker -->
 				<field name="font" type="sywfontpicker" default=""
@@ -193,12 +198,6 @@
 				<field name="icon2" type="sywiconpicker" default="" editable="true"
 					label="Icon" 
 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
-				
-					
-					
-					
-					
-					
 					
 				<!-- SYWUniversalIconPicker -->
 				<field name="iconuniv" type="sywuniversaliconpicker" default="" iconsets="syw,icomoon"
@@ -220,16 +219,7 @@
 				<!-- SYWUniversalIconPicker -->
 				<field name="iconuniv4" type="sywuniversaliconpicker" default="" 
 					label="Icon Universal" 
-					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
-					
-					
-					
-					
-					
-					
-					
-					
-					
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />					
 				
 				<!-- SYWTransitionPicker -->
 				<field name="hovereffect" type="sywtransitionpicker" default="none" transitiongroups="2d" icon="SYWicon-layers" 
