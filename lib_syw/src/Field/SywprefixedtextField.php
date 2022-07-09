@@ -13,6 +13,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
+/* deprecated - use verbosetext */
 class SywprefixedtextField extends FormField
 {
 	protected $type = 'Sywprefixedtext';

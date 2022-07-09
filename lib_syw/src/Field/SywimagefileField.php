@@ -13,6 +13,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 
+/* deprecated - use imagefilepreview */
 class SywimagefileField extends FormField
 {
 	public $type = 'Sywimagefile';
