@@ -172,11 +172,11 @@
 					
 				<fieldset name="datasource_exin" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONINEX_FIELDSET_LABEL">
 					
-					<field name="ex" type="text" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles,k2" 
+					<field name="ex" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles,k2" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_EXCLUDE_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_EXCLUDE_DESC" />
 					
-					<field name="in" type="text" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles,k2" 
+					<field name="in" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles,k2" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDE_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDE_DESC" />
 	            </fieldset>
