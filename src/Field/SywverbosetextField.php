@@ -87,6 +87,8 @@ class SywverbosetextField extends FormField
 			{
 				$hint = $max ? $max : '';
 			}
+			
+			$hint = Text::sprintf('LIB_SYW_SYWVERBOSETEXT_HINT', $hint);
 		}
 
 		if (empty($hint) && $this->hint)
