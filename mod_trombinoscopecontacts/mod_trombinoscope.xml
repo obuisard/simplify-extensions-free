@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.9.3</version>
+	<version>4.9.4</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -62,7 +62,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\TrombinoscopeContacts\Site\Field">			
 			<fieldset name="basic" label="MOD_TROMBINOSCOPE_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.9.3" />
+				<field type="extensionversion" version="4.9.4" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_TROMBINOSCOPE_TRANSLATORS" />
@@ -196,11 +196,11 @@
 
 				<fieldset name="selection_exin" label="MOD_TROMBINOSCOPE_SELECTIONINEX_FIELDSET_LABEL">
 				 
-					<field name="ex" type="text" default="" filter="string" translateHint="false" hint="20,34,47" showon="selection!:contact" 
+					<field name="ex" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" showon="selection!:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_EXCLUDE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_EXCLUDE_DESC" />
 						
-					<field name="in" type="text" default="" filter="string" translateHint="false" hint="20,34,47" showon="selection!:contact" 
+					<field name="in" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" showon="selection!:contact" 
 						label="MOD_TROMBINOSCOPE_FIELD_INCLUDE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_INCLUDE_DESC" />
 				</fieldset>
@@ -241,7 +241,7 @@
 						<option value="manual">MOD_TROMBINOSCOPE_VALUE_MANUAL</option>
 					</field>
 				
-					<field name="manual_ids" type="text" default="" filter="string" translateHint="false" hint="20,34,47" showon="selection!:contact[AND]order:manual" 
+					<field name="manual_ids" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" showon="selection!:contact[AND]order:manual" 
 						label="MOD_TROMBINOSCOPE_FIELD_MANUALIDS_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_MANUALIDS_DESC" />				
 				</fieldset>
@@ -471,7 +471,7 @@
 						label="MOD_TROMBINOSCOPE_FIELD_MODULEEXTERNALURL_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_MODULEEXTERNALURL_DESC" />
 						
-					<field name="modulel_lbl" type="text" default="" translateHint="true" hint="MOD_TROMBINOSCOPE_FIELD_MODULELINKLABEL_HINT" 
+					<field name="modulel_lbl" type="text" default="" hint="MOD_TROMBINOSCOPE_FIELD_MODULELINKLABEL_HINT" 
 						label="MOD_TROMBINOSCOPE_FIELD_MODULELINKLABEL_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_MODULELINKLABEL_DESC" />
 						
@@ -736,7 +736,7 @@
 	   					label="MOD_TROMBINOSCOPE_IMAGEFILTERS_LABEL" 
 	   					description="MOD_TROMBINOSCOPE_IMAGEFILTERS_DESC" />
 					
-					<field name="quality" type="sywverbosetext" default="100" filter="integer" size="12" maxlength="3" min="0" max="100" showon="s_pic:1[AND]crop_pic:1" 
+					<field name="quality" type="sywverbosetext" default="100" filter="integer" size="18" maxlength="3" min="0" max="100" showon="s_pic:1[AND]crop_pic:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_IMAGEQUALITY_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_IMAGEQUALITY_DESC" />
 				</fieldset>
@@ -993,7 +993,7 @@
 						<option value="1">JYES</option>
 					</field>
 					
-					<field name="keep_tags" type="text" default="" filter="raw" translateHint="false" hint="&lt;p&gt;&lt;a&gt;&lt;br&gt;" showon="t:info[AND]s_t:1" 
+					<field name="keep_tags" type="sywverbosetext" default="" filter="raw" translateHint="false" hint="&lt;p&gt;&lt;a&gt;&lt;br&gt;" showon="t:info[AND]s_t:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_KEEPTAGS_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_KEEPTAGS_DESC" />
 					
