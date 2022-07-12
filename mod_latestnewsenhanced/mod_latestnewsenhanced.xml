@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.6.0</version>
+	<version>6.6.1</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -67,7 +67,7 @@
 			
 			<fieldset name="basic" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="6.6.0" />
+				<field type="extensionversion" version="6.6.1" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_LATESTNEWSENHANCED_TRANSLATORS" />
@@ -347,11 +347,11 @@
 						<option value="1">JYES</option>
 					</field>
 					
-					<field name="ex" type="text" default="" filter="string" translateHint="false" hint="20,34,47" 
+					<field name="ex" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDE_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDE_DESC" />
 						
-					<field name="in" type="text" default="" filter="string" translateHint="false" hint="20,34,47"
+					<field name="in" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ONLYIDS_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ONLYIDS_DESC" />
 						
@@ -668,7 +668,7 @@
 						<option value="1">JYES</option>
 					</field>
 					
-					<field name="keep_tags" type="text" default="" filter="raw" translateHint="false" hint="&lt;p&gt;&lt;a&gt;&lt;br&gt;" showon="strip_tags:1" 
+					<field name="keep_tags" type="sywverbosetext" default="" filter="raw" translateHint="false" hint="&lt;p&gt;&lt;a&gt;&lt;br&gt;" showon="strip_tags:1" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_KEEPTAGS_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_KEEPTAGS_DESC" />
 						
