@@ -483,7 +483,12 @@ class Helper
 			case 'order': $ordering .= 'a.ordering '.$params->get('direction', 'asc'); break;
 			case 'random': $ordering .= 'rand()'; break;
 			case 'hits': $ordering .= 'a.hits '.$params->get('direction', 'asc'); break;
-			default: $ordering .= 'a.title '.$params->get('direction', 'asc'); break;
+
+			case 'created': $ordering .= 'a.created '.$params->get('direction', 'asc'); break;
+			case 'modified': $ordering .= 'a.modified '.$params->get('direction', 'asc'); break;
+			case 'published': $ordering .= 'a.publish_up '.$params->get('direction', 'asc'); break;
+
+			default: $ordering .= 'a.title '.$params->get('direction', 'asc');
 		}
 
 		if ($ordering) {

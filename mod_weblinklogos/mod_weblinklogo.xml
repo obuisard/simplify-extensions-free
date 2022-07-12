@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.5.2</version>
+	<version>4.5.3</version>
 	<description>MOD_WEBLINKLOGO_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\WeblinkLogos</namespace>
 	
@@ -55,7 +55,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\WeblinkLogos\Site\Field">
 			<fieldset name="basic" label="MOD_WEBLINKLOGO_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.5.2" />
+				<field type="extensionversion" version="4.5.3" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_WEBLINKLOGO_TRANSLATORS" />
@@ -181,11 +181,11 @@
 
 				<fieldset name="selection_exin" label="MOD_WEBLINKLOGO_SELECTIONINEX_FIELDSET_LABEL">
 			
-					<field name="ex" type="text" default="" filter="string" translateHint="false" hint="20,34,47" 
+					<field name="ex" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" 
 						label="MOD_WEBLINKLOGO_FIELD_EXCLUDE_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_EXCLUDE_DESC" />
 						
-					<field name="in" type="text" default="" filter="string" translateHint="false" hint="20,34,47"
+					<field name="in" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47"
 						label="MOD_WEBLINKLOGO_FIELD_INCLUDE_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_INCLUDE_DESC" />
 				</fieldset>
@@ -198,10 +198,13 @@
 						<option value="title">JGLOBAL_TITLE</option>
 						<option value="order">MOD_WEBLINKLOGO_FIELD_VALUE_ORDER</option>
 						<option value="hits">MOD_WEBLINKLOGO_FIELD_VALUE_HITS</option>
+						<option value="created">MOD_WEBLINKLOGO_FIELD_VALUE_CREATED</option>
+						<option value="modified">MOD_WEBLINKLOGO_FIELD_VALUE_MODIFIED</option>
+						<option value="published">MOD_WEBLINKLOGO_FIELD_VALUE_PUBLISHED</option>
 						<option value="random">MOD_WEBLINKLOGO_FIELD_VALUE_RANDOM</option>
 					</field>
 					
-					<field name="direction" type="list" default="asc" showon="ordering:title,order,hits" 
+					<field name="direction" type="list" default="asc" showon="ordering!:random" 
 						label="MOD_WEBLINKLOGO_FIELD_ORDERDIRECTION_LABEL"
 						description="MOD_WEBLINKLOGO_FIELD_ORDERDIRECTION_DESC">
 						<option value="asc">MOD_WEBLINKLOGO_FIELD_VALUE_ASCENDING</option>
@@ -329,7 +332,7 @@
 						<option value="1">JSHOW</option>
 					</field>
 				
-					<field name="caption_classes" type="text" default="" filter="string" hint="label label-info" showon="caption:1" 
+					<field name="caption_classes" type="sywverbosetext" default="" filter="string" translateHint="false" hint="label label-info" showon="caption:1" 
 						label="MOD_WEBLINKLOGO_FIELD_CAPTIONCLASSES_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_CAPTIONCLASSES_DESC" />
 				</fieldset>						
@@ -401,7 +404,7 @@
 						<option value="1">JSHOW</option>
 					</field>
 					
-					<field name="hits_classes" type="text" default="" filter="string" hint="label label-info" showon="hits:1" 
+					<field name="hits_classes" type="sywverbosetext" default="" filter="string" translateHint="false" hint="label label-info" showon="hits:1" 
 						label="MOD_WEBLINKLOGO_FIELD_HITSCLASSES_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_HITSCLASSES_DESC" />
 					
@@ -444,7 +447,7 @@
 						<option value="1">JYES</option>
 					</field>
 					
-					<field name="keep_tags" type="text" default="" filter="raw" hint="&lt;p&gt;&lt;a&gt;&lt;br&gt;" showon="description:1" 
+					<field name="keep_tags" type="sywverbosetext" default="" filter="raw" translateHint="false" hint="&lt;p&gt;&lt;a&gt;&lt;br&gt;" showon="description:1" 
 						label="MOD_WEBLINKLOGO_FIELD_KEEPTAGS_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_KEEPTAGS_DESC" />
 						
