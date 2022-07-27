@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>5.0.4</version>
+	<version>5.1.0</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Plugin\System\JqueryEasy</namespace>
 	
@@ -61,7 +61,7 @@
 		
 			<fieldset name="basic" label="PLG_SYSTEM_JQUERYEASY_INFORMATION_LABEL" addfieldprefix="SYW\Library\Field">
 				
-				<field type="extensionversion" version="5.0.4" />
+				<field type="extensionversion" version="5.1.0" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_JQUERYEASY_TRANSLATORS" />
@@ -122,7 +122,7 @@
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_WHICHHTTP_DESC">
 		                <option value="http">PLG_SYSTEM_JQUERYEASY_VALUE_HTTP</option>
 		                <option value="https">PLG_SYSTEM_JQUERYEASY_VALUE_HTTPS</option>
-		                <option value="none">JNONE</option>
+		                <option value="none">PLG_SYSTEM_JQUERYEASY_VALUE_RELATIVE</option>
 		            </field>
 		            
 		            <field name="compression" type="list" default="compressed" 
@@ -357,6 +357,10 @@
 		                <option value="0">JNO</option>
 		                <option value="1">JYES</option>
 		            </field>
+		            
+		            <field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="PLG_SYSTEM_JQUERYEASY_FIELD_DEFERJQUERY_LABEL"
+						description="PLG_SYSTEM_JQUERYEASY_FIELD_DEFERJQUERY_DESC" />
 		        </fieldset>
 		        
 		        <fieldset name="independant_jquery" label="PLG_SYSTEM_JQUERYEASY_INDEPENDENTMODIFICATIONS_LABEL" description="PLG_SYSTEM_JQUERYEASY_INFO_INDEPENDENT">
@@ -405,9 +409,9 @@
 		                <option value="both">PLG_SYSTEM_JQUERYEASY_VALUE_BOTH</option>
 		            </field>
 		            
-		            <field type="message" style="info" text="PLG_SYSTEM_JQUERYEASY_INFO_BOOTSTRAPCSSPACKAGES" showon="bootstrapinpage:1[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1[AND]bootstraplibrarytypes:css,both" />
+		            <field type="message" style="info" text="PLG_SYSTEM_JQUERYEASY_INFO_BOOTSTRAPCSSPACKAGES" showon="bootstrapinpage:1[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1,5.2[AND]bootstraplibrarytypes:css,both" />
 		            
-		            <field name="bootstrapcsspackages" type="checkboxes" showon="bootstrapinpage:1[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1[AND]bootstraplibrarytypes:css,both" 
+		            <field name="bootstrapcsspackages" type="checkboxes" showon="bootstrapinpage:1[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1,5.2[AND]bootstraplibrarytypes:css,both" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_BOOTSTRAPCSSPACKAGES_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_BOOTSTRAPCSSPACKAGES_DESC">
 						<option value="grid">bootstrap-grid</option>
@@ -433,7 +437,7 @@
 						<option value="toast">toast</option>
 					</field>	            
 			
-					<field name="bootstraprtl" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="bootstrapinpage:1[AND]bootstrapversion:5.0,5.1[AND]bootstraplibrarytypes:css,both" 
+					<field name="bootstraprtl" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="bootstrapinpage:1[AND]bootstrapversion:5.0,5.1,5.2[AND]bootstraplibrarytypes:css,both" 
 	            		label="PLG_SYSTEM_JQUERYEASY_FIELD_LOADBOOTSTRAPRTLVERSION_LABEL" 
 	            		description="PLG_SYSTEM_JQUERYEASY_FIELD_LOADBOOTSTRAPRTLVERSION_DESC">
 	                	<option value="0">JNO</option>
@@ -459,7 +463,7 @@
 		                <option value="1">JYES</option>
 		            </field>
 				
-					<field name="loadbootstrapbundle" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="bootstrapinpage:1[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1[AND]bootstraplibrarytypes:js,both" 
+					<field name="loadbootstrapbundle" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="bootstrapinpage:1[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1,5.2[AND]bootstraplibrarytypes:js,both" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_LOADBOOTSTRAPBUNDLE_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_LOADBOOTSTRAPBUNDLE_DESC">
 		                <option value="0">JNO</option>
@@ -471,7 +475,7 @@
 				
 					<field type="message" style="info" text="PLG_SYSTEM_JQUERYEASY_INFO_POPPERFORBOOTSTRAP" />
 					
-					<field name="popperversion" type="list" default="none" showon="bootstrapinpage:1[AND]loadbootstrapbundle:0[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1[AND]bootstraplibrarytypes:js,both" 
+					<field name="popperversion" type="list" default="none" showon="bootstrapinpage:1[AND]loadbootstrapbundle:0[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1,5.2[AND]bootstraplibrarytypes:js,both" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_POPPERVERSION_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_POPPERVERSION_DESC">	
 		            	<option value="none">JNONE</option>
@@ -492,11 +496,11 @@
 		            	<option value="1.12">1.12.x</option>
 		            </field>
 		            
-		            <field name="poppersubversion" type="sywprefixedtext" prefix="x.x." filter="integer" default="0" size="2" showon="bootstrapinpage:1[AND]loadbootstrapbundle:0[AND]popperversion!:none[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1[AND]bootstraplibrarytypes:js,both" 
+		            <field name="poppersubversion" type="sywprefixedtext" prefix="x.x." filter="integer" default="0" size="2" showon="bootstrapinpage:1[AND]loadbootstrapbundle:0[AND]popperversion!:none[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1,5.2[AND]bootstraplibrarytypes:js,both" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_POPPERSUBVERSION_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_POPPERSUBVERSION_DESC" />
 					
-					<field type="cdnlinks" library="popper" showon="bootstrapinpage:1[AND]loadbootstrapbundle:0[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1[AND]bootstraplibrarytypes:js,both" />
+					<field type="cdnlinks" library="popper" showon="bootstrapinpage:1[AND]loadbootstrapbundle:0[AND]bootstrapversion:4.0,4.1,4.2,4.3,4.4,4.5,4.6,5.0,5.1,5.2[AND]bootstraplibrarytypes:js,both" />
 				</fieldset>
 
 	           	<fieldset name="dependant_bootstrap" label="PLG_SYSTEM_JQUERYEASY_ADDITIONNALMODIFICATIONS_LABEL" description="PLG_SYSTEM_JQUERYEASY_INFO_DEPENDENT">
@@ -512,6 +516,10 @@
 	            		description="PLG_SYSTEM_JQUERYEASY_FIELD_IGNORESTYLESHEETS_DESC" />
 	            
 	            	<field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_IGNOREBOOTSTRAPSTYLESHEET" showon="bootstrapinpage:1" />
+
+		        	<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="PLG_SYSTEM_JQUERYEASY_FIELD_DEFERBOOTSTRAP_LABEL"
+						description="PLG_SYSTEM_JQUERYEASY_FIELD_DEFERBOOTSTRAP_DESC" />
 		        </fieldset>
 	            
 	            <fieldset name="independant_bootstrap" label="PLG_SYSTEM_JQUERYEASY_INDEPENDENTMODIFICATIONS_LABEL" description="PLG_SYSTEM_JQUERYEASY_INFO_INDEPENDENT">	
@@ -537,8 +545,12 @@
 					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/jquery-easy/scripts-options" />
 				</fieldset>
 			
-				<fieldset name="remaining_scripts" label="PLG_SYSTEM_JQUERYEASY_FIELD_CLEANREMAININGSCRIPTS_LABEL">
-						
+				<fieldset name="all_scripts" label="PLG_SYSTEM_JQUERYEASY_SCRIPTS_LABEL">
+					
+					<field type="message" text="PLG_SYSTEM_JQUERYEASY_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="PLG_SYSTEM_JQUERYEASY_FIELD_DEFERSCRIPTS_LABEL"
+						description="PLG_SYSTEM_JQUERYEASY_FIELD_DEFERSCRIPTS_DESC" />
+
 					<field name="stripremainingscripts" type="textarea" cols="40" rows="5" default="" filter="raw" class="input-xxlarge"
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_CLEANREMAININGSCRIPTS_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_CLEANREMAININGSCRIPTS_DESC" /> 
@@ -584,7 +596,7 @@
 					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/jquery-easy/styles-options" />
 				</fieldset>
            		
-           		<fieldset name="remaining_styles" label="PLG_SYSTEM_JQUERYEASY_FIELD_CLEANREMAININGCSS_LABEL">
+           		<fieldset name="all_styles" label="PLG_SYSTEM_JQUERYEASY_STYLES_LABEL">
 					
 		            <field name="stripremainingcss" type="textarea" cols="40" rows="5" default="" filter="raw" class="input-xxlarge"
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_CLEANREMAININGCSS_LABEL" 
@@ -606,7 +618,7 @@
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_ADDCSSDECLARATION_DESC" />
 		            	
 		            <field type="message" style="example" text="PLG_SYSTEM_JQUERYEASY_EXAMPLE_ADDCSSDECLARATION" />
-		        </fieldset>				            
+		        </fieldset>
            	</fieldset>
 			
 			<fieldset name="regexp_options" label="PLG_SYSTEM_JQUERYEASY_REGEXP_LABEL" description="PLG_SYSTEM_JQUERYEASY_REGEXP_DESC">

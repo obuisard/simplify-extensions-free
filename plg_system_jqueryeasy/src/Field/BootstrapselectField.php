@@ -30,6 +30,7 @@ class BootstrapselectField extends ListField
 		
 		$options[] = HTMLHelper::_('select.option', 'local', Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_LOCAL'), 'value', 'text', $disable = false);
 		
+		$options[] = HTMLHelper::_('select.option', '5.2', '5.2.x', 'value', 'text', $disable = false);
 		$options[] = HTMLHelper::_('select.option', '5.1', '5.1.x', 'value', 'text', $disable = false);
 		$options[] = HTMLHelper::_('select.option', '5.0', '5.0.x', 'value', 'text', $disable = false);
 		$options[] = HTMLHelper::_('select.option', '4.6', '4.6.x', 'value', 'text', $disable = false);
