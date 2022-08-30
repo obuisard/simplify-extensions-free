@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.6.1</version>
+	<version>6.6.2</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -67,7 +67,7 @@
 			
 			<fieldset name="basic" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="6.6.1" />
+				<field type="extensionversion" version="6.6.2" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_LATESTNEWSENHANCED_TRANSLATORS" />
@@ -1649,7 +1649,7 @@
 				</fieldset>
 			</fieldset>
 
-			<fieldset name="advanced" description="MOD_LATESTNEWSENHANCEDEXTENDED_ADVANCED_FIELDSET_DESC">
+			<fieldset name="advanced_all" label="MOD_LATESTNEWSENHANCEDEXTENDED_ADVANCED_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_ADVANCED_FIELDSET_DESC">
 			
 				<fieldset name="advanced_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
 
@@ -1788,7 +1788,7 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="advanced_module" label="MOD_LATESTNEWSENHANCEDEXTENDED_MODULE_LABEL">
+				<fieldset name="advanced" label="MOD_LATESTNEWSENHANCEDEXTENDED_MODULE_LABEL">
 					
 					<field name="show_on_mobile" type="list" default="1" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONMOBILE_LABEL"
@@ -1817,8 +1817,8 @@
 					<field name="cache_time" type="sywverbosetext" default="900" filter="integer" size="4" unit="ms" icon="SYWicon-timer" 
 						label="COM_MODULES_FIELD_CACHE_TIME_LABEL" />
 						
-					<field name="cachemode" type="hidden" default="itemid">
-						<option value="itemid"></option>
+					<field name="cachemode" type="hidden" default="static">
+						<option value="static"></option>
 					</field>
 				</fieldset>
 			</fieldset>
