@@ -20,10 +20,10 @@ class Version
     const PRODUCT = 'SimplifyYourWeb Extensions Library';
 
 	/** @var  string  Release version. */
-    const RELEASE = '2.2.3';
+    const RELEASE = '2.2.4';
 
 	/** @var  string  Release date. */
-    const RELDATE = '08-Jul-2022';
+    const RELDATE = '02-Aug-2022';
 
 	/** @var  string  Copyright Notice. */
     const COPYRIGHT = 'Copyright (C) 2011 Simplify Your Web, Inc. All rights reserved.';
