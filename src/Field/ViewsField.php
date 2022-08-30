@@ -6,12 +6,12 @@
 
 namespace SYW\Library\Field;
 
-defined('_JEXEC') or die ;
+defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\GroupedlistField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Multilanguage;
-use Joomla\CMS\Factory;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 class ViewsField extends GroupedlistField
@@ -20,6 +20,7 @@ class ViewsField extends GroupedlistField
 
 	protected $extension_option;
 	protected $extension_view;
+	protected $client;
 
 	protected function getGroups()
 	{
@@ -45,8 +46,17 @@ class ViewsField extends GroupedlistField
 				$query->join('LEFT', $db->quoteName('#__menu') . ' AS b ON a.lft > b.lft AND a.rgt < b.rgt');
 				$query->where('a.link LIKE '.$db->quote('%option='.$this->extension_option.'&view='.$extension_view.'%'));
 				$query->where('a.published = 1');
+				
+				if ($this->client) {
+				    if ($this->client === 'administrator') {
+				        $query->where('a.client_id = 1');
+				    } else if ($this->client === 'site') {
+				        $query->where('a.client_id = 0');
+				    }
+				}
 
 				$db->setQuery($query);
+
 				try {
 					$results = $db->loadObjectList();
 
@@ -61,6 +71,7 @@ class ViewsField extends GroupedlistField
 				}
 			}
 		} else {
+
 			$query = $db->getQuery(true);
 
 			$query->select('DISTINCT a.id AS value, CONCAT(a.title, " (", a.alias, ")"'.$additional_tag.') AS text, a.alias, a.level, a.menutype, a.type, a.template_style_id, a.checked_out');
@@ -68,6 +79,14 @@ class ViewsField extends GroupedlistField
 			$query->join('LEFT', $db->quoteName('#__menu') . ' AS b ON a.lft > b.lft AND a.rgt < b.rgt');
 			$query->where('a.link LIKE '.$db->quote('%option='.$this->extension_option.'&view='.$extension_views[0].'%'));
 			$query->where('a.published = 1');
+			
+			if ($this->client) {
+			    if ($this->client === 'administrator') {
+			        $query->where('a.client_id = 1');
+			    } else if ($this->client === 'site') {
+			        $query->where('a.client_id = 0');
+			    }
+			}
 
 			$db->setQuery($query);
 
@@ -98,6 +117,7 @@ class ViewsField extends GroupedlistField
 		if ($return) {
 			$this->extension_option = isset($this->element['option']) ? trim((string)$this->element['option']) : '';
 			$this->extension_view = isset($this->element['view']) ? (string)$this->element['view'] : '';
+			$this->client = isset($this->element['client']) ? (string)$this->element['client'] : ''; // administrator or site or nothing
 		}
 
 		return $return;
