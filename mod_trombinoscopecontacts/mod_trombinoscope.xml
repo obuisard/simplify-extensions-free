@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.9.4</version>
+	<version>4.9.5</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -62,7 +62,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\TrombinoscopeContacts\Site\Field">			
 			<fieldset name="basic" label="MOD_TROMBINOSCOPE_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.9.4" />
+				<field type="extensionversion" version="4.9.5" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_TROMBINOSCOPE_TRANSLATORS" />
@@ -1151,7 +1151,7 @@
 	        	</fieldset>
 			</fieldset>
 			
-			<fieldset name="advanced" description="MOD_TROMBINOSCOPE_ADVANCED_FIELDSET_DESC">
+			<fieldset name="advanced_all" label="MOD_TROMBINOSCOPE_ADVANCED_FIELDSET_LABEL" description="MOD_TROMBINOSCOPE_ADVANCED_FIELDSET_DESC">
 			
 				<fieldset name="advanced_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
 
@@ -1293,7 +1293,7 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="advanced_module" label="MOD_TROMBINOSCOPE_MODULE_LABEL">
+				<fieldset name="advanced" label="MOD_TROMBINOSCOPE_MODULE_LABEL">
 				
 					<field name="show_on_mobile" type="list" default="1" 
 						label="MOD_TROMBINOSCOPE_FIELD_SHOWONMOBILE_LABEL"
