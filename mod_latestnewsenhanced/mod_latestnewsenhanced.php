@@ -58,7 +58,7 @@ if ($list === null) {
 $bootstrap_version = $params->get('bootstrap_version', 'joomla');
 $load_bootstrap = false;
 if ($bootstrap_version === 'joomla') {
-    $bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
+    $bootstrap_version = 5;
     $load_bootstrap = true;
 } else {
 	$bootstrap_version = intval($bootstrap_version);

@@ -19,7 +19,7 @@ use SYW\Module\LatestNewsEnhanced\Site\Helper\CalendarHelper as LNECalendarHelpe
 use SYW\Module\LatestNewsEnhanced\Site\Helper\ContentHelper as LNEContentHelper;
 use SYW\Module\LatestNewsEnhanced\Site\Helper\Helper as LNEHelper;
 
-if ($bootstrap_version > 0) {
+if ($load_bootstrap) {
     HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 }
 ?>

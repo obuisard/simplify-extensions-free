@@ -31,6 +31,10 @@
 	    text-align: initial;
 	}
 	
+	.lnee ul.latestnews-items li.latestnews-item.shadow {
+		box-shadow: none !important /* BS5 side effect */
+	}
+	
 		.lnee .news,
 			.lnee .innernews {
 				overflow: hidden;
