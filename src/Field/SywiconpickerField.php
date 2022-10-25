@@ -538,10 +538,10 @@ class SywiconpickerField extends FormField
 		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 		HTMLHelper::_('bootstrap.dropdown', '.dropdown-toggle');
 
-		$wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
+		$wam->registerAndUseStyle('syw.font', 'syw/fonts.min.css', ['relative' => true, 'version' => 'auto']);
 
 		if ($this->icomoon) {
-		    $wam->registerAndUseStyle('syw.font.icomoon', 'syw/fonts-icomoon-min.css', ['relative' => true, 'version' => 'auto']);
+		    $wam->registerAndUseStyle('syw.font.icomoon', 'syw/fonts-icomoon.min.css', ['relative' => true, 'version' => 'auto']);
 		}
 
 		$transition_method = SYWStylesheets::getTransitionMethod('hvr-radial-out');
@@ -738,9 +738,7 @@ class SywiconpickerField extends FormField
 		}
 
 		$html .= '<div class="btn-group" style="margin: 0">';
-			$html .= '<button type="button" id="'.$this->id.'_caret"'.($this->disabled ? ' disabled="disabled"' : '').' style="border-radius:0" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">';
-			$html .= '<span class="visually-hidden">' . Text::_('LIB_SYW_ICONPICKER_SELECTICON') . '</span>'; // can't have tooltip on dropdown
-			$html .= '</button>';
+			$html .= '<button type="button" id="'.$this->id.'_caret"'.($this->disabled ? ' disabled="disabled"' : '').' style="border-radius:0" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="' . Text::_('LIB_SYW_ICONPICKER_SELECTICON') . '"></button>';
 			$html .= '<ul id="'.$this->id.'_select" class="dropdown-menu dropdown-menu-end" aria-labelledby="'.$this->id.'_caret" style="min-width: 250px; max-height: 200px; overflow: auto;">';
 
 		if (isset($this->icons)) {
@@ -783,7 +781,7 @@ class SywiconpickerField extends FormField
 		$html .= '</div>';
 
 		if ($this->help) {
-			$html .= '<span class="help-block">'.Text::_($this->help).'</span>';
+			$html .= '<span class="help-block" style="font-size: .8rem">'.Text::_($this->help).'</span>';
 		}
 
 		return $html;

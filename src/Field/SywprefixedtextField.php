@@ -44,7 +44,7 @@ class SywprefixedtextField extends FormField
 		if ($this->prefix) {
 
 			if ($this->icon) {
-			    HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+			    HTMLHelper::_('stylesheet', 'syw/fonts.min.css', ['version' => 'auto', 'relative' => true]);
 				$html .= '<span class="input-group-text"><i class="'.$this->icon.'"></i></span>';
 			}
 
@@ -60,7 +60,7 @@ class SywprefixedtextField extends FormField
 		$html .= '</div>';
 
 		if ($this->help) {
-			$html .= '<span class="help-block">'.Text::_($this->help).'</span>';
+			$html .= '<span class="help-block" style="font-size: .8rem">'.Text::_($this->help).'</span>';
 		}
 
 		return $html;

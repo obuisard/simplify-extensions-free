@@ -119,7 +119,8 @@ class Utilities
 	 *
 	 * @param string $hexStr (hexadecimal color value)
 	 * @param boolean $returnAsString (if set true, returns the value separated by the separator character. Otherwise returns associative array)
-	 * @param string $seperator (to separate RGB values. Applicable only if second parameter is true.)
+	 * @param string $seperator separator of RGB values. Applicable only if second parameter is true.
+	 * 
 	 * @return array or string (depending on second parameter. Returns False if invalid hex color value)
 	 */
 	static function hex2RGB($hexStr, $returnAsString = false, $seperator = ',')
@@ -140,6 +141,88 @@ class Utilities
 	    }
 
 	    return $returnAsString ? implode($seperator, $rgbArray) : $rgbArray; // returns the rgb string or the associative array
+	}
+	
+	/**
+	 * Convert a HSL color into RGB
+	 * 
+	 * @param string $hslStr color value eg: hsl(216, 98%, 52%)
+	 * @param boolean $returnAsString (if set true, returns the value separated by the separator character. Otherwise returns associative array)
+	 * @param string $seperator separator of RGB values. Applicable only if second parameter is true.
+	 * 
+	 * @return array or string (depending on second parameter. Returns False if invalid hex color value)
+	 */
+	static function HSL2RGB($hslStr, $returnAsString = false, $seperator = ',')
+	{
+		$hsl_string = str_replace('hsl', '', $hslStr);
+		$hsl_string = trim($hsl_string, '()');
+		
+		$hsl_array = explode(',', $hsl_string);
+		foreach ($hsl_array as $key => $value) {
+			$value = trim($value, ' %');
+			if (empty($value)) {
+				unset($key);
+			}
+		}
+		
+		$h = (float)$hsl_array[0] / 360;
+		$s = (float)$hsl_array[1] / 100;
+		$l = (float)$hsl_array[2] / 100;
+		
+		$r = $l;
+		$g = $l;
+		$b = $l;
+		$v = ($l <= 0.5) ? ($l * (1.0 + $s)) : ($l + $s - $l * $s);
+		
+		if ($v > 0) {
+			
+			$m = $l + $l - $v;
+			$sv = ($v - $m ) / $v;
+			$h *= 6.0;
+			$sextant = floor($h);
+			$fract = $h - $sextant;
+			$vsf = $v * $sv * $fract;
+			$mid1 = $m + $vsf;
+			$mid2 = $v - $vsf;
+			
+			switch ($sextant)
+			{
+				case 0:
+					$r = $v;
+					$g = $mid1;
+					$b = $m;
+					break;
+				case 1:
+					$r = $mid2;
+					$g = $v;
+					$b = $m;
+					break;
+				case 2:
+					$r = $m;
+					$g = $v;
+					$b = $mid1;
+					break;
+				case 3:
+					$r = $m;
+					$g = $mid2;
+					$b = $v;
+					break;
+				case 4:
+					$r = $mid1;
+					$g = $m;
+					$b = $v;
+					break;
+				case 5:
+					$r = $v;
+					$g = $m;
+					$b = $mid2;
+					break;
+			}
+		}
+		
+		$rgbArray = array('red' => round($r * 255.0), 'green' => round($g * 255.0), 'blue' => round($b * 255.0));
+		
+		return $returnAsString ? implode($seperator, $rgbArray) : $rgbArray; // returns the rgb string or the associative array
 	}
 
 	/*

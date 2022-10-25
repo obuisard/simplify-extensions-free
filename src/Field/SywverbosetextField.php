@@ -108,7 +108,7 @@ class SywverbosetextField extends FormField
 
 		if ($this->icon)
 		{
-			$wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
+			$wam->registerAndUseStyle('syw.font', 'syw/fonts.min.css', ['relative' => true, 'version' => 'auto']);
 
 			$html .= '<span class="input-group-text"><i class="' . $this->icon . '"></i></span>';
 		}
@@ -134,7 +134,7 @@ class SywverbosetextField extends FormField
 
 		if ($this->help)
 		{
-			$html .= '<span class="help-block">' . Text::_($this->help) . '</span>';
+			$html .= '<span class="help-block" style="font-size: .8rem">' . Text::_($this->help) . '</span>';
 		}
 
 		return $html;

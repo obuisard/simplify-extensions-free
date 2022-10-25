@@ -54,7 +54,7 @@ class DemotestField extends FormField
 		$return = parent::setup($element, $value, $group);
 
 		if ($return) {
-			$this->demo_folder = JPATH_ROOT.trim($this->element['demofolder']);
+			$this->demo_folder = JPATH_ROOT . $this->element['demofolder'];
 		}
 
 		return $return;

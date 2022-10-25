@@ -69,7 +69,7 @@ class GdLibrary extends AbstractImageLibrary
                     
                     $image = @imagecreatetruecolor($width, $height);
                     if ($image !== false) {                    
-                        $this->crop_and_resize($mime_type, $image, $source_image, 0, 0, $x, $y, $width, $height, $w, $h);
+                    	$this->crop_and_resize($mime_type, $image, $source_image, 0, 0, (int) $x, (int) $y, $width, $height, (int) $w, (int) $h);
                     }
                     
                     unset($source_image);
@@ -102,7 +102,7 @@ class GdLibrary extends AbstractImageLibrary
                 
                 $image = @imagecreatetruecolor($width, $height);
                 if ($image !== false) {
-                    $this->crop_and_resize($mime_type, $image, $source_image, 0, 0, $x, $y, $width, $height, $w, $h);
+                	$this->crop_and_resize($mime_type, $image, $source_image, 0, 0, (int) $x, (int) $y, $width, $height, (int) $w, (int) $h);
                 }
             }
             

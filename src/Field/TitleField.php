@@ -43,7 +43,7 @@ class TitleField extends FormField
 			}
 			$html .= '<img style="margin: -1px 4px 0 0; padding: 0; width: 24px; height: 24px" src="'.$this->image_src.'"' . $alt_attribute . '>';
 		} else if ($this->icon) {
-		    $wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
+		    $wam->registerAndUseStyle('syw.font', 'syw/fonts.min.css', ['relative' => true, 'version' => 'auto']);
 		    
 			$html .= '<i style="margin: -1px 4px 0 0; font-size: inherit; vertical-align: baseline" class="SYWicon-'.$this->icon.'" aria-hidden="true"></i>';
 		}
