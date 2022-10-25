@@ -9,13 +9,6 @@ defined('_JEXEC') or die;
 
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Cache as SYWCache;
-use SYW\Library\Version as SYWVersion;
-
-if (!SYWVersion::isCompatible('2.1.0')) {
-    echo '<span>incompatible extensions library</span>';
-} else {
-    echo '<span>compatible extensions library</span>';
-}
 
 // image tests
 
