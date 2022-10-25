@@ -491,14 +491,11 @@ class ContentHelper
 		// metakeys filter
 
 		$metakeys = array();
-		$keys = explode(',', $params->get('keys', ''));
-
+		$keys = array_filter(explode(',', trim($params->get('keys', ''), ' ,')));
+		
 		// assemble any non-blank word(s)
 		foreach ($keys as $key) {
-			$key = trim($key);
-			if ($key) {
-				$metakeys[] = $key;
-			}
+			$metakeys[] = trim($key);
 		}
 
 		if (!empty($item_on_page_keys)) {
@@ -738,7 +735,46 @@ class ContentHelper
 			} else {
 				$query->where('a.state = 1');
 			}
-		} else if (isset($array_of_authors_values['auto']) && $array_of_authors_values['auto'] > 0) { // 'auto' was selected
+		} else if (isset($array_of_authors_values['realauto']) && $array_of_authors_values['realauto'] > 0) { // 'realauto' was selected: check if author on page, if so, select it
+			
+			$found = false;
+			if ($option === 'com_content' && $view === 'article') {
+				$temp = $jinput->getString('id');
+				$temp = explode(':', $temp);
+				if ($temp[0]) {
+					
+					$subquery = $db->getQuery(true);
+					$subquery->select($db->quoteName('created_by'));
+					$subquery->from($db->quoteName('#__content'));
+					$subquery->where($db->quoteName('id').' = ' . $temp[0]);
+					
+					$db->setQuery($subquery);
+					
+					try {
+						$result = $db->loadResult();
+						if ($result) {
+							$found = true;
+							$test_type = $include ? '=' : '<>';
+							$query->where('a.created_by' . $test_type . $result);
+							
+							if ($include && $params->get('allow_edit', 0) && (int)$user->get('id') === $result) {
+								$query->where('a.state IN (0, 1)'); // show all articles for the logged author, published or not
+							} else {
+								$query->where('a.state = 1');
+							}
+						}
+					} catch (ExecutionFailureException $e) {
+						$app->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+						return null;
+					}
+				}
+			}
+			
+			if (!$found) {
+				return array();
+			}
+
+		} else if (isset($array_of_authors_values['auto']) && $array_of_authors_values['auto'] > 0) { // 'auto' was selected: equivalent to check if the author is logged in
 			$test_type = $include ? '=' : '<>';
 			$query->where('a.created_by ' .$test_type.' '.(int) $user->get('id'));
 			if ($include && $params->get('allow_edit', 0) && (int)$user->get('id') > 0) {
@@ -871,21 +907,33 @@ class ContentHelper
 			case 'hit': $ordering .= 'a.hits DESC'; break;
 			case 'title_asc': $ordering .= 'a.title ASC'; break;
 			case 'title_dsc': $ordering .= 'a.title DESC'; break;
-			default: $ordering .= 'a.publish_up DESC'; break;
+			case 'manual':
+				$articles_to_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
+				if (!empty($articles_to_include)) {
+					$ordering .= 'CASE a.id';
+					foreach ($articles_to_include as $key => $id) {
+						$ordering .= ' WHEN ' . $id . ' THEN ' . $key;
+					}
+					$ordering .= ' ELSE 999 END, a.id'; // 'FIELD(a.id, ' . $articles_to_include . ')' is MySQL specific
+				}
+				//break;
+			default: $ordering = rtrim($ordering, ',');
 		}
 
-		$query->order($ordering);
+		if ($ordering) {
+			$query->order($ordering);
+		}
 
 		// include only
 
-		$articles_to_include = trim($params->get('in', ''));
+		$articles_to_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
 		if (!empty($articles_to_include)) {
-			$query->where('a.id IN ('.$articles_to_include.')');
+			$query->where('a.id IN (' . implode(',', $articles_to_include) . ')');
 		}
 
 		// exclude
 
-		$articles_to_exclude = array_filter(explode(",", trim($params->get('ex', ''))));
+		$articles_to_exclude = array_filter(explode(',', trim($params->get('ex', ''), ' ,')));
 
 		$item_on_page_id = '';
 		if ($params->get('ex_current_item', 0) && $option === 'com_content' && $view === 'article') {
@@ -899,7 +947,7 @@ class ContentHelper
 		}
 
 		if (!empty($articles_to_exclude)) {
-			$query->where('a.id NOT IN ('.implode(",", $articles_to_exclude).')');
+			$query->where('a.id NOT IN (' . implode(',', $articles_to_exclude) . ')');
 		}
 
 		// launch query
@@ -1124,9 +1172,9 @@ class ContentHelper
 		}
 
 		$text_type = $params->get('text', 'intro');
-		$letter_count = trim($params->get('l_count'));
+		$letter_count = trim($params->get('l_count', ''));
 		$truncate_last_word = $params->get('trunc_l_w', 0);
-		$keep_tags = $params->get('keep_tags');
+		$keep_tags = trim($params->get('keep_tags', ''));
 		$strip_tags = $params->get('strip_tags', 1);
 		$always_show_readmore = $params->get('readmore_always_show', true);
 		$trigger_OnContentPrepare = $params->get('trigger_events', false);
@@ -1522,7 +1570,7 @@ class ContentHelper
 						PluginHelper::importPlugin('content');
 						Factory::getApplication()->triggerEvent('onContentPrepare', array('com_content.article', &$item, &$item->params, 0));
 					}
-					$item->text = SYWText::getText($item->text.$beacon, 'html', $number_of_letters, $strip_tags, trim($keep_tags), true, $truncate_last_word);
+					$item->text = SYWText::getText($item->text.$beacon, 'html', $number_of_letters, $strip_tags, $keep_tags, true, $truncate_last_word);
 				}
 			} else { // use meta text
 				$item->text = SYWText::getText($item->metadesc.$beacon, 'txt', $number_of_letters, false, '', true, $truncate_last_word);

@@ -192,22 +192,27 @@ class CSSFileCache extends HeaderFilesCache
 		// image
 
 		$image = false;
+		
+		$bgcolor = trim($params->get('imagebgcolor', '')) != '' ? trim($params->get('imagebgcolor')) : 'transparent';
+		$variables[] = 'bgcolor';
+		
+		$pic_shadow_width = $params->get('sh_w_pic', 0);
+		$variables[] = 'pic_shadow_width';
+		
+		$pic_border_width = $params->get('border_w', 0);
+		$variables[] = 'pic_border_width';
+		
+		$pic_border_radius = $params->get('border_r_pic', 0);
+		$variables[] = 'pic_border_radius';
+		
+		$pic_border_color = trim($params->get('border_c_pic', '#fff'));
+		$variables[] = 'pic_border_color';
 
 		$image_types = array('image', 'imageintro', 'imagefull', 'allimagesasc', 'allimagesdesc');
 
 		if (in_array($head_type, $image_types)) {
 
-			$bgcolor = trim($params->get('imagebgcolor', '')) != '' ? trim($params->get('imagebgcolor')) : 'transparent';
-			$variables[] = 'bgcolor';
-
-			$pic_shadow_width = $params->get('sh_w_pic', 0);
-			$variables[] = 'pic_shadow_width';
-			$pic_border_width = $params->get('border_w', 0);
-			$variables[] = 'pic_border_width';
-			$pic_border_radius = $params->get('border_r_pic', 0);
-			$variables[] = 'pic_border_radius';
-			$pic_border_color = trim($params->get('border_c_pic', '#fff'));
-			$variables[] = 'pic_border_color';
+			// make sure the variables are available in case no head is selected but the theme is image-only
 
 			$head_width = $head_width - $pic_border_width * 2;
 			$head_height = $head_height - $pic_border_width * 2;

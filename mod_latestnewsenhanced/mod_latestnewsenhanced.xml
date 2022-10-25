@@ -7,12 +7,11 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.6.3</version>
+	<version>6.7.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
 	<media folder="media" destination="mod_latestnewsenhanced">
-		<filename>index.html</filename>
 		<folder>css</folder>
 		<folder>images</folder>
 		<folder>scripts</folder>
@@ -21,7 +20,6 @@
 	
 	<files>
 		<filename module="mod_latestnewsenhanced">mod_latestnewsenhanced.php</filename>
-		<filename>index.html</filename>
 		<filename>license.txt</filename>
 		<folder>forms</folder>
 		<folder>layouts</folder>
@@ -67,7 +65,7 @@
 			
 			<fieldset name="basic" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="6.6.3" />
+				<field type="extensionversion" extension="mod_latestnewsenhanced" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_LATESTNEWSENHANCED_TRANSLATORS" />
@@ -247,14 +245,20 @@
 					<field name="created_by" type="authorselect" multiple="true" size="5" default="all" layout="joomla.form.field.list-fancy-select" showon="datasource:articles" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORS_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORS_DESC">					
-						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
+						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LOGGEDUSER</option>
+					
+						<option value="realauto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
+					
 						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLAUTHORS</option>
 					</field> 
 	
 					<field name="k2_created_by" type="authorselect" multiple="true" size="5" default="all" option="com_k2" layout="joomla.form.field.list-fancy-select" showon="datasource:k2" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORS_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORS_DESC">					
-						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
+						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LOGGEDUSER</option>
+					
+						<option value="realauto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
+					
 						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLAUTHORS</option>
 					</field> 
 					
@@ -374,9 +378,10 @@
 				
 				<fieldset name="selection_order" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONORDER_FIELDSET_LABEL">
 							
-					<field name="order" type="listfree" default="p_dsc" 
+					<field name="order" type="listfree" default="" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ORDERING_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ORDERING_DESC">
+						<option value="">JNONE</option>
 						<option value="o_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ORDERDESC</option>
 						<option value="o_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ORDERASC</option>
 						<option value="c_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CREATEDDESC</option>
@@ -391,10 +396,11 @@
 						<option value="mc_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TOUCHEDASC</option>
 						<option value="cfield_dsc" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CUSTOMFIELDDATEDESC</option>
 						<option value="cfield_asc" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CUSTOMFIELDDATEASC</option>
-						<option value="random">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RANDOM</option>
-						<option value="hit">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_HIT</option>
 						<option value="title_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TITLEDESC</option>
 						<option value="title_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TITLEASC</option>
+						<option value="random">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RANDOM</option>
+						<option value="hit">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_HIT</option>
+						<option value="manual">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MANUAL</option>
 				  	</field>
 				</fieldset>
 				
@@ -920,7 +926,7 @@
 
 				<fieldset name="themes_content" label="MOD_LATESTNEWSENHANCEDEXTENDED_THEMEBODY_FIELDSET_LABEL">
 					
-					<field name="bgcolor" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
+					<field name="bgcolor" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR_DESC" />
 				
@@ -932,7 +938,7 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERRADIUS_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMBORDERRADIUS_DESC" />
 				
-					<field name="item_border_c" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-border-color" 
+					<field name="item_border_c" type="sywcolorpicker" default="" transparency="true" icon="outline" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERCOLOR_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMBORDERCOLOR_DESC" />	
 					
@@ -944,15 +950,15 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DISTANCETOBORDER_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DISTANCETOBORDER_DESC" />
 					
-					<field name="item_color" type="sywcolorpicker" transparency="true" default="" icon="SYWicon-format-color-text" 
+					<field name="item_color" type="sywcolorpicker" transparency="true" default="" icon="text" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMFONTCOLOR_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMFONTCOLOR_DESC" />
 					
-					<field name="item_l_color" type="sywcolorpicker" transparency="true" default="" icon="SYWicon-format-color-text" 
+					<field name="item_l_color" type="sywcolorpicker" transparency="true" default="" icon="text" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMLINKFONTCOLOR_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMLINKFONTCOLOR_DESC" />
 					
-					<field name="item_l_color_h" type="sywcolorpicker" transparency="true" default="" icon="SYWicon-format-color-text" 
+					<field name="item_l_color_h" type="sywcolorpicker" transparency="true" default="" icon="text" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMLINKFONTHOVERCOLOR_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMLINKFONTHOVERCOLOR_DESC" />
 				
@@ -989,7 +995,7 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSLINESPACING_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSLINESPACING_DESC" />
 					
-					<field name="details_color" type="sywcolorpicker" transparency="true" default="" icon="SYWicon-format-color-text" 
+					<field name="details_color" type="sywcolorpicker" transparency="true" default="" icon="text" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSCOLOR_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSCOLOR_DESC" />
 						
@@ -997,7 +1003,7 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSCOLOROVERHEAD_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSCOLOROVERHEAD_DESC" />
 					
-					<field name="iconscolor" type="sywcolorpicker" transparency="true" default="" icon="SYWicon-format-color-text" 
+					<field name="iconscolor" type="sywcolorpicker" transparency="true" default="" icon="fill" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ICONSCOLOR_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ICONSCOLOR_DESC" />
 					
@@ -1129,7 +1135,7 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICTURE_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICTURE_DESC" />
 						
-					<field name="imagebgcolor" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
+					<field name="imagebgcolor" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEBGCOLOR_DESC" />
 					
@@ -1141,7 +1147,7 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERRADIUS_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICBORDERRADIUS_DESC" />
 					
-					<field name="border_c_pic" type="sywcolorpicker" default="#FFFFFF" icon="SYWicon-border-color" 
+					<field name="border_c_pic" type="sywcolorpicker" default="#ffffff" icon="outline" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERCOLOR_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICBORDERCOLOR_DESC" />
 					
@@ -1158,7 +1164,7 @@
 						<option value="vr" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHADOW_VRIGHT</option>
 					</field>
 					
-					<field name="hover_effect" type="sywtransitionpicker" default="none" transitiongroups="2d" icon="SYWicon-layers" 
+					<field name="hover_effect" type="sywtransitionpicker" default="none" transitiongroups="2d" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HOVEREFFECT_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICHOVEREFFECT_DESC" />
 				</fieldset>
@@ -1370,7 +1376,7 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERRADIUS_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERRADIUS_DESC" />	
 						
-					<field name="border_c_cal" type="sywcolorpicker" default="#000000" icon="SYWicon-border-color" 
+					<field name="border_c_cal" type="sywcolorpicker" default="#000000" icon="outline" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CALBORDERCOLOR_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CALBORDERCOLOR_DESC" />
 					
@@ -1389,39 +1395,39 @@
 						
 				<fieldset name="calendar_style_top" label="MOD_LATESTNEWSENHANCEDEXTENDED_CALENDARTOPCOLORS_LABEL">
 					
-					<field name="c2" type="sywcolorpicker" default="#494949" icon="SYWicon-format-color-text" 
+					<field name="c2" type="sywcolorpicker" default="#494949" icon="text" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR2_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR2_DESC" />	
-					<field name="bgc21" type="sywcolorpicker" default="" transparency="true"  icon="SYWicon-format-color-fill" 
+					<field name="bgc21" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR21_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR21_DESC" />	
-					<field name="bgc22" type="sywcolorpicker" default="" transparency="true"  icon="SYWicon-format-color-fill" 
+					<field name="bgc22" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR22_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR22_DESC" />
 				</fieldset>
 						
 				<fieldset name="calendar_style_overal" label="MOD_LATESTNEWSENHANCEDEXTENDED_CALENDARCOLORS_LABEL">			
 					
-					<field name="c1" type="sywcolorpicker" default="#3D3D3D" icon="SYWicon-format-color-text" 
+					<field name="c1" type="sywcolorpicker" default="#3D3D3D" icon="text" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR1_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR1_DESC" />
-					<field name="bgc11" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
+					<field name="bgc11" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR11_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR11_DESC" />	
-					<field name="bgc12" type="sywcolorpicker" default="" transparency="true"  icon="SYWicon-format-color-fill" 
+					<field name="bgc12" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR12_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR12_DESC" />
 				</fieldset>
 						
 				<fieldset name="calendar_style_bottom" label="MOD_LATESTNEWSENHANCEDEXTENDED_CALENDARBOTTOMCOLORS_LABEL">
 				
-					<field name="c3" type="sywcolorpicker" default="#494949" icon="SYWicon-format-color-text" 
+					<field name="c3" type="sywcolorpicker" default="#494949" icon="text" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR3_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR3_DESC" />	
-					<field name="bgc31" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
+					<field name="bgc31" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR31_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR31_DESC" />	
-					<field name="bgc32" type="sywcolorpicker" default="" transparency="true"  icon="SYWicon-format-color-fill" 
+					<field name="bgc32" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR32_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR32_DESC" />
 				</fieldset>
@@ -1491,7 +1497,7 @@
 						<option value="stars">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_STARS</option>
 					</field>
 					
-					<field name="star_color" type="sywcolorpicker" default="#000000" icon="SYWicon-format-color-text" showon="show_rating:stars" 
+					<field name="star_color" type="sywcolorpicker" default="#000000" icon="fill" showon="show_rating:stars" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STARSCOLOR_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STARSCOLOR_DESC" />				
 				</fieldset>
