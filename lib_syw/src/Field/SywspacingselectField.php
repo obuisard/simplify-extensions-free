@@ -17,7 +17,12 @@ class SywspacingselectField extends DynamicsingleselectField
 {
 	public $type = 'Sywspacingselect';
 
-	protected $items;
+	protected $items;    
+	
+	/*
+	* return the true CSS value rather than a short version of it
+	*/
+	protected $truevalue; 
 
     protected function getOptions()
     {
@@ -49,7 +54,7 @@ class SywspacingselectField extends DynamicsingleselectField
         }
 
 		foreach ($this->items as $key => $value) {
-			$options[] = array($key, $value['label'], '', $imagefolder . $value['image'] . '.png');
+			$options[] = array(($this->true_value ? $value['true_value'] : $key), $value['label'], '', $imagefolder . $value['image'] . '.png');
         }
 
         return $options;
@@ -60,6 +65,8 @@ class SywspacingselectField extends DynamicsingleselectField
         $return = parent::setup($element, $value, $group);
 
         if ($return) {
+        	
+        	$this->true_value = isset($this->element['truevalue']) ? filter_var($this->element['truevalue'], FILTER_VALIDATE_BOOLEAN) : false;
 
         	$lang = Factory::getLanguage();
         	$lang->load('lib_syw.sys', JPATH_SITE);
@@ -68,12 +75,12 @@ class SywspacingselectField extends DynamicsingleselectField
             $this->height = 50;
 
             $this->items = array();
-            $this->items['fs'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_START'), 'image' => 'start');
-            $this->items['c'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_CENTER'), 'image' => 'center');
-            $this->items['fe'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_END'), 'image' => 'end');
-            $this->items['sb'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEBETWEEN'), 'image' => 'spacebetween');
-            $this->items['sa'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEAROUND'), 'image' => 'spacearound');
-            $this->items['se'] = array('label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEEVENLY'), 'image' => 'spaceevenly');
+            $this->items['fs'] = array('true_value' => 'start', 'label' => Text::_('LIB_SYW_ALIGN_VALUE_START'), 'image' => 'start');
+            $this->items['c'] = array('true_value' => 'center', 'label' => Text::_('LIB_SYW_ALIGN_VALUE_CENTER'), 'image' => 'center');
+            $this->items['fe'] = array('true_value' => 'end', 'label' => Text::_('LIB_SYW_ALIGN_VALUE_END'), 'image' => 'end');
+            $this->items['sb'] = array('true_value' => 'space-between', 'label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEBETWEEN'), 'image' => 'spacebetween');
+            $this->items['sa'] = array('true_value' => 'space-around', 'label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEAROUND'), 'image' => 'spacearound');
+            $this->items['se'] = array('true_value' => 'space-evenly', 'label' => Text::_('LIB_SYW_ALIGN_VALUE_SPACEEVENLY'), 'image' => 'spaceevenly');
         }
 
         return $return;

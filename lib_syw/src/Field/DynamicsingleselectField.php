@@ -95,19 +95,19 @@ class DynamicsingleselectField extends ListField
 		// add the styles
 
 		$wam->addInlineStyle("
-			#".$this->id."_elements { display: -webkit-box; display: -ms-flexbox; display: -webkit-flex; display: flex; overflow-x: auto; -ms-flex-wrap: wrap; flex-wrap: wrap; }
-			#".$this->id."_elements .element { display: inline-block; position: relative; vertical-align: top; relative; margin: 0 5px 5px 5px; padding: 15px;".($this->maxwidth ? " max-width: ".$this->maxwidth."px;" : "")." text-align: center; cursor: pointer; -webkit-transition: all .2s ease-in-out; -o-transition: all .2s ease-in-out; transition: all .2s ease-in-out; }
+			#".$this->id."_elements { display: flex; flex-wrap: wrap; }
+			#".$this->id."_elements .element { display: flex; flex-direction: column; align-items: center; position: relative; margin: 0 5px 5px 5px; padding: 15px;".($this->maxwidth ? " max-width: ".$this->maxwidth."px;" : "")." text-align: center; cursor: pointer; -webkit-transition: all .2s ease-in-out; -o-transition: all .2s ease-in-out; transition: all .2s ease-in-out; }
 			#".$this->id."_elements .element.enabled:hover { -webkit-transform: scale(0.8); -ms-transform: scale(0.8); transform: scale(0.8); }
 			#".$this->id."_elements .element.selected.global { background-color: #2a6496; color: #fff }
 			#".$this->id."_elements .element.selected.none { background-color: #c52827; color: #fff }
 			#".$this->id."_elements .element.selected { background-color: ".$this->selectedcolor."; color: #fff }
 			#".$this->id."_elements .element.disabled { opacity: 0.65; filter: alpha(opacity=65); cursor: default; }
 			#".$this->id."_elements .element-label { position: absolute; top: 5px; left: 5px; z-index: 10 }
-			#".$this->id."_elements .description { max-width: ".$this->width."px; font-size: .8em }
-			#".$this->id."_elements .images-container { display: inline-block; position: relative; ".($this->imagebgcolor ? "width" : "max-width").": ".$this->width."px; height: ".$this->height."px; margin-bottom: 5px;" . ($this->imagebgcolor ? " background-color: " . $this->imagebgcolor : "") . " }
-			#".$this->id."_elements .element img { display: block; position: relative; left: 50%; top: 50%; transform: translate(-50%, -50%); -webkit-transition: opacity .4s ease; transition: opacity .4s ease; max-width: ".$this->width."px; max-height: ".$this->height."px; }
+			#".$this->id."_elements .description { font-size: .8em }
+			#".$this->id."_elements .images-container { display: block; position: relative; ".($this->imagebgcolor ? "width" : "max-width").": ".$this->width."px; height: ".$this->height."px; margin-bottom: 5px;" . ($this->imagebgcolor ? " background-color: " . $this->imagebgcolor : "") . " }
+			#".$this->id."_elements .element img { display: inline-block; position: relative; top: 50%; transform: translateY(-50%); -webkit-transition: opacity .4s ease; transition: opacity .4s ease; max-width: 100%; }
 			#".$this->id."_elements .element img.original { opacity: 1; filter: alpha(opacity=100); }
-			#".$this->id."_elements .element img.hover { position: absolute; opacity: 0; filter: alpha(opacity=0); z-index: 2; }
+			#".$this->id."_elements .element img.hover { position: absolute; left: 50%; transform: translate(-50%, -50%); opacity: 0; filter: alpha(opacity=0); z-index: 2; }
 			#".$this->id."_elements .element:hover img.hover { opacity: 1; filter: alpha(opacity=100); }
 			#".$this->id."_elements .element:hover img.original { opacity: 0; filter: alpha(opacity=0); }
 		");
@@ -228,7 +228,7 @@ class DynamicsingleselectField extends ListField
 			$this->width = 100;
 			$this->maxwidth = '';
 			$this->height = 100;
-			$this->selectedcolor = '#2f7d32';//isset($this->element['selectedcolor']) ? (string)$this->element['selectedcolor'] : '#6f6f6f';
+			$this->selectedcolor = '#2f7d32';
 			$this->disabledtitle = isset($this->element['disabledtitle']) ? (string)$this->element['disabledtitle'] : '';
 			$this->imagebgcolor = isset($this->element['imagebgcolor']) ? (string)$this->element['imagebgcolor'] : '';
 		}

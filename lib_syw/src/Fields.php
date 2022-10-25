@@ -21,6 +21,12 @@ class Fields
 	protected static $fields = array();
 	
 	/**
+	 * Cache for field categories
+	 * @var array
+	 */
+	protected static $fields_categories = array();
+	
+	/**
      * Get the values of a custom field for a specific item
 	 *
 	 * @param string $item_id
@@ -102,6 +108,39 @@ class Fields
 		return $results;
 	}
 
+    /**
+     * Check if a custom field is restricted to one or several categories
+     * 
+     * @param int $field_id
+     * @return array categories the field is restricted to - an empty array means the field is available in ALL categories
+     */
+    public static function getAssignedCategories($field_id)
+    {
+    	if (isset(static::$fields_categories[$field_id])) {
+    		return static::$fields_categories[$field_id];
+    	}
+    	
+    	$db = Factory::getDbo();
+    	$query = $db->getQuery(true);
+    	
+    	$query->select($db->quoteName('category_id'));
+    	$query->from($db->quoteName('#__fields_categories'));
+    	$query->where('field_id = ' . $field_id);
+    	
+    	$db->setQuery($query);
+    	
+    	$results = array();
+    	
+    	try {
+    		$results = $db->loadColumn();
+    		static::$fields_categories[$field_id] = $results;
+    	} catch (ExecutionFailureException $e) {
+    		//
+    	}
+    
+    	return $results;
+    }
+    
     /**
      * For a custom field that has a list of items, translates the options and returns the coma separated list of values ready for display
      *

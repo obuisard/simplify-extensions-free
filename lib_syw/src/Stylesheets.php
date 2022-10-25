@@ -13,10 +13,6 @@ use Joomla\CMS\Plugin\PluginHelper;
 
 class Stylesheets
 {
-// 	static $animateLoaded = false;
-// 	static $twodtransitionsLoaded = false;
-// 	static $bgtransitionsLoaded = false;
-// 	static $bootstrapmodalsLoaded = false;
 	static $puremodalscssLoaded = false;
 	static $bootstrapmodalscssLoaded = array();
 	static $accessibleVisibilityLoaded = false;
@@ -100,25 +96,17 @@ class Stylesheets
 	 * https://github.com/daneden/animate.css
 	 */
 	public static function loadAnimate($remote = false)
-	{
-// 		if (self::$animateLoaded) {
-// 			return;
-// 		}
-
-	    $minified = (defined('JDEBUG') && JDEBUG) ? '' : '.min';
-	    
+	{	    
 	    $attributes = array();
 	    if (Factory::getApplication()->isClient('site') && isset(self::getPluginParams()->lazy_stylesheets) && self::getPluginParams()->lazy_stylesheets > 0) {
 	        $attributes['rel'] = 'lazy-stylesheet';
 	    }
 
 		if ($remote) {
-		    self::getWebAssetManager()->registerAndUseStyle('syw.animate', 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate' . $minified . '.css', [], $attributes);
+		    self::getWebAssetManager()->registerAndUseStyle('syw.animate', 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css', [], $attributes);
 		} else {
-		    self::getWebAssetManager()->registerAndUseStyle('syw.animate', 'syw/animate' . $minified . '.css', ['relative' => true, 'version' => 'auto'], $attributes);
+		    self::getWebAssetManager()->registerAndUseStyle('syw.animate', 'syw/animate.min.css', ['relative' => true, 'version' => 'auto'], $attributes);
 		}
-
-// 		self::$animateLoaded = true;
 	}
 
 	/*
@@ -1979,42 +1967,26 @@ CSS;
 	 * Load the 2d transitions stylesheet if needed
 	 */
 	static function load2DTransitions()
-	{
-// 		if (self::$twodtransitionsLoaded) {
-// 			return;
-// 		}
-
-	    $minified = (defined('JDEBUG') && JDEBUG) ? '' : '-min';
-	    
+	{	    
 	    $attributes = array();
 	    if (Factory::getApplication()->isClient('site') && isset(self::getPluginParams()->lazy_stylesheets) && self::getPluginParams()->lazy_stylesheets > 0) {
 	        $attributes['rel'] = 'lazy-stylesheet';
 	    }
 		
-	    self::getWebAssetManager()->registerAndUseStyle('syw.transitions.2d', 'syw/2d-transitions' . $minified . '.css', ['relative' => true, 'version' => 'auto'], $attributes);
-
-// 		self::$twodtransitionsLoaded = true;
+	    self::getWebAssetManager()->registerAndUseStyle('syw.transitions.2d', 'syw/2d-transitions.min.css', ['relative' => true, 'version' => 'auto'], $attributes);
 	}
 
 	/**
 	 * Load the background transitions stylesheet if needed
 	 */
 	static function loadBGTransitions()
-	{
-// 		if (self::$bgtransitionsLoaded) {
-// 			return;
-// 		}
-
-	    $minified = (defined('JDEBUG') && JDEBUG) ? '' : '-min';
-	    
+	{	    
 	    $attributes = array();
 	    if (Factory::getApplication()->isClient('site') && isset(self::getPluginParams()->lazy_stylesheets) && self::getPluginParams()->lazy_stylesheets > 0) {
 	        $attributes['rel'] = 'lazy-stylesheet';
 	    }
 		
-	    self::getWebAssetManager()->registerAndUseStyle('syw.transitions.bg', 'syw/bg-transitions' . $minified . '.css', ['relative' => true, 'version' => 'auto'], $attributes);
-
-// 		self::$bgtransitionsLoaded = true;
+	    self::getWebAssetManager()->registerAndUseStyle('syw.transitions.bg', 'syw/bg-transitions.min.css', ['relative' => true, 'version' => 'auto'], $attributes);
 	}
 
 	/**
@@ -2022,15 +1994,7 @@ CSS;
 	 */
 	static function loadBootstrapModals()
 	{
-// 		if (self::$bootstrapmodalsLoaded) {
-// 	        return;
-// 		}
-
-		$minified = (defined('JDEBUG') && JDEBUG) ? '' : '-min';
-		
-		self::getWebAssetManager()->registerAndUseStyle('syw.bootstrap.modal', 'syw/bootstrap-modals' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-
-// 	    self::$bootstrapmodalsLoaded = true;
+		self::getWebAssetManager()->registerAndUseStyle('syw.bootstrap.modal', 'syw/bootstrap-modals.min.css', ['relative' => true, 'version' => 'auto']);
 	}
 
 	/**

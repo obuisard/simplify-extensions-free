@@ -31,7 +31,7 @@ class SywonlinehelpField extends FormField
 	{
 	    $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 	    
-	    $wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
+	    $wam->registerAndUseStyle('syw.font', 'syw/fonts.min.css', ['relative' => true, 'version' => 'auto']);
 
 		$html = array();
 

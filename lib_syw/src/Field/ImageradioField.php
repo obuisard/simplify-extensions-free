@@ -45,7 +45,7 @@ class ImageradioField extends FormField
 
         HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
         
-        $wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']);
+        $wam->registerAndUseStyle('syw.font', 'syw/fonts.min.css', ['relative' => true, 'version' => 'auto']);
 
         // Build the radio field output.
         foreach ($options as $i => $option) {

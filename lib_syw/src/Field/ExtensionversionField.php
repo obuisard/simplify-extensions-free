@@ -17,6 +17,7 @@ class ExtensionversionField extends FormField
 	public $type = 'Extensionversion';
 
 	protected $version;
+	protected $extension;
 
 	protected function getLabel()
 	{
@@ -34,9 +35,23 @@ class ExtensionversionField extends FormField
 	{
 		$html = '<div style="padding-top: 5px; overflow: inherit">';
 
-		//$version = strval(simplexml_load_file(JPATH_ADMINISTRATOR . '/components/com_trombinoscopeextended/trombinoscopeextended.xml')->version);
-
-		$html .= '<span class="badge bg-dark">'.$this->version.'</span>';
+		if ($this->version) {
+			$html .= '<span class="badge bg-dark">'.$this->version.'</span>';
+		} else if ($this->extension) {
+			$extension_parts = explode('_', $this->extension);
+			$path = '';
+			switch ($extension_parts[0]) {
+				case 'plg': $path = JPATH_SITE . '/plugins/' . $extension_parts[1] . '/' . $extension_parts[2] . '/' . $extension_parts[2] . '.xml'; break;
+				case 'com': $path = JPATH_ADMINISTRATOR . '/components/' . $this->extension . '/' . $extension_parts[1]. '.xml'; break;
+				//case 'lib': $path = JPATH_SITE . '/libraries/' . $extension_parts[1] . '/' . $extension_parts[1]. '.xml'; break;
+				case 'tpl': $path = JPATH_SITE . '/templates/' . $extension_parts[1] . '/templateDetails.xml'; break;
+				default: $path = JPATH_SITE . '/modules/' . $this->extension . '/' . $this->extension . '.xml';
+			}
+			
+			if ($path) {
+				$html .= '<span class="badge bg-dark">' . strval(simplexml_load_file($path)->version) . '</span>';
+			}
+		}
 
 		$html .= '</div>';
 
@@ -49,6 +64,7 @@ class ExtensionversionField extends FormField
 
 		if ($return) {
 			$this->version = isset($this->element['version']) ? (string)$this->element['version'] : '';
+			$this->extension = isset($this->element['extension']) ? (string)$this->element['extension'] : '';
 		}
 
 		return $return;

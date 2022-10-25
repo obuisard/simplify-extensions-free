@@ -718,14 +718,14 @@ class Image
 		}		
 		
 		if ($high_resolution) {
-		    $this->thumbnail_high_res = $this->image_library->createThumbnail($mime_type, $this->image, $to_path_high_res, 0, 0, $x, $y, $thumbnail_width, $thumbnail_height, $w, $h, $quality, $filter);
-		    $this->thumbnail = $this->image_library->createThumbnail($mime_type, $this->image, $to_path, 0, 0, $x, $y, $thumbnail_width / 2, $thumbnail_height / 2, $w, $h, $quality, $filter);
+			$this->thumbnail_high_res = $this->image_library->createThumbnail($mime_type, $this->image, $to_path_high_res, 0, 0, (int) $x, (int) $y, (int) $thumbnail_width, (int) $thumbnail_height, (int) $w, (int) $h, $quality, $filter);
+			$this->thumbnail = $this->image_library->createThumbnail($mime_type, $this->image, $to_path, 0, 0, (int) $x, (int) $y, intval($thumbnail_width / 2), intval($thumbnail_height / 2), (int) $w, (int) $h, $quality, $filter);
 		    
 		    if ($this->thumbnail !== false && $this->thumbnail_high_res !== false) {
 		        $creation_success = true;
 		    }
 		} else {		
-		    $this->thumbnail = $this->image_library->createThumbnail($mime_type, $this->image, $to_path, 0, 0, $x, $y, $thumbnail_width, $thumbnail_height, $w, $h, $quality, $filter);
+			$this->thumbnail = $this->image_library->createThumbnail($mime_type, $this->image, $to_path, 0, 0, (int) $x, (int) $y, (int) $thumbnail_width, (int) $thumbnail_height, (int) $w, (int) $h, $quality, $filter);
 		    
 		    if ($this->thumbnail !== false) {
 		        $creation_success = true;
@@ -740,8 +740,8 @@ class Image
 				$this->thumbnail_high_res_path = $to_path_high_res;
 				$this->thumbnail_high_res_width = $thumbnail_width;
 				$this->thumbnail_high_res_height = $thumbnail_height;
-				$this->thumbnail_width = $thumbnail_width / 2;
-				$this->thumbnail_height = $thumbnail_height / 2;
+				$this->thumbnail_width = intval($thumbnail_width / 2);
+				$this->thumbnail_height = intval($thumbnail_height / 2);
 			}
 		}
 

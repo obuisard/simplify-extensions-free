@@ -67,7 +67,7 @@ class ImagickLibrary extends AbstractImageLibrary
                     $x = ($source_width - $width / $ratio) / 2;
                     $y = ($source_height - $height / $ratio) / 2;
                         
-                    $this->crop_and_resize($image, $x, $y, $width, $height, $w, $h);
+                    $this->crop_and_resize($image, (int) $x, (int) $y, $width, $height, (int) $w, (int) $h);
                 }
             }
         }
@@ -99,7 +99,7 @@ class ImagickLibrary extends AbstractImageLibrary
                 $x = ($source_width - $width / $ratio) / 2;
                 $y = ($source_height - $height / $ratio) / 2;
                 
-                $this->crop_and_resize($image, $x, $y, $width, $height, $w, $h);
+                $this->crop_and_resize($image, (int) $x, (int) $y, $width, $height, (int) $w, (int) $h);
             }
         }
         

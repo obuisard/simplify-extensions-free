@@ -39,7 +39,7 @@ class SywcardinaltextField extends ListField
 
 		HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 		
-		$wam->registerAndUseStyle('syw.font', 'syw/fonts-min.css', ['relative' => true, 'version' => 'auto']); // TODO if icons to show
+		$wam->registerAndUseStyle('syw.font', 'syw/fonts.min.css', ['relative' => true, 'version' => 'auto']); // TODO if icons to show
 
 		$size = !empty($this->size) ? ' size="' . $this->size . '"' : '';
 		$style = empty($size) ? '' : ' style="width:auto"';
@@ -160,7 +160,7 @@ class SywcardinaltextField extends ListField
 		$html .= '</table>';
 
 		if ($this->help) {
-			$html .= '<span class="help-block">'.Text::_($this->help).'</span>';
+			$html .= '<span class="help-block" style="font-size: .8rem">'.Text::_($this->help).'</span>';
 		}
 
 		return $html;

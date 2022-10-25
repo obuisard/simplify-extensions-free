@@ -13,23 +13,11 @@ use Joomla\CMS\Language\Text;
 
 class Libraries
 {
-// 	static $purePajinateLoaded = false;
-// 	static $tinySliderLoaded = false;
-// 	static $tingleLoaded = false;
-
-// 	static $jq_owlLoaded = false;
-
 	static $jqcLoaded = false;
 	static $jqcMultipackLoaded = false;
-// 	static $jqcthrottleLoaded = false;
-// 	static $jqctouchLoaded = false;
-// 	static $jqcmousewheelLoaded = false;
-// 	static $jqctransitLoaded = false;
 
 	static $instantiatePureModalLoaded = array();
 	static $instantiateBootstrapModalLoaded = array();
-	
-// 	static $lazystylesheetLoaded = false;
 
 	static $compareLoaded = false;
 	
@@ -58,11 +46,9 @@ class Libraries
 	 * IE10+ compatible
 	 */
 	static function loadPurePajinate($remote = false, $defer = false, $async = false)
-	{
-    	$minified = (defined('JDEBUG') && JDEBUG) ? '' : '.min';
-		
-		self::getWebAssetManager()->registerAndUseScript('syw.purepajinate', 'syw/purepajinate/purePajinate' . $minified . '.js', ['relative' => true, 'version' => 'auto'], ['type' => 'module']);
-		self::getWebAssetManager()->registerAndUseScript('syw.purepajinate-es5', 'syw/purepajinate/purePajinate-es5' . $minified . '.js', ['relative' => true, 'version' => 'auto'], ['nomodule' => true, 'defer' => true]);
+	{		
+		self::getWebAssetManager()->registerAndUseScript('syw.purepajinate', 'syw/purepajinate/purePajinate.min.js', ['relative' => true, 'version' => 'auto'], ['type' => 'module']);
+		self::getWebAssetManager()->registerAndUseScript('syw.purepajinate-es5', 'syw/purepajinate/purePajinate-es5.min.js', ['relative' => true, 'version' => 'auto'], ['nomodule' => true, 'defer' => true]);
 	}
 
 	/*
@@ -83,12 +69,6 @@ class Libraries
 	 */
 	static function loadTinySlider($remote = false, $defer = false, $async = false)
 	{
-// 		if (self::$tinySliderLoaded) {
-// 			return;
-// 		}
-
-		$minified = (defined('JDEBUG') && JDEBUG) ? '' : '.min';
-
 		// WARNING loading the library remotely won't have the RTL fix
 // 		$remote = false;
 
@@ -105,11 +85,9 @@ class Libraries
 // 			self::getWebAssetManager()->registerAndUseScript('syw.tinyslider', 'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider' . $minified . '.js', [], $attributes);
 // 			self::getWebAssetManager()->addInlineStyle('.tns-slider{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}.tns-nav{text-align:center;margin:10px 0}.tns-nav>[aria-controls]{width:9px;height:9px;padding:0;margin:0 5px;border-radius:50%;background:#ddd;border:0}.tns-nav>.tns-nav-active{background:#999}');
 // 		} else {
-			self::getWebAssetManager()->registerAndUseStyle('syw.tinyslider', 'syw/tinyslider/tiny-slider' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-			self::getWebAssetManager()->registerAndUseScript('syw.tinyslider', 'syw/tinyslider/tiny-slider' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes);
+			self::getWebAssetManager()->registerAndUseStyle('syw.tinyslider', 'syw/tinyslider/tiny-slider.min.css', ['relative' => true, 'version' => 'auto']);
+			self::getWebAssetManager()->registerAndUseScript('syw.tinyslider', 'syw/tinyslider/tiny-slider.min.js', ['relative' => true, 'version' => 'auto'], $attributes);
 // 		}
-
-// 		self::$tinySliderLoaded = true;
 	}
 
 	/**
@@ -120,12 +98,6 @@ class Libraries
 	 */
 	static function loadTingle($remote = false, $defer = false, $async = false)
 	{
-// 		if (self::$tingleLoaded) {
-// 			return;
-// 		}
-
-		$minified = (defined('JDEBUG') && JDEBUG) ? '' : '.min';
-
 		$attributes = array();
 		if ($defer) {
 			$attributes['defer'] = true;
@@ -135,14 +107,12 @@ class Libraries
 		}
 
 		if ($remote) {
-			self::getWebAssetManager()->registerAndUseStyle('syw.tingle', 'https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle' . $minified . '.css');
-			self::getWebAssetManager()->registerAndUseScript('syw.tingle', 'https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle' . $minified . '.js', [], $attributes);
+			self::getWebAssetManager()->registerAndUseStyle('syw.tingle', 'https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle.min.css');
+			self::getWebAssetManager()->registerAndUseScript('syw.tingle', 'https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle.min.js', [], $attributes);
 		} else {
-			self::getWebAssetManager()->registerAndUseStyle('syw.tingle', 'syw/tingle/tingle' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-			self::getWebAssetManager()->registerAndUseScript('syw.tingle', 'syw/tingle/tingle' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes);
+			self::getWebAssetManager()->registerAndUseStyle('syw.tingle', 'syw/tingle/tingle.min.css', ['relative' => true, 'version' => 'auto']);
+			self::getWebAssetManager()->registerAndUseScript('syw.tingle', 'syw/tingle/tingle.min.js', ['relative' => true, 'version' => 'auto'], $attributes);
 		}
-
-// 		self::$tingleLoaded = true;
 	}
 
 	/*
@@ -336,12 +306,6 @@ JS;
 	 */
 	static function loadOwlCarousel($remote = false, $defer = false, $async = false)
 	{
-// 		if (self::$jq_owlLoaded) {
-// 			return;
-// 		}
-
-		$minified = (defined('JDEBUG') && JDEBUG) ? '' : '.min';
-
 		$attributes = array();
 		if ($defer) {
 			$attributes['defer'] = true;
@@ -351,14 +315,12 @@ JS;
 		}
 
 		if ($remote) {
-			self::getWebAssetManager()->registerAndUseStyle('syw.owlcarousel', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel' . $minified . '.css');
-			self::getWebAssetManager()->registerAndUseScript('syw.owlcarousel', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel' . $minified . '.js', [], $attributes, ['jquery']);
+			self::getWebAssetManager()->registerAndUseStyle('syw.owlcarousel', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css');
+			self::getWebAssetManager()->registerAndUseScript('syw.owlcarousel', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js', [], $attributes, ['jquery-migrate']);
 		} else {
-			self::getWebAssetManager()->registerAndUseStyle('syw.owlcarousel', 'syw/owlcarousel/owl.carousel' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-			self::getWebAssetManager()->registerAndUseScript('syw.owlcarousel', 'syw/owlcarousel/owl.carousel' . $minified . '.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+			self::getWebAssetManager()->registerAndUseStyle('syw.owlcarousel', 'syw/owlcarousel/owl.carousel.min.css', ['relative' => true, 'version' => 'auto']);
+			self::getWebAssetManager()->registerAndUseScript('syw.owlcarousel', 'syw/owlcarousel/owl.carousel.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery-migrate']);
 		}
-
-// 		self::$jq_owlLoaded = true;
 	}
 
 	/**
@@ -402,7 +364,7 @@ JS;
 
 		if (!self::$jqcMultipackLoaded && $will_use_multipack) { // multi-pack is not used when debug or when remote
 
-			self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel', 'syw/carousel/jquery.carouFredSel.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+			self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel', 'syw/carousel/jquery.carouFredSel.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery-migrate']);
 
 			self::$jqcMultipackLoaded = true;
 		} else {
@@ -412,9 +374,9 @@ JS;
 			}
 
 			if ($remote) {
-				self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.caroufredsel/6.2.1/jquery.carouFredSel.packed.js', [], $attributes, ['jquery']); // only minified version
+				self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.caroufredsel/6.2.1/jquery.carouFredSel.packed.js', [], $attributes, ['jquery-migrate']); // only minified version
 			} else {
-			    self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel', 'syw/carousel/jquery.carouFredSel-6.2.1' . ((JDEBUG) ? '' : '-packed') . '.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+			    self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel', 'syw/carousel/jquery.carouFredSel-6.2.1.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery-migrate']);
 			}
 
 			self::$jqcLoaded = true;
@@ -427,10 +389,6 @@ JS;
 	 */
 	static function loadCarousel_throttle($defer = false, $async = false, $remote = false)
 	{
-// 		if (self::$jqcthrottleLoaded) {
-// 			return;
-// 		}
-
 		$attributes = array();
 		if ($defer) {
 			$attributes['defer'] = true;
@@ -440,12 +398,10 @@ JS;
 		}		
 
 		if ($remote) {
-		    self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.throttle', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce' . ((JDEBUG) ? '' : '.min') . '.js', [], $attributes, ['jquery']);
+		    self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.throttle', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js', [], $attributes, ['jquery-migrate']);
 		} else {
-			self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.throttle', 'syw/carousel/jquery.ba-throttle-debounce.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+			self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.throttle', 'syw/carousel/jquery.ba-throttle-debounce.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery-migrate']);
 		}
-
-// 		self::$jqcthrottleLoaded = true;
 	}
 
 	/**
@@ -454,10 +410,6 @@ JS;
 	 */
 	static function loadCarousel_touch($defer = false, $async = false, $remote = false)
 	{
-// 		if (self::$jqctouchLoaded) {
-// 			return;
-// 		}
-
 		$attributes = array();
 		if ($defer) {
 			$attributes['defer'] = true;
@@ -467,12 +419,10 @@ JS;
 		}
 
 		if ($remote) {
-		    self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.touch', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.18/jquery.touchSwipe' . ((JDEBUG) ? '' : '.min') . '.js', [], $attributes, ['jquery']);
+		    self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.touch', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.18/jquery.touchSwipe.min.js', [], $attributes, ['jquery-migrate']);
 		} else {
-			self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.touch', 'syw/carousel/jquery.touchSwipe.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
+			self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.touch', 'syw/carousel/jquery.touchSwipe.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery-migrate']);
 		}
-
-// 		self::$jqctouchLoaded = true;
 	}
 
 	/**
@@ -481,10 +431,6 @@ JS;
 	 */
 	static function loadCarousel_mousewheel($defer = false, $async = false, $remote = false)
 	{
-// 		if (self::$jqcmousewheelLoaded) {
-// 			return;
-// 		}
-
 		$attributes = array();
 		if ($defer) {
 			$attributes['defer'] = true;
@@ -493,9 +439,7 @@ JS;
 			$attributes['async'] = 'async';
 		}		
 
-		self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.mousewheel', 'syw/carousel/jquery.mousewheel.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
-
-// 		self::$jqcmousewheelLoaded = true;
+		self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.mousewheel', 'syw/carousel/jquery.mousewheel.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery-migrate']);
 	}
 
 	/**
@@ -504,10 +448,6 @@ JS;
 	 */
 	static function loadCarousel_transit($defer = false, $async = false, $remote = false)
 	{
-// 		if (self::$jqctransitLoaded) {
-// 			return;
-// 		}
-
 		$attributes = array();
 		if ($defer) {
 			$attributes['defer'] = true;
@@ -516,9 +456,7 @@ JS;
 			$attributes['async'] = 'async';
 		}
 
-		self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.transit', 'syw/carousel/jquery.transit.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery']);
-
-// 		self::$jqctransitLoaded = true;
+		self::getWebAssetManager()->registerAndUseScript('syw.caroufredsel.transit', 'syw/carousel/jquery.transit.min.js', ['relative' => true, 'version' => 'auto'], $attributes, ['jquery-migrate']);
 	}
 
 	/**
@@ -537,28 +475,6 @@ JS;
 
 		self::$compareLoaded = true;
 	}
-	
-	/**
-	 * Load the comparison version function if needed
-	 */
-// 	static function loadLazyStylesheetSupport()
-// 	{
-// 	    if (self::$lazystylesheetLoaded) {
-// 	        return;
-// 	    }
-	    
-// 	    $inline_js = <<< JS
-// 			document.addEventListener("DOMContentLoaded", function(event) {
-// 				[].slice.call(document.head.querySelectorAll('link[rel="lazy-stylesheet"]')).forEach(function(el) {
-//                     el.rel = "stylesheet";
-//                 });
-// 			});
-// JS;
-							
-// 		self::getWebAssetManager()->addInlineScript(self::compress($inline_js));
-	    
-// 		self::$lazystylesheetLoaded = true;
-// 	}
 
 	/**
 	 * Compress inline JS
