@@ -26,7 +26,7 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.1.1';
+	protected $minimumLibrary = '2.3.0';
 
 	/**
 	 * Available languages
@@ -220,7 +220,6 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
     			    
     			    if (Folder::exists(JPATH_SITE . '/modules/mod_trombinoscope/themes/canary')) {
     			        
-    			        $this->copyFile('index.html', '/modules/mod_trombinoscope/themes/canary', '/media/mod_trombinoscopecontacts/styles/themes/canary');
     			        $this->copyFile('style.css.php', '/modules/mod_trombinoscope/themes/canary', '/media/mod_trombinoscopecontacts/styles/themes/canary');
     			        
     			        if (File::exists(JPATH_SITE . '/modules/mod_trombinoscope/themes/canary/images/canary_card_landscape.png')
@@ -254,6 +253,10 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 			// data migration for changes in the parameters
 			
 			$this->migrateData();
+
+			// remove files
+
+			$this->deleteFiles[] = '/media/mod_trombinoscopecontacts/css/common_styles-min.css';
 		}
 
 		$this->removeFiles();
