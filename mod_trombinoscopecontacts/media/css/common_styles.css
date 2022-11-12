@@ -258,7 +258,7 @@
 				.te .personfield.beneath {
 					-webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column;
 				}
-				
+
 				.te .personfield.nowrap.fieldaddress,
 				.te .personfield.nowrap.fieldformattedaddress,
 				.te .personfield.nowrap.fieldmisc,
@@ -298,7 +298,7 @@
 					.te .personinfo .iconbg .icon {
 						padding: 4px;
 					}
-					
+
 					.te .personinfo .iconbg .noicon {
 						padding: 0 4px;
 					}
@@ -353,24 +353,31 @@
                     	text-overflow: ellipsis;
                     	max-width: 100%;
 					}
+				
+					.te .personfield.nowrap.fieldaddress .fieldvalue,
+					.te .personfield.nowrap.fieldformattedaddress .fieldvalue,
+					.te .personfield.nowrap.fieldmisc .fieldvalue,
+					.te .personfield.nowrap.fieldsummary .fieldvalue {
+						-webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto;
+					}
 					
-					.te .nowrap.fieldaddress .fieldvalue,
-                    .te .nowrap.fieldformattedaddress .fieldvalue {
-                    	overflow: hidden;
-                    	text-overflow: ellipsis;          	
-                    }
+					.te .personfield.nowrap.fieldaddress .fieldvalue,
+					.te .personfield.nowrap.fieldformattedaddress .fieldvalue {
+						overflow: hidden;
+                    	text-overflow: ellipsis;
+					}
                     
-                    .te .fieldmisc .fieldvalue,
-					.te .fieldsummary .fieldvalue {
+                    .te .personfield.fieldmisc .fieldvalue,
+					.te .personfield.fieldsummary .fieldvalue {
 						white-space: normal; /* always */
 					}
-				
-						.te .fieldmisc .fieldvalue p {	
+
+						.te .personfield.fieldmisc .fieldvalue p {	
 							margin: 0;				
 						}
-					
+
 					.te .personfield.fieldtwitter .fieldvalue:before {
-					    content: '@';
+						content: '@';
 					}
 			
 				.te .picture_top .personinfo .fieldname,
@@ -381,7 +388,7 @@
 				.te .ghost_picture_top .personinfo .tags {
 					text-align: center;
 				}
-				
+
 				.te .picture_top .wrap.alignself.fieldname,
 				.te .ghost_picture_top .wrap.alignself.fieldname {
 					-webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;

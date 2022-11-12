@@ -19,7 +19,7 @@ use SYW\Library\Utilities as SYWUtilities;
 use SYW\Library\Version as SYWVersion;
 use SYW\Module\TrombinoscopeContacts\Site\Helper\Helper;
 
-if ($bootstrap_version > 0) {
+if ($load_bootstrap) {
     HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 }
 

@@ -94,10 +94,9 @@ class JSAnimationFileCache extends HeaderFilesCache
 //  			$this->sendHttpHeaders('js');
 //  		}
 
+ 		$carousel_var = 'te_slider_' . $suffix;
  		if (Factory::getDocument()->getDirection() == 'rtl') {
- 			$carousel_var = 'te_slider_' . $suffix . '_rtl';
- 		} else {
- 			$carousel_var = 'te_slider_' . $suffix;
+ 			$carousel_var .= '_rtl';
  		}
 
 		echo 'document.addEventListener("readystatechange", function(event) { ';

@@ -20,11 +20,9 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Contact\Site\Helper\RouteHelper as ContactRouteHelper;
-use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
 use SYW\Library\Cache as SYWCache;
-use SYW\Library\Fields as SYWFields;
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Tags as SYWTags;
 use SYW\Library\Text as SYWText;
@@ -34,10 +32,6 @@ abstract class Helper
 {
 	protected static $sort_locale;
 	protected static $contact_globals;
-
-	protected static $flipScriptLoaded = false;
-	protected static $commonStylesLoaded = false;
-	protected static $userStylesLoaded = false;
 
 	/**
 	 * Is the picture set to be shown?
@@ -557,21 +551,21 @@ abstract class Helper
 
 			// include
 
-			$contact_ids_include = trim($params->get('in', ''));
+			$contact_ids_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
 			if (!empty($contact_ids_include)) {
-				$query->where('cd.id IN ('.$contact_ids_include.')');
+				$query->where('cd.id IN (' . implode(',', $contact_ids_include) . ')');
 			}
 
 			// exclude
 
-			$contact_ids_exclude = array_filter(explode(",", trim($params->get('ex', ''))));
+			$contact_ids_exclude = array_filter(explode(',', trim($params->get('ex', ''), ' ,')));
 
 			if (!empty($related_id)) {
 				$contact_ids_exclude[] = $related_id;
 			}
 
 			if (!empty($contact_ids_exclude)) {
-				$query->where('cd.id NOT IN ('.implode(",", $contact_ids_exclude).')');
+				$query->where('cd.id NOT IN (' . implode(',', $contact_ids_exclude) . ')');
 			}
 
 			// filter by metakeys
@@ -743,15 +737,11 @@ abstract class Helper
 				case 'fnf_ld' : $query->order('cd.ordering DESC'); break;
 				case 'random' : $query->order('rand()'); break;
 				case 'manual' :
-					$manual_order_ids = trim($params->get('manual_ids', '')); // TODO trim the commas as well? actually, do this in all fields with lists of elements with commas
+					$manual_order_ids = array_filter(explode(',', trim($params->get('manual_ids', ''), ' ,')));
 					if (!empty($manual_order_ids)) {
-						//$query->order('FIELD(cd.id, '.self::$manual_order_ids.')'); // MySQL specific
-
-						$array_ids = explode(',', $manual_order_ids);
 						$order = 'CASE cd.id';
-						$i = 0;
-						foreach ($array_ids as $id) {
-							$order .= ' WHEN '.$id.' THEN '.$i++;
+						foreach ($manual_order_ids as $key => $id) {
+							$order .= ' WHEN ' . $id . ' THEN ' . $key;
 						}
 						$order .= ' ELSE 999 END, cd.id';
 						$query->order($order);
@@ -778,7 +768,7 @@ abstract class Helper
 				
 				case 'hit': $query->order('cd.hits DESC'); break; // popular (most hit)
 				
-				default : $query->order('cd.ordering ASC'); break;
+				default : $query->order('cd.ordering ASC');
 			}
 		}
 
@@ -1383,35 +1373,19 @@ abstract class Helper
 
 	    $html .= '<div class="personfield index0 fieldname' . ($extraclass ? ' ' . $extraclass : '') . '">';
 
-	    if (Factory::getDocument()->getDirection() != 'rtl') {
-	        if ($show_label) { // labels
-	            $html .= '<span class="fieldlabel">'.$label.$label_separator.'</span>';
-	        } else if ($show_icon) { // icons
-	            $html .= '<i class="icon SYWicon-'.$icon.'" aria-hidden="true"></i>';
-	        } else { // no icon or no label for the field
-	            if ($label_by_default) { // force 'no label' even if there is one
-	                $html .= '<span class="nolabel"></span>';
-	            } else if ($icon_by_default) { // force 'no icon' even if one exists for the field
-	                $html .= '<i class="noicon" aria-hidden="true"></i>';
-	            }
-	        }
-	    }
+        if ($show_label) { // labels
+            $html .= '<span class="fieldlabel">'.$label.$label_separator.'</span>';
+        } else if ($show_icon) { // icons
+            $html .= '<i class="icon SYWicon-'.$icon.'" aria-hidden="true"></i>';
+        } else { // no icon or no label for the field
+            if ($label_by_default) { // force 'no label' even if there is one
+                $html .= '<span class="nolabel"></span>';
+            } else if ($icon_by_default) { // force 'no icon' even if one exists for the field
+                $html .= '<i class="noicon" aria-hidden="true"></i>';
+            }
+        }
 
 	    $html .= $value;
-
-	    if (Factory::getDocument()->getDirection() == 'rtl') {
-	        if ($show_label) { // labels
-	            $html .= '<span class="fieldlabel">'.$label.$label_separator.'</span>';
-	        } else if ($show_icon) { // icons
-	            $html .= '<i class="icon SYWicon-'.$icon.'" aria-hidden="true"></i>';
-	        } else { // no icon or no label for the field
-	            if ($label_by_default) { // force 'no label' even if there is one
-	                $html .= '<span class="nolabel"></span>';
-	            } else if ($icon_by_default) { // force 'no icon' even if one exists for the field
-	                $html .= '<i class="noicon" aria-hidden="true"></i>';
-	            }
-	        }
-	    }
 
 	    $html .= '</div>';
 
@@ -1899,23 +1873,21 @@ abstract class Helper
 				    $html .= '<span>&nbsp;</span>';
 				} else {
 
-				    if (Factory::getDocument()->getDirection() != 'rtl') {
-    					if ($prefield == 1) { // labels
-    						$html .= '<span class="fieldlabel">'.$label.$params->get('lbl_separator', '').'</span>';
-    					} else if ($prefield == 2) { // icons
-    						if (!empty($icon_class)) {
-    							$html .= '<i class="icon SYWicon-'.$icon_class.'" aria-hidden="true"></i>';
-    						} else {
-    							$html .= '<i class="noicon" aria-hidden="true"></i>';
-    						}
-    					} else { // no icon or no label for the field
-    						if ($params->get('s_f_lbl', 0) == 1 && $class != 'fieldname') { // force 'no label' even if there is one
-    							$html .= '<span class="nolabel"></span>';
-    						} else if ($params->get('s_f_lbl', 0) == 2 && $class != 'fieldname') { // force 'no icon' even if one exists for the field
-    							$html .= '<i class="noicon" aria-hidden="true"></i>';
-    						}
-    					}
-				    }
+					if ($prefield == 1) { // labels
+						$html .= '<span class="fieldlabel">'.$label.$params->get('lbl_separator', '').'</span>';
+					} else if ($prefield == 2) { // icons
+						if (!empty($icon_class)) {
+							$html .= '<i class="icon SYWicon-'.$icon_class.'" aria-hidden="true"></i>';
+						} else {
+							$html .= '<i class="noicon" aria-hidden="true"></i>';
+						}
+					} else { // no icon or no label for the field
+						if ($params->get('s_f_lbl', 0) == 1 && $class != 'fieldname') { // force 'no label' even if there is one
+							$html .= '<span class="nolabel"></span>';
+						} else if ($params->get('s_f_lbl', 0) == 2 && $class != 'fieldname') { // force 'no icon' even if one exists for the field
+							$html .= '<i class="noicon" aria-hidden="true"></i>';
+						}
+					}
 
 					if ($value_is_link) {
 						if (!empty($generated_link_tag)) {
@@ -1936,24 +1908,6 @@ abstract class Helper
 					} else {
 						//$value_as_title = empty($title) ? $value : $title;
 					    $html .= '<span class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" aria-label="'.$label.'"'.self::getTitleAttribute($label/*$value_as_title*/, $fieldtooltip).'>'.($substitute_value ? $substitute_value : $value).'</span>';
-					}
-
-					if (Factory::getDocument()->getDirection() == 'rtl') {
-					    if ($prefield == 1) { // labels
-					        $html .= '<span class="fieldlabel">'.$label.$params->get('lbl_separator', '').'</span>';
-					    } else if ($prefield == 2) { // icons
-					        if (!empty($icon_class)) {
-					            $html .= '<i class="icon SYWicon-'.$icon_class.'" aria-hidden="true"></i>';
-					        } else {
-					            $html .= '<i class="noicon" aria-hidden="true"></i>';
-					        }
-					    } else { // no icon or no label for the field
-					        if ($params->get('s_f_lbl', 0) == 1 && $class != 'fieldname') { // force 'no label' even if there is one
-					            $html .= '<span class="nolabel"></span>';
-					        } else if ($params->get('s_f_lbl', 0) == 2 && $class != 'fieldname') { // force 'no icon' even if one exists for the field
-					            $html .= '<i class="noicon" aria-hidden="true"></i>';
-					        }
-					    }
 					}
 				}
 
@@ -2020,7 +1974,7 @@ abstract class Helper
 	 * @param string $filter
 	 * @param boolean $create_high_resolution
 	 *
-	 * @return String thumbnail path if no error, 'error' if error, the original path otherwise if conditions are not met to create the thumbnail
+	 * @return string the thumbnail path if no error, 'error' if error, the original path otherwise if conditions are not met to create the thumbnail
 	 */
 	public static function getCroppedImage($module_id, $item_id, $imagesrc, $tmp_path, $clear_cache, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution = false, $thumbnail_mime_type = '')
 	{
@@ -2620,17 +2574,9 @@ abstract class Helper
 	 */
 	public static function loadFlipCards()
 	{
-		if (self::$flipScriptLoaded) {
-			return;
-		}
-
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
-		$minified = (JDEBUG) ? '' : '.min';
-
-		$wam->registerAndUseScript('tc.flipcards', 'mod_trombinoscopecontacts/flipcards' . $minified . '.js', ['relative' => true, 'version' => 'auto']); // no defer
-
-		self::$flipScriptLoaded = true;
+		$wam->registerAndUseScript('tc.flipcards', 'mod_trombinoscopecontacts/flipcards.min.js', ['relative' => true, 'version' => 'auto'], ['defer' => true]);
 	}
 
 	/**
@@ -2638,17 +2584,9 @@ abstract class Helper
 	 */
 	public static function loadCommonStylesheet()
 	{
-		if (self::$commonStylesLoaded) {
-			return;
-		}
-
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
-		$minified = (JDEBUG) ? '' : '-min';
-
-		$wam->registerAndUseStyle('tc.common_styles', 'mod_trombinoscopecontacts/common_styles' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-
-		self::$commonStylesLoaded = true;
+		$wam->registerAndUseStyle('tc.common_styles', 'mod_trombinoscopecontacts/common_styles.min.css', ['relative' => true, 'version' => 'auto']);
 	}
 
 	/**
@@ -2657,10 +2595,6 @@ abstract class Helper
 	 */
 	public static function loadUserStylesheet($styles_substitute = false)
 	{
-		if (self::$userStylesLoaded) {
-			return;
-		}
-
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$prefix = 'common_user';
@@ -2668,13 +2602,15 @@ abstract class Helper
 			$prefix = 'substitute';
 		}
 
-		if (!File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css') || JDEBUG) {
-			$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
+		if (File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css')) {
+			if (JDEBUG && File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles.css')) {
+				$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
+			} else {
+				$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
+			}
 		} else {
-			$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
+			$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles.min.css', ['relative' => true, 'version' => 'auto']);
 		}
-
-		self::$userStylesLoaded = true;
 	}
 
 }

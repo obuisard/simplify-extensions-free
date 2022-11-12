@@ -7,12 +7,11 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.9.5</version>
+	<version>4.10.0</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
 	<media folder="media" destination="mod_trombinoscopecontacts">
-		<filename>index.html</filename>		
 		<folder>css</folder>
 		<folder>images</folder>
 		<folder>js</folder>
@@ -21,7 +20,6 @@
 	
 	<files>
 		<filename module="mod_trombinoscope">mod_trombinoscope.php</filename>
-		<filename>index.html</filename>
 		<filename>license.txt</filename>
 		<folder>forms</folder>
 		<folder>layouts</folder>
@@ -62,7 +60,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\TrombinoscopeContacts\Site\Field">			
 			<fieldset name="basic" label="MOD_TROMBINOSCOPE_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.9.5" />
+				<field type="extensionversion" extension="mod_trombinoscope" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_TROMBINOSCOPE_TRANSLATORS" />
@@ -515,11 +513,11 @@
 						label="MOD_TROMBINOSCOPE_FIELD_BGIMAGE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_BGIMAGE_DESC" />
 						
-					<field name="bgcolor1" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
+					<field name="bgcolor1" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_TROMBINOSCOPE_FIELD_BGCOLOR1_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_BGCOLOR1_DESC" />
 						
-					<field name="bgcolor2" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
+					<field name="bgcolor2" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_TROMBINOSCOPE_FIELD_BGCOLOR2_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_BGCOLOR2_DESC" />					
 						
@@ -535,7 +533,7 @@
 						label="MOD_TROMBINOSCOPE_FIELD_CARDBORDERWIDTH_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_CARDBORDERWIDTH_DESC" />
 						
-					<field name="card_border_c" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-text" 
+					<field name="card_border_c" type="sywcolorpicker" default="" transparency="true" icon="outline" 
 						label="MOD_TROMBINOSCOPE_FIELD_CARDBORDERCOLOR_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_CARDBORDERCOLOR_DESC" />
 										
@@ -547,7 +545,7 @@
 						label="MOD_TROMBINOSCOPE_FIELD_FONTSIZEREFERENCE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_FONTSIZEREFERENCE_DESC" />
 						
-					<field name="fontcolor" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-text" 
+					<field name="fontcolor" type="sywcolorpicker" default="" transparency="true" icon="text" 
 						label="MOD_TROMBINOSCOPE_FIELD_FONTCOLOR_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_FONTCOLOR_DESC" />
 				
@@ -562,11 +560,11 @@
 						label="MOD_TROMBINOSCOPE_FIELD_ICONFONTSIZE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_ICONFONTSIZE_DESC" />
 						
-					<field name="ifont_c" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-text" 
+					<field name="ifont_c" type="sywcolorpicker" default="" transparency="true" icon="text" 
 						label="MOD_TROMBINOSCOPE_FIELD_ICONFONTCOLOR_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_ICONFONTCOLOR_DESC" />				
 					
-					<field name="ifont_bgc" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
+					<field name="ifont_bgc" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_TROMBINOSCOPE_FIELD_ICONFONTBGCOLOR_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_ICONFONTBGCOLOR_DESC" />
 					
@@ -574,11 +572,11 @@
 						label="MOD_TROMBINOSCOPE_FIELD_LABELWIDTH_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_LABELWIDTH_DESC" />
 						
-					<field name="lbl_c" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-text" 
+					<field name="lbl_c" type="sywcolorpicker" default="" transparency="true" icon="text" 
 						label="MOD_TROMBINOSCOPE_FIELD_LABELFONTCOLOR_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_LABELFONTCOLOR_DESC" />
 			
-					<field name="lbl_bgc" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
+					<field name="lbl_bgc" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_TROMBINOSCOPE_FIELD_LABELBGCOLOR_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_LABELBGCOLOR_DESC" />
 				</fieldset>
@@ -597,11 +595,11 @@
 						label="MOD_TROMBINOSCOPE_FIELD_ICONFONTSIZE_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_ICONFONTSIZE_DESC" />
 				
-					<field name="ifont_c_links" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-text" 
+					<field name="ifont_c_links" type="sywcolorpicker" default="" transparency="true" icon="text" 
 						label="MOD_TROMBINOSCOPE_FIELD_ICONFONTCOLOR_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_ICONFONTCOLOR_DESC" />
 			
-					<field name="ifont_bgc_links" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
+					<field name="ifont_bgc_links" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_TROMBINOSCOPE_FIELD_ICONFONTBGCOLOR_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_ICONFONTBGCOLOR_DESC" />
 				</fieldset>
@@ -666,7 +664,7 @@
 	                    <option value="1" imagesrc="/media/mod_trombinoscopecontacts/images/configs/keep_height_icon.png">JYES</option>
 	                </field>
 					
-					<field name="pic_bgcolor" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" showon="s_pic:1" 
+					<field name="pic_bgcolor" type="sywcolorpicker" default="" transparency="true" icon="fill" showon="s_pic:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_PICBGCOLOR_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_PICBGCOLOR_DESC" />
 						
