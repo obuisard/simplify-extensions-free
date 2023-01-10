@@ -42,6 +42,7 @@ class SliderselectField extends DynamicsingleselectField
         if ($return) {
             $this->width = 120;
             $this->height = 100;
+            $this->maxwidth = 200;
 
             $this->items = array();
             $this->items['basic'] = array('label' => Text::_('MOD_TRULYRESPONSIVESLIDER_VALUE_ANIMATIONBASIC'), 'image' => 'sliders_basic', 'disabled' => false);

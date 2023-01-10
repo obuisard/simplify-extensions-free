@@ -31,7 +31,7 @@ class PreviewarrowField extends FormField
 					let preview = document.querySelectorAll(".preview_arrow");
 
 					preview.forEach(function (el) {
-						el.style.backgroundColor = document.getElementById("jform_params_arrow_bgc").value;
+						el.style.backgroundColor = document.getElementById("visible_jform_params_arrow_bgc").value;
 						el.querySelector("i").style.color = document.getElementById("jform_params_arrow_c").value;
 						el.style.borderRadius = document.getElementById("jform_params_arrow_bgr").value + "px";
 						el.style.boxShadow = "0 0 " + document.getElementById("jform_params_arrow_shadow").value + "px #000";
@@ -39,17 +39,27 @@ class PreviewarrowField extends FormField
 
 					document.getElementById("a_jform_params_arrow_bgc").addEventListener("click", function(event) {
 						document.querySelectorAll(".preview_arrow").forEach(function (el) {
-							el.style.backgroundColor = "transparent";
+							el.style.backgroundColor = "";
 						});
 					});
 
-					document.getElementById("visible_jform_params_arrow_bgc").addEventListener("change", function(event) {
-						document.querySelectorAll(".preview_arrow").forEach(function (el) {
-							el.style.backgroundColor = document.getElementById("jform_params_arrow_bgc").value;
+					document.getElementById("select_jform_params_arrow_bgc").querySelectorAll("li[data-keyword]").forEach (function (option) {
+						option.addEventListener("click", function(event) {
+							document.querySelectorAll(".preview_arrow").forEach(function (el) {
+								el.style.backgroundColor = event.target.getAttribute("data-keyword");
+							});
 						});
 					});
 
-					document.getElementById("jform_params_arrow_c").addEventListener("change", function(event) {
+					document.getElementById("visible_jform_params_arrow_bgc").addEventListener("input", function(event) {
+						if (event.target.value != "") {
+							document.querySelectorAll(".preview_arrow").forEach(function (el) {
+								el.style.backgroundColor = event.target.value;
+							});
+						}
+					});
+
+					document.getElementById("jform_params_arrow_c").addEventListener("input", function(event) {
 						if (event.target.value != "") {
 							document.querySelectorAll(".preview_arrow i").forEach(function (el) {
 								el.style.color = event.target.value;
@@ -80,13 +90,13 @@ class PreviewarrowField extends FormField
 
 		$html = '';
 
-		$html .= '<div style="width: 84px; padding: 20px; background-color: #fbfbfb; border: 2px dashed #ccc; -webkit-border-radius: 10px; border-radius: 10px; box-sizing: initial">';
+		$html .= '<div style="direction: ltr; width: 104px; padding: 20px; background-color: #fbfbfb; border: 2px dashed #ccc; -webkit-border-radius: 10px; border-radius: 10px; box-sizing: initial">';
 
-			$html .= '<div id="preview_arrow_left" class="preview_arrow" style="display: inline-block; width: 32px; height: 32px; vertical-align: middle; text-align: center; cursor: pointer">';
+			$html .= '<div id="preview_arrow_left" class="preview_arrow" style="margin: 0 10px; display: inline-block; width: 32px; height: 32px; vertical-align: middle; text-align: center; cursor: pointer">';
 				$html .= '<i class="fas fa-angle-left" style="font-size: 32px; line-height: 32px"></i>';
 			$html .= '</div>';
 
-			$html .= '<div id="preview_arrow_right" class="preview_arrow" style="margin-left: 20px; display: inline-block; width: 32px; height: 32px; vertical-align: middle; text-align: center; cursor: pointer">';
+			$html .= '<div id="preview_arrow_right" class="preview_arrow" style="margin: 0 10px; display: inline-block; width: 32px; height: 32px; vertical-align: middle; text-align: center; cursor: pointer">';
 				$html .= '<i class="fas fa-angle-right" style="font-size: 32px; line-height: 32px"></i>';
 			$html .= '</div>';
 

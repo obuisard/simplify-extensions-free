@@ -331,16 +331,16 @@ class ArticlesHelper
 
 		// include only
 
-		$articles_to_include = trim($params->get('in'));
+		$articles_to_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
 		if (!empty($articles_to_include)) {
-			$query->where('a.id IN ('.$articles_to_include.')');
+			$query->where('a.id IN (' . implode(',', $articles_to_include) . ')');
 		}
 
 		// exclude
 
-		$articles_to_exclude = trim($params->get('ex'));
+		$articles_to_exclude = array_filter(explode(',', trim($params->get('ex', ''), ' ,')));
 		if (!empty($articles_to_exclude)) {
-			$query->where('a.id NOT IN ('.$articles_to_exclude.')');
+			$query->where('a.id NOT IN (' . implode(',', $articles_to_exclude) . ')');
 		}
 
 		// launch query

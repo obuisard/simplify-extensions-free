@@ -7,12 +7,11 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>2.5.2</version>
+	<version>2.6.0</version>
 	<description>MOD_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrulyResponsiveSlides</namespace>
 	
 	<media folder="media" destination="mod_trulyresponsiveslides">
-		<filename>index.html</filename>
 		<folder>images</folder>
 		<folder>css</folder>
 		<folder>js</folder>	
@@ -21,7 +20,6 @@
 	
 	<files>
 		<filename module="mod_trulyresponsiveslides">mod_trulyresponsiveslides.php</filename>
-		<filename>index.html</filename>
 		<filename>license.txt</filename>
 		<folder>forms</folder>
 		<folder>layouts</folder>
@@ -57,7 +55,7 @@
 			
 			<fieldset name="basic" label="MOD_TRULYRESPONSIVESLIDER_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 								
-				<field type="extensionversion" version="2.5.2" />
+				<field type="extensionversion" extension="mod_trulyresponsiveslides" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_TRULYRESPONSIVESLIDES_TRANSLATORS" />
@@ -273,11 +271,11 @@
 				
 				<fieldset name="slider_arrows" label="MOD_TRULYRESPONSIVESLIDER_ARROWS_LABEL">
 				 
-					 <field name="arrow_c" type="sywcolorpicker" default="#000000" icon="SYWicon-format-color-text" 
+					 <field name="arrow_c" type="sywcolorpicker" default="#000000" icon="text" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_COLOR_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_COLOR_DESC" />
 					 
-					 <field name="arrow_bgc" type="sywcolorpicker" transparency="true" icon="SYWicon-format-color-fill" 
+					 <field name="arrow_bgc" type="sywcolorpicker" transparency="true" icon="fill" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_BGCOLOR_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_BGCOLOR_DESC" />
 					 
