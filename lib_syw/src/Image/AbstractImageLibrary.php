@@ -1,7 +1,12 @@
 <?php
-/* This file has been prefixed by <PHP-Prefixer> for "PHP-Prefixer Getting Started" */
+/**
+ * @copyright	Copyright (C) 2011 Simplify Your Web, Inc. All rights reserved.
+ * @license		GNU General Public License version 3 or later; see LICENSE.txt
+ */
 
 namespace SYW\Library\Image;
+
+defined('_JEXEC') or die;
 
 abstract class AbstractImageLibrary
 {

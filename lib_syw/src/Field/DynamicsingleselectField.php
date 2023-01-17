@@ -104,8 +104,8 @@ class DynamicsingleselectField extends ListField
 			#".$this->id."_elements .element.disabled { opacity: 0.65; filter: alpha(opacity=65); cursor: default; }
 			#".$this->id."_elements .element-label { position: absolute; top: 5px; left: 5px; z-index: 10 }
 			#".$this->id."_elements .description { font-size: .8em }
-			#".$this->id."_elements .images-container { display: block; position: relative; ".($this->imagebgcolor ? "width" : "max-width").": ".$this->width."px; height: ".$this->height."px; margin-bottom: 5px;" . ($this->imagebgcolor ? " background-color: " . $this->imagebgcolor : "") . " }
-			#".$this->id."_elements .element img { display: inline-block; position: relative; top: 50%; transform: translateY(-50%); -webkit-transition: opacity .4s ease; transition: opacity .4s ease; max-width: 100%; }
+			#".$this->id."_elements .images-container { display: block; position: relative; ".($this->imagebgcolor ? "width" : "max-width").": ".$this->width."px; height: ".$this->height."px; margin-bottom: 15px;" . ($this->imagebgcolor ? " background-color: " . $this->imagebgcolor : "") . " }
+			#".$this->id."_elements .element img { display: inline-block; position: relative; top: 50%; transform: translateY(-50%); -webkit-transition: opacity .4s ease; transition: opacity .4s ease; max-width: 100%; max-height: 100%; }
 			#".$this->id."_elements .element img.original { opacity: 1; filter: alpha(opacity=100); }
 			#".$this->id."_elements .element img.hover { position: absolute; left: 50%; transform: translate(-50%, -50%); opacity: 0; filter: alpha(opacity=0); z-index: 2; }
 			#".$this->id."_elements .element:hover img.hover { opacity: 1; filter: alpha(opacity=100); }
