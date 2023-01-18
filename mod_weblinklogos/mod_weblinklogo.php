@@ -178,7 +178,7 @@ if (empty($letter_count)) {
 }
 
 $strip_tags = $params->get('strip_tags', 1);
-$keep_tags = trim($params->get('keep_tags'));
+$keep_tags = trim($params->get('keep_tags', ''));
 $trigger_events = $params->get('trigger_events', false);
 
 // END keep to make sure overrides still work after update

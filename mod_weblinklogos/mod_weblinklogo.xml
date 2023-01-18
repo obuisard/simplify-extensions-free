@@ -7,12 +7,11 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.5.4</version>
+	<version>4.6.0</version>
 	<description>MOD_WEBLINKLOGO_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\WeblinkLogos</namespace>
 	
 	<media folder="media" destination="mod_weblinklogos">
-		<filename>index.html</filename>
 		<folder>css</folder>
 		<folder>images</folder>
 		<folder>styles</folder>
@@ -20,7 +19,6 @@
 	
 	<files>
 		<filename module="mod_weblinklogo">mod_weblinklogo.php</filename>
-		<filename>index.html</filename>
 		<filename>license.txt</filename>
 		<folder>forms</folder>
 		<folder>layouts</folder>
@@ -55,7 +53,7 @@
 		<fields name="params" addfieldprefix="SYW\Module\WeblinkLogos\Site\Field">
 			<fieldset name="basic" label="MOD_WEBLINKLOGO_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
 							
-				<field type="extensionversion" version="4.5.4" />
+				<field type="extensionversion" extension="mod_weblinklogo" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="MOD_WEBLINKLOGO_TRANSLATORS" />
@@ -186,25 +184,27 @@
 						description="MOD_WEBLINKLOGO_FIELD_EXCLUDE_DESC" />
 						
 					<field name="in" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47"
-						label="MOD_WEBLINKLOGO_FIELD_INCLUDE_LABEL" 
-						description="MOD_WEBLINKLOGO_FIELD_INCLUDE_DESC" />
+						label="MOD_WEBLINKLOGO_FIELD_ONLYIDS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ONLYIDS_DESC" />
 				</fieldset>
 				
 				<fieldset name="selection_order" label="MOD_WEBLINKLOGO_SELECTIONORDER_FIELDSET_LABEL">
 					
-					<field name="ordering" type="list" default="title" 
+					<field name="ordering" type="list" default="" 
 						label="MOD_WEBLINKLOGO_FIELD_ORDERING_LABEL"
 						description="MOD_WEBLINKLOGO_FIELD_ORDERING_DESC">
+						<option value="">JNONE</option>
 						<option value="title">JGLOBAL_TITLE</option>
 						<option value="order">MOD_WEBLINKLOGO_FIELD_VALUE_ORDER</option>
-						<option value="hits">MOD_WEBLINKLOGO_FIELD_VALUE_HITS</option>
 						<option value="created">MOD_WEBLINKLOGO_FIELD_VALUE_CREATED</option>
 						<option value="modified">MOD_WEBLINKLOGO_FIELD_VALUE_MODIFIED</option>
 						<option value="published">MOD_WEBLINKLOGO_FIELD_VALUE_PUBLISHED</option>
 						<option value="random">MOD_WEBLINKLOGO_FIELD_VALUE_RANDOM</option>
+						<option value="hits">MOD_WEBLINKLOGO_FIELD_VALUE_HITS</option>
+						<option value="manual">MOD_WEBLINKLOGO_FIELD_VALUE_MANUAL</option>
 					</field>
 					
-					<field name="direction" type="list" default="asc" showon="ordering!:random" 
+					<field name="direction" type="list" default="asc" showon="ordering!:,random,manual" 
 						label="MOD_WEBLINKLOGO_FIELD_ORDERDIRECTION_LABEL"
 						description="MOD_WEBLINKLOGO_FIELD_ORDERDIRECTION_DESC">
 						<option value="asc">MOD_WEBLINKLOGO_FIELD_VALUE_ASCENDING</option>
@@ -480,7 +480,7 @@
 				
 				<fieldset name="themes_all" label="MOD_WEBLINKLOGO_THEMES_FIELDSET_LABEL">
 				
-					<field name="overallbgcolor" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
+					<field name="overallbgcolor" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_WEBLINKLOGO_FIELD_OVERALLBGCOLOR_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_OVERALLBGCOLOR_DESC" />
 					
@@ -503,7 +503,7 @@
 						label="MOD_WEBLINKLOGO_FIELD_CARDBORDERWIDTH_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_CARDBORDERWIDTH_DESC" />
 						
-					<field name="card_border_c" type="sywcolorpicker" default="#ffffff" icon="SYWicon-format-color-text" 
+					<field name="card_border_c" type="sywcolorpicker" default="#ffffff" icon="text" 
 						label="MOD_WEBLINKLOGO_FIELD_CARDBORDERCOLOR_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_CARDBORDERCOLOR_DESC" />
 					
@@ -598,7 +598,7 @@
 						<option value="1">JYES</option>
 					</field>
 						
-					<field name="logobgcolor" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" 
+					<field name="logobgcolor" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_WEBLINKLOGO_FIELD_LOGOBGCOLOR_LABEL" 
 						description="MOD_WEBLINKLOGO_FIELD_LOGOBGCOLOR_DESC" />
 							  	

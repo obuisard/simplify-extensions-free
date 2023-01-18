@@ -12,7 +12,7 @@
 		.weblinklogos ul.weblink_items li.weblink_item {
 		    list-style: none;
 			padding: 0;
-		    display: inline-table;
+		    display: inline-block;
 		    text-align: initial;
 		}
 		
@@ -49,6 +49,14 @@
 				
 					.weblinklogos ul.weblink_items li .logo_link {
 						position: relative;
+
+						display: -webkit-box;
+						display: -ms-flexbox;
+						display: flex;
+						
+						-webkit-box-pack: center;
+        				-ms-flex-pack: center;
+            			justify-content: center;
 					}
 	
 						.weblinklogos ul.weblink_items li .logo_link a {

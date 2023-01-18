@@ -30,10 +30,6 @@ class Helper
 {
 	protected static $weblinks_config_params;
 
-	//static $clickScriptLoaded = false;
-	protected static $commonStylesLoaded = false;
-	protected static $userStylesLoaded = false;
-
 	protected static $image_extension_types = array('png', 'jpg', 'jpeg', 'gif', 'webp', 'avif');
 
 	/**
@@ -480,6 +476,7 @@ class Helper
 
 		switch ($params->get('ordering', 'title'))
 		{
+		    case 'title': $ordering .= 'a.title '.$params->get('direction', 'asc'); break;
 			case 'order': $ordering .= 'a.ordering '.$params->get('direction', 'asc'); break;
 			case 'random': $ordering .= 'rand()'; break;
 			case 'hits': $ordering .= 'a.hits '.$params->get('direction', 'asc'); break;
@@ -488,7 +485,17 @@ class Helper
 			case 'modified': $ordering .= 'a.modified '.$params->get('direction', 'asc'); break;
 			case 'published': $ordering .= 'a.publish_up '.$params->get('direction', 'asc'); break;
 
-			default: $ordering .= 'a.title '.$params->get('direction', 'asc');
+			case 'manual':
+			    $weblinks_to_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
+			    if (!empty($weblinks_to_include)) {
+			        $ordering .= 'CASE a.id';
+			        foreach ($weblinks_to_include as $key => $id) {
+			            $ordering .= ' WHEN ' . $id . ' THEN ' . $key;
+			        }
+			        $ordering .= ' ELSE 999 END, a.id'; // 'FIELD(a.id, ' . $weblinks_to_include . ')' is MySQL specific
+			    }
+			    
+			default: $ordering = rtrim($ordering, ',');
 		}
 
 		if ($ordering) {
@@ -497,16 +504,16 @@ class Helper
 
 		// include only
 
-		$weblinks_to_include = trim($params->get('in', ''));
+		$weblinks_to_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
 		if (!empty($weblinks_to_include)) {
-			$query->where('a.id IN ('.$weblinks_to_include.')');
+			$query->where('a.id IN (' . implode(',', $weblinks_to_include) . ')');
 		}
 
 		// exclude
 
-		$weblinks_to_exclude = trim($params->get('ex', ''));
+		$weblinks_to_exclude = array_filter(explode(',', trim($params->get('ex', ''), ' ,')));
 		if (!empty($weblinks_to_exclude)) {
-			$query->where('a.id NOT IN ('.$weblinks_to_exclude.')');
+			$query->where('a.id NOT IN (' . implode(',', $weblinks_to_exclude) . ')');
 		}
 
 		if (intval($params->get('count', '')) > 0) {
@@ -660,7 +667,7 @@ class Helper
 				}
 
 				$strip_tags = $params->get('strip_tags', 1);
-				$keep_tags = trim($params->get('keep_tags'));
+				$keep_tags = trim($params->get('keep_tags', ''));
 				$trigger_events = $params->get('trigger_events', false);
 				$truncate_last_word = $params->get('trunc_l_w', 0);
 
@@ -901,17 +908,9 @@ class Helper
 	 */
 	static function loadCommonStylesheet() {
 
-		if (self::$commonStylesLoaded) {
-			return;
-		}
-
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
-		$minified = (JDEBUG) ? '' : '-min';
-
-		$wam->registerAndUseStyle('wl.common_styles', 'mod_weblinklogos/common_styles' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-
-		self::$commonStylesLoaded = true;
+		$wam->registerAndUseStyle('wl.common_styles', 'mod_weblinklogos/common_styles.min.css', ['relative' => true, 'version' => 'auto']);
 	}
 
 	/**
@@ -920,10 +919,6 @@ class Helper
 	 */
 	static function loadUserStylesheet($styles_substitute = false) {
 
-		if (self::$userStylesLoaded) {
-			return;
-		}
-
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$prefix = 'common_user';
@@ -931,13 +926,15 @@ class Helper
 			$prefix = 'substitute';
 		}
 
-		if (!File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/'.$prefix.'_styles-min.css') || JDEBUG) {
-			$wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
+		if (File::exists(JPATH_ROOT . '/media/mod_weblinklogos/css/' . $prefix . '_styles-min.css')) { //  B/C
+			if (JDEBUG && File::exists(JPATH_ROOT . '/media/mod_weblinklogos/css/' . $prefix . '_styles.css')) {
+			    $wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
+			} else {
+			    $wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
+			}
 		} else {
-			$wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
+			$wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles.min.css', ['relative' => true, 'version' => 'auto']);
 		}
-
-		self::$userStylesLoaded = true;
 	}
 
 	/**

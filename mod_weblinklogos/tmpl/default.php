@@ -101,7 +101,7 @@ if ($remove_whitespaces) {
 						$attributes = array('class' => 'hover');
 
 						if ($params->get('logo_tooltip', 1)) {
-							if ($bootstrap_version > 0) {
+							if ($load_bootstrap) {
 							    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 								$attributes['class'] .= ' hasTooltip';
 							}
