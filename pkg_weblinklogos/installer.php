@@ -8,7 +8,6 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
@@ -27,7 +26,7 @@ class Pkg_WeblinkLogosInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.1.1';
+	protected $minimumLibrary = '2.3.1';
 
 	/**
 	 * Available languages
@@ -227,6 +226,10 @@ class Pkg_WeblinkLogosInstallerScript extends InstallerScript
 			$this->deleteFolders[] = '/cache/mod_weblinklogos';
 			
 			// +++ End Migration
+			
+			// remove obsolete files
+			
+			$this->deleteFiles[] = '/media/mod_weblinklogos/css/common_styles-min.css';
  		}
 
  		$this->removeFiles();
