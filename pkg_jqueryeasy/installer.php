@@ -25,7 +25,7 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.0.2';
+	protected $minimumLibrary = '2.3.2';
 
 	/**
 	 * Available languages
@@ -115,10 +115,13 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 
 		echo '<p style="margin: 20px 0">';
 		echo HTMLHelper::image('plg_system_jqueryeasy/logo.png', 'jQuery Easy', null, true);
-		echo '<br /><br /><span class="badge bg-dark">'.Text::sprintf('PKG_JQUERYEASY_VERSION', $this->release).'</span>';
+		echo '<br /><br /><span class="badge bg-dark">' . Text::sprintf('PKG_JQUERYEASY_VERSION', $this->release) . '</span>';
 		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
 		echo '</p>';
 
+		echo '<p>';
+		echo '<a class="btn btn-primary me-2" href="index.php?option=com_plugins&view=plugins&filter[folder]=system&filter[element]=jqueryeasy">' . Text::_('PKG_JQUERYEASY_PLUGIN_SETUP') . '</a>';
+		
  		// language test
 
  		$current_language = Factory::getLanguage()->getTag();
@@ -130,7 +133,7 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 
 			// update warning
 
-			echo '<p><a class="btn btn-primary" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_JQUERYEASY_BUTTON_UPDATENOTES') . '</a></p>';
+			echo '<a class="btn btn-primary" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_JQUERYEASY_BUTTON_UPDATENOTES') . '</a>';
 			
 			// +++ Migration Joomla 3 to Joomla 4
 			
@@ -190,6 +193,8 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 			
 			// +++ End Migration
 		}
+		
+		echo '</p>';
 
 		$this->removeFiles();
 
