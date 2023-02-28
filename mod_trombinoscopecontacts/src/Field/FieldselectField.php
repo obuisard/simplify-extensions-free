@@ -120,7 +120,7 @@ class FieldselectField extends GroupedlistField
 			$fields = self::getCoreFields();
 
 			// supported field types
-			$allowed_types = array('calendar', 'checkboxes', 'email', 'integer', 'list', 'radio', 'tel', 'text', 'textarea', 'url');
+			$allowed_types = array('calendar', 'checkboxes', 'email', 'integer', 'list', 'radio', 'tel', 'text', 'textarea', 'url', 'sql');
 
 			// organize the fields according to their group
 

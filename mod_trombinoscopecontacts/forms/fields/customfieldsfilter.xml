@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form>	
-	<field name="field" type="customfieldslist" default="none" context="com_contact.contact" allowed_types="list,checkboxes,radio"
+	<field name="field" type="customfieldslist" default="none" context="com_contact.contact" allowed_types="list,checkboxes,radio,sql"
 		label="MOD_TROMBINOSCOPE_FIELD_FILTERFIELD_LABEL" 
 		description="MOD_TROMBINOSCOPE_FIELD_FILTERFIELD_DESC">
 		<option value="none">JNONE</option>

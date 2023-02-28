@@ -2585,7 +2585,7 @@ abstract class Helper
 	public static function loadCommonStylesheet()
 	{
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-
+		
 		$wam->registerAndUseStyle('tc.common_styles', 'mod_trombinoscopecontacts/common_styles.min.css', ['relative' => true, 'version' => 'auto']);
 	}
 
