@@ -444,7 +444,7 @@ class Helper
                     if (!empty($ignore_files)) {
                         $ignore = false;
                         foreach ($ignore_files as $ignore_file) {
-                            if (stripos($result, $ignore_file) !== false) { // library needs to be ignored from removal
+                            if ($ignore_file && stripos($result, $ignore_file) !== false) { // library needs to be ignored from removal
                                 $ignore = true;
                                 if (!is_null($verbose)) {
                                     $verbose[] = array('info', Text::sprintf('PLG_SYSTEM_JQUERYEASY_VERBOSE_IGNORE' . ($type == 'js' ? 'SCRIPT' : 'STYLESHEET'), $ignore_file));
@@ -485,7 +485,7 @@ class Helper
                     $ignore = false;
                     foreach ($ignore_files as $ignore_file) {
 
-                        if (stripos($matches[0], $ignore_file) !== false && $ignore_file_count[$ignore_file] < 1) { // library needs to be ignored for removal
+                        if ($ignore_file && stripos($matches[0], $ignore_file) !== false && $ignore_file_count[$ignore_file] < 1) { // library needs to be ignored for removal
                             $ignore = true;
 
                             $ignore_file_count[$ignore_file]++;
@@ -897,7 +897,7 @@ class Helper
                         foreach ($localVersionPaths as $key => $localVersionPath) {
 
                             if (File::exists(JPATH_ROOT.$localVersionPath)) {
-                                $paths['local' . $key] = $localVersionPath;
+                                $paths['local' . $key] = ltrim($localVersionPath, "/");
                             } else {
                                 self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
                             }
@@ -968,7 +968,7 @@ class Helper
 
                         foreach ($localVersionPaths as $key => $localVersionPath) {
                             if (File::exists(JPATH_ROOT.$localVersionPath)) {
-                                $paths['local' . $key] = $localVersionPath;
+                                $paths['local' . $key] = ltrim($localVersionPath, "/");
                             } else {
                                 self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
                             }

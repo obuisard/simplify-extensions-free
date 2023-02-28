@@ -88,7 +88,7 @@ class CdnlinksField extends FormField
 		$lang = Factory::getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 
-		HTMLHelper::_('stylesheet', 'syw/fonts-min.css', ['version' => 'auto', 'relative' => true]);
+		HTMLHelper::_('stylesheet', 'syw/fonts.min.css', ['version' => 'auto', 'relative' => true]);
 		HTMLHelper::_('bootstrap.tooltip');
 
 		if (!empty($this->library)) {
