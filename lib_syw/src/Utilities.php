@@ -577,10 +577,10 @@ class Utilities
 		$source_path = File::stripExt($src);
 		$source_extension = File::getExt($src);
 
-		if (!$lazy_load) {
-			$attributes['loading'] = 'eager';
+		if ($lazy_load && isset($attributes['width'])) {
+		    $attributes['loading'] = 'lazy';
 		} else {
-			$attributes['loading'] = 'lazy';
+		    $attributes['loading'] = 'eager';
 		}
 
 		if (!empty($breakpoints)) {

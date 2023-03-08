@@ -21,12 +21,9 @@ class GdLibrary extends AbstractImageLibrary
     }
     
     /**
-     * Creates new image instance
-     *
-	 * @param string $path
-	 * @param number $width
-	 * @param number $height
-     * @return Image
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::createImageFromPath()
      */
     public function createImageFromPath($mime_type, $path = '', $width = 0, $height = 0)
     {
@@ -85,6 +82,11 @@ class GdLibrary extends AbstractImageLibrary
         return $image;
     }
     
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::createImageFromData()
+     */
     public function createImageFromData($mime_type, $image_string, $width = 0, $height = 0)
     {
         $image = @imagecreatefromstring($image_string); // no support for WebP nor for Avif
@@ -118,21 +120,9 @@ class GdLibrary extends AbstractImageLibrary
     }
     
     /**
-     * 
-     * @param unknown $mime_type
-     * @param unknown $image
-     * @param unknown $path
-     * @param number $target_origin_x
-     * @param number $target_origin_y
-     * @param number $source_origin_x
-     * @param number $source_origin_y
-     * @param number $target_width
-     * @param number $target_height
-     * @param number $source_width
-     * @param number $source_height
-     * @param number $quality
-     * @param unknown $filter
-     * @return unknown|boolean
+     *
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::createThumbnail()
      */
     public function createThumbnail($mime_type, $image, $path, $target_origin_x = 0, $target_origin_y = 0, $source_origin_x = 0, $source_origin_y = 0, $target_width = 0, $target_height = 0, $source_width = 0, $source_height = 0, $quality = 75, $filter = null)
     {        
@@ -179,6 +169,11 @@ class GdLibrary extends AbstractImageLibrary
         return $thumbnail;
     }
     
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::createFile()
+     */
     public function createFile($mime_type, $image, $path, $quality = 75, $filter = null)
     {
         if (!is_null($filter)) {
@@ -214,6 +209,11 @@ class GdLibrary extends AbstractImageLibrary
         return $creation_success;
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::createFile()
+     */
     public function createEncodedString($mime_type, $image, $quality = 75, $filter = null)
     {
         if (!is_null($filter)) {
@@ -344,6 +344,11 @@ class GdLibrary extends AbstractImageLibrary
         }
     }
     
+    /**
+     * 
+     * @param resource|\GdImage $image
+     * @param string $filter
+     */
     protected function filter(&$image, $filter)
     {
         switch ($filter)
@@ -363,25 +368,40 @@ class GdLibrary extends AbstractImageLibrary
     }
     
     /**
-     * Checks if GD library is available
-     *
-     * @return boolean
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::isAvailable()
      */
     public function isAvailable()
     {
         return (extension_loaded('gd') && function_exists('gd_info'));
     }    
     
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::getImageWidth()
+     */
     public function getImageWidth($image)
     {
         return imagesx($image);
     }
     
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::getImageHeight()
+     */
     public function getImageHeight($image)
     {
         return imagesy($image);
     }
     
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::isTransparent()
+     */
     public function isTransparent($mime_type, $image)
     {
         if (!empty($mime_type) && $mime_type !== 'image/jpeg') {
@@ -391,11 +411,21 @@ class GdLibrary extends AbstractImageLibrary
         return false;
     }
     
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::rotate()
+     */
     public function rotate(&$image, $orientation_angle)
     {
         $image = imagerotate($image, $orientation_angle, 0);
     }
     
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::destroy()
+     */
     public function destroy(&$image)
     {
         if (isset($image)) {
@@ -406,6 +436,11 @@ class GdLibrary extends AbstractImageLibrary
         }
     }
     
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::getLibraryName()
+     */
     public function getLibraryName()
     {
         return 'gd';

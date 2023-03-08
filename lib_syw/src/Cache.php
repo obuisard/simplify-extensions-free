@@ -164,14 +164,9 @@ class Cache
 			$path .= '/'.$folder;
 			if (!Folder::exists($path)) {
 				if (Folder::create($path)) {
-					if ($include_index) {
-						$src = JPATH_ROOT.'/libraries/syw/index.html';
-						$dest = $path.'/index.html';
-
-						if (!File::copy($src, $dest)) {
-							return false;
-						}
-					}
+ 					if ($include_index) {
+                        // no longer required in Joomla 4
+ 					}
 				} else {
 					return false;
 				}
