@@ -21,12 +21,9 @@ class ImagickLibrary extends AbstractImageLibrary
     }
     
     /**
-     * Creates new image instance
-     *
-	 * @param string $path
-	 * @param number $width
-	 * @param number $height
-     * @return Image
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::createImageFromPath()
      */
     public function createImageFromPath($mime_type, $path = '', $width = 0, $height = 0)
     {
@@ -80,6 +77,11 @@ class ImagickLibrary extends AbstractImageLibrary
         return $image;
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::createImageFromData()
+     */
     public function createImageFromData($mime_type, $image_string, $width = 0, $height = 0)
     {
         $image = new \Imagick();
@@ -111,6 +113,11 @@ class ImagickLibrary extends AbstractImageLibrary
         return $image;
     }
     
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::createThumbnail()
+     */
     public function createThumbnail($mime_type, $image, $path, $target_origin_x = 0, $target_origin_y = 0, $source_origin_x = 0, $source_origin_y = 0, $target_width = 0, $target_height = 0, $source_width = 0, $source_height = 0, $quality = 75, $filter = null)
     {
         $thumbnail = clone $image;
@@ -156,13 +163,16 @@ class ImagickLibrary extends AbstractImageLibrary
         return $thumbnail;
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::createFile()
+     */
     public function createFile($mime_type, $image, $path, $quality = 75, $filter = null)
     {
         if (!is_null($filter)) {
             $this->apply_filters($image, $filter);
         }
-        
-        $creation_success = false;
         
         switch (strtolower($mime_type))
         {
@@ -195,6 +205,11 @@ class ImagickLibrary extends AbstractImageLibrary
         return $image->writeImage(JPATH_ROOT . '/' .$path);
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::createFile()
+     */
     public function createEncodedString($mime_type, $image, $quality = 75, $filter = null)
     {
         if (!is_null($filter)) {
@@ -232,6 +247,16 @@ class ImagickLibrary extends AbstractImageLibrary
         return $image->getImageBlob();
     }
     
+    /**
+     * 
+     * @param \Imagick $image
+     * @param number $source_origin_x
+     * @param number $source_origin_y
+     * @param number $target_width
+     * @param number $target_height
+     * @param number $source_width
+     * @param number $source_height
+     */
     protected function crop_and_resize(&$image, $source_origin_x = 0, $source_origin_y = 0, $target_width = 0, $target_height = 0, $source_width = 0, $source_height = 0)
     {
         $image->cropImage($source_width, $source_height, $source_origin_x, $source_origin_y);
@@ -260,6 +285,11 @@ class ImagickLibrary extends AbstractImageLibrary
         }
     }
     
+    /**
+     *
+     * @param \Imagick $image
+     * @param string $filter
+     */
     protected function filter(&$image, $filter)
     {
         try {
@@ -287,37 +317,60 @@ class ImagickLibrary extends AbstractImageLibrary
     }
     
     /**
-     * Checks if Imagick library is available
      *
-     * @return boolean
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::isAvailable()
      */
     public function isAvailable()
     {
         return (extension_loaded('imagick') && class_exists('Imagick'));
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::getImageWidth()
+     */
     public function getImageWidth($image)
     {
         return $image->getImageWidth();
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::getImageHeight()
+     */
     public function getImageHeight($image)
     {
         return $image->getImageHeight();
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::isTransparent()
+     */
     public function isTransparent($mime_type, $image)
     {
-        // 0 = No transparency
-        // 1 = Has transparency
         return $image->getImageAlphaChannel();
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::rotate()
+     */
     public function rotate(&$image, $orientation_angle)
     {
         $image->rotateimage(new \ImagickPixel('none'), intval(360 - $orientation_angle));
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::destroy()
+     */
     public function destroy(&$image)
     {
         if (isset($image) && is_object($image) && $image instanceOf \Imagick) {
@@ -326,6 +379,11 @@ class ImagickLibrary extends AbstractImageLibrary
         }
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \SYW\Library\Image\AbstractImageLibrary::getLibraryName()
+     */
     public function getLibraryName()
     {
         return 'imagick';
