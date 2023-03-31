@@ -9,7 +9,7 @@
 	<url>https://simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>https://simplifyyourweb.com/</packagerurl>
-	<version>6.7.0</version>
+	<version>6.8.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/latestnewsenhanced/changelog.xml</changelogurl>
 	<description>PKG_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<blockChildUninstall>true</blockChildUninstall>
@@ -28,6 +28,7 @@
 		<language tag="nl-NL">language/nl-NL/nl-NL.pkg_latestnewsenhanced.sys.ini</language>
 		<language tag="pl-PL">language/pl-PL/pl-PL.pkg_latestnewsenhanced.sys.ini</language>
 		<language tag="pt-BR">language/pt-BR/pt-BR.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="pt-PT">language/pt-PT/pt-PT.pkg_latestnewsenhanced.sys.ini</language>
 		<language tag="ru-RU">language/ru-RU/ru-RU.pkg_latestnewsenhanced.sys.ini</language>
 		<language tag="sl-SI">language/sl-SI/sl-SI.pkg_latestnewsenhanced.sys.ini</language>
 		<language tag="tr-TR">language/tr-TR/tr-TR.pkg_latestnewsenhanced.sys.ini</language>

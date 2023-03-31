@@ -25,12 +25,12 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.3.0';
+	protected $minimumLibrary = '2.3.2';
 
 	/**
 	 * Available languages
 	 */
-	protected $availableLanguages = array('da-DK', 'de-DE', 'en-GB', 'es-ES', 'fi-FI', 'fr-FR', 'hu-HU', 'it-IT', 'ja-JP', 'nl-NL', 'pl-PL', 'pt-BR', 'ru-RU', 'sl-SI', 'tr-TR');
+	protected $availableLanguages = array('da-DK', 'de-DE', 'en-GB', 'es-ES', 'fi-FI', 'fr-FR', 'hu-HU', 'it-IT', 'ja-JP', 'nl-NL', 'pl-PL', 'pt-BR', 'pt-PT', 'ru-RU', 'sl-SI', 'tr-TR');
 
 	/**
 	 * Extensions library link for download
@@ -200,6 +200,10 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 	        }
 	        
 	        // +++ End Migration
+	        
+	        // remove files
+	        
+	        $this->deleteFiles[] = '/media/mod_latestnewsenhanced/css/common_styles-min.css';
 	    }
 
 	    $this->removeFiles();
