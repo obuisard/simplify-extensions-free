@@ -54,6 +54,10 @@ defined('_JEXEC') or die;
 	text-align: center;
 }
 
+<?php echo $suffix; ?>.horizontal .items_pagination.left {
+	left: 0;
+}
+
 <?php echo $suffix; ?>.horizontal .items_pagination.right {
 	right: 0;
 }

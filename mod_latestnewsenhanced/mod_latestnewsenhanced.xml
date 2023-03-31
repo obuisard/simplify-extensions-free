@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.7.0</version>
+	<version>6.8.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -52,6 +52,8 @@
 		<language tag="pl-PL">language/pl-PL/pl-PL.mod_latestnewsenhanced.sys.ini</language>
 		<language tag="pt-BR">language/pt-BR/pt-BR.mod_latestnewsenhanced.ini</language>
 		<language tag="pt-BR">language/pt-BR/pt-BR.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="pt-PT">language/pt-PT/pt-PT.mod_latestnewsenhanced.ini</language>
+		<language tag="pt-PT">language/pt-PT/pt-PT.mod_latestnewsenhanced.sys.ini</language>
 		<language tag="ru-RU">language/ru-RU/ru-RU.mod_latestnewsenhanced.ini</language>
 		<language tag="ru-RU">language/ru-RU/ru-RU.mod_latestnewsenhanced.sys.ini</language>
 		<language tag="sl-SI">language/sl-SI/sl-SI.mod_latestnewsenhanced.ini</language>
@@ -105,6 +107,9 @@
 					</field>
 					
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREDATASOURCEINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>
+				
+				<fieldset name="selection_dynamic" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONDYNAMIC_FIELDSET_LABEL">
 					 
 					<field name="related" type="relatedselect" default="0" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_RELATEDARTICLES_LABEL" 
@@ -227,40 +232,65 @@
 				
 				<fieldset name="selection_authors" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONAUTHORS_FIELDSET_LABEL">
 
-					<field name="show_a" type="list" default="alias" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHOR_LABEL" 
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHOR_DESC">
-						<option value="full">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FULL</option>
-						<option value="alias">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALIAS</option>
-						<option value="user">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_USER</option>
+					<field name="author_match" type="list" default="0" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORMATCH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORMATCH_DESC">
+						<option value="0">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CREATEDBY</option>
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CREATEDBY_AND_CREATEDBYALIAS</option>
+						<option value="2">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CREATEDBY_OR_CREATEDBYALIAS</option>
 					</field>
-	
+
 				  	<field name="author_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORFILTER_LABEL"
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORFILTER_DESC">
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYFILTER_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYFILTER_DESC">
 						<option value="0">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EXCLUS</option>
 						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INCLUS</option>
 					</field>
 	
 					<field name="created_by" type="authorselect" multiple="true" size="5" default="all" layout="joomla.form.field.list-fancy-select" showon="datasource:articles" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORS_LABEL"
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORS_DESC">					
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBY_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBY_DESC">
 						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LOGGEDUSER</option>
-					
 						<option value="realauto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
-					
-						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLAUTHORS</option>
+						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLCREATEDBY</option>
 					</field> 
 	
 					<field name="k2_created_by" type="authorselect" multiple="true" size="5" default="all" option="com_k2" layout="joomla.form.field.list-fancy-select" showon="datasource:k2" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORS_LABEL"
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORS_DESC">					
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBY_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBY_DESC">
 						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LOGGEDUSER</option>
-					
 						<option value="realauto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
-					
-						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLAUTHORS</option>
+						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLCREATEDBY</option>
+					</field>
+
+					<field name="author_alias_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" showon="author_match:1,2"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIASFILTER_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIASFILTER_DESC">
+						<option value="0">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EXCLUS</option>
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INCLUS</option>
+					</field>
+	
+					<field name="created_by_alias" type="authoraliasselect" multiple="true" size="5" layout="joomla.form.field.list-fancy-select" showon="author_match:1,2[AND]datasource:articles" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIAS_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIAS_DESC">
+						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
+						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLCREATEDBYALIAS</option>
 					</field> 
+	
+					<field name="k2_created_by_alias" type="authoraliasselect" multiple="true" size="5" option="com_k2" layout="joomla.form.field.list-fancy-select" showon="author_match:1,2[AND]datasource:k2" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIAS_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIAS_DESC">
+						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>					
+						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLCREATEDBYALIAS</option>
+					</field>
+
+					<field name="show_a" type="list" default="alias" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORNAME_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORNAME_DESC">
+						<option value="full">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FULL</option>
+						<option value="alias">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALIAS</option>
+						<option value="user">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_USER</option>
+					</field>
 					
 					<field name="author_order" type="list" default="" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORORDER_LABEL" 
@@ -366,7 +396,7 @@
 				
 				<fieldset name="selection_featured" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONFEATURED_FIELDSET_LABEL">
 					
-					<field name="show_f" type="list" default="3" 
+					<field name="show_f" type="list" default="3"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FEATURED_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FEATURED_DESC">
 						<option value="0">JNO</option>
@@ -420,7 +450,7 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COUNT_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COUNT_DESC" />
 	
-				  	<field name="count_for" type="list" default="articles" 
+				  	<field name="count_for" type="list" default="articles"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COUNTFOR_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COUNTFOR_DESC">
 						<option value="articles">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TOARTICLES</option>

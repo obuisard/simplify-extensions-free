@@ -97,7 +97,6 @@ class ContentHelper
 		$user = Factory::getUser();
 		$groups = implode(',', $user->getAuthorisedViewLevels());
 
-		//$nullDate = $db->quote($db->getNullDate());
 		$nowDate = $db->quote(Factory::getDate()->toSql());
 
 		$jinput = $app->input;
@@ -272,7 +271,6 @@ class ContentHelper
 
 		// access filter
 
-		//$access = !JComponentHelper::getParams('com_content')->get('show_noauth'); // for links only
 		$authorised = Access::getAuthorisedViewLevels(Factory::getUser()->get('id'));
 
 		$show_unauthorized_items = false; // do not allow to show unauthorized items in the free version
@@ -287,12 +285,12 @@ class ContentHelper
 		$postdate = $params->get('post_d', 'published');
 
 		if ($postdate != 'fin_pen' && $postdate != 'pending') {
-			$query->where('(' . $db->quoteName('a.publish_up') . ' IS NULL OR ' . $db->quoteName('a.publish_up') . ' <= '.$nowDate.')');
+			$query->where('(' . $db->quoteName('a.publish_up') . ' IS NULL OR ' . $db->quoteName('a.publish_up') . ' <= ' . $nowDate . ')');
 		}
 		if ($postdate == 'pending') {
 			$query->where($db->quoteName('a.publish_up') . ' > ' . $nowDate);
 		}
-		$query->where('(' . $db->quoteName('a.publish_down') . ' IS NULL OR ' . $db->quoteName('a.publish_down') . ' >= '.$nowDate.')');
+		$query->where('(' . $db->quoteName('a.publish_down') . ' IS NULL OR ' . $db->quoteName('a.publish_down') . ' >= ' . $nowDate . ')');
 
 		// filter by date range
 
@@ -414,24 +412,21 @@ class ContentHelper
 							$categories_array[] = $jinput->getInt('id');
 						break;
 						case 'article':
-							//if ($params->get('show_on_item_page', 1)) { // useless since test before
+							$article_id = $jinput->getInt('id');
+							$catid = $jinput->getInt('catid');
 
-								$article_id = $jinput->getInt('id');
-								$catid = $jinput->getInt('catid');
+							if (!$catid) {
+								// Get an instance of the generic article model
+								$article = BaseDatabaseModel::getInstance('Article', 'ContentModel', array('ignore_request' => true));
 
-								if (!$catid) {
-									// Get an instance of the generic article model
-									$article = BaseDatabaseModel::getInstance('Article', 'ContentModel', array('ignore_request' => true));
-
-									$article->setState('params', $app->getParams());
-									$article->setState('filter.published', 1);
-									$article->setState('article.id', (int) $article_id);
-									$item = $article->getItem();
-									$categories_array[] = $item->catid;
-								} else {
-									$categories_array[] = $catid;
-								}
-							//}
+								$article->setState('params', $app->getParams());
+								$article->setState('filter.published', 1);
+								$article->setState('article.id', (int) $article_id);
+								$item = $article->getItem();
+								$categories_array[] = $item->catid;
+							} else {
+								$categories_array[] = $catid;
+							}
 						break;
 					}
 				}
@@ -460,7 +455,7 @@ class ContentHelper
 						$categories_object = Categories::getInstance('Content', array('access' => false));
 					}
 					foreach ($categories_array as $category_id) {
-					    $category_object = $categories_object->get($category_id); // if category unpublished, unset
+						$category_object = $categories_object->get($category_id); // if category unpublished, unset
 						if (isset($category_object) && $category_object->hasChildren()) {
 
 							$sub_categories_array = $category_object->getChildren(true); // get all levels recursively
@@ -492,7 +487,7 @@ class ContentHelper
 
 		$metakeys = array();
 		$keys = array_filter(explode(',', trim($params->get('keys', ''), ' ,')));
-		
+
 		// assemble any non-blank word(s)
 		foreach ($keys as $key) {
 			$metakeys[] = trim($key);
@@ -662,14 +657,6 @@ class ContentHelper
 	            $subQuery->where('(f.access IS NULL OR f.access IN (' . $groups . '))');
 	            $subQuery->where($db->quoteName('cfv.field_id').' = ' . $db->quote($customfield_filter['id']));
 
-	            // any category for the field? if so, join with categories. If not, do not join
-// 	            if (!empty(FieldsHelper::getAssignedCategoriesTitles($customfield_filter['id']))) {
-//     	            if (!isset($array_of_category_values['all']) && !isset($array_of_category_values['auto']) && !empty($categories_array)) {
-//     	               $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');
-//     	               $subQuery->where($db->quoteName('cfc.category_id') . ' ' . ($params->get('cat_inex', 1) ? 'IN' : 'NOT IN') . ' (' . implode(',', $categories_array) . ')');
-//     	            }
-// 	            }
-
 	            if ($customfield_filter['inex']) {
 	               $subQuery->where($db->quoteName('cfv.value') . " = '" . implode("' OR " . $db->quoteName('cfv.value') . " = '", $customfield_filter['values']) . "'");
 	            } else {
@@ -721,22 +708,25 @@ class ContentHelper
 				case 'all': default: $authors_array[] = 'all';
 			}
 		}
+		
+		$where_state = 'a.state = 1';
+		$where_createdby = '';
 
 		$array_of_authors_values = array_count_values($authors_array);
 		if (isset($array_of_authors_values['all']) && $array_of_authors_values['all'] > 0) { // 'all' was selected
+		    $test_type = $include ? '>' : '<';
+		    $where_createdby = 'a.created_by ' . $test_type . ' 0'; // necessary so that the OR match returns good results
 		    if ($params->get('allow_edit', 0) && (int)$user->get('id') > 0) {
 				if ($user->authorise('core.edit', 'com_content')) {
 					// logged user can see everyone's unpublished articles
-					$query->where('a.state IN (0, 1)');
+				    $where_state = 'a.state IN (0, 1)';
 				} else {
 					// logged user can see his own unpublished articles only
-					$query->where('(a.state = 1) OR (a.state = 0 AND a.created_by = ' . (int) $user->get('id') . ')');
+				    $where_state = '(a.state = 1) OR (a.state = 0 AND a.created_by = ' . (int) $user->get('id') . ')';
 				}
-			} else {
-				$query->where('a.state = 1');
 			}
 		} else if (isset($array_of_authors_values['realauto']) && $array_of_authors_values['realauto'] > 0) { // 'realauto' was selected: check if author on page, if so, select it
-			
+
 			$found = false;
 			if ($option === 'com_content' && $view === 'article') {
 				$temp = $jinput->getString('id');
@@ -744,10 +734,11 @@ class ContentHelper
 				if ($temp[0]) {
 					
 					$subquery = $db->getQuery(true);
+
 					$subquery->select($db->quoteName('created_by'));
 					$subquery->from($db->quoteName('#__content'));
 					$subquery->where($db->quoteName('id').' = ' . $temp[0]);
-					
+
 					$db->setQuery($subquery);
 					
 					try {
@@ -755,12 +746,10 @@ class ContentHelper
 						if ($result) {
 							$found = true;
 							$test_type = $include ? '=' : '<>';
-							$query->where('a.created_by' . $test_type . $result);
+							$where_createdby = 'a.created_by' . $test_type . $result;
 							
 							if ($include && $params->get('allow_edit', 0) && (int)$user->get('id') === $result) {
-								$query->where('a.state IN (0, 1)'); // show all articles for the logged author, published or not
-							} else {
-								$query->where('a.state = 1');
+							    $where_state = 'a.state IN (0, 1)'; // show all articles for the logged author, published or not
 							}
 						}
 					} catch (ExecutionFailureException $e) {
@@ -776,55 +765,115 @@ class ContentHelper
 
 		} else if (isset($array_of_authors_values['auto']) && $array_of_authors_values['auto'] > 0) { // 'auto' was selected: equivalent to check if the author is logged in
 			$test_type = $include ? '=' : '<>';
-			$query->where('a.created_by ' .$test_type.' '.(int) $user->get('id'));
+			$where_createdby = 'a.created_by ' .$test_type.' '.(int) $user->get('id');
 			if ($include && $params->get('allow_edit', 0) && (int)$user->get('id') > 0) {
-				$query->where('a.state IN (0, 1)'); // show all articles for the logged author, published or not
-			} else {
-				$query->where('a.state = 1');
+			    $where_state = 'a.state IN (0, 1)'; // show all articles for the logged author, published or not
 			}
 		} else {
 			$authors = implode(',', $authors_array);
 			if ($authors) {
 				$test_type = $include ? 'IN' : 'NOT IN';
-				$query->where('a.created_by '.$test_type.' ('.$authors.')');
+				$where_createdby = 'a.created_by '.$test_type.' ('.$authors.')';
 			}
 
 			if ($params->get('allow_edit', 0) && (int)$user->get('id') > 0) {
 				if ($user->authorise('core.edit', 'com_content')) {
 					// logged user can see everyone's unpublished articles
-					$query->where('a.state IN (0, 1)');
+				    $where_state = 'a.state IN (0, 1)';
 				} else {
-					if ($include) {
-						if (in_array($user->get('id'), $authors_array)) {
-							// the user is part of the selected authors
-
-							// logged user can see his own unpublished articles only
-							$query->where('(a.state = 1) OR (a.state = 0 AND a.created_by = ' . (int) $user->get('id') . ')');
-
-						} else {
-							$query->where('a.state = 1');
-						}
-					} else {
-						if (!in_array($user->get('id'), $authors_array)) {
-							// the user is not part of the discarded authors but may not be an author
-
-							// logged user can see his own unpublished articles only
-							$query->where('(a.state = 1) OR (a.state = 0 AND a.created_by = ' . (int) $user->get('id') . ')');
-
-						} else {
-							$query->where('a.state = 1');
-						}
+				    if (($include && in_array($user->get('id'), $authors_array)) || (!$include && !in_array($user->get('id'), $authors_array))) {
+						// logged user can see his own unpublished articles only
+						$where_state = '(a.state = 1) OR (a.state = 0 AND a.created_by = ' . (int) $user->get('id') . ')';
 					}
 				}
-			} else {
-				$query->where('a.state = 1');
 			}
+		}
 
-			// 			if ($include && $params->get('allow_edit', 0) && count($authors_array) == 1 && $authors_array[0] == (int) $user->get('id')) {
-			// 				$query->where('a.state IN (0, 1)'); // show all articles for the logged author, published or not
-			// 			} else {
-			// 				$query->where('a.state = 1');
-			// 			}
+		// author alias filter
+		
+		$include = $params->get('author_alias_inex', 1);
+		$authors_array = $params->get('created_by_alias', array());
+		$author_match = (int)$params->get('author_match', 0);
+
+		$where_createdbyalias = '';
+		
+		if ($author_match > 0 && count($authors_array) > 0) {
+		
+    		$array_of_authors_values = array_count_values($authors_array);
+    		
+    		if (isset($array_of_authors_values['all']) && $array_of_authors_values['all'] > 0) { // 'all' was selected
+    		    
+    		    if ($include) {
+    		        $where_createdbyalias = 'a.created_by_alias != ' . $db->quote('');
+    		    } else {
+    		        $where_createdbyalias = 'a.created_by_alias = ' . $db->quote('');
+    		    }
+    		
+    		} else if (isset($array_of_authors_values['auto']) && $array_of_authors_values['auto'] > 0) { // 'auto' was selected: check if author alias on page, if so, select it
+    		
+    		    $found = false;
+    		    if ($option === 'com_content' && $view === 'article') {
+    		        $temp = $jinput->getString('id');
+    		        $temp = explode(':', $temp);
+    		        if ($temp[0]) {
+    		            
+    		            $subquery = $db->getQuery(true);
+
+    		            $subquery->select($db->quoteName('created_by_alias'));
+    		            $subquery->from($db->quoteName('#__content'));
+    		            $subquery->where($db->quoteName('id').' = ' . $temp[0]);
+    		            
+    		            $db->setQuery($subquery);
+    		            
+    		            try {
+    		                $result = $db->loadResult();
+    		                if ($result) {
+    		                    $found = true;
+    		                    $test_type = $include ? '=' : '!=';
+    		                    $where_createdbyalias = 'a.created_by_alias' . $test_type . $db->quote($result);
+    		                    if (!$include) {
+    		                        $where_createdbyalias .= ' AND a.created_by_alias != ' . $db->quote('');
+    		                    }
+    		                }
+    		            } catch (ExecutionFailureException $e) {
+    		                $app->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+    		                return null;
+    		            }
+    		        }
+        		}
+    		    
+    		    if (!$found) {
+    		        return array();
+    		    }
+    		
+    		} else {
+    		    $quoted_array = array();
+    		    foreach ($authors_array as $author) {
+    		        $quoted_array[] = $db->quote($author);
+    		    }
+    		    
+    		    $authors = implode(',', $quoted_array);
+    		    if ($authors) {
+    		        $test_type = $include ? 'IN' : 'NOT IN';
+    		        $where_createdbyalias = 'a.created_by_alias '.$test_type.' ('.$authors.')';
+    		        if (!$include) {
+    		            $where_createdbyalias .= ' AND a.created_by_alias != ' . $db->quote('');
+    		        }
+    		    }
+    		}
+		}
+
+		$query->where($where_state);
+
+		if ($author_match === 2 && !empty($where_createdby) && !empty($where_createdbyalias)) {
+		    $query->where('(' . $where_createdby . ' OR ' . '(' . $where_createdbyalias . ')' . ')');
+		} else {
+		    if ($where_createdby) {
+		        $query->where($where_createdby);
+		    }
+		    if ($where_createdbyalias) {
+		        $query->where('(' . $where_createdbyalias . ')');
+		    }
 		}
 
 		// language filter

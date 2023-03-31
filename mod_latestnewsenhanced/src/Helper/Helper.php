@@ -20,9 +20,6 @@ use SYW\Library\Libraries as SYWLibraries;
 
 class Helper
 {
-	protected static $commonStylesLoaded = false;
-	protected static $userStylesLoaded = false;
-
 	protected static $image_extension_types = array('png', 'jpg', 'gif', 'jpeg', 'webp', 'avif');
 
 	/**
@@ -481,14 +478,18 @@ class Helper
 	{
 		$html = "";
 
-		if ($show_icon) {
+		if ($show_icon && Factory::getDocument()->getDirection() !== 'rtl') {
 			$icon = empty($icon) ? $default_icon : $icon;
-			$html .= '<i class="SYWicon-'.$icon.'"></i>';
+			$html .= '<i class="SYWicon-' . $icon . '"></i>';
 		}
 
-		$prepend = $label;
-		if (!empty($prepend)) {
-			$html .= '<span class="detail_label">'.$prepend.'</span>';
+		if (!empty($label)) {
+		    $html .= '<span class="detail_label">' . $label . '</span>';
+		}
+
+		if ($show_icon && Factory::getDocument()->getDirection() === 'rtl') {
+		    $icon = empty($icon) ? $default_icon : $icon;
+		    $html .= '<i class="SYWicon-' . $icon . '"></i>';
 		}
 
 		return $html;
@@ -1013,17 +1014,9 @@ class Helper
 	 */
 	static function loadCommonStylesheet()
 	{
-		if (self::$commonStylesLoaded) {
-			return;
-		}
-
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
-		$minified = (JDEBUG) ? '' : '-min';
-
-		$wam->registerAndUseStyle('lne.common_styles', 'mod_latestnewsenhanced/common_styles' . $minified . '.css', ['relative' => true, 'version' => 'auto']);
-
-		self::$commonStylesLoaded = true;
+		$wam->registerAndUseStyle('lne.common_styles', 'mod_latestnewsenhanced/common_styles.min.css', ['relative' => true, 'version' => 'auto']);
 	}
 
 	/**
@@ -1032,10 +1025,6 @@ class Helper
 	 */
 	static function loadUserStylesheet($styles_substitute = false)
 	{
-		if (self::$userStylesLoaded) {
-			return;
-		}
-
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$prefix = 'common_user';
@@ -1043,13 +1032,15 @@ class Helper
 			$prefix = 'substitute';
 		}
 
-		if (!File::exists(JPATH_ROOT.'/media/mod_latestnewsenhanced/css/'.$prefix.'_styles-min.css') || JDEBUG) {
-			$wam->registerAndUseStyle('lne.' . $prefix . '_styles', 'mod_latestnewsenhanced/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
+		if (File::exists(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/' . $prefix . '_styles-min.css')) {
+		    if (JDEBUG && File::exists(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/' . $prefix . '_styles.css')) {
+		        $wam->registerAndUseStyle('lne.' . $prefix . '_styles', 'mod_latestnewsenhanced/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
+		    } else {
+		        $wam->registerAndUseStyle('lne.' . $prefix . '_styles', 'mod_latestnewsenhanced/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
+		    }
 		} else {
-			$wam->registerAndUseStyle('lne.' . $prefix . '_styles', 'mod_latestnewsenhanced/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
+			$wam->registerAndUseStyle('lne.' . $prefix . '_styles', 'mod_latestnewsenhanced/' . $prefix . '_styles.min.css', ['relative' => true, 'version' => 'auto']);
 		}
-
-		self::$userStylesLoaded = true;
 	}
 
 	/**
