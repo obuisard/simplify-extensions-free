@@ -15,6 +15,7 @@ use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Language\Text;
+use Joomla\Database\ParameterType;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
@@ -26,7 +27,7 @@ class Pkg_ArticleDetailsInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.0.1';
+	protected $minimumLibrary = '2.3.3';
 
 	/**
 	 * Available languages
