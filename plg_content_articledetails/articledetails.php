@@ -174,7 +174,6 @@ class plgContentArticleDetails extends CMSPlugin
 			$result = $cache_css->cache('style_article.css', $clear_header_files_cache);
 
 			if ($result) {
-				//Factory::getDocument()->addStyleSheet($cache_css->getCacheURL() . '/plg_content_articledetails/style_article.css');
 				$wam->registerAndUseStyle('adp.article_style', $cache_css->getCachePath() . '/style_article.css');
 			}
 
@@ -182,7 +181,6 @@ class plgContentArticleDetails extends CMSPlugin
 			$result = $cache_css_print->cache('print_article.css', $clear_header_files_cache);
 
 			if ($result) {
-				//Factory::getDocument()->addStyleSheet($cache_css_print->getCacheURL() . '/plg_content_articledetails/print_article.css', [], ['media' => 'print']);
 				$wam->registerAndUseStyle('adp.article_print_style', $cache_css_print->getCachePath() . '/print_article.css', [], ['media' => 'print']);
 			}
 		}
@@ -255,7 +253,6 @@ class plgContentArticleDetails extends CMSPlugin
 				$result = $cache_css->cache('style_'.$view.'.css', $clear_header_files_cache);
 
 				if ($result) {
-					//Factory::getDocument()->addStyleSheet($cache_css->getCacheURL() . '/plg_content_articledetails/style_'.$view.'.css');
 					$wam->registerAndUseStyle('adp.' . $view . '_style', $cache_css->getCachePath() . '/style_' . $view . '.css');
 				}
 
@@ -263,7 +260,6 @@ class plgContentArticleDetails extends CMSPlugin
 				$result = $cache_css_print->cache('print_'.$view.'.css', $clear_header_files_cache);
 
 				if ($result) {
-					//Factory::getDocument()->addStyleSheet($cache_css_print->getCacheURL() . '/plg_content_articledetails/print_'.$view.'.css', [], ['media' => 'print']);
 					$wam->registerAndUseStyle('adp.' . $view . '_print_style', $cache_css_print->getCachePath() . '/print_' . $view . '.css', [], ['media' => 'print']);
 				}
 
@@ -315,7 +311,7 @@ class plgContentArticleDetails extends CMSPlugin
 		$bootstrap_version = $this->params->get('bootstrap_version', 'joomla');
 		$load_bootstrap = false;
 		if ($bootstrap_version === 'joomla') {
-			$bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
+			$bootstrap_version = 5;
 			$load_bootstrap = true;
 		} else {
 			$bootstrap_version = intval($bootstrap_version);
@@ -400,7 +396,7 @@ class plgContentArticleDetails extends CMSPlugin
 			if (strtotime($row->publish_up) > strtotime(Factory::getDate())) {
 				$publishing_status_output .= '<span class="article_notpublishedyet label label-warning">'.Text::_('JNOTPUBLISHEDYET').'</span>';
 			}
-			if ((strtotime($row->publish_down) < strtotime(Factory::getDate())) && $row->publish_down != NULL) {
+			if (!is_null($row->publish_down) && strtotime($row->publish_down) < strtotime(Factory::getDate())) {
 				$publishing_status_output .= '<span class="article_expired label label-warning">'.Text::_('JEXPIRED').'</span>';
 			}
 
@@ -422,7 +418,7 @@ class plgContentArticleDetails extends CMSPlugin
 		$edit_addition = '';
 		if ($params->get('access-edit') && !$this->app->input->getBool('print') /*&& !$params->get('popup')*/) {
 
-			if ($bootstrap_version > 0) {
+			if ($load_bootstrap) {
 			    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 			}
 

@@ -189,7 +189,7 @@ class Helper
 			$bootstrap_version = intval($bootstrap_version);
 		}
 
-		if ($bootstrap_version > 0) {
+		if ($load_bootstrap) {
 		    HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 		}
 

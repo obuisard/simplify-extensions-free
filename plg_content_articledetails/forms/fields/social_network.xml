@@ -16,7 +16,7 @@
 		label="PLG_CONTENT_ARTICLEDETAILS_FIELD_OTHERNETWORK_LABEL" 
 		description="PLG_CONTENT_ARTICLEDETAILS_FIELD_OTHERNETWORK_DESC" />
 		
-	<field name="network_color" type="sywcolorpicker" default="" transparency="true" icon="SYWicon-format-color-fill" showon="social_network:other" 
+	<field name="network_color" type="sywcolorpicker" default="" transparency="true" icon="fill" showon="social_network:other" 
 		label="PLG_CONTENT_ARTICLEDETAILS_FIELD_NETWORKCOLOR_LABEL" 
 		description="PLG_CONTENT_ARTICLEDETAILS_FIELD_NETWORKCOLOR_DESC" />
 </form>
