@@ -15,7 +15,6 @@ use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Language\Text;
-use Joomla\Database\ParameterType;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 /**
