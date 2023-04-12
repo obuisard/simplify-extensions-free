@@ -22,7 +22,7 @@ class SywspacingselectField extends DynamicsingleselectField
 	/*
 	* return the true CSS value rather than a short version of it
 	*/
-	protected $truevalue; 
+	protected $true_value; 
 
     protected function getOptions()
     {

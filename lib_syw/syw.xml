@@ -8,7 +8,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>2.3.2</version>
+	<version>2.3.3</version>
 	<description>LIB_SYW_XML_DESCRIPTION</description>
 	<packager>SimplifyYourWeb</packager>
 	<packagerurl>https://simplifyyourweb.com</packagerurl>
@@ -38,6 +38,7 @@
 		<language tag="nl-NL">language/nl-NL/nl-NL.lib_syw.sys.ini</language>
 		<language tag="pl-PL">language/pl-PL/pl-PL.lib_syw.sys.ini</language>
 		<language tag="pt-BR">language/pt-BR/pt-BR.lib_syw.sys.ini</language>
+		<language tag="pt-PT">language/pt-PT/pt-PT.lib_syw.sys.ini</language>
 		<language tag="ru-RU">language/ru-RU/ru-RU.lib_syw.sys.ini</language>
 		<language tag="sl-SI">language/sl-SI/sl-SI.lib_syw.sys.ini</language>
 		<language tag="sv-SE">language/sv-SE/sv-SE.lib_syw.sys.ini</language>

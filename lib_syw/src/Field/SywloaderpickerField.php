@@ -17,6 +17,7 @@ class SywloaderpickerField extends DynamicsingleselectField
 	public $type = 'Sywloaderpicker';
 
 	protected $loaders;
+	protected $imagebgc;
 
 	protected function getOptions()
 	{
