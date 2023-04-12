@@ -550,7 +550,11 @@ class Utilities
 		$possible_fallback_extensions = array('png', 'jpg');
 
 		if ($version) {
-		    $version = '?' . $version; // stay homogeneous with the way Joomla adds versions (or use ?version=)
+		    if (strpos($src, '?') === false) {
+		        $version = '?' . $version; // stay homogeneous with the way Joomla adds versions (or use ?version=)
+		    } else {
+		        $version = '';
+		    }
 		}
 
 // 		$version = '';

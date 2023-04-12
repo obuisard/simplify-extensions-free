@@ -15,6 +15,8 @@ use Joomla\CMS\Factory;
 class ExtensiontranslatorsField extends FormField
 {
 	public $type = 'Extensiontranslators';
+	
+	protected $translators;
 
 	protected function getLabel()
 	{
