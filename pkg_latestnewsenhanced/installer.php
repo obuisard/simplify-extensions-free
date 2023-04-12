@@ -204,10 +204,85 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 	        // remove files
 	        
 	        $this->deleteFiles[] = '/media/mod_latestnewsenhanced/css/common_styles-min.css';
+	        
+	        // fix manual configuration errors made before v6.8.0
+	        // v6.8.0 does not return any more results when authors are excluded and authors are set to 'all'
+	        
+	        $this->fixConfigErrors();
 	    }
 
 	    $this->removeFiles();
 
+	    return true;
+	}
+	
+	private function fixConfigErrors()
+	{
+	    $db = Factory::getDBO();
+	    
+	    $query = $db->getQuery(true);
+	    
+	    $query->select('id');
+	    $query->select('params');
+	    $query->from('#__modules');
+	    $query->where($db->quoteName('module') . '=' . $db->quote('mod_latestnewsenhanced'));
+	    
+	    $db->setQuery($query);
+	    
+	    $lne_instances = array();
+	    try {
+	        $lne_instances = $db->loadObjectList();
+	    } catch (ExecutionFailureException $e) {
+	        return false;
+	    }
+	    
+	    foreach ($lne_instances as $lne_instance) {
+	        
+	        $instance_params = json_decode($lne_instance->params, true);
+	        
+	        $changes_made = false;
+	        
+	        if (!isset($instance_params['author_match'])) { // before 6.8.0, 'author_match' does not exist
+	            if (isset($instance_params['author_inex']) && (int)$instance_params['author_inex'] === 0) { // 'excluded' is selected
+	                if (isset($instance_params['datasource'])) {
+	                    
+	                    $created_by = '';
+	                    if ($instance_params['datasource'] === 'articles') {
+	                        $created_by = 'created_by';
+	                    } else if ($instance_params['datasource'] === 'k2') {
+	                        $created_by = 'k2_created_by';
+	                    }
+	                    
+	                    if ($created_by && isset($instance_params[$created_by])) {
+	                        $authors_array = (array)$instance_params[$created_by];
+	                        $array_of_authors_values = array_count_values($authors_array);
+	                        if (isset($array_of_authors_values['all']) && $array_of_authors_values['all'] > 0) { // 'all' was selected
+	                            $changes_made = true;
+	                            $instance_params['author_inex'] = '1';
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	        
+	        if ($changes_made) {
+	            
+	            $query->clear();
+	            
+	            $query->update('#__modules');
+	            $query->set($db->quoteName('params') . '=' . $db->quote(json_encode($instance_params)));
+	            $query->where($db->quoteName('id') . '=' . $db->quote($lne_instance->id));
+	            
+	            $db->setQuery($query);
+	            
+	            try {
+	                $db->execute();
+	            } catch (ExecutionFailureException $e) {
+	                return false;
+	            }
+	        }
+	    }
+	    
 	    return true;
 	}
 	
