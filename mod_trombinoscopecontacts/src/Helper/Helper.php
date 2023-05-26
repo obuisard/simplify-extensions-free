@@ -16,12 +16,13 @@ use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Contact\Site\Helper\RouteHelper as ContactRouteHelper;
+use Joomla\Database\ParameterType;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
+use Joomla\Utilities\ArrayHelper;
 use SYW\Library\Cache as SYWCache;
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Tags as SYWTags;
@@ -129,7 +130,7 @@ abstract class Helper
 	 */
 	public static function getThumbnailMimeType($params)
 	{
-	    return $params->get('thumb_mime_type', '');
+		return $params->get('thumb_mime_type', '');
 	}
 
 	/**
@@ -253,22 +254,69 @@ abstract class Helper
 		}
 
 		$db = Factory::getDbo();
-		$query = $db->getQuery(true);
 
 		$related_id = ''; // to avoid the contact to be visible in the list of related contacts
 
-		//self::$address_format = $params->get('a_fmt', 'zss');
-		//self::$text_type = $params->get('t', 'info');
 		self::$sort_locale = $params->get('sort_locale', 'en_US');
 
 		// contact selection
 		$selection = $params->get('selection', 'categories');
+		
+		$user = $app->getIdentity();
+		$view_levels = $user->getAuthorisedViewLevels();
 
 		$metakeys = array();
 		$tags = array();
+		$linked_user_id = 0;
 
 		if ($selection != 'contact') { // we don't want to go through metakeys and tags if we just want the contact selected
 
+			// related to author of an article
+		    if ($selection == 'relatedtoarticleauthor') {
+		        if ($option === 'com_content' && ($view === 'article' || $view === 'form')) {
+		            $article_id = 0;
+		            if ($view === 'form') {
+		                $article_id = $app->input->getString('a_id');
+		            } else {
+		                $temp = $app->input->getString('id');
+		                $temp = explode(':', $temp);
+		                $article_id = $temp[0];
+		            }
+
+		            $query = $db->getQuery(true);
+
+		            $query->select($db->quoteName('created_by'));
+		            $query->from($db->quoteName('#__content'));
+		            $query->where($db->quoteName('id') . ' = :articleId');
+		            $query->bind(':articleId', $article_id, ParameterType::INTEGER);
+		            
+		            $db->setQuery($query);
+		            
+		            try {
+		                $result = (int)$db->loadResult();
+		                if ($result > 0) {
+		                    $linked_user_id = $result;
+		                } else {
+		                    return null;
+		                }
+		            } catch (ExecutionFailureException $e) {
+		                $app->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+		                return null;
+		            }
+		        } else {
+		            return null;
+		        }
+		    }
+			
+			// related to logged user
+			if ($selection == 'user') {
+				if ($user->id > 0) {
+					$linked_user_id = $user->id;
+				} else {
+					return null;
+				}
+			}
+			
 			// metakeys filtering
 
 			//$metakeys = array();
@@ -285,9 +333,12 @@ abstract class Helper
 
 				if ($item_on_page_id) { // the content is a standard contact or a TCP contact page
 
+				    $query = $db->getQuery(true);
+
 					$query->select($db->quoteName('metakey'));
 					$query->from($db->quoteName('#__contact_details'));
-					$query->where($db->quoteName('id').' = '.$item_on_page_id);
+					$query->where($db->quoteName('id') . ' = :itemOnPageId');
+					$query->bind(':itemOnPageId', $item_on_page_id, ParameterType::INTEGER);
 
 					$db->setQuery($query);
 
@@ -316,8 +367,6 @@ abstract class Helper
 					if (empty($item_on_page_keys)) {
 						return array();
 					}
-
-					$query->clear();
 
 					$related_id = $item_on_page_id;
 				} else {
@@ -411,14 +460,14 @@ abstract class Helper
 						return array();
 					}
 				} else if ($params->get('include_tag_children', 0)) { // get tag children
-					
+
 					$tagTreeArray = array();
 					$helper_tags = new TagsHelper();
-					
+
 					foreach ($tags as $tag) {
 						$helper_tags->getTagTreeArray($tag, $tagTreeArray);
 					}
-					
+
 					$tags = array_unique(array_merge($tags, $tagTreeArray));
 				}
 			}
@@ -446,10 +495,9 @@ abstract class Helper
 			}
 		}
 
-		$user = Factory::getUser();
-		$groups	= implode(',', $user->getAuthorisedViewLevels());
-
 		// START OF DATABASE QUERY
+
+		$query = $db->getQuery(true);
 
 		$subquery1 = ' CASE WHEN ';
 		$subquery1 .= $query->charLength('cd.alias');
@@ -467,49 +515,47 @@ abstract class Helper
 		$subquery2 .= ' ELSE ';
 		$subquery2 .= $cc_id.' END AS catslug';
 
-		$subquery = $subquery1.','.$subquery2;
-
 		// get only the fields we are interested in
 
 		$fields_to_fetch = array();
 
 		$detail_blocs = $params->get('detail_blocks'); // array of objects
 		if (!empty($detail_blocs) && is_object($detail_blocs)) {
-		    foreach ($detail_blocs as $i => $detail_bloc) {
-		        if ($detail_bloc->f != 'none') {
-	                $core_fields = self::getSelectedCoreFields($params, $detail_bloc->f);
-		        	if (is_array($core_fields)) {
-		            	$fields_to_fetch = array_merge($fields_to_fetch, $core_fields);
-		        	} else if (!empty($core_fields)) {
-		            	$fields_to_fetch[] = $core_fields;
-		        	}
-		    	}
+			foreach ($detail_blocs as $detail_bloc) {
+				if ($detail_bloc->f != 'none') {
+					$core_fields = self::getSelectedCoreFields($params, $detail_bloc->f);
+					if (is_array($core_fields)) {
+						$fields_to_fetch = array_merge($fields_to_fetch, $core_fields);
+					} else if (!empty($core_fields)) {
+						$fields_to_fetch[] = $core_fields;
+					}
+				}
 			}
 		}
 
 		$detaillink_blocs = $params->get('detaillink_blocks'); // array of objects
 		if (!empty($detaillink_blocs) && is_object($detaillink_blocs)) {
-		    foreach ($detaillink_blocs as $i => $detaillink_bloc) {
-		        if ($detaillink_bloc->lf != 'none') {
-		            $core_fields = self::getSelectedCoreFields($params, $detaillink_bloc->lf);
-		        	if (is_array($core_fields)) {
-		            	$fields_to_fetch = array_merge($fields_to_fetch, $core_fields);
-		        	} else if (!empty($core_fields)) {
-		            	$fields_to_fetch[] = $core_fields;
-		        	}
-		    	}
+			foreach ($detaillink_blocs as $detaillink_bloc) {
+				if ($detaillink_bloc->lf != 'none') {
+					$core_fields = self::getSelectedCoreFields($params, $detaillink_bloc->lf);
+					if (is_array($core_fields)) {
+						$fields_to_fetch = array_merge($fields_to_fetch, $core_fields);
+					} else if (!empty($core_fields)) {
+						$fields_to_fetch[] = $core_fields;
+					}
+				}
 			}
 		}
 
 		$query->select($db->quoteName(array('cd.id', 'cd.catid', 'cd.name', 'cc.title', 'cc.lft', 'cd.user_id', 'cd.featured', 'cd.image', 'cd.params', 'cd.language'), array('id', 'catid', 'name', 'category', 'c_order', 'user_id', 'featured', 'image', 'params', 'language')));
-		$query->select($subquery);
+		$query->select($subquery1 . ',' . $subquery2);
 
 		foreach (array_unique($fields_to_fetch) as $key => $core_field) {
-		    $query->select($db->quoteName('cd.' . $core_field, $core_field));
+			$query->select($db->quoteName('cd.' . $core_field, $core_field));
 		}
 
 		$query->from($db->quoteName('#__contact_details', 'cd'));
-		$query->join('INNER', '#__categories AS cc ON cd.catid = cc.id');
+		$query->join('INNER', $db->quoteName('#__categories', 'cc'), $db->quoteName('cd.catid') . ' = ' . $db->quoteName('cc.id'));
 
 		$count = '';
 		$startat = 1;
@@ -517,19 +563,12 @@ abstract class Helper
 		if ($selection == 'contact') {
 			$contact_id = $params->get('contact_id', '');
 			if (!empty($contact_id)) {
-				$query->where('cd.id='.$contact_id);
+			    $query->where($db->quoteName('cd.id') . ' = :contactId');
+			    $query->bind(':contactId', $contact_id, ParameterType::INTEGER);
 			} else {
 				return null;
 			}
 		} else {
-
-			if ($selection == 'user') {
-				if ($user->id > 0) {
-					$query->where('cd.user_id='.$user->id);
-				} else {
-					return null;
-				}
-			}
 
 			$count = trim($params->get('count', ''));
 			$startat = $params->get('startat', 1);
@@ -537,12 +576,19 @@ abstract class Helper
 				$startat = 1;
 			}
 
+			// filter by user id
+
+			if ($linked_user_id > 0) {
+			    $query->where($db->quoteName('cd.user_id') . ' = :linkedUserId');
+			    $query->bind(':linkedUserId', $linked_user_id, ParameterType::INTEGER);
+			}
+
 			// filter by category
 
 			$categories = self::getCategories($params->get('cat', array()), $params->get('includesubcat', 'no'), $params->get('levelsubcategories', 1));
 			if ($categories != '') {
 				$test_type = $params->get('cat_inex', 1) ? 'IN' : 'NOT IN';
-				$query->where('cd.catid ' . $test_type . ' ('.$categories.')');
+				$query->where($db->quoteName('cd.catid') . ' ' . $test_type . ' (' . $categories . ')');
 			} else {
 				if (!$params->get('cat_inex', 1)) {
 					return array(); // if all categories excluded, then there should be no result
@@ -553,7 +599,8 @@ abstract class Helper
 
 			$contact_ids_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
 			if (!empty($contact_ids_include)) {
-				$query->where('cd.id IN (' . implode(',', $contact_ids_include) . ')');
+			    $contact_ids_include = ArrayHelper::toInteger($contact_ids_include);
+			    $query->whereIn($db->quoteName('cd.id'), $contact_ids_include);
 			}
 
 			// exclude
@@ -565,161 +612,169 @@ abstract class Helper
 			}
 
 			if (!empty($contact_ids_exclude)) {
-				$query->where('cd.id NOT IN (' . implode(',', $contact_ids_exclude) . ')');
+			    $contact_ids_exclude = ArrayHelper::toInteger($contact_ids_exclude);
+			    $query->whereNotIn($db->quoteName('cd.id'), $contact_ids_exclude);
 			}
 
 			// filter by metakeys
 
 			if (!empty($metakeys)) {
 				$concat_string = $query->concatenate(array('","', ' REPLACE(cd.metakey, ", ", ",")', ' ","')); // remove single space after commas in keywords
-				$query->where('('.$concat_string.' LIKE "%'.implode('%" OR '.$concat_string.' LIKE "%', $metakeys).'%")');
+				
+				//$query->where('('.$concat_string.' LIKE "%'.implode('%" OR '.$concat_string.' LIKE "%', $metakeys).'%")');
+				
+				$query_meta_array = array();
+				foreach ($metakeys as $key) {
+				    $query_meta_array[] = $concat_string . ' LIKE ' . $db->quote('%' . $db->escape($key, true) . '%');
+				}
+				
+				$query->where('(' . implode(' OR ', $query_meta_array) . ')');
 			}
 
 			// filter by tags
 
 			if (!empty($tags)) {
-				
+
 				$tags_to_match = implode(',', $tags);
-				
-				$query->select('COUNT(tags.id) AS tags_count');
-				$query->join('INNER', $db->quoteName('#__contentitem_tag_map', 'm').' ON '.$db->quoteName('m.content_item_id').' = '.$db->quoteName('cd.id').' AND '.$db->quoteName('m.type_alias').' = '.$db->quote('com_contact.contact'));
-				$query->join('INNER', $db->quoteName('#__tags', 'tags') . ' ON '.$db->quoteName('m.tag_id').' = '.$db->quoteName('tags.id'));
-				
-				$query->where($db->quoteName('tags.access').' IN ('.$groups.')');
-				$query->where($db->quoteName('tags.published').' = 1');
-				
+
+				$query->select('COUNT(' . $db->quoteName('tags.id') . ') AS tags_count');
+				$query->join('INNER', $db->quoteName('#__contentitem_tag_map', 'm'), $db->quoteName('m.content_item_id') . ' = ' . $db->quoteName('cd.id') . ' AND ' . $db->quoteName('m.type_alias') . ' = ' . $db->quote('com_contact.contact'));
+				$query->join('INNER', $db->quoteName('#__tags', 'tags'), $db->quoteName('m.tag_id') . ' = ' . $db->quoteName('tags.id'));
+				$query->whereIn($db->quoteName('tags.access'), $view_levels);
+				$query->where($db->quoteName('tags.published') . ' = 1');
+
 				$test_type = $params->get('tags_inex', 1) ? 'IN' : 'NOT IN';
-				$query->where($db->quoteName('tags.id').' ' . $test_type . ' ('.$tags_to_match.')');
-				
+				$query->where($db->quoteName('tags.id') . ' ' . $test_type . ' (' . $tags_to_match . ')');
+
 				if ($params->get('tags_inex', 1)) {
 					if ($params->get('tags_match', 'any') == 'all') {
-						$query->having('COUNT('.$db->quoteName('tags.id').') = '.count($tags));
+						$query->having('COUNT(' . $db->quoteName('tags.id') . ') = ' . count($tags));
 					}
 				} else {
 					$query->select('tags_per_items.tag_count_per_item');
 					
+					$subquery = $db->getQuery(true);
+
 					// subquery gets all the tags for all items - VERY INNEFICIENT
-					$subquery = 'SELECT mm.content_item_id AS content_id, COUNT(tt.id) AS tag_count_per_item FROM #__contentitem_tag_map AS mm';
-					$subquery .= ' INNER JOIN #__tags AS tt ON mm.tag_id = tt.id';
-					$subquery .= ' WHERE tt.access IN ('.$groups.') AND tt.published = 1 AND mm.type_alias = \'com_contact.contact\' GROUP BY content_id';
-					
-					$query->join('INNER', '(' . $subquery . ') AS tags_per_items ON tags_per_items.content_id = cd.id');
-					
+					$subquery->select($db->quoteName('mm.content_item_id', 'content_id'));
+					$subquery->select('COUNT(' . $db->quoteName('tt.id') . ') AS tag_count_per_item');
+					$subquery->from($db->quoteName('#__contentitem_tag_map', 'mm'));
+					$subquery->join('INNER', $db->quoteName('#__tags', 'tt'), $db->quoteName('mm.tag_id') . ' = ' . $db->quoteName('tt.id'));
+					$subquery->whereIn($db->quoteName('tt.access'), $view_levels);
+					$subquery->where($db->quoteName('tt.published') . ' = 1');
+					$subquery->where($db->quoteName('mm.type_alias') . ' = ' . $db->quote('com_contact.contact'));
+					$subquery->group($db->quoteName('content_id'));
+
+					$query->join('INNER', '(' . (string) $subquery . ') AS tags_per_items', $db->quoteName('tags_per_items.content_id') . ' = ' . $db->quoteName('cd.id'));
+
 					// we keep items that have the same amount of tags before and after removals
-					$query->having('COUNT('.$db->quoteName('tags.id').') = '.$db->quoteName('tags_per_items.tag_count_per_item'));
+					$query->having('COUNT(' . $db->quoteName('tags.id') . ') = ' . $db->quoteName('tags_per_items.tag_count_per_item'));
 				}
 
 				$query->group($db->quoteName('cd.id'));
 			}
-			
+
 			// custom field filters
-			
+
 			$customfield_filters_arrays = array();
-			
+
 			$customfield_filters = $params->get('customfieldsfilter'); // string (if default), array or object
-			
+
 			if (!empty($customfield_filters) && !is_string($customfield_filters)) {
-			    
-			    foreach ($customfield_filters as $customfield_filter) {
-			        
-			        $customfield_filter = (array)$customfield_filter;
-			        
-			        if ($customfield_filter['field'] !== 'none') {
-			            
-			            $values = explode(',', $customfield_filter['values']);
-			            foreach ($values as $key => $value) {
-			                $value = trim($value);
-			                if (empty($value)) {
-			                    unset($values[$key]);
-			                }
-			            }
-			            
-			            if (!empty($values)) {
-			                $customfield_filters_arrays[] = array('id' => $customfield_filter['field'], 'values' => $values, 'inex' => $customfield_filter['inex']);
-			            }
-			        }
-			    }
+
+				foreach ($customfield_filters as $customfield_filter) {
+
+					$customfield_filter = (array)$customfield_filter;
+
+					if ($customfield_filter['field'] !== 'none') {
+
+						$values = explode(',', $customfield_filter['values']);
+						foreach ($values as $key => $value) {
+							$value = trim($value);
+							if (empty($value)) {
+								unset($values[$key]);
+							}
+						}
+
+						if (!empty($values)) {
+							$customfield_filters_arrays[] = array('id' => $customfield_filter['field'], 'values' => $values, 'inex' => $customfield_filter['inex']);
+						}
+					}
+				}
 			}
-			
+
 			if (!empty($customfield_filters_arrays)) {
-			    
-			    $contact_id_arrays_from_cfields = array();
-			    
-			    foreach ($customfield_filters_arrays as $customfield_filter) {
-			        
-			        $subQuery = $db->getQuery(true);
-			        
-			        $subQuery->select("DISTINCT cfv.item_id"); // no unique results when joining with categories
-			        $subQuery->from("#__fields_values AS cfv");
-			        $subQuery->join('LEFT', '#__fields AS f ON f.id = cfv.field_id');
-			        $subQuery->where('(f.context IS NULL OR f.context = ' . $db->quote('com_contact.contact') . ')');
-			        $subQuery->where('(f.state IS NULL OR f.state = 1)');
-			        $subQuery->where('(f.access IS NULL OR f.access IN (' . $groups . '))');
-			        $subQuery->where($db->quoteName('cfv.field_id').' = ' . $db->quote($customfield_filter['id']));
-			        
-			        // any category for the field? if so, join with categories. If not, do not join
-// 			        if (!empty(FieldsHelper::getAssignedCategoriesTitles($customfield_filter['id']))) {
-// 			            if (!isset($array_of_category_values['all']) && !isset($array_of_category_values['auto']) && !empty($categories)) {
-// 			                $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');
-// 			                $subQuery->where($db->quoteName('cfc.category_id') . ' ' . ($params->get('cat_inex', 1) ? 'IN' : 'NOT IN') . ' (' . $categories . ')');
-// 			            }
-// 			        }
-			        
-			        if ($customfield_filter['inex']) {
-			            $subQuery->where($db->quoteName('cfv.value') . " = '" . implode("' OR " . $db->quoteName('cfv.value') . " = '", $customfield_filter['values']) . "'");
-			        } else {
-			            $subQuery->where($db->quoteName('cfv.value') . " <> '" . implode("' AND " . $db->quoteName('cfv.value') . " <> '", $customfield_filter['values']) . "'");
-			        }
-			        
-			        if ($params->get('filter_lang', 0) && Multilanguage::isEnabled()) {
-			            $subQuery->where('(f.language IS NULL OR f.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . '))');
-			        }
-			        
-			        $db->setQuery($subQuery);
-			        
-			        try {
-			            $contact_id_arrays_from_cfields[] = $db->loadColumn();
-			        } catch (ExecutionFailureException $e) {
-			            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
-			        }
-			    }
-			    
-			    if (!empty($contact_id_arrays_from_cfields)) {
-			        
-			        // keep only the ids found in all the arrays
-			        if (count($contact_id_arrays_from_cfields) > 1) {
-			            $contact_ids = call_user_func_array('array_intersect', $contact_id_arrays_from_cfields);
-			        } else {
-			            $contact_ids = $contact_id_arrays_from_cfields[0];
-			        }
-			        
-			        if (!empty($contact_ids)) {
-			            $query->where('cd.id IN (' . implode(",", $contact_ids) . ')'); // include all articles that have custom field value(s) that correspond to the custom field value
-			        } else {
-			            $query->where('cd.id = 0'); // no article having all values selected
-			        }
-			    }
+
+				$contact_id_arrays_from_cfields = array();
+
+				foreach ($customfield_filters_arrays as $customfield_filter) {
+
+					$subQuery = $db->getQuery(true);
+
+					$subQuery->select('DISTINCT ' . $db->quoteName('cfv.item_id')); // no unique results when joining with categories
+					$subQuery->from($db->quoteName('#__fields_values', 'cfv'));
+					$subQuery->join('LEFT', $db->quoteName('#__fields', 'f'), $db->quoteName('f.id') . ' = ' . $db->quoteName('cfv.field_id'));
+					$subQuery->where('(' . $db->quoteName('f.context') . ' IS NULL OR ' . $db->quoteName('f.context') . ' = ' . $db->quote('com_contact.contact') . ')');
+					$subQuery->where('(' . $db->quoteName('f.state') . ' IS NULL OR ' . $db->quoteName('f.state') . ' = 1)');
+					$subQuery->where('(' . $db->quoteName('f.access') . ' IS NULL OR ' . $db->quoteName('f.access') . ' IN (' . implode(',', $view_levels) . '))');
+					$subQuery->where($db->quoteName('cfv.field_id').' = :fieldId');
+					$subQuery->bind(':fieldId', $customfield_filter['id'], ParameterType::INTEGER);
+
+					if ($customfield_filter['inex']) {
+						$subQuery->where($db->quoteName('cfv.value') . " = '" . implode("' OR " . $db->quoteName('cfv.value') . " = '", $customfield_filter['values']) . "'");
+					} else {
+						$subQuery->where($db->quoteName('cfv.value') . " <> '" . implode("' AND " . $db->quoteName('cfv.value') . " <> '", $customfield_filter['values']) . "'");
+					}
+
+					if ($params->get('filter_lang', 0) && Multilanguage::isEnabled()) {
+						$subQuery->where('(' . $db->quoteName('f.language') . ' IS NULL OR ' . $db->quoteName('f.language') . ' IN (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . '))');
+					}
+
+					$db->setQuery($subQuery);
+
+					try {
+						$contact_id_arrays_from_cfields[] = $db->loadColumn();
+					} catch (ExecutionFailureException $e) {
+						Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+					}
+				}
+
+				if (!empty($contact_id_arrays_from_cfields)) {
+
+					// keep only the ids found in all the arrays
+				    $contact_ids = $contact_id_arrays_from_cfields[0];
+					if (count($contact_id_arrays_from_cfields) > 1) {
+						$contact_ids = call_user_func_array('array_intersect', $contact_id_arrays_from_cfields);
+					}
+
+					if (!empty($contact_ids)) {
+					    $contact_ids = ArrayHelper::toInteger($contact_ids);
+					    $query->whereIn($db->quoteName('cd.id'), $contact_ids); // include all articles that have custom field value(s) that correspond to the custom field value
+					} else {
+					    $query->where($db->quoteName('cd.id') . ' = 0'); // no article having all values selected
+					}
+				}
 			}
 
 			// featured switch
 
 			$featured = $params->get('f', 's');
 			if ($featured == 'o') {
-				$query->where('cd.featured = 1');
+			    $query->where($db->quoteName('cd.featured') . ' = 1');
 			} else if ($featured == 'h') {
-				$query->where('cd.featured = 0');
+			    $query->where($db->quoteName('cd.featured') . ' = 0');
 			} else if ($featured == 'sf') {
-				$query->order("cd.featured DESC");
+			    $query->order($db->quoteName('cd.featured') . ' DESC');
 			}
 
 			// category order
 
 			$catorder = $params->get('c_order', '');
 			switch ($catorder) {
-				case 'oa' : $query->order('cc.lft ASC'); break;
-				case 'od' : $query->order('cc.lft DESC'); break;
-				case 'na' : $query->order('cc.title ASC'); break;
-				case 'nd' : $query->order('cc.title DESC'); break;
+			    case 'oa' : $query->order($db->quoteName('cc.lft') . ' ASC'); break;
+			    case 'od' : $query->order($db->quoteName('cc.lft') . ' DESC'); break;
+			    case 'na' : $query->order($db->quoteName('cc.title') . ' ASC'); break;
+			    case 'nd' : $query->order($db->quoteName('cc.title') . ' DESC'); break;
 				default : break;
 			}
 
@@ -727,15 +782,15 @@ abstract class Helper
 
 			$order = $params->get('order', 'oa');
 			switch ($order) {
-				case 'oa' : $query->order('cd.ordering ASC'); break;
-				case 'od' : $query->order('cd.ordering DESC'); break;
-				case 'na' : $query->order('cd.name ASC'); break;
-				case 'nd' : $query->order('cd.name DESC'); break;
-				case 'fnf_fa' : $query->order('cd.ordering ASC'); break;
-				case 'fnf_fd' : $query->order('cd.ordering DESC'); break;
-				case 'fnf_la' : $query->order('cd.ordering ASC'); break;
-				case 'fnf_ld' : $query->order('cd.ordering DESC'); break;
-				case 'random' : $query->order('rand()'); break;
+			    case 'oa' : $query->order($db->quoteName('cd.ordering') . ' ASC'); break;
+			    case 'od' : $query->order($db->quoteName('cd.ordering') . ' DESC'); break;
+			    case 'na' : $query->order($db->quoteName('cd.name') . ' ASC'); break;
+			    case 'nd' : $query->order($db->quoteName('cd.name') . ' DESC'); break;
+			    case 'fnf_fa' : $query->order($db->quoteName('cd.ordering') . ' ASC'); break;
+			    case 'fnf_fd' : $query->order($db->quoteName('cd.ordering') . ' DESC'); break;
+			    case 'fnf_la' : $query->order($db->quoteName('cd.ordering') . ' ASC'); break;
+			    case 'fnf_ld' : $query->order($db->quoteName('cd.ordering') . ' DESC'); break;
+			    case 'random' : $query->order($query->rand()); break;
 				case 'manual' :
 					$manual_order_ids = array_filter(explode(',', trim($params->get('manual_ids', ''), ' ,')));
 					if (!empty($manual_order_ids)) {
@@ -746,51 +801,50 @@ abstract class Helper
 						$order .= ' ELSE 999 END, cd.id';
 						$query->order($order);
 					} else {
-						$query->order('cd.id ASC');
+					    $query->order($db->quoteName('cd.id') . ' ASC');
 					}
 					break;
-				case 'sna' : 
-				    $query->order($db->escape('cd.sortname1').' ASC');
-    				$query->order($db->escape('cd.sortname2').' ASC');
-    				$query->order($db->escape('cd.sortname3').' ASC');
-    				break;
-				case 'snd' : 
-				    $query->order($db->escape('cd.sortname1').' DESC');
-    				$query->order($db->escape('cd.sortname2').' DESC');
-    				$query->order($db->escape('cd.sortname3').' DESC');
-    				break;
-    				
-				case 'c_asc': $query->order('cd.created ASC'); break;
-				case 'c_dsc': $query->order('cd.created DESC'); break;
-				
-				case 'mc_asc': $query->order('CASE WHEN (cd.modified IS NULL) THEN cd.created ELSE cd.modified END ASC'); break;
-				case 'mc_dsc': $query->order('CASE WHEN (cd.modified IS NULL) THEN cd.created ELSE cd.modified END DESC'); break;
-				
-				case 'hit': $query->order('cd.hits DESC'); break; // popular (most hit)
-				
-				default : $query->order('cd.ordering ASC');
+				case 'sna' :
+				    $query->order($db->quoteName('cd.sortname1') . ' ASC');
+				    $query->order($db->quoteName('cd.sortname2') . ' ASC');
+				    $query->order($db->quoteName('cd.sortname3') . ' ASC');
+					break;
+				case 'snd' :
+				    $query->order($db->quoteName('cd.sortname1') . ' DESC');
+				    $query->order($db->quoteName('cd.sortname2') . ' DESC');
+				    $query->order($db->quoteName('cd.sortname3') . ' DESC');
+					break;
+
+				case 'c_asc': $query->order($db->quoteName('cd.created') . ' ASC'); break;
+				case 'c_dsc': $query->order($db->quoteName('cd.created') . ' DESC'); break;
+
+				case 'mc_asc': $query->order('CASE WHEN (' . $db->quoteName('cd.modified') . ' IS NULL) THEN ' . $db->quoteName('cd.created') . ' ELSE ' . $db->quoteName('cd.modified') . ' END ASC'); break;
+				case 'mc_dsc': $query->order('CASE WHEN (' . $db->quoteName('cd.modified') . ' IS NULL) THEN ' . $db->quoteName('cd.created') . ' ELSE ' . $db->quoteName('cd.modified') . ' END DESC'); break;
+
+				case 'hit': $query->order($db->quoteName('cd.hits') . ' DESC'); break; // popular (most hit)
+
+				default : $query->order($db->quoteName('cd.ordering') . ' ASC');
 			}
 		}
 
 		// access filter
 
-		$query->where('cd.access IN ('.$groups.')');
-		$query->where('cc.access IN ('.$groups.')');
+		$query->whereIn($db->quoteName('cd.access'), $view_levels);
+		$query->whereIn($db->quoteName('cc.access'), $view_levels);
 
-		$query->where($db->quoteName('cc.published').' = 1');
+		$query->where($db->quoteName('cc.published') . ' = 1');
 
 		// date filter
 
-		//$nullDate = $db->quote($db->getNullDate());
 		$nowDate = $db->quote(Factory::getDate()->toSql());
 		$query->where($db->quoteName('cd.published') . ' = 1');
-		$query->where('(' . $db->quoteName('cd.publish_up') . ' IS NULL OR ' . $db->quoteName('cd.publish_up') . ' <= '.$nowDate.')');
-		$query->where('(' . $db->quoteName('cd.publish_down') . ' IS NULL OR ' . $db->quoteName('cd.publish_down') . ' >= '.$nowDate.')');
+		$query->where('(' . $query->isNullDatetime('cd.publish_up') . ' OR ' . $db->quoteName('cd.publish_up') . ' <= ' . $nowDate . ')');
+		$query->where('(' . $query->isNullDatetime('cd.publish_down') . ' OR ' . $db->quoteName('cd.publish_down') . ' >= ' . $nowDate . ')');
 
 		// language filter
 
 		if ($params->get('filter_lang', 0) && Multilanguage::isEnabled()) {
-			$query->where('cd.language IN ('.$db->quote(Factory::getLanguage()->getTag()).','.$db->quote('*').')');
+		    $query->whereIn($db->quoteName('cd.language'), [$db->quote(Factory::getLanguage()->getTag()), $db->quote('*')]);
 		}
 
 		// launch query
@@ -822,54 +876,54 @@ abstract class Helper
 			$item->firstpart = self::_substring_index(trim($item->name), ' ', 1);
 			$item->secondpart = self::_substring_index(self::_substring_index(trim($item->name), ' ', 2), ' ', -1);
 			$item->lastpart = self::_substring_index(trim($item->name), ' ', -1);
-			
+
 			// keep original image (needed if showing picture in popup)
 			$item->original_image = '';
 			if ($item->image) {
-			    $image_object = HTMLHelper::cleanImageURL($item->image);
-			    $item->original_image = $image_object->url;
+				$image_object = HTMLHelper::cleanImageURL($item->image);
+				$item->original_image = $image_object->url;
 			}
 
 			if (self::isShowPicture($params)) {
 
 				$picture_output = '';
-				
+
 				if ($item->original_image) {
 					if (self::isCropPicture($params)) {
-					    $picture_output = self::getCroppedImage($module->id, $item->id, $item->original_image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
+						$picture_output = self::getCroppedImage($module->id, $item->id, $item->original_image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
 					} else {
-					    $picture_output = (File::exists(JPATH_SITE . '/' . $item->original_image) || !Uri::getInstance()->isInternal($item->original_image)) ? $item->original_image : 'error';
+						$picture_output = (File::exists(JPATH_SITE . '/' . $item->original_image) || !Uri::getInstance()->isInternal($item->original_image)) ? $item->original_image : 'error';
 					}
 				}
-				
+
 				if ($picture_output == 'error' || $picture_output == '') {
 					$default_image = $params->get('d_pic', '');
 					if ($default_image) {
-					    
-					    $default_image_object = HTMLHelper::cleanImageURL($default_image);					    
-					    
+
+						$default_image_object = HTMLHelper::cleanImageURL($default_image);
+
 						if (self::isCropPicture($params)) {
-						    $picture_output = self::getCroppedImage($module->id, 'default', $default_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
+							$picture_output = self::getCroppedImage($module->id, 'default', $default_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
 						} else {
-						    $picture_output = (File::exists(JPATH_SITE . '/' . $default_image_object->url)) ? $default_image_object->url : 'error';
+							$picture_output = (File::exists(JPATH_SITE . '/' . $default_image_object->url)) ? $default_image_object->url : 'error';
 						}
 					}
 				}
-				
+
 				if ($picture_output == 'error' || $picture_output == '') {
 					$global_image = self::getContactGlobalParams()->get('default_image');
 					if ($global_image) {
-					    
-					    $global_image_object = HTMLHelper::cleanImageURL($global_image);	
-					    
+
+						$global_image_object = HTMLHelper::cleanImageURL($global_image);
+
 						if (self::isCropPicture($params)) {
-						    $picture_output = self::getCroppedImage($module->id, 'global', $global_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
+							$picture_output = self::getCroppedImage($module->id, 'global', $global_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
 						} else {
-						    $picture_output = (File::exists(JPATH_SITE . '/' . $global_image_object->url)) ? $global_image_object->url : 'error';
+							$picture_output = (File::exists(JPATH_SITE . '/' . $global_image_object->url)) ? $global_image_object->url : 'error';
 						}
 					}
 				}
-				
+
 				$item->image = $picture_output;
 
 				if ($picture_output == 'error') {
@@ -893,35 +947,35 @@ abstract class Helper
 
 			$individual_bg_option = $params->get('individual_bg_pic', '');
 			if ($individual_bg_option) {
-			    
-			    $item->individual_bg = '';
-			    $item->individual_bg_alt = '';
-			    
+
+				$item->individual_bg = '';
+				$item->individual_bg_alt = '';
+
 				if ($individual_bg_option == 'def_bg') { // default bg picture selected
 					if ($params->get('d_bg_pic', '')) {
-					    $default_image_object = HTMLHelper::cleanImageURL($params->get('d_bg_pic'));
-					    $item->individual_bg = $default_image_object->url;
+						$default_image_object = HTMLHelper::cleanImageURL($params->get('d_bg_pic'));
+						$item->individual_bg = $default_image_object->url;
 					}
 				} else if ($individual_bg_option == 'pic') { // contact picture selected
 					if ($item->image) {
 						$item->individual_bg = $item->image;
 					} else if ($params->get('d_bg_pic', '')) {
-					    $default_image_object = HTMLHelper::cleanImageURL($params->get('d_bg_pic'));
-					    $item->individual_bg = $default_image_object->url;
+						$default_image_object = HTMLHelper::cleanImageURL($params->get('d_bg_pic'));
+						$item->individual_bg = $default_image_object->url;
 					}
-				} else {				    
-				    // PRO version only
+				} else { // custom field of 'media' type
+					// PRO version only
 				}
 			}
 		}
 
 		// SPECIFIC ORDERING
 
-		if ($selection != 'contact' && $selection != 'user') {
+		if ($selection != 'contact' && $selection != 'user' && $selection != 'relatedtoarticleauthor') {
 
 			$format_style = $params->get('name_fmt', 'none');
 			if ($format_style != '') {
-				if ($catorder == "oa") {
+				if ($catorder == 'oa') {
 					switch ($order) {
 						case 'fnf_fa' : // follow the name format - order on 1st part (asc)
 							switch ($format_style) {
@@ -961,7 +1015,7 @@ abstract class Helper
 							break;
 						default : break;
 					}
-				} else if ($catorder == "od") {
+				} else if ($catorder == 'od') {
 					switch ($order) {
 						case 'fnf_fa' : // follow the name format - order on 1st part (asc)
 							switch ($format_style) {
@@ -1050,44 +1104,44 @@ abstract class Helper
 
 	protected static function getSelectedCoreFields($params, $selected_field)
 	{
-	    switch ($selected_field) {
-	        case 'c_p': return 'con_position';
-	        case 'tel': return 'telephone';
-	        case 'mob': return 'mobile';
-	        case 'fax': return 'fax';
-	        case 'mail': return 'email_to';
-	        case 'web': return 'webpage';
-	        case 'add': return 'address';
-	        case 'sub': return 'suburb';
-	        case 'st': return 'state';
-	        case 'p_c': return 'postcode';
-	        case 'cou': return 'country';
-	        
-	        case 'date_c': return 'created';
-	        case 'date_m': return array('created', 'modified');
-	        case 'hits': return 'hits';
-	        
-	        case 'misc':
-	            if ($params->get('t', 'info') == 'info') { // take misc
-	                return 'misc';
-	            } else { // take metadescription
-	                return 'metadesc';
-	            }
-	        case 'f_f_a':
-	            switch ($params->get('a_fmt', 'zss')) {
-	                case 'ssz' :
-	                case 'zss' :
-	                    return array('address', 'suburb', 'state', 'postcode');
-	                case 'zs' :
-	                case 'sz' :
-	                    return array('address', 'suburb', 'postcode');
-	                case 'ss' :
-	                    return array('address', 'suburb', 'state');
-	            }
-	        default: return '';
-	    }
+		switch ($selected_field) {
+			case 'c_p': return 'con_position';
+			case 'tel': return 'telephone';
+			case 'mob': return 'mobile';
+			case 'fax': return 'fax';
+			case 'mail': return 'email_to';
+			case 'web': return 'webpage';
+			case 'add': return 'address';
+			case 'sub': return 'suburb';
+			case 'st': return 'state';
+			case 'p_c': return 'postcode';
+			case 'cou': return 'country';
 
-	    return null;
+			case 'date_c': return 'created';
+			case 'date_m': return array('created', 'modified');
+			case 'hits': return 'hits';
+
+			case 'misc':
+				if ($params->get('t', 'info') == 'info') { // take misc
+					return 'misc';
+				} else { // take metadescription
+					return 'metadesc';
+				}
+			case 'f_f_a':
+				switch ($params->get('a_fmt', 'zss')) {
+					case 'ssz' :
+					case 'zss' :
+						return array('address', 'suburb', 'state', 'postcode');
+					case 'zs' :
+					case 'sz' :
+						return array('address', 'suburb', 'postcode');
+					case 'ss' :
+						return array('address', 'suburb', 'state');
+				}
+			default: return '';
+		}
+
+		return null;
 	}
 
 	/**
@@ -1117,10 +1171,10 @@ abstract class Helper
 						//}
 
 						foreach ($sub_categories_array as $subcategory_object) {
-						    $condition = ($get_sub_categories == 'all' || ($subcategory_object->level - $category_object->level) <= $levels);
-						    if ($condition) {
-						        $categories_array[] = $subcategory_object->id;
-						    }
+							$condition = ($get_sub_categories == 'all' || ($subcategory_object->level - $category_object->level) <= $levels);
+							if ($condition) {
+								$categories_array[] = $subcategory_object->id;
+							}
 						}
 					}
 
@@ -1186,97 +1240,97 @@ abstract class Helper
 			case 'rsf' :
 				$formatted_name = $firstpart;
 				if (!empty($remainingpart)) {
-					$formatted_name = $remainingpart." ".$formatted_name;
+					$formatted_name = $remainingpart . ' ' . $formatted_name;
 				}
 				break;
 			case 'fsr' :
 				$formatted_name = $firstpart;
 				if (!empty($remainingpart)) {
-					$formatted_name = $formatted_name." ".$remainingpart;
+					$formatted_name = $formatted_name . ' ' . $remainingpart;
 				}
 				break;
 			case 'rcf' :
 				$formatted_name = $firstpart;
 				if (!empty($remainingpart)) {
-					$formatted_name = $remainingpart.", ".$formatted_name;
+					$formatted_name = $remainingpart . ', ' . $formatted_name;
 				}
 				break;
 			case 'fcr' :
 				$formatted_name = $firstpart;
 				if (!empty($remainingpart)) {
-					$formatted_name = $formatted_name.", ".$remainingpart;
+					$formatted_name = $formatted_name . ', ' . $remainingpart;
 				}
 				break;
 			case 'psl' :
 				$formatted_name = $lastpart;
 				if (!empty($previouspart)) {
-					$formatted_name = $previouspart." ".$formatted_name;
+					$formatted_name = $previouspart . ' ' . $formatted_name;
 				}
 				break;
 			case 'lsp' :
 				$formatted_name = $lastpart;
 				if (!empty($previouspart)) {
-					$formatted_name = $formatted_name." ".$previouspart;
+					$formatted_name = $formatted_name . ' ' . $previouspart;
 				}
 				break;
 			case 'pcl' :
 				$formatted_name = $lastpart;
 				if (!empty($previouspart)) {
-					$formatted_name = $previouspart.", ".$formatted_name;
+					$formatted_name = $previouspart . ', ' . $formatted_name;
 				}
 				break;
 			case 'lcp' :
 				$formatted_name = $lastpart;
 				if (!empty($previouspart)) {
-					$formatted_name = $formatted_name.", ".$previouspart;
+					$formatted_name = $formatted_name . ', ' . $previouspart;
 				}
 				break;
 			case 'rsfd' :
-				$formatted_name = substr($firstpart, 0, 1).'.';
+				$formatted_name = substr($firstpart, 0, 1) . '.';
 				if (!empty($remainingpart)) {
-					$formatted_name = $remainingpart." ".$formatted_name;
+					$formatted_name = $remainingpart . ' ' . $formatted_name;
 				}
 				break;
 			case 'fdsr' :
-				$formatted_name = substr($firstpart, 0, 1).'.';
+				$formatted_name = substr($firstpart, 0, 1) . '.';
 				if (!empty($remainingpart)) {
-					$formatted_name = $formatted_name." ".$remainingpart;
+					$formatted_name = $formatted_name . ' ' . $remainingpart;
 				}
 				break;
 			case 'psld' :
 				$formatted_name = substr($lastpart, 0, 1).'.';
 				if (!empty($previouspart)) {
-					$formatted_name = $previouspart." ".$formatted_name;
+					$formatted_name = $previouspart . ' ' . $formatted_name;
 				}
 				break;
 			case 'ldsp' :
-				$formatted_name = substr($lastpart, 0, 1).'.';
+				$formatted_name = substr($lastpart, 0, 1) . '.';
 				if (!empty($previouspart)) {
-					$formatted_name = $formatted_name." ".$previouspart;
+					$formatted_name = $formatted_name . ' ' . $previouspart;
 				}
 				break;
 			case 'rdsf' :
 				$formatted_name = $firstpart;
 				if (!empty($remainingpart)) {
-					$formatted_name = substr($remainingpart, 0, 1).". ".$formatted_name;
+					$formatted_name = substr($remainingpart, 0, 1) . '. ' . $formatted_name;
 				}
 				break;
 			case 'fsrd' :
 				$formatted_name = $firstpart;
 				if (!empty($remainingpart)) {
-					$formatted_name = $formatted_name." ".substr($remainingpart, 0, 1).'.';
+					$formatted_name = $formatted_name . ' ' . substr($remainingpart, 0, 1) . '.';
 				}
 				break;
 			case 'pdsl' :
 				$formatted_name = $lastpart;
 				if (!empty($previouspart)) {
-					$formatted_name = substr($previouspart, 0, 1).". ".$formatted_name;
+					$formatted_name = substr($previouspart, 0, 1) . '. ' . $formatted_name;
 				}
 				break;
 			case 'lspd' :
 				$formatted_name = $lastpart;
 				if (!empty($previouspart)) {
-					$formatted_name = $formatted_name." ".substr($previouspart, 0, 1).'.';
+					$formatted_name = $formatted_name . ' ' . substr($previouspart, 0, 1) . '.';
 				}
 				break;
 			default :
@@ -1291,35 +1345,35 @@ abstract class Helper
 
 	public static function getTooltipClass($show_tooltip = false)
 	{
-	    if ($show_tooltip) {
-	        return ' hasTooltip';
-	    }
+		if ($show_tooltip) {
+			return ' hasTooltip';
+		}
 
-	    return '';
+		return '';
 	}
 
 	public static function getTitleAttribute($title, $show_tooltip = false)
 	{
-	    if ($show_tooltip) {
-	        return ' title="'.$title.'"';
-	    }
+		if ($show_tooltip) {
+			return ' title="' . $title . '"';
+		}
 
-	    return '';
+		return '';
 	}
 
 	public static function getClassAttribute($show_tooltip = false, $existing_classes = '')
 	{
-	    $classes = trim($existing_classes);
+		$classes = trim($existing_classes);
 
-	    if ($show_tooltip) {
-	        $classes .= ' hasTooltip';
-	    }
+		if ($show_tooltip) {
+			$classes .= ' hasTooltip';
+		}
 
-	    if ($classes) {
-	        return ' class="'.ltrim($classes).'"';
-	    }
+		if ($classes) {
+			return ' class="' . ltrim($classes) . '"';
+		}
 
-	    return '';
+		return '';
 	}
 
 	public static function getContactGlobalParams()
@@ -1330,13 +1384,13 @@ abstract class Helper
 
 			$global_contact_params = ComponentHelper::getParams('com_contact');
 
-			self::$contact_globals->set("linka_name", trim($global_contact_params->get('linka_name', '')));
-			self::$contact_globals->set("linkb_name", trim($global_contact_params->get('linkb_name', '')));
-			self::$contact_globals->set("linkc_name", trim($global_contact_params->get('linkc_name', '')));
-			self::$contact_globals->set("linkd_name", trim($global_contact_params->get('linkd_name', '')));
-			self::$contact_globals->set("linke_name", trim($global_contact_params->get('linke_name', '')));
+			self::$contact_globals->set('linka_name', trim($global_contact_params->get('linka_name', '')));
+			self::$contact_globals->set('linkb_name', trim($global_contact_params->get('linkb_name', '')));
+			self::$contact_globals->set('linkc_name', trim($global_contact_params->get('linkc_name', '')));
+			self::$contact_globals->set('linkd_name', trim($global_contact_params->get('linkd_name', '')));
+			self::$contact_globals->set('linke_name', trim($global_contact_params->get('linke_name', '')));
 
-			self::$contact_globals->set("default_image", $global_contact_params->get('image', ''));
+			self::$contact_globals->set('default_image', $global_contact_params->get('image', ''));
 		}
 
 		return self::$contact_globals;
@@ -1344,69 +1398,69 @@ abstract class Helper
 
 	public static function renderName($params, $value, $extraclass = '')
 	{
-	    $html = '';
+		$html = '';
 
-	    $show_label = ($params->get('s_name_lbl', 0) == 1) ? true : false;
-	    $show_icon = ($params->get('s_name_lbl', 0) == 2) ? true : false;
-	    $label_by_default = ($params->get('s_f_lbl', 0) == 1) ? true : false;
-	    $icon_by_default = ($params->get('s_f_lbl', 0) == 2) ? true : false;
-	    $label_separator = $params->get('lbl_separator', '');
+		$show_label = ($params->get('s_name_lbl', 0) == 1) ? true : false;
+		$show_icon = ($params->get('s_name_lbl', 0) == 2) ? true : false;
+		$label_by_default = ($params->get('s_f_lbl', 0) == 1) ? true : false;
+		$icon_by_default = ($params->get('s_f_lbl', 0) == 2) ? true : false;
+		$label_separator = $params->get('lbl_separator', '');
 
-	    $label = empty($params->get('name_lbl', '')) ? Text::_('MOD_TROMBINOSCOPE_LABEL_NAME') : $params->get('name_lbl', '');
-	    $icon = empty($params->get('name_icon', '')) ? 'user' : $params->get('name_icon', '');
+		$label = empty($params->get('name_lbl', '')) ? Text::_('MOD_TROMBINOSCOPE_LABEL_NAME') : $params->get('name_lbl', '');
+		$icon = empty($params->get('name_icon', '')) ? 'user' : $params->get('name_icon', '');
 
-	    if (!$params->get('force_one_line', 1)) {
-	    	$extraclass .= ' wrap';
+		if (!$params->get('force_one_line', 1)) {
+			$extraclass .= ' wrap';
 
-	    	if ($params->get('wrap_pre', 1) == 0) {
-	    		$extraclass .= ' alignself';
-	    	}
-	    } else {
-	    	$extraclass .= ' nowrap';
-	    }
+			if ($params->get('wrap_pre', 1) == 0) {
+				$extraclass .= ' alignself';
+			}
+		} else {
+			$extraclass .= ' nowrap';
+		}
 
-	    if ($params->get('wrap_pre', 1) == 2) {
-	    	$extraclass .= ' beneath';
-	    }
+		if ($params->get('wrap_pre', 1) == 2) {
+			$extraclass .= ' beneath';
+		}
 
-	    $extraclass = trim($extraclass);
+		$extraclass = trim($extraclass);
 
-	    $html .= '<div class="personfield index0 fieldname' . ($extraclass ? ' ' . $extraclass : '') . '">';
+		$html .= '<div class="personfield index0 fieldname' . ($extraclass ? ' ' . $extraclass : '') . '">';
 
-        if ($show_label) { // labels
-            $html .= '<span class="fieldlabel">'.$label.$label_separator.'</span>';
-        } else if ($show_icon) { // icons
-            $html .= '<i class="icon SYWicon-'.$icon.'" aria-hidden="true"></i>';
-        } else { // no icon or no label for the field
-            if ($label_by_default) { // force 'no label' even if there is one
-                $html .= '<span class="nolabel"></span>';
-            } else if ($icon_by_default) { // force 'no icon' even if one exists for the field
-                $html .= '<i class="noicon" aria-hidden="true"></i>';
-            }
-        }
+		if ($show_label) { // labels
+			$html .= '<span class="fieldlabel">'.$label.$label_separator.'</span>';
+		} else if ($show_icon) { // icons
+			$html .= '<i class="icon SYWicon-'.$icon.'" aria-hidden="true"></i>';
+		} else { // no icon or no label for the field
+			if ($label_by_default) { // force 'no label' even if there is one
+				$html .= '<span class="nolabel"></span>';
+			} else if ($icon_by_default) { // force 'no icon' even if one exists for the field
+				$html .= '<i class="noicon" aria-hidden="true"></i>';
+			}
+		}
 
-	    $html .= $value;
+		$html .= $value;
 
-	    $html .= '</div>';
+		$html .= '</div>';
 
-	    return $html;
+		return $html;
 	}
 
 	public static function getRequestedLinks($params, $prefix = '', $subform = '')
 	{
 		$links = array();
 
-		$user = Factory::getUser();
-		$groups	= $user->getAuthorisedViewLevels();
+		$user = Factory::getApplication()->getIdentity();
+		$view_levels = $user->getAuthorisedViewLevels();
 
 		// get data from subform items
 
 		$detail_blocs = $params->get($prefix . ($subform ? $subform : 'detaillink_blocks')); // array of objects
 		if (!empty($detail_blocs) && is_object($detail_blocs)) {
 			$j = 0;
-			foreach ($detail_blocs as $i => $detail_bloc) {
+			foreach ($detail_blocs as $detail_bloc) {
 				$j++;
-				if ($detail_bloc->lf != 'none' && in_array($detail_bloc->lf_access, $groups)) {
+				if ($detail_bloc->lf != 'none' && in_array($detail_bloc->lf_access, $view_levels)) {
 
 					$info_details = array();
 
@@ -1427,24 +1481,24 @@ abstract class Helper
 
 	public static function renderLink($params, $item, $index, $requested_link, $extraclass = '')
 	{
-	    return self::getFieldOutput($index, $requested_link, $params, $item, $extraclass, true);
+		return self::getFieldOutput($index, $requested_link, $params, $item, $extraclass, true);
 	}
 
 	public static function getRequestedInfos($params, $prefix = '', $subform = '')
 	{
 		$infos = array();
 
-		$user = Factory::getUser();
-		$groups	= $user->getAuthorisedViewLevels();
+		$user = Factory::getApplication()->getIdentity();
+		$view_levels = $user->getAuthorisedViewLevels();
 
 		// get data from subform items
 
 		$detail_blocs = $params->get($prefix . ($subform ? $subform : 'detail_blocks')); // array of objects
 		if (!empty($detail_blocs) && is_object($detail_blocs)) {
 			$j = 0;
-			foreach ($detail_blocs as $i => $detail_bloc) {
+			foreach ($detail_blocs as $detail_bloc) {
 				$j++;
-				if ($detail_bloc->f != 'none' && in_array($detail_bloc->f_access, $groups)) {
+				if ($detail_bloc->f != 'none' && in_array($detail_bloc->f_access, $view_levels)) {
 
 					$info_details = array();
 
@@ -1466,19 +1520,11 @@ abstract class Helper
 
 	public static function renderInfo($params, $item, $index, $requested_info, $extraclass = '')
 	{
-	    return self::getFieldOutput($index, $requested_info, $params, $item, $extraclass);
+		return self::getFieldOutput($index, $requested_info, $params, $item, $extraclass);
 	}
 
 	public static function getFieldOutput($index, $info_details, $params, $item, $extraclass = '', $iconlinkonly = false)
 	{
-		// restricted access
-
-		// 		$user = Factory::getUser();
-		// 		$groups	= $user->getAuthorisedViewLevels();
-		// 		if (!in_array($fieldaccess, $groups)) {
-		// 			return $html;
-		// 		}
-
 		$html = '';
 
 		$fieldname = $info_details['name'];
@@ -1526,203 +1572,203 @@ abstract class Helper
 				break;
 
 			case 'c_p' : // con_position
-			    $value = trim($item->con_position);
-			    $class = 'fieldposition';
-			    if ($value) {
-    			    if (strpos($value, 'POSITION_') !== false) {
-    			        $field_array = explode(',', $value);
-    					$field_array_fixed = array();
-    					$last_field = '';
-    					foreach ($field_array as $field_element) {
-    						$field_array_fixed[] = Text::_(trim($field_element));
-    					}
-    					$count = count($field_array);
-    					if ($count > 1) {
-    						$last_field = $field_array_fixed[$count - 1];
-    						unset($field_array_fixed[$count - 1]);
-    						$value = implode(', ', $field_array_fixed);
-    						$value .= Text::_('TROMBINOSCOPEEXTENDED_AND').' '.$last_field;
-    					} else {
-    					    $value = Text::_($value);
-    					}
-    				}
-    				$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_POSITION') : $fieldlabel;
-    				$icon_class = !empty($fieldicon) ? $fieldicon : 'briefcase';
-			    }
+				$value = trim($item->con_position);
+				$class = 'fieldposition';
+				if ($value) {
+					if (strpos($value, 'POSITION_') !== false) {
+						$field_array = explode(',', $value);
+						$field_array_fixed = array();
+						$last_field = '';
+						foreach ($field_array as $field_element) {
+							$field_array_fixed[] = Text::_(trim($field_element));
+						}
+						$count = count($field_array);
+						if ($count > 1) {
+							$last_field = $field_array_fixed[$count - 1];
+							unset($field_array_fixed[$count - 1]);
+							$value = implode(', ', $field_array_fixed);
+							$value .= Text::_('TROMBINOSCOPEEXTENDED_AND').' '.$last_field;
+						} else {
+							$value = Text::_($value);
+						}
+					}
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_POSITION') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'briefcase';
+				}
 				break;
 
 			case 'tel' : // telephone
-			    $value = trim($item->telephone);
-			    $class = 'fieldtel';
-			    if ($value) {
-    				if (SYWUtilities::isMobile()) {
-    					$value_is_link = true;
-    					//$show_link = true;
-    					$substitute_value = $value;
-    					//$title = $value;
-    					$value = 'tel:'.$value;
-    				}
-    				$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_TELEPHONE') : $fieldlabel;
-    				$icon_class = !empty($fieldicon) ? $fieldicon : 'phone';
-			    }
+				$value = trim($item->telephone);
+				$class = 'fieldtel';
+				if ($value) {
+					if (SYWUtilities::isMobile()) {
+						$value_is_link = true;
+						//$show_link = true;
+						$substitute_value = $value;
+						//$title = $value;
+						$value = 'tel:'.$value;
+					}
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_TELEPHONE') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'phone';
+				}
 				break;
 
 			case 'mob' : // mobile
-			    $value = trim($item->mobile);
-			    $class = 'fieldmobile';
-			    if ($value) {
-    				if (SYWUtilities::isMobile()) {
-    					$value_is_link = true;
-    					//$show_link = true;
-    					$substitute_value = $value;
-    					//$title = $value;
-    					$value = 'tel:'.$value;
-    				}
-    				$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_MOBILE') : $fieldlabel;
-    				$icon_class = !empty($fieldicon) ? $fieldicon : 'mobile';
-			    }
+				$value = trim($item->mobile);
+				$class = 'fieldmobile';
+				if ($value) {
+					if (SYWUtilities::isMobile()) {
+						$value_is_link = true;
+						//$show_link = true;
+						$substitute_value = $value;
+						//$title = $value;
+						$value = 'tel:'.$value;
+					}
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_MOBILE') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'mobile';
+				}
 				break;
 
 			case 'fax' : // fax
-			    $value = trim($item->fax);
-			    $class = 'fieldfax';
-			    if ($value) {
-			        if (SYWUtilities::isMobile()) {
-			            $value_is_link = true;
-			            //$show_link = true;
-			            $substitute_value = $value;
-			            //$title = $value;
-			            $value = 'tel:'.$value;
-			        }
-    				$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_FAX') : $fieldlabel;
-    				$icon_class = !empty($fieldicon) ? $fieldicon : 'fax';
-			    }
+				$value = trim($item->fax);
+				$class = 'fieldfax';
+				if ($value) {
+					if (SYWUtilities::isMobile()) {
+						$value_is_link = true;
+						//$show_link = true;
+						$substitute_value = $value;
+						//$title = $value;
+						$value = 'tel:'.$value;
+					}
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_FAX') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'fax';
+				}
 				break;
 
 			case 'mail' : // email_to
-			    $initial_value = trim($item->email_to);
-			    $class = 'fieldemail';
+				$initial_value = trim($item->email_to);
+				$class = 'fieldemail';
 
-			    if (trim($params->get('e_substitut', '')) == '') {
-			    	$class .= ' breakall';
-			    }
+				if (trim($params->get('e_substitut', '')) == '') {
+					$class .= ' breakall';
+				}
 
-			    if ($initial_value) {
+				if ($initial_value) {
 
-			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_EMAIL') : $fieldlabel;
-			        $icon_class = !empty($fieldicon) ? $fieldicon : 'mail';
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_EMAIL') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'mail';
 
-    			    $substitute_value = (trim($params->get('e_substitut', '')) == '') ? $initial_value : $params->get('e_substitut', '');
-    				switch ($params->get('link_e', 1)) {
-    					case 1: // mailto
-					        $value = 'mailto:'.$initial_value;
-					        //$title = $initial_value;
+					$substitute_value = (trim($params->get('e_substitut', '')) == '') ? $initial_value : $params->get('e_substitut', '');
+					switch ($params->get('link_e', 1)) {
+						case 1: // mailto
+							$value = 'mailto:'.$initial_value;
+							//$title = $initial_value;
 							$value_is_link = true;
 							$target = '_blank';
 							//$show_link = true;
 							if ($params->get('cloak_e', false)) {
-							    $generated_link_tag = '<span class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" aria-label="'.$label.'" '.self::getTitleAttribute($label, $fieldtooltip).'>';
+								$generated_link_tag = '<span class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" aria-label="'.$label.'" '.self::getTitleAttribute($label, $fieldtooltip).'>';
 								if ($params->get('e_substitut', '') != '') {
-								    $generated_link_tag .= HTMLHelper::_('email.cloak', $initial_value, true, $params->get('e_substitut', ''), false);
+									$generated_link_tag .= HTMLHelper::_('email.cloak', $initial_value, true, $params->get('e_substitut', ''), false);
 								} else {
-								    $generated_link_tag .= HTMLHelper::_('email.cloak', $initial_value);
+									$generated_link_tag .= HTMLHelper::_('email.cloak', $initial_value);
 								}
 								$generated_link_tag .= '</span>';
 							}
-    						break;
-    					case 2: // contact
+							break;
+						case 2: // contact
 							$value_is_link = true;
 							//$show_link = true;
 							//$title = Text::_('MOD_TROMBINOSCOPE_LABEL_EMAIL');
 							$value = Route::_(ContactRouteHelper::getContactRoute($item->slug, $item->catid, $item->language));
-    						break;
-    					default: // no link
-    						if (!$iconlinkonly) {
-    						    $value = $initial_value;
-    						}
-    				}
-			    }
+							break;
+						default: // no link
+							if (!$iconlinkonly) {
+								$value = $initial_value;
+							}
+					}
+				}
 				break;
 
 			case 'web' : // webpage
-			    $value = trim($item->webpage);
-			    $class = 'fieldwebpage';
+				$value = trim($item->webpage);
+				$class = 'fieldwebpage';
 
-			    if (trim($params->get('w_substitut', '')) == '') {
-			    	$class .= ' breakall';
-			    }
+				if (trim($params->get('w_substitut', '')) == '') {
+					$class .= ' breakall';
+				}
 
-			    if ($value) {
-    				$value_is_link = true;
-    				//$show_link = true;
-    				
-    				$value = rtrim($value, '/');
+				if ($value) {
+					$value_is_link = true;
+					//$show_link = true;
+					
+					$value = rtrim($value, '/');
 
-    				if (!Uri::isInternal($value)) {
-    				    $target = '_blank';
+					if (!Uri::isInternal($value)) {
+						$target = '_blank';
 					}
 
 					if (!$params->get('protocol', true)) {
 						//$title = self::remove_protocol($value);
-					    $substitute_value = (trim($params->get('w_substitut', '')) == '') ? self::remove_protocol($value) : $params->get('w_substitut', '');
+						$substitute_value = (trim($params->get('w_substitut', '')) == '') ? self::remove_protocol($value) : $params->get('w_substitut', '');
 					} else {
 						//$title = $value;
 						$substitute_value = (trim($params->get('w_substitut', '')) == '') ? $value : $params->get('w_substitut', '');
 					}
 
-    				$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_WEBPAGE') : $fieldlabel;
-    				$icon_class = !empty($fieldicon) ? $fieldicon : 'earth';
-			    }
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_WEBPAGE') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'earth';
+				}
 				break;
 
 			case 'add' : // address
-			    $value = trim($item->address, ", \t\n\r\0\x0B"); // single quotes won't work
-			    $class = 'fieldaddress';
-			    if ($value) {
-    				//$title = $value;
-    				$value = nl2br($value);
-    				$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_ADDRESS') : $fieldlabel;
-    				$icon_class = !empty($fieldicon) ? $fieldicon : 'home';
-			    }
+				$value = trim($item->address, ", \t\n\r\0\x0B"); // single quotes won't work
+				$class = 'fieldaddress';
+				if ($value) {
+					//$title = $value;
+					$value = nl2br($value);
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_ADDRESS') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'home';
+				}
 				break;
 
 			case 'f_f_a' : // address + zipcode... formatted
 
-			    $address = trim($item->address, ", \t\n\r\0\x0B");
-			    if ($address) {
-			        $address .= "\n";
-			    }
-			    switch ($params->get('a_fmt', 'ssz')) {
-			        case 'ssz' :
-			            $value = $address . trim($item->suburb) . (trim($item->state) == '' ? '' : ', ' . trim($item->state)) . ' ' . trim($item->postcode);
-			            break;
-			        case 'zss' :
-			            $value = $address . trim($item->postcode) . (trim($item->suburb) == '' ? '' : ' ' . trim($item->suburb)) . ', ' . trim($item->state);
-			            break;
-			        case 'zs' :
-			            $value = $address . trim($item->postcode) . ' ' . trim($item->suburb);
-			            break;
-			        case 'sz' :
-			            $value = $address . trim($item->suburb) . ' ' . trim($item->postcode);
-			            break;
-			        case 'ss' :
-			            $value = $address . trim($item->suburb) . ', ' . trim($item->state);
-			            break;
-			        default :
-			            $value = '';
-			    }
+				$address = trim($item->address, ", \t\n\r\0\x0B");
+				if ($address) {
+					$address .= '\n';
+				}
+				switch ($params->get('a_fmt', 'ssz')) {
+					case 'ssz' :
+						$value = $address . trim($item->suburb) . (trim($item->state) == '' ? '' : ', ' . trim($item->state)) . ' ' . trim($item->postcode);
+						break;
+					case 'zss' :
+						$value = $address . trim($item->postcode) . (trim($item->suburb) == '' ? '' : ' ' . trim($item->suburb)) . ', ' . trim($item->state);
+						break;
+					case 'zs' :
+						$value = $address . trim($item->postcode) . ' ' . trim($item->suburb);
+						break;
+					case 'sz' :
+						$value = $address . trim($item->suburb) . ' ' . trim($item->postcode);
+						break;
+					case 'ss' :
+						$value = $address . trim($item->suburb) . ', ' . trim($item->state);
+						break;
+					default :
+						$value = '';
+				}
 
-			    $value = trim($value, ", \t\n\r\0\x0B");
+				$value = trim($value, ", \t\n\r\0\x0B");
 
-			    $class = 'fieldformattedaddress';
-			    if ($value) {
+				$class = 'fieldformattedaddress';
+				if ($value) {
 
-			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_FORMATTEDADDRESS') : $fieldlabel;
-			        $icon_class = !empty($fieldicon) ? $fieldicon : 'home';
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_FORMATTEDADDRESS') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'home';
 
-    				//$title = $value;
-			        if ($params->get('a_link_map', 0) == 1) { // auto
-			            $substitute_value = nl2br($value);
+					//$title = $value;
+					if ($params->get('a_link_map', 0) == 1) { // auto
+						$substitute_value = nl2br($value);
 						$value = self::getAutoMapLink($value, trim($params->get('auto_map_params', '')));
 						$value_is_link = true;
 						$target = '_blank';
@@ -1730,43 +1776,43 @@ abstract class Helper
 					} else {
 						$value = nl2br($value);
 					}
-			    }
+				}
 				break;
 
 			case 'sub' : // suburb
-			    $value = trim($item->suburb);
-			    $class = 'fieldsuburb';
-			    if ($value) {
-			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_SUBURB') : $fieldlabel;
-			        $icon_class = !empty($fieldicon) ? $fieldicon : '';
-			    }
+				$value = trim($item->suburb);
+				$class = 'fieldsuburb';
+				if ($value) {
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_SUBURB') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : '';
+				}
 				break;
 
 			case 'st' : // state
-			    $value = trim($item->state);
-			    $class = 'fieldstate';
-			    if ($value) {
-			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_STATE') : $fieldlabel;
-			        $icon_class = !empty($fieldicon) ? $fieldicon : '';
-			    }
+				$value = trim($item->state);
+				$class = 'fieldstate';
+				if ($value) {
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_STATE') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : '';
+				}
 				break;
 
 			case 'p_c' : // postcode
-			    $value = trim($item->postcode);
-			    $class = 'fieldpostcode';
-			    if ($value) {
-			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_POSTCODE') : $fieldlabel;
-			        $icon_class = !empty($fieldicon) ? $fieldicon : '';
-			    }
+				$value = trim($item->postcode);
+				$class = 'fieldpostcode';
+				if ($value) {
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_POSTCODE') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : '';
+				}
 				break;
 
 			case 'cou' : // country
-			    $value = trim($item->country);
-			    $class = 'fieldcountry';
-			    if ($value) {
-				    $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_COUNTRY') : $fieldlabel;
-				    $icon_class = !empty($fieldicon) ? $fieldicon : 'flag2';
-			    }
+				$value = trim($item->country);
+				$class = 'fieldcountry';
+				if ($value) {
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_COUNTRY') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'flag2';
+				}
 				break;
 
 			case 'misc' :
@@ -1784,71 +1830,71 @@ abstract class Helper
 				$class = 'fieldmisc';
 
 				if ($value) {
-    				$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_MISC') : $fieldlabel;
-    				//$title = $label;
-    				$icon_class = !empty($fieldicon) ? $fieldicon : 'info';
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_MISC') : $fieldlabel;
+					//$title = $label;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'info';
 				}
 				break;
 
 			case 'date_c' : // date created
-			    $value = HTMLHelper::_('date', $item->created, $params->get('d_format', 'd F Y'));
-			    $class = 'fieldcreated';
-			    if ($value) {
-			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_CREATED') : $fieldlabel;
-			        $icon_class = !empty($fieldicon) ? $fieldicon : 'calendar';
-			    }
-			    break;
-			    
+				$value = HTMLHelper::_('date', $item->created, $params->get('d_format', 'd F Y'));
+				$class = 'fieldcreated';
+				if ($value) {
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_CREATED') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'calendar';
+				}
+				break;
+				
 			case 'date_m' : // date modified - if null, use created
-			    
-			    $date_modified = $item->modified;
-			    if ($date_modified == Factory::getDbo()->getNullDate()) {
-			        $date_modified = $item->created;
-			    }
-			    
-			    $value = HTMLHelper::_('date', $date_modified, $params->get('d_format', 'd F Y'));
-			    $class = 'fieldmodified';
-			    if ($value) {
-			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_MODIFIED') : $fieldlabel;
-			        $icon_class = !empty($fieldicon) ? $fieldicon : 'calendar';
-			    }
-			    break;
-			    
+				
+				$date_modified = $item->modified;
+				if ($date_modified == Factory::getDbo()->getNullDate()) {
+					$date_modified = $item->created;
+				}
+				
+				$value = HTMLHelper::_('date', $date_modified, $params->get('d_format', 'd F Y'));
+				$class = 'fieldmodified';
+				if ($value) {
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_MODIFIED') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'calendar';
+				}
+				break;
+				
 			case 'hits' : // hits
-			    $value = $item->hits;
-			    $class = 'fieldhits';
-			    if ($value) {
-			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_HITS') : $fieldlabel;
-			        $icon_class = !empty($fieldicon) ? $fieldicon : 'eye';
-			    }
-			    break;
+				$value = $item->hits;
+				$class = 'fieldhits';
+				if ($value) {
+					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_HITS') : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'eye';
+				}
+				break;
 
 			case 'a': case 'b': case 'c': case 'd': case 'e': // links a .. e
 			case 'a_sw': case 'b_sw': case 'c_sw': case 'd_sw': case 'e_sw':
 				$value = trim($item_params->get('link' . str_replace('_sw', '', $info_details['name']), ''));
 				$class = 'fieldlink' . str_replace('_sw', '', $info_details['name']);
 				if ($value) {
-				    
-				    $value = rtrim($value, '/');
-				    
-				    if (!$params->get('protocol', true)) {
-				        $substitute_value = self::remove_protocol($value);
-				    }
+					
+					$value = rtrim($value, '/');
+					
+					if (!$params->get('protocol', true)) {
+						$substitute_value = self::remove_protocol($value);
+					}
 
-				    $value_is_link = true;
-				    $label = empty($fieldlabel) ? ($params->get('linkae_l_as_s', 0) ? Text::_('MOD_TROMBINOSCOPE_LABEL_LINK') : self::getLabelForLink('link' . str_replace('_sw', '', $info_details['name']), $value, $item_params, false)) : $fieldlabel;
-				    $icon_class = !empty($fieldicon) ? $fieldicon : self::getIconForLink($value);
+					$value_is_link = true;
+					$label = empty($fieldlabel) ? ($params->get('linkae_l_as_s', 0) ? Text::_('MOD_TROMBINOSCOPE_LABEL_LINK') : self::getLabelForLink('link' . str_replace('_sw', '', $info_details['name']), $value, $item_params, false)) : $fieldlabel;
+					$icon_class = !empty($fieldicon) ? $fieldicon : self::getIconForLink($value);
 
-				    if (strpos($info_details['name'], '_sw') === false) {
-				        $target = '_blank';
-				    }
+					if (strpos($info_details['name'], '_sw') === false) {
+						$target = '_blank';
+					}
 
-				    if ($params->get('linkae_l_as_s', 0)) {
-				    	$linkX_label = self::getLabelForLink('link' . str_replace('_sw', '', $info_details['name']), $value, $item_params, true);
-					    if ($linkX_label) {
-					    	$substitute_value = $linkX_label;
-					    }
-				    }
+					if ($params->get('linkae_l_as_s', 0)) {
+						$linkX_label = self::getLabelForLink('link' . str_replace('_sw', '', $info_details['name']), $value, $item_params, true);
+						if ($linkX_label) {
+							$substitute_value = $linkX_label;
+						}
+					}
 				}
 				break;
 		}
@@ -1857,20 +1903,20 @@ abstract class Helper
 
 		if ($iconlinkonly) {
 			if ($value) {
-			    $html .= '<li class="iconlink index'.$index.' '.$class.($extraclass ? ' '.$extraclass : '').'">';
-			     $html .= '<a class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" aria-label="'.$label.'" href="'.$value.'"'.($target ? ' target="'.$target.'"' : '').self::getTitleAttribute($label, $fieldtooltip).'>';
-                        $html .= '<i class="icon SYWicon-'.$icon_class.'" aria-hidden="true"></i>';
-                        $html .= '<span>'.($substitute_value ? $substitute_value : $value).'</span>'; // hidden
-    				$html .= '</a>';
+				$html .= '<li class="iconlink index'.$index.' '.$class.($extraclass ? ' '.$extraclass : '').'">';
+				 $html .= '<a class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" aria-label="'.$label.'" href="'.$value.'"'.($target ? ' target="'.$target.'"' : '').self::getTitleAttribute($label, $fieldtooltip).'>';
+						$html .= '<i class="icon SYWicon-'.$icon_class.'" aria-hidden="true"></i>';
+						$html .= '<span>'.($substitute_value ? $substitute_value : $value).'</span>'; // hidden
+					$html .= '</a>';
 				$html .= '</li>';
 			}
 		} else {
 			if (!$params->get('k_s', 1) && empty($value) && $class != 'empty') {
 				return '';
 			} else {
-			    $html .= '<div class="personfield index'.$index.' '.$class.($extraclass ? ' '.$extraclass : '').'">';
+				$html .= '<div class="personfield index'.$index.' '.$class.($extraclass ? ' '.$extraclass : '').'">';
 				if (empty($value)) {
-				    $html .= '<span>&nbsp;</span>';
+					$html .= '<span>&nbsp;</span>';
 				} else {
 
 					if ($prefield == 1) { // labels
@@ -1893,21 +1939,12 @@ abstract class Helper
 						if (!empty($generated_link_tag)) {
 							$html .= $generated_link_tag;
 						} else {
-							//if ($show_link) {
-								//$label_as_title = empty($title) ? $label : $title;
-                                $html .= '<a class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" aria-label="'.$label.'" href="'.$value.'"'.($target ? ' target="'.$target.'"' : '').self::getTitleAttribute($label/*$label_as_title*/, $fieldtooltip).'>';
-                                    $html .= '<span>'.($substitute_value ? $substitute_value : $value).'</span>';
-								$html .= '</a>';
-							//} else {
-								//$value_as_title = empty($title) ? $value : $title;
-								//$html .= '<a class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" href="'.$value.'"'.($target ? ' target="'.$target.'"' : '').self::getTitleAttribute($value_as_title, $fieldtooltip).'>';
-                                    //$html .= '<span>'.$label.'</span>';
-								//$html .= '</a>';
-							//}
+							$html .= '<a class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" aria-label="'.$label.'" href="'.$value.'"'.($target ? ' target="'.$target.'"' : '').self::getTitleAttribute($label, $fieldtooltip).'>';
+								$html .= '<span>'.($substitute_value ? $substitute_value : $value).'</span>';
+							$html .= '</a>';
 						}
 					} else {
-						//$value_as_title = empty($title) ? $value : $title;
-					    $html .= '<span class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" aria-label="'.$label.'"'.self::getTitleAttribute($label/*$value_as_title*/, $fieldtooltip).'>'.($substitute_value ? $substitute_value : $value).'</span>';
+						$html .= '<span class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" aria-label="'.$label.'"'.self::getTitleAttribute($label, $fieldtooltip).'>'.($substitute_value ? $substitute_value : $value).'</span>';
 					}
 				}
 
@@ -1927,15 +1964,15 @@ abstract class Helper
 		if ($label) {
 			return $label;
 		} else {
-		    $globalparams = self::getContactGlobalParams();
-		    if ($globalparams->get($field.'_name')) {
-		        return $globalparams->get($field.'_name');
-		    }
+			$globalparams = self::getContactGlobalParams();
+			if ($globalparams->get($field.'_name')) {
+				return $globalparams->get($field.'_name');
+			}
 		}
 
 		foreach (self::$social_networks_labels as $key => $value) {
-		    if (strpos($link, $key) > 0) {
-		        return $value;
+			if (strpos($link, $key) > 0) {
+				return $value;
 			}
 		}
 
@@ -1951,10 +1988,10 @@ abstract class Helper
 	public static function getIconForLink($link)
 	{
 		foreach (self::$social_networks_icons as $key => $value) {
-	        if (strpos($link, $key) > 0) {
-	            return $value;
-	        }
-	    }
+			if (strpos($link, $key) > 0) {
+				return $value;
+			}
+		}
 
 		return 'earth';
 	}
@@ -1978,151 +2015,65 @@ abstract class Helper
 	 */
 	public static function getCroppedImage($module_id, $item_id, $imagesrc, $tmp_path, $clear_cache, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution = false, $thumbnail_mime_type = '')
 	{
-	    if (!extension_loaded('gd') && !extension_loaded('imagick')) {
-	        return $imagesrc; // return the original
-		}
-		
-		$imageext = File::getExt($imagesrc);
-		$original_imageext = $imageext;
-		
-		switch ($thumbnail_mime_type) {
-		    case 'image/jpg': $imageext = 'jpg'; break;
-		    case 'image/png': $imageext = 'png'; break;
-		    case 'image/webp': $imageext = 'webp'; break;
-		    case 'image/avif': $imageext = 'avif';
+		if (!extension_loaded('gd') && !extension_loaded('imagick')) {
+			return $imagesrc; // return the original
 		}
 
-		$filename = $tmp_path.'/thumb_'.$module_id.'_'.$item_id.'.'.$imageext;
-		$filename_highres = $tmp_path.'/thumb_'.$module_id.'_'.$item_id.'@2x.'.$imageext;
-		
+		$imageext = File::getExt($imagesrc);
+		$original_imageext = $imageext;
+
+		switch ($thumbnail_mime_type) {
+			case 'image/jpg': $imageext = 'jpg'; break;
+			case 'image/png': $imageext = 'png'; break;
+			case 'image/webp': $imageext = 'webp'; break;
+			case 'image/avif': $imageext = 'avif';
+		}
+
+		$filename = $tmp_path . '/thumb_' . $module_id . '_' . $item_id . '.' . $imageext;
+		$filename_highres = $tmp_path . '/thumb_' . $module_id . '_' . $item_id . '@2x.' . $imageext;
+
 		if ((!$clear_cache && !$create_high_resolution && File::exists(JPATH_ROOT . '/' . $filename))
-		    || (!$clear_cache && $create_high_resolution && File::exists(JPATH_ROOT . '/' . $filename) && File::exists(JPATH_ROOT . '/' . $filename_highres))) {
+			|| (!$clear_cache && $create_high_resolution && File::exists(JPATH_ROOT . '/' . $filename) && File::exists(JPATH_ROOT . '/' . $filename_highres))) {
 
 			// thumbnail already exists
 
 		} else { // create the thumbnail
 
-		    $image = new SYWImage($imagesrc);
-		    
-		    $creation_success = true;
+			$image = new SYWImage($imagesrc);
+
+			$creation_success = true;
 
 			if (is_null($image->getImagePath())) {
-			    $creation_success = false;
+				$creation_success = false;
 			} else if (is_null($image->getImageMimeType())) {
-			    $creation_success = false;
+				$creation_success = false;
 			} else if (is_null($image->getImage()) || $image->getImageWidth() == 0) {
-			    $creation_success = false;
+				$creation_success = false;
 			} else {
+				if ($image->toThumbnail($filename, $thumbnail_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter['filters'], $create_high_resolution)) {
 
-				// START find image compression plugin
+					if ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif') { // create fallback
 
-				$compression_plugin = null;
-				$compression_plugins_exist = PluginHelper::importPlugin('imagecompression');
+						$fallback_extension = 'png';
+						$fallback_mime_type = 'image/png';
 
-				if ($compression_plugins_exist) {
-
-					$plugins_available_for_compression = Factory::getApplication()->triggerEvent('onImageCompressionCheckAvailability', array($imageext, true));
-
-					foreach ($plugins_available_for_compression as $plugin_available_for_compression) {
-
-						$plugin_name = array_keys($plugin_available_for_compression)[0];
-						$available = $plugin_available_for_compression[$plugin_name];
-
-						if ($available) {
-							$filename_temp = $tmp_path.'/thumb_temp_'.$module_id.'_'.$item_id.'.'.$imageext;
-							$filename_highres_temp = $tmp_path.'/thumb_temp_'.$module_id.'_'.$item_id.'@2x.'.$imageext;
-
-							// does not take into account fallbacks
-
-							$plugin = PluginHelper::getPlugin('imagecompression', $plugin_name);
-							$classname = 'plgImageCompression'.$plugin_name;
-							$compression_plugin = new $classname($dispatcher, (array) $plugin);
-
-							break;
-							// uses the first plugin that returns true - useful if a plugin is limited (reached a limit of use)
-							// therefore the order of the plugins is important
+						// create fallback with original image mime type when the original is not webp or avif
+						if ($image->getImageMimeType() !== 'image/webp' && $image->getImageMimeType() !== 'image/avif') {
+							$fallback_extension = $original_imageext;
+							$fallback_mime_type = $image->getImageMimeType();
 						}
+
+						$creation_success = $image->toThumbnail($tmp_path . '/thumb_' . $module_id . '_' . $item_id . '.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter['filters'], $create_high_resolution);
 					}
-				}
-
-				// END find image compression plugin
-
-				if (!is_null($compression_plugin)) {
-				    
-				    if ($image->toThumbnail($filename_temp, $thumbnail_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter["filters"], $create_high_resolution)) {
-					
-    				    if ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif') { // create fallback
-    					    
-    					    $fallback_extension = 'png';
-    					    $fallback_mime_type = 'image/png';
-    					    
-    					    // create fallback with original image mime type when the original is not webp or avif
-    					    if ($image->getImageMimeType() !== 'image/webp' && $image->getImageMimeType() !== 'image/avif') {
-    					        $fallback_extension = $original_imageext;
-    					        $fallback_mime_type = $image->getImageMimeType();
-    					    }
-    					    
-    					    $creation_success = $image->toThumbnail($tmp_path.'/thumb_temp_'.$module_id.'_'.$item_id.'.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter["filters"], $create_high_resolution);
-    					}
-				    } else {
-				        $creation_success = false;
-				    }
 				} else {
-				    
-				    if ($image->toThumbnail($filename, $thumbnail_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter["filters"], $create_high_resolution)) {
-					
-    				    if ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif') { // create fallback
-    					    
-    					    $fallback_extension = 'png';
-    					    $fallback_mime_type = 'image/png';
-    					    
-    					    // create fallback with original image mime type when the original is not webp or avif
-    					    if ($image->getImageMimeType() !== 'image/webp' && $image->getImageMimeType() !== 'image/avif') {
-    					        $fallback_extension = $original_imageext;
-    					        $fallback_mime_type = $image->getImageMimeType();
-    					    }
-    					    
-    					    $creation_success = $image->toThumbnail($tmp_path.'/thumb_'.$module_id.'_'.$item_id.'.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter["filters"], $create_high_resolution);
-    					}
-				    } else {
-				        $creation_success = false;
-				    }
+					$creation_success = false;
 				}
-
-				// START image compression
-
-				if ($creation_success && !is_null($compression_plugin)) {
-
-					//$optimization_success = $dispatcher->trigger('onImageCompressionCompress', array($filename_temp, $filename));
-					$optimization_success = $compression_plugin->onImageCompressionCompress($filename_temp, $filename);
-					if ($optimization_success) {
-						//$dispatcher->trigger('onImageCompressionSuccess', array(false));
-						$compression_plugin->onImageCompressionSuccess(false);
-					} else {
-						//$dispatcher->trigger('onImageCompressionFailure');
-						$compression_plugin->onImageCompressionFailure();
-					}
-
-					if ($create_high_resolution) {
-						//$optimization_highres_success = $dispatcher->trigger('onImageCompressionCompress', array($filename_highres_temp, $filename_highres));
-						$optimization_highres_success = $compression_plugin->onImageCompressionCompress($filename_highres_temp, $filename_highres);
-						if ($optimization_highres_success) {
-							//$dispatcher->trigger('onImageCompressionSuccess', array(false));
-							$compression_plugin->onImageCompressionSuccess(false);
-						} else {
-							//$dispatcher->trigger('onImageCompressionFailure');
-							$compression_plugin->onImageCompressionFailure();
-						}
-					}
-				}
-
-				// END image compression
 			}
 
 			$image->destroy();
-			
+
 			if (!$creation_success) {
-			    return 'error';
+				return 'error';
 			}
 		}
 
@@ -2142,7 +2093,7 @@ abstract class Helper
 
 	public static function getAutoMapLink($address, $params = '', $embed = false) {
 
-		$address_array = explode("\n", $address);
+		$address_array = explode('\n', $address);
 		$address = '';
 		foreach ($address_array as $address_line) {
 			$address_line = str_replace(',', ' ', $address_line);

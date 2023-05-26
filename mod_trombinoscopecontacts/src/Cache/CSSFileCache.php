@@ -50,9 +50,11 @@ class CSSFileCache extends HeaderFilesCache
 		// card
 
 		$card_width = $params->get('card_w', 100);
+		$card_width_unit = $params->get('card_w_u', '%');		
+		if ($card_width_unit === '%' && $card_width > 100) {
+		    $card_width = 100;
+		}
 		$variables[] = 'card_width';
-
-		$card_width_unit = $params->get('card_w_u', '%');
 		$variables[] = 'card_width_unit';
 
 		$card_height = $params->get('card_h', '');

@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.11.0</version>
+	<version>4.12.0</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -101,6 +101,7 @@
 						<option value="related">MOD_TROMBINOSCOPE_VALUE_RELATEDCONTACT</option>
 						<option value="relatedcontactbytags">MOD_TROMBINOSCOPE_VALUE_RELATEDCONTACTBYTAG</option>
 						<option value="relatedbytags">MOD_TROMBINOSCOPE_VALUE_RELATEDBYTAG</option>
+						<option value="relatedtoarticleauthor">MOD_TROMBINOSCOPE_VALUE_RELATEDTOARTICLEAUTHOR</option>
 						<option value="user">MOD_TROMBINOSCOPE_VALUE_USER</option>
 					</field>
 					

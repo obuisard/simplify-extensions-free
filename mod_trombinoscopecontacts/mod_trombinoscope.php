@@ -153,6 +153,10 @@ $min_card_width = trim($params->get('min_card_w', ''));
 $card_width_unit = $params->get('card_w_u', '%');
 $card_height = $params->get('card_h', '');
 
+if ($card_width_unit === '%' && $card_width > 100) {
+    $card_width = 100;
+}
+
 $min_card_flip_width = trim($params->get('min_card_flip_w', ''));
 
 $border_width = Helper::getPictureBorderWidth($params);
