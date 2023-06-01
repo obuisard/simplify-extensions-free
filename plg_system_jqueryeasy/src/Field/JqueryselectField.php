@@ -29,6 +29,8 @@ class JqueryselectField extends ListField
 		}
 		$options[] = HTMLHelper::_('select.option', 'local', Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_LOCAL'), 'value', 'text', $disable = false);
 		
+		$options[] = HTMLHelper::_('select.option', '3.7#slim', '3.7.x slim (Pro)', 'value', 'text', $disable = true);
+		$options[] = HTMLHelper::_('select.option', '3.7', '3.7.x', 'value', 'text', $disable = false);
 		$options[] = HTMLHelper::_('select.option', '3.6#slim', '3.6.x slim (Pro)', 'value', 'text', $disable = true);
 		$options[] = HTMLHelper::_('select.option', '3.6', '3.6.x', 'value', 'text', $disable = false);
 		$options[] = HTMLHelper::_('select.option', '3.5#slim', '3.5.x slim (Pro)', 'value', 'text', $disable = true);

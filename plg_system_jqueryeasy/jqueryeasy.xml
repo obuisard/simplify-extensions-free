@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>5.2.0</version>
+	<version>5.2.1</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Plugin\System\JqueryEasy</namespace>
 	
@@ -238,7 +238,7 @@
 								
 					<field type="jqueryversion" />
 					
-					<field name="jqueryversion" type="jqueryselect" default="3.6" showon="jqueryinpage:1,2" 
+					<field name="jqueryversion" type="jqueryselect" default="3.7" showon="jqueryinpage:1,2" 
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYVERSION_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYVERSION_DESC" />
 		            
@@ -248,8 +248,8 @@
 						
 					<field type="cdnlinks" library="jquery" showon="jqueryinpage:1,2[AND]jqueryversion!:local,joomla" />
 									
-					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY2" showon="jqueryinpage:1,2[AND]jqueryversion:2.0,2.1,2.2,3.0,3.1,3.2,3.3,3.4,3.5,3.6" />
-					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY3" showon="jqueryinpage:1,2[AND]jqueryversion:3.0,3.1,3.2,3.3,3.4,3.5,3.6" />
+					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY2" showon="jqueryinpage:1,2[AND]jqueryversion:2.0,2.1,2.2,3.0,3.1,3.2,3.3,3.4,3.5,3.6,3.7" />
+					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY3" showon="jqueryinpage:1,2[AND]jqueryversion:3.0,3.1,3.2,3.3,3.4,3.5,3.6,3.7" />
 						
 					<field name="localversion" type="text" default="" size="50" showon="jqueryinpage:1,2[AND]jqueryversion:local" class="input-xxlarge" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALVERSION_LABEL" 
