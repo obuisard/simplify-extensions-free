@@ -25,7 +25,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.3.1';
+	protected $minimumLibrary = '2.3.3';
 
 	/**
 	 * Available languages
