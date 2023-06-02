@@ -264,7 +264,7 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
 				break;
 			default:
 				$extra_class .= 'basic';
-				$scriptDeclaration .=  Helper::getBasicSliderJavascript($params, $class_suffix);
+				$scriptDeclaration .= Helper::getBasicSliderJavascript($params, $class_suffix);
 				break;
 		}
 
@@ -311,7 +311,7 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
 				<?php echo Helper::getSliderWithThumbHtml($params, $list_images, $list_alts, $list_captions, null, Uri::root(true), $class_suffix); ?>
 			<?php else : ?>
 				<?php echo Helper::getBasicSliderHtml($params, $list_images, $list_alts, $list_captions, null, Uri::root(true), $class_suffix); ?>
-		<?php endif; ?>
+			<?php endif; ?>
 		</div>
 		<?php if ($params->get('out_captions', 0)) : ?>
 			<?php echo Helper::getOutCaptionsHtml($params, count($list_images), $list_captions, null, $class_suffix); ?>

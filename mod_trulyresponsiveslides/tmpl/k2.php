@@ -67,7 +67,7 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
 
 			$links = ''; // no links for k2
 
-            /* category and title */
+            // category and title
 
             $caption_category = '';
             $caption_title = '';
@@ -78,7 +78,7 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
             // Get the global parameters from category
             $db = Factory::getDBO();
             $category = Table::getInstance('K2Category', 'Table');
-            $category->load($item->cat_id);
+            $category->load($item->catid);
             $globalparams = new Registry($category->params); // JComponentHelper::getParams('com_k2');
 
             if (($itemparams->get("itemCategory") == '' && $globalparams->get('itemCategory')) || $itemparams->get("itemCategory") == 1) {
@@ -184,7 +184,6 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
 		$result = $cache_css->cache('style_'.$module->id.'.css', $clear_header_files_cache);
 
 		if ($result) {
-			//$doc->addStyleSheet(Uri::base(true).'/media/cache/mod_trulyresponsiveslides/style_'.$module->id.'.css');
 			$wam->registerAndUseStyle('trs.style_' . $module->id, $cache_css->getCachePath() . '/style_' . $module->id . '.css');
 		}
 

@@ -9,11 +9,11 @@ namespace SYW\Module\TrulyResponsiveSlides\Site\Helper;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Access\Access;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
+use Joomla\Utilities\ArrayHelper;
 
 require_once (JPATH_SITE.'/components/com_k2/models/itemlist.php');
 
@@ -23,6 +23,9 @@ class K2ItemsHelper
 	{
 		$db = Factory::getDbo();
 		$app = Factory::getApplication();
+		
+		$user = $app->getIdentity();
+		$view_levels = $user->getAuthorisedViewLevels();
 
 		$query = $db->getQuery(true);
 
@@ -39,43 +42,50 @@ class K2ItemsHelper
 		$subquery2 = ' CASE WHEN ';
 		$subquery2 .= $query->charLength('c.alias');
 		$subquery2 .= ' THEN ';
-		$cc_id = $query->castAsChar('c.id');
-		$subquery2 .= $query->concatenate(array($cc_id, 'c.alias'), ':');
+		$c_id = $query->castAsChar('c.id');
+		$subquery2 .= $query->concatenate(array($c_id, 'c.alias'), ':');
 		$subquery2 .= ' ELSE ';
-		$subquery2 .= $cc_id.' END AS cat_slug';
+		$subquery2 .= $c_id.' END AS cat_slug';
 
-		$query->select('a.*, c.id AS cat_id, c.name AS category_title, c.alias AS cat_alias');
+		$query->select($db->quoteName(array('a.id', 'a.catid', 'a.title', 'a.alias', 'a.introtext', 'a.fulltext', 'a.params', 'a.metadata', 'a.metakey', 'a.metadesc', 'a.access', 'a.hits', 'a.featured', 'a.language')));
+		$query->select($db->quoteName('c.id', 'cat_id')); // keep for b/c
+
+		$query->select($db->quoteName(array('a.checked_out', 'a.checked_out_time', 'a.created', 'a.created_by', 'a.created_by_alias')));
+		
+		// Use created if modified is 0
+		$query->select('CASE WHEN ' . $query->isNullDatetime('a.modified') . ' THEN ' . $db->quoteName('a.created') . ' ELSE ' . $db->quoteName('a.modified') . ' END AS ' . $db->quoteName('modified'));
+		$query->select($db->quoteName('a.modified_by'));
+
+		// Use created if publish_up is 0
+		$query->select('CASE WHEN ' . $query->isNullDatetime('a.publish_up') . ' THEN ' . $db->quoteName('a.created') . ' ELSE ' . $db->quoteName('a.publish_up') . ' END AS  ' . $db->quoteName('publish_up'));
+		$query->select($db->quoteName('a.publish_down'));
 
 		$query->select($subquery1);
 		$query->select($subquery2);
 
-		$query->from('#__k2_items AS a');
+		$query->from($db->quoteName('#__k2_items', 'a'));
 
 		// join over the categories
-
-		$query->join('INNER', '#__k2_categories AS c ON c.id = a.catid');
+		$query->select($db->quoteName(array('c.name', 'c.access', 'c.alias'), array('category_title', 'category_access', 'category_alias'))); // TODO check: was cat_alias originally: error ?
+		$query->join('LEFT', $db->quoteName('#__k2_categories', 'c'), $db->quoteName('c.id') . ' = ' . $db->quoteName('a.catid'));
 
 		// access filter
 
-		$user = Factory::getUser();
-		$groups	= implode(',', $user->getAuthorisedViewLevels());
-
-		$authorised = Access::getAuthorisedViewLevels(Factory::getUser()->get('id'));
-
-		$query->where('a.access IN ('.$groups.')');
-		$query->where('c.access IN ('.$groups.')');
+		$query->whereIn($db->quoteName('a.access'), $view_levels);
+		$query->whereIn($db->quoteName('c.access'), $view_levels);
 
 		// publishing
 
-		//$nullDate = $db->quote($db->getNullDate());
 		$nowDate = $db->quote(Factory::getDate()->toSql());
 
 		$query->where($db->quoteName('a.published') . ' = 1');
 		$query->where($db->quoteName('a.trash') . ' = 0');
-		$query->where('(' . $db->quoteName('a.publish_up') . ' IS NULL OR ' . $db->quoteName('a.publish_up') . ' <= '.$nowDate.')');
-		$query->where('(' . $db->quoteName('a.publish_down') . ' IS NULL OR ' . $db->quoteName('a.publish_down') . ' >= '.$nowDate.')');
+
+		$query->where('(' . $query->isNullDatetime('a.publish_up') . ' OR ' . $db->quoteName('a.publish_up') . ' <= ' . $nowDate . ')');
+		$query->where('(' . $query->isNullDatetime('a.publish_down') . ' OR ' . $db->quoteName('a.publish_down') . ' >= ' . $nowDate . ')');
 
 		$query->where($db->quoteName('c.published') . ' = 1');
+		$query->where($db->quoteName('c.trash') . ' = 0');
 
 		// category filter
 
@@ -107,8 +117,7 @@ class K2ItemsHelper
 			}
 
 			if (!empty($categories_array)) {
-				$categories = implode(',', $categories_array);
-				$query->where('c.id IN ('.$categories.')');
+				$query->whereIn($db->quoteName('a.catid'), $categories_array);
 			}
 		}
 
@@ -124,13 +133,13 @@ class K2ItemsHelper
 
 				// get all tags
 
-				$query2 = $db->getQuery(true);
+				$subQuery = $db->getQuery(true);
 
-				$query2->select($db->quoteName('id'));
-				$query2->from($db->quoteName('#__k2_tags'));
-				$query2->where('published = 1');
+				$subQuery->select($db->quoteName('id'));
+				$subQuery->from($db->quoteName('#__k2_tags'));
+				$subQuery->where($db->quoteName('published') . ' = 1');
 
-				$db->setQuery($query2);
+				$db->setQuery($subQuery);
 
 				try {
 					$tags = $db->loadColumn();
@@ -139,102 +148,121 @@ class K2ItemsHelper
 					return null;
 				}
 
-				$query2->clear();
-
-				if (empty($tags) /*&& $params->get('tags_inex', 1)*/) { // won't return any k2 item if no k2 item has been associated to any tag (when include tags only)
+				if (empty($tags)) { // won't return any k2 item if no k2 item has been associated to any tag (when include tags only)
 					return array();
 				}
 			}
 		}
 
 		if (!empty($tags)) {
-
-			$tags_to_match = implode(',', $tags);
-
-			$query->select('COUNT(tags.id) AS tags_count');
-			$query->join('LEFT', '#__k2_tags_xref tags_xref ON tags_xref.itemID = a.id LEFT JOIN #__k2_tags tags ON tags.id = tags_xref.tagID');
-			$query->where('tags.published = 1');
-			$query->where('tags.id IN ('.$tags_to_match.')');
+			
+		    $query->select('COUNT(' . $db->quoteName('tags.id') . ') AS tags_count');
+		    $query->join('LEFT', $db->quoteName('#__k2_tags_xref', 'tags_xref'), $db->quoteName('tags_xref.itemID') . ' = ' . $db->quoteName('a.id'));
+		    $query->join('LEFT', $db->quoteName('#__k2_tags', 'tags'), $db->quoteName('tags_xref.tagID') . ' = ' . $db->quoteName('tags.id'));
+		    $query->whereIn($db->quoteName('tags.id'), $tags);
+		    // no access in database table
+		    $query->where($db->quoteName('tags.published') . ' = 1');
 
 			if ($params->get('tags_match', 'any') == 'all') {
-				$query->having('COUNT('.$db->quoteName('tags.id').') = '.count($tags));
+				$query->having('COUNT(' . $db->quoteName('tags.id') . ') = ' . count($tags));
 			}
 
 			$query->group($db->quoteName('a.id'));
 		}
 
-		// filter by language
+		// language filter
 
 		if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
-			$query->where('a.language IN ('.$db->quote(Factory::getLanguage()->getTag()).','.$db->quote('*').')');
+			$query->whereIn($db->quoteName('a.language'), [$db->quote(Factory::getLanguage()->getTag()), $db->quote('*')]);
 		}
 
 		// ordering
 
-		$ordering = '';
+		$ordering = array();
 
 		// featured switch
 
+		$featured = false;
+		$featured_only = false;
 		switch ($params->get('show_f'))
 		{
-			case '1': // only
-				$query->where('a.featured = 1');
+		    case '1': // only
+		        $featured = true;
+		        $featured_only = true;
+			    $query->where($db->quoteName('a.featured') . ' = 1');
 				break;
 			case '0': // hide
-				$query->where('a.featured = 0');
+			    $query->where($db->quoteName('a.featured') . ' = 0');
 				break;
-			case '2':
-				$ordering .= 'a.featured DESC,';
-			default: // show
+			case '2': // first the featured ones
+			    $featured = true;
+			    $ordering[] = $db->quoteName('a.featured') . ' DESC';
+			    break;
+			default: // no discrimination between featured/unfeatured items
+			    $featured = true;
 		}
 
 		// category order
 
-		switch ($params->get('cat_order')) {
-			case 'o_asc' :
-				$ordering .= "c.lft ASC,";
-				break;
-			case 'o_dsc' :
-				$ordering .= "c.lft DESC,";
-				break;
-			default :
+		if (!$featured_only) {
+    		switch ($params->get('cat_order', '')) 
+    		{
+    		    case 'o_asc': $ordering[] = $db->quoteName('c.parent') . ' ASC'; $ordering[] = $db->quoteName('c.ordering') . ' ASC'; break;
+    		    case 'o_dsc': $ordering[] = $db->quoteName('c.parent') . ' DESC'; $ordering[] = $db->quoteName('c.ordering') . ' DESC'; break;
+    		}
 		}
 
-		// Set ordering
+		// general ordering
 
 		switch ($params->get( 'order' ))
 		{
-			case 'o_asc': $ordering .= 'a.ordering ASC'; break;
-			case 'o_dsc': $ordering .= 'a.ordering DESC'; break;
-			case 'p_asc': $ordering .= 'a.publish_up ASC'; break;
-			case 'p_dsc': $ordering .= 'a.publish_up DESC'; break;
-			case 'm_asc': $ordering .= 'a.modified ASC, a.created ASC'; break;
-			case 'm_dsc': $ordering .= 'a.modified DESC, a.created DESC'; break;
-			case 'c_asc': $ordering .= 'a.created ASC'; break;
-			case 'c_dsc': $ordering .= 'a.created DESC'; break;
-			case 'mc_asc': $ordering .= 'CASE WHEN (a.modified IS NULL) THEN a.created ELSE a.modified END ASC'; break;
-			case 'mc_dsc': $ordering .= 'CASE WHEN (a.modified IS NULL) THEN a.created ELSE a.modified END DESC'; break;
-			case 'random': $ordering .= 'rand()'; break;
-			case 'hit': $ordering .= 'a.hits DESC'; break;
-			case 'title_asc': $ordering .= 'a.title ASC'; break;
-			case 'title_dsc': $ordering .= 'a.title DESC'; break;
-			default: $ordering .= 'a.publish_up DESC';
+		    case 'o_asc':
+		        if ($featured) {
+		            $ordering[] = 'CASE WHEN ' . $db->quoteName('a.featured') . ' = 1 THEN ' . $db->quoteName('a.featured_ordering') . ' ELSE ' . $db->quoteName('a.ordering') . ' END ASC';
+		        } else {
+		            $ordering[] = $db->quoteName('a.ordering') . ' ASC';
+		        }
+		        break;
+		    case 'o_dsc':
+		        if ($featured) {
+		            $ordering[] = 'CASE WHEN ' . $db->quoteName('a.featured') . ' = 1 THEN ' . $db->quoteName('a.featured_ordering') . ' ELSE ' . $db->quoteName('a.ordering') . ' END DESC';
+		        } else {
+		            $ordering[] = $db->quoteName('a.ordering') . ' DESC';
+		        }
+		        break;
+		    case 'p_asc': $ordering[] = $db->quoteName('a.publish_up') . ' ASC'; break;
+		    case 'p_dsc': $ordering[] = $db->quoteName('a.publish_up') . ' DESC'; break;
+		    case 'm_asc': $ordering[] = $db->quoteName('a.modified') . ' ASC'; $ordering[] = $db->quoteName('a.created') . ' ASC'; break;
+		    case 'm_dsc': $ordering[] = $db->quoteName('a.modified') . ' DESC'; $ordering[] = $db->quoteName('a.created') . ' DESC'; break;
+		    case 'c_asc': $ordering[] = $db->quoteName('a.created') . ' ASC'; break;
+		    case 'c_dsc': $ordering[] = $db->quoteName('a.created') . ' DESC'; break;
+		    case 'mc_asc': $ordering[] = 'CASE WHEN ' . $query->isNullDatetime('a.modified') . ' THEN ' . $db->quoteName('a.created') . ' ELSE ' . $db->quoteName('a.modified') . ' END ASC'; break;
+		    case 'mc_dsc': $ordering[] = 'CASE WHEN ' . $query->isNullDatetime('a.modified') . ' THEN ' . $db->quoteName('a.created') . ' ELSE ' . $db->quoteName('a.modified') . ' END DESC'; break;
+		    case 'random': $ordering[] = $query->rand(); break;
+		    case 'hit': $ordering[] = $db->quoteName('a.hits') . ' DESC'; break;
+		    case 'title_asc': $ordering[] = $db->quoteName('a.title') . ' ASC'; break;
+		    case 'title_dsc': $ordering[] = $db->quoteName('a.title') . ' DESC'; break;
+		    default: $ordering[] = $db->quoteName('a.publish_up') . ' DESC';
 		}
 
-		$query->order($ordering);
+		if (count($ordering) > 0) {
+		    $query->order($ordering);
+		}
 
 		// include only
 
 		$articles_to_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
 		if (!empty($articles_to_include)) {
-			$query->where('a.id IN (' . implode(',', $articles_to_include) . ')');
+		    $articles_to_include = ArrayHelper::toInteger($articles_to_include);
+		    $query->whereIn($db->quoteName('a.id'), $articles_to_include);
 		}
 
 		// exclude
 
 		$articles_to_exclude = array_filter(explode(',', trim($params->get('ex', ''), ' ,')));
 		if (!empty($articles_to_exclude)) {
-			$query->where('a.id NOT IN (' . implode(',', $articles_to_exclude) . ')');
+		    $articles_to_exclude = ArrayHelper::toInteger($articles_to_exclude);
+		    $query->whereNotIn($db->quoteName('a.id'), $articles_to_exclude);
 		}
 
 		// launch query
