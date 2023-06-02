@@ -20,8 +20,10 @@ use Joomla\CMS\Log\Log;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\Database\ParameterType;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
+use Joomla\Utilities\ArrayHelper;
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Tags as SYWTags;
 use SYW\Library\Text as SYWText;
@@ -36,10 +38,6 @@ class Helper
 	 * Load the script that handles click feedback
 	 */
 	static function loadClickedScript($id) {
-
-// 		if (self::$clickScriptLoaded) {
-// 			return;
-// 		}
 
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
@@ -57,15 +55,7 @@ class Helper
 			$script .= '} ';
 		$script .= '}); ';
 
-// 		$script = 'jQuery(document).ready(function($) { ';
-// 			$script .= '$(".weblinklogos .weblink_item a").click(function() { ';
-// 				$script .= '$(this).closest("li").addClass("clicked"); ';
-// 			$script .= '}); ';
-// 		$script .= '});';
-
 		$wam->addInlineScript($script);
-
-// 		self::$clickScriptLoaded = true;
 	}
 
 	static function getList($params)
@@ -77,104 +67,38 @@ class Helper
 		$option = $jinput->get('option');
 		$view = $jinput->get('view');
 
-		$query = $db->getQuery(true);
-
 		$related = $params->get('related', 0); // 0: no, 1: keywords, 2: tags weblinks only, 3: tags any content
 
 		$item_on_page_id = '';
 		$item_on_page_tagids = array();
-		$item_on_page_keys = array();
 
-		if ($related == 1) { // related by keyword
-
-			if ($option === 'com_weblinks' && $view === 'weblink') {
-				$temp = $jinput->getString('id');
-				$temp = explode(':', $temp);
-				$item_on_page_id = $temp[0];
+		if ($related == 3) { // related by tag any content
+			
+			if ($option === 'com_trombinoscopeextended' && $view === 'contact') { // because tags are recorded with com_contact
+				$option = 'com_contact';
 			}
+
+			$temp = $jinput->getString('id');
+			$temp = explode(':', $temp);
+			$item_on_page_id = $temp[0];
 
 			if ($item_on_page_id) {
-
-				$query->select($db->quoteName('metakey'));
-				$query->from($db->quoteName('#__content'));
-				$query->where($db->quoteName('id').' = '.$item_on_page_id);
-
-				$db->setQuery($query);
-
-// 					$results = trim($db->loadResult());
-
-// 					if ($error = $db->getErrorMsg()) {
-// 						throw new Exception($error);
-// 						return null;
-// 					}
-
-				try {
-					$result = $db->loadResult();
-				} catch (ExecutionFailureException $e) {
-					$app->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
-					return null;
-				}
-
-				$result = trim($result);
-				if (empty($result)) {
-					return array(); // won't find a related weblink if no key is present
-				}
-
-				$keys = explode(',', $result);
-
-				// assemble any non-blank word(s)
-				foreach ($keys as $key) {
-					$key = trim($key);
-					if ($key) {
-						$item_on_page_keys[] = $key;
-					}
-				}
-
-				if (empty($item_on_page_keys)) {
-					return array();
-				}
-
-				$query->clear();
-			} else {
-				return null; // no result (was not on weblink page)
-			}
-
-		} else if ($related == 2 || $related == 3) { // related by tag
-
-			$get_the_tags = false;
-			if ($related == 2 && $option === 'com_weblinks' && $view === 'weblink') {
-				$get_the_tags = true;
-			} else if ($related == 3) { // no restriction on the type of content
-				$get_the_tags = true;
-
-				if ($option === 'com_trombinoscopeextended' && $view === 'contact') { // because tags are recorded with com_contact
-					$option = 'com_contact';
+				$helper_tags = new TagsHelper();
+				$tags = $helper_tags->getItemTags($option.'.'.$view, $item_on_page_id); // array of tag objects
+				foreach ($tags as $tag) {
+					$item_on_page_tagids[] = $tag->tag_id;
 				}
 			}
 
-			if ($get_the_tags) {
-				$temp = $jinput->getString('id');
-				$temp = explode(':', $temp);
-				$item_on_page_id = $temp[0];
-
-				if ($item_on_page_id) {
-					$helper_tags = new TagsHelper();
-					$tags = $helper_tags->getItemTags($option.'.'.$view, $item_on_page_id); // array of tag objects
-					foreach ($tags as $tag) {
-						$item_on_page_tagids[] = $tag->tag_id;
-					}
-				}
-
-				if (empty($item_on_page_tagids)) {
-					return array(); // no result because no tag found for the object on the page
-				}
-			} else {
-				return null; // no result (was not on weblink page)
+			if (empty($item_on_page_tagids)) {
+				return array(); // no result because no tag found for the object on the page
 			}
 		}
 
-		$user = Factory::getUser();
-		$groups = implode(',', $user->getAuthorisedViewLevels());
+		$query = $db->getQuery(true);
+
+		$user = Factory::getApplication()->getIdentity();
+		$view_levels = $user->getAuthorisedViewLevels();
 
 		// START OF DATABASE QUERY
 
@@ -184,7 +108,7 @@ class Helper
 		$a_id = $query->castAsChar('a.id');
 		$case_when1 .= $query->concatenate(array($a_id, 'a.alias'), ':');
 		$case_when1 .= ' ELSE ';
-		$case_when1 .= $a_id . ' END as slug';
+		$case_when1 .= $a_id . ' END AS slug';
 
 		$case_when2 = ' CASE WHEN ';
 		$case_when2 .= $query->charLength('c.alias', '!=', '0');
@@ -192,13 +116,12 @@ class Helper
 		$c_id = $query->castAsChar('c.id');
 		$case_when2 .= $query->concatenate(array($c_id, 'c.alias'), ':');
 		$case_when2 .= ' ELSE ';
-		$case_when2 .= $c_id . ' END as catslug';
+		$case_when2 .= $c_id . ' END AS catslug';
 
-		//$query->select('a.*, c.published AS c_published,' . $case_when1 . ',' . $case_when2 . ',' . 'DATE_FORMAT(a.created, "%Y-%m-%d") AS created');
-		$query->select('a.*,'.$case_when1.','.$case_when2);
-		$query->select('c.title AS category_title, c.path AS category_route, c.access AS category_access, c.alias AS category_alias');
+		$query->select('a.*,' . $case_when1 . ',' . $case_when2);
+		$query->select($db->quoteName(array('c.title', 'c.path', 'c.access', 'c.alias'), array('category_title', 'category_route', 'category_access', 'category_alias')));
 		$query->from($db->quoteName('#__weblinks', 'a'));
-		$query->where($db->quoteName('a.access').' IN ('.$groups.')');
+		$query->whereIn($db->quoteName('a.access'), $view_levels);
 
 		// filter by categories
 
@@ -207,9 +130,9 @@ class Helper
 		$array_of_category_values = array_count_values($categories_array);
 		if (isset($array_of_category_values['all']) && $array_of_category_values['all'] > 0) { // 'all' was selected
 			// keep categories = ''
-		    if (!$params->get('cat_inex', 1)) {
-		        return array(); // if all categories excluded, then there should be no result
-		    }
+			if (!$params->get('cat_inex', 1)) {
+				return array(); // if all categories excluded, then there should be no result
+			}
 		} else {
 			// sub-category inclusion
 			$get_sub_categories = $params->get('includesubcategories', 'no');
@@ -238,21 +161,13 @@ class Helper
 
 			if (!empty($categories_array)) {
 				$test_type = $params->get('cat_inex', 1) ? 'IN' : 'NOT IN';
-			    $query->where($db->quoteName('a.catid').' '.$test_type.' ('.implode(',', $categories_array).')');
-		    }
+				$query->where($db->quoteName('a.catid') . ' ' . $test_type . ' (' . implode(',', $categories_array) . ')');
+			}
 		}
 
-		$query->join('LEFT', $db->quoteName('#__categories', 'c').' ON '.$db->quoteName('c.id').' = '.$db->quoteName('a.catid'));
-		$query->where($db->quoteName('c.access').' IN ('.$groups.')');
-
-		$query->where($db->quoteName('c.published').' = 1');
-
-		// filter by metakeys
-
-		if (!empty($item_on_page_keys)) {
-			$concat_string = $query->concatenate(array('","', ' REPLACE(a.metakey, ", ", ",")', ' ","')); // remove single space after commas in keywords
-			$query->where('('.$concat_string.' LIKE "%'.implode('%" OR '.$concat_string.' LIKE "%', $item_on_page_keys).'%")');
-		}
+		$query->join('LEFT', $db->quoteName('#__categories', 'c'), $db->quoteName('c.id') . ' = ' . $db->quoteName('a.catid'));
+		$query->whereIn($db->quoteName('c.access'), $view_levels);
+		$query->where($db->quoteName('c.published') . ' = 1');
 
 		// filter by tags
 
@@ -312,33 +227,38 @@ class Helper
 
 			$tags_to_match = implode(',', $tags);
 
-			$query->select('COUNT(t.id) AS tags_count');
-			$query->join('INNER', $db->quoteName('#__contentitem_tag_map', 'm').' ON '.$db->quoteName('m.content_item_id').' = '.$db->quoteName('a.id').' AND '.$db->quoteName('m.type_alias').' = '.$db->quote('com_weblinks.weblink'));
-			$query->join('INNER', $db->quoteName('#__tags', 't') . ' ON '.$db->quoteName('m.tag_id').' = '.$db->quoteName('t.id'));
+			$query->select('COUNT(' . $db->quoteName('tags.id') . ') AS tags_count');
+			$query->join('INNER', $db->quoteName('#__contentitem_tag_map', 'm'), $db->quoteName('m.content_item_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('m.type_alias') . ' = ' . $db->quote('com_weblinks.weblink'));
+			$query->join('INNER', $db->quoteName('#__tags', 'tags'), $db->quoteName('m.tag_id') . ' = ' . $db->quoteName('tags.id'));
 
 			$test_type = $params->get('tags_inex', 1) ? 'IN' : 'NOT IN';
-			$query->where($db->quoteName('t.id').' '.$test_type.' ('.$tags_to_match.')');
+			$query->where($db->quoteName('tags.id') . ' ' . $test_type . ' (' . $tags_to_match . ')');
 
-			$query->where($db->quoteName('t.access').' IN ('.$groups.')');
-			$query->where($db->quoteName('t.published').' = 1');
+			$query->whereIn($db->quoteName('tags.access'), $view_levels);
+			$query->where($db->quoteName('tags.published') . ' = 1');
 
 			if (!$params->get('tags_inex', 1)) { // EXCLUDE TAGS
-				$query->select('tags_per_items.tag_count_per_item');
+			    $query->select($db->quoteName('tags_per_items.tag_count_per_item'));
+			    
+			    $subquery = $db->getQuery(true);
 
-				// subquery gets all the tags for all items
-				$subquery = 'SELECT mm.content_item_id AS content_id, COUNT(tt.id) AS tag_count_per_item FROM #__contentitem_tag_map AS mm INNER JOIN #__tags AS tt ON mm.tag_id = tt.id WHERE tt.access IN ('.$groups.') AND tt.published = 1 AND mm.type_alias = \'com_weblinks.weblink\' GROUP BY content_id';
-				$query->join('INNER', '(' . $subquery . ') AS tags_per_items ON tags_per_items.content_id = a.id');
+			    // subquery gets all the tags for all items
+			    $subquery->select($db->quoteName('mm.content_item_id', 'content_id'));
+			    $subquery->select('COUNT(' . $db->quoteName('tt.id') . ') AS tag_count_per_item');
+			    $subquery->from($db->quoteName('#__contentitem_tag_map', 'mm'));
+			    $subquery->join('INNER', $db->quoteName('#__tags', 'tt'), $db->quoteName('mm.tag_id') . ' = ' . $db->quoteName('tt.id'));
+			    $subquery->whereIn($db->quoteName('tt.access'), $view_levels);
+			    $subquery->where($db->quoteName('tt.published') . ' = 1');
+			    $subquery->where($db->quoteName('mm.type_alias') . ' = ' . $db->quote('com_weblinks.weblink'));
+			    $subquery->group($db->quoteName('content_id'));
 
-				//if ($params->get('tags_match', 'any') == 'all') {
-				// TODO incomplete: if an item has one of the tags and that is the only tag, it won't show (COUNT(t.id) is never 0)
-				//$query->having('COUNT('.$db->quoteName('t.id').') + '.count($tags).' <> tags_per_items.tag_count_per_item');
-				//} else {
+			    $query->join('INNER', '(' . (string) $subquery . ') AS tags_per_items', $db->quoteName('tags_per_items.content_id') . ' = ' . $db->quoteName('a.id'));
+
 				// we keep items that have the same amount of tags before and after removals
-				$query->having('COUNT('.$db->quoteName('t.id').') = tags_per_items.tag_count_per_item');
-				//}
+				$query->having('COUNT(' . $db->quoteName('tags.id') . ') = ' . $db->quoteName('tags_per_items.tag_count_per_item'));
 			} else { // INCLUDE TAGS
 				if ($params->get('tags_match', 'any') == 'all') {
-					$query->having('COUNT('.$db->quoteName('t.id').') = '.count($tags));
+					$query->having('COUNT(' . $db->quoteName('tags.id') . ') = ' . count($tags));
 				}
 			}
 
@@ -346,159 +266,144 @@ class Helper
 		}
 
 		// custom field filters
-		
+
 		$customfield_filters_arrays = array();
-		
+
 		$customfield_filters = $params->get('customfieldsfilter'); // string (if default), array or object
-		
+
 		if (!empty($customfield_filters) && !is_string($customfield_filters)) {
-		    
-		    foreach ($customfield_filters as $customfield_filter) {
-		        
-		        $customfield_filter = (array)$customfield_filter;
-		        
-		        if ($customfield_filter['field'] !== 'none') {
-		            
-		            $values = explode(',', $customfield_filter['values']);
-		            foreach ($values as $key => $value) {
-		                $value = trim($value);
-		                if (empty($value)) {
-		                    unset($values[$key]);
-		                }
-		            }
-		            
-		            if (!empty($values)) {
-		                $customfield_filters_arrays[] = array('id' => $customfield_filter['field'], 'values' => $values, 'inex' => $customfield_filter['inex']);
-		            }
-		        }
-		    }
-		}
-		
-		if (!empty($customfield_filters_arrays)) {
-		    
-		    $weblink_id_arrays_from_cfields = array();
-		    
-		    foreach ($customfield_filters_arrays as $customfield_filter) {
-		        
-		        $subQuery = $db->getQuery(true);
-		        
-		        $subQuery->select("DISTINCT cfv.item_id"); // no unique results when joining with categories
-		        $subQuery->from("#__fields_values AS cfv");
-		        $subQuery->join('LEFT', '#__fields AS f ON f.id = cfv.field_id');
-		        $subQuery->where('(f.context IS NULL OR f.context = ' . $db->quote('com_weblinks.weblink') . ')');
-		        $subQuery->where('(f.state IS NULL OR f.state = 1)');
-		        $subQuery->where('(f.access IS NULL OR f.access IN (' . $groups . '))');
-		        $subQuery->where($db->quoteName('cfv.field_id').' = ' . $db->quote($customfield_filter['id']));
-		        
-		        // any category for the field? if so, join with categories. If not, do not join
-// 		        if (!empty(FieldsHelper::getAssignedCategoriesTitles($customfield_filter['id']))) {
-// 		            if (!isset($array_of_category_values['all']) && !empty($categories_array)) {
-// 		                $subQuery->join('LEFT', '#__fields_categories AS cfc ON cfc.field_id = cfv.field_id');
-// 		                $subQuery->where($db->quoteName('cfc.category_id') . ' ' . ($params->get('cat_inex', 1) ? 'IN' : 'NOT IN') . ' (' . implode(',', $categories_array) . ')');
-// 		            }
-// 		        }
-		        
-		        if ($customfield_filter['inex']) {
-		            $subQuery->where($db->quoteName('cfv.value') . " = '" . implode("' OR " . $db->quoteName('cfv.value') . " = '", $customfield_filter['values']) . "'");
-		        } else {
-		            $subQuery->where($db->quoteName('cfv.value') . " <> '" . implode("' AND " . $db->quoteName('cfv.value') . " <> '", $customfield_filter['values']) . "'");
-		        }
-		        
-		        if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
-		            $subQuery->where('(f.language IS NULL OR f.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . '))');
-		        }
-		        
-		        $db->setQuery($subQuery);
-		        
-		        try {
-		            $weblink_id_arrays_from_cfields[] = $db->loadColumn();
-		        } catch (ExecutionFailureException $e) {
-		            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
-		        }
-		    }
-		    
-		    if (!empty($weblink_id_arrays_from_cfields)) {
-		        
-		        // keep only the ids found in all the arrays
-		        if (count($weblink_id_arrays_from_cfields) > 1) {
-		            $weblink_ids = call_user_func_array('array_intersect', $weblink_id_arrays_from_cfields);
-		        } else {
-		            $weblink_ids = $weblink_id_arrays_from_cfields[0];
-		        }
-		        
-		        if (!empty($weblink_ids)) {
-		            $query->where('a.id IN (' . implode(",", $weblink_ids) . ')'); // include all weblinks that have custom field value(s) that correspond to the custom field value
-		        } else {
-		            $query->where('a.id = 0'); // no weblink having all values selected
-		        }
-		    }
+			
+			foreach ($customfield_filters as $customfield_filter) {
+				
+				$customfield_filter = (array)$customfield_filter;
+				
+				if ($customfield_filter['field'] !== 'none') {
+					
+					$values = explode(',', $customfield_filter['values']);
+					foreach ($values as $key => $value) {
+						$value = trim($value);
+						if (empty($value)) {
+							unset($values[$key]);
+						}
+					}
+
+					if (!empty($values)) {
+						$customfield_filters_arrays[] = array('id' => $customfield_filter['field'], 'values' => $values, 'inex' => $customfield_filter['inex']);
+					}
+				}
+			}
 		}
 
-		// Join over the users for the author and modified_by names.
-		//$query->select("CASE WHEN a.created_by_alias > ' ' THEN a.created_by_alias ELSE ua.name END AS author");
-		//$query->select("ua.email AS author_email");
-		//$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
-		//$query->join('LEFT', '#__users AS uam ON uam.id = a.modified_by');
+		if (!empty($customfield_filters_arrays)) {
+
+			$weblink_id_arrays_from_cfields = array();
+
+			foreach ($customfield_filters_arrays as $customfield_filter) {
+
+				$subQuery = $db->getQuery(true);
+
+				$subQuery->select('DISTINCT ' . $db->quoteName('cfv.item_id')); // no unique results when joining with categories
+				$subQuery->from($db->quoteName('#__fields_values', 'cfv'));
+				$subQuery->join('LEFT', $db->quoteName('#__fields', 'f'), $db->quoteName('f.id') . ' = ' . $db->quoteName('cfv.field_id'));
+				$subQuery->where('(' . $db->quoteName('f.context') . ' IS NULL OR ' . $db->quoteName('f.context') . ' = ' . $db->quote('com_weblinks.weblink') . ')');
+				$subQuery->where('(' . $db->quoteName('f.state') . ' IS NULL OR ' . $db->quoteName('f.state') . ' = 1)');
+				$subQuery->where('(' . $db->quoteName('f.access') . ' IS NULL OR ' . $db->quoteName('f.access') . ' IN (' . implode(',', $view_levels) . '))');
+				$subQuery->where($db->quoteName('cfv.field_id') . ' = :fieldId');
+				$subQuery->bind(':fieldId', $customfield_filter['id'], ParameterType::INTEGER);
+				
+				if ($customfield_filter['inex']) {
+					$subQuery->where($db->quoteName('cfv.value') . " = '" . implode("' OR " . $db->quoteName('cfv.value') . " = '", $customfield_filter['values']) . "'");
+				} else {
+					$subQuery->where($db->quoteName('cfv.value') . " <> '" . implode("' AND " . $db->quoteName('cfv.value') . " <> '", $customfield_filter['values']) . "'");
+				}
+				
+				if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
+				    $subQuery->where('(' . $db->quoteName('f.language') . ' IS NULL OR ' . $db->quoteName('f.language') . ' IN (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . '))');
+				}
+				
+				$db->setQuery($subQuery);
+				
+				try {
+					$weblink_id_arrays_from_cfields[] = $db->loadColumn();
+				} catch (ExecutionFailureException $e) {
+					Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+				}
+			}
+			
+			if (!empty($weblink_id_arrays_from_cfields)) {
+				
+				// keep only the ids found in all the arrays
+				if (count($weblink_id_arrays_from_cfields) > 1) {
+					$weblink_ids = call_user_func_array('array_intersect', $weblink_id_arrays_from_cfields);
+				} else {
+					$weblink_ids = $weblink_id_arrays_from_cfields[0];
+				}
+				
+				if (!empty($weblink_ids)) {
+				    $weblink_ids = ArrayHelper::toInteger($weblink_ids);
+				    $query->whereIn($db->quoteName('a.id'), $weblink_ids); // include all weblinks that have custom field value(s) that correspond to the custom field value
+				} else {
+				    $query->where($db->quoteName('a.id') . ' = 0'); // no weblink having all values selected
+				}
+			}
+		}
 
 		// filter by state
 
-		$query->where($db->quoteName('a.state').' = 1');
+		$query->where($db->quoteName('a.state') . ' = 1');
 
 		// filter by start and end dates
 
-		//$nullDate = $db->quote($db->getNullDate());
 		$nowDate = $db->quote(Factory::getDate()->toSql());
 
-		$query->where('('.$db->quoteName('a.publish_up').' IS NULL OR '.$db->quoteName('a.publish_up').' <= '.$nowDate.')');
-		$query->where('('.$db->quoteName('a.publish_down').' IS NULL OR '.$db->quoteName('a.publish_down').' >= '.$nowDate.')');
+		$query->where('(' . $query->isNullDatetime('a.publish_up') . ' OR ' . $db->quoteName('a.publish_up') . ' <= ' . $nowDate . ')');
+		$query->where('(' . $query->isNullDatetime('a.publish_down') . ' OR ' . $db->quoteName('a.publish_down') . ' >= ' . $nowDate . ')');
 
 		// filter by language
 
 		if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
-			$query->where($db->quoteName('a.language').' IN ('.$db->quote(Factory::getLanguage()->getTag()).','.$db->quote('*').')');
+			$query->whereIn($db->quoteName('a.language'), [$db->quote(Factory::getLanguage()->getTag()), $db->quote('*')]);
 		}
 
 		// ordering
 
-		$ordering = '';
+		$ordering = array();
 
 		// category order
 
 		switch ($params->get('cat_order', ''))
 		{
-			case 'o_asc': $ordering .= "c.lft ASC,"; break;
-			case 'o_dsc': $ordering .= "c.lft DESC,"; break;
-			case 'n_asc': $ordering .= "c.title ASC,"; break;
-			case 'n_dsc': $ordering .= "c.title DESC,"; break;
+		    case 'o_asc': $ordering[] = $db->quoteName('c.lft') . ' ASC'; break;
+			case 'o_dsc': $ordering[] = $db->quoteName('c.lft') . ' DESC'; break;
+			case 'n_asc': $ordering[] = $db->quoteName('c.title') . ' ASC'; break;
+		    case 'n_dsc': $ordering[] = $db->quoteName('c.title') . ' DESC'; break;
 		}
 
 		// items order
 
 		switch ($params->get('ordering', 'title'))
 		{
-		    case 'title': $ordering .= 'a.title '.$params->get('direction', 'asc'); break;
-			case 'order': $ordering .= 'a.ordering '.$params->get('direction', 'asc'); break;
-			case 'random': $ordering .= 'rand()'; break;
-			case 'hits': $ordering .= 'a.hits '.$params->get('direction', 'asc'); break;
+		    case 'title': $ordering[] = $db->quoteName('a.title') . ' ' . strtoupper($params->get('direction', 'asc')); break;
+		    case 'order': $ordering[] = $db->quoteName('a.ordering') . ' ' . strtoupper($params->get('direction', 'asc')); break;
+		    case 'random': $ordering[] = $query->rand(); break;
+		    case 'hits': $ordering[] = $db->quoteName('a.hits') . ' ' . strtoupper($params->get('direction', 'asc')); break;
 
-			case 'created': $ordering .= 'a.created '.$params->get('direction', 'asc'); break;
-			case 'modified': $ordering .= 'a.modified '.$params->get('direction', 'asc'); break;
-			case 'published': $ordering .= 'a.publish_up '.$params->get('direction', 'asc'); break;
+			case 'created': $ordering[] = $db->quoteName('a.created') . ' ' . strtoupper($params->get('direction', 'asc')); break;
+			case 'modified': $ordering[] = $db->quoteName('a.modified') . ' ' . strtoupper($params->get('direction', 'asc')); break;
+			case 'published': $ordering[] = $db->quoteName('a.publish_up') . ' ' . strtoupper($params->get('direction', 'asc')); break;
 
 			case 'manual':
-			    $weblinks_to_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
-			    if (!empty($weblinks_to_include)) {
-			        $ordering .= 'CASE a.id';
-			        foreach ($weblinks_to_include as $key => $id) {
-			            $ordering .= ' WHEN ' . $id . ' THEN ' . $key;
-			        }
-			        $ordering .= ' ELSE 999 END, a.id'; // 'FIELD(a.id, ' . $weblinks_to_include . ')' is MySQL specific
-			    }
-			    
-			default: $ordering = rtrim($ordering, ',');
+				$weblinks_to_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
+				if (!empty($weblinks_to_include)) {
+					$manual_ordering = 'CASE a.id';
+					foreach ($weblinks_to_include as $key => $id) {
+					    $manual_ordering .= ' WHEN ' . $id . ' THEN ' . $key;
+					}
+					$ordering[] = $manual_ordering . ' ELSE 999 END, a.id'; // 'FIELD(a.id, ' . $weblinks_to_include . ')' is MySQL specific
+				}
 		}
 
-		if ($ordering) {
+		if (count($ordering) > 0) {
 			$query->order($ordering);
 		}
 
@@ -506,14 +411,16 @@ class Helper
 
 		$weblinks_to_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
 		if (!empty($weblinks_to_include)) {
-			$query->where('a.id IN (' . implode(',', $weblinks_to_include) . ')');
+		    $weblinks_to_include = ArrayHelper::toInteger($weblinks_to_include);
+		    $query->whereIn($db->quoteName('a.id'), $weblinks_to_include);
 		}
 
 		// exclude
 
 		$weblinks_to_exclude = array_filter(explode(',', trim($params->get('ex', ''), ' ,')));
 		if (!empty($weblinks_to_exclude)) {
-			$query->where('a.id NOT IN (' . implode(',', $weblinks_to_exclude) . ')');
+		    $weblinks_to_exclude = ArrayHelper::toInteger($weblinks_to_exclude);
+		    $query->whereNotIn($db->quoteName('a.id'), $weblinks_to_exclude);
 		}
 
 		if (intval($params->get('count', '')) > 0) {
@@ -580,10 +487,10 @@ class Helper
 			$item->alt_second = ''; // $item->title;
 			$item->caption_second = $item->title;
 			if (isset($images->image_first)) {
-			    
-			    $image_object = HTMLHelper::cleanImageURL($images->image_first);
-			    $item->image_first = $image_object->url;
-				
+
+				$image_object = HTMLHelper::cleanImageURL($images->image_first);
+				$item->image_first = $image_object->url;
+
 				if (!empty($images->image_first_alt)) {
 					$item->alt_first = $images->image_first_alt;
 				}
@@ -592,10 +499,10 @@ class Helper
 				}
 			}
 			if (isset($images->image_second)) {
-			    
-			    $image_object = HTMLHelper::cleanImageURL($images->image_second);
-			    $item->image_second = $image_object->url;
-			    
+
+				$image_object = HTMLHelper::cleanImageURL($images->image_second);
+				$item->image_second = $image_object->url;
+
 				if (!empty($images->image_second_alt)) {
 					$item->alt_second = $images->image_second_alt;
 				}
@@ -767,19 +674,19 @@ class Helper
 
 		if (substr_count($imagesrc, 'http') > 0) {
 			// we have an external URL
-		    if (/*!ini_get('allow_url_fopen') || */!$allow_remote) {
+			if (/*!ini_get('allow_url_fopen') || */!$allow_remote) {
 				$result[0] = $original_imagesrc;
 				$result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_EXTERNALURLNOTALLOWED', $imagesrc);
 
 				return $result;
 			}
 		}
-		
+
 		switch ($thumbnail_mime_type) {
-		    case 'image/jpg': $imageext = 'jpg'; break;
-		    case 'image/png': $imageext = 'png'; break;
-		    case 'image/webp': $imageext = 'webp'; break;
-		    case 'image/avif': $imageext = 'avif';
+			case 'image/jpg': $imageext = 'jpg'; break;
+			case 'image/png': $imageext = 'png'; break;
+			case 'image/webp': $imageext = 'webp'; break;
+			case 'image/avif': $imageext = 'avif';
 		}
 
 		if ($filter == 'none' || strpos($filter, '_css') !== false) {
@@ -811,7 +718,7 @@ class Helper
 				$result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_UNSUPPORTEDFILETYPE', $imagesrc);
 			} else {
 
-			    $quality = self::getImageQualityFromExt($imageext, $image_quality_array);
+				$quality = self::getImageQualityFromExt($imageext, $image_quality_array);
 
 				// negative values force the creation of the thumbnails with size of original image
 				// great to create high-res of original image and/or to use quality parameters to create an image with smaller file size
@@ -822,25 +729,25 @@ class Helper
 
 				if ($image->toThumbnail($filename, $thumbnail_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_highres_images)) {
 
-				    if ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif') { // create fallback
-    					
-				        $fallback_extension = 'png';
-				        $fallback_mime_type = 'image/png';
-				        
-				        // create fallback with original image mime type when the original is not webp or avif
-				        if ($image->getImageMimeType() !== 'image/webp' && $image->getImageMimeType() !== 'image/avif') {
-				            $fallback_extension = $original_imageext;
-				            $fallback_mime_type = $image->getImageMimeType();
-				        }
-				        
-				        $quality = self::getImageQualityFromExt($fallback_extension, $image_quality_array);
-				        
-				        if (!$image->toThumbnail($tmp_path . '/thumb' . $module_id . '_' . $item_id . $filtername . '.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_highres_images)) {
-				            $result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
-				        }
-    				}
+					if ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif') { // create fallback
+
+						$fallback_extension = 'png';
+						$fallback_mime_type = 'image/png';
+
+						// create fallback with original image mime type when the original is not webp or avif
+						if ($image->getImageMimeType() !== 'image/webp' && $image->getImageMimeType() !== 'image/avif') {
+							$fallback_extension = $original_imageext;
+							$fallback_mime_type = $image->getImageMimeType();
+						}
+
+						$quality = self::getImageQualityFromExt($fallback_extension, $image_quality_array);
+
+						if (!$image->toThumbnail($tmp_path . '/thumb' . $module_id . '_' . $item_id . $filtername . '.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_highres_images)) {
+							$result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
+						}
+					}
 				} else {
-				    $result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
+					$result[1] = Text::sprintf('MOD_WEBLINKLOGO_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
 				}
 			}
 
@@ -853,19 +760,19 @@ class Helper
 
 		return $result;
 	}
-	
+
 	static protected function getImageQualityFromExt($image_extension, $qualities = array('jpg' => 75, 'png' => 3, 'webp' => 80, 'avif' => 80))
 	{
-	    $quality = -1;
-	    
-	    switch ($image_extension){
-	        case 'jpg': case 'jpeg': $quality = $qualities['jpg']; break; // 0 to 100
-	        case 'png': $quality = round(11.111111 * (9 - $qualities['png'])); break; // compression: 0 to 9
-	        case 'webp': $quality = $qualities['webp']; break; // 0 to 100
-	        case 'avif': $quality = $qualities['avif']; // 0 to 100
-	    }
-	    
-	    return $quality;
+		$quality = -1;
+		
+		switch ($image_extension){
+			case 'jpg': case 'jpeg': $quality = $qualities['jpg']; break; // 0 to 100
+			case 'png': $quality = round(11.111111 * (9 - $qualities['png'])); break; // compression: 0 to 9
+			case 'webp': $quality = $qualities['webp']; break; // 0 to 100
+			case 'avif': $quality = $qualities['avif']; // 0 to 100
+		}
+		
+		return $quality;
 	}
 
 	/**
@@ -928,9 +835,9 @@ class Helper
 
 		if (File::exists(JPATH_ROOT . '/media/mod_weblinklogos/css/' . $prefix . '_styles-min.css')) { //  B/C
 			if (JDEBUG && File::exists(JPATH_ROOT . '/media/mod_weblinklogos/css/' . $prefix . '_styles.css')) {
-			    $wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
+				$wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
 			} else {
-			    $wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
+				$wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
 			}
 		} else {
 			$wam->registerAndUseStyle('wl.' . $prefix . '_styles', 'mod_weblinklogos/' . $prefix . '_styles.min.css', ['relative' => true, 'version' => 'auto']);
@@ -938,9 +845,9 @@ class Helper
 	}
 
 	/**
-	* Get the site mode
-	* @return string (dev|prod|adv)
-	*/
+	 * Get the site mode
+	 * @return string (dev|prod|adv)
+	 */
 	public static function getSiteMode($params)
 	{
 		return $params->get('site_mode', 'adv');
