@@ -13,8 +13,8 @@ use Joomla\CMS\Date\Date;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Content\Site\Helper\RouteHelper as ContentRouteHelper;
@@ -1408,54 +1408,9 @@ class Helper
 					}
 				break;
 
-// 				case 'jcommentscount':
-// 				case 'linkedjcommentscount':
-
-// 					if (file_exists(JPATH_ROOT . '/components/com_jcomments/jcomments.php')) {
-
-// 						if ($has_info_from_previous_detail) {
-// 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
-// 						}
-
-// 						$info_block .= '<span class="detail detail_jcommentscount' . $extraclasses . '">';
-
-// 						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_COMMENTS'), $value['show_icon'], 'comment', $value['icon']);
-
-// 						$info_block .= '<span class="detail_data">';
-
-// 						require_once(JPATH_ROOT . '/components/com_jcomments/jcomments.php');
-
-// 						$comments_count = JComments::getCommentsCount($item->id, 'com_content');
-
-// 						if ($value['info'] == 'linkedjcommentscount' && isset($item->link) && !empty($item->link)) {
-
-// 							$link_to_comments = '#addcomments';
-// 							if ($view != 'article') {
-// 								$link_to_comments = $item->link.'#addcomments';
-// 							}
-
-// 							$info_block .= '<a href="'.$link_to_comments.'" class="hasTooltip" title="'.Text::_('PLG_CONTENT_ARTICLEDETAILS_GOTOCOMMENTS').'">'.Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_COMMENTS', $comments_count).'</a>';
-// 						} else {
-// 							if ($comments_count > 0) {
-// 								$info_block .= Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_COMMENTS', $comments_count);
-// 							} else {
-// 								$info_block .= Text::_('PLG_CONTENT_ARTICLEDETAILS_NOCOMMENT');
-// 							}
-// 						}
-
-// 						$info_block .= '</span>';
-
-// 						$info_block .= self::getPostData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_COMMENTS'), $value['show_icon'], 'comment', $value['icon']);
-
-// 						$info_block .= '</span>';
-
-// 						$has_info_from_previous_detail = true;
-// 					}
-// 				break;
-
 				case 'email':
 
-				    if (/*$item_params->get('show_email_icon') &&*/$item->link && !$app->input->getBool('print')) {
+				    if ($item->link && !$app->input->getBool('print')) {
 
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
@@ -1501,7 +1456,7 @@ class Helper
 
 				case 'print':
 
-					if (/*$item_params->get('show_print_icon') &&*/ isset($item->slug) && !$app->input->getBool('print')) {
+					if (isset($item->slug) && !$app->input->getBool('print')) {
 						// only article and blog views get slug property
 
 						if ($has_info_from_previous_detail) {
@@ -1826,32 +1781,35 @@ class Helper
 
 	static function getContact($author_id)
 	{
-		if (isset($contacts[$author_id])) {
-			return $contacts[$author_id];
+	    if (isset(self::$contacts[$author_id])) {
+	        return self::$contacts[$author_id];
 		}
 
 		$db = Factory::getDbo();
 
 		$query = $db->getQuery(true);
 
-		$query->select('MAX(id) AS contactid, alias, catid, webpage, email_to AS email');
+		$query->select('MAX(' . $db->quoteName('id') . ') AS contactid');
+		$query->select($db->quoteName(array('alias', 'catid', 'webpage', 'email_to'), array('alias', 'catid', 'webpage', 'email')));
 		$query->from($db->quoteName('#__contact_details'));
-		$query->where($db->quoteName('published').' = 1');
-		$query->where($db->quoteName('user_id').' = '.$author_id);
+		$query->where($db->quoteName('published') . ' = 1');
+		$query->where($db->quoteName('user_id') . ' = :userId');
+		$query->bind(':userId', $author_id, ParameterType::INTEGER);
+
 		if (Multilanguage::isEnabled()) {
-			$query->where('language IN (' . $db->quote(Factory::getLanguage()->getTag()).','.$db->quote('*').') OR language IS NULL');
+		    $query->where('(' . $db->quoteName('language') . ' IS NULL OR ' . $db->quoteName('language') . ' IN (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . '))');
 		}
 
 		$db->setQuery($query);
 
 		try {
-			$contacts[$author_id] = $db->loadObject();
+		    self::$contacts[$author_id] = $db->loadObject();
 		} catch (ExecutionFailureException $e) {
 			//Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 			return null;
 		}
 
-		return $contacts[$author_id];
+		return self::$contacts[$author_id];
 	}
 
 	/**

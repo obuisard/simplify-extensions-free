@@ -83,7 +83,7 @@ class DetailselectField extends GroupedlistField
 			$fields = self::getCoreFields();
 
 			// supported field types
-			$allowed_types = array('calendar', 'checkboxes', 'email', 'integer', 'list', 'radio', 'tel', 'text', 'textarea', 'url', 'editor');
+			$allowed_types = array('calendar', 'checkboxes', 'editor', 'email', 'integer', 'list', 'radio', 'sql', 'tel', 'text', 'textarea', 'url');
 
 			// organize the fields according to their group
 

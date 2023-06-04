@@ -26,6 +26,7 @@ use Joomla\Component\Content\Site\Helper\RouteHelper as ContentRouteHelper;
 use Joomla\Registry\Registry;
 use SYW\Component\TrombinoscopeExtended\Site\Helper\RouteHelper as TrombinoscopeExtendedRouteHelper;
 use SYW\Library\Fonts as SYWFonts;
+use SYW\Library\Utilities as SYWUtilities;
 use SYW\Plugin\Content\ArticleDetails\Cache\CSSFileCache;
 use SYW\Plugin\Content\ArticleDetails\Cache\CSSPrintFileCache;
 use SYW\Plugin\Content\ArticleDetails\Helper\CalendarHelper;
@@ -376,8 +377,14 @@ class plgContentArticleDetails extends CMSPlugin
 		}
 
 		// create output
+		
+		$additional_class = SYWUtilities::isMobile() ? ' mobile' : '';
+		$additional_class .= ' id-' . $row->id;
+		if (isset($row->catid)) {
+		    $additional_class .= ' catid-' . $row->catid;
+		}
 
-		$output .= '<div class="articledetails articledetails-header">';
+		$output .= '<div class="articledetails articledetails-header' . $additional_class . '">';
 
 		$output .= $head_output;
 
@@ -482,9 +489,15 @@ class plgContentArticleDetails extends CMSPlugin
 
 		if ($info_block_footer) {
 
-			// create output
+		    // create output
+		    
+		    $additional_class = SYWUtilities::isMobile() ? ' mobile' : '';
+		    $additional_class .= ' id-' . $row->id;
+		    if (isset($row->catid)) {
+		        $additional_class .= ' catid-' . $row->catid;
+		    }
 
-			$output .= '<div class="articledetails articledetails-footer">';
+			$output .= '<div class="articledetails articledetails-footer' . $additional_class . '">';
 				if ($info_block_footer) {
 					$output .= '<div class="info">';
 						$output .= '<dl class="item_details">'.$info_block_footer.'</dl>';

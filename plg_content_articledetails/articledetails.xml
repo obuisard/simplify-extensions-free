@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="content" method="upgrade">
 	<name>PLG_CONTENT_ARTICLEDETAILS</name>
-	<version>6.1.0</version>
+	<version>6.2.0</version>
 	<creationDate>09/24/2015</creationDate>
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>	
