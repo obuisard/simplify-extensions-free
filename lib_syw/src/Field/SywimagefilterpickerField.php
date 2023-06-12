@@ -11,9 +11,8 @@ defined('_JEXEC') or die ;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Uri\Uri;
-use Joomla\Registry\Registry;
+use SYW\Library\Plugin as SYWPLugin;
 
 class SywimagefilterpickerField extends DynamicsingleselectField
 {
@@ -27,26 +26,6 @@ class SywimagefilterpickerField extends DynamicsingleselectField
 	protected $css_filters_extended = array('blur', 'brightness', 'contrast', 'saturate', 'hue');
 	protected $include_gd_filters;
 	protected $include_css_filters;
-	
-	static $global_image_library = null;
-	
-	static function getGlobalImageLibrary()
-	{
-	    if (!isset(self::$global_image_library)) {
-	        
-	        if (PluginHelper::isEnabled('system', 'syw')) {
-	            
-	            $plugin = PluginHelper::getPlugin('system', 'syw');
-	            
-	            $params = new Registry;
-	            $params->loadString($plugin->params);
-	            
-	            self::$global_image_library = $params->get('image_library', 'gd');
-	        }
-	    }
-	    
-	    return self::$global_image_library;
-	}
 
 	protected function getOptions()
 	{
@@ -94,7 +73,7 @@ class SywimagefilterpickerField extends DynamicsingleselectField
 
 		if ($this->include_gd_filters) {
 		    
-		    $library_tag = self::getGlobalImageLibrary();
+		    $library_tag = SYWPLugin::getImageLibrary();
 		    
 			foreach ($filters as $filter) {
 				if (in_array($filter, $this->gd_filters)) {

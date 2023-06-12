@@ -9,8 +9,7 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Log\Log;
-use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\Registry\Registry;
+use SYW\Library\Plugin as SYWPLugin;
 
 /**
  * Management of an image resource
@@ -95,29 +94,6 @@ class Image
 	private $initial_memory_limit = -1;
 	
 	/**
-	 * 
-	 */
-	static $global_image_library = null;
-	
-	static function getGlobalImageLibrary()
-	{
-	    if (!isset(self::$global_image_library)) {
-	        
-	        if (PluginHelper::isEnabled('system', 'syw')) {
-	            
-	            $plugin = PluginHelper::getPlugin('system', 'syw');
-	            
-	            $params = new Registry;
-	            $params->loadString($plugin->params);
-	            
-	            self::$global_image_library = $params->get('image_library', 'gd');
-	        }
-	    }
-	    
-	    return self::$global_image_library;
-	}
-	
-	/**
 	 * Image resource creation
 	 *
 	 * @param string $from_path
@@ -131,7 +107,7 @@ class Image
 	    
 	    try {
 	        
-	        $library_name = ucfirst(strtolower(self::getGlobalImageLibrary()));
+	        $library_name = ucfirst(strtolower(SYWPLugin::getImageLibrary()));
 	        $library_class = sprintf('SYW\\Library\\Image\\%sLibrary', $library_name);
 	        
 	        if (!class_exists($library_class)) {

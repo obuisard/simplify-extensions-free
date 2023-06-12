@@ -11,8 +11,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\Registry\Registry;
+use SYW\Library\Plugin as SYWPLugin;
 
 class ImagelibrarytestField extends FormField
 {
@@ -34,14 +33,8 @@ class ImagelibrarytestField extends FormField
 		
 		$image_library = '';
 		
-		if (!$this->check_all && PluginHelper::isEnabled('system', 'syw')) {
-		    
-		    $plugin = PluginHelper::getPlugin('system', 'syw');
-		    
-		    $params = new Registry;
-		    $params->loadString($plugin->params);
-		    
-		    $image_library = $params->get('image_library', 'gd');
+		if (!$this->check_all) {		    
+		    $image_library = SYWPlugin::getImageLibrary();
 		}
 
 		$html = '';

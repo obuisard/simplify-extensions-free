@@ -90,39 +90,47 @@ abstract class HeaderFilesCache
 
 		$cache_path = $this->getCachePath(true);
 
-		if (!$reset && File::exists($cache_path.'/'.$output_file)) {
+		if (!$reset && File::exists($cache_path . '/' . $output_file)) {
 			return true;
 		}
 
 		$buffer = $this->getBuffer();
+		
+		/* Removed to avoid memory issues and not so useful checks, which time to complete
 
 		$this->footprint = md5($buffer.$this->declaration);
 
 		// check if footprint of file online is the same
-		if (File::exists($cache_path.'/'.$output_file)) {
-			$content = @file_get_contents(URI::base().'cache/'.$this->extension.'/'.$output_file);
+		if (File::exists($cache_path . '/' . $output_file)) {
+		    $content = @file_get_contents($cache_path . '/' . $output_file);
 			if ($content === false) {
 				if (defined('JDEBUG') && JDEBUG) {
 					Log::add('SYWHeaderFilesCache:cache() - Warning with file_get_contents - Cannot check content footprint', Log::WARNING, 'syw');
 				}
 			} else if (md5($content) == $this->footprint) { // no need to re_create the file because there are no changes
-				return true;
+			    return true;
 			}
 		}
+		
+		*/
 
-		$result = @file_put_contents($cache_path.'/'.$output_file, $buffer);
+		$result = @file_put_contents($cache_path . '/' . $output_file, $buffer.$this->declaration);
 		if ($result === false) {
 			Log::add('SYWHeaderFilesCache:cache() - Error in file_put_contents', Log::ERROR, 'syw');
 			return false;
 		}
 
+		/* Removed so we have one write only
+
 		if ($this->declaration) {
-			$result = @file_put_contents($cache_path.'/'.$output_file, $this->declaration, FILE_APPEND);
+			$result = @file_put_contents($cache_path . '/' . $output_file, $this->declaration, FILE_APPEND);
 			if ($result === false) {
 				Log::add('SYWHeaderFilesCache:cache() - Error in file_put_contents when appending content', Log::ERROR, 'syw');
 				return false;
 			}
 		}
+
+		*/
 
 		return true;
 	}

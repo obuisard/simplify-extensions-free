@@ -176,7 +176,7 @@ class SywcolorpickerField extends FormField
 		}
 		
 		if ($this->clear) { // use a_ rather than clear_ for backward compatibility
-			$html .= '<button type="button" id="a_'.$this->id.'" data-name="clear" class="btn btn-secondary hasTooltip" title="'.Text::_('JCLEAR').'" aria-label="' . Text::_('JCLEAR') . '"><i class="icon-remove" aria-hidden="true"></i></button>';
+			$html .= '<button type="button" id="a_'.$this->id.'" data-name="clear" class="btn btn-danger hasTooltip" title="'.Text::_('JCLEAR').'" aria-label="' . Text::_('JCLEAR') . '"><i class="icon-remove" aria-hidden="true"></i></button>';
 		}
 		
 		$html .= '</div>';

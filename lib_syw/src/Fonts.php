@@ -9,7 +9,7 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Plugin\PluginHelper;
+use SYW\Library\Plugin as SYWPLugin;
 
 class Fonts
 {
@@ -17,11 +17,6 @@ class Fonts
      * The web asset manager
      */
     protected static $wam;
-
-    /**
-     * The plugin params
-     */
-    protected static $plugin_params;
 
     /**
      * Get the web asset manager
@@ -37,24 +32,6 @@ class Fonts
         return self::$wam;
     }
 
-    /**
-     * Get the plugin params
-     * @return object
-     */
-    protected static function getPluginParams()
-    {
-        if (self::$plugin_params == null)
-        {
-            if (PluginHelper::isEnabled('system', 'syw'))
-            {
-                $plugin = PluginHelper::getPlugin('system', 'syw');
-                self::$plugin_params = json_decode($plugin->params);
-            }
-        }
-
-        return self::$plugin_params;
-    }
-
 	/**
 	 * Load the icon font if needed
 	 */
@@ -62,15 +39,13 @@ class Fonts
 	{
 		$lazyload = false;
 
-		if (Factory::getApplication()->isClient('site') && isset(self::getPluginParams()->lazy_stylesheets) && self::getPluginParams()->lazy_stylesheets > 0)
-		{
+		if (Factory::getApplication()->isClient('site') && SYWPLugin::getLazyStylesheet() > 0) {
 			$lazyload = true;
 		}
 
 		$attributes = array();
 
-		if ($lazyload)
-		{
+		if ($lazyload) {
 		    $attributes['rel'] = 'lazy-stylesheet';
 		}
 
@@ -82,8 +57,7 @@ class Fonts
 
 	        case 'fontawesome' : // loads fontawesome and icomoon B/C from web asset, probably already loaded on the page
 
-	        	if ($lazyload)
-	        	{
+	        	if ($lazyload) {
 	        		self::getWebAssetManager()->getAsset('style', 'fontawesome')->setAttribute('rel', 'lazy-stylesheet');
 	        	}
 
@@ -96,17 +70,281 @@ class Fonts
 	}
 	
 	/**
+	 * Returns the webfonts found in a font family
+	 * The returned font is of format "Web Font"
+	 * 
+	 * @param string $font_family
+	 * 
+	 * @return array
+	 */
+	public static function getWebfontsFromFamily($font_family)
+	{
+	    $webfonts = [];
+
+	    $standard_fonts = [];
+
+	    $standard_fonts[] = 'Palatino Linotype';
+	    $standard_fonts[] = 'Book Antiqua';
+	    $standard_fonts[] = 'MS Serif';
+	    $standard_fonts[] = 'New York';
+	    $standard_fonts[] = 'Times New Roman';
+	    $standard_fonts[] = 'Arial Black';
+	    $standard_fonts[] = 'Comic Sans MS';
+	    $standard_fonts[] = 'Lucida Sans Unicode';
+	    $standard_fonts[] = 'Lucida Grande';
+	    $standard_fonts[] = 'Trebuchet MS';
+	    $standard_fonts[] = 'MS Sans Serif';
+	    $standard_fonts[] = 'Courier New';
+	    $standard_fonts[] = 'Lucida Console';
+
+	    $fonts = explode(',', $font_family);
+
+	    foreach ($fonts as $font) {
+	        if (substr_count($font, '"') == 2 || substr_count($font, '\'') == 2) { // found a font with 2 quotes
+	            $font = trim($font, ' \'"');
+	            
+	            if (in_array(ucwords($font), $standard_fonts)) {
+	                continue; // Not a webfont
+	            }
+
+	            $webfonts[] = $font;
+	        }
+	    }
+	    
+	    return $webfonts;
+	}
+	
+	/**
+	 * Transform "Web Font" into Web<replacement>Font for use in <link> tag
+	 *
+	 * @param string $webfont with or without enclosed "
+	 * 
+	 * @return string
+	 */
+// 	public static function getSafeWebfont($webfont)
+// 	{
+// 	    $host_service = SYWPLugin::getWebfontService();
+	    
+// 	    $replacement = '+';
+// 	    if ($host_service === 'bunny') {
+// 	        $replacement = '-';
+// 	    }
+
+// 	    $font = str_replace(' ', $replacement, $webfont); // replace spaces with replacement
+	    
+// 	    return trim($font, '"');
+// 	}
+	
+	/**
+	 * Get a Bunny webfont family syntax
+	 *
+	 * @param string $font_name (can be "Web Font" or Web-Font or "Web-Font")
+	 * @param array $weights
+	 * 
+	 * @return string
+	 */
+	protected static function getBunnyFamily($font_name, $weights = [])
+	{
+	    $family = $font_name;
+	    
+	    if (count($weights) > 0) {
+	        $family .= ':' . implode(',', $weights);
+	    }
+        
+        return $family;
+	}
+	
+	/**
+	 * Get a Google webfont family syntax
+	 *
+	 * @param string $font_name (can be "Web Font" or Web+Font or "Web+Font")
+	 * @param array $weights
+	 * 
+	 * @return string
+	 */
+	protected static function getGoogleFamily($font_name, $weights = [])
+	{
+	    $family = $font_name;
+	    
+	    if (count($weights) > 0) {
+	        
+	        $weights_mdarray = [];
+	        $italic = false;
+	        
+	        foreach ($weights as $weight) {
+	            if (strpos($weight, 'i') !== false) {
+	                $weights_mdarray[rtrim($weight, 'i')][] = '1';
+	                $italic = true;
+	            } else {
+	                $weights_mdarray[$weight][] = '0';
+	            }
+	        }
+	        
+	        $family .= ':';
+	        
+	        if ($italic) {
+	            $family .= 'ital,';
+	        }
+	        
+	        $family .= 'wght@';
+	        
+	        // :wght@100;300 when no italic specimens
+	        // :ital,wght@0,100;0,300;1,400 when italic specimens
+	        
+	        foreach ($weights_mdarray as $weight => $weight_array) {
+	            foreach ($weight_array as $italic_value) {
+	                if ($italic) {
+	                    $family .= $italic_value . ',' . $weight . ';';
+	                } else {
+	                    $family .= $weight . ';';
+	                }
+	            }
+	        }
+	        
+	        $family = rtrim($family, ';');
+	    }
+	    
+	    return $family;
+	}
+	
+	/**
+	 * Load a set of web fonts
+	 * 
+	 * @param array 
+	 *     $font_names [['name' => 'Web Font 1', 'weights' => ['400', '500', '500i']], ['name' => 'Web Font 2', 'weights' => []], ['name' => 'Web Font 2']]
+	 *     $font_names can be ['Web Font 1', 'Web Font 2']
+	 *     Web fonts can be Web Font or Web+Font or Web-Font
+	 * 
+	 * @return boolean if the webfont URL has been processed or not
+	 */
+	public static function loadWebFonts($font_names)
+	{
+	    if (count($font_names) <= 0) {
+	        return false;
+	    }
+	    
+	    // If the array is a mono list of font names, remove duplicates and create a usable array
+	    if (!is_array(array_values($font_names)[0])) {
+	        $font_names = array_unique($font_names);
+
+	        $web_fonts_array = [];
+	        foreach ($font_names as $font_name) {
+	            $web_fonts_array[] = ['name' => $font_name];
+	        }
+	        
+	        $font_names = $web_fonts_array;
+	    } else {
+	        // Look for duplicates only. Merge weights
+	        
+	        $unique_array = [];
+	        $key_array = [];
+	        
+	        foreach ($font_names as $font_name_array) {
+	            if (!in_array($font_name_array['name'], $key_array)) {
+	                $key_array[] = $font_name_array['name'];
+	                $unique_array[$font_name_array['name']] = isset($font_name_array['weights']) ? $font_name_array['weights'] : [];
+	            } else {
+	                $weights_recorded = $unique_array[$font_name_array['name']];
+	                $weights_to_record = isset($font_name_array['weights']) ? $font_name_array['weights'] : [];
+
+	                // Make sure 400 is part of the list or else the normal weight will be missing
+	                if (count($weights_recorded) > 0 && empty($weights_to_record)) {
+	                    $weights_to_record = ['400'];
+	                } else if (count($weights_to_record) > 0 && empty($weights_recorded)) {
+	                    $weights_recorded = ['400'];
+	                }
+
+	                $unique_array[$font_name_array['name']] = array_unique(array_merge($weights_recorded, $weights_to_record));
+	            }
+	        }
+	        
+	        // Duplicates have been found
+	        if (count($font_names) > count($unique_array)) {
+	            $font_names = [];
+	            foreach ($unique_array as $name => $weights) {
+	                $font_names[] = ['name' => $name, 'weights' => $weights];
+	            }
+	        }
+	    }
+	    
+	    $host_service = SYWPLugin::getWebfontService();
+	    
+	    switch ($host_service)
+	    {
+	        case 'bunny':
+	            
+	            $url = 'https://fonts.bunny.net/css?family=';
+	            
+	            $families = [];
+	            $asset_names = [];
+	            
+	            foreach ($font_names as $font_name_array) {
+	                $safe_font_name = str_replace(' ', '-', $font_name_array['name']);
+	                $safe_weights = isset($font_name_array['weights']) ? $font_name_array['weights'] : [];
+	                $families[] = self::getBunnyFamily($safe_font_name, $safe_weights);
+	                $asset_names[] = strtolower(str_replace('-', '_', $safe_font_name));
+	            }
+
+// 	            foreach ($font_names as $font_name => $weights) {
+// 	                $safe_font_name = str_replace(' ', '-', $font_name);
+// 	                $families[] = self::getBunnyFamily($safe_font_name, $weights);
+// 	                $asset_names[] = strtolower(str_replace('-', '_', $safe_font_name));
+// 	            }
+	            
+	            $url .= implode('|', $families);
+	            
+	            Factory::getApplication()->getDocument()->getPreloadManager()->preconnect('https://fonts.bunny.net');
+	            self::getWebAssetManager()->registerAndUseStyle('syw.webfont.' . implode('__', $asset_names), $url);
+	            
+	            break;
+
+	        default:
+	            
+	            $url = 'https://fonts.googleapis.com/css2?';
+	            
+	            $families = [];
+	            $asset_names = [];
+	            
+	            foreach ($font_names as $font_name_array) {
+	                $safe_font_name = str_replace(' ', '+', $font_name_array['name']);
+	                $safe_weights = isset($font_name_array['weights']) ? $font_name_array['weights'] : [];
+	                $families[] = 'family=' . self::getGoogleFamily($safe_font_name, $safe_weights);
+	                $asset_names[] = strtolower(str_replace('+', '_', $safe_font_name));
+	            }
+
+// 	            foreach ($font_names as $font_name => $weights) {
+// 	                $safe_font_name = str_replace(' ', '+', $font_name);	                
+// 	                $families[] = 'family=' . self::getGoogleFamily($safe_font_name, $weights);
+// 	                $asset_names[] = strtolower(str_replace('+', '_', $safe_font_name));
+// 	            }
+	            
+	            $url .= implode('&', $families);
+	            
+	            $url .= '&display=swap';
+	            
+	            Factory::getApplication()->getDocument()->getPreloadManager()->preconnect('https://fonts.googleapis.com', ['crossorigin' => 'anonymous']);
+	            Factory::getApplication()->getDocument()->getPreloadManager()->preconnect('https://fonts.gstatic.com', ['crossorigin' => 'anonymous']);
+	            self::getWebAssetManager()->registerAndUseStyle('syw.webfont.' . implode('__', $asset_names), $url);
+	    }
+	    
+	    return true;
+	}
+	
+	/**
 	 * Load a Google font
 	 * 
 	 * @param string $font_name (can be "Google Font" or Google+Font)
 	 * @param string $weight (can be 400 400;700 400..700)
 	 * @param string $text get only the letters needed
+	 * 
+	 * @deprecated use loadWebFont instead
 	 */
 	public static function loadGoogleFont($font_name, $weight = '', $text = '')
 	{
 		$font_name = trim($font_name, '"'); // removes quotes, if any
+		$font_name = str_replace(' ', '+', $font_name);
 		
-		$url = 'https://fonts.googleapis.com/css2?family=' . str_replace(' ', '+', $font_name);
+		$url = 'https://fonts.googleapis.com/css2?family=' . $font_name;
 		
 		if ($weight) {
 			$url .= ':wght@' . $weight;
@@ -118,7 +356,7 @@ class Fonts
 		
 		$url .= '&display=swap';
 
-		self::getWebAssetManager()->registerAndUseStyle('syw.googlefont.' . str_replace(' ', '_', $font_name), $url);
+		self::getWebAssetManager()->registerAndUseStyle('syw.googlefont.' . str_replace('+', '_', $font_name), $url);
 	}
 	
 	/**

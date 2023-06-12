@@ -411,7 +411,7 @@ class SywuniversaliconpickerField extends FormField
 	    }
 
 	    if ($this->buttonrole == 'clear') {
-	        $default_class_extra = ' btn-secondary';
+	        $default_class_extra = ' btn-danger';
 	    }
 
 	    $html .= '<button type="button" data-name="default-icon" id="'.$this->id.'_default"'.($this->disabled ? ' disabled="disabled"' : '').' class="btn'.$default_class_extra.' hasTooltip" title="' . htmlspecialchars($this->buttonlabel, ENT_COMPAT, 'UTF-8') . '" aria-label="' . htmlspecialchars($this->buttonlabel, ENT_COMPAT, 'UTF-8') . '">';

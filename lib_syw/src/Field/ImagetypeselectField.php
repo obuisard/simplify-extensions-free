@@ -10,8 +10,7 @@ defined( '_JEXEC' ) or die;
 
 use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\Registry\Registry;
+use SYW\Library\Plugin as SYWPLugin;
 
 class ImagetypeselectField extends ListField
 {
@@ -23,17 +22,7 @@ class ImagetypeselectField extends ListField
 
 		$options = array();
 		
-		$image_library = 'gd';
-		
-		if (PluginHelper::isEnabled('system', 'syw')) {
-		    
-		    $plugin = PluginHelper::getPlugin('system', 'syw');
-		    
-		    $params = new Registry;
-		    $params->loadString($plugin->params);
-		    
-		    $image_library = $params->get('image_library', 'gd');
-		}
+		$image_library = SYWPlugin::getImageLibrary();
 		
 		$allow_webp = false;
 		$allow_avif = false;

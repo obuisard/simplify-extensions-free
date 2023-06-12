@@ -9,7 +9,7 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Plugin\PluginHelper;
+use SYW\Library\Plugin as SYWPLugin;
 
 class Stylesheets
 {
@@ -57,11 +57,6 @@ class Stylesheets
 	protected static $wam;
 	
 	/**
-	 * The plugin params
-	 */
-	protected static $plugin_params;
-	
-	/**
 	 * Get the web asset manager
 	 * @return object
 	 */
@@ -73,22 +68,6 @@ class Stylesheets
 	    
 	    return self::$wam;
 	}
-	
-	/**
-	 * Get the plugin params
-	 * @return object
-	 */
-	protected static function getPluginParams()
-	{
-	    if (self::$plugin_params == null) {
-	        if (PluginHelper::isEnabled('system', 'syw')) {
-	            $plugin = PluginHelper::getPlugin('system', 'syw');
-	            self::$plugin_params = json_decode($plugin->params);
-	        }
-	    }
-	    
-	    return self::$plugin_params;
-	}
 
 	/**
 	 * Load the animate stylesheet
@@ -98,7 +77,7 @@ class Stylesheets
 	public static function loadAnimate($remote = false)
 	{	    
 	    $attributes = array();
-	    if (Factory::getApplication()->isClient('site') && isset(self::getPluginParams()->lazy_stylesheets) && self::getPluginParams()->lazy_stylesheets > 0) {
+	    if (Factory::getApplication()->isClient('site') && SYWPLugin::getLazyStylesheet() > 0) {
 	        $attributes['rel'] = 'lazy-stylesheet';
 	    }
 
@@ -1969,7 +1948,7 @@ CSS;
 	static function load2DTransitions()
 	{	    
 	    $attributes = array();
-	    if (Factory::getApplication()->isClient('site') && isset(self::getPluginParams()->lazy_stylesheets) && self::getPluginParams()->lazy_stylesheets > 0) {
+	    if (Factory::getApplication()->isClient('site') && SYWPLugin::getLazyStylesheet() > 0) {
 	        $attributes['rel'] = 'lazy-stylesheet';
 	    }
 		
@@ -1982,7 +1961,7 @@ CSS;
 	static function loadBGTransitions()
 	{	    
 	    $attributes = array();
-	    if (Factory::getApplication()->isClient('site') && isset(self::getPluginParams()->lazy_stylesheets) && self::getPluginParams()->lazy_stylesheets > 0) {
+	    if (Factory::getApplication()->isClient('site') && SYWPLugin::getLazyStylesheet() > 0) {
 	        $attributes['rel'] = 'lazy-stylesheet';
 	    }
 		
