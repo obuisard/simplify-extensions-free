@@ -69,6 +69,8 @@ class Utilities
 	/*
 	* Returns the google font found in a font family
 	* The returned font is of format "Google Font"
+	* 
+	* @deprecated use Fonts::getWebfontFromFamily
 	*/
 	static function getGoogleFont($font_family)
 	{
@@ -107,10 +109,12 @@ class Utilities
 
 	/*
 	 * Transform "Google Font" into Google+Font for use in <link> tag
+	 * 
+	 * @deprecated use Fonts::getSafeWebfont
 	 */
 	static function getSafeGoogleFont($google_font)
 	{
-		$font = str_replace(' ', '+', $google_font); // replace spaces by +
+		$font = str_replace(' ', '+', $google_font); // replace spaces with +
 		return trim($font, '"');
 	}
 

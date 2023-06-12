@@ -80,7 +80,7 @@ class K2ElementItem extends K2Element
 		$html = '<span class="input-group">';
 		$html .= '    <input type="text" class="form-control" id="'.$name.'_name" value="'.htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8').'" disabled="disabled" />';
 		$html .= '    <a href="#modalK2Item'.$name.'" class="btn hasTooltip" role="button" data-bs-toggle="modal" title="'.Text::_('LIB_SYW_K2ITEM_SELECT_AN_ITEM').'"><i class="icon-file"></i> '.Text::_('JSELECT').'</a>';
-		$html .= '    <a id="'.$name.'_clear" href="#" class="btn btn-secondary hasTooltip'.($value ? '' : ' hidden').'" title="'.Text::_('JCLEAR').'" aria-label="' . Text::_('JCLEAR') . '" onclick="return jClearArticle(\''.$this->id.'\')"><i class="icon-remove"></i></a>';
+		$html .= '    <a id="'.$name.'_clear" href="#" class="btn btn-danger hasTooltip'.($value ? '' : ' hidden').'" title="'.Text::_('JCLEAR').'" aria-label="' . Text::_('JCLEAR') . '" onclick="return jClearArticle(\''.$this->id.'\')"><i class="icon-remove"></i></a>';
 		$html .= '</span>';
 
 		$class = '';

@@ -284,7 +284,7 @@ class SywtransitionpickerField extends FormField
 		$html .= '</ul>';
 		
 		if ($this->use_global) {
-			$html .= '<button type="button" id="'.$this->id.'_clear" class="btn btn-secondary hasTooltip" title="' . Text::_('JCLEAR') . '" aria-label="' . Text::_('JCLEAR') . '"><i class="icon-remove" aria-hidden="true"></i></button>';
+			$html .= '<button type="button" id="'.$this->id.'_clear" class="btn btn-danger hasTooltip" title="' . Text::_('JCLEAR') . '" aria-label="' . Text::_('JCLEAR') . '"><i class="icon-remove" aria-hidden="true"></i></button>';
 		}
 		
 		$html .= '</div>';

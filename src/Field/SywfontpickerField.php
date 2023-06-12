@@ -14,12 +14,15 @@ use Joomla\CMS\Form\FormField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+use SYW\Library\Plugin as SYWPlugin;
 
 class SywfontpickerField extends FormField
 {
 	public $type = 'Sywfontpicker';
 	
 	protected $use_global;
+	
+	protected $support_webfonts;
 	
 	/**
 	 * 
@@ -144,9 +147,9 @@ class SywfontpickerField extends FormField
                         });
                     }
 			
-                    var google_fonts = document.querySelectorAll(".googlefont_' . $this->id . '");
-                    for (let i = 0; i < google_fonts.length; i++) {
-                        google_fonts[i].addEventListener("click", function(event) {
+                    var web_fonts = document.querySelectorAll(".webfont_' . $this->id . '");
+                    for (let i = 0; i < web_fonts.length; i++) {
+                        web_fonts[i].addEventListener("click", function(event) {
                             let font_family = this.textContent;
                             input.value = font_family;
                             input.style.fontFamily = "inherit";
@@ -186,7 +189,7 @@ class SywfontpickerField extends FormField
 		$html .= '<button type="button" id="dropdownMenu'.$this->id.'" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent" aria-label="' . Text::_('LIB_SYW_FONTPICKER_SELECTFONT') . '"></button>';
 		$html .= '<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenu'.$this->id.'" style="max-height: 200px; overflow-x: hidden; overflow-y: auto">';
 		
-		$html .= '<li><a class="dropdown-item googlefont_'.$this->id.'" href="#" onclick="return false;">' . Text::_('LIB_SYW_FONTPICKER_GOOGLEFONTFORMAT') . '</a></li>';
+		$html .= '<li><a class="dropdown-item webfont_'.$this->id.'" href="#" onclick="return false;">' . Text::_('LIB_SYW_FONTPICKER_WEBFONTFORMAT') . '</a></li>';
 		
 		$html .= '<li><h6 class="dropdown-header">Serif</h6></li>';
 		$html .= self::getSerifFontFamilies();
@@ -205,7 +208,7 @@ class SywfontpickerField extends FormField
 		
 		$html .= '</ul>';
 		
-		$html .= '<button id="clear_' . $this->id . '" type="button" class="btn btn-secondary hasTooltip" title="' . Text::_('JCLEAR') . '" aria-label="' . Text::_('JCLEAR') . '"><i class="icon-remove" aria-hidden="true"></i></button>';
+		$html .= '<button id="clear_' . $this->id . '" type="button" class="btn btn-danger hasTooltip" title="' . Text::_('JCLEAR') . '" aria-label="' . Text::_('JCLEAR') . '"><i class="icon-remove" aria-hidden="true"></i></button>';
 		
 		$html .= '</div>';
 		
@@ -220,7 +223,21 @@ class SywfontpickerField extends FormField
 		
 		if ($return) {
 			$this->use_global = ((string)$this->element['global'] == "true" || (string)$this->element['useglobal'] == "true") ? true : false;
-			$this->help = isset($this->element['help']) ? Text::_((string)$this->element['help']) : Text::_('LIB_SYW_FONTPICKER_GOOGLEFONTLINKHELP') . '<br /><a href="https://fonts.google.com" target="_blank">' . Text::_('LIB_SYW_FONTPICKER_GOOGLEFONTLINK') . '</a>';
+			$this->support_webfonts = ((string)$this->element['webfonts'] == "true") ? true : false;
+			$this->help = isset($this->element['help']) ? Text::_((string)$this->element['help']) : '';
+
+			if (empty($this->help)) {
+			    $help = Text::_('LIB_SYW_FONTPICKER_WEBFONTLINKHELP');
+
+			    $webfont_service = $this->support_webfonts ? SYWPlugin::getWebfontService() : 'google';
+    			if ($webfont_service === 'bunny') {
+    			    $help .= '<br /><a href="https://fonts.bunny.net" target="_blank">' . Text::_('LIB_SYW_FONTPICKER_BUNNYFONTLINK') . '</a>';
+    			} else {
+                    $help .= '<br /><a href="https://fonts.google.com" target="_blank">' . Text::_('LIB_SYW_FONTPICKER_GOOGLEFONTLINK') . '</a>';
+    			}
+
+    			$this->help = $help;
+			}
 		}
 		
 		return $return;
