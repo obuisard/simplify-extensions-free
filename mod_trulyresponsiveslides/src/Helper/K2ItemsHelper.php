@@ -12,7 +12,6 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\Database\Exception\ExecutionFailureException;
-use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 require_once (JPATH_SITE.'/components/com_k2/models/itemlist.php');
@@ -47,7 +46,7 @@ class K2ItemsHelper
 		$subquery2 .= ' ELSE ';
 		$subquery2 .= $c_id.' END AS cat_slug';
 
-		$query->select($db->quoteName(array('a.id', 'a.catid', 'a.title', 'a.alias', 'a.introtext', 'a.fulltext', 'a.params', 'a.metadata', 'a.metakey', 'a.metadesc', 'a.access', 'a.hits', 'a.featured', 'a.language')));
+		$query->select($db->quoteName(array('a.id', 'a.catid', 'a.title', 'a.alias', 'a.introtext', 'a.fulltext', 'a.params', 'a.metadata', 'a.metakey', 'a.metadesc', 'a.access', 'a.hits', 'a.featured', 'a.language', 'a.image_caption')));
 		$query->select($db->quoteName('c.id', 'cat_id')); // keep for b/c
 
 		$query->select($db->quoteName(array('a.checked_out', 'a.checked_out_time', 'a.created', 'a.created_by', 'a.created_by_alias')));
@@ -299,11 +298,6 @@ class K2ItemsHelper
 			}
 
 			// n/a: links a, b and c
-
-			// convert the plugins field to an array
-			$registry = new Registry();
-			$registry->loadString($item->plugins);
-			$item->plugins = $registry->toArray();
 		}
 
 		return $items;
