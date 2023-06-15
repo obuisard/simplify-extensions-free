@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.8.1</version>
+	<version>6.9.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -1013,7 +1013,7 @@
 				
 				<fieldset name="themes_information" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_LABEL">
 					
-					<field name="details_font" type="sywfontpicker" default=""
+					<field name="details_font" type="sywfontpicker" webfonts="true" default=""
 	                    label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTDETAILS_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTDETAILS_DESC" />
 					
@@ -1414,7 +1414,7 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHADOWWIDTH_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHADOWWIDTH_DESC" />	
 						
-					<field name="fontcalendar" type="sywfontpicker" default=""
+					<field name="fontcalendar" type="sywfontpicker" webfonts="true" default=""
 	                    label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTCALENDAR_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTCALENDAR_DESC" />
 						

@@ -606,12 +606,7 @@ if (empty($list)) { // $list can be an empty array
 		// font details
 		$font_details = $params->get('details_font', '');
 		if (!empty($font_details)) {
-			$font_details = str_replace('\'', '"', $font_details); // " lost, replaced by '
-
-			$google_font = SYWUtilities::getGoogleFont($font_details); // get Google font, if any
-			if ($google_font) {
-				SYWFonts::loadGoogleFont($google_font);
-			}
+		    SYWFonts::loadWebFonts(SYWFonts::getWebfontsFromFamily($font_details));
 
 			$extra_styles .= '#lnee_' . $class_suffix . ' .newsextra { font-family: ' . $font_details . '} ';
 		}

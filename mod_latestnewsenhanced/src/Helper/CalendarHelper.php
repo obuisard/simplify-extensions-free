@@ -11,7 +11,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
 use SYW\Library\Fonts as SYWFonts;
-use SYW\Library\Utilities as SYWUtilities;
 
 class CalendarHelper
 {
@@ -71,12 +70,7 @@ class CalendarHelper
 
 		$font_calendar = $params->get('fontcalendar', '');
 		if (!empty($font_calendar)) {
-			$font_calendar = str_replace('\'', '"', $font_calendar); // " lost, replaced by '
-
-			$google_font = SYWUtilities::getGoogleFont($font_calendar); // get Google font, if any
-			if ($google_font) {
-				SYWFonts::loadGoogleFont($google_font);
-			}
+		    SYWFonts::loadWebFonts(SYWFonts::getWebfontsFromFamily($font_calendar));
 
 			$styles .= '#lnee_'.$suffix.' .calendar {';
 			$styles .= 'font-family: '.$font_calendar.' !important;';
