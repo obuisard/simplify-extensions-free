@@ -1736,7 +1736,7 @@ abstract class Helper
 
 				$address = trim($item->address, ", \t\n\r\0\x0B");
 				if ($address) {
-					$address .= '\n';
+					$address .= "\n";
 				}
 				switch ($params->get('a_fmt', 'ssz')) {
 					case 'ssz' :
@@ -2093,7 +2093,7 @@ abstract class Helper
 
 	public static function getAutoMapLink($address, $params = '', $embed = false) {
 
-		$address_array = explode('\n', $address);
+		$address_array = explode("\n", $address);
 		$address = '';
 		foreach ($address_array as $address_line) {
 			$address_line = str_replace(',', ' ', $address_line);
