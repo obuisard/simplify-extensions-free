@@ -387,7 +387,7 @@ defined('_JEXEC') or die;
 	}
 
 	/* backward compatibility */
-	<?php echo $prefix; ?> .items_pagination.pagination .pagenumbers {
+	#weblinklogo_<?php echo $suffix; ?> .items_pagination.pagination .pagenumbers {
 		display: none;
 	}
 

@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.7.0</version>
+	<version>4.7.2</version>
 	<description>MOD_WEBLINKLOGO_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\WeblinkLogos</namespace>
 	
@@ -65,7 +65,7 @@
 					forum="https://simplifyyourweb.com/forum/weblink-logos" 
 					support="https://simplifyyourweb.com/support" 
 					report="https://simplifyyourweb.com/support" 
-					demo="http://demo3.simplifyyourweb.com/weblink-logos" 
+					demo="https://demo4.simplifyyourweb.com/weblink-logos" 
 					review="http://extensions.joomla.org/extensions/extension/directory-a-documentation/weblinks/weblink-logos" 
 					donate="https://simplifyyourweb.com/free-products/weblink-logos" />
 									
