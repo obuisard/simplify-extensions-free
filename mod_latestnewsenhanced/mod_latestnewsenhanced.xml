@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.9.0</version>
+	<version>6.9.1</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -79,7 +79,7 @@
 					forum="https://simplifyyourweb.com/forum/16-latest-news-enhanced"
 					report="https://simplifyyourweb.com/support"
 					support="https://simplifyyourweb.com/support"
-					demo="http://demo3.simplifyyourweb.com/latest-news-enhanced"
+					demo="https://demo4.simplifyyourweb.com/latest-news-enhanced"
 					review="http://extensions.joomla.org/extensions/extension/news-display/articles-display/latest-news-enhanced"
 					donate="https://simplifyyourweb.com/free-products/latest-news-enhanced" />
 

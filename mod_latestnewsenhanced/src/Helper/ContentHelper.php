@@ -605,7 +605,7 @@ class ContentHelper
 					$subquery->select('COUNT(' . $db->quoteName('tt.id') . ') AS tag_count_per_item');
 					$subquery->from($db->quoteName('#__contentitem_tag_map', 'mm'));
 					$subquery->join('INNER', $db->quoteName('#__tags', 'tt'), $db->quoteName('mm.tag_id') . ' = ' . $db->quoteName('tt.id'));
-					$subquery->whereIn($db->quoteName('tt.access'), $view_levels);
+					$subquery->where($db->quoteName('tt.access') . ' IN (' . implode(',', $view_levels) . ')'); // DO NOT USE whereIn (or else we need prepared variables)
 					$subquery->where($db->quoteName('tt.published') . ' = 1');
 					$subquery->where($db->quoteName('mm.type_alias') . ' = ' . $db->quote('com_content.article'));
 					$subquery->group($db->quoteName('content_id'));
