@@ -6,10 +6,10 @@
 	<packagename>latestnewsenhanced</packagename>
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>
-	<url>https://simplifyyourweb.com/</url>
+	<url>https://simplifyyourweb.com</url>
 	<packager>Olivier Buisard</packager>
- 	<packagerurl>https://simplifyyourweb.com/</packagerurl>
-	<version>6.9.0</version>
+ 	<packagerurl>https://simplifyyourweb.com</packagerurl>
+	<version>6.9.1</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/latestnewsenhanced/changelog.xml</changelogurl>
 	<description>PKG_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<blockChildUninstall>true</blockChildUninstall>
