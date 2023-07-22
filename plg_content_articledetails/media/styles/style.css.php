@@ -146,6 +146,7 @@ defined('_JEXEC') or die;
 
 		.articledetails .info .form-inline select {
 			width: auto;
+			display: inline-block;
 		}
 
 		.articledetails-header .info .form-inline,

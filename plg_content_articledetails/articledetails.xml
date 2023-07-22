@@ -1,25 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="content" method="upgrade">
 	<name>PLG_CONTENT_ARTICLEDETAILS</name>
-	<version>6.2.0</version>
+	<author>Olivier Buisard</author>
 	<creationDate>09/24/2015</creationDate>
 	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
 	<license>GNU General Public License version 3 or later</license>	
-	<author>Olivier Buisard</author>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
+	<version>6.3.0</version>
 	<description>PLG_CONTENT_ARTICLEDETAILS_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Plugin\Content\ArticleDetails</namespace>
+	
 	<media folder="media" destination="plg_content_articledetails">
 		<folder>images</folder>
 		<folder>styles</folder>
 	</media>
+	
 	<files>
-		<filename plugin="articledetails">articledetails.php</filename>
-		<filename>license.txt</filename>
+		<folder plugin="articledetails">services</folder>
 		<folder>forms</folder>
 		<folder>src</folder>
+		<filename>license.txt</filename>
 	</files>
+	
 	<languages>
 	   <language tag="de-DE">language/de-DE/de-DE.plg_content_articledetails.ini</language>
 	   <language tag="de-DE">language/de-DE/de-DE.plg_content_articledetails.sys.ini</language>
@@ -48,6 +51,7 @@
 	   <language tag="tr-TR">language/tr-TR/tr-TR.plg_content_articledetails.ini</language>
 	   <language tag="tr-TR">language/tr-TR/tr-TR.plg_content_articledetails.sys.ini</language>
 	</languages>
+	
 	<config>
 		<fields name="params" addfieldprefix="SYW\Plugin\Content\ArticleDetails\Field">
 		
@@ -64,7 +68,7 @@
 					forum="https://simplifyyourweb.com/forum/20-article-details"		
 					report="https://simplifyyourweb.com/support"	
 					support="https://simplifyyourweb.com/support"
-					demo="http://demo3.simplifyyourweb.com/article-details" 
+					demo="https://demo4.simplifyyourweb.com/article-details" 
 					donate="https://simplifyyourweb.com/free-products/article-details"
 					review="http://extensions.joomla.org/extensions/extension/news-display/content-infos/article-details" />
 			
@@ -399,7 +403,7 @@
 						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHADOWWIDTH_LABEL" 
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHADOWWIDTH_DESC" />	
 						
-					<field name="fontcalendar" type="sywfontpicker" default=""
+					<field name="fontcalendar" type="sywfontpicker" webfonts="true" default=""
 	                    label="PLG_CONTENT_ARTICLEDETAILS_FIELD_FONTCALENDAR_LABEL"
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_FONTCALENDAR_DESC" />
 						
@@ -771,7 +775,7 @@
 					
 				<fieldset name="details_styles"	label="PLG_CONTENT_ARTICLEDETAILS_DETAILSSTYLES_FIELDSET_LABEL">
 						
-					<field name="fontdetails" type="sywfontpicker" default=""
+					<field name="fontdetails" type="sywfontpicker" webfonts="true" default=""
 	                    label="PLG_CONTENT_ARTICLEDETAILS_FIELD_FONTDETAILS_LABEL"
 						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_FONTDETAILS_DESC" />
 											

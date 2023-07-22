@@ -321,30 +321,27 @@ class Helper
 						$info_block .= '</span>';
 
 						if ($view == 'article' && $item->state == 1 && !$app->input->getBool('print')) {
-							$uri = Uri::getInstance();
-							$uri->setQuery($uri->getQuery() . '&hitcount=0');
-
-							HTMLHelper::_('formbehavior.chosen', 'select');
+							
+							$uri = clone Uri::getInstance();
+							$uri->setVar('hitcount', '0');
 
 							$options = array();
 							$options[] = HTMLHelper::_('select.option', 5, Text::_('PLG_CONTENT_ARTICLEDETAILS_VOTE5'));
 							for ($i = 4; $i > 0; $i--) {
 							    $options[] = HTMLHelper::_('select.option', $i, Text::sprintf('PLG_CONTENT_ARTICLEDETAILS_VOTE', $i));
 							}
-
-							// voting form (cannot have a form inside a paragraph)
-							$info_block .= '</dd>';
-							$info_block .= '<form method="post" action="' . htmlspecialchars($uri->toString()) . '" class="form-inline">';
-							$info_block .= '<span class="article_vote">';
-							$info_block .= HTMLHelper::_('select.genericlist', $options, 'user_rating', null, 'value', 'text', '5', 'article_vote_' . $item->id);
-							$info_block .= '&#160;<input class="btn btn-mini" type="submit" name="submit_vote" value="' . Text::_('PLG_CONTENT_ARTICLEDETAILS_RATE') . '" />';
+						
+							$info_block .= '<form method="post" action="' . htmlspecialchars($uri->toString(), ENT_COMPAT, 'UTF-8') . '" class="form-inline">';
+							$info_block .= '<span class="article_vote">';							
+							$info_block .= '<label class="visually-hidden" for="article_vote_' . $item->id . '">' . Text::_('PLG_CONTENT_ARTICLEDETAILS_PLEASEVOTE') . '</label>';
+							$info_block .= HTMLHelper::_('select.genericlist', $options, 'user_rating', 'class="form-select form-select-sm w-auto"', 'value', 'text', '5', 'article_vote_' . $item->id);
+							$info_block .= '&#160;<input class="btn btn-sm btn-primary align-baseline" type="submit" name="submit_vote" value="' . Text::_('PLG_CONTENT_ARTICLEDETAILS_RATE') . '" />';
 							$info_block .= '<input type="hidden" name="task" value="article.vote" />';
 							$info_block .= '<input type="hidden" name="hitcount" value="0" />';
-							$info_block .= '<input type="hidden" name="url" value="' . htmlspecialchars($uri->toString()) . '" />';
+							$info_block .= '<input type="hidden" name="url" value="' . htmlspecialchars($uri->toString(), ENT_COMPAT, 'UTF-8') . '" />';
 							$info_block .= HTMLHelper::_('form.token');
 							$info_block .= '</span>';
 							$info_block .= '</form>';
-							$info_block .= '<dd class="details">'; // force new line after the form
 						}
 
 						$has_info_from_previous_detail = true;
