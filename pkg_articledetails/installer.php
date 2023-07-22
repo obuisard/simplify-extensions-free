@@ -26,7 +26,7 @@ class Pkg_ArticleDetailsInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.3.3';
+	protected $minimumLibrary = '2.4.0';
 
 	/**
 	 * Available languages
