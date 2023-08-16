@@ -189,13 +189,13 @@ class CSSFileCache extends HeaderFilesCache
 					$color = isset($default_colors[$social_network_class]) ? $default_colors[$social_network_class] : '';
 
 					if ($share_bgcolor && $color) {
-						echo '.articledetails .info .details .detail_social a.' . $social_network_class . ' i {';
+						echo '.articledetails .info .details .detail_social a.' . $social_network_class . ' > * {';
 						echo 'background-color: ' . $color . ';';
 						echo '}';
 					}
 
 					if ($share_color && $color) {
-						echo '.articledetails .info .details .detail_social a.' . $social_network_class . ' i {';
+						echo '.articledetails .info .details .detail_social a.' . $social_network_class . ' > * {';
 						echo 'color: ' . $color . ';';
 						echo '}';
 					}

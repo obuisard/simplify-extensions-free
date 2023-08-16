@@ -263,9 +263,17 @@ defined('_JEXEC') or die;
 				font-size: 1.2em;
     			display: inline-block;
 			}
+			
+			.articledetails .info .details .detail_social .detail_data a svg {
+				vertical-align: middle;
+				width: 1.2em;
+				height: 1.2em;
+    			display: inline-block;
+			}
 
 			<?php if ($share_bgcolor) : ?>
-    			.articledetails .info .details .detail_social .detail_data a > i {
+    			.articledetails .info .details .detail_social .detail_data a > * {
+    				display: inline-block;
     				color: #fff;
     				padding: 6px;
     				<?php if ($share_radius > 0) : ?>

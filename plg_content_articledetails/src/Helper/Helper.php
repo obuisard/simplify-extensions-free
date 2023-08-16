@@ -1563,25 +1563,17 @@ class Helper
 	 */
 	public static function sendToFriendIcon($title, $link, $classes = '')
 	{
-// 		\JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
-
 		$link = rawurldecode($link);
-
-// 		$template = Factory::getApplication()->getTemplate();
-// 		$url = 'index.php?option=com_mailto&tmpl=component&template='.$template.'&link='.MailToHelper::addLink($link);
-
-// 		$status = 'width=400,height=350,menubar=yes,resizable=yes';
 
 		$attribs = array(
 			'title' => Text::_('JGLOBAL_EMAIL'),
 			'class' => 'hasTooltip sendtofriend'.$classes
-// 			'onclick' => "window.open(this.href,'win2','".$status."'); return false;",
-// 		    'aria-label' => Text::_('JGLOBAL_EMAIL')
 		);
 
-		$text = '<i class="SYWicon-email" aria-hidden="true"></i>';
+		$text = '<span class="svg_container">';
+		$text .= '<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"></path></svg>';
+		$text .= '</span>';
 
-		//$output = HTMLHelper::_('link', $url, $text, $attribs);
 		$output = HTMLHelper::_('link', 'mailto:?subject=' . rawurlencode($title) . '&amp;body=' . $link, $text, $attribs);
 
 		return $output;
@@ -1591,36 +1583,40 @@ class Helper
 	{
 		$html = '';
 
-		$html .= '<a class="hasTooltip facebook'.$classes.'" href="http://www.facebook.com/sharer.php?u='.$link.'&amp;t='.urlencode($title).'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Facebook").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Facebook").'" target="_blank" >';
-			$html .= '<i class="SYWicon-facebook" aria-hidden="true"></i>';
+		$html .= '<a class="hasTooltip facebook'.$classes.'" href="https://www.facebook.com/sharer.php?u='.$link.'&amp;t='.urlencode($title).'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Facebook").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Facebook").'" target="_blank" >';
+			$html .= '<span class="svg_container">';
+				$html .= '<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="m 371.14,288 14.22,-92.66 h -88.91 v -60.13 c 0,-25.35 12.42,-50.06 52.24,-50.06 h 40.42 V 6.26 C 389.11,6.26 352.43,0 317.36,0 244.14,0 196.28,44.38 196.28,124.72 v 70.62 H 114.89 V 288 h 81.39 V 512 H 296.45 V 288 Z"></path></svg>';
+			$html .= '</span>';
 		$html .= '</a>';
 
 		return $html;
 	}
 
 	/*
-	 * deprecated
+	 * deprecated - no longer exists
 	 */
 	public static function getGoogleButton($link, $classes = '')
 	{
 		$html = '';
 
-		$html .= '<a class="hasTooltip googleplus'.$classes.'" href="https://plus.google.com/share?url='.$link.'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Google Plus").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Google Plus").'" target="_blank" >';
-			$html .= '<i class="SYWicon-googleplus" aria-hidden="true"></i>';
-		$html .= '</a>';
+// 		$html .= '<a class="hasTooltip googleplus'.$classes.'" href="https://plus.google.com/share?url='.$link.'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Google Plus").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Google Plus").'" target="_blank" >';
+// 			$html .= '<i class="SYWicon-googleplus" aria-hidden="true"></i>';
+// 		$html .= '</a>';
 
 		return $html;
 	}
 
 	/*
-	 * deprecated
+	 * Stumbleupon has been replaced with Mix - not used
 	 */
 	public static function getStumbleuponButton($title, $link, $classes = '')
 	{
 		$html = '';
 
-		$html .= '<a class="hasTooltip stumbleupon'.$classes.'" href="http://www.stumbleupon.com/submit?url='.$link.'&amp;title='.urlencode($title).'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Stumbleupon").'" title="' . Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Stumbleupon").'" target="_blank" >';
-			$html .= '<i class="SYWicon-stumbleupon" aria-hidden="true"></i>';
+		$html .= '<a class="hasTooltip stumbleupon mix' . $classes . '" href="https://mix.com/add?url=' . $link . '" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Mix").'" title="' . Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Mix").'" target="_blank" >';
+    		$html .= '<span class="svg_container">';
+				$html .= '<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="m 30,64 v 348.9 c 0,56.2 88,58.1 88,0 V 174.3 c 7.9,-52.9 88,-50.4 88,6.5 v 175.3 c 0,57.9 96,58 96,0 V 240 c 5.3,-54.7 88,-52.5 88,4.3 v 23.8 c 0,59.9 88,56.6 88,0 V 64 Z"></path></svg>';
+    		$html .= '</span>';
 		$html .= '</a>';
 
 		return $html;
@@ -1630,8 +1626,10 @@ class Helper
 	{
 		$html = '';
 
-		$html .= '<a class="hasTooltip twitter'.$classes.'" href="https://twitter.com/intent/tweet?text='.urlencode($title)."&amp;url=".$link.'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Twitter").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "Twitter").'" target="_blank" >';
-			$html .= '<i class="SYWicon-twitter" aria-hidden="true"></i>';
+		$html .= '<a class="hasTooltip twitter'.$classes.'" href="https://twitter.com/intent/tweet?text='.urlencode($title)."&amp;url=".$link.'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "X-Twitter").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "X-Twitter").'" target="_blank" >';
+    		$html .= '<span class="svg_container">';
+				$html .= '<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"></path></svg>';
+    		$html .= '</span>';
 		$html .= '</a>';
 
 		return $html;
@@ -1641,8 +1639,10 @@ class Helper
 	{
 		$html = '';
 
-		$html .= '<a class="hasTooltip linkedin'.$classes.'" href="http://www.linkedin.com/shareArticle?mini=true&amp;url='.$link.'&amp;title='.urlencode($title).'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "LinkedIn").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "LinkedIn").'" target="_blank" >';
-			$html .= '<i class="SYWicon-linkedin" aria-hidden="true"></i>';
+		$html .= '<a class="hasTooltip linkedin'.$classes.'" href="https://www.linkedin.com/shareArticle?mini=true&amp;url='.$link.'&amp;title='.urlencode($title).'" aria-label="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "LinkedIn").'" title="'.Text::sprintf("PLG_CONTENT_ARTICLEDETAILS_SHAREWITH", "LinkedIn").'" target="_blank" >';
+    		$html .= '<span class="svg_container">';
+				$html .= '<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M 132.28,448 H 39.4 V 148.9 h 92.88 z M 85.79,108.1 C 56.09,108.1 32,83.5 32,53.8 a 53.79,53.79 0 0 1 107.58,0 c 0,29.7 -24.1,54.3 -53.79,54.3 z M 479.9,448 H 387.22 V 302.4 c 0,-34.7 -0.7,-79.2 -48.29,-79.2 -48.29,0 -55.69,37.7 -55.69,76.7 V 448 H 190.46 V 148.9 h 89.08 v 40.8 h 1.3 c 12.4,-23.5 42.69,-48.3 87.88,-48.3 94,0 111.28,61.9 111.28,142.3 V 448 Z"></path></svg>';
+    		$html .= '</span>';
 		$html .= '</a>';
 
 		return $html;
@@ -1815,7 +1815,7 @@ class Helper
 	 */
 	public static function getSiteMode($params)
 	{
-		return $params->get('site_mode', 'adv');
+		return $params->get('site_mode', 'dev');
 	}
 
 	/**
