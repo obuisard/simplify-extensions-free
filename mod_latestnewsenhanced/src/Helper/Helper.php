@@ -20,7 +20,7 @@ use SYW\Library\Libraries as SYWLibraries;
 
 class Helper
 {
-	protected static $image_extension_types = array('png', 'jpg', 'gif', 'jpeg', 'webp', 'avif');
+	protected static $image_extension_types = array('png', 'jpg', 'gif', 'jpeg', 'webp', 'avif', 'svg');
 
 	/**
 	 * Look for images in content
@@ -122,6 +122,11 @@ class Helper
 			$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_UNSUPPORTEDFILETYPE', $original_imagesrc);
 
 			return $result;
+		}
+		
+		// Special case with SVG: no creation of thumbnails
+		if ($imageext === 'svg') {
+		    return [$original_imagesrc, ''];
 		}
 
 		// URL works only if 'allow url fopen' is 'on', which is a security concern
@@ -1049,7 +1054,7 @@ class Helper
 	 */
 	public static function getSiteMode($params)
 	{
-		return $params->get('site_mode', 'adv');
+		return $params->get('site_mode', 'dev');
 	}
 
 	/**
