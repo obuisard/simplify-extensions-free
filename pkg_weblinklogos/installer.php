@@ -26,7 +26,7 @@ class Pkg_WeblinkLogosInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.3.1';
+	protected $minimumLibrary = '2.4.0';
 
 	/**
 	 * Available languages
@@ -182,15 +182,15 @@ class Pkg_WeblinkLogosInstallerScript extends InstallerScript
 
  			// overrides warning
 
- 			$defaultemplate = $this->getDefaultTemplate();
+//  			$defaultemplate = $this->getDefaultTemplate();
 
- 			if ($defaultemplate) {
- 				$overrides_path = JPATH_ROOT.'/templates/'.$defaultemplate.'/html/';
+//  			if ($defaultemplate) {
+//  				$overrides_path = JPATH_ROOT.'/templates/'.$defaultemplate.'/html/';
 
- 				if (Folder::exists($overrides_path.'mod_weblinklogo')) {
- 					Factory::getApplication()->enqueueMessage(Text::_('PKG_WEBLINKLOGOS_WARNING_OVERRIDES'), 'warning');
- 				}
- 			}
+//  				if (Folder::exists($overrides_path.'mod_weblinklogo')) {
+//  					Factory::getApplication()->enqueueMessage(Text::_('PKG_WEBLINKLOGOS_WARNING_OVERRIDES'), 'warning');
+//  				}
+//  			}
 
 			// remove old cached headers which may interfere with fixes, updates or new additions
 
