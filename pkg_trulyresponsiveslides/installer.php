@@ -149,15 +149,15 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 
 			// overrides warning
 
-			$defaultemplate = $this->getDefaultTemplate();
+// 			$defaultemplate = $this->getDefaultTemplate();
 
-			if ($defaultemplate) {
-				$overrides_path = JPATH_ROOT.'/templates/'.$defaultemplate.'/html/';
+// 			if ($defaultemplate) {
+// 				$overrides_path = JPATH_ROOT.'/templates/'.$defaultemplate.'/html/';
 
-				if (Folder::exists($overrides_path.'mod_trulyresponsiveslides')) {
-					Factory::getApplication()->enqueueMessage(Text::_('PKG_TRULYRESPONSIVESLIDES_WARNING_OVERRIDES'), 'warning');
-				}
-			}
+// 				if (Folder::exists($overrides_path.'mod_trulyresponsiveslides')) {
+// 					Factory::getApplication()->enqueueMessage(Text::_('PKG_TRULYRESPONSIVESLIDES_WARNING_OVERRIDES'), 'warning');
+// 				}
+// 			}
 
 			// remove old cached headers which may interfere with fixes, updates or new additions
 
