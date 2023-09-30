@@ -32,7 +32,7 @@ class Helper
 {
 	protected static $weblinks_config_params;
 
-	protected static $image_extension_types = array('png', 'jpg', 'jpeg', 'gif', 'webp', 'avif');
+	protected static $image_extension_types = array('png', 'jpg', 'jpeg', 'gif', 'webp', 'avif', 'svg');
 
 	/**
 	 * Load the script that handles click feedback
@@ -247,7 +247,7 @@ class Helper
 			    $subquery->select('COUNT(' . $db->quoteName('tt.id') . ') AS tag_count_per_item');
 			    $subquery->from($db->quoteName('#__contentitem_tag_map', 'mm'));
 			    $subquery->join('INNER', $db->quoteName('#__tags', 'tt'), $db->quoteName('mm.tag_id') . ' = ' . $db->quoteName('tt.id'));
-			    $subquery->whereIn($db->quoteName('tt.access'), $view_levels);
+			    $subquery->where($db->quoteName('tt.access') . ' IN (' . implode(',', $view_levels) . ')'); // DO NOT USE whereIn (or else we need prepared variables)
 			    $subquery->where($db->quoteName('tt.published') . ' = 1');
 			    $subquery->where($db->quoteName('mm.type_alias') . ' = ' . $db->quote('com_weblinks.weblink'));
 			    $subquery->group($db->quoteName('content_id'));
@@ -656,6 +656,11 @@ class Helper
 
 			return $result;
 		}
+		
+		// Special case with SVG: no creation of thumbnails
+		if ($imageext === 'svg') {
+		    return [$original_imagesrc, ''];
+		}
 
 		// URL works only if 'allow url fopen' is 'on', which is a security concern
 		// retricts images to the ones found on the site, external URLs are not allowed (for security purposes)
@@ -850,7 +855,7 @@ class Helper
 	 */
 	public static function getSiteMode($params)
 	{
-		return $params->get('site_mode', 'adv');
+		return $params->get('site_mode', 'dev');
 	}
 
 	/**
