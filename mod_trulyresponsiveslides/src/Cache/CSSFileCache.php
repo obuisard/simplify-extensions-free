@@ -90,6 +90,9 @@ class CSSFileCache extends HeaderFilesCache
 		$variables[] = 'o_c_b';
 
 		// arrows
+		
+		$font_family = (version_compare(JVERSION, '4.9.0', 'lt')) ? 'Font Awesome 5 Free' : 'Font Awesome 6 Free';
+		$variables[] = 'font_family';
 
 		$arrows_c = trim($params->get('arrow_c', '#000000'));
 		$variables[] = 'arrows_c';

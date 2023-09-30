@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>2.7.1</version>
+	<version>2.7.2</version>
 	<description>MOD_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrulyResponsiveSlides</namespace>
 	
@@ -287,7 +287,7 @@
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_SHADOWWIDTH_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_SHADOWWIDTH_DESC" />
 						
-					<field type="previewArrow" label="MOD_TRULYRESPONSIVESLIDER_PREVIEW_LABEL" />
+					<field type="previewarrow" label="MOD_TRULYRESPONSIVESLIDER_PREVIEW_LABEL" />
 				</fieldset>
 				
 				<fieldset name="slider_thumbnails" label="MOD_TRULYRESPONSIVESLIDER_THUMBNAILS_LABEL">

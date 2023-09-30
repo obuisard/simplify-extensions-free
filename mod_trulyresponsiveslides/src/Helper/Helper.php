@@ -703,7 +703,7 @@ class Helper
      */
     public static function getSiteMode($params)
     {
-        return $params->get('site_mode', 'adv');
+        return $params->get('site_mode', 'dev');
     }
 
     /**

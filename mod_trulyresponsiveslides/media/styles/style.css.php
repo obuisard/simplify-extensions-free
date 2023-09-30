@@ -90,7 +90,7 @@ defined('_JEXEC') or die;
 }
 
 #trs_<?php echo $suffix; ?> .flex-direction-nav a::before {
-    font-family: "Font Awesome 5 Free";
+    font-family: "<?php echo $font_family; ?>";
     font-weight: 900;
     font-size: 32px;
     line-height: 32px;
