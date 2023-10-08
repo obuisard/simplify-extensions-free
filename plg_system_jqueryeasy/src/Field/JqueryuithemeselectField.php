@@ -4,7 +4,7 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-namespace SYW\Plugin\System\JqueryEasy\Field;
+namespace SYW\Plugin\System\JQueryEasy\Field;
 
 defined( '_JEXEC' ) or die;
 

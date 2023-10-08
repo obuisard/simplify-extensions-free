@@ -4,7 +4,7 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
  */
 
-namespace SYW\Plugin\System\JqueryEasy\Helper;
+namespace SYW\Plugin\System\JQueryEasy\Helper;
 
 defined('_JEXEC') or die;
 
@@ -13,117 +13,8 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
-class Helper
+class JQueryEasyHelper
 {
-    static public function isEnabledOnPage($application, $params, $suffix = '')
-    {
-//         if (!$application->isClient('site')) {
-//             return false;
-//         }
-
-        // enable the plugin for HTML pages only
-        if (Factory::getDocument()->getType() !== 'html') {
-            return false;
-        }
-
-        if ($application->getTemplate() === 'system') {
-            return false;
-        }
-
-        // device selection
-
-//         if (($params->get('device'.$suffix, '') === 'desktop' && $is_mobile) || ($params->get('device'.$suffix, '') === 'mobile' && !$is_mobile)) {
-//             return false;
-//         }
-
-        // template selection
-
-        $templates_inex = $params->get('template_inex'.$suffix, '');
-
-        if ($templates_inex !== '') {
-
-            $templates = self::getParamValues($params->get('templateid'.$suffix, array()));
-
-            if ($templates) {
-
-                if ((int)$templates_inex === 1) { // include : use the plugin if in template
-
-                    if (!in_array($application->getTemplate(true)->id, $templates)) {
-                        return false;
-                    }
-                } else { // exclude : plugin is excluded if in template
-
-                    if (in_array($application->getTemplate(true)->id, $templates)) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        // component selection
-
-        $components_inex = $params->get('wherecomponent_inex'.$suffix, '');
-
-        if ($components_inex !== '') {
-
-            $components = self::getParamValues($params->get('wherecomponent'.$suffix, array()));
-
-            if ($components) {
-
-                if ((int)$components_inex === 1) { // include : use the plugin if on extension's page
-
-                    if (!in_array($application->input->get('option', ''), $components)) {
-                        return false;
-                    }
-                } else { // exclude : plugin is excluded if on extension's page
-
-                    if (in_array($application->input->get('option', ''), $components)) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        // page selection
-
-        $urls_inex = $params->get('url_inex'.$suffix, '');
-
-        if ($urls_inex !== '') {
-
-            $url_paths = trim( (string) $params->get('url_inex_items'.$suffix, ''));
-
-            if ($url_paths) {
-
-                if ((int)$urls_inex === 1) { // include : use the plugin if on a page
-
-                    $paths = array_map('trim', (array) explode("\n", $url_paths));
-
-                    foreach ($paths as $path) {
-                        if (self::paths_are_identical(Uri::current(), $path)) {
-
-                            return true;
-                        }
-                    }
-
-                    return false;
-
-                } else { // exclude: plugin is excluded if on a page
-
-                    $paths = array_map('trim', (array) explode("\n", $url_paths));
-
-                    foreach ($paths as $path) {
-                        if (self::paths_are_identical(Uri::current(), $path)) {
-
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
     static public function getParamValues($array_of_elements = array())
     {
         if (isset($array_of_elements) && !empty($array_of_elements)) {

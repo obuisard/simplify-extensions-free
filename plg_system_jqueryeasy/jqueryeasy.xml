@@ -7,9 +7,9 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>5.2.1</version>
+	<version>5.3.0</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
-	<namespace path="src">SYW\Plugin\System\JqueryEasy</namespace>
+	<namespace path="src">SYW\Plugin\System\JQueryEasy</namespace>
 	
 	<media folder="media" destination="plg_system_jqueryeasy">
 		<folder>css</folder>
@@ -18,9 +18,9 @@
 	</media>
 	
 	<files>
-		<filename plugin="jqueryeasy">jqueryeasy.php</filename>
-		<filename>license.txt</filename>
+		<folder plugin="jqueryeasy">services</folder>
 		<folder>src</folder>
+		<filename>license.txt</filename>
 	</files>
 	
 	<languages>
@@ -55,7 +55,7 @@
 	</languages>
 	
 	<config>
-		<fields name="params" addfieldprefix="SYW\Plugin\System\JqueryEasy\Field">
+		<fields name="params" addfieldprefix="SYW\Plugin\System\JQueryEasy\Field">
 		
 			<fieldset name="basic" label="PLG_SYSTEM_JQUERYEASY_INFORMATION_LABEL" addfieldprefix="SYW\Library\Field">
 				
