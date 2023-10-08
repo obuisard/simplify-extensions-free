@@ -25,7 +25,7 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.3.2';
+	protected $minimumLibrary = '2.4.0';
 
 	/**
 	 * Available languages
@@ -53,7 +53,7 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 	public function __construct($parent)
 	{
 	    $this->extension = 'pkg_jqueryeasy';
-	    $this->minimumJoomla = '4.0.0';
+	    $this->minimumJoomla = '4.1.0';
 	    //$this->minimumPhp = JOOMLA_MINIMUM_PHP; // not needed
 	}
 	
@@ -192,6 +192,8 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 			}
 			
 			// +++ End Migration
+			
+			$this->deleteFiles[] = '/plugins/system/jqueryeasy/src/Helper/Helper.php';
 		}
 		
 		echo '</p>';
