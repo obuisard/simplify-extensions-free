@@ -131,7 +131,6 @@ defined('_JEXEC') or die;
 		}
 
 			<?php echo $suffix; ?> .newstitle {
-				font-weight: bold;
 				padding: 0 0 10px 0;
 
 				-webkit-box-flex: none;

@@ -113,6 +113,10 @@ if (empty($list)) { // $list can be an empty array
 	$text_align = $params->get('text_align', 'r');
 	$title_before_head = $params->get('title_before_head', false);
 	$title_html_tag = $params->get('title_tag', '4');
+	$title_class = trim($params->get('title_class', ''));
+	if ($title_class) {
+	    $title_class = ' ' . $title_class;
+	}
 
 	$follow = $params->get('follow', true);
 

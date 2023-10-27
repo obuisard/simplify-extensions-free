@@ -8,9 +8,10 @@ namespace SYW\Module\LatestNewsEnhanced\Site\Helper;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
 use Joomla\CMS\Access\Access;
+use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Image\Image;
 use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
@@ -402,8 +403,8 @@ class K2Helper
 
 								$subquery->select($db->quoteName('catid'));
 								$subquery->from($db->quoteName('#__k2_items'));
-								$subquery->where($db->quoteName('id') . ' = :id');
-								$subquery->bind(':id', $item_id, ParameterType::INTEGER);
+								$subquery->where($db->quoteName('id') . ' = :itemId');
+								$subquery->bind(':itemId', $item_id, ParameterType::INTEGER);
 
 								$db->setQuery($subquery);
 
@@ -1060,7 +1061,7 @@ class K2Helper
 
 			$show_image = true;
 
-			$crop_picture = $params->get('crop_pic', 0);
+			$crop_picture = ($params->get('crop_pic', 0) && $params->get('create_thumb', 1));
 
 			$create_highres_images = false;
 			$lazyload = $params->get('lazyload', false);
@@ -1117,10 +1118,10 @@ class K2Helper
 			$clear_cache = Helper::IsClearPictureCache($params);
 
 			$subdirectory = 'thumbnails/lne';
-			if ($params->get('thumb_path', 'images') == 'cache') {
+			if ($params->get('thumb_path', 'cache') == 'cache') {
 				$subdirectory = 'mod_latestnewsenhanced';
 			}
-			$tmp_path = SYWCache::getTmpPath($params->get('thumb_path', 'images'), $subdirectory);
+			$tmp_path = SYWCache::getTmpPath($params->get('thumb_path', 'cache'), $subdirectory);
 
 			$default_picture = trim($params->get('default_pic', ''));
 
@@ -1294,7 +1295,6 @@ class K2Helper
 
 			if ($show_image) {
 
-				//$thumbnails_exist = false;
 				$filename = '';
 				$image_width = 0;
 				$image_height = 0;
@@ -1305,13 +1305,10 @@ class K2Helper
 				    $thumbnail_src = Helper::thumbnailExists($module->id, $item->id, $tmp_path, $create_highres_images);
 				    if ($thumbnail_src !== false) {
 				        $filename = $thumbnail_src; // found a corresponding thumbnail
-						//$thumbnails_exist = true;
 					}
 				}
 
 				if (empty($filename)) {
-				    //if (!$thumbnails_exist) {
-					// thumbnail(s) do not exist
 
 					$imagesrc = '';
 
@@ -1374,26 +1371,20 @@ class K2Helper
 					}
 
 					if ($imagesrc) { // found an image
-
-					    $image_object = HTMLHelper::cleanImageURL($imagesrc);
-					    $imagesrc = $image_object->url;
-
 					    if (!$params->get('create_thumb', 1) || $head_width <= 0 || $head_height <= 0) { // no thumbnails are created, use the original image
+					        // Use the original
 					        $filename = $imagesrc;
-
-					        $image_width = $image_object->attributes['width'];
-					        $image_height = $image_object->attributes['height'];
-
 					    } else {
+					        // Create the thumbnail
 					        $result_array = Helper::getImageFromSrc($module->id, $item->id, $imagesrc, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
 
-    						if (!empty($result_array[0])) {
-    							$filename = $result_array[0];
+					        if (isset($result_array['url']) && $result_array['url']) {
+    							$filename = $result_array['url'];
     						}
 
-    						if (!empty($result_array[1])) {
+    						if (isset($result_array['error']) && $result_array['error']) {
 
-    						    $item->error[] = $result_array[1];
+    						    $item->error[] = $result_array['error'];
 
     							// if error for the file found, try and use the default image instead
     							if (!$used_default_image && $default_picture) { // if the default image was the one chosen, no use to retry
@@ -1402,29 +1393,40 @@ class K2Helper
 
     							    $result_array = Helper::getImageFromSrc($module->id, $item->id, $default_image_object->url, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
 
-    								if (!empty($result_array[0])) {
-    									$filename = $result_array[0];
-    								}
+    							    if (isset($result_array['url']) && $result_array['url']) {
+    							        $filename = $result_array['url'];
+    							    }
 
-    								if (!empty($result_array[1])) {
-    									$item->error[] = $result_array[1];
-    								}
+    							    if (isset($result_array['error']) && $result_array['error']) {
+    							        $item->error[] = $result_array['error'];
+    							    }
     							}
     						}
 					    }
 					}
-
-// 					if ($filename && empty($item->error)) {
-// 						$thumbnails_exist = true;
-// 					}
 				}
 
 				if ($filename) {
 
 					$img_attributes = array();
-					if ($crop_picture && $head_width > 0 && $head_height > 0) {
-						$img_attributes = array('width' => $head_width, 'height' => $head_height);
-					} else if ($image_width > 0 && $image_height > 0) {
+
+				    if ($crop_picture) {
+				        if ($head_width > 0 && $head_height > 0) {
+   					        $image_width = $head_width;
+   					        $image_height = $head_height;
+				        }
+				    } else {
+				        try {
+				            $image_properties = Image::getImageFileProperties($filename);
+				            $image_width = $image_properties->width;
+				            $image_height = $image_properties->height;
+				        } catch (\Exception $e) {
+				            $image_width = 0;
+				            $image_height = 0;
+				        }
+				    }
+
+					if ($image_width > 0 && $image_height > 0) {
 					    $img_attributes = array('width' => $image_width, 'height' => $image_height);
 					}
 

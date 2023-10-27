@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.9.2</version>
+	<version>6.10.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -1009,6 +1009,10 @@
 					<field name="space_body" type="sywverbosetext" default="" size="4" maxlength="2" unit="px" icon="SYWicon-swap-horiz" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEAROUND_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEAROUNDBODY_DESC" />
+					
+					<field name="title_class" type="text" default="" filter="string" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TITLECLASSES_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TITLECLASSES_DESC" />
 				</fieldset>
 				
 				<fieldset name="themes_information" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_LABEL">
@@ -1756,7 +1760,7 @@
 						<option value="1">JYES</option>
 					</field>
 									
-					<field name="thumb_path" type="list" default="images" 
+					<field name="thumb_path" type="list" default="cache" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_THUMBPATH_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_THUMBPATH_DESC">
 						<option value="default">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TEMPFOLDER</option>

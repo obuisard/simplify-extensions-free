@@ -18,6 +18,9 @@ use Joomla\CMS\HTML\HTMLHelper;
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Libraries as SYWLibraries;
 
+/**
+ * Class Helper
+ */
 class Helper
 {
 	protected static $image_extension_types = array('png', 'jpg', 'gif', 'jpeg', 'webp', 'avif', 'svg');
@@ -81,22 +84,24 @@ class Helper
 	*/
 	static function getImageFromSrc($module_id, $item_id, $imagesrc, $tmp_path, $head_width, $head_height, $crop_picture, $image_quality_array, $filter, $create_high_resolution = false, $allow_remote = true, $thumbnail_mime_type = '')
 	{
-		$result = array(null, null); // image link and error
+	    $result = [];
 
 		if ($head_width == 0 || $head_height == 0) {
 			// keep original image
-			$result[0] = $imagesrc;
-			$result[1] = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_INFO_USINGORIGINALIMAGE'); // necessary to specify thumbnail creation failed
 
-			return $result;
+			return [
+			    'url' => $imagesrc,
+			    'error' => Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_INFO_USINGORIGINALIMAGE'), // necessary to specify thumbnail creation failed
+			];
 		}
 
 		if (!extension_loaded('gd') && !extension_loaded('imagick')) {
 			// missing image library
-			$result[0] = $imagesrc;
-			$result[1] = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_NOIMAGELIBRARYLOADED');
 
-			return $result;
+		    return [
+		        'url' => $imagesrc,
+		        'error' => Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_NOIMAGELIBRARYLOADED'),
+		    ];
 		}
 
 		$original_imagesrc = $imagesrc;
@@ -118,15 +123,18 @@ class Helper
 			// thubmnails cannot be created from generated images external paths
 			// or image has another file type like .tiff
 
-			$result[0] = $original_imagesrc;
-			$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_UNSUPPORTEDFILETYPE', $original_imagesrc);
-
-			return $result;
+		    return [
+		        'url' => $original_imagesrc,
+		        'error' => Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_UNSUPPORTEDFILETYPE', $original_imagesrc),
+		    ];
 		}
 		
 		// Special case with SVG: no creation of thumbnails
 		if ($imageext === 'svg') {
-		    return [$original_imagesrc, ''];
+		    return [
+		        'url' => $original_imagesrc, 
+		        'error' => '',
+		    ];
 		}
 
 		// URL works only if 'allow url fopen' is 'on', which is a security concern
@@ -147,10 +155,10 @@ class Helper
 		if (substr_count($imagesrc, 'http') > 0) {
 			// we have an external URL
 			if (/*!ini_get('allow_url_fopen') || */!$allow_remote) {
-				$result[0] = $original_imagesrc;
-				$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_EXTERNALURLNOTALLOWED', $imagesrc);
-
-				return $result;
+				return [
+				    'url' => $original_imagesrc,
+				    'error' => Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_EXTERNALURLNOTALLOWED', $imagesrc),
+				];
 			}
 		}
 
@@ -168,11 +176,11 @@ class Helper
 		$image = new SYWImage($imagesrc);
 
 		if (is_null($image->getImagePath())) {
-			$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_IMAGEFILEDOESNOTEXIST', $imagesrc);
+		    $result['error'] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_IMAGEFILEDOESNOTEXIST', $imagesrc);
 		} else if (is_null($image->getImageMimeType())) {
-			$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_UNABLETOGETIMAGEPROPERTIES', $imagesrc);
+		    $result['error'] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_UNABLETOGETIMAGEPROPERTIES', $imagesrc);
 		} else if (is_null($image->getImage()) || $image->getImageWidth() == 0) {
-			$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_UNSUPPORTEDFILETYPE', $imagesrc);
+		    $result['error'] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_UNSUPPORTEDFILETYPE', $imagesrc);
 		} else {
 
 		    $quality = self::getImageQualityFromExt($imageext, $image_quality_array);
@@ -186,6 +194,9 @@ class Helper
 
 			if ($image->toThumbnail($filename, $thumbnail_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution)) {
 
+			    $result['thumb_width'] = $image->getThumbnailWidth();
+			    $result['thumb_height'] = $image->getThumbnailHeight();
+			    
     			if ($image->getImageMimeType() === 'image/webp' || $thumbnail_mime_type === 'image/webp' || $image->getImageMimeType() === 'image/avif' || $thumbnail_mime_type === 'image/avif') { // create fallback
 
     			    $fallback_extension = 'png';
@@ -200,18 +211,18 @@ class Helper
     			    $quality = self::getImageQualityFromExt($fallback_extension, $image_quality_array);
 
     			    if (!$image->toThumbnail($tmp_path . '/thumb_' . $module_id . '_' . $item_id . '.' . $fallback_extension, $fallback_mime_type, $head_width, $head_height, $crop_picture, $quality, $filter, $create_high_resolution)) {
-    					$result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
+    			        $result['error'] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
     				}
     			}
 			} else {
-			    $result[1] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
+			    $result['error'] = Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_ERROR_THUMBNAILCREATIONFAILED', $imagesrc);
 			}
 		}
 
 		$image->destroy();
 
-		if (empty($result[1])) {
-			$result[0] = $filename;
+		if (empty($result['error'])) {
+			$result['url'] = $filename;
 		}
 
 		return $result;
@@ -314,9 +325,9 @@ class Helper
 	{
 		$module_params = json_decode($module->params);
 
-		$bootstrap_version = isset($module_params->bootstrap_version) ? $module_params->bootstrap_version : 'joomla';
+		$bootstrap_version = isset($module_params->bootstrap_version) ? $module_params->bootstrap_version : 5;
 		if ($bootstrap_version === 'joomla') {
-			$bootstrap_version = 5; //version_compare(JVERSION, '4.0.0', 'lt') ? 2 : 5;
+			$bootstrap_version = 5;
 		} else {
 			$bootstrap_version = intval($bootstrap_version);
 		}
@@ -327,7 +338,7 @@ class Helper
 	/*
 	 * for B/C
 	 */
-	static function getATag($item, $follow = true, $tooltip = true, $popup_width = '600', $popup_height = '500', $css_classes = '', $anchors = '', $module_id = 0, $add_aria_label = true, $bootstrap_version = 2)
+	static function getATag($item, $follow = true, $tooltip = true, $popup_width = '600', $popup_height = '500', $css_classes = '', $anchors = '', $module_id = 0, $add_aria_label = true, $bootstrap_version = 5)
 	{
 		$attribute_title = '';
 		$attribute_class = '';

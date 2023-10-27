@@ -14,6 +14,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Image\Image;
 use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
@@ -914,30 +915,52 @@ class ContentHelper
 		$featured_only = false;
 		switch ($params->get('show_f', 3))
 		{
+		    case '0': // hide
+		        $query->where($db->quoteName('a.featured') . ' = 0');
+		        
+		        break;
 			case '1': // only
 				$featured = true;
 				$featured_only = true;
-				$query->where($db->quoteName('a.featured') . ' = 1');
-				if ($params->get('order') == 'o_asc' || $params->get('order') == 'o_dsc') {
-				    $query->join('LEFT', $db->quoteName('#__content_frontpage', 'fp'), $db->quoteName('fp.content_id') . ' = ' . $db->quoteName('a.id'));
-				}
-				break;
-			case '0': // hide
-			    $query->where($db->quoteName('a.featured') . ' = 0');
+				
+				$query->where(
+				    [
+				        '(' . $db->quoteName('fp.featured_up') . ' IS NULL OR ' . $db->quoteName('fp.featured_up') . ' <= ' . $nowDate . ')',
+				        '(' . $db->quoteName('fp.featured_down') . ' IS NULL OR ' . $db->quoteName('fp.featured_down') . ' >= ' . $nowDate . ')',
+				    ]
+				);
+				
+				// NOTE cannot use binding or else bind all $nowDate and do $nowDate = Factory::getDate()->toSql();
+
+				$query->join('INNER', $db->quoteName('#__content_frontpage', 'fp'), $db->quoteName('fp.content_id') . ' = ' . $db->quoteName('a.id'));
+
 				break;
 			case '2': // first the featured ones
 				$featured = true;
-				if ($params->get('order') == 'o_asc' || $params->get('order') == 'o_dsc') {
-				    $query->join('LEFT', $db->quoteName('#__content_frontpage', 'fp'), $db->quoteName('fp.content_id') . ' = ' . $db->quoteName('a.id'));
-				}
-				$ordering[] = $db->quoteName('a.featured') . ' DESC';
+				
+				$query->where(
+				    [
+				        '(' . $db->quoteName('fp.featured_up') . ' IS NULL OR ' . $db->quoteName('fp.featured_up') . ' <= ' . $nowDate . ')',
+				        '(' . $db->quoteName('fp.featured_down') . ' IS NULL OR ' . $db->quoteName('fp.featured_down') . ' >= ' . $nowDate . ')',
+				    ]
+				);
+				
+			    $query->join('LEFT', $db->quoteName('#__content_frontpage', 'fp'), $db->quoteName('fp.content_id') . ' = ' . $db->quoteName('a.id'));
+			    
+			    $ordering[] = $db->quoteName('a.featured') . ' DESC';
+			    
 				break;
 			default: // no discrimination between featured/unfeatured items
 				$featured = true;
-				if ($params->get('order') == 'o_asc' || $params->get('order') == 'o_dsc') {
-				    $query->join('LEFT', $db->quoteName('#__content_frontpage', 'fp'), $db->quoteName('fp.content_id') . ' = ' . $db->quoteName('a.id'));
-				}
-				break;
+				
+				$query->where(
+				    [
+				        '(' . $db->quoteName('fp.featured_up') . ' IS NULL OR ' . $db->quoteName('fp.featured_up') . ' <= ' . $nowDate . ')',
+				        '(' . $db->quoteName('fp.featured_down') . ' IS NULL OR ' . $db->quoteName('fp.featured_down') . ' >= ' . $nowDate . ')',
+				    ]
+				);
+				
+				$query->join('LEFT', $db->quoteName('#__content_frontpage', 'fp'), $db->quoteName('fp.content_id') . ' = ' . $db->quoteName('a.id'));
 		}
 
 		// category order
@@ -1177,7 +1200,7 @@ class ContentHelper
 
 			$show_image = true;
 
-			$crop_picture = $params->get('crop_pic', 0);
+			$crop_picture = ($params->get('crop_pic', 0) && $params->get('create_thumb', 1));
 
 			$create_highres_images = false;
 			$lazyload = $params->get('lazyload', false);
@@ -1234,10 +1257,10 @@ class ContentHelper
 			$clear_cache = Helper::IsClearPictureCache($params);
 
 			$subdirectory = 'thumbnails/lne';
-			if ($params->get('thumb_path', 'images') == 'cache') {
+			if ($params->get('thumb_path', 'cache') == 'cache') {
 				$subdirectory = 'mod_latestnewsenhanced';
 			}
-			$tmp_path = SYWCache::getTmpPath($params->get('thumb_path', 'images'), $subdirectory);
+			$tmp_path = SYWCache::getTmpPath($params->get('thumb_path', 'cache'), $subdirectory);
 
 			$default_picture = trim($params->get('default_pic', ''));
 
@@ -1262,7 +1285,7 @@ class ContentHelper
 
 		$link_to = $params->get('link_to', 'item');
 		switch ($params->get('link_target', 'default')) {
-			case 'same': $link_target = ''; break;
+			case 'same': $link_target = 0; break;
 			case 'new': $link_target = 1; break;
 			case 'modal': $link_target = 3; break;
 			case 'popup': $link_target = 2; break;
@@ -1326,7 +1349,7 @@ class ContentHelper
 
 			if ($item->state == 1) {
 
-				//$item->linktarget = '';
+				//$item->linktarget = 0;
 				$item->isinternal = true;
 
 				$item->linktitle = $item->title;
@@ -1359,7 +1382,7 @@ class ContentHelper
 					if ($link_target !== 'default') {
 						$item->linktarget = $link_target;
 					} else {
-						$item->linktarget = '';
+						$item->linktarget = 0;
 					}
 
 					// strange: no Itemid search in ContentHelperRoute::getArticleRoute starting in Joomla 3.7
@@ -1394,7 +1417,7 @@ class ContentHelper
 					// returns 'index.php/latest-news/13-ipsum/9-phosfluorescently-engage-worldwide-methodologies-with-web-enabled-technology-5';
 
 					$item->link = $link;
-					$item->linktarget = ''; // cannot open in modal window in this case - too many cases where it might fail bacause the login form	opens first
+					$item->linktarget = 0; // cannot open in modal window in this case - too many cases where it might fail bacause the login form	opens first
 					$item->authorized = false;
 				}
 			}
@@ -1429,7 +1452,6 @@ class ContentHelper
 				$registry->loadString($item->images);
 				$images_array = $registry->toArray();
 
-				//$thumbnails_exist = false;
 				$filename = '';
 				$image_width = 0;
 				$image_height = 0;
@@ -1440,13 +1462,10 @@ class ContentHelper
 				    $thumbnail_src = Helper::thumbnailExists($module->id, $item->id, $tmp_path, $create_highres_images);
 					if ($thumbnail_src !== false) {
 						$filename = $thumbnail_src; // found a corresponding thumbnail
-						//$thumbnails_exist = true;
 					}
 				}
 
 				if (empty($filename)) {
-				//if (!$thumbnails_exist) {
-					// thumbnail(s) do not exist
 
 					$imagesrc = '';
 
@@ -1529,21 +1548,23 @@ class ContentHelper
 					    $imagesrc = $image_object->url;
 
 						if (!$params->get('create_thumb', 1) || $head_width <= 0 || $head_height <= 0) { // no thumbnails are created, use the original image
-					        $filename = $imagesrc;
+					        // Use the original
+							$filename = $imagesrc;
 
 					        $image_width = $image_object->attributes['width'];
 					        $image_height = $image_object->attributes['height'];
 
 					    } else {
+					        // Create the thumbnail
 					        $result_array = Helper::getImageFromSrc($module->id, $item->id, $imagesrc, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
 
-    						if (!empty($result_array[0])) {
-    							$filename = $result_array[0];
+					        if (isset($result_array['url']) && $result_array['url']) {
+    							$filename = $result_array['url'];
     						}
 
-    						if (!empty($result_array[1])) {
+    						if (isset($result_array['error']) && $result_array['error']) {
 
-    						    $item->error[] = $result_array[1];
+    						    $item->error[] = $result_array['error'];
 
     							// if error for the file found, try and use the default image instead
     						    if (!$used_default_image && $default_picture) { // if the default image was the one chosen, no use to retry
@@ -1552,29 +1573,42 @@ class ContentHelper
 
 									$result_array = Helper::getImageFromSrc($module->id, $item->id, $default_image_object->url, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
 
-    								if (!empty($result_array[0])) {
-    									$filename = $result_array[0];
-    								}
+									if (isset($result_array['url']) && $result_array['url']) {
+									    $filename = $result_array['url'];
+									}
 
-    								if (!empty($result_array[1])) {
-    									$item->error[] = $result_array[1];
-    								}
+									if (isset($result_array['error']) && $result_array['error']) {
+									    $item->error[] = $result_array['error'];
+									}
     							}
     						}
 					    }
 					}
-
-// 					if ($filename && empty($item->error)) {
-// 						$thumbnails_exist = true;
-// 					}
 				}
 
 				if ($filename) {
 
 					$img_attributes = array();
-					if ($crop_picture && $head_width > 0 && $head_height > 0) {
-						$img_attributes = array('width' => $head_width, 'height' => $head_height);
-					} else if ($image_width > 0 && $image_height > 0) {
+					
+					if ($image_width <= 0 || $image_height <= 0) {
+					    if ($crop_picture) {
+					        if ($head_width > 0 && $head_height > 0) {
+    					        $image_width = $head_width;
+    					        $image_height = $head_height;
+					        }
+					    } else {
+					        try {
+					            $image_properties = Image::getImageFileProperties($filename);
+					            $image_width = $image_properties->width;
+					            $image_height = $image_properties->height;
+					        } catch (\Exception $e) {
+					            $image_width = 0;
+					            $image_height = 0;
+					        }
+					    }
+					}
+
+					if ($image_width > 0 && $image_height > 0) {
 					    $img_attributes = array('width' => $image_width, 'height' => $image_height);
 					}
 

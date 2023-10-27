@@ -242,7 +242,7 @@ if ($load_bootstrap) {
 									<?php endif; ?>
 
 									<?php if ($show_title) : ?>
-										<h<?php echo $title_html_tag; ?> class="newstitle">
+										<h<?php echo $title_html_tag; ?> class="newstitle<?php echo $title_class; ?>">
 										<?php if ($link_title) : ?>
 											<?php if ($item->link) : ?>
 												<?php echo LNEHelper::getHtmlATag($module, $item, $follow, $link_tooltip, $popup_width, $popup_height); ?>
@@ -265,7 +265,7 @@ if ($load_bootstrap) {
 										</h<?php echo $title_html_tag; ?>>
 									<?php else : ?>
 										<?php if (isset($item->link_edit)) : ?>
-											<h<?php echo $title_html_tag; ?> class="newstitle">
+											<h<?php echo $title_html_tag; ?> class="newstitle<?php echo $title_class; ?>">
 											<?php if ($item->checked_out > 0 && $item->checked_out != Factory::getUser()->get('id')) : ?>
 												<?php $checkoutUser = Factory::getUser($item->checked_out); ?>
 												<span class="checked_out hasTooltip" title="<?php echo Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_CHECKED_OUT_BY', $checkoutUser->name); ?>"><i class="SYWicon-lock"></i></span>
@@ -354,7 +354,7 @@ if ($load_bootstrap) {
 									<?php endif; ?>
 
 									<?php if ($show_title) : ?>
-										<h<?php echo $title_html_tag; ?> class="newstitle">
+										<h<?php echo $title_html_tag; ?> class="newstitle<?php echo $title_class; ?>">
 										<?php if ($link_title) : ?>
 											<?php if ($item->link) : ?>
 												<?php echo LNEHelper::getHtmlATag($module, $item, $follow, $link_tooltip, $popup_width, $popup_height); ?>
@@ -377,7 +377,7 @@ if ($load_bootstrap) {
 										</h<?php echo $title_html_tag; ?>>
 									<?php else : ?>
 										<?php if (isset($item->link_edit)) : ?>
-											<h<?php echo $title_html_tag; ?> class="newstitle">
+											<h<?php echo $title_html_tag; ?> class="newstitle<?php echo $title_class; ?>">
 											<?php if ($item->checked_out > 0 && $item->checked_out != Factory::getUser()->get('id')) : ?>
 												<?php $checkoutUser = Factory::getUser($item->checked_out); ?>
 												<span class="checked_out hasTooltip" title="<?php echo Text::sprintf('MOD_LATESTNEWSENHANCEDEXTENDED_CHECKED_OUT_BY', $checkoutUser->name); ?>"><i class="SYWicon-lock"></i></span>

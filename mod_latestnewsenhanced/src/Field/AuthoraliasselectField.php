@@ -18,7 +18,9 @@ use SYW\Library\K2 as SYWK2;
  */
 class AuthoraliasselectField extends ListField
 {
-	public $type = 'Authoraliasselect';
+    public $type = 'Authoraliasselect';
+    
+    protected $option;
 
 	protected function getOptions()
 	{

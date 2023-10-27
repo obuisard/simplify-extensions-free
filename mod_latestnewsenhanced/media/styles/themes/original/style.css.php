@@ -58,10 +58,6 @@ defined('_JEXEC') or die;
 			}
 		<?php endif; ?>
 
-			<?php echo $suffix; ?> .newstitle {
-				font-weight: bold;
-			}
-
 <?php if ($image) : ?>
 
 	<?php echo $suffix; ?> .newshead.picturetype {
