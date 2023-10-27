@@ -208,7 +208,7 @@ if ($remove_whitespaces) {
 
     					<?php if ($show_vcard) : ?>
     						<div class="vcard">
-    							<a href="<?php echo Route::_('index.php?option=com_contact&view=contact&id='.$item->id.'&format=vcf'); ?>" class="hasTooltip<?php echo $extraclasseslinkfields ? ' ' . $extraclasseslinkfields : ''; ?>" aria-label="<?php echo Text::_('MOD_TROMBINOSCOPE_VCARD');?>" title="<?php echo Text::_('MOD_TROMBINOSCOPE_DOWNLOAD_VCARD');?>">
+    							<a href="<?php echo Route::_(ContactRouteHelper::getContactRoute($item->slug, $item->catid, $item->language) . '&format=vcf'); ?>" class="hasTooltip<?php echo $extraclasseslinkfields ? ' ' . $extraclasseslinkfields : ''; ?>" aria-label="<?php echo Text::_('MOD_TROMBINOSCOPE_VCARD');?>" title="<?php echo Text::_('MOD_TROMBINOSCOPE_DOWNLOAD_VCARD');?>">
     								<i class="icon SYWicon-vcard" aria-hidden="true"></i><span><?php echo Text::_('MOD_TROMBINOSCOPE_VCARD'); ?></span>
     							</a>
     						</div>

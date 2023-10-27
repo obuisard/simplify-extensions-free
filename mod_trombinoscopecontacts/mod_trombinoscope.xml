@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.12.2</version>
+	<version>4.13.0</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -285,11 +285,13 @@
 				
 				<fieldset name="layout_card" label="MOD_TROMBINOSCOPE_CARD_LABEL">
 				
-					<field name="card_w" type="sywverbosetext" default="100" filter="integer" size="4" icon="SYWicon-swap-horiz" 
+					<field name="card_w" type="sywverbosetext" default="100" filter="integer" size="4" icon="SYWicon-swap-horiz"
+						parentclass="span-3-inline"
 						label="MOD_TROMBINOSCOPE_FIELD_CARD_WIDTH_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_CARD_WIDTH_DESC" />
 										
 					<field name="card_w_u" type="radio" default="%" layout="joomla.form.field.radio.switcher"
+						parentclass="span-3-inline"
 						label="MOD_TROMBINOSCOPE_FIELD_CARD_WIDTH_UNIT_LABEL"
 						description="MOD_TROMBINOSCOPE_FIELD_CARD_WIDTH_UNIT_DESC">
 						<option value="px">MOD_TROMBINOSCOPE_VALUE_PIXELS</option>
@@ -301,11 +303,13 @@
 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_DYNAMICWIDTHNOTCOMPATIBLEWITHCAROUSEL" style="warning" showon="carousel_config:h[AND]card_w_u!:px" />
 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_STATICWIDTHNOTCOMPATIBLEWITHCAROUSEL" style="warning" showon="carousel_config:v[AND]card_w_u:px" />
 					
-					<field name="min_card_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz" 
+					<field name="min_card_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz"
+						parentclass="span-3-inline"
 						label="MOD_TROMBINOSCOPE_FIELD_MIN_CARD_WIDTH_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_MIN_CARD_WIDTH_DESC" />
 					
-					<field name="max_card_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz" 
+					<field name="max_card_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz"
+						parentclass="span-3-inline"
 						label="MOD_TROMBINOSCOPE_FIELD_MAX_CARD_WIDTH_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_MAX_CARD_WIDTH_DESC" />
 						
@@ -650,11 +654,13 @@
 						label="MOD_TROMBINOSCOPE_FIELD_MIN_CARDFLIP_WIDTH_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_MIN_CARDFLIP_WIDTH_DESC" />				
 					
-					<field name="pic_w" type="sywverbosetext" default="100" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="s_pic:1" 
+					<field name="pic_w" type="sywverbosetext" default="100" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="s_pic:1"
+						parentclass="span-3-inline"
 						label="MOD_TROMBINOSCOPE_FIELD_PICTURE_WIDTH_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_PICTURE_WIDTH_DESC" />
 						
-					<field name="pic_h" type="sywverbosetext" default="120" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="s_pic:1" 
+					<field name="pic_h" type="sywverbosetext" default="120" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="s_pic:1"
+						parentclass="span-3-inline"
 						label="MOD_TROMBINOSCOPE_FIELD_PICTURE_HEIGHT_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_PICTURE_HEIGHT_DESC" />
 					
