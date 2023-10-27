@@ -1160,7 +1160,7 @@ final class JQueryEasy extends CMSPlugin implements SubscriberInterface
         
         if ($templates_inex !== '') {
             
-            $templates = self::getParamValues($this->params->get('templateid' . $this->_suffix, array()));
+            $templates = Helper::getParamValues($this->params->get('templateid' . $this->_suffix, array()));
             
             if ($templates) {
                 
@@ -1184,7 +1184,7 @@ final class JQueryEasy extends CMSPlugin implements SubscriberInterface
         
         if ($components_inex !== '') {
             
-            $components = self::getParamValues($this->params->get('wherecomponent' . $this->_suffix, array()));
+            $components = Helper::getParamValues($this->params->get('wherecomponent' . $this->_suffix, array()));
             
             if ($components) {
                 
@@ -1217,7 +1217,7 @@ final class JQueryEasy extends CMSPlugin implements SubscriberInterface
                     $paths = array_map('trim', (array) explode("\n", $url_paths));
                     
                     foreach ($paths as $path) {
-                        if (self::paths_are_identical(Uri::current(), $path)) {
+                        if (Helper::paths_are_identical(Uri::current(), $path)) {
                             
                             return true;
                         }
@@ -1230,7 +1230,7 @@ final class JQueryEasy extends CMSPlugin implements SubscriberInterface
                     $paths = array_map('trim', (array) explode("\n", $url_paths));
                     
                     foreach ($paths as $path) {
-                        if (self::paths_are_identical(Uri::current(), $path)) {
+                        if (Helper::paths_are_identical(Uri::current(), $path)) {
                             
                             return false;
                         }
