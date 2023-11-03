@@ -61,8 +61,10 @@ $test_image = new SYWImage($source_path . '/right.jpg', $width, $height);
 echo '<h3>right.jpg</h3>';
 echo '<span>Memory limit: ' . $test_image->getMemoryLimit() . '<br /></span>';
 echo '<span>Image mime type: ' . $test_image->getImageMimeType() . '<br /></span>';
-$exif = @exif_read_data($source_path . '/right.jpg');
-echo '<span>Orientation: ' . $exif['Orientation'] . '<br /></span>';
+if (function_exists('exif_read_data')) {
+    $exif = @exif_read_data($source_path . '/right.jpg');
+    echo '<span>Orientation: ' . $exif['Orientation'] . '<br /></span>';
+}
 $test_image->toFile($tmp_path . '/right', 'image/webp', $quality);
 $test_image->destroy();
 ?>
