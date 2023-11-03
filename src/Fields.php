@@ -10,6 +10,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Database\ParameterType;
 use Joomla\Database\Exception\ExecutionFailureException;
 
 class Fields
@@ -92,7 +93,8 @@ class Fields
 		$query->select($db->quoteName(array('f.label', 'f.name', 'f.params', 'f.fieldparams', 'f.context', 'f.type', 'f.default_value'), array('title', 'alias', 'fieldoptions', 'fieldparams', 'context', 'type', 'default_value')));
 		
 		$query->from($db->quoteName('#__fields', 'f'));
-		$query->where($db->quoteName('f.id').' = ' . $field_id);
+		$query->where($db->quoteName('f.id').' = :fieldId');
+		$query->bind(':fieldId', $field_id, ParameterType::INTEGER);
 		
 		$db->setQuery($query);
 		
