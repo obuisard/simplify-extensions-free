@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.13.0</version>
+	<version>4.13.1</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -542,7 +542,7 @@
 						label="MOD_TROMBINOSCOPE_FIELD_CARDBORDERCOLOR_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_CARDBORDERCOLOR_DESC" />
 										
-					<field name="font" type="sywfontpicker" default=""
+					<field name="font" type="sywfontpicker" webfonts="true" default=""
 						label="MOD_TROMBINOSCOPE_FIELD_FONT_LABEL"
 						description="MOD_TROMBINOSCOPE_FIELD_FONT_DESC" />									
 										

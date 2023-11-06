@@ -425,18 +425,11 @@ if (File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/substitute_s
 
 	$user_styles = trim($params->get('style_overrides', ''));
 
-	if (trim($params->get('font', '')) != '') {
-
-	    $font = str_replace('\'', '"', trim($params->get('font', ''))); // " lost, replaced by '
-
-	    $google_font = SYWUtilities::getGoogleFont($font); // get Google font, if any
-	    if ($google_font) {
-	        SYWFonts::loadGoogleFont($google_font);
-	    }
-
-	    $user_styles .= '#te_'.$module->id.' .person {';
-	    $user_styles .= 'font-family: '.$font.' !important;';
-	    $user_styles .= '} ';
+	$font = trim($params->get('font', ''));
+	if ($font) {
+	    SYWFonts::loadWebFonts(SYWFonts::getWebfontsFromFamily($font));
+	    
+	    $user_styles .= '#te_' . $module->id . ' .person { font-family: ' . $font . ' !important; } ';
 	}
 
 	if (!empty($user_styles)) {
