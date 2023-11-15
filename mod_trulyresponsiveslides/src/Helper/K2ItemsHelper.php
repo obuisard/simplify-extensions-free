@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
+use Joomla\Database\ParameterType;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Utilities\ArrayHelper;
 
@@ -172,7 +173,7 @@ class K2ItemsHelper
 		// language filter
 
 		if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
-			$query->whereIn($db->quoteName('a.language'), [$db->quote(Factory::getLanguage()->getTag()), $db->quote('*')]);
+			$query->whereIn($db->quoteName('a.language'), [Factory::getLanguage()->getTag(), '*'], ParameterType::STRING);
 		}
 
 		// ordering

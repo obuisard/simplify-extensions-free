@@ -51,7 +51,7 @@ use SYW\Library\Utilities as SYWUtilities;
 
 		/* alts */
 
-		$alts = array_map('trim', (array) explode("\n", $params->get('alts')));
+		$alts = array_map('trim', (array) explode("\n", $params->get('alts', '')));
 
 		$extended_alts = array();
 		foreach ($alts as $alt) {
@@ -65,7 +65,7 @@ use SYW\Library\Utilities as SYWUtilities;
 
 		/* caption, position */
 
-		$captions = array_map('trim', (array) explode("\n", $params->get('captions')));
+		$captions = array_map('trim', (array) explode("\n", $params->get('captions', '')));
 		$coordinate = $default_position;
 
 		$extended_captions = array();
