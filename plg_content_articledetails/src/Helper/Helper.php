@@ -1418,28 +1418,28 @@ class Helper
 						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_EMAIL'), $value['show_icon'], 'email', $value['icon']);
 
 						$info_block .= '<span class="detail_data">';
+						
+						$root_path = rtrim(Uri::root(), "/");
 
-// 						\JLoader::register("MailToHelper", JPATH_SITE . '/components/com_mailto/helpers/mailto.php');
-
-						$link = str_replace(array("tmpl=component", "print=1"), "", $item->link);
-						$link = rtrim($link, "?&amp;");
-						$link = rawurldecode(rtrim(Uri::root(), "/").$link);
-
-// 						$template = $app->getTemplate();
-// 						$url = 'index.php?option=com_mailto&tmpl=component&template='.$template.'&link='.MailToHelper::addLink($link);
-
-// 						$status = 'width=400,height=350,menubar=yes,resizable=yes';
+						$url = str_replace(array("tmpl=component", "print=1"), "", $item->link);
+						$url = rtrim($url, "?&amp;");
+						
+						$base_path = Uri::base(true);
+						
+						// remove base path from item link if it is already there
+						if ($base_path && strpos($url, $base_path) === 0) {
+						    $url = substr($url, strlen($base_path));
+						}
 
 						$attribs = array(
 							'title'   => Text::_('JGLOBAL_EMAIL'),
 							'class' => 'hasTooltip'
-// 							'onclick' => "window.open(this.href,'win2','".$status."'); return false;"
+// 							'onclick' => "window.open(this.href,'win2','"width=400,height=350,menubar=yes,resizable=yes"'); return false;"
 						);
 
-						$text = '<i class="SYWicon-email"></i><span>'.Text::_('JGLOBAL_EMAIL').'</span>';
+						$text = '<i class="SYWicon-email"></i><span>' . Text::_('JGLOBAL_EMAIL') . '</span>';
 
-// 						$info_block .= HTMLHelper::_('link', $url, $text, $attribs);
-						$info_block .= HTMLHelper::_('link', 'mailto:?subject=' . rawurlencode($item->title) . '&amp;body=' . $link, $text, $attribs);
+						$info_block .= HTMLHelper::_('link', 'mailto:?subject=' . urlencode(htmlspecialchars($item->title)) . '&amp;body=' . urlencode($root_path . $url), $text, $attribs);
 
 						$info_block .= '</span>';
 

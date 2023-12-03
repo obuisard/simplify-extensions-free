@@ -35,11 +35,17 @@ use SYW\Plugin\Content\ArticleDetails\Helper\Helper;
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
 
-/**
- * Replace the menu icon class with a full-blown icon picker *
- */
 final class ArticleDetails extends CMSPlugin
 {
+    /**
+     * Application object.
+     * Needed for compatibility with Joomla 4 < 4.2
+     * Ultimately, we should use $this->getApplication() in Joomla 6
+     *
+     * @var    \Joomla\CMS\Application\CMSApplication
+     */
+    protected $app;
+
     /**
      * Load the language file on instantiation.
      *
@@ -54,6 +60,8 @@ final class ArticleDetails extends CMSPlugin
      */
     protected $supportedContext = [
         'com_content.article',
+        'com_content.category',
+        'com_content.featured',
     ];
     
     protected $_library_loaded = true;
@@ -64,8 +72,12 @@ final class ArticleDetails extends CMSPlugin
     {
         parent::__construct($subject, $config);
         
+        if (!$this->app) {
+            $this->app = Factory::getApplication();
+        }
+        
         if (!PluginHelper::isEnabled('system', 'syw')) {
-            $this->getApplication()->enqueueMessage(Text::_('PLG_CONTENT_ARTICLEDETAILS_WARNING_MISSINGLIBRARY'), 'error');
+            $this->app->enqueueMessage(Text::_('PLG_CONTENT_ARTICLEDETAILS_WARNING_MISSINGLIBRARY'), 'error');
             $this->_library_loaded = false;
             return;
         }
@@ -76,14 +88,9 @@ final class ArticleDetails extends CMSPlugin
         if (!$this->_library_loaded) {
             return;
         }
-        
-        // 		$canProceed = ($context == 'com_content.article' || $context == 'com_content.category' || $context == 'com_content.featured');
-        // 		if (!$canProceed) {
-        // 			return;
-        // 		}
             
         // add missing info in case 'force showing' is enabled and some info is missing
-        if (($context == 'com_content.article' || $context == 'com_content.category' || $context == 'com_content.featured') && $this->params->get('force_show', 0)) {
+        if (in_array($context, $this->supportedContext) && $this->params->get('force_show', 0)) {
             $this->_addMissingInfo($row, $params);
         }
         
@@ -169,7 +176,7 @@ final class ArticleDetails extends CMSPlugin
             
             $this->_syntax_exists = true;
             
-            $wam = $this->getApplication()->getDocument()->getWebAssetManager();
+            $wam = $this->app->getDocument()->getWebAssetManager();
             
             // add styles
             
@@ -206,9 +213,8 @@ final class ArticleDetails extends CMSPlugin
         }
         
         $html = '';
-        
-        $canProceed = ($context == 'com_content.article' || $context == 'com_content.category' || $context == 'com_content.featured');
-        if (!$canProceed) {
+
+        if (!in_array($context, $this->supportedContext)) {
             return $html;
         }
         
@@ -216,7 +222,7 @@ final class ArticleDetails extends CMSPlugin
             return $html;
         }
         
-        $view = $this->getApplication()->getInput()->getCmd('view', '');
+        $view = $this->app->getInput()->getCmd('view', '');
         
         if ($view != 'article') {
             if ($this->params->get('disable_in_list_views', false)) {
@@ -228,7 +234,7 @@ final class ArticleDetails extends CMSPlugin
             
             if ($this->_foundCategory($row->catid)) {
                 
-                $wam = $this->getApplication()->getDocument()->getWebAssetManager();
+                $wam = $this->app->getDocument()->getWebAssetManager();
                 
                 // heads
                 
@@ -297,7 +303,7 @@ final class ArticleDetails extends CMSPlugin
             return $html;
         }
         
-        $view = $this->getApplication()->getInput()->getCmd('view', '');
+        $view = $this->app->getInput()->getCmd('view', '');
         
         if ($view == 'article') {
             
@@ -435,7 +441,7 @@ final class ArticleDetails extends CMSPlugin
         // title
         
         $edit_addition = '';
-        if ($params->get('access-edit') && !$this->getApplication()->getInput()->getBool('print', false) /*&& !$params->get('popup')*/) {
+        if ($params->get('access-edit') && !$this->app->getInput()->getBool('print', false) /*&& !$params->get('popup')*/) {
             
             if ($load_bootstrap) {
                 HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
@@ -453,7 +459,7 @@ final class ArticleDetails extends CMSPlugin
         
         if ($params->get('ad_show_title') && !empty($row->title)) {
             if ( $view == 'category' || $view == 'featured') {
-                if ($params->get('link_titles') && $params->get('access-view') && !$this->getApplication()->getInput()->getBool('print')) {
+                if ($params->get('link_titles') && $params->get('access-view') && !$this->app->getInput()->getBool('print')) {
                     $output .= '<h'.$title_html_tag.' class="article_title"><a href="'.$row->link.'">'.$row->title.'</a>'.$edit_addition.'</h'.$title_html_tag.'>';
                 } else {
                     $output .= '<h'.$title_html_tag.' class="article_title">'.$row->title.$edit_addition.'</h'.$title_html_tag.'>';
