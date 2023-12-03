@@ -54,7 +54,7 @@ class Pkg_ArticleDetailsInstallerScript extends InstallerScript
 	public function __construct($installer)
 	{
 	    $this->extension = 'pkg_articledetails';
-	    $this->minimumJoomla = '4.0.0';
+	    $this->minimumJoomla = '4.1.0';
 	    //$this->minimumPhp = JOOMLA_MINIMUM_PHP; // not needed
 	}
 
