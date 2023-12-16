@@ -30,7 +30,7 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 	/**
 	 * Available languages
 	 */
-	protected $availableLanguages = array('da-DK', 'de-DE', 'en-GB', 'es-ES', 'fi-FI', 'fr-FR', 'hu-HU', 'it-IT', 'ja-JP', 'nl-NL', 'pl-PL', 'pt-BR', 'pt-PT', 'ru-RU', 'sl-SI', 'tr-TR');
+	protected $availableLanguages = array('da-DK', 'de-DE', 'en-GB', 'es-ES', 'fi-FI', 'fr-FR', 'hu-HU', 'it-IT', 'ja-JP', 'nl-NL', 'pl-PL', 'pt-BR', 'pt-PT', 'ru-RU', 'sl-SI', 'sv-SE', 'tr-TR');
 
 	/**
 	 * Extensions library link for download
