@@ -789,7 +789,7 @@ class K2Helper
 		// language filter
 
 		if ($params->get('filter_lang', 1) && Multilanguage::isEnabled()) {
-		    $query->whereIn($db->quoteName('a.language'), [$db->quote(Factory::getLanguage()->getTag()), $db->quote('*')]);
+		    $query->whereIn($db->quoteName('a.language'), [Factory::getLanguage()->getTag(), '*'], ParameterType::STRING);
 		}
 
 		$ordering = array();
@@ -1597,7 +1597,7 @@ class K2Helper
 	    }
 
 	    if (Factory::getApplication()->getLanguageFilter()) {
-	        $query->whereIn($db->quoteName('language'), [$db->quote(Factory::getLanguage()->getTag()), $db->quote('*')]);
+	        $query->whereIn($db->quoteName('language'), [Factory::getLanguage()->getTag(), '*'], ParameterType::STRING);
 	    }
 
 	    $db->setQuery($query);

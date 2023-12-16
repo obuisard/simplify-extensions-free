@@ -114,9 +114,15 @@ class CSSFileCache extends HeaderFilesCache
 		$variables[] = 'padding_body';
 
 		$padding_head = trim($params->get('space_head', ''));
+		if ($padding_head !== '' && is_numeric($padding_head)) {
+		    $padding_head = intval($padding_head); // make sure we have values
+		}
 		$variables[] = 'padding_head';
 
 		$padding_info = trim($params->get('space_body', ''));
+		if ($padding_info !== '' && is_numeric($padding_info)) {
+		    $padding_info = intval($padding_info); // make sure we have values
+		}
 		$variables[] = 'padding_info';
 
 		$content_align = $params->get('content_align', '');

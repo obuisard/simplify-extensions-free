@@ -241,13 +241,13 @@ defined('_JEXEC') or die;
 				}
 			<?php endif; ?>
 
-				<?php if ($padding_head) : ?>
+				<?php if (is_int($padding_head) && $padding_head >= 0) : ?>
 					<?php echo $suffix; ?> .newshead {
 						padding: <?php echo $padding_head; ?>px !important;
 					}
 				<?php endif; ?>
 
-				<?php if ($padding_info) : ?>
+				<?php if (is_int($padding_info) && $padding_info >= 0) : ?>
 					<?php echo $suffix; ?> .newsinfo,
 					<?php echo $suffix; ?> .newsinfooverhead {
 						padding: <?php echo $padding_info; ?>px !important;
