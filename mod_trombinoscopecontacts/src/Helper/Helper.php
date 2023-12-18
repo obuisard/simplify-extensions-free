@@ -844,7 +844,7 @@ abstract class Helper
 		// language filter
 
 		if ($params->get('filter_lang', 0) && Multilanguage::isEnabled()) {
-		    $query->whereIn($db->quoteName('cd.language'), [$db->quote(Factory::getLanguage()->getTag()), $db->quote('*')]);
+		    $query->whereIn($db->quoteName('cd.language'), [Factory::getLanguage()->getTag(), '*'], ParameterType::STRING);
 		}
 
 		// launch query
@@ -1572,7 +1572,8 @@ abstract class Helper
 				break;
 
 			case 'c_p' : // con_position
-				$value = trim($item->con_position);
+
+				$value = empty($item->con_position) ? '' : trim($item->con_position);
 				$class = 'fieldposition';
 				if ($value) {
 					if (strpos($value, 'POSITION_') !== false) {
@@ -1598,7 +1599,8 @@ abstract class Helper
 				break;
 
 			case 'tel' : // telephone
-				$value = trim($item->telephone);
+
+				$value = empty($item->telephone) ? '' : trim($item->telephone);
 				$class = 'fieldtel';
 				if ($value) {
 					if (SYWUtilities::isMobile()) {
@@ -1614,7 +1616,8 @@ abstract class Helper
 				break;
 
 			case 'mob' : // mobile
-				$value = trim($item->mobile);
+
+			    $value = empty($item->mobile) ? '' : trim($item->mobile);
 				$class = 'fieldmobile';
 				if ($value) {
 					if (SYWUtilities::isMobile()) {
@@ -1630,7 +1633,8 @@ abstract class Helper
 				break;
 
 			case 'fax' : // fax
-				$value = trim($item->fax);
+
+				$value = empty($item->fax) ? '' : trim($item->fax);
 				$class = 'fieldfax';
 				if ($value) {
 					if (SYWUtilities::isMobile()) {
@@ -1646,7 +1650,8 @@ abstract class Helper
 				break;
 
 			case 'mail' : // email_to
-				$initial_value = trim($item->email_to);
+
+			    $initial_value = empty($item->email_to) ? '' : trim($item->email_to);
 				$class = 'fieldemail';
 
 				if (trim($params->get('e_substitut', '')) == '') {
@@ -1691,7 +1696,8 @@ abstract class Helper
 				break;
 
 			case 'web' : // webpage
-				$value = trim($item->webpage);
+
+				$value = empty($item->webpage) ? '' : trim($item->webpage);
 				$class = 'fieldwebpage';
 
 				if (trim($params->get('w_substitut', '')) == '') {
@@ -1722,7 +1728,8 @@ abstract class Helper
 				break;
 
 			case 'add' : // address
-				$value = trim($item->address, ", \t\n\r\0\x0B"); // single quotes won't work
+
+				$value = empty($item->address) ? '' : trim($item->address, ", \t\n\r\0\x0B");
 				$class = 'fieldaddress';
 				if ($value) {
 					//$title = $value;
@@ -1734,25 +1741,30 @@ abstract class Helper
 
 			case 'f_f_a' : // address + zipcode... formatted
 
-				$address = trim($item->address, ", \t\n\r\0\x0B");
+			    $address = empty($item->address) ? '' : trim($item->address, ", \t\n\r\0\x0B");
 				if ($address) {
 					$address .= "\n";
 				}
+				
+				$item->suburb = empty($item->suburb) ? '' : trim($item->suburb);
+				$item->state = empty($item->state) ? '' : trim($item->state);
+				$item->postcode = empty($item->postcode) ? '' : trim($item->postcode);
+				
 				switch ($params->get('a_fmt', 'ssz')) {
 					case 'ssz' :
-						$value = $address . trim($item->suburb) . (trim($item->state) == '' ? '' : ', ' . trim($item->state)) . ' ' . trim($item->postcode);
+						$value = $address . $item->suburb . ($item->state ? ', ' . $item->state : '') . ' ' . $item->postcode;
 						break;
 					case 'zss' :
-						$value = $address . trim($item->postcode) . (trim($item->suburb) == '' ? '' : ' ' . trim($item->suburb)) . ', ' . trim($item->state);
+						$value = $address . $item->postcode . ($item->suburb ? ' ' . $item->suburb : '') . ', ' . $item->state;
 						break;
 					case 'zs' :
-						$value = $address . trim($item->postcode) . ' ' . trim($item->suburb);
+						$value = $address . $item->postcode . ' ' . $item->suburb;
 						break;
 					case 'sz' :
-						$value = $address . trim($item->suburb) . ' ' . trim($item->postcode);
+						$value = $address . $item->suburb . ' ' . $item->postcode;
 						break;
 					case 'ss' :
-						$value = $address . trim($item->suburb) . ', ' . trim($item->state);
+						$value = $address . $item->suburb . ', ' . $item->state;
 						break;
 					default :
 						$value = '';
@@ -1780,7 +1792,8 @@ abstract class Helper
 				break;
 
 			case 'sub' : // suburb
-				$value = trim($item->suburb);
+
+				$value = empty($item->suburb) ? '' : trim($item->suburb);
 				$class = 'fieldsuburb';
 				if ($value) {
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_SUBURB') : $fieldlabel;
@@ -1789,7 +1802,8 @@ abstract class Helper
 				break;
 
 			case 'st' : // state
-				$value = trim($item->state);
+
+				$value = empty($item->state) ? '' : trim($item->state);
 				$class = 'fieldstate';
 				if ($value) {
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_STATE') : $fieldlabel;
@@ -1798,7 +1812,8 @@ abstract class Helper
 				break;
 
 			case 'p_c' : // postcode
-				$value = trim($item->postcode);
+
+				$value = empty($item->postcode) ? '' : trim($item->postcode);
 				$class = 'fieldpostcode';
 				if ($value) {
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_POSTCODE') : $fieldlabel;
@@ -1807,7 +1822,8 @@ abstract class Helper
 				break;
 
 			case 'cou' : // country
-				$value = trim($item->country);
+
+				$value = empty($item->country) ? '' : trim($item->country);
 				$class = 'fieldcountry';
 				if ($value) {
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_COUNTRY') : $fieldlabel;
@@ -1823,9 +1839,11 @@ abstract class Helper
 					$number_of_letters = (int)$letter_count;
 				}
 				if ($params->get('t', 'info') == 'info') {
-					$value = SYWText::getText(trim($item->misc), 'html', $number_of_letters, $params->get('s_t', 1), trim($params->get('keep_tags', '')), !$params->get('process_miscinfo', 0), $params->get('trunc_l_w', 0));
+				    $item->misc = empty($item->misc) ? '' : trim($item->misc);
+					$value = SYWText::getText($item->misc, 'html', $number_of_letters, $params->get('s_t', 1), trim($params->get('keep_tags', '')), !$params->get('process_miscinfo', 0), $params->get('trunc_l_w', 0));
 				} else {
-					$value = SYWText::getText(trim($item->metadesc), 'txt', $number_of_letters, false, '', true, $params->get('trunc_l_w', 0));
+				    $item->metadesc = empty($item->metadesc) ? '' : trim($item->metadesc);
+					$value = SYWText::getText($item->metadesc, 'txt', $number_of_letters, false, '', true, $params->get('trunc_l_w', 0));
 				}
 				$class = 'fieldmisc';
 
