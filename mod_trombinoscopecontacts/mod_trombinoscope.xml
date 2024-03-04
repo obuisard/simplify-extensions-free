@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.13.2</version>
+	<version>4.14.0</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -353,9 +353,9 @@
 						<option value="1">JSHOW</option>
 					</field>
 				
-<!-- 				<field name="v_icon" type="sywiconpicker" default="vcard" showon="s_v:1"  -->
-<!-- 					label="MOD_TROMBINOSCOPE_FIELD_VCARDICON_LABEL"  -->
-<!-- 					description="MOD_TROMBINOSCOPE_FIELD_VCARDICON_DESC" />				 -->
+	 				<field name="v_icon" type="sywuniversaliconpicker" iconsets="syw" default="SYWicon-vcard" showon="s_v:1"  
+	 					label="MOD_TROMBINOSCOPE_FIELD_VCARDICON_LABEL"  
+	 					description="MOD_TROMBINOSCOPE_FIELD_VCARDICON_DESC" />
 			
 					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_TROMBINOSCOPE_FIELD_VCARDTYPE_LABEL"
@@ -368,7 +368,7 @@
 						<option value="1">JSHOW</option>
 					</field>
 					
-					<field name="f_icon" type="sywiconpicker" default="star" showon="s_f:1" 
+					<field name="f_icon" type="sywuniversaliconpicker" iconsets="syw" bcmode="true" default="SYWicon-star" showon="s_f:1" 
 						label="MOD_TROMBINOSCOPE_FIELD_FEATUREDICON_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_FEATUREDICON_DESC" />
 				</fieldset>				
@@ -849,7 +849,7 @@
 						label="MOD_TROMBINOSCOPE_FIELD_LABELNAME_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_LABELNAME_DESC" />
 						
-					<field name="name_icon" type="sywiconpicker" default="person" showon="s_name_lbl:2" 
+					<field name="name_icon" type="sywuniversaliconpicker" iconsets="syw" bcmode="true" default="SYWicon-person" showon="s_name_lbl:2" 
 						label="MOD_TROMBINOSCOPE_FIELD_ICONNAME_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_ICONNAME_DESC" />
 						
@@ -1211,6 +1211,13 @@
 					<field name="load_icon_font" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
 						label="MOD_TROMBINOSCOPE_FIELD_LOADICONFONT_LABEL"
 						description="MOD_TROMBINOSCOPE_FIELD_LOADICONFONT_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+			
+					<field name="load_fontawesome" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TROMBINOSCOPE_FIELD_LOADFONTAWESOME_LABEL"
+						description="MOD_TROMBINOSCOPE_FIELD_LOADFONTAWESOME_DESC">
 						<option value="0">JNO</option>
 						<option value="1">JYES</option>
 					</field>

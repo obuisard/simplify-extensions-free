@@ -209,7 +209,7 @@ if ($remove_whitespaces) {
     					<?php if ($show_vcard) : ?>
     						<div class="vcard">
     							<a href="<?php echo Route::_(ContactRouteHelper::getContactRoute($item->slug, $item->catid, $item->language) . '&format=vcf'); ?>" class="hasTooltip<?php echo $extraclasseslinkfields ? ' ' . $extraclasseslinkfields : ''; ?>" aria-label="<?php echo Text::_('MOD_TROMBINOSCOPE_VCARD');?>" title="<?php echo Text::_('MOD_TROMBINOSCOPE_DOWNLOAD_VCARD');?>">
-    								<i class="icon SYWicon-vcard" aria-hidden="true"></i><span><?php echo Text::_('MOD_TROMBINOSCOPE_VCARD'); ?></span>
+    								<i class="icon <?php echo $vcard_icon; ?>" aria-hidden="true"></i><span><?php echo Text::_('MOD_TROMBINOSCOPE_VCARD'); ?></span>
     							</a>
     						</div>
     					<?php endif; ?>
@@ -234,7 +234,7 @@ if ($remove_whitespaces) {
     								<div class="picture_veil">
     									<?php if ($item->featured && $show_featured) : ?>
     										<div class="feature">
-    											<i class="icon SYWicon-<?php echo $featured_icon; ?>" aria-hidden="true"></i>
+    											<i class="icon <?php echo $featured_icon; ?>" aria-hidden="true"></i>
     										</div>
     									<?php endif; ?>
     								</div>
@@ -261,7 +261,7 @@ if ($remove_whitespaces) {
     							<div class="text_veil">
     								<?php if ($item->featured && $show_featured) : ?>
     									<div class="feature">
-    										<i class="icon SYWicon-<?php echo $featured_icon; ?>" aria-hidden="true"></i>
+    										<i class="icon <?php echo $featured_icon; ?>" aria-hidden="true"></i>
     									</div>
     								<?php endif; ?>
     							</div>

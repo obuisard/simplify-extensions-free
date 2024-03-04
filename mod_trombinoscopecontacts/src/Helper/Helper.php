@@ -717,7 +717,7 @@ abstract class Helper
 					$subQuery->where('(' . $db->quoteName('f.context') . ' IS NULL OR ' . $db->quoteName('f.context') . ' = ' . $db->quote('com_contact.contact') . ')');
 					$subQuery->where('(' . $db->quoteName('f.state') . ' IS NULL OR ' . $db->quoteName('f.state') . ' = 1)');
 					$subQuery->where('(' . $db->quoteName('f.access') . ' IS NULL OR ' . $db->quoteName('f.access') . ' IN (' . implode(',', $view_levels) . '))');
-					$subQuery->where($db->quoteName('cfv.field_id').' = :fieldId');
+					$subQuery->where($db->quoteName('cfv.field_id') . ' = :fieldId');
 					$subQuery->bind(':fieldId', $customfield_filter['id'], ParameterType::INTEGER);
 
 					if ($customfield_filter['inex']) {
@@ -1138,7 +1138,10 @@ abstract class Helper
 					case 'ss' :
 						return array('address', 'suburb', 'state');
 				}
-			default: return '';
+			default: 
+			    
+			    // PRO version only
+			    return '';
 		}
 
 		return null;
@@ -1407,7 +1410,7 @@ abstract class Helper
 		$label_separator = $params->get('lbl_separator', '');
 
 		$label = empty($params->get('name_lbl', '')) ? Text::_('MOD_TROMBINOSCOPE_LABEL_NAME') : $params->get('name_lbl', '');
-		$icon = empty($params->get('name_icon', '')) ? 'user' : $params->get('name_icon', '');
+		$icon = empty($params->get('name_icon', '')) ? 'SYWicon-user' : $params->get('name_icon', '');
 
 		if (!$params->get('force_one_line', 1)) {
 			$extraclass .= ' wrap';
@@ -1430,7 +1433,7 @@ abstract class Helper
 		if ($show_label) { // labels
 			$html .= '<span class="fieldlabel">'.$label.$label_separator.'</span>';
 		} else if ($show_icon) { // icons
-			$html .= '<i class="icon SYWicon-'.$icon.'" aria-hidden="true"></i>';
+			$html .= '<i class="icon '.$icon.'" aria-hidden="true"></i>';
 		} else { // no icon or no label for the field
 			if ($label_by_default) { // force 'no label' even if there is one
 				$html .= '<span class="nolabel"></span>';
@@ -1467,7 +1470,7 @@ abstract class Helper
 					$info_details['name'] = $detail_bloc->lf; // name
 					$info_details['show_what'] = 2;
 					$info_details['label'] = '';
-					$info_details['icon'] = $detail_bloc->lf_icon;
+					$info_details['icon'] = SYWUtilities::getIconFullName($detail_bloc->lf_icon);
 					$info_details['show_tooltip'] = true;
 					$info_details['classes'] = '';
 
@@ -1505,7 +1508,7 @@ abstract class Helper
 					$info_details['name'] = $detail_bloc->f; // name
 					$info_details['show_what'] = $detail_bloc->s_f_lbl;
 					$info_details['label'] = $detail_bloc->f_lbl;
-					$info_details['icon'] = $detail_bloc->f_icon;
+					$info_details['icon'] = SYWUtilities::getIconFullName($detail_bloc->f_icon);
 					$info_details['show_tooltip'] = $detail_bloc->f_tooltip == 1 ? true : false;
 					$info_details['one_line'] = (!isset($detail_bloc->f_one_line) || (isset($detail_bloc->f_one_line) && $detail_bloc->f_one_line == 1)) ? true : false;
 					$info_details['classes'] = isset($detail_bloc->f_classes) ? $detail_bloc->f_classes : '';
@@ -1594,7 +1597,7 @@ abstract class Helper
 						}
 					}
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_POSITION') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'briefcase';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-briefcase';
 				}
 				break;
 
@@ -1611,7 +1614,7 @@ abstract class Helper
 						$value = 'tel:'.$value;
 					}
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_TELEPHONE') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'phone';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-phone';
 				}
 				break;
 
@@ -1628,7 +1631,7 @@ abstract class Helper
 						$value = 'tel:'.$value;
 					}
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_MOBILE') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'mobile';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-mobile';
 				}
 				break;
 
@@ -1645,7 +1648,7 @@ abstract class Helper
 						$value = 'tel:'.$value;
 					}
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_FAX') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'fax';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-fax';
 				}
 				break;
 
@@ -1661,7 +1664,7 @@ abstract class Helper
 				if ($initial_value) {
 
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_EMAIL') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'mail';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-mail';
 
 					$substitute_value = (trim($params->get('e_substitut', '')) == '') ? $initial_value : $params->get('e_substitut', '');
 					switch ($params->get('link_e', 1)) {
@@ -1723,7 +1726,7 @@ abstract class Helper
 					}
 
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_WEBPAGE') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'earth';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-earth';
 				}
 				break;
 
@@ -1735,7 +1738,7 @@ abstract class Helper
 					//$title = $value;
 					$value = nl2br($value);
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_ADDRESS') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'home';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-home';
 				}
 				break;
 
@@ -1776,7 +1779,7 @@ abstract class Helper
 				if ($value) {
 
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_FORMATTEDADDRESS') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'home';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-home';
 
 					//$title = $value;
 					if ($params->get('a_link_map', 0) == 1) { // auto
@@ -1827,7 +1830,7 @@ abstract class Helper
 				$class = 'fieldcountry';
 				if ($value) {
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_COUNTRY') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'flag2';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-flag2';
 				}
 				break;
 
@@ -1850,7 +1853,7 @@ abstract class Helper
 				if ($value) {
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_MISC') : $fieldlabel;
 					//$title = $label;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'info';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-info';
 				}
 				break;
 
@@ -1859,7 +1862,7 @@ abstract class Helper
 				$class = 'fieldcreated';
 				if ($value) {
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_CREATED') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'calendar';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-calendar';
 				}
 				break;
 				
@@ -1874,7 +1877,7 @@ abstract class Helper
 				$class = 'fieldmodified';
 				if ($value) {
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_MODIFIED') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'calendar';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-calendar';
 				}
 				break;
 				
@@ -1883,7 +1886,7 @@ abstract class Helper
 				$class = 'fieldhits';
 				if ($value) {
 					$label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_HITS') : $fieldlabel;
-					$icon_class = !empty($fieldicon) ? $fieldicon : 'eye';
+					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-eye';
 				}
 				break;
 
@@ -1923,7 +1926,7 @@ abstract class Helper
 			if ($value) {
 				$html .= '<li class="iconlink index'.$index.' '.$class.($extraclass ? ' '.$extraclass : '').'">';
 				 $html .= '<a class="fieldvalue'.self::getTooltipClass($fieldtooltip).'" aria-label="'.$label.'" href="'.$value.'"'.($target ? ' target="'.$target.'"' : '').self::getTitleAttribute($label, $fieldtooltip).'>';
-						$html .= '<i class="icon SYWicon-'.$icon_class.'" aria-hidden="true"></i>';
+						$html .= '<i class="icon '.$icon_class.'" aria-hidden="true"></i>';
 						$html .= '<span>'.($substitute_value ? $substitute_value : $value).'</span>'; // hidden
 					$html .= '</a>';
 				$html .= '</li>';
@@ -1941,7 +1944,7 @@ abstract class Helper
 						$html .= '<span class="fieldlabel">'.$label.$params->get('lbl_separator', '').'</span>';
 					} else if ($prefield == 2) { // icons
 						if (!empty($icon_class)) {
-							$html .= '<i class="icon SYWicon-'.$icon_class.'" aria-hidden="true"></i>';
+							$html .= '<i class="icon '.$icon_class.'" aria-hidden="true"></i>';
 						} else {
 							$html .= '<i class="noicon" aria-hidden="true"></i>';
 						}
@@ -1974,7 +1977,17 @@ abstract class Helper
 	}
 
 	protected static $social_networks_labels = array('facebook' => 'Facebook', 'linkedin' => 'LinkedIn', 'twitter' => 'Twitter', 'plus.google' => 'Google+', 'instagram' => 'Instagram', 'tumblr' => 'Tumblr', 'pinterest' => 'Pinterest', 'youtube' => 'YouTube', 'vimeo' => 'Vimeo', 'wordpress' => 'Wordpress', 'skype' => 'Skype', 'blogspot' => 'Blogger');
-
+	
+	/**
+	 * Get the default label for a link
+	 *
+	 * @param string  $field
+	 * @param string  $link
+	 * @param unknown $params
+	 * @param boolean $is_substitute
+	 *
+	 * @return string the label
+	 */
 	public static function getLabelForLink($field, $link, $params, $is_substitute)
 	{
 		$label = trim($params->get($field.'_name'));
@@ -2001,8 +2014,15 @@ abstract class Helper
 		return Text::_('MOD_TROMBINOSCOPE_LABEL_LINK');
 	}
 
-	protected static $social_networks_icons = array('facebook' => 'facebook', 'linkedin' => 'linkedin', 'twitter' => 'twitter', 'plus.google' => 'googleplus', 'instagram' => 'instagram', 'tumblr' => 'tumblr', 'pinterest' => 'pinterest', 'youtube' => 'youtube', 'vimeo' => 'vimeo', 'wordpress' => 'wordpress', 'skype' => 'skype', 'blogspot' => 'blogger');
+	protected static $social_networks_icons = array('facebook' => 'SYWicon-facebook', 'linkedin' => 'SYWicon-linkedin', 'twitter' => 'SYWicon-twitter', 'plus.google' => 'SYWicon-googleplus', 'instagram' => 'SYWicon-instagram', 'tumblr' => 'SYWicon-tumblr', 'pinterest' => 'SYWicon-pinterest', 'youtube' => 'SYWicon-youtube', 'vimeo' => 'SYWicon-vimeo', 'wordpress' => 'SYWicon-wordpress', 'skype' => 'SYWicon-skype', 'blogspot' => 'SYWicon-blogger');
 
+	/**
+	 * Get the default class icon for a link
+	 * 
+	 * @param string $link
+	 * 
+	 * @return string the icon class
+	 */
 	public static function getIconForLink($link)
 	{
 		foreach (self::$social_networks_icons as $key => $value) {
@@ -2011,7 +2031,7 @@ abstract class Helper
 			}
 		}
 
-		return 'earth';
+		return 'SYWicon-earth';
 	}
 
 	/**

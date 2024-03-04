@@ -6,7 +6,7 @@
 		<option value="none">JNONE</option>
 	</field>
 	
-	<field name="lf_icon" type="sywiconpicker" default="" showon="lf!:none"
+	<field name="lf_icon" type="sywuniversaliconpicker" iconsets="syw" bcmode="true" default="" showon="lf!:none"
 		label="MOD_TROMBINOSCOPE_FIELD_ICONLINKFIELD_LABEL" 
 		description="MOD_TROMBINOSCOPE_FIELD_ICONLINKFIELD_DESC" />	
 		

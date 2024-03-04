@@ -175,10 +175,11 @@ $keep_picture_space = $params->get('k_pic_s', true);
 $overflow = $params->get('overflow', false);
 
 $show_vcard = $params->get('s_v', false);
+$vcard_icon = $params->get('v_icon', 'SYWicon-vcard');
 $vcard_type = $params->get('vcard_type', 'p');
 
 $show_featured = $params->get('s_f', false);
-$featured_icon = $params->get('f_icon', 'star');
+$featured_icon = $params->get('f_icon', 'SYWicon-star');
 
 $crop_picture = Helper::isCropPicture($params);
 
@@ -464,6 +465,11 @@ $create_highres_images = Helper::isCreateHighResolutionPicture($params);
 $load_icon_font = $params->get('load_icon_font', 1);
 if ($load_icon_font) {
 	SYWFonts::loadIconFont();
+}
+
+$load_fontawesome = $params->get('load_fontawesome', 1);
+if ($load_fontawesome) {
+    SYWFonts::loadIconFont('fontawesome');
 }
 
 // load modal script when no Bootstrap
