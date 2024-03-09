@@ -68,6 +68,15 @@ class Stylesheets
 	    
 	    return self::$wam;
 	}
+	
+	/**
+	 * Load pureTreeMenu stylesheet
+	 * IE11+ compatible
+	 */
+	public static function loadPureTreeMenu($style = 'rawmenu')
+	{
+	    self::getWebAssetManager()->registerAndUseStyle('syw.puretreemenu.' . $style, 'syw/puretreemenu/ptm-' . $style . '.min.css', ['relative' => true, 'version' => 'auto']);
+	}
 
 	/**
 	 * Load the animate stylesheet
