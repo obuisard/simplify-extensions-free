@@ -30,7 +30,7 @@ return new class () implements ServiceProviderInterface {
 
                 $plugin = new SYW(
                     $dispatcher,
-                    (array) PluginHelper::getPlugin('system', 'syw'),
+                    (array) PluginHelper::getPlugin('system', 'syw')
                 );
 
                 //$plugin->setApplication(Factory::getApplication());
