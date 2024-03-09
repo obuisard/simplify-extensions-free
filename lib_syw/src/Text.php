@@ -24,40 +24,38 @@ class Text
 			return '';
 		}
 
-		$temp = '';
-
 		if ($max_letter_count > 0) {
-			if ($type == 'html') {
-				$temp = self::stripPluginTags($text);
+			if ($type === 'html') {
+			    $text = self::stripPluginTags($text);
 				if ($strip_tags) {
-					$temp = strip_tags($temp, $tags_to_keep);
-					return StringHelper::truncateComplex($temp, $max_letter_count, !$split_last_word);
+				    $text = strip_tags($text, $tags_to_keep);
+				    return StringHelper::truncateComplex($text, $max_letter_count, !$split_last_word);
 				} else {
-					return StringHelper::truncateComplex($temp, $max_letter_count, !$split_last_word);
+				    return StringHelper::truncateComplex($text, $max_letter_count, !$split_last_word);
 				}
 			} else { // 'txt'
 				return StringHelper::truncate($text, $max_letter_count, !$split_last_word, false); // no html allowed
 			}
 		} else { // take everything
-			if ($type == 'html') {
+			if ($type === 'html') {
 				if ($strip_plugin_tags) {
-					$text = self::stripPluginTags($text);
+				    $text = self::stripPluginTags($text);
 				}
 				if ($strip_tags) {
 					if ($tags_to_keep == '') {
-						return strip_tags($text);
+					    $text = strip_tags($text);
+					    return html_entity_decode($text, ENT_QUOTES, 'UTF-8');
 					} else {
-						return strip_tags($text, $tags_to_keep);
+						$text = strip_tags($text, $tags_to_keep);
+						return html_entity_decode($text, ENT_QUOTES, 'UTF-8');
 					}
 				} else {
-					return $text;
+				    return html_entity_decode($text, ENT_QUOTES, 'UTF-8');
 				}
-			} else { // 'txt'
-				return $text;
 			}
 		}
 
-		return $temp;
+		return $text;
 	}
 
 	static function stripPluginTags($output)

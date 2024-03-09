@@ -797,6 +797,32 @@ class Utilities
 
 		return $icon_full_name;
 	}
+	
+	public static function loadPureTreePreset($classes_array = [])
+	{
+	    $preset = ['prefix' => '', 'retracted' => '', 'expanded' => ''];
+	    
+	    if (empty($classes_array)) {
+	        return $preset;
+	    }
+
+	    $presets = [];
+	    $presets['fa-caret'] = ['prefix' => 'fas', 'retracted' => 'fa-caret-down', 'expanded' => 'fa-caret-up'];
+	    $presets['fa-square-caret'] = ['prefix' => 'fas', 'retracted' => 'fa-square-caret-down', 'expanded' => 'fa-square-caret-up'];
+	    $presets['fa-angle'] = ['prefix' => 'fas', 'retracted' => 'fa-angle-down', 'expanded' => 'fa-angle-up'];
+	    $presets['fa-angles'] = ['prefix' => 'fas', 'retracted' => 'fa-angles-down', 'expanded' => 'fa-angles-up'];
+	    
+	    if (in_array('fa-caret', $classes_array)) {
+	        $preset = $presets['fa-caret'];
+	    } else if (in_array('fa-square-caret', $classes_array)) {
+	        $preset = $presets['fa-square-caret'];
+	    } else if (in_array('fa-angle', $classes_array)) {
+	        $preset = $presets['fa-angle'];
+	    } else if (in_array('fa-angles', $classes_array)) {
+	        $preset = $presets['fa-angles'];
+	    }
+	    
+	    return $preset;
+	}
 
 }
-?>

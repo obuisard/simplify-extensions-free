@@ -33,7 +33,7 @@ class ExtensionauthorField extends FormField
 	{
 		$html = '<div style="padding-top: 5px; overflow: inherit">';
 
-		$html .= 'Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank" style="margin-left: 5px; background-color: #fff">';
+		$html .= 'Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank" style="margin-left: 5px; padding: 5px; border-radius: 3px; background-color: #fff">';
 			$html .= '<img alt="Simplify Your Web" src="'.URI::root(true).'/media/syw/images/simplifyyourweb.png">';
 		$html .= '</a>';
 

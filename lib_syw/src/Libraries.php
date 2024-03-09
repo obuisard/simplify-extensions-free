@@ -45,7 +45,7 @@ class Libraries
 	 * https://github.com/obuisard/purePajinate
 	 * IE10+ compatible
 	 */
-	static function loadPurePajinate($remote = false, $defer = false, $async = false)
+	public static function loadPurePajinate($remote = false, $defer = false, $async = false)
 	{		
 		self::getWebAssetManager()->registerAndUseScript('syw.purepajinate', 'syw/purepajinate/purePajinate.min.js', ['relative' => true, 'version' => 'auto'], ['type' => 'module']);
 		self::getWebAssetManager()->registerAndUseScript('syw.purepajinate-es5', 'syw/purepajinate/purePajinate-es5.min.js', ['relative' => true, 'version' => 'auto'], ['nomodule' => true, 'defer' => true]);
@@ -54,9 +54,19 @@ class Libraries
 	/*
 	 * function that makes it easier to switch between libraries that handle pagination written in pure Javascript
 	 */
-	static function loadPurePagination($remote = false, $defer = false, $async = false)
+	public static function loadPurePagination($remote = false, $defer = false, $async = false)
 	{
 		self::loadPurePajinate($remote, $defer, $async);
+	}
+	
+	/**
+	 * Load pureTreeMenu (pure javascript)
+	 * IE11+ compatible
+	 */
+	public static function loadPureTreeMenu($remote = false, $defer = false, $async = false)
+	{
+	    self::getWebAssetManager()->registerAndUseScript('syw.puretreemenu', 'syw/puretreemenu/puretreemenu.min.js', ['relative' => true, 'version' => 'auto'], ['type' => 'module']);
+	    self::getWebAssetManager()->registerAndUseScript('syw.puretreemenu-es5', 'syw/puretreemenu/puretreemenu-es5.min.js', ['relative' => true, 'version' => 'auto'], ['nomodule' => true, 'defer' => true]);
 	}
 
 	/**
@@ -67,7 +77,7 @@ class Libraries
 	 * the CSS file has been modified to add styling of the dots
 	 * the JS file has been modified to add RTL support
 	 */
-	static function loadTinySlider($remote = false, $defer = false, $async = false)
+	public static function loadTinySlider($remote = false, $defer = false, $async = false)
 	{
 		// WARNING loading the library remotely won't have the RTL fix
 // 		$remote = false;
@@ -96,7 +106,7 @@ class Libraries
 	 * https://github.com/robinparisi/tingle
 	 * ? compatible
 	 */
-	static function loadTingle($remote = false, $defer = false, $async = false)
+	public static function loadTingle($remote = false, $defer = false, $async = false)
 	{
 		$attributes = array();
 		if ($defer) {
@@ -118,7 +128,7 @@ class Libraries
 	/*
 	 * function that makes it easier to switch between libraries that handle modals written in pure Javascript
 	 */
-	static function loadPureModal($remote = false, $defer = false, $async = false)
+	public static function loadPureModal($remote = false, $defer = false, $async = false)
 	{
 		self::loadTingle($remote, $defer, $async);
 	}
@@ -128,7 +138,7 @@ class Libraries
 	 *
 	 * @param string $selector
 	 */
-	static function instantiatePureModal($selector = 'modal')
+	public static function instantiatePureModal($selector = 'modal')
 	{
 		if (in_array($selector, self::$instantiatePureModalLoaded)) {
 			return;
@@ -187,7 +197,7 @@ class Libraries
 					
 				}
 			});
-JS;		
+JS;
 
 		self::getWebAssetManager()->addInlineScript(self::compress($inline_js));
 
@@ -201,7 +211,7 @@ JS;
 	 * @param array $attributes
 	 * @param number $bootstrap_version
 	 */
-	static function instantiateBootstrapModal($selector = 'modal', $attributes = array('default_title' => ''), $bootstrap_version = 5)
+	public static function instantiateBootstrapModal($selector = 'modal', $attributes = array('default_title' => ''), $bootstrap_version = 5)
 	{
 		if (in_array($selector, self::$instantiateBootstrapModalLoaded)) {
 			return;
@@ -304,7 +314,7 @@ JS;
 	 * v2.3.4
 	 * https://github.com/OwlCarousel2/OwlCarousel2
 	 */
-	static function loadOwlCarousel($remote = false, $defer = false, $async = false)
+	public static function loadOwlCarousel($remote = false, $defer = false, $async = false)
 	{
 		$attributes = array();
 		if ($defer) {
@@ -327,7 +337,7 @@ JS;
 	 * Load the carousel carouFredSel library (jQuery plugins)
 	 * v6.2.1
 	 */
-	static function loadCarousel($throttle = true, $touch = true, $mousewheel = false, $transit = false, $defer = false, $async = false, $remote = false)
+	public static function loadCarousel($throttle = true, $touch = true, $mousewheel = false, $transit = false, $defer = false, $async = false, $remote = false)
 	{
 		if (self::$jqcMultipackLoaded && !$mousewheel && !$transit) {
 			return;
@@ -387,7 +397,7 @@ JS;
 	 * jquery.ba-throttle-debounce
 	 * v1.1
 	 */
-	static function loadCarousel_throttle($defer = false, $async = false, $remote = false)
+	public static function loadCarousel_throttle($defer = false, $async = false, $remote = false)
 	{
 		$attributes = array();
 		if ($defer) {
@@ -408,7 +418,7 @@ JS;
 	 * jquery.touchSwipe
 	 * v1.6.18
 	 */
-	static function loadCarousel_touch($defer = false, $async = false, $remote = false)
+	public static function loadCarousel_touch($defer = false, $async = false, $remote = false)
 	{
 		$attributes = array();
 		if ($defer) {
@@ -429,7 +439,7 @@ JS;
 	 * jquery.mousewheel
 	 * v3.0.6
 	 */
-	static function loadCarousel_mousewheel($defer = false, $async = false, $remote = false)
+	public static function loadCarousel_mousewheel($defer = false, $async = false, $remote = false)
 	{
 		$attributes = array();
 		if ($defer) {
@@ -446,7 +456,7 @@ JS;
 	 * jquery.transit
 	 * v?
 	 */
-	static function loadCarousel_transit($defer = false, $async = false, $remote = false)
+	public static function loadCarousel_transit($defer = false, $async = false, $remote = false)
 	{
 		$attributes = array();
 		if ($defer) {
@@ -462,7 +472,7 @@ JS;
 	/**
 	 * Load the comparison version function if needed
 	 */
-	static function loadCompareVersions()
+	public static function loadCompareVersions()
 	{
 		if (self::$compareLoaded) {
 			return;
@@ -481,7 +491,7 @@ JS;
 	 * @param string $inlineJS
 	 * @return string
 	 */
-	static function compress($inlineJS = '', $remove_comments = false)
+	public static function compress($inlineJS = '', $remove_comments = false)
 	{
 		if ($remove_comments) {
 			$inlineJS = preg_replace('!\/\*[\s\S]*?\*\/|\/\/.*!', '', $inlineJS);
