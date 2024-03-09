@@ -41,7 +41,7 @@ class Pkg_SYWLibraryInstallerScript extends InstallerScript
 	{
 	    $this->extension = 'lib_syw';
 	    $this->minimumJoomla = '4.1.0';
-	    //$this->minimumPhp = JOOMLA_MINIMUM_PHP; // not needed
+	    $this->minimumPhp = '7.4.0';
 	}
 	
 	/**
