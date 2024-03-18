@@ -1410,7 +1410,7 @@ abstract class Helper
 		$label_separator = $params->get('lbl_separator', '');
 
 		$label = empty($params->get('name_lbl', '')) ? Text::_('MOD_TROMBINOSCOPE_LABEL_NAME') : $params->get('name_lbl', '');
-		$icon = empty($params->get('name_icon', '')) ? 'SYWicon-user' : $params->get('name_icon', '');
+		$icon = empty($params->get('name_icon', '')) ? 'SYWicon-user' : SYWUtilities::getIconFullName($params->get('name_icon', ''));
 
 		if (!$params->get('force_one_line', 1)) {
 			$extraclass .= ' wrap';
