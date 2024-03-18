@@ -13,7 +13,6 @@ ul.rawmenu ul {
 ul.rawmenu li > * {
 	display: inline-block;
 	padding: 0.5rem;
-	width: 100%;
 }
 
 ul.rawmenu a {
@@ -42,12 +41,13 @@ ul.rawmenu .expcol {
 	justify-self: center;
 	height: 100%;
 	width: auto;
-	padding: 0.5rem;
+	padding: 0;
 }
 
 ul.rawmenu .expcol + * {
 	grid-area: title;
 	align-self: center;
+	line-height: normal;
 }
  
 ul.rawmenu .expcol:hover {
@@ -61,6 +61,7 @@ ul.rawmenu .active .expcol:hover {
 ul.rawmenu .expcol.no-icon {
 	font-family: monospace;
 	font-size: xx-large;
+	line-height: normal;
 }
  
 ul.rawmenu .expcol.no-icon:before {
@@ -124,10 +125,11 @@ ul.rawmenu.post .deeper .rawmenu-child {
 
 ul.rawmenu .deeper .rawmenu-child {	
 	padding: 0;
-	width: auto;
+	width: calc(100% - 30px);
 	margin: 0 0 0 30px;
 }
 
 ul.rawmenu.no-indent .deeper .rawmenu-child {
+	width: 100%;
 	margin: 0;
 }
