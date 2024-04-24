@@ -382,13 +382,11 @@ defined('_JEXEC') or die;
 						}
 
 						<?php if ($iconfont_color) : ?>
-							<?php echo $suffix; ?> .newsextra [class^="SYWicon-"],
-							<?php echo $suffix; ?> .newsextra [class*=" SYWicon-"] {
+							<?php echo $suffix; ?> .newsextra .detail_icon {
 						    	color: <?php echo $iconfont_color; ?>;
 							}
 						<?php endif; ?>
 
-						<?php echo $suffix; ?> .newsextra .detail_rating .detail_data [class*=" SYWicon-"],
-						<?php echo $suffix; ?> .newsextra .detail_rating .detail_data [class^="SYWicon-"] {
+						<?php echo $suffix; ?> .newsextra .detail_rating .detail_data .detail_icon {
 							color: <?php echo $star_color; ?>;
 						}

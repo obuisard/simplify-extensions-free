@@ -214,7 +214,7 @@ class CSSFileCache extends HeaderFilesCache
 		$pic_border_color = trim($params->get('border_c_pic', '#fff'));
 		$variables[] = 'pic_border_color';
 
-		$image_types = array('image', 'imageintro', 'imagefull', 'allimagesasc', 'allimagesdesc');
+		$image_types = array('image', 'imageintro', 'imagefull', 'allimagesasc', 'allimagesdesc', 'categoryimage');
 
 		if (in_array($head_type, $image_types)) {
 

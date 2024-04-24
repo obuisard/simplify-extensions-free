@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.10.1</version>
+	<version>7.0.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -565,24 +565,24 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEARCHFULLTEXT_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEARCHFULLTEXT_DESC" />
 					
-					<field name="head_w" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,calendar" 
+					<field name="head_w" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,categoryimage,calendar" 
 						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_WIDTH_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_WIDTH_DESC" />
 						
-					<field name="head_h" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,calendar" 
+					<field name="head_h" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,categoryimage,calendar" 
 						parentclass="span-3-inline"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_HEIGHT_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_HEIGHT_DESC" />
 						
-					<field name="maintain_height" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc" 
+					<field name="maintain_height" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,categoryimage" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MAINTAINHEIGHT_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MAINTAINHEIGHT_DESC">
 						<option value="0">JNO</option>
 						<option value="1">JYES</option>
 					</field>
 						
-					<field name="keep_image_space" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,calendar" 
+					<field name="keep_image_space" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,categoryimage,calendar" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_KEEPSPACE_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_KEEPSPACE_DESC">
 						<option value="0">JNO</option>
@@ -1168,8 +1168,15 @@
 				<fieldset name="image_general" label="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGE_FIELDSET_LABEL">
 				
 					<field name="default_pic" type="media" default=""
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICTURE_LABEL" 
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICTURE_DESC" />
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DEFAULTPICTURE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DEFAULTPICTURE_DESC" />						
+						
+					<field name="default_cat_pic" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DEFAULTCATPICTURE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DEFAULTCATPICTURE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
 						
 					<field name="imagebgcolor" type="sywcolorpicker" default="" transparency="true" icon="fill" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR_LABEL" 
@@ -1269,9 +1276,12 @@
 						<option value="1">JYES</option>
 					</field>
 				
-					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+					<field name="create_highres" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEHIGHRES_LABEL" 
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEHIGHRES_DESC" />
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEHIGHRES_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
 					
 					<field name="lazyload" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOAD_LABEL" 
@@ -1740,6 +1750,13 @@
 					<field name="load_icon_font" type="radio" default="1" layout="joomla.form.field.radio.switcher"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LOADICONFONT_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LOADICONFONT_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+			
+					<field name="load_fontawesome" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LOADFONTAWESOME_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LOADFONTAWESOME_DESC">
 						<option value="0">JNO</option>
 						<option value="1">JYES</option>
 					</field>

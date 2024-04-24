@@ -457,7 +457,10 @@ class Helper
 	 */
 	static function getDetails($params, $prefix = '', $subform = 'information_blocks')
 	{
-		$infos = array();
+	    $infos = array();
+	    
+	    $user = Factory::getUser();
+	    $groups	= $user->getAuthorisedViewLevels();
 
 		// get data from subform items
 
@@ -465,13 +468,13 @@ class Helper
 			$information_blocs = $params->get($prefix.$subform); // array of objects
 			if (!empty($information_blocs) && is_object($information_blocs)) {
 				foreach ($information_blocs as $information_bloc) {
-					if ($information_bloc->info != 'none') {
+				    if ($information_bloc->info != 'none' && in_array($information_bloc->access, $groups)) {
 
 						$details = array();
 						$details['info'] = $information_bloc->info;
 						$details['prepend'] = $information_bloc->prepend;
 						$details['show_icons'] = $information_bloc->show_icons == 1 ? true : false;
-						$details['icon'] = ''; // no icon
+						$details['icon'] = $information_bloc->icon;
 						$details['extra_classes'] = isset($information_bloc->extra_classes) ? trim($information_bloc->extra_classes) : '';
 
 						$infos[] = $details;
@@ -496,7 +499,7 @@ class Helper
 
 		if ($show_icon && Factory::getDocument()->getDirection() !== 'rtl') {
 			$icon = empty($icon) ? $default_icon : $icon;
-			$html .= '<i class="SYWicon-' . $icon . '"></i>';
+			$html .= '<i class="detail_icon ' . $icon . '"></i>';
 		}
 
 		if (!empty($label)) {
@@ -505,7 +508,7 @@ class Helper
 
 		if ($show_icon && Factory::getDocument()->getDirection() === 'rtl') {
 		    $icon = empty($icon) ? $default_icon : $icon;
-		    $html .= '<i class="SYWicon-' . $icon . '"></i>';
+		    $html .= '<i class="detail_icon ' . $icon . '"></i>';
 		}
 
 		return $html;
@@ -559,7 +562,7 @@ class Helper
 						$info_block .= '<span class="detail detail_readmore' . ($value['extra_classes'] ? ' ' . $value['extra_classes'] : '') . '">';
 
 						if (Factory::getDocument()->getDirection() != 'rtl') {
-							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'more', $value['icon']);
+							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'SYWicon-more', $value['icon']);
 						}
 
 						$info_block .= '<span class="detail_data">';
@@ -584,7 +587,7 @@ class Helper
 						$info_block .= '</span>';
 
 						if (Factory::getDocument()->getDirection() == 'rtl') {
-							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'more', $value['icon']);
+							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'SYWicon-more', $value['icon']);
 						}
 
 						$info_block .= '</span>';
@@ -604,7 +607,7 @@ class Helper
 						$info_block .= '<span class="detail detail_hits' . ($value['extra_classes'] ? ' ' . $value['extra_classes'] : '') . '">';
 
 						if (Factory::getDocument()->getDirection() != 'rtl') {
-							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'eye', $value['icon']);
+							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'SYWicon-eye', $value['icon']);
 						}
 
 						$info_block .= '<span class="detail_data">';
@@ -614,7 +617,7 @@ class Helper
 						$info_block .= '</span>';
 
 						if (Factory::getDocument()->getDirection() == 'rtl') {
-							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'eye', $value['icon']);
+							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'SYWicon-eye', $value['icon']);
 						}
 
 						$info_block .= '</span>';
@@ -636,9 +639,9 @@ class Helper
 						$icon_default = 'star-outline';
 						if (!empty($item->vote)) {
 							if ($item->vote == 5) {
-								$icon_default = 'star';
+								$icon_default = 'SYWicon-star';
 							} else {
-								$icon_default = 'star-half';
+								$icon_default = 'SYWicon-star-half';
 							}
 						}
 
@@ -717,7 +720,7 @@ class Helper
 						$info_block .= '</span>';
 
 						if (Factory::getDocument()->getDirection() == 'rtl') {
-							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'user', $value['icon']);
+							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'SYWicon-user', $value['icon']);
 						}
 
 						$info_block .= '</span>';
@@ -735,7 +738,7 @@ class Helper
 						$info_block .= '<span class="detail detail_keywords' . ($value['extra_classes'] ? ' ' . $value['extra_classes'] : '') . '">';
 
 						if (Factory::getDocument()->getDirection() != 'rtl') {
-							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'tag', $value['icon']);
+							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'SYWicon-tag', $value['icon']);
 						}
 
 						$info_block .= '<span class="detail_data">';
@@ -745,7 +748,7 @@ class Helper
 						$info_block .= '</span>';
 
 						if (Factory::getDocument()->getDirection() == 'rtl') {
-							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'tag', $value['icon']);
+							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'SYWicon-tag', $value['icon']);
 						}
 
 						$info_block .= '</span>';
@@ -767,9 +770,9 @@ class Helper
 						$info_block .= '<span class="detail detail_category' . ($value['extra_classes'] ? ' ' . $value['extra_classes'] : '') . '">';
 
 						if ($value['info'] == 'category') {
-							$icon_default = 'folder';
+							$icon_default = 'SYWicon-folder';
 						} else {
-							$icon_default = 'folder-open';
+							$icon_default = 'SYWicon-folder-open';
 						}
 
 						if (Factory::getDocument()->getDirection() != 'rtl') {
@@ -814,7 +817,7 @@ class Helper
 						$info_block .= '<span class="detail detail_date' . $additional_class . ($value['extra_classes'] ? ' ' . $value['extra_classes'] : '') . '">';
 
 						if (Factory::getDocument()->getDirection() != 'rtl') {
-							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'calendar', $value['icon']);
+							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'SYWicon-calendar', $value['icon']);
 						}
 
 						if ($item->date) {
@@ -961,7 +964,7 @@ class Helper
 						}
 
 						if (Factory::getDocument()->getDirection() == 'rtl') {
-							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'calendar', $value['icon']);
+							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'SYWicon-calendar', $value['icon']);
 						}
 
 						$info_block .= '</span>';
@@ -984,7 +987,7 @@ class Helper
 						$info_block .= '<span class="detail detail_time' . $additional_class . ($value['extra_classes'] ? ' ' . $value['extra_classes'] : '') . '">';
 
 						if (Factory::getDocument()->getDirection() != 'rtl') {
-							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'clock', $value['icon']);
+							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'SYWicon-clock', $value['icon']);
 						}
 
 						if ($item->date) {
@@ -994,7 +997,7 @@ class Helper
 						}
 
 						if (Factory::getDocument()->getDirection() == 'rtl') {
-							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'clock', $value['icon']);
+							$info_block .= self::getPreData($value['prepend'], $value['show_icons'], 'SYWicon-clock', $value['icon']);
 						}
 
 						$info_block .= '</span>';

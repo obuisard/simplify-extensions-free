@@ -71,13 +71,11 @@ defined('_JEXEC') or die;
 		color: var(--textOverColor);
 	}
 
-	<?php echo $suffix; ?> .newsextra [class^="SYWicon-"],
-	<?php echo $suffix; ?> .newsextra [class*=" SYWicon-"] {
+	<?php echo $suffix; ?> .newsextra .detail_icon {
 	    color: var(--iconColor);
 	}
 
-	<?php echo $suffix; ?> .over_head .newsextra [class^="SYWicon-"],
-	<?php echo $suffix; ?> .over_head .newsextra [class*=" SYWicon-"] {
+	<?php echo $suffix; ?> .over_head .newsextra .detail_icon {
 	    color: var(--iconOverColor);
 	}
 

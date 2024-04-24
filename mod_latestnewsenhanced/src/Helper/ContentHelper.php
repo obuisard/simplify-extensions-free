@@ -239,7 +239,7 @@ class ContentHelper
 		$query->from($db->quoteName('#__content', 'a'));
 
 		// join over the categories
-		$query->select($db->quoteName(array('c.title', 'c.path', 'c.access', 'c.alias'), array('category_title', 'category_route', 'category_access', 'category_alias')));
+		$query->select($db->quoteName(array('c.title', 'c.path', 'c.access', 'c.alias', 'c.params'), array('category_title', 'category_route', 'category_access', 'category_alias', 'category_params')));
 		$query->join('LEFT', $db->quoteName('#__categories', 'c'), $db->quoteName('c.id') . ' = ' . $db->quoteName('a.catid'));
 
 		// join over the users for the author and modified_by names
@@ -1192,7 +1192,7 @@ class ContentHelper
 
 		$head_type = $params->get('head_type', 'none');
 
-		$image_types = array('image', 'imageintro', 'imagefull', 'allimagesasc', 'allimagesdesc');
+		$image_types = array('image', 'imageintro', 'imagefull', 'allimagesasc', 'allimagesdesc', 'categoryimage');
 
 		$show_image = false;
 
@@ -1202,7 +1202,7 @@ class ContentHelper
 
 			$crop_picture = ($params->get('crop_pic', 0) && $params->get('create_thumb', 1));
 
-			$create_highres_images = false;
+			$create_highres_images = $params->get('create_highres', false);
 			$lazyload = $params->get('lazyload', false);
 
 			$allow_remote = $params->get('allow_remote', true);
@@ -1263,6 +1263,7 @@ class ContentHelper
 			$tmp_path = SYWCache::getTmpPath($params->get('thumb_path', 'cache'), $subdirectory);
 
 			$default_picture = trim($params->get('default_pic', ''));
+			$category_picture_as_default = $params->get('default_cat_pic', 0);
 
 			if ($clear_cache) {
 				Helper::clearThumbnails($module->id, $tmp_path);
@@ -1529,6 +1530,21 @@ class ContentHelper
 								$imagesrc = Helper::getImageSrcFromContent($item->introtext);
 							}
 						}
+					} else if ($head_type == 'categoryimage') {
+					    
+					    // get the image from the params
+					    $category_params = json_decode($item->category_params);
+					    if (isset($category_params->image)) {
+					        $imagesrc = $category_params->image;
+					    }
+					}
+
+					if (empty($imagesrc) && $category_picture_as_default) {
+					    // get the image from the category params
+					    $category_params = json_decode($item->category_params);
+					    if (isset($category_params->image)) {
+					        $imagesrc = $category_params->image;
+					    }
 					}
 
 					// last resort, use default image if it exists

@@ -25,7 +25,7 @@
 		
 		letter-spacing: normal;		
 		line-height: inherit;
-	    vertical-align: top;	    
+	    vertical-align: top;
 		display: inline-block;	    
 	    margin-bottom: 5px;
 	    text-align: initial;
@@ -54,7 +54,7 @@
 				background: none;
 				padding: 0;
 			}
-		
+
 				.lnee .newshead,
 				.lnee .newsinfo {
 					-webkit-box-sizing: border-box;
@@ -114,25 +114,21 @@
 							white-space: pre-wrap;
 						}
 					
-						.lnee .newsextra [class^="SYWicon-"], 
-						.lnee .newsextra [class*=" SYWicon-"] {
+						.lnee .newsextra .detail_icon {
 						    font-size: 1em;
 						    padding-right: 3px;
 						}
 						
-						html[dir="rtl"] .lnee .newsextra [class^="SYWicon-"], 
-						html[dir="rtl"] .lnee .newsextra [class*=" SYWicon-"] {
+						html[dir="rtl"] .lnee .newsextra .detail_icon {
 							padding-left: 3px;
 							padding-right: 0;
 						}
 						
-						.lnee .newsextra a [class^="SYWicon-"], 
-						.lnee .newsextra a [class*=" SYWicon-"] {
+						.lnee .newsextra a .detail_icon {
 						    color: inherit;
 						}
 						
-						.lnee .newsextra .detail_rating .detail_data [class*=" SYWicon-"],
-						.lnee .newsextra .detail_rating .detail_data [class^="SYWicon-"] {
+						.lnee .newsextra .detail_rating .detail_data .detail_icon {
 							font-size: 1.2em;
 						}
 					
@@ -152,13 +148,13 @@
 .lnee .linkright {
 	text-align: right !important;
 }
-					
+
 .lnee .link,
 .lnee .catlink {
 	text-align: left;
 }
-					
-.lnee .head_right .link,				
+
+.lnee .head_right .link,
 .lnee .head_right .catlink,
 html[dir="rtl"] .lnee .link,
 html[dir="rtl"] .lnee .catlink,
@@ -166,7 +162,7 @@ html[dir="rtl"] .lnee .head_right .link,
 html[dir="rtl"] .lnee .head_right .catlink {
 	text-align: right;
 }
-					
+
 .lnee.vertical .catlink.emptyspace {
 	display: none;
 }
@@ -189,7 +185,7 @@ html[dir="rtl"] .lnee .head_right .catlink {
 	float: none;
 	clear: both;
 }
-	
+
 .lnee ul.latestnews-items li p + p {
 	text-indent: 0 !important;
 }
@@ -198,7 +194,7 @@ html[dir="rtl"] .lnee .head_right .catlink {
 .lnee dl.item_details,
 .lnee dd.newsextra {
 	margin: 0;
-    padding: 0;
+	padding: 0;
 }
 
 .lnee dl.item_details > dt { 

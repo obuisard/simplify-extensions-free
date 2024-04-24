@@ -1063,7 +1063,7 @@ class K2Helper
 
 			$crop_picture = ($params->get('crop_pic', 0) && $params->get('create_thumb', 1));
 
-			$create_highres_images = false;
+			$create_highres_images = $params->get('create_highres', false);
 			$lazyload = $params->get('lazyload', false);
 
 			$allow_remote = $params->get('allow_remote', true);
