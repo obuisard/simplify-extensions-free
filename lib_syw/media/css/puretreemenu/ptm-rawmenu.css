@@ -39,15 +39,16 @@ ul.rawmenu .expcol {
 	grid-area: cross;
 	align-self: center;
 	justify-self: center;
-	height: 100%;
 	width: auto;
 	padding: 0;
+	margin: 0 .35em;
 }
 
 ul.rawmenu .expcol + * {
 	grid-area: title;
 	align-self: center;
 	line-height: normal;
+	width: max-content;
 }
  
 ul.rawmenu .expcol:hover {
@@ -95,7 +96,7 @@ ul.rawmenu .active.deeper > ul {
 
 ul.rawmenu.pre .deeper,
 ul.rawmenu.post .deeper {
-	display: inline-grid;
+	display: inline-grid !important;
 	grid-template-rows: auto;
 	width: 100%;
 }
