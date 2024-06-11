@@ -1488,11 +1488,16 @@ class K2Helper
 				case 'intrometa': $use_intro = (trim($item->introtext) != '') ? true : false; break;
 				case 'metaintro': $use_intro = (trim($item->metadesc) != '') ? false : true; break;
 				case 'meta': $use_intro = false; break;
-				default: case 'intro': $use_intro = true;
+				default: $use_intro = true;
 			}
 
 			if ($use_intro) { // use intro text
-				$item->text = $item->introtext;
+			    $item->text = $item->introtext;
+
+			    if ($text_type === 'full') {
+			        $item->text .= ($item->text ? ' ' : '') . $item->fulltext;
+			    }
+
 				if ($item->text) {
 					if ($trigger_OnContentPrepare) { // will trigger events from plugins
 						$item->text = HTMLHelper::_('content.prepare', $item->text);
