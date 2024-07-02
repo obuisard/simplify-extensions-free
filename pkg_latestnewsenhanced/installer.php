@@ -144,14 +144,14 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 
             // link to Quickstart
 
-            echo '<p><a class="btn btn-primary" href="' . $this->quickstartLink . '" target="_blank"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_LATESTNEWSENHANCED_BUTTON_QUICKSTART') . '</a></p>';
+            echo '<p><a class="btn btn-dark text-light" href="' . $this->quickstartLink . '" target="_blank"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_LATESTNEWSENHANCED_BUTTON_QUICKSTART') . '</a></p>';
         }
 
         if ($action === 'update') {
 
             // update warning
 
-            echo '<p><a class="btn btn-primary text-light" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_LATESTNEWSENHANCED_BUTTON_UPDATENOTES') . '</a></p>';
+            echo '<p><a class="btn btn-dark text-light" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_LATESTNEWSENHANCED_BUTTON_UPDATENOTES') . '</a></p>';
 
             // remove old cached headers which may interfere with fixes, updates or new additions
 
@@ -199,6 +199,12 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
             // remove files
 
             $this->deleteFiles[] = '/media/mod_latestnewsenhanced/css/common_styles-min.css';
+            
+            // Remove K2 files
+            
+            $this->deleteFiles[] = '/modules/mod_latestnewsenhanced/src/Helper/K2Helper.php';
+            $this->deleteFiles[] = '/modules/mod_latestnewsenhanced/tmpl/accordionk2.php';
+            $this->deleteFiles[] = '/modules/mod_latestnewsenhanced/tmpl/k2.php';
 
             // fix manual configuration errors made before v6.8.0
             // v6.8.0 does not return any more results when authors are excluded and authors are set to 'all'
@@ -244,8 +250,6 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
                         $created_by = '';
                         if ($instance_params['datasource'] === 'articles') {
                             $created_by = 'created_by';
-                        } else if ($instance_params['datasource'] === 'k2') {
-                            $created_by = 'k2_created_by';
                         }
 
                         if ($created_by && isset($instance_params[$created_by])) {
