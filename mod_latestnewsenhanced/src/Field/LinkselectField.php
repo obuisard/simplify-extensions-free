@@ -14,14 +14,12 @@ use Joomla\CMS\Form\Field\GroupedlistField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use SYW\Library\K2 as SYWK2;
 
 class LinkselectField extends GroupedlistField
 {
 	public $type = 'Linkselect';
 
 	static $core_fields = null;
-	static $k2_fields = null;
 
 	static function getCoreFields($allowed_types = array())
 	{
@@ -43,31 +41,9 @@ class LinkselectField extends GroupedlistField
 		return self::$core_fields;
 	}
 
-	static function getK2Fields($allowed_types = array())
-	{
-		if (!isset(self::$k2_fields)) {
-			self::$k2_fields = SYWK2::getK2Fields($allowed_types);
-		}
-
-		return self::$k2_fields;
-	}
-
 	protected function getGroups()
 	{
 		$groups = array();
-
-		if (SYWK2::exists()) {
-
-			// get K2 extra fields
-			$fields = self::getK2Fields(array('link'));
-
-			$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS');
-			$groups[$group_name] = array();
-
-			foreach ($fields as $field) {
-				$groups[$group_name][] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
-			}
-		}
 
 		// get Joomla! fields
 		// test the fields folder first to avoid message warning that the component is missing

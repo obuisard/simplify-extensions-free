@@ -14,14 +14,12 @@ use Joomla\CMS\Form\Field\GroupedlistField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use SYW\Library\K2 as SYWK2;
 
 class DetailselectField extends GroupedlistField
 {
 	public $type = 'Detailselect';
 
 	static $core_fields = null;
-	static $k2_fields = null;
 
 	static function getCoreFields()
 	{
@@ -30,15 +28,6 @@ class DetailselectField extends GroupedlistField
 		}
 
 		return self::$core_fields;
-	}
-
-	static function getK2Fields()
-	{
-		if (!isset(self::$k2_fields)) {
-			self::$k2_fields = SYWK2::getK2Fields();
-		}
-
-		return self::$k2_fields;
 	}
 
 	protected function getGroups()
@@ -76,28 +65,6 @@ class DetailselectField extends GroupedlistField
 // 			$groups[$group_name][] = HTMLHelper::_('select.option', 'jcommentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_JCOMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
 // 			$groups[$group_name][] = HTMLHelper::_('select.option', 'linkedjcommentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDJCOMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
 // 		}
-
-		if (SYWK2::exists()) {
-			//$groups[$group_name][] = HTMLHelper::_('select.option', 'k2_user', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2USER'), 'value', 'text', $disable = false);
-			$groups[$group_name][] = HTMLHelper::_('select.option', 'k2commentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2COMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
-			$groups[$group_name][] = HTMLHelper::_('select.option', 'linkedk2commentscount', Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINKEDK2COMMENTSCOUNT') . ' (Pro)', 'value', 'text', $disable = true);
-
-			// get K2 extra fields
-
-			$fields = self::getK2Fields();
-
-			// supported field types
-			$allowed_types = array('textfield', 'textarea', 'select', 'multipleSelect', 'radio', 'link', /*'labels',*/ 'date');
-
-			$group_name = Text::_('MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_K2EXTRAFIELDS');
-			$groups[$group_name] = array();
-
-			foreach ($fields as $field) {
-				if (in_array($field->type, $allowed_types)) {
-					$groups[$group_name][] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
-				}
-			}
-		}
 
 		// get Joomla! fields
 		// test the fields folder first to avoid message warning that the component is missing

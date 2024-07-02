@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>7.0.0</version>
+	<version>7.1.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -138,13 +138,6 @@
 						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
 						<option value="all">JOPTION_ALL_CATEGORIES</option>
 					</field>
-					
-					<field name="k2catid" type="k2category" multiple="true" size="5" default="all" layout="joomla.form.field.list-fancy-select" showon="datasource:k2" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_K2CATEGORY_LABEL" 
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_K2CATEGORY_DESC">
-						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
-						<option value="all">JOPTION_ALL_CATEGORIES</option>
-					</field>
 								
 					<field name="includesubcategories" type="list" default="no" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INCLUDESUBCATEGORIES_LABEL" 
@@ -182,12 +175,6 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGS_LABEL" 
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGS_DESC">
 						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLTAGS</option>
-					</field>
-								
-					<field name="k2tags" type="k2tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select" showon="datasource:k2" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_K2TAGS_LABEL" 
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_K2TAGS_DESC">
-						<option value="all">JALL</option>
 					</field>
 					
 					<field name="include_tag_children" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="datasource:articles" 
@@ -255,14 +242,6 @@
 						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LOGGEDUSER</option>
 						<option value="realauto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
 						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLCREATEDBY</option>
-					</field> 
-	
-					<field name="k2_created_by" type="authorselect" multiple="true" size="5" default="all" option="com_k2" layout="joomla.form.field.list-fancy-select" showon="datasource:k2" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBY_LABEL"
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBY_DESC">
-						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LOGGEDUSER</option>
-						<option value="realauto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
-						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLCREATEDBY</option>
 					</field>
 
 					<field name="author_alias_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" showon="author_match:1,2"
@@ -276,13 +255,6 @@
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIAS_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIAS_DESC">
 						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
-						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLCREATEDBYALIAS</option>
-					</field> 
-	
-					<field name="k2_created_by_alias" type="authoraliasselect" multiple="true" size="5" option="com_k2" layout="joomla.form.field.list-fancy-select" showon="author_match:1,2[AND]datasource:k2" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIAS_LABEL"
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIAS_DESC">
-						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>					
 						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLCREATEDBYALIAS</option>
 					</field>
 
@@ -559,8 +531,6 @@
 						<option value="none">JNONE</option>
 					</field>
 					
-					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_MESSAGE_IMAGESELECTION" style="info" showon="datasource:k2" />
-					
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="head_type:image,allimagesasc,allimagesdesc" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEARCHFULLTEXT_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEARCHFULLTEXT_DESC" />
@@ -678,6 +648,7 @@
 						<option value="intrometa">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INTROMETADESC</option>
 						<option value="meta">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_METADESC</option>
 						<option value="metaintro">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_METADESCINTRO</option>
+						<option value="full">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FULLTEXT</option>
 					</field>
 
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
@@ -1303,8 +1274,6 @@
 					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/head-icon" />
 					
 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_REQUIREMENTSFORICONHEAD" style="warning" />
-						
-					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_NOICONSFORK2" style="warning" showon="datasource:k2" />
 					
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
 				</fieldset>	
@@ -1486,8 +1455,6 @@
 					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/head-video" />
 					
 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_REQUIREMENTSFORVIDEOHEAD" style="warning" />
-						
-					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_NOVIDEOSFORK2" style="warning" showon="datasource:k2" />
 															
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
 				</fieldset>

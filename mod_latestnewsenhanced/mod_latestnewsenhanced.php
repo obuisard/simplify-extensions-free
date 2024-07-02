@@ -15,7 +15,6 @@ use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use SYW\Library\Fonts as SYWFonts;
-use SYW\Library\K2 as SYWK2;
 use SYW\Library\Stylesheets as SYWStylesheets;
 use SYW\Library\Utilities as SYWUtilities;
 use SYW\Module\LatestNewsEnhanced\Site\Cache\CSSFileCache;
@@ -23,7 +22,6 @@ use SYW\Module\LatestNewsEnhanced\Site\Cache\JSAnimationFileCache;
 use SYW\Module\LatestNewsEnhanced\Site\Helper\CalendarHelper as LNECalendarHelper;
 use SYW\Module\LatestNewsEnhanced\Site\Helper\Helper as LNEHelper;
 use SYW\Module\LatestNewsEnhanced\Site\Helper\ContentHelper as LNEContentHelper;
-use SYW\Module\LatestNewsEnhanced\Site\Helper\K2Helper as LNEK2Helper;
 
 $isMobile = SYWUtilities::isMobile();
 
@@ -43,12 +41,6 @@ switch ($datasource)
     case 'articles':
         $list = LNEContentHelper::getList($params, $module);
         break;
-    case 'k2':
-        if (SYWK2::exists()) {
-            $list = LNEK2Helper::getList($params, $module);
-        } else {
-            return; // wrong selection since K2 is not installed
-        }
 }
 
 // consider $list is null, in which case, just do a return

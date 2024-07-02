@@ -43,13 +43,13 @@
 				box-sizing: border-box;
 			}
 		
-			.lnee .even { /* to override k2 style */
+			.lnee .even { /* to override third-party styles */
 				border-bottom: none;
 				background: none;
 				padding: 0;
 			}
 			
-			.lnee .odd { /* to override k2 style */
+			.lnee .odd { /* to override third-party styles */
 				border-bottom: none;
 				background: none;
 				padding: 0;

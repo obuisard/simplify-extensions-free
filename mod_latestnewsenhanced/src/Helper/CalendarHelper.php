@@ -14,7 +14,7 @@ use SYW\Library\Fonts as SYWFonts;
 
 class CalendarHelper
 {
-	static function getCalendarBlockData($params, $date, $isK2 = false)
+	static function getCalendarBlockData($params, $date)
 	{
 		$data = array();
 
@@ -32,9 +32,6 @@ class CalendarHelper
 		$keys = array($position_1, $position_2, $position_3, $position_4, $position_5);
 
 		$offset = true; // default
-		if ($isK2 && defined('K2_JVERSION')) {
-			$offset = (K2_JVERSION != '15') ? null : 0;
-		}
 
 		foreach ($keys as $key) {
 			switch ($key) {

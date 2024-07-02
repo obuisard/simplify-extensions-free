@@ -910,69 +910,76 @@ class ContentHelper
 		}
 
 		// featured switch
+		
+		// NOTE cannot use binding or else bind all $nowDate and do $nowDate = Factory::getDate()->toSql();
 
 		$featured = false;
-		$featured_only = false;
+		
+		$query->select(
+		    [
+		        $db->quoteName('fp.featured_up'),
+		        $db->quoteName('fp.featured_down'),
+		    ]
+		);
+		
 		switch ($params->get('show_f', 3))
 		{
 		    case '0': // hide
-		        $query->where($db->quoteName('a.featured') . ' = 0');
+		        // featured articles out of range are no longer considered featured
+		        $query->extendWhere(
+    		        'AND',
+    		        [
+        		        $db->quoteName('a.featured') . ' = 0',
+        		        '(' . $db->quoteName('fp.featured_up') . ' IS NOT NULL AND ' . $db->quoteName('fp.featured_up') . ' >= ' . $nowDate . ')',
+        		        '(' . $db->quoteName('fp.featured_down') . ' IS NOT NULL AND ' . $db->quoteName('fp.featured_down') . ' <= ' . $nowDate . ')',
+    		        ],
+    		        'OR'
+    		    );
+		        
+		        $query->join('LEFT', $db->quoteName('#__content_frontpage', 'fp'), $db->quoteName('fp.content_id') . ' = ' . $db->quoteName('a.id'));
 		        
 		        break;
+		        
 			case '1': // only
 				$featured = true;
-				$featured_only = true;
 				
 				$query->where(
 				    [
+				        $db->quoteName('a.featured') . ' = 1',
 				        '(' . $db->quoteName('fp.featured_up') . ' IS NULL OR ' . $db->quoteName('fp.featured_up') . ' <= ' . $nowDate . ')',
 				        '(' . $db->quoteName('fp.featured_down') . ' IS NULL OR ' . $db->quoteName('fp.featured_down') . ' >= ' . $nowDate . ')',
 				    ]
 				);
-				
-				// NOTE cannot use binding or else bind all $nowDate and do $nowDate = Factory::getDate()->toSql();
 
 				$query->join('INNER', $db->quoteName('#__content_frontpage', 'fp'), $db->quoteName('fp.content_id') . ' = ' . $db->quoteName('a.id'));
 
 				break;
+				
 			case '2': // first the featured ones
 				$featured = true;
 				
-				$query->where(
-				    [
-				        '(' . $db->quoteName('fp.featured_up') . ' IS NULL OR ' . $db->quoteName('fp.featured_up') . ' <= ' . $nowDate . ')',
-				        '(' . $db->quoteName('fp.featured_down') . ' IS NULL OR ' . $db->quoteName('fp.featured_down') . ' >= ' . $nowDate . ')',
-				    ]
-				);
+				$query->select('CASE WHEN ' . $db->quoteName('a.featured') . ' = 1 AND (' . $db->quoteName('fp.featured_up') . ' IS NULL OR ' . $db->quoteName('fp.featured_up') . ' <= ' . $nowDate . ') AND (' . $db->quoteName('fp.featured_down') . ' IS NULL OR ' . $db->quoteName('fp.featured_down') . ' >= ' . $nowDate . ') THEN 1 ELSE 0 END AS ' . $db->quoteName('featuredinrange'));
 				
 			    $query->join('LEFT', $db->quoteName('#__content_frontpage', 'fp'), $db->quoteName('fp.content_id') . ' = ' . $db->quoteName('a.id'));
 			    
-			    $ordering[] = $db->quoteName('a.featured') . ' DESC';
+			    $ordering[] = $db->quoteName('featuredinrange') . ' DESC';
 			    
 				break;
-			default: // no discrimination between featured/unfeatured items
-				$featured = true;
 				
-				$query->where(
-				    [
-				        '(' . $db->quoteName('fp.featured_up') . ' IS NULL OR ' . $db->quoteName('fp.featured_up') . ' <= ' . $nowDate . ')',
-				        '(' . $db->quoteName('fp.featured_down') . ' IS NULL OR ' . $db->quoteName('fp.featured_down') . ' >= ' . $nowDate . ')',
-				    ]
-				);
+			default: // no discrimination between featured/unfeatured items (if featured but outside the range featured up/down, the article is considered 'unfeatured')
+				$featured = true;
 				
 				$query->join('LEFT', $db->quoteName('#__content_frontpage', 'fp'), $db->quoteName('fp.content_id') . ' = ' . $db->quoteName('a.id'));
 		}
 
 		// category order
-
-		if (!$featured_only) {
-			switch ($params->get('cat_order', ''))
-			{
-			    case 'o_asc': $ordering[] = $db->quoteName('c.lft') . ' ASC'; break;
-			    case 'o_dsc': $ordering[] = $db->quoteName('c.lft') . ' DESC'; break;
-			    case 't_asc': $ordering[] = $db->quoteName('c.title') . ' ASC'; break;
-			    case 't_dsc': $ordering[] = $db->quoteName('c.title') . ' DESC'; break;
-			}
+		
+		switch ($params->get('cat_order', ''))
+		{
+		    case 'o_asc': $ordering[] = $db->quoteName('c.lft') . ' ASC'; break;
+		    case 'o_dsc': $ordering[] = $db->quoteName('c.lft') . ' DESC'; break;
+		    case 't_asc': $ordering[] = $db->quoteName('c.title') . ' ASC'; break;
+		    case 't_dsc': $ordering[] = $db->quoteName('c.title') . ' DESC'; break;
 		}
 
 		// general ordering
@@ -1308,6 +1315,15 @@ class ContentHelper
 				}
 
 				$item->date = '';
+			}
+			
+			// featured: when featured but outside the date range, set to featured to false
+			
+			if ($item->featured) {			    
+			    if ((!empty($item->featured_up) && strtotime($item->featured_up) >= strtotime('now'))
+			        || (!empty($item->featured_down) && strtotime($item->featured_down) <= strtotime('now'))) {
+			        $item->featured = false;
+			    }
 			}
 
 			// category link
@@ -1686,11 +1702,16 @@ class ContentHelper
 				case 'intrometa': $use_intro = (trim($item->introtext) != '') ? true : false; break;
 				case 'metaintro': $use_intro = (trim($item->metadesc) != '') ? false : true; break;
 				case 'meta': $use_intro = false; break;
-				default: case 'intro': $use_intro = true;
+				default: $use_intro = true;
 			}
 
 			if ($use_intro) { // use intro text
 				$item->text = $item->introtext;
+
+				if ($text_type === 'full') {
+				    $item->text .= ($item->text ? ' ' : '') . $item->fulltext; 
+				}
+
 				if ($item->text) {
 					if ($trigger_OnContentPrepare) { // will trigger events from plugins
 						PluginHelper::importPlugin('content');

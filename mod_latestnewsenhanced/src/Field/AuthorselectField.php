@@ -11,7 +11,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\ListField;
 use Joomla\Database\Exception\ExecutionFailureException;
-use SYW\Library\K2 as SYWK2;
 
 /**
  * Author selection
@@ -26,41 +25,15 @@ class AuthorselectField extends ListField
 	{
 		$options = array();
 
-		if ($this->option == 'com_k2') {
+		$db = Factory::getDbo();
 
-			if (SYWK2::exists()) {
+		$query = $db->getQuery(true);
 
-				$db = Factory::getDbo();
-
-				$query = $db->getQuery(true);
-
-				$query->select($db->quoteName('id', 'value'));
-				$query->select($db->quoteName('name', 'text'));
-				$query->from($db->quoteName('#__users'));
-				$query->where('id IN (select distinct(created_by) from #__k2_items)');
-				$query->order('name', 'ASC');
-
-				$db->setQuery($query);
-
-				try {
-					$authors = $db->loadObjectList();
-				} catch (ExecutionFailureException $e) {
-					$authors = array();
-				}
-
-				$options = array_merge($options, $authors);
-			}
-		} else {
-
-			$db = Factory::getDbo();
-
-			$query = $db->getQuery(true);
-
-			$query->select($db->quoteName('id', 'value'));
-			$query->select($db->quoteName('name', 'text'));
-			$query->from($db->quoteName('#__users'));
-			$query->where('id IN (select distinct(created_by) from #__content)');
-			$query->order('name', 'ASC');
+		$query->select($db->quoteName('id', 'value'));
+		$query->select($db->quoteName('name', 'text'));
+		$query->from($db->quoteName('#__users'));
+		$query->where('id IN (select distinct(created_by) from #__content)');
+		$query->order('name', 'ASC');
 
 // 			$query = $db->getQuery(true)
 // 			->select('u.id AS value, u.name AS text')
@@ -69,16 +42,15 @@ class AuthorselectField extends ListField
 // 			->group('u.id, u.name')
 // 			->order('u.name');
 
-			$db->setQuery($query);
+		$db->setQuery($query);
 
-			try {
-				$authors = $db->loadObjectList();
-			} catch (ExecutionFailureException $e) {
-				$authors = array();
-			}
-
-			$options = array_merge($options, $authors);
+		try {
+			$authors = $db->loadObjectList();
+		} catch (ExecutionFailureException $e) {
+			$authors = array();
 		}
+
+		$options = array_merge($options, $authors);
 
 		// Merge any additional options in the XML definition.
 		$options = array_merge(parent::getOptions(), $options);
