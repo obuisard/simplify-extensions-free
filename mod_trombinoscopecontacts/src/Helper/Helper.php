@@ -403,6 +403,7 @@ abstract class Helper
 			// tags filtering
 
 			$tags = $params->get('tags', array());
+			$tags = array_filter($tags); // remove empty tags (array(1) { [0]=> string(0) "" }) wrongly returned from RL Advanced Module Manager
 			$item_on_page_tagids = array();
 
 			if ($selection == 'relatedbytags' || $selection == 'relatedcontactbytags') {

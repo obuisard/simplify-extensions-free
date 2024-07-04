@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.14.1</version>
+	<version>4.14.2</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -1215,7 +1215,7 @@
 						<option value="1">JYES</option>
 					</field>
 			
-					<field name="load_fontawesome" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+					<field name="load_fontawesome" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_TROMBINOSCOPE_FIELD_LOADFONTAWESOME_LABEL"
 						description="MOD_TROMBINOSCOPE_FIELD_LOADFONTAWESOME_DESC">
 						<option value="0">JNO</option>

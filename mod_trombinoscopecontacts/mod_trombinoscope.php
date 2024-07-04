@@ -179,7 +179,7 @@ $vcard_icon = $params->get('v_icon', 'SYWicon-vcard');
 $vcard_type = $params->get('vcard_type', 'p');
 
 $show_featured = $params->get('s_f', false);
-$featured_icon = $params->get('f_icon', 'SYWicon-star');
+$featured_icon = SYWUtilities::getIconFullName($params->get('f_icon', 'SYWicon-star'));
 
 $crop_picture = Helper::isCropPicture($params);
 
@@ -467,7 +467,7 @@ if ($load_icon_font) {
 	SYWFonts::loadIconFont();
 }
 
-$load_fontawesome = $params->get('load_fontawesome', 1);
+$load_fontawesome = $params->get('load_fontawesome', 0);
 if ($load_fontawesome) {
     SYWFonts::loadIconFont('fontawesome');
 }
