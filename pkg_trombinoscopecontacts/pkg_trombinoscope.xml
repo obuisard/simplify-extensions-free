@@ -9,7 +9,7 @@
 	<url>https://simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>https://simplifyyourweb.com/</packagerurl>
-	<version>4.14.1</version>
+	<version>4.14.2</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/trombinoscope/changelog.xml</changelogurl>
 	<description>PKG_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<blockChildUninstall>true</blockChildUninstall>

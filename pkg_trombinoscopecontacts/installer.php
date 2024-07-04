@@ -159,14 +159,14 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 
      		// link to Quickstart
 
-     		echo '<p><a class="btn btn-primary" href="' . $this->quickstartLink . '" target="_blank"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_TROMBINOSCOPE_BUTTON_QUICKSTART') . '</a></p>';
+     		echo '<p><a class="btn btn-dark text-light" href="' . $this->quickstartLink . '" target="_blank"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_TROMBINOSCOPE_BUTTON_QUICKSTART') . '</a></p>';
      	}
 
 		if ($action === 'update') {
 
 			// update warning
 
-			echo '<p><a class="btn btn-primary" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_TROMBINOSCOPE_BUTTON_UPDATENOTES') . '</a></p>';
+			echo '<p><a class="btn btn-dark text-light" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_TROMBINOSCOPE_BUTTON_UPDATENOTES') . '</a></p>';
 
 			// overrides warning
 
