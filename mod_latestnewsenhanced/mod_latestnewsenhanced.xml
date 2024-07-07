@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>7.1.0</version>
+	<version>7.1.1</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
