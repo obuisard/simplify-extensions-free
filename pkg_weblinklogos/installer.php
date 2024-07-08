@@ -152,7 +152,7 @@ class Pkg_WeblinkLogosInstallerScript extends InstallerScript
 
      		// link to Quickstart
 
-     	    echo '<p><a class="btn btn-primary" href="' . $this->quickstartLink . '" target="_blank"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_WEBLINKLOGOS_BUTTON_QUICKSTART') . '</a></p>';
+     	    echo '<p><a class="btn btn-dark text-light" href="' . $this->quickstartLink . '" target="_blank"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_WEBLINKLOGOS_BUTTON_QUICKSTART') . '</a></p>';
      		
      		// move default place-holder to /images
      		
@@ -178,7 +178,7 @@ class Pkg_WeblinkLogosInstallerScript extends InstallerScript
 
 			// update warning
 
- 		    echo '<p><a class="btn btn-primary" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_WEBLINKLOGOS_BUTTON_UPDATENOTES') . '</a></p>';
+ 		    echo '<p><a class="btn btn-dark text-light" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_WEBLINKLOGOS_BUTTON_UPDATENOTES') . '</a></p>';
 
  			// overrides warning
 
