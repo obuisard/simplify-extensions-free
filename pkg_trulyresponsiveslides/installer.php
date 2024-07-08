@@ -25,7 +25,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.3.3';
+	protected $minimumLibrary = '2.6.2';
 
 	/**
 	 * Available languages
@@ -138,14 +138,14 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 
    			// link to Quickstart
 
-   		    echo '<p><a class="btn btn-primary" href="' . $this->quickstartLink . '" target="_blank"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_TRULYRESPONSIVESLIDES_BUTTON_QUICKSTART') . '</a></p>';
+   		    echo '<p><a class="btn btn-dark text-light" href="' . $this->quickstartLink . '" target="_blank"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_TRULYRESPONSIVESLIDES_BUTTON_QUICKSTART') . '</a></p>';
    		}
 
 		if ($action === 'update') {
 
 			// update warning
 
-			echo '<p><a class="btn btn-primary" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_TRULYRESPONSIVESLIDES_BUTTON_UPDATENOTES') . '</a></p>';
+			echo '<p><a class="btn btn-dark text-light" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_TRULYRESPONSIVESLIDES_BUTTON_UPDATENOTES') . '</a></p>';
 
 			// overrides warning
 
@@ -191,6 +191,11 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 			$this->deleteFolders[] = '/cache/mod_trulyresponsiveslides';
 
 			// +++ End Migration
+			
+			// Remove K2 files
+			
+			$this->deleteFiles[] = '/modules/mod_trulyresponsiveslides/src/Helper/K2ItemsHelper.php';
+			$this->deleteFiles[] = '/modules/mod_trulyresponsiveslides/tmpl/k2.php';
 		}
 
 		$this->removeFiles();
