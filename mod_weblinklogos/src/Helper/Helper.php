@@ -172,6 +172,7 @@ class Helper
 		// filter by tags
 
 		$tags = $params->get('tags', array());
+		$tags = array_filter($tags); // remove empty tags (array(1) { [0]=> string(0) "" }) wrongly returned from RL Advanced Module Manager
 
 		if (!empty($tags)) {
 
