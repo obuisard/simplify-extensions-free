@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>2.7.3</version>
+	<version>2.8.0</version>
 	<description>MOD_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrulyResponsiveSlides</namespace>
 	
@@ -122,14 +122,8 @@
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CATEGORY_DESC">
 						<option value="">JOPTION_ALL_CATEGORIES</option>
 					</field>
-					
-					<field name="k2catid" type="k2category" multiple="true" size="5" default="all" layout="joomla.form.field.list-fancy-select" showon="layout:k2" 
-						label="MOD_TRULYRESPONSIVESLIDER_FIELD_K2CATEGORY_LABEL" 
-						description="MOD_TRULYRESPONSIVESLIDER_FIELD_K2CATEGORY_DESC">
-						<option value="all">JOPTION_ALL_CATEGORIES</option>
-					</field>
 								
-					<field name="includesubcategories" type="list" default="all" showon="layout:articles,k2" 
+					<field name="includesubcategories" type="list" default="all" showon="layout:articles" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDESUBCATEGORIES_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDESUBCATEGORIES_DESC">					
 						<option value="no">JNO</option>
@@ -146,13 +140,7 @@
 						<option value="all">MOD_TRULYRESPONSIVESLIDER_VALUE_ALLTAGS</option>
 					</field>
 					
-					<field name="k2tags" type="k2tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select" showon="layout:k2" 
-						label="MOD_TRULYRESPONSIVESLIDER_FIELD_K2TAGS_LABEL" 
-						description="MOD_TRULYRESPONSIVESLIDER_FIELD_K2TAGS_DESC">
-						<option value="all">JALL</option>
-					</field>
-					
-					<field name="tags_match" type="radio" default="any" layout="joomla.form.field.radio.switcher" showon="layout:articles,k2" 
+					<field name="tags_match" type="radio" default="any" layout="joomla.form.field.radio.switcher" showon="layout:articles" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TAGSMATCH_LABEL"
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TAGSMATCH_DESC">
 						<option value="all">JALL</option>
@@ -170,18 +158,18 @@
 					
 				<fieldset name="datasource_exin" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONINEX_FIELDSET_LABEL">
 					
-					<field name="ex" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles,k2" 
+					<field name="ex" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_EXCLUDE_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_EXCLUDE_DESC" />
 					
-					<field name="in" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles,k2" 
+					<field name="in" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDE_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDE_DESC" />
 	            </fieldset>
 					
 				<fieldset name="datasource_featured" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONFEATURED_FIELDSET_LABEL">
 				  	
-					<field name="show_f" type="list" default="" showon="layout:articles,k2" 
+					<field name="show_f" type="list" default="" showon="layout:articles" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_FEATURED_LABEL"
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_FEATURED_DESC">
 						<option value="0">JNO</option>
@@ -193,7 +181,7 @@
 					
 				<fieldset name="datasource_order" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONORDER_FIELDSET_LABEL">
 											
-					<field name="cat_order" type="list" default="" showon="layout:articles,k2" 
+					<field name="cat_order" type="list" default="" showon="layout:articles" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CATORDER_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CATORDER_DESC">	
 						<option value="">MOD_TRULYRESPONSIVESLIDER_VALUE_NONE</option>				
@@ -201,7 +189,7 @@
 						<option value="o_dsc">MOD_TRULYRESPONSIVESLIDER_VALUE_ORDERDESC</option>
 					</field>
 					
-					<field name="order" type="list" default="o_asc" showon="layout:articles,k2" 
+					<field name="order" type="list" default="o_asc" showon="layout:articles" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ORDERING_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ORDERING_DESC">
 						<option value="o_dsc">MOD_TRULYRESPONSIVESLIDER_VALUE_ORDERDESC</option>
@@ -223,7 +211,7 @@
 				
 				<fieldset name="datasource_language" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONLANGUAGE_FIELDSET_LABEL">
 				
-					<field name="filter_lang" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="layout:articles,k2" 
+					<field name="filter_lang" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="layout:articles" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_FILTERLANGUAGE_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_FILTERLANGUAGE_DESC">
 						<option value="0">JNO</option>
@@ -233,7 +221,7 @@
 					
 				<fieldset name="datasource_count" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONCOUNT_FIELDSET_LABEL">
 					
-					<field name="count" type="sywverbosetext" default="" filter="string" size="4" showon="layout:articles,k2" 
+					<field name="count" type="sywverbosetext" default="" filter="string" size="4" showon="layout:articles" 
 						label="MOD_TRULYRESPONSIVESLIDER_FIELD_COUNT_LABEL" 
 						description="MOD_TRULYRESPONSIVESLIDER_FIELD_COUNT_DESC" />
 				</fieldset>

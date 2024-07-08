@@ -8,10 +8,8 @@ namespace SYW\Module\TrulyResponsiveSlides\Site\Field;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use SYW\Library\Field\DynamicsingleselectField;
-use SYW\Library\K2 as SYWK2;
 
 class DatasourceselectField extends DynamicsingleselectField
 {
@@ -21,13 +19,11 @@ class DatasourceselectField extends DynamicsingleselectField
 	{
 	    $options = parent::getOptions();
 	    
-	    $options[] = array('k2', Text::_('MOD_TRULYRESPONSIVESLIDER_VALUE_K2ITEMS'), '', '', '', !SYWK2::exists());
-	    
 	    $imagefolder = '/media/mod_trulyresponsiveslides/images/datasources';
 	    
 	    foreach ($options as &$option) {
 	        
-	        $option[3] = Uri::root(true).$imagefolder.'/'.$option[0].'.png';
+	        $option[3] = Uri::root(true) . $imagefolder . '/' . $option[0] . '.png';
 	    }
 	    
 	    return $options;

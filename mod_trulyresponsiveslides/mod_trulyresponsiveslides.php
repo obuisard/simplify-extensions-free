@@ -12,12 +12,10 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Uri\Uri;
 use SYW\Library\Fonts as SYWFonts;
-use SYW\Library\K2 as SYWK2;
 use SYW\Library\Utilities as SYWUtilities;
 use SYW\Module\TrulyResponsiveSlides\Site\Helper\ArticlesHelper;
 use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
 use SYW\Module\TrulyResponsiveSlides\Site\Helper\ImagesHelper;
-use SYW\Module\TrulyResponsiveSlides\Site\Helper\K2ItemsHelper;
 
 $isMobile = SYWUtilities::isMobile();
 
@@ -30,17 +28,11 @@ $list = null;
 
 $layout = $params->get('layout');
 switch ($layout) {
-	case 'k2':
-		if (SYWK2::exists()) {
-			$list = K2ItemsHelper::getItems($params, $module);
-		}
-		break;
 	case 'articles':
 		$list = ArticlesHelper::getItems($params, $module);
 		break;
 	default:
 		$list = ImagesHelper::getItems($params, $module);
-		break;
 }
 
 $doc = Factory::getDocument();

@@ -14,14 +14,12 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Form\Field\GroupedlistField;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use SYW\Library\K2 as SYWK2;
 
 class BgimageselectField extends GroupedlistField
 {
 	public $type = 'Bgimageselect';
 
 	static $core_fields = null;
-	static $k2_fields = null;
 
 	static function getCoreFields($allowed_types = array())
 	{
@@ -43,26 +41,11 @@ class BgimageselectField extends GroupedlistField
 		return self::$core_fields;
 	}
 
-	static function getK2Fields($allowed_types = array())
-	{
-		if (!isset(self::$k2_fields)) {
-			self::$k2_fields = SYWK2::getK2Fields($allowed_types);
-		}
-
-		return self::$k2_fields;
-	}
-
 	protected function getGroups()
 	{
 		$groups = array();
 
-		$k2extrafields = array();
 		$customfields = array();
-
-		if (SYWK2::exists()) {
-			// get K2 extra fields
-			$k2extrafields = self::getK2Fields(array('image'));
-		}
 
 		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams('com_content')->get('custom_fields_enable', '1')) {
 			// get the custom fields
@@ -73,11 +56,6 @@ class BgimageselectField extends GroupedlistField
 
 		$group_options = self::getFieldGroup('com_content', $customfields, 'media');
 		$groups = array_merge($groups, $group_options);
-
-		if (SYWK2::exists()) {
-			$group_options = self::getFieldGroup('com_k2', $k2extrafields, 'image');
-			$groups = array_merge($groups, $group_options);
-		}
 
 		// merge any additional options in the XML definition.
 		$groups = array_merge(parent::getGroups(), $groups);
@@ -91,21 +69,6 @@ class BgimageselectField extends GroupedlistField
 
 		if (empty($fields)) {
 			return $groups;
-		}
-
-		if ($option == 'com_k2') {
-
-			$group_name = Text::_('MOD_TRULYRESPONSIVESLIDER_VALUE_K2EXTRAFIELDS');
-			$groups[$group_name] = array();
-
-			foreach ($fields as $field) {
-
-				if ($field->type != $type) {
-					continue;
-				}
-
-				$groups[$group_name][] = HTMLHelper::_('select.option', 'k2field:'.$field->type.':'.$field->id, 'K2: '.$field->group_name.': '.$field->name . ' (Pro)', 'value', 'text', $disable = true);
-			}
 		}
 
 		if ($option == 'com_content') {
