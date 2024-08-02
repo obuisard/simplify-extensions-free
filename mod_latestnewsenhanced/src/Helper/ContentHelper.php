@@ -1729,8 +1729,11 @@ class ContentHelper
 			if (!$always_show_readmore) {
 				$text_length = strlen($item->text);
 				$item->text = rtrim($item->text, "^");
-				if (strlen($item->text) < $text_length && !$item->fulltexthascontent) {
-					$item->cropped = false;
+				if (strlen($item->text) < $text_length) { // The beacon was present, therefore we had the full content
+				    // Now, the text can be the full text
+				    if ($text_type === 'full' || !$item->fulltexthascontent) {
+				        $item->cropped = false;
+				    }
 				}
 			}
 

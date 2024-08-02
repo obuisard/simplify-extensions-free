@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>7.1.1</version>
+	<version>7.2.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -753,13 +753,6 @@
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOOLTIP_DESC">
 						<option value="0">JHIDE</option>
 						<option value="1">JSHOW</option>
-					</field>	
-									
-					<field name="readmore_always_show" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READMOREALWAYSSHOW_LABEL" 
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READMOREALWAYSSHOW_DESC">
-						<option value="0">JNO</option>
-						<option value="1">JYES</option>
 					</field>
 	
 					<field name="allow_edit" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
@@ -770,7 +763,14 @@
 					</field>
 				</fieldset>
 				
-				<fieldset name="layout_readmore" label="MOD_LATESTNEWSENHANCEDEXTENDED_READMORE_LABEL">
+				<fieldset name="layout_readmore" label="MOD_LATESTNEWSENHANCEDEXTENDED_READMORE_LABEL">	
+									
+					<field name="readmore_always_show" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READMOREALWAYSSHOW_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READMOREALWAYSSHOW_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
 						
 					<field name="link" type="text" default="" filter="string" hint="MOD_LATESTNEWSENHANCEDEXTENDED_READMORE_HINT"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINK_LABEL" 
