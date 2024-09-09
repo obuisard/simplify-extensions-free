@@ -1465,161 +1465,125 @@ class ContentHelper
 
 			if ($show_image) {
 
-				// Convert the images field to an array
-				$registry = new Registry();
-				$registry->loadString($item->images);
-				$images_array = $registry->toArray();
-
-				$filename = '';
+			    $image_to_attach = '';
+			    $image_alt = $item->title;
 				$image_width = 0;
 				$image_height = 0;
 
 				// note: original images are not cached, therefore looking thru article content will be inefficient
 
-				if (!$clear_cache && $params->get('create_thumb', 1)) {
-				    $thumbnail_src = Helper::thumbnailExists($module->id, $item->id, $tmp_path, $create_highres_images);
-					if ($thumbnail_src !== false) {
-						$filename = $thumbnail_src; // found a corresponding thumbnail
-					}
-				}
+				$selectedImage = null;
 
-				if (empty($filename)) {
+    			if ($head_type == 'imageintro') {    
+    			    $selectedImage = Helper::getImageFromItem($item->images, 'intro');
+    
+    			} else if ($head_type == 'imagefull') {    
+    			    $selectedImage = Helper::getImageFromItem($item->images, 'fulltext');
+    
+    			} else if ($head_type == 'image') {    
+    			    $selectedImage = Helper::getImageFromContent($item->introtext, isset($item->fulltext) ? $item->fulltext : '');
+    
+    			} else if ($head_type == 'allimagesasc') { // look into content first    			    
+    			    $selectedImage = Helper::getImageFromContent($item->introtext, isset($item->fulltext) ? $item->fulltext : '');
+    			    
+    			    if (empty($selectedImage)) {
+    			        $selectedImage = Helper::getImageFromItem($item->images, 'intro');
+    			    }
+    			    
+    			    if (empty($selectedImage)) {
+    			        $selectedImage = Helper::getImageFromItem($item->images, 'fulltext');
+    			    }
+    
+    			} else if ($head_type == 'allimagesdesc') { // look into image intro and full first    			    
+    			    $selectedImage = Helper::getImageFromItem($item->images, 'intro');
+    			    
+    			    if (empty($selectedImage)) {
+    			        $selectedImage = Helper::getImageFromItem($item->images, 'fulltext');
+    			    }
+    			    
+    			    if (empty($selectedImage)) {
+    			        $selectedImage = Helper::getImageFromContent($item->introtext, isset($item->fulltext) ? $item->fulltext : '');
+    			    }
+    			    
+    			} else if ($head_type == 'categoryimage') {    			    
+    			    $selectedImage = Helper::getImageFromCategory($item->category_params);
+    			}
+    
+    			if (empty($selectedImage) && $category_picture_as_default) {
+    			    // get the image from the category params
+    			    $selectedImage = Helper::getImageFromCategory($item->category_params);
+    			}
+    
+    			// last resort, use default image if it exists
+    			$used_default_image = false;
+    			if (empty($selectedImage) && $default_picture) {
+    			    $selectedImage = new \stdClass();
+    			    $selectedImage->src = $default_picture;
+    			    $used_default_image = true;
+    			}
 
-					$imagesrc = '';
+				if ($selectedImage) { // found an image
+				    
+				    if ($params->get('original_alt', 0) && isset($selectedImage->alt)) {
+				        $image_alt = $selectedImage->alt;
+				    }
 
-					if ($head_type == 'imageintro') {
+				    $image_object = HTMLHelper::cleanImageURL($selectedImage->src);
 
-						if ($images_array) {
-							$imagesrc = trim($images_array['image_intro']);
-						}
+					if (!$params->get('create_thumb', 1) || $head_width <= 0 || $head_height <= 0) { // no thumbnails are created, use the original image
+				        $image_to_attach = $image_object->url;
+				        
+				        if ($image_object->attributes['width'] > 0 && $image_object->attributes['height'] > 0) {
+				            $image_width = $image_object->attributes['width'];
+				            $image_height = $image_object->attributes['height'];
+				        } else if (isset($selectedImage->width) && isset($selectedImage->height)) {
+				            $image_width = $selectedImage->width;
+				            $image_height = $selectedImage->height;
+				        }
 
-					} else if ($head_type == 'imagefull') {
-
-						if ($images_array) {
-							$imagesrc = trim($images_array['image_fulltext']);
-						}
-
-					} else if ($head_type == 'image') {
-
-						if (isset($item->fulltext))	{
-							$imagesrc = Helper::getImageSrcFromContent($item->introtext, $item->fulltext);
-						} else {
-							$imagesrc = Helper::getImageSrcFromContent($item->introtext);
-						}
-
-					} else if ($head_type == 'allimagesasc') {
-
-						if (isset($item->fulltext))	{
-							$imagesrc = Helper::getImageSrcFromContent($item->introtext, $item->fulltext);
-						} else {
-							$imagesrc = Helper::getImageSrcFromContent($item->introtext);
-						}
-
-						// if images not found, look into intro and full article
-						if (empty($imagesrc)) {
-
-							if ($images_array) {
-								$imagesrc = trim($images_array['image_intro']);
-
-								if (empty($imagesrc)) {
-									$imagesrc = trim($images_array['image_fulltext']);
-								}
-							}
-						}
-
-					} else if ($head_type == 'allimagesdesc') {
-
-						// look into image intro and full first
-						if ($images_array) {
-							$imagesrc = trim($images_array['image_intro']);
-
-							if (empty($imagesrc)) {
-								$imagesrc = trim($images_array['image_fulltext']);
-							}
-						}
-
-						// if image full article not found, look into the article
-						if (empty($imagesrc)) {
-
-							if (isset($item->fulltext))	{
-								$imagesrc = Helper::getImageSrcFromContent($item->introtext, $item->fulltext);
-							} else {
-								$imagesrc = Helper::getImageSrcFromContent($item->introtext);
-							}
-						}
-					} else if ($head_type == 'categoryimage') {
+					} else {
 					    
-					    // get the image from the params
-					    $category_params = json_decode($item->category_params);
-					    if (isset($category_params->image)) {
-					        $imagesrc = $category_params->image;
+					    if (!$clear_cache && $params->get('create_thumb', 1)) {
+					        $thumbnail_src = Helper::thumbnailExists($module->id, $item->id, $tmp_path, $create_highres_images);
+					        if ($thumbnail_src !== false) {
+					            $image_to_attach = $thumbnail_src; // found a corresponding thumbnail
+					        }
 					    }
-					}
+				        
+				        if (empty($image_to_attach)) {
 
-					if (empty($imagesrc) && $category_picture_as_default) {
-					    // get the image from the category params
-					    $category_params = json_decode($item->category_params);
-					    if (isset($category_params->image)) {
-					        $imagesrc = $category_params->image;
-					    }
-					}
-
-					// last resort, use default image if it exists
-					$used_default_image = false;
-					if (empty($imagesrc)) {
-						if ($default_picture) {
-							$imagesrc = $default_picture;
-							$used_default_image = true;
-						} else {
-						    $imagesrc = '';
-						}
-					}
-
-					if ($imagesrc) { // found an image
-
-					    $image_object = HTMLHelper::cleanImageURL($imagesrc);
-					    $imagesrc = $image_object->url;
-
-						if (!$params->get('create_thumb', 1) || $head_width <= 0 || $head_height <= 0) { // no thumbnails are created, use the original image
-					        // Use the original
-							$filename = $imagesrc;
-
-					        $image_width = $image_object->attributes['width'];
-					        $image_height = $image_object->attributes['height'];
-
-					    } else {
-					        // Create the thumbnail
-					        $result_array = Helper::getImageFromSrc($module->id, $item->id, $imagesrc, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
-
-					        if (isset($result_array['url']) && $result_array['url']) {
-    							$filename = $result_array['url'];
+    				        // Create the thumbnail
+    				        $result_array = Helper::getImageFromSrc($module->id, $item->id, $image_object->url, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
+    
+    				        if (isset($result_array['url']) && $result_array['url']) {
+    				            $image_to_attach = $result_array['url'];
     						}
-
+    
     						if (isset($result_array['error']) && $result_array['error']) {
-
+    
     						    $item->error[] = $result_array['error'];
-
+    
     							// if error for the file found, try and use the default image instead
     						    if (!$used_default_image && $default_picture) { // if the default image was the one chosen, no use to retry
-
-									$default_image_object = HTMLHelper::cleanImageURL($default_picture);
-
-									$result_array = Helper::getImageFromSrc($module->id, $item->id, $default_image_object->url, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
-
-									if (isset($result_array['url']) && $result_array['url']) {
-									    $filename = $result_array['url'];
-									}
-
-									if (isset($result_array['error']) && $result_array['error']) {
-									    $item->error[] = $result_array['error'];
-									}
+    
+    								$default_image_object = HTMLHelper::cleanImageURL($default_picture);
+    
+    								$result_array = Helper::getImageFromSrc($module->id, $item->id, $default_image_object->url, $tmp_path, $head_width, $head_height, $crop_picture, $image_qualities, $filter, $create_highres_images, $allow_remote, $thumbnail_mime_type);
+    
+    								if (isset($result_array['url']) && $result_array['url']) {
+    								    $image_to_attach = $result_array['url'];
+    								}
+    
+    								if (isset($result_array['error']) && $result_array['error']) {
+    								    $item->error[] = $result_array['error'];
+    								}
     							}
     						}
-					    }
-					}
+				        } // end if empty($image_to_attach)
+				    }
 				}
 
-				if ($filename) {
+				if ($image_to_attach) {
 
 					$img_attributes = array();
 					
@@ -1631,7 +1595,7 @@ class ContentHelper
 					        }
 					    } else {
 					        try {
-					            $image_properties = Image::getImageFileProperties($filename);
+					            $image_properties = Image::getImageFileProperties($image_to_attach);
 					            $image_width = $image_properties->width;
 					            $image_height = $image_properties->height;
 					        } catch (\Exception $e) {
@@ -1653,7 +1617,7 @@ class ContentHelper
 						}
 					}
 
-					$item->imagetag = SYWUtilities::getImageElement($filename, $item->title, $img_attributes, $lazyload, $create_highres_images, null, true, SYWVersion::getMediaVersion('mod_latestnewsenhanced_' . $module->id));
+					$item->imagetag = SYWUtilities::getImageElement($image_to_attach, $image_alt, $img_attributes, $lazyload, $create_highres_images, null, true, SYWVersion::getMediaVersion('mod_latestnewsenhanced_' . $module->id));
 				}
 			}
 

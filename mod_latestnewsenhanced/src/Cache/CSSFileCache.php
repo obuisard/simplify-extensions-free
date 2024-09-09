@@ -95,7 +95,7 @@ class CSSFileCache extends HeaderFilesCache
 		$maintain_height = $params->get('maintain_height', 0);
 		$variables[] = 'maintain_height';
 
-		$bgcolor_body = trim($params->get('bgcolor', '')) != '' ? trim($params->get('bgcolor')) : 'transparent';
+		$bgcolor_body = trim($params->get('bgcolor', '')) != '' ? trim($params->get('bgcolor', '')) : 'transparent';
 		$variables[] = 'bgcolor_body';
 
 		$border_width_body = $params->get('item_border_w', 0);
@@ -199,7 +199,7 @@ class CSSFileCache extends HeaderFilesCache
 
 		$image = false;
 		
-		$bgcolor = trim($params->get('imagebgcolor', '')) != '' ? trim($params->get('imagebgcolor')) : 'transparent';
+		$bgcolor = trim($params->get('imagebgcolor', '')) != '' ? trim($params->get('imagebgcolor', '')) : 'transparent';
 		$variables[] = 'bgcolor';
 		
 		$pic_shadow_width = $params->get('sh_w_pic', 0);
@@ -244,23 +244,23 @@ class CSSFileCache extends HeaderFilesCache
 
 			$color = trim($params->get('c1', '#3D3D3D'));
 			$variables[] = 'color';
-			$bgcolor1 = trim($params->get('bgc11', '')) != '' ? trim($params->get('bgc11')) : 'transparent';
+			$bgcolor1 = trim($params->get('bgc11', '')) != '' ? trim($params->get('bgc11', '')) : 'transparent';
 			$variables[] = 'bgcolor1';
-			$bgcolor2 = trim($params->get('bgc12', '')) != '' ? trim($params->get('bgc12')) : 'transparent';
+			$bgcolor2 = trim($params->get('bgc12', '')) != '' ? trim($params->get('bgc12', '')) : 'transparent';
 			$variables[] = 'bgcolor2';
 
 			$color_top = trim($params->get('c2', '#494949'));
 			$variables[] = 'color_top';
-			$bgcolor1_top = trim($params->get('bgc21', '')) != '' ? trim($params->get('bgc21')) : 'transparent';
+			$bgcolor1_top = trim($params->get('bgc21', '')) != '' ? trim($params->get('bgc21', '')) : 'transparent';
 			$variables[] = 'bgcolor1_top';
-			$bgcolor2_top = trim($params->get('bgc22', '')) != '' ? trim($params->get('bgc22')) : 'transparent';
+			$bgcolor2_top = trim($params->get('bgc22', '')) != '' ? trim($params->get('bgc22', '')) : 'transparent';
 			$variables[] = 'bgcolor2_top';
 
 			$color_bottom = trim($params->get('c3', '#494949'));
 			$variables[] = 'color_bottom';
-			$bgcolor1_bottom = trim($params->get('bgc31', '')) != '' ? trim($params->get('bgc31')) : 'transparent';
+			$bgcolor1_bottom = trim($params->get('bgc31', '')) != '' ? trim($params->get('bgc31', '')) : 'transparent';
 			$variables[] = 'bgcolor1_bottom';
-			$bgcolor2_bottom = trim($params->get('bgc32', '')) != '' ? trim($params->get('bgc32')) : 'transparent';
+			$bgcolor2_bottom = trim($params->get('bgc32', '')) != '' ? trim($params->get('bgc32', '')) : 'transparent';
 			$variables[] = 'bgcolor2_bottom';
 
 			$cal_shadow_width = $params->get('sh_w', 0);

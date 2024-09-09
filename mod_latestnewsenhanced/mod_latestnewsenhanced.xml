@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>7.2.0</version>
+	<version>7.3.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -243,6 +243,8 @@
 						<option value="realauto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
 						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLCREATEDBY</option>
 					</field>
+
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_CREATEDBY_NORESULTS" style="warning" showon="datasource:articles[AND]author_inex:0[AND]created_by:all" />
 
 					<field name="author_alias_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" showon="author_match:1,2"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIASFILTER_LABEL"
@@ -1237,6 +1239,13 @@
 				</fieldset>
 				
 				<fieldset name="image_advanced" label="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGEADVANCED_FIELDSET_LABEL">
+				
+					<field name="original_alt" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ORIGINALALT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ORIGINALALT_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
 							  
 					<field type="phpsettingtest" setting="allow_url_fopen" message="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWURLFOPENTEST_LABEL" showon="create_thumb:1" />
 					
@@ -1758,6 +1767,10 @@
 						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset"
 						imagesrc="media/mod_latestnewsenhanced/images/logo_autoreset_small.png"
 						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" />
+						
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SIZETHRESHOLD_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SIZETHRESHOLD_DESC" />
 				</fieldset>
 						
 				<fieldset name="advanced_headers" label="MOD_LATESTNEWSENHANCEDEXTENDED_STYLESHEETSANDSCRIPTS_LABEL">

@@ -15,6 +15,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\Registry\Registry;
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Libraries as SYWLibraries;
 
@@ -27,39 +28,228 @@ class Helper
 
 	/**
 	 * Look for images in content
+	 * Using regular expressions
 	 *
 	 * @param string $introtext
 	 * @param string $fulltext
+	 * @param int    $threshold the minimum width or height the image must have to be eligible
 	 *
-	 * @return string|null the image source if found one, null otherwise
+	 * @return object|null the first image attributes if one is found, null otherwise
 	 */
-	static function getImageSrcFromContent($introtext, $fulltext = '')
+	static function getImageFromContent($introtext, $fulltext = '', $threshold = 0)
 	{
-		preg_match_all('#<img[^>]*>#iU', $introtext, $img_result); // finds all images in the introtext
-		if (empty($img_result[0][0]) && !empty($fulltext)) {	// maybe there are images in the fulltext...
-			preg_match_all('#<img[^>]*>#iU', $fulltext, $img_result); // finds all images in the fulltext
-		}
+	    Log::addLogger(array('text_file' => 'syw.errors.php'), Log::ALL, array('syw'));
+	    
+	    if ($introtext == '' && $fulltext == '') {
+	        return null;
+	    }
+	    
+	    preg_match_all('#<img[^>]*>#iU', $introtext . ' ' . $fulltext, $img_result); // finds all images
+	    
+	    if (empty($img_result[0])) {
+	        return null;
+	    }
+	    
+	    $result = null;
+	    
+	    libxml_use_internal_errors(true); // Suppress errors but still handle exceptions
+	    
+	    foreach ($img_result[0] as $element) {
+	        
+	        // Make sure img is well formed to be recognized as xml, ensure the <img> tag ends with />
+	        $element = preg_replace('/<img([^>]+?)(?<!\/)>/', '<img$1 />', $element);
+	        try {
+	            $img = new \SimpleXMLElement($element);
+	            
+	            if (count($img->attributes()) > 0) { // if it has attributes
+	                $result = new \stdClass();
+	                $hasSrc = false;
+	                $isBigEnough = true;
+	                foreach ($img->attributes() as $attribute_name => $attribute_value) {
+	                    if ($attribute_value) {
+	                        $result->{$attribute_name} = $attribute_value;
+	                        if ($attribute_name == 'src') {
+	                            $hasSrc = true;
+	                        }
+	                        
+	                        // Discard x-small images
+	                        if (($attribute_name == 'width' || $attribute_name == 'height') && (int)$attribute_value <= $threshold) {
+	                            $isBigEnough = false;
+	                        }
+	                    }
+	                }
+	                if ($hasSrc && $isBigEnough) {
+	                    break;
+	                }
+	                
+	                $result = null;
+	            }
+	        } catch (\Exception $e) {
+	            Log::add('LatestNewsEnhanced Helper:getImageSrcFromContent() - img is not well formed', Log::ERROR, 'syw');
+	            continue;
+	        }
+	    }
+	    
+	    return $result;
+	}
 
-		// TODO: if image too small, discard it (like a dot for empty space)
+	/**
+	 * Look for images in content
+	 * Using DOMDocument (DO NOT USE BECAUSE OF HIGH MEMORY CONSUMPTION ON LARGE ARTICLES)
+	 *
+	 * @param string $introtext
+	 * @param string $fulltext
+	 * @param int $threshold the minimum width or height the image must have to be eligible
+	 *
+	 * @return object|null the first image attributes if one is found, null otherwise
+	 */
+	static function getImageFromContentThruDom($introtext, $fulltext = '', $threshold = 0)
+	{	    
+	    if ($introtext == '' && $fulltext == '') {
+	        return null;
+	    }
+	    
+	    $dom = new \DOMDocument();
+	    $dom->loadHTML($introtext . ' ' . $fulltext);
+	    $anchors = $dom->getElementsByTagName('img');
+	    
+	    if ($anchors->length == 0) {
+	        return null;
+	    }
+	    
+	    $result = null;
+	    
+	    // Make sure we do not handle invalid HTML: ignore img without the src attribute or if src is empty
+	    
+	    foreach ($anchors as $element) {
+	        if ($element->hasAttributes()) {
+	            $result = new \stdClass();
+	            $hasSrc = false;
+	            $isBigEnough = true;
+	            foreach ($element->attributes as $attribute) {
+	                if ($attribute->value) {
+	                    $result->{$attribute->name} = $attribute->value;
+	                    if ($attribute->name == 'src') {
+	                        $hasSrc = true;
+	                    }
+	                    
+	                    // Discard x-small images
+	                    if (($attribute->name == 'width' || $attribute->name == 'height') && (int)$attribute->value <= $threshold) {
+	                        $isBigEnough = false;
+	                    }
+	                }
+	            }
+	            if ($hasSrc && $isBigEnough) {
+	                break;
+	            }
+	            
+	            $result = null;
+	        }
+	    }
+	    
+	    return $result;
+	}
+	
+	/**
+	 * Look for images in the item image parameters
+	 * 
+	 * @param string $images
+	 * @param string $section
+	 * 
+	 * @return object|null
+	 */
+	static function getImageFromItem($images, $section = 'intro')
+	{
+	    $registry = new Registry();
+	    $registry->loadString($images);
+	    $images_array = $registry->toArray();
+	    
+	    if (empty($images_array)) {
+	        return null;
+	    }
+	    
+	    if (!isset($images_array['image_' . $section]) || $images_array['image_' . $section] == '') {
+	        return null;
+	    }
+	    
+	    $result = new \stdClass();
+	    
+	    $result->src = $images_array['image_' . $section];
+	    
+	    if (isset($images_array['image_' . $section . '_alt']) && trim($images_array['image_' . $section . '_alt']) != '') {
+	        if (isset($images_array['image_' . $section . '_alt_empty']) && $images_array['image_' . $section . '_alt_empty'] == '1') {
+	            return $result;
+	        }
+	        
+	        $result->alt = $images_array['image_' . $section . '_alt'];
+	    }
 
-// 		var_dump($img_result);
-// 		foreach ($img_result[0] as $img_result) {
-
-// 			preg_match('/(src)=("[^"]*")/i', $img_result, $src_result); // get the src attribute
-
-// 			$imagesize = getimagesize(trim($src_result[2], '"')); // needs allow_url_fopen for http images and open_ssl for https images
-// 			if ($imagesize[0] > 10 && $imagesize[1] > 10) {
-// 				return trim($src_result[2], '"');
-// 			}
-
-// 		}
-
-		if (!empty($img_result[0][0])) { // $img_result[0][0] is the first image found
-			preg_match('/(src)=("[^"]*")/i', $img_result[0][0], $src_result); // get the src attribute
-			return trim($src_result[2], '"');
-		}
-
-		return null;
+	    return $result;
+	}
+	
+	/**
+	 * Look for images in the category parameters
+	 * 
+	 * @param string $params
+	 * 
+     * @return object|null
+	 */
+	static function getImageFromCategory($params)
+	{
+	    $category_params = json_decode($params);
+	    
+	    if (!isset($category_params->image) || $category_params->image == '') {
+	        return null;
+	    }
+	    
+	    $result = new \stdClass();
+	    
+	    $result->src = $category_params->image;
+	    
+	    if (isset($category_params->image_alt) && trim($category_params->image_alt) != '') {
+	        if (isset($category_params->image_alt_empty) && $category_params->image_alt_empty == '1') {
+	            return $result;
+	        }
+	        
+	        $result->alt = $category_params->image_alt;
+	    }	    
+	    
+	    return $result;
+	}
+	
+	/**
+	 * Look for images in the media field
+	 * 
+	 * @param string $value
+	 * 
+     * @return object|null
+	 */
+	static function getImageFromMediaField($value)
+	{
+	    $image_custom_field_value = json_decode($value, true);
+	    
+	    $result = new \stdClass();
+	    
+	    if ($image_custom_field_value !== null) { // new json string from accessible media field
+	        if (!isset($image_custom_field_value['imagefile']) || $image_custom_field_value['imagefile'] == '') {
+	            return null;
+	        }
+	        
+	        $result->src = $image_custom_field_value['imagefile'];
+	        
+	        if (isset($image_custom_field_value['alt_text']) && trim($image_custom_field_value['alt_text']) != '') {
+	            if (isset($image_custom_field_value['alt_empty']) && $image_custom_field_value['alt_empty'] == '1') {
+	                return $result;
+	            }
+	            
+	            $result->alt = $image_custom_field_value['alt_text'];
+	        }	        
+	        
+	    } else { // old values before using accessible media field
+	        $result->src = $value;
+	    }
+	    
+	    return $result;
 	}
 
 	/**
@@ -257,7 +447,7 @@ class Helper
 		if (function_exists('glob')) {
 			$filenames = glob(JPATH_ROOT.'/'.$tmp_path.'/thumb_'.$module_id.'_*.*');
 			if ($filenames == false) {
-				Log::add('modLatestNewsEnhancedHelper:clearThumbnails() - Error on glob - No permission on files/folder or old system', Log::ERROR, 'syw');
+				Log::add('LatestNewsEnhanced Helper:clearThumbnails() - Error on glob - No permission on files/folder or old system', Log::ERROR, 'syw');
 				return false;
 			}
 
@@ -266,9 +456,9 @@ class Helper
 			}
 
 			return true;
-		} else {
-			Log::add('modLatestNewsEnhancedHelper:clearThumbnails() - glob - function does not exist', Log::ERROR, 'syw');
 		}
+			
+		Log::add('LatestNewsEnhanced Helper:clearThumbnails() - glob function does not exist', Log::ERROR, 'syw');
 
 		return false;
 	}
@@ -352,7 +542,7 @@ class Helper
 		}
 
 		if (!empty($css_classes)) {
-			$attribute_class .= ' '.$css_classes;
+		    $attribute_class .= empty($attribute_class) ? $css_classes : ' '.$css_classes;
 		}
 
 		if (!empty($attribute_class)) {
