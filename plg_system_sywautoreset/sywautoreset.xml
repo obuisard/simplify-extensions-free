@@ -7,19 +7,24 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>1.4.3</version>
-	<changelogurl>https://updates.simplifyyourweb.com/free/sywautoreset/changelog.xml</changelogurl>
+	<version>2.0.0</version>
 	<description>PLG_SYSTEM_SYWAUTORESET_XML_DESCRIPTION</description>
+	<changelogurl>https://updates.simplifyyourweb.com/free/sywautoreset/changelog.xml</changelogurl>
 	<scriptfile>installer.php</scriptfile>
+	<namespace path="src">SYW\Plugin\System\SYWAutoReset</namespace>
+
+	<variant>free</variant>
+	
 	<media folder="media" destination="plg_system_sywautoreset">
-		<filename>index.html</filename>
 		<folder>images</folder>
 	</media>
+	
 	<files>
-		<filename plugin="sywautoreset">sywautoreset.php</filename>
-		<filename>index.html</filename>
+		<folder plugin="sywautoreset">services</folder>
+		<folder>src</folder>
 		<filename>license.txt</filename>
 	</files>
+	
 	<languages>
 		<language tag="en-GB">language/en-GB/en-GB.plg_system_sywautoreset.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.plg_system_sywautoreset.sys.ini</language>
@@ -35,18 +40,20 @@
 		<language tag="pl-PL">language/pl-PL/pl-PL.plg_system_sywautoreset.sys.ini</language>
 		<language tag="sl-SI">language/sl-SI/sl-SI.plg_system_sywautoreset.ini</language>
 		<language tag="sl-SI">language/sl-SI/sl-SI.plg_system_sywautoreset.sys.ini</language>
+		<language tag="sv-SE">language/sv-SE/sv-SE.plg_system_sywautoreset.ini</language>
+		<language tag="sv-SE">language/sv-SE/sv-SE.plg_system_sywautoreset.sys.ini</language>
 		<language tag="tr-TR">language/tr-TR/tr-TR.plg_system_sywautoreset.ini</language>
 		<language tag="tr-TR">language/tr-TR/tr-TR.plg_system_sywautoreset.sys.ini</language>
-	</languages>	
+	</languages>
+
 	<config>
 		<fields name="params">
 			<fieldset name="basic" addfieldprefix="SYW\Library\Field">				
-				<field type="extensionversion" version="1.4.3" />
+				<field type="extensionversion" extension="plg_system_sywautoreset" />
 				<field type="extensionauthor" />
 				<field type="extensionconnect" />
 				<field type="extensiontranslators" translators="PLG_SYSTEM_SYWAUTORESET_TRANSLATORS" />
 				<field type="extensionlink" linktype="translate" link="https://simplifyyourweb.com/translators" />
-<!-- 				<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/" /> -->
 				
 				<field name="spacer" type="spacer" hr="true" />
 				
@@ -65,8 +72,8 @@
 				<field name="article_cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
 					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_LABEL"
 					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_DESC">
-					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_INCLUDE</option>
 					<option value="0">PLG_SYSTEM_SYWAUTORESET_VALUE_EXCLUDE</option>
+					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_INCLUDE</option>
 				</field>
 				<field name="article_cat" type="category" extension="com_content" multiple="true" size="5" default="none" layout="joomla.form.field.list-fancy-select"
 					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_LABEL" 
@@ -86,36 +93,13 @@
 					description="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORYLEVELS_DESC" />
 			</fieldset>
 			
-			<fieldset name="k2items" label="PLG_SYSTEM_SYWAUTORESET_K2ITEMS_FIELDSET_LABEL" description="PLG_SYSTEM_SYWAUTORESET_INFO_K2ITEMSUSEWITH">
-			
-				<field name="k2_cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
-					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_LABEL"
-					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_DESC">
-					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_INCLUDE</option>
-					<option value="0">PLG_SYSTEM_SYWAUTORESET_VALUE_EXCLUDE</option>
-				</field>
-				<field name="k2_cat" type="k2category" multiple="true" size="5" default="none" layout="joomla.form.field.list-fancy-select"
-					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_LABEL" 
-					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_DESC">
-					<option value="none">JNONE</option>
-					<option value="all">JALL</option>
-				</field>
-				<field name="k2_subcat" type="list" default="no" 
-					label="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORIES_LABEL" 
-					description="PLG_SYSTEM_SYWAUTORESET_FIELD_SUBCATEGORIES_DESC">					
-					<option value="no">JNO</option>
-					<option value="level">PLG_SYSTEM_SYWAUTORESET_VALUE_ONELEVEL</option>
-					<option value="all">JALL</option>
-				</field>
-			</fieldset>
-			
 			<fieldset name="contacts" label="PLG_SYSTEM_SYWAUTORESET_CONTACTS_FIELDSET_LABEL" description="PLG_SYSTEM_SYWAUTORESET_INFO_CONTACTSUSEWITH">
 
 				<field name="contact_cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
 					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_LABEL"
 					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_DESC">
-					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_INCLUDE</option>
 					<option value="0">PLG_SYSTEM_SYWAUTORESET_VALUE_EXCLUDE</option>
+					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_INCLUDE</option>
 				</field>
 				<field name="contact_cat" type="category" extension="com_contact" multiple="true" size="5" default="none" layout="joomla.form.field.list-fancy-select"
 					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_LABEL" 
@@ -140,8 +124,8 @@
 				<field name="weblink_cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
 					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_LABEL"
 					description="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORYFILTER_DESC">
-					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_INCLUDE</option>
 					<option value="0">PLG_SYSTEM_SYWAUTORESET_VALUE_EXCLUDE</option>
+					<option value="1">PLG_SYSTEM_SYWAUTORESET_VALUE_INCLUDE</option>
 				</field>
 				<field name="weblink_cat" type="category" extension="com_weblinks" multiple="true" size="5" default="none" layout="joomla.form.field.list-fancy-select"
 					label="PLG_SYSTEM_SYWAUTORESET_FIELD_CATEGORY_LABEL" 
