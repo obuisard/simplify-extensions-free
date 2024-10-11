@@ -89,7 +89,6 @@
 						.te .iconlinks .icon,
 						.te .vcard .icon {
 							line-height: 1em;
-							width: 1em;
 							height: 1em;
 							display: inline-block;
 							vertical-align: middle;
@@ -187,6 +186,7 @@
 				}
 			
 					.te .picture_veil {
+		    			position: relative;
 		    			z-index: 200;
 					}
 					
@@ -220,6 +220,7 @@
 			}
 			
 				.te .text_veil {
+					position: relative;
 	    			z-index: 200;
 				}
 				
@@ -269,7 +270,6 @@
 				
 					.te .personinfo .icon {
 						line-height: 1em;
-						width: 1em;
 						display: inline-block;
 						margin: 1px 6px 1px 0;
 			    		vertical-align: middle;

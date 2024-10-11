@@ -757,6 +757,9 @@ abstract class Helper
 				}
 			}
 
+			$hold_featured_order = false;
+			$show_category_header = $params->get('s_h', 'h') == 'h' ? false : true;
+
 			// featured switch
 
 			$featured = $params->get('f', 's');
@@ -765,7 +768,12 @@ abstract class Helper
 			} else if ($featured == 'h') {
 			    $query->where($db->quoteName('cd.featured') . ' = 0');
 			} else if ($featured == 'sf') {
-			    $query->order($db->quoteName('cd.featured') . ' DESC');
+			    // we want favorites to be first for each heading, so if there are headings, we should not add the ordering at this stage
+			    if (!$show_category_header) {
+			    	$query->order($db->quoteName('cd.featured') . ' DESC');
+			    } else {
+			        $hold_featured_order = true;
+			    }
 			}
 
 			// category order
@@ -777,6 +785,10 @@ abstract class Helper
 			    case 'na' : $query->order($db->quoteName('cc.title') . ' ASC'); break;
 			    case 'nd' : $query->order($db->quoteName('cc.title') . ' DESC'); break;
 				default : break;
+			}
+
+			if ($hold_featured_order && $show_category_header) {
+			    $query->order($db->quoteName('cd.featured') . ' DESC');
 			}
 
 			// general ordering

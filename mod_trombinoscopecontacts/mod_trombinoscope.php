@@ -70,7 +70,7 @@ if ($module_link) {
 		if ($external_url) {
 			$module_link = $external_url;
 			$module_link_isExternal = true;
-			$module_link_label = trim($params->get('modulel_lbl', '')) == '' ? $external_url : trim($params->get('modulel_lbl'));
+			$module_link_label = trim($params->get('modulel_lbl', '')) == '' ? $external_url : trim($params->get('modulel_lbl', ''));
 		} else {
 			$module_link = '';
 		}
@@ -109,7 +109,7 @@ if ($module_link) {
 			default: $module_link = $menuitem->link . '&Itemid=' . $menuitem->id;
 		}
 
-		$module_link_label = trim($params->get('modulel_lbl', '')) == '' ? $menuitem->title : trim($params->get('modulel_lbl'));
+		$module_link_label = trim($params->get('modulel_lbl', '')) == '' ? $menuitem->title : trim($params->get('modulel_lbl', ''));
 	} else { // backward compatibility, we get old value until the instance is saved again
 		$module_link_label = trim($params->get('modulel_lbl', ''));
 	}
