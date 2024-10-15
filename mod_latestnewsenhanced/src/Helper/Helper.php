@@ -55,11 +55,32 @@ class Helper
 	    libxml_use_internal_errors(true); // Suppress errors but still handle exceptions
 	    
 	    foreach ($img_result[0] as $element) {
-	        
-	        // Make sure img is well formed to be recognized as xml, ensure the <img> tag ends with />
-	        $element = preg_replace('/<img([^>]+?)(?<!\/)>/', '<img$1 />', $element);
+
 	        try {
-	            $img = new \SimpleXMLElement($element);
+	            // Remove empty attributes (when we have 'title' instead of title="" for instance, which fails in XML)
+	            
+	            $dom = new \DOMDocument();
+	            $dom->loadHTML($element, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+	            
+	            $xpath = new \DOMXPath($dom);
+	            $elements = $xpath->query('//img'); // Select all img tags
+	            
+	            foreach ($elements as $element) {
+	                $attributesToRemove = [];
+	                foreach ($element->attributes as $attribute) {
+	                    if ($attribute->value === '') {
+	                        $attributesToRemove[] = $attribute->name;
+	                    }
+	                }
+	                foreach ($attributesToRemove as $attrName) {
+	                    $element->removeAttribute($attrName);
+	                }
+	            }
+	            
+	            // Make sure img is well formed to be recognized as xml, ensure the <img> tag ends with />
+	            $imgFromDOM = preg_replace('/<img([^>]+?)(?<!\/)>/', '<img$1 />', $dom->saveXML(null, LIBXML_NOXMLDECL));
+	            
+	            $img = new \SimpleXMLElement($imgFromDOM);
 	            
 	            if (count($img->attributes()) > 0) { // if it has attributes
 	                $result = new \stdClass();
