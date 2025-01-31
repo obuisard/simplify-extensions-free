@@ -9,7 +9,7 @@
 	<url>https://simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>https://simplifyyourweb.com/</packagerurl>
-	<version>4.14.3</version>
+	<version>4.14.4</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/trombinoscope/changelog.xml</changelogurl>
 	<description>PKG_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<blockChildUninstall>true</blockChildUninstall>
@@ -28,6 +28,7 @@
 		<language tag="pt-BR">language/pt-BR/pt-BR.pkg_trombinoscope.sys.ini</language>
 		<language tag="ru-RU">language/ru-RU/ru-RU.pkg_trombinoscope.sys.ini</language>
 		<language tag="sl-SI">language/sl-SI/sl-SI.pkg_trombinoscope.sys.ini</language>
+		<language tag="sv-SE">language/sv-SE/sv-SE.pkg_trombinoscope.sys.ini</language>
 		<language tag="tr-TR">language/tr-TR/tr-TR.pkg_trombinoscope.sys.ini</language>
 	</languages>
  	<files folder="packages">

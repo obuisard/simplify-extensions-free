@@ -31,7 +31,7 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 	/**
 	 * Available languages
 	 */
-	protected $availableLanguages = array('cs-CZ', 'da-DK', 'de-DE', 'en-GB', 'es-ES', 'fa-IR', 'fi-FI', 'fr-FR', 'nl-NL', 'pt-BR', 'ru-RU', 'sl-SI', 'tr-TR');
+	protected $availableLanguages = array('cs-CZ', 'da-DK', 'de-DE', 'en-GB', 'es-ES', 'fa-IR', 'fi-FI', 'fr-FR', 'nl-NL', 'pt-BR', 'ru-RU', 'sl-SI', 'sv-SE', 'tr-TR');
 
 	/**
 	 * Extensions library link for download
