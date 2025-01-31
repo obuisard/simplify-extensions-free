@@ -645,6 +645,8 @@ class ContentHelper
 		                $value = trim($value);
 		                if (empty($value)) {
 		                    unset($values[$key]);
+		                } else {
+		                    $values[$key] = $db->escape($value);
 		                }
 		            }
 

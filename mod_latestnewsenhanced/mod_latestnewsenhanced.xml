@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>7.3.1</version>
+	<version>7.3.2</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -1811,11 +1811,11 @@
 				
 				<fieldset name="advanced_prepost" label="MOD_LATESTNEWSENHANCEDEXTENDED_ADVANCEDPREPOST_FIELDSET_LABEL">
 					
-					<field name="pretext" type="editor" rows="5" editor="codemirror|none" filter="safehtml" buttons="false" syntax="html"
+					<field name="pretext" type="editor" rows="5" editor="codemirror|none" filter="raw" buttons="false" syntax="html"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PRETEXT_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PRETEXT_DESC" />
 						
-					<field name="posttext" type="editor" rows="5" editor="codemirror|none" filter="safehtml" buttons="false" syntax="html"
+					<field name="posttext" type="editor" rows="5" editor="codemirror|none" filter="raw" buttons="false" syntax="html"
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSTTEXT_LABEL"
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSTTEXT_DESC" />
 	
