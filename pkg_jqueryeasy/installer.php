@@ -120,7 +120,7 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 		echo '</p>';
 
 		echo '<p>';
-		echo '<a class="btn btn-primary me-2" href="index.php?option=com_plugins&view=plugins&filter[folder]=system&filter[element]=jqueryeasy">' . Text::_('PKG_JQUERYEASY_PLUGIN_SETUP') . '</a>';
+		echo '<a class="btn btn-dark btn-sm text-light me-2" href="index.php?option=com_plugins&view=plugins&filter[folder]=system&filter[element]=jqueryeasy">' . Text::_('PKG_JQUERYEASY_PLUGIN_SETUP') . '</a>';
 		
  		// language test
 
@@ -133,7 +133,7 @@ class Pkg_JQueryEasyInstallerScript extends InstallerScript
 
 			// update warning
 
-			echo '<a class="btn btn-primary" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_JQUERYEASY_BUTTON_UPDATENOTES') . '</a>';
+			echo '<a class="btn btn-dark text-light" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_JQUERYEASY_BUTTON_UPDATENOTES') . '</a>';
 			
 			// +++ Migration Joomla 3 to Joomla 4
 			
