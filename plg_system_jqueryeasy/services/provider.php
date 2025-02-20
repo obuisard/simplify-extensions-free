@@ -30,7 +30,7 @@ return new class () implements ServiceProviderInterface {
 
                 $plugin = new JQueryEasy(
                     $dispatcher,
-                    (array) PluginHelper::getPlugin('system', 'jqueryeasy'),
+                    (array) PluginHelper::getPlugin('system', 'jqueryeasy')
                 );
 
                 //$plugin->setApplication(Factory::getApplication());
