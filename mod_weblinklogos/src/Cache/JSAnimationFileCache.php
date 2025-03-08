@@ -38,8 +38,8 @@ class JSAnimationFileCache extends HeaderFilesCache
 			$card_width = intval($params->get('overall_width'));
 		} else {
 			$card_border_width = $params->get('card_border_w', 0);
-			$overall_bgcolor = trim($params->get('overallbgcolor', '')) != '' ? trim($params->get('overallbgcolor')) : 'transparent';
-			$logo_bgcolor = trim($params->get('logobgcolor', '')) != '' ? trim($params->get('logobgcolor')) : 'transparent';
+			$overall_bgcolor = trim($params->get('overallbgcolor', '')) != '' ? trim($params->get('overallbgcolor', '')) : 'transparent';
+			$logo_bgcolor = trim($params->get('logobgcolor', '')) != '' ? trim($params->get('logobgcolor', '')) : 'transparent';
 
 			$padding = $params->get('content_spacing', 10);
 

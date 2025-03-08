@@ -37,7 +37,7 @@ class CSSFileCache extends HeaderFilesCache
 
 		// card
 
-		$overall_bgcolor = trim($params->get('overallbgcolor', '')) != '' ? trim($params->get('overallbgcolor')) : 'transparent';
+		$overall_bgcolor = trim($params->get('overallbgcolor', '')) != '' ? trim($params->get('overallbgcolor', '')) : 'transparent';
 		$variables[] = 'overall_bgcolor';
 
 		$font_size = $params->get('fontsize', array('90', '%'));
@@ -109,7 +109,7 @@ class CSSFileCache extends HeaderFilesCache
 		$height = $params->get('height', 40);
 		$variables[] = 'height';
 
-		$logo_bgcolor = trim($params->get('logobgcolor', '')) != '' ? trim($params->get('logobgcolor')) : 'transparent';
+		$logo_bgcolor = trim($params->get('logobgcolor', '')) != '' ? trim($params->get('logobgcolor', '')) : 'transparent';
 		$variables[] = 'logo_bgcolor';
 
 		$opacity = $params->get('opacity', 1);
