@@ -23,9 +23,12 @@ if ($load_bootstrap) {
     HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 }
 
+$i_header = 0;
 if ($show_heading) {
 	$previous_header = '';
 	$header = '';
+	$previous_header_alpha = '';
+	$header_alpha = '';
 }
 
 $modal_needed = false;
@@ -53,6 +56,12 @@ if ($remove_whitespaces) {
 		  	<?php echo Text::_('MOD_TROMBINOSCOPE_MESSAGE_ORDERFORCATEGORYHEADER'); ?>
 		</div>
 	<?php endif; ?>
+	
+	<?php if (in_array($order, array('oa', 'od', 'random', 'manual', 'c_asc', 'c_dsc', 'mc_asc', 'mc_dsc', 'hit')) && $show_alphabet_header) : ?>
+		<div class="alert <?php echo SYWUtilities::getBootstrapProperty('alert-warning', $bootstrap_version); ?>">
+		  	<?php echo Text::_('MOD_TROMBINOSCOPE_MESSAGE_ORDERFORALPHAHEADER'); ?>
+		</div>
+	<?php endif; ?>
 
 	<?php if ($show_arrows && ($arrow_prev_left || $arrow_prev_top)) : ?>
 		<div class="items_pagination top<?php echo $extra_pagination_classes; ?>">
@@ -73,13 +82,39 @@ if ($remove_whitespaces) {
 
 			<?php
 				// header
-				if ($show_heading) {
-					$header = $item->category;
-					if ($previous_header == $header) {
-						$header = '';
-					} else {
-						$previous_header = $header;
-					}
+				if ($show_category_header) {
+			    	$header = $item->category;
+			    	if ($previous_header == $header) {
+			        	$header = '';
+			    	} else {
+			        	$previous_header = $header;
+			        	$previous_header_alpha = '';
+			        	$header_alpha = '';
+			        	$i_header = 0;
+			    	}
+				}
+			
+				// alpha header
+				if ($show_alphabet_header) {
+			    	switch ($order) {
+			        	case 'na' : case 'nd' : $header_alpha = ucfirst($item->name[0]); break;
+			        	case 'fnf_fa' : case 'fnf_fd' : $header_alpha = ucfirst($item->firstpart[0]); break;
+			        	case 'fnf_la' : case 'fnf_ld' : $header_alpha = ucfirst($item->lastpart[0]); break;
+			        	case 'sna' : case 'snd' :
+			            	if (empty($item->sortname1)) { // all unsorted contacts appear first
+			                	$item->error[] = $item->name . ': ' . Text::_('MOD_TROMBINOSCOPE_ERROR_MISSINGFIRSTSORTFIELD');
+			            	} else {
+			                	$header_alpha = ucfirst($item->sortname1[0]);
+			            	}
+			            	break;
+			        	default : $header_alpha = ''; break;
+			    	}
+			    	if ($previous_header_alpha == $header_alpha) {
+			        	$header_alpha = '';
+			    	} else {
+			        	$previous_header_alpha = $header_alpha;
+			        	$i_header = 0;
+			    	}
 				}
 
 				// Convert parameter fields to objects.
@@ -137,7 +172,7 @@ if ($remove_whitespaces) {
 					}
 				}
 
-				$extraclasses .= ($i % 2) ? " even" : " odd";
+				$extraclasses .= ($i_header % 2) ? " even" : " odd";
 
 				if ($item->featured && $show_featured) {
 					$extraclasses .= " featured";
@@ -158,26 +193,47 @@ if ($remove_whitespaces) {
 						case 'l': $extraclasses .= "picture_left"; break;
 						case 'r': $extraclasses .= "picture_right"; break;
 						case 't': $extraclasses .= "picture_top"; break;
-						case 'lr': $extraclasses .= ($i % 2) ? "picture_right" : "picture_left"; break;
-						case 'rl': $extraclasses .= ($i % 2) ? "picture_left" : "picture_right"; break;
+						case 'lr': $extraclasses .= ($i_header % 2) ? "picture_right" : "picture_left"; break;
+						case 'rl': $extraclasses .= ($i_header % 2) ? "picture_left" : "picture_right"; break;
 						default : $extraclasses .= "picture_left";
 					}
 				}
+				
+				$i_header++;
 			?>
 
-			<?php if ($show_heading && $header) : ?>
-				<div class="heading-group">
-					<?php echo '<h'.$header_html_tag.' class="heading">'; ?>
-						<?php if ($heading_link) : ?>
-							<a href="<?php echo $heading_link; ?>">
-								<span><?php echo $header ?></span>
-							</a>
-						<?php else : ?>
-							<span><?php echo $header ?></span>
-						<?php endif; ?>
-					<?php echo '</h'.$header_html_tag.'>'; ?>
-				</div>
-			<?php endif; ?>
+			<?php if ($show_category_header) : ?>
+    			<?php if ($header || $header_alpha) : ?>
+    				<div class="heading-group">
+    					<?php if ($header) : ?>
+        					<?php echo '<h' . $header_html_tag . ' class="heading">'; ?>
+        						<?php if ($heading_link) : ?>
+        							<a href="<?php echo $heading_link; ?>">
+        								<span><?php echo $header ?></span>
+        							</a>
+        						<?php else : ?>
+        							<span><?php echo $header ?></span>
+        						<?php endif; ?>
+        					<?php echo '</h' . $header_html_tag . '>'; ?>
+        				<?php endif; ?>
+        				<?php if ($show_alphabet_header) : ?>
+        					<?php if ($header_alpha) : ?>
+        						<?php echo '<h' . $subheader_html_tag . ' class="sub-heading">'; ?>
+        							<span><?php echo $header_alpha ?></span>
+        						<?php echo '</h' . $subheader_html_tag . '>'; ?>
+        					<?php endif; ?>
+        				<?php endif; ?>
+    				</div>
+    			<?php endif; ?>
+    		<?php elseif ($show_alphabet_header) : ?>
+    			<?php if ($header_alpha) : ?>
+    				<div class="heading-group">
+    					<?php echo '<h' . $header_html_tag . ' class="heading">'; ?>
+    						<span><?php echo $header_alpha ?></span>
+    					<?php echo '</h' . $header_html_tag . '>'; ?>
+    				</div>
+    			<?php endif; ?>
+    		<?php endif; ?>
 
 			<div class="person<?php echo $extraclasses ?>">
 				<?php if ($carousel_configuration != 'none') : ?><div class="shell_animate"><?php endif; ?>

@@ -8,12 +8,12 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\File;
 use SYW\Library\Fonts as SYWFonts;
 use SYW\Library\Libraries as SYWLibraries;
 use SYW\Library\Stylesheets as SYWStylesheets;
@@ -236,31 +236,43 @@ switch ($tags_showing) {
 		break;
 }
 
-$header_showing = $params->get('s_h', 'h');
 $header_html_tag = $params->get('h_tag', '4');
-$header_view_id = $params->get('header_views', 'auto');
-$show_category_header = false;
+$subheader_html_tag = $header_html_tag + 1;
+if ($subheader_html_tag > 6) {
+    $subheader_html_tag = 6;
+}
+
+$show_alphabet_header = false;
+if ($params->get('s_h_alpha', '0')) {
+    $show_alphabet_header = true;
+}
+
 $link_to_category_header = false;
 $link_to_view_category_header = false;
+switch ($params->get('s_h', 'h')) {
+    case 'sc' :
+        $show_category_header = true;
+        break;
+    case 'slc' :
+        $show_category_header = true;
+        $link_to_category_header = true;
+        break;
+    case 'svc' :
+        $show_category_header = true;
+        $link_to_view_category_header = true;
+        $header_view_id = $params->get('header_views', 'auto');
+        break;
+    default :
+        $show_category_header = false;
+}
 
-$show_heading = true;
-switch ($header_showing) {
-	case 'sc' :
-		$show_category_header = true;
-		break;
-	case 'slc' :
-		$show_category_header = true;
-		$link_to_category_header = true;
-		break;
-	case 'svc' :
-		$show_category_header = true;
-		$link_to_view_category_header = true;
-		break;
-	default :
-		$show_heading = false;
+$show_heading = false;
+if ($show_category_header || $show_alphabet_header) {
+    $show_heading = true;
 }
 
 $cat_order = $params->get('c_order', '');
+$order = $params->get('order', 'oa');
 
 $requested_links = Helper::getRequestedLinks($params);
 $requested_infos = Helper::getRequestedInfos($params);
@@ -401,7 +413,7 @@ if ($carousel_configuration != 'none') {
 
 } else {
 	// remove animation.js if it exists
-	if (File::exists(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js')) {
+	if (is_file(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js')) {
 		File::delete(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/animation_' . $module->id . $rtl_suffix . '.js');
 	}
 }
@@ -415,11 +427,11 @@ if ($show_picture && $photo_align != 't' && $min_card_flip_width) {
 
 // styles
 
-if (File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/substitute_styles.css') || File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/substitute_styles-min.css')) {
+if (is_file(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/substitute_styles.css') || is_file(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/substitute_styles-min.css')) {
 	Helper::loadUserStylesheet(true);
 
 	// remove style.css if it exists
-	if (File::exists(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/style_'.$module->id.'.css')) {
+	if (is_file(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/style_'.$module->id.'.css')) {
 		File::delete(JPATH_SITE . '/media/cache/mod_trombinoscopecontacts/style_'.$module->id.'.css');
 	}
 } else {
@@ -448,7 +460,7 @@ if (File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/substitute_s
 
 	Helper::loadCommonStylesheet();
 
-	if (File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/common_user_styles.css') || File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/common_user_styles-min.css')) {
+	if (is_file(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/common_user_styles.css') || is_file(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/common_user_styles-min.css')) {
 		Helper::loadUserStylesheet();
 	}
 }

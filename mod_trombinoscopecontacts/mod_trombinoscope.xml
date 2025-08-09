@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>4.14.4</version>
+	<version>4.16.0</version>
 	<description>MOD_TROMBINOSCOPE_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\TrombinoscopeContacts</namespace>	
 	 
@@ -458,9 +458,16 @@
 						<option value="slc">MOD_TROMBINOSCOPE_VALUE_SHOWANDLINKCATEGORY</option>
 						<option value="svc" disabled="true">MOD_TROMBINOSCOPE_VALUE_SHOWANDLINKVIEWCATEGORY</option>
 						<option value="h">JHIDE</option>
-					</field> 
-				
-<!-- 				<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
+					</field>
+
+					<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_ORDERFORALPHAHEADER" style="warning" />
+
+					<field name="s_h_alpha" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TROMBINOSCOPE_FIELD_SHOWHEADERALPHA_LABEL" 
+						description="MOD_TROMBINOSCOPE_FIELD_SHOWHEADERALPHA_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
 				</fieldset>
 					
 				<fieldset name="layout_modulelink" label="MOD_TROMBINOSCOPE_FIELD_MODULELINK_LABEL">
@@ -953,8 +960,6 @@
 						<option value="3" disabled="true">MOD_TROMBINOSCOPE_VALUE_FIELDFIRST</option>
 					</field>
 				
-<!-- 				<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
-				
 					<field name="auto_map_params" type="sywverbosetext" filter="string" translateHint="false" hint="hl=en" help="MOD_TROMBINOSCOPE_FIELD_AUTOMAPPARAMS_HELP" 
 						label="MOD_TROMBINOSCOPE_FIELD_AUTOMAPPARAMS_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_AUTOMAPPARAMS_DESC" />
@@ -1024,8 +1029,6 @@
 						<option value="3" disabled="true">MOD_TROMBINOSCOPE_VALUE_TECONTACTFORM</option>
 					</field>
 				
-<!-- 				<field type="message" text="MOD_TROMBINOSCOPE_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
-					
 					<field name="cloak_e" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
 						label="MOD_TROMBINOSCOPE_FIELD_CLOAKEMAIL_LABEL" 
 						description="MOD_TROMBINOSCOPE_FIELD_CLOAKEMAIL_DESC">
@@ -1068,8 +1071,6 @@
 				</fieldset>
 				
 				<fieldset name="carousel_all" label="MOD_TROMBINOSCOPE_CAROUSEL_FIELDSET_LABEL">
-					
-	<!-- 				<field type="message" text="MOD_TROMBINOSCOPE_INFO_JQUERY" style="warning" /> -->
 					
 					<field name="carousel_config" type="list" default="none" 
 						label="MOD_TROMBINOSCOPE_FIELD_CONFIGURATION_LABEL" 

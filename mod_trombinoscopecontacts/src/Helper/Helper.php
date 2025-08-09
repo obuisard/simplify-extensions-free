@@ -11,7 +11,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Multilanguage;
@@ -420,7 +419,12 @@ abstract class Helper
 				}
 
 				if ($get_the_tags) {
-					$temp = $app->input->getString('id');
+					$temp = $app->input->getString('id'); // may return an array!!!
+					
+					if (!is_string($temp)) {
+                        return null;
+                    }
+					
 					$temp = explode(':', $temp);
 					$item_on_page_id = $temp[0];
 
@@ -907,7 +911,7 @@ abstract class Helper
 					if (self::isCropPicture($params)) {
 						$picture_output = self::getCroppedImage($module->id, $item->id, $item->original_image, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
 					} else {
-						$picture_output = (File::exists(JPATH_SITE . '/' . $item->original_image) || !Uri::getInstance()->isInternal($item->original_image)) ? $item->original_image : 'error';
+						$picture_output = (is_file(JPATH_SITE . '/' . $item->original_image) || !Uri::getInstance()->isInternal($item->original_image)) ? $item->original_image : 'error';
 					}
 				}
 
@@ -920,7 +924,7 @@ abstract class Helper
 						if (self::isCropPicture($params)) {
 							$picture_output = self::getCroppedImage($module->id, 'default', $default_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
 						} else {
-							$picture_output = (File::exists(JPATH_SITE . '/' . $default_image_object->url)) ? $default_image_object->url : 'error';
+							$picture_output = (is_file(JPATH_SITE . '/' . $default_image_object->url)) ? $default_image_object->url : 'error';
 						}
 					}
 				}
@@ -934,7 +938,7 @@ abstract class Helper
 						if (self::isCropPicture($params)) {
 							$picture_output = self::getCroppedImage($module->id, 'global', $global_image_object->url, self::getPictureTemporaryPath($params), self::IsClearPictureCache($params), self::getPictureWidth($params), self::getPictureHeight($params), self::isCropPicture($params), self::getPictureQuality($params), self::getPictureFilters($params), self::isCreateHighResolutionPicture($params), self::getThumbnailMimeType($params));
 						} else {
-							$picture_output = (File::exists(JPATH_SITE . '/' . $global_image_object->url)) ? $global_image_object->url : 'error';
+							$picture_output = (is_file(JPATH_SITE . '/' . $global_image_object->url)) ? $global_image_object->url : 'error';
 						}
 					}
 				}
@@ -1588,6 +1592,15 @@ abstract class Helper
 			case 'empty' :
 				$class = 'empty';
 				break;
+				
+			case 'cat' : // category
+			    $value = empty($item->category) ? '' : trim($item->category);			    
+			    $class = 'fieldcategory';
+			    if ($value) {
+			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_CATEGORY') : $fieldlabel;
+			        $icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-group';
+			    }
+			    break;
 
 			case 'c_p' : // con_position
 
@@ -1998,7 +2011,7 @@ abstract class Helper
 	 *
 	 * @param string  $field
 	 * @param string  $link
-	 * @param unknown $params
+	 * @param object $params
 	 * @param boolean $is_substitute
 	 *
 	 * @return string the label
@@ -2071,8 +2084,15 @@ abstract class Helper
 		if (!extension_loaded('gd') && !extension_loaded('imagick')) {
 			return $imagesrc; // return the original
 		}
-
-		$imageext = File::getExt($imagesrc);
+		
+		if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+		    // Joomla 5 and 6
+		    $imageext = \Joomla\Filesystem\File::getExt($imagesrc);
+		} else {
+		    // Joomla 4 fallback
+		    $imageext = \Joomla\CMS\Filesystem\File::getExt($imagesrc);
+		}
+		
 		$original_imageext = $imageext;
 
 		switch ($thumbnail_mime_type) {
@@ -2085,8 +2105,8 @@ abstract class Helper
 		$filename = $tmp_path . '/thumb_' . $module_id . '_' . $item_id . '.' . $imageext;
 		$filename_highres = $tmp_path . '/thumb_' . $module_id . '_' . $item_id . '@2x.' . $imageext;
 
-		if ((!$clear_cache && !$create_high_resolution && File::exists(JPATH_ROOT . '/' . $filename))
-			|| (!$clear_cache && $create_high_resolution && File::exists(JPATH_ROOT . '/' . $filename) && File::exists(JPATH_ROOT . '/' . $filename_highres))) {
+		if ((!$clear_cache && !$create_high_resolution && is_file(JPATH_ROOT . '/' . $filename))
+			|| (!$clear_cache && $create_high_resolution && is_file(JPATH_ROOT . '/' . $filename) && is_file(JPATH_ROOT . '/' . $filename_highres))) {
 
 			// thumbnail already exists
 
@@ -2606,8 +2626,8 @@ abstract class Helper
 			$prefix = 'substitute';
 		}
 
-		if (File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css')) {
-			if (JDEBUG && File::exists(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles.css')) {
+		if (is_file(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css')) {
+			if (JDEBUG && is_file(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles.css')) {
 				$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
 			} else {
 				$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);

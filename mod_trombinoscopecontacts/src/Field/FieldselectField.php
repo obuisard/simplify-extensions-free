@@ -9,7 +9,6 @@ namespace SYW\Module\TrombinoscopeContacts\Site\Field;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Form\Field\GroupedlistField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -38,6 +37,8 @@ class FieldselectField extends GroupedlistField
 		$groups[$group_name] = array();
 
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'empty', Text::_('MOD_TROMBINOSCOPE_VALUE_EMPTY'), 'value', 'text', $disable = false);
+		
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'cat', Text::_('MOD_TROMBINOSCOPE_VALUE_CATEGORY'), 'value', 'text', $disable=false);
 
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'c_p', Text::_('MOD_TROMBINOSCOPE_VALUE_POSITION'), 'value', 'text', $disable = false);
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'tel', Text::_('MOD_TROMBINOSCOPE_VALUE_TELEPHONE'), 'value', 'text', $disable = false);
@@ -115,7 +116,7 @@ class FieldselectField extends GroupedlistField
 
 		// get Joomla! fields
 		// test the fields folder first to avoid message warning that the component is missing
-		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams('com_contact')->get('custom_fields_enable', '1')) {
+		if (is_dir(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams('com_contact')->get('custom_fields_enable', '1')) {
 
 			$fields = self::getCoreFields();
 

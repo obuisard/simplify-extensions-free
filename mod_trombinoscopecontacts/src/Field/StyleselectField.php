@@ -9,9 +9,9 @@ namespace SYW\Module\TrombinoscopeContacts\Site\Field;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\Folder;
 use SYW\Library\Field\DynamicsingleselectField;
 
 class StyleselectField extends DynamicsingleselectField

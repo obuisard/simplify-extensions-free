@@ -9,7 +9,6 @@ namespace SYW\Module\TrombinoscopeContacts\Site\Field;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Form\Field\GroupedlistField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -37,6 +36,10 @@ class LinkfieldselectField extends GroupedlistField
 		$group_name = Text::_('MOD_TROMBINOSCOPE_VALUE_STANDARDFIELDS');
 		$groups[$group_name] = array();
 
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'vcard', Text::_('MOD_TROMBINOSCOPE_VALUE_VCARD'), 'value', 'text', $disable=false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'tel', Text::_('MOD_TROMBINOSCOPE_VALUE_TELEPHONE'), 'value', 'text', $disable=false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'mob', Text::_('MOD_TROMBINOSCOPE_VALUE_MOBILE'), 'value', 'text', $disable=false);
+		$groups[$group_name][] = HTMLHelper::_('select.option', 'fax', Text::_('MOD_TROMBINOSCOPE_VALUE_FAX'), 'value', 'text', $disable=false);
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'mail', Text::_('MOD_TROMBINOSCOPE_VALUE_EMAIL'), 'value', 'text', $disable = false);
 		$groups[$group_name][] = HTMLHelper::_('select.option', 'web', Text::_('MOD_TROMBINOSCOPE_VALUE_WEBPAGE'), 'value', 'text', $disable = false);
 
@@ -80,7 +83,7 @@ class LinkfieldselectField extends GroupedlistField
 
 		// get Joomla! fields
 		// test the fields folder first to avoid message warning that the component is missing
-		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams('com_contact')->get('custom_fields_enable', '1')) {
+		if (is_dir(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams('com_contact')->get('custom_fields_enable', '1')) {
 
 			$fields = self::getCoreFields();
 
