@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>2.4.0</version>
+	<version>2.7.0</version>
 	<description>MOD_LIBRARY_TEST_XML_DESCRIPTION</description>
 	<media folder="media" destination="mod_library_test">
 		<folder>fonts</folder>

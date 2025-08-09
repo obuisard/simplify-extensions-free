@@ -9,13 +9,23 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\ModuleHelper;
 use SYW\Library\Fonts as SYWFonts;
+use SYW\Library\Utilities as SYWUtilities;
 use SYW\Library\Version as SYWVersion;
 
 if (!SYWVersion::isCompatible('2.1.0')) {
-	echo '<span>incompatible extensions library</span>';
+	echo '<p>incompatible extensions library</p>';
 } else {
-	echo '<span>compatible extensions library</span>';
+	echo '<p>compatible extensions library</p>';
 }
+
+// mobile test
+
+$isMobile = SYWUtilities::isMobile();
+$isTablet = SYWUtilities::isTablet();
+$mobileDetectVersion = SYWUtilities::getMobileDetectVersion();
+
+echo '<p>Is mobile: ' . ($isMobile ? 'yes' : 'no') . ' - Is tablet: ' . ($isTablet ? 'yes' : 'no') . ' - Mobile Detect version: <code>' . $mobileDetectVersion . '</code></p>';
+
 
 // font tests
 
