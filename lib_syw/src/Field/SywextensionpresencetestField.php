@@ -8,14 +8,13 @@ namespace SYW\Library\Field;
 
 defined('_JEXEC') or die ;
 
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Factory;
-use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Uri\Uri;
 
 /*
  * Checks if an extension is installed
@@ -72,7 +71,7 @@ class SywextensionpresencetestField extends FormField
 		$alert = '';
 
 		if ($this->extensiontype == 'plugin') {
-		    if (!Folder::exists(JPATH_ROOT.'/plugins/'.$this->extensionfolder.'/'.$this->extensionelement)) {
+		    if (!is_dir(JPATH_ROOT.'/plugins/'.$this->extensionfolder.'/'.$this->extensionelement)) {
 		        $missing_extension = true;
 		    } else {
 		        if (PluginHelper::isEnabled((string)$this->extensionfolder, (string)$this->extensionelement)) {
@@ -84,7 +83,7 @@ class SywextensionpresencetestField extends FormField
     		    }
 		    }
 		} else if ($this->extensiontype == 'component') {
-		    if (Folder::exists(JPATH_ADMINISTRATOR . '/components/'.$this->extensionelement)) {
+		    if (is_dir(JPATH_ADMINISTRATOR . '/components/'.$this->extensionelement)) {
 		        if (ComponentHelper::isEnabled((string)$this->extensionelement)) {
 		            $alert = ' success';
 		            $html .= '<span class="badge bg-success">'.Text::_('JENABLED').'</span>'; // index.php?option=com_installer&view=manage&filter_status=1&filter_type=component

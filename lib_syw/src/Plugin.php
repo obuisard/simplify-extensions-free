@@ -38,7 +38,7 @@ class Plugin
     {
         $plugin_params = self::getPluginParams();
         
-        if (isset($plugin_params) && isset($plugin_params->image_library)) {
+        if (isset($plugin_params) && isset($plugin_params->image_library) && $plugin_params->image_library != 'none') {
             return $plugin_params->image_library;
         }
         

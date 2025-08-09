@@ -8,11 +8,10 @@ namespace SYW\Library\Field;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Factory;
 
 class TagsField extends ListField
 {
@@ -27,7 +26,7 @@ class TagsField extends ListField
 		}
 		
 		$folder = JPATH_ROOT.'/components/com_tags';
-		if (Folder::exists($folder)) {
+		if (is_dir($folder)) {
 			
 			$content_type = $this->element['contenttype'];
 		

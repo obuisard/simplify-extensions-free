@@ -19,20 +19,22 @@ class ImagelibraryselectField extends ListField
 
 		$options = array();
 		
-		if (!extension_loaded('gd') && !extension_loaded('imagick')) {
-		    $options[] = HTMLHelper::_('select.option', 'none', 'JNONE', 'value', 'text', $disable = false);
-		}
+		//$this->__set('default', 'none');
 		
 		if (!extension_loaded('gd')) {		    
-            $options[] = HTMLHelper::_('select.option', 'gd', 'GD', 'value', 'text', $disable = true);
+            $options[] = HTMLHelper::_('select.option', 'gd', 'GD', 'value', 'text', true);
 		} else {
-		    $options[] = HTMLHelper::_('select.option', 'gd', 'GD', 'value', 'text', $disable = false);
+		    $options[] = HTMLHelper::_('select.option', 'gd', 'GD', 'value', 'text');
+		    $this->__set('default', 'gd');
 		}
 		
 		if (!extension_loaded('imagick')) {
-		    $options[] = HTMLHelper::_('select.option', 'imagick', 'Imagick', 'value', 'text', $disable = true);
+		    $options[] = HTMLHelper::_('select.option', 'imagick', 'Imagick', 'value', 'text', true);
 		} else {
-		    $options[] = HTMLHelper::_('select.option', 'imagick', 'Imagick', 'value', 'text', $disable = false);
+		    $options[] = HTMLHelper::_('select.option', 'imagick', 'Imagick', 'value', 'text');
+		    if (!extension_loaded('gd')) {
+		        $this->__set('default', 'imagick');
+		    }
 		}
 
 		// Merge any additional options in the XML definition.

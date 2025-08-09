@@ -9,8 +9,6 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Log\Log;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Uri\Uri;
 
 use SYW\Library\Cache as SYWCache;
 
@@ -90,7 +88,7 @@ abstract class HeaderFilesCache
 
 		$cache_path = $this->getCachePath(true);
 
-		if (!$reset && File::exists($cache_path . '/' . $output_file)) {
+		if (!$reset && is_file($cache_path . '/' . $output_file)) {
 			return true;
 		}
 
