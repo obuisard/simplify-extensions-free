@@ -12,6 +12,7 @@ use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
+use SYW\Library\Version as SYWVersion;
 
 /**
  *
@@ -40,6 +41,7 @@ class SywimagefilepreviewField extends FormField
     protected $show_name;
     protected $show_preview;
     protected $clear;
+    protected $versionfromext;
 
     protected function getInput()
     {
@@ -132,8 +134,13 @@ class SywimagefilepreviewField extends FormField
 			$html .= '<div class="image_preview" style="display: ' . (empty($path) ? 'none' : 'block') . '">';
 
 			$parts = explode('/', $path);
+			
+			$file_path = Uri::root().$path;
+			if ($this->versionfromext) {
+			    $file_path .= '?' . SYWVersion::getMediaVersion($this->versionfromext);
+			}
 
-			$html .= '<img src="'.Uri::root().$path.'" alt="'.end($parts).'" style="max-width: 100%">';
+			$html .= '<img src="' . $file_path . '" alt="' . end($parts) . '" style="max-width: 100%">';
 
 //                 $extensions_needing_fallbacks = array('webp', 'avif');
 //                 $image_extension = JFile::getExt($path);
@@ -201,6 +208,7 @@ class SywimagefilepreviewField extends FormField
             $this->show_name = isset($this->element['showname']) ? filter_var($this->element['showname'], FILTER_VALIDATE_BOOLEAN) : false;
             $this->show_preview = isset($this->element['showpreview']) ? filter_var($this->element['showpreview'], FILTER_VALIDATE_BOOLEAN) : false;
             $this->clear = isset($this->element['clear']) ? filter_var($this->element['clear'], FILTER_VALIDATE_BOOLEAN) : true;
+            $this->versionfromext = isset($this->element['versionfromext']) ? trim((string)$this->element['versionfromext']) : '';
         }
 
         return $return;

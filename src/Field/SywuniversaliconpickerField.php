@@ -425,7 +425,7 @@ class SywuniversaliconpickerField extends FormField
 	    $html .= '</div>';
 
 	    if ($this->help) {
-	        $html .= '<span class="help-block" style="font-size: .8rem">'.Text::_($this->help).'</span>';
+	        $html .= '<span class="help-block" style="font-size: .8rem">'. $this->help . '</span>';
 	    }
 
 	    return $html;
@@ -438,7 +438,7 @@ class SywuniversaliconpickerField extends FormField
 	    if ($return) {
 	        $this->icons = isset($this->element['icons']) ? explode(",", (string)$this->element['icons']) : null;
 	        $this->icongroups = isset($this->element['icongroups']) ? explode(",", (string)$this->element['icongroups']) : null;
-	        $this->help = isset($this->element['help']) ? (string)$this->element['help'] : 'LIB_SYW_UNIVERSALICONPICKER_FONTAWESOMEHELP';
+	        $this->help = isset($this->element['help']) ? Text::_((string)$this->element['help']) : Text::sprintf('LIB_SYW_UNIVERSALICONPICKER_FONTAWESOMEHELP', (version_compare(JVERSION, '5.0', 'lt') ? '5' : '6'));
 
 	        $this->sets = isset($this->element['iconsets']) ? explode(",", (string)$this->element['iconsets']) : null;
 

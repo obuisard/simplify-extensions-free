@@ -9,8 +9,6 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\Database\Exception\ExecutionFailureException;
@@ -20,7 +18,7 @@ class K2
 {
 	static function exists()
 	{
-// 		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_k2') && ComponentHelper::isEnabled('com_k2')) {
+// 		if (is_dir(JPATH_ADMINISTRATOR . '/components/com_k2') && ComponentHelper::isEnabled('com_k2')) {
 // 			return true;
 // 		}
 

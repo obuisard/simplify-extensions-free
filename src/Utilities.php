@@ -9,58 +9,99 @@ namespace SYW\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Environment\Browser;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\Filesystem\File;
 use Joomla\Utilities\ArrayHelper;
-use SYW\Library\Vendor\MobileDetect;
 
 class Utilities
 {
 	static $mobile_detector = null;
-	static $is_mobile = null;
-	static $is_tablet = null;
-
 	static $SVGSprites = array();
 
-	/*
+	/**
 	 * Determines if the device is mobile
+	 * 
+	 * @return boolean
 	 */
 	static public function isMobile($use_joomla_library = false)
 	{
-		if (!isset(self::$is_mobile)) {
-
-			if ($use_joomla_library) {
-				$browser = Browser::getInstance();
-				self::$is_mobile = $browser->isMobile();
-			} else {
-				self::$is_mobile = self::getMobileDetector()->isMobile();
+		if ($use_joomla_library) {
+			$browser = Browser::getInstance();
+			return $browser->isMobile();
+		} else {				
+			$mobileDetector = self::getMobileDetector();
+			if ($mobileDetector instanceof \SYW\Library\Vendor\Detection\v4\Exception\MobileDetectException) {
+			    return false; //'unknown'
 			}
+			    
+			return $mobileDetector->isMobile();
 		}
-
-		return self::$is_mobile;
 	}
 
-	/*
+	/**
 	 * Determines if the device is a tablet
+	 * 
+	 * @return boolean
 	 */
 	static public function isTablet()
 	{
-		if (!isset(self::$is_tablet)) {
-			self::$is_tablet = self::getMobileDetector()->isTablet();
-		}
-
-		return self::$is_tablet;
+	    $mobileDetector = self::getMobileDetector();
+	    if ($mobileDetector instanceof \SYW\Library\Vendor\Detection\v4\Exception\MobileDetectException) {
+	        return false; //'unknown'
+	    }		    
+        
+	    return $mobileDetector->isTablet();
+	}
+	
+	/**
+	 * Returns the version of the library used for mobile detection
+	 * 
+	 * @return string
+	 */
+	static public function getMobileDetectVersion()
+	{
+	    $mobileDetector = self::getMobileDetector();
+	    if ($mobileDetector instanceof \SYW\Library\Vendor\Detection\v4\Exception\MobileDetectException) {
+	        return 'unknown';
+	    }
+	    
+	    if (version_compare(PHP_VERSION, '8.0', '>=')) {
+	        // Use MobileDetect v4.8
+	        return $mobileDetector->getVersion();
+	    } else {
+	        return $mobileDetector::VERSION;
+	    }
 	}
 
 	/**
 	 * Get the mobile detector object
+	 * 
+	 * v2.8  PHP >=5.0,<7.0
+	 * v3.74 PHP >=7.4,<8.0
+	 * v4.8  PHP >=8.0
 	 *
 	 * @return \SYW\Library\Vendor\MobileDetect
 	 */
 	static protected function getMobileDetector()
 	{
 		if (!isset(self::$mobile_detector)) {
-			self::$mobile_detector = new MobileDetect;
+		    
+		    $phpVersion = PHP_VERSION;
+		    
+		    if (version_compare($phpVersion, '8.0', '>=')) {
+		        // Use MobileDetect v4.8
+		        try {
+		            self::$mobile_detector = new \SYW\Library\Vendor\Detection\v4\MobileDetect();
+		        } catch (\SYW\Library\Vendor\Detection\v4\Exception\MobileDetectException $e) {
+		            self::$mobile_detector = $e;
+		        }
+		    } elseif (version_compare($phpVersion, '7.4', '>=')) {
+		        // Use MobileDetect v3.74
+		        self::$mobile_detector = new \SYW\Library\Vendor\Detection\v3\MobileDetect();
+		    } else {
+		        // Use MobileDetect v2.8
+		        self::$mobile_detector = new \SYW\Library\Vendor\MobileDetect();
+		    }
 		}
 
 		return self::$mobile_detector;
@@ -583,7 +624,14 @@ class Utilities
 
 		// get the image extension and the image path from $src
 		$source_path = File::stripExt($src);
-		$source_extension = File::getExt($src);
+		
+		if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+		    // Joomla 5 and 6
+		    $source_extension = \Joomla\Filesystem\File::getExt($src);
+		} else {
+		    // Joomla 4 fallback
+		    $source_extension = \Joomla\CMS\Filesystem\File::getExt($src);
+		}
 
 		if ($lazy_load && isset($attributes['width'])) {
 		    $attributes['loading'] = 'lazy';
@@ -600,7 +648,7 @@ class Utilities
 				$source_highres_breakpoint = false;
 				if ($high_resolution) {
 					if ($check_files) {
-						if (File::exists(JPATH_SITE . '/' . $source_path . '_' . $breakpoint . '@2x.' . $source_extension)) {
+						if (is_file(JPATH_SITE . '/' . $source_path . '_' . $breakpoint . '@2x.' . $source_extension)) {
 							$source_highres_breakpoint = true;
 						}
 					} else {
@@ -616,10 +664,10 @@ class Utilities
 
 					if ($check_files) {
 						foreach ($possible_fallback_extensions as $possible_fallback_extension) {
-							if (File::exists(JPATH_SITE . '/' . $source_path . '_' . $breakpoint . '.' . $possible_fallback_extension)) {
+							if (is_file(JPATH_SITE . '/' . $source_path . '_' . $breakpoint . '.' . $possible_fallback_extension)) {
 								$fallback_breakpoint = true;
 								$fallback_extension_breakpoint = $possible_fallback_extension;
-								if ($high_resolution && File::exists(JPATH_SITE . '/' . $source_path . '_' . $breakpoint . '@2x.' . $possible_fallback_extension)) {
+								if ($high_resolution && is_file(JPATH_SITE . '/' . $source_path . '_' . $breakpoint . '@2x.' . $possible_fallback_extension)) {
 									$fallback_highres_breakpoint = true;
 								}
 								break;
@@ -642,7 +690,7 @@ class Utilities
 			$source_highres = false;
 			if ($high_resolution) {
 				if ($check_files) {
-					if (File::exists(JPATH_SITE . '/' . $source_path . '@2x.' . $source_extension)) {
+					if (is_file(JPATH_SITE . '/' . $source_path . '@2x.' . $source_extension)) {
 						$source_highres = true;
 					}
 				} else {
@@ -658,10 +706,10 @@ class Utilities
 
 				if ($check_files) {
 					foreach ($possible_fallback_extensions as $possible_fallback_extension) {
-						if (File::exists(JPATH_SITE . '/' . $source_path . '.' . $possible_fallback_extension)) {
+						if (is_file(JPATH_SITE . '/' . $source_path . '.' . $possible_fallback_extension)) {
 							$fallback = true;
 							$fallback_extension = $possible_fallback_extension;
-							if ($high_resolution && File::exists(JPATH_SITE . '/' . $source_path . '@2x.' . $possible_fallback_extension)) {
+							if ($high_resolution && is_file(JPATH_SITE . '/' . $source_path . '@2x.' . $possible_fallback_extension)) {
 								$fallback_highres = true;
 							}
 							break;
@@ -698,7 +746,7 @@ class Utilities
 			$source_highres = false;
 			if ($high_resolution) {
 				if ($check_files) {
-					if (File::exists(JPATH_SITE . '/' . $source_path . '@2x.' . $source_extension)) {
+					if (is_file(JPATH_SITE . '/' . $source_path . '@2x.' . $source_extension)) {
 						$source_highres = true;
 					}
 				} else {
@@ -714,10 +762,10 @@ class Utilities
 
 				if ($check_files) {
 					foreach ($possible_fallback_extensions as $possible_fallback_extension) {
-						if (File::exists(JPATH_SITE . '/' . $source_path . '.' . $possible_fallback_extension)) {
+						if (is_file(JPATH_SITE . '/' . $source_path . '.' . $possible_fallback_extension)) {
 							$fallback = true;
 							$fallback_extension = $possible_fallback_extension;
-							if ($high_resolution && File::exists(JPATH_SITE . '/' . $source_path . '@2x.' . $possible_fallback_extension)) {
+							if ($high_resolution && is_file(JPATH_SITE . '/' . $source_path . '@2x.' . $possible_fallback_extension)) {
 								$fallback_highres = true;
 							}
 							break;

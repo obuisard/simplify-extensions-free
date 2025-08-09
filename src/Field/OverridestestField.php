@@ -8,12 +8,12 @@ namespace SYW\Library\Field;
 
 defined('_JEXEC') or die ;
 
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Filesystem\Folder;
 
 class OverridestestField extends FormField
 {
@@ -61,7 +61,7 @@ class OverridestestField extends FormField
 
 		$html .= '<span>';
 
-		if (!is_null($this->extension) && Folder::exists($overrides_path.$this->extension.$this->view)) {
+		if (!is_null($this->extension) && is_dir($overrides_path.$this->extension.$this->view)) {
 			$files = Folder::files($overrides_path.$this->extension.$this->view, '.php');
 			if (!empty($files)) {
 				$html .= Text::sprintf('LIB_SYW_FILESOVERRIDEN', $this->extension.$this->view);
@@ -95,7 +95,7 @@ class OverridestestField extends FormField
 					$check_overrides = true;
 				}
 				if ($check_overrides) {
-					if (Folder::exists($overrides_path.$extension)) {
+					if (is_dir($overrides_path.$extension)) {
 
 						$html .= '<span>';
 
@@ -123,50 +123,46 @@ class OverridestestField extends FormField
 
 			$html .= '<span>';
 
-			if (version_compare(JVERSION, '3.2', 'lt')) { // no layout folders existed before Joomla! 3.2
-				$html .= Text::_('LIB_SYW_CANNOTDETERMINELAYOUTOVERRIDES');
-			} else {
-				if (!is_null($this->extension) && Folder::exists($overrides_path.'layouts/'.$this->extension)) {
-				    $files = Folder::files($overrides_path.'layouts/'.$this->extension, '.php');
-				    $folders = Folder::folders($overrides_path.'layouts/'.$this->extension);
-				    if (!empty($files) || !empty($folders)) {
-						$html .= Text::sprintf('LIB_SYW_LAYOUTSOVERRIDEN', $this->extension);
-						foreach ($files as $file) {
-							$html .= ' <code>'.$file.'</code>';
-						}
-						foreach ($folders as $folder) {
-						    $subfiles = Folder::files($overrides_path.'layouts/'.$this->extension.'/'.$folder, '.php');
-						    if (!empty($subfiles)) {
-						        $html .= '<br /><code>'.$folder.'/</code><br />';
-						        foreach ($subfiles as $file) {
-						            $html .= ' <code>'.$file.'</code>';
-						        }
-						    } else {
-						        $html .= '<br />'.Text::sprintf('LIB_SYW_EMPTYFOLDER', '/templates/'.$defaultemplate.'/html/layouts/'.$this->extension.'/'.$folder);
-						    }
-						}
-					} else {
-						$html .= Text::sprintf('LIB_SYW_EMPTYFOLDER', '/templates/'.$defaultemplate.'/html/layouts/'.$this->extension);
+			if (!is_null($this->extension) && is_dir($overrides_path.'layouts/'.$this->extension)) {
+			    $files = Folder::files($overrides_path.'layouts/'.$this->extension, '.php');
+			    $folders = Folder::folders($overrides_path.'layouts/'.$this->extension);
+			    if (!empty($files) || !empty($folders)) {
+					$html .= Text::sprintf('LIB_SYW_LAYOUTSOVERRIDEN', $this->extension);
+					foreach ($files as $file) {
+						$html .= ' <code>'.$file.'</code>';
 					}
-
-					$overrides_do_exist = true;
-				} else if (!is_null($this->parent_extension) && Folder::exists($overrides_path.'layouts/'.$this->parent_extension)) {
-				    $files = Folder::files($overrides_path.'layouts/'.$this->parent_extension, '.php');
-				    $folders = Folder::folders($overrides_path.'layouts/'.$this->parent_extension);
-				    if (!empty($files) || !empty($folders)) {
-	// 					$html .= JText::sprintf('LIB_SYW_LAYOUTSOVERRIDEN', $this->parent_extension);
-	// 					foreach ($files as $file) {
-	// 						$html .= '<br /><code>'.$file.'</code>';
-	// 					}
-						$html .= Text::sprintf('LIB_SYW_LAYOUTSOVERRIDENINPARENT', $this->parent_extension, $this->extension);
-					} else {
-						$html .= Text::sprintf('LIB_SYW_EMPTYFOLDER', '/templates/'.$defaultemplate.'/html/layouts/'.$this->parent_extension);
+					foreach ($folders as $folder) {
+					    $subfiles = Folder::files($overrides_path.'layouts/'.$this->extension.'/'.$folder, '.php');
+					    if (!empty($subfiles)) {
+					        $html .= '<br /><code>'.$folder.'/</code><br />';
+					        foreach ($subfiles as $file) {
+					            $html .= ' <code>'.$file.'</code>';
+					        }
+					    } else {
+					        $html .= '<br />'.Text::sprintf('LIB_SYW_EMPTYFOLDER', '/templates/'.$defaultemplate.'/html/layouts/'.$this->extension.'/'.$folder);
+					    }
 					}
-
-					$overrides_do_exist = true;
 				} else {
-					$html .= Text::sprintf('LIB_SYW_NOLAYOUTOVERRIDES', $this->extension);
+					$html .= Text::sprintf('LIB_SYW_EMPTYFOLDER', '/templates/'.$defaultemplate.'/html/layouts/'.$this->extension);
 				}
+
+				$overrides_do_exist = true;
+			} else if (!is_null($this->parent_extension) && is_dir($overrides_path.'layouts/'.$this->parent_extension)) {
+			    $files = Folder::files($overrides_path.'layouts/'.$this->parent_extension, '.php');
+			    $folders = Folder::folders($overrides_path.'layouts/'.$this->parent_extension);
+			    if (!empty($files) || !empty($folders)) {
+// 					$html .= JText::sprintf('LIB_SYW_LAYOUTSOVERRIDEN', $this->parent_extension);
+// 					foreach ($files as $file) {
+// 						$html .= '<br /><code>'.$file.'</code>';
+// 					}
+					$html .= Text::sprintf('LIB_SYW_LAYOUTSOVERRIDENINPARENT', $this->parent_extension, $this->extension);
+				} else {
+					$html .= Text::sprintf('LIB_SYW_EMPTYFOLDER', '/templates/'.$defaultemplate.'/html/layouts/'.$this->parent_extension);
+				}
+
+				$overrides_do_exist = true;
+			} else {
+				$html .= Text::sprintf('LIB_SYW_NOLAYOUTOVERRIDES', $this->extension);
 			}
 
 			$html .= '</span>';

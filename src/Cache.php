@@ -10,11 +10,10 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\Folder;
 
 class Cache
 {
@@ -99,7 +98,7 @@ class Cache
 		$filepath_origin = $path.$file_origin;
 		$filepath_target = $path.$file_target;
 
-		if ($reset || !File::exists(JPATH_ROOT.'/'.$filepath_target)) {
+		if ($reset || !is_file(JPATH_ROOT.'/'.$filepath_target)) {
 
 			$content = "\n"; // if empty, does not work
 			if (!empty($file_origin)) {
@@ -162,7 +161,7 @@ class Cache
 
 		foreach ($folders as $folder) {
 			$path .= '/'.$folder;
-			if (!Folder::exists($path)) {
+			if (!is_dir($path)) {
 				if (Folder::create($path)) {
  					if ($include_index) {
                         // no longer required in Joomla 4
@@ -203,6 +202,4 @@ class Cache
 
 		return $tmp_path;
 	}
-
 }
-?>
