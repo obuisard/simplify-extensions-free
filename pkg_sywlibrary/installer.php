@@ -7,12 +7,12 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerScript;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Filesystem\File;
 
 /**
  * Script file for the SYW extensions library package
@@ -115,7 +115,7 @@ class Pkg_SYWLibraryInstallerScript extends InstallerScript
 
  		$plugin_is_enable = $this->enableExtension('plugin', 'syw', 'system');
  		if (!$plugin_is_enable) {
- 		    echo '<p><a class="btn btn-primary" href="index.php?option=com_plugins&view=plugins&filter[folder]=system&filter[element]=syw&filter[enabled]=0"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_SYWLIBRARY_WARNING_ENABLEPLUGIN') . '</a></p>';
+ 		    echo '<p><a class="btn btn-dark text-light" href="index.php?option=com_plugins&view=plugins&filter[folder]=system&filter[element]=syw&filter[enabled]=0"><i class="fa fa-stopwatch"></i> ' . Text::_('PKG_SYWLIBRARY_WARNING_ENABLEPLUGIN') . '</a></p>';
  		}
 
  		if ($action == 'update') {
@@ -137,7 +137,7 @@ class Pkg_SYWLibraryInstallerScript extends InstallerScript
 
 	private function moveFile($file, $source, $destination, $minified_version = '.min')
 	{
-		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+		if (is_file(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
 			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_SYWLIBRARY_ERROR_CANNOTMOVEFILE', $file), 'warning');
 		}
 
@@ -145,7 +145,7 @@ class Pkg_SYWLibraryInstallerScript extends InstallerScript
 		$file_pieces[0] .= $minified_version;
 		$file = implode('.', $file_pieces);
 
-		if (File::exists(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
+		if (is_file(JPATH_SITE . $source . '/' . $file) && !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
 			Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_SYWLIBRARY_ERROR_CANNOTMOVEFILE', $file), 'warning');
 		}
 	}
