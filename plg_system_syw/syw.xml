@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>2.6.0</version>
+	<version>2.7.0</version>
 	<description>PLG_SYSTEM_SYW_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Plugin\System\SYW</namespace>
 	
@@ -59,9 +59,11 @@
 
 				<field type="imagelibrarytest" checkall="true" />
 				
-				<field name="image_library" type="imagelibraryselect" default="gd" 
+				<field name="image_library" type="imagelibraryselect" default="none" 
 					label="PLG_SYSTEM_SYW_FIELD_IMAGELIBRARY_LABEL" 
-					description="PLG_SYSTEM_SYW_FIELD_IMAGELIBRARY_DESC" />
+					description="PLG_SYSTEM_SYW_FIELD_IMAGELIBRARY_DESC">
+					<option value="none">JNONE</option>
+				</field>
 
 				<field name="lazy_stylesheets" type="list" default="0" 
 					label="PLG_SYSTEM_SYW_FIELD_LAZYLOADSTYLESHEETS_LABEL" 

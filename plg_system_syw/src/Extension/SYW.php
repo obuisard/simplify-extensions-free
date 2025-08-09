@@ -8,13 +8,13 @@ namespace SYW\Plugin\System\SYW\Extension;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Event\EventInterface;
 use Joomla\Event\SubscriberInterface;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 use Joomla\Registry\Registry;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -85,19 +85,19 @@ final class SYW extends CMSPlugin implements SubscriberInterface
      */
 	public function onAfterInitialise()
 	{
-		if (Folder::exists(JPATH_ROOT . '/libraries/syw/src')) {
+		if (is_dir(JPATH_ROOT . '/libraries/syw/src')) {
 			\JLoader::registerNamespace('SYW\\Library', JPATH_LIBRARIES . '/syw/src', false, false, 'psr4');
 		}
 
-		if (Folder::exists(JPATH_ROOT . '/libraries/syw/src/Field')) {
+		if (is_dir(JPATH_ROOT . '/libraries/syw/src/Field')) {
 			\JLoader::registerNamespace('SYW\\Library\\Field', JPATH_LIBRARIES . '/syw/src/Field', false, false, 'psr4');
 		}
 
-		if (Folder::exists(JPATH_ROOT . '/libraries/syw/src/Image')) {
+		if (is_dir(JPATH_ROOT . '/libraries/syw/src/Image')) {
 		    \JLoader::registerNamespace('SYW\\Library\\Image', JPATH_LIBRARIES . '/syw/src/Image', false, false, 'psr4');
 		}
 
-		if (Folder::exists(JPATH_ROOT . '/libraries/syw/src/Vendor')) {
+		if (is_dir(JPATH_ROOT . '/libraries/syw/src/Vendor')) {
 			\JLoader::registerNamespace('SYW\\Library\\Vendor', JPATH_LIBRARIES . '/syw/src/Vendor', false, false, 'psr4');
 		}
 	}
@@ -176,7 +176,7 @@ JS;
 	        ];
 	        
 	        foreach ($modules as $key => $module) {
-	            if ($table->module === $key && Folder::exists(JPATH_ROOT . '/media/cache/' . $module)) {	                
+	            if ($table->module === $key && is_dir(JPATH_ROOT . '/media/cache/' . $module)) {	                
 	                
 	                $site_mode = $this->getSiteMode(new Registry($table->params ?? ''), $extensions[$key]);
 	                if ($site_mode === 'prod') {	                
@@ -204,7 +204,7 @@ JS;
 	        $plugin_name = 'plg_' . $table->folder . '_' . $table->element;
 	        
 	        foreach ($plugins as $plugin) {
-	            if ($plugin_name === $plugin && Folder::exists(JPATH_ROOT . '/media/cache/' . $plugin)) {
+	            if ($plugin_name === $plugin && is_dir(JPATH_ROOT . '/media/cache/' . $plugin)) {
     	            
 	                $site_mode = $this->getSiteMode(new Registry($table->params ?? ''), $extensions[$plugin]);
 	                if ($site_mode === 'prod') {
@@ -263,7 +263,7 @@ JS;
 	    $query_array = $link_uri->getQuery(true);
 
 	    foreach ($options as $key => $option) {
-	        if (isset($query_array['option']) && $query_array['option'] === $key && Folder::exists(JPATH_ROOT . '/media/cache/' . $option)) {
+	        if (isset($query_array['option']) && $query_array['option'] === $key && is_dir(JPATH_ROOT . '/media/cache/' . $option)) {
 	            
 	            $site_mode = $this->getSiteMode(new Registry($table->params ?? ''), $key);
 	            if ($site_mode === 'prod') {
@@ -288,7 +288,7 @@ JS;
 	    $mode = $params->get('site_mode', '');
 
 	    if ($mode === '' && $extension) {
-	        if (File::exists(JPATH_ADMINISTRATOR . '/components/' . $extension . '/config.xml')) {	            
+	        if (is_file(JPATH_ADMINISTRATOR . '/components/' . $extension . '/config.xml')) {	            
 	            $mode = ComponentHelper::getParams($extension)->get('site_mode', 'prod');
 	        }
 	    }
@@ -339,7 +339,16 @@ JS;
 	        
 	        if ($delete) {
 	            if (File::delete($filename)) {
-	                $extension = File::getExt($filename);
+	                if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+	                    // Joomla 5 and 6
+	                    $extension = \Joomla\Filesystem\File::getExt($filename);
+	                } else {
+	                    // Joomla 4 fallback
+	                    $extension = \Joomla\CMS\Filesystem\File::getExt($filename);
+	                }	                
+	                
+	                $extension = File::getExt($filename);	                
+	                
 	                if (!isset($extensions[$extension])) {
 	                    $extensions[] = $extension;
 	                }
