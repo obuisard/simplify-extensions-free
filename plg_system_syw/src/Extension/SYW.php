@@ -345,9 +345,7 @@ JS;
 	                } else {
 	                    // Joomla 4 fallback
 	                    $extension = \Joomla\CMS\Filesystem\File::getExt($filename);
-	                }	                
-	                
-	                $extension = File::getExt($filename);	                
+	                }
 	                
 	                if (!isset($extensions[$extension])) {
 	                    $extensions[] = $extension;
