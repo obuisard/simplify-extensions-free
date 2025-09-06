@@ -9,12 +9,12 @@ namespace SYW\Plugin\System\SYWAutoReset\Extension;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Categories\Categories;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Event\DispatcherInterface;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 //use Joomla\Event\SubscriberInterface;
 use Joomla\Utilities\ArrayHelper;
 use SYW\Library\Version as SYWVersion;
@@ -464,7 +464,7 @@ final class SYWAutoReset extends CMSPlugin //implements SubscriberInterface
         $some_files_deleted = false;
 
         foreach ($filenames_to_delete as $filename) {
-            if (File::exists($filename)) {
+            if (is_file($filename)) {
                 if (File::delete($filename)) {
                     $some_files_deleted = true; // deleted the file
                     if ($this->showVerbose()) {
@@ -535,35 +535,35 @@ final class SYWAutoReset extends CMSPlugin //implements SubscriberInterface
             case 'com_content.article':
             case 'com_content.form':
                 
-                if (Folder::exists(JPATH_ROOT.'/media/cache/com_latestnewsenhancedpro')) {
+                if (is_dir(JPATH_ROOT.'/media/cache/com_latestnewsenhancedpro')) {
                     $paths[] = '/media/cache/com_latestnewsenhancedpro';
                 }
                 
-                if (Folder::exists(JPATH_ROOT.'/media/cache/mod_latestnewsenhancedpro')) {
+                if (is_dir(JPATH_ROOT.'/media/cache/mod_latestnewsenhancedpro')) {
                     $paths[] = '/media/cache/mod_latestnewsenhancedpro';
                 }
                 
-                if (Folder::exists(JPATH_ROOT.'/media/cache/mod_latestnewsenhanced')) {
+                if (is_dir(JPATH_ROOT.'/media/cache/mod_latestnewsenhanced')) {
                     $paths[] = '/media/cache/mod_latestnewsenhanced';
                 }
                 
-                if (Folder::exists(JPATH_ROOT.'/images/thumbnails/lne')) {
+                if (is_dir(JPATH_ROOT.'/images/thumbnails/lne')) {
                     $paths[] = '/images/thumbnails/lne';
                 }
                 
-                if (Folder::exists(JPATH_ROOT.'/images/thumbnails/lnep')) {
+                if (is_dir(JPATH_ROOT.'/images/thumbnails/lnep')) {
                     $paths[] = '/images/thumbnails/lnep';
                 }
                 
-//             if (Folder::exists(JPATH_ROOT.'/cache/mod_trulyresponsiveslidespro')) {
+//             if (is_dir(JPATH_ROOT.'/cache/mod_trulyresponsiveslidespro')) {
 //             	$paths[] = '/cache/mod_trulyresponsiveslidespro';
 //             }
 
-//             if (Folder::exists(JPATH_ROOT.'/cache/mod_trulyresponsiveslides')) {
+//             if (is_dir(JPATH_ROOT.'/cache/mod_trulyresponsiveslides')) {
 //             	$paths[] = '/cache/mod_trulyresponsiveslides';
 //             }
 
-//             if (Folder::exists(JPATH_ROOT.'/images/thumbnails/trs')) {
+//             if (is_dir(JPATH_ROOT.'/images/thumbnails/trs')) {
 //             	$paths[] = '/images/thumbnails/trs';
 //             }
                 
@@ -572,19 +572,19 @@ final class SYWAutoReset extends CMSPlugin //implements SubscriberInterface
             case 'com_contact.contact':
             case 'com_trombinoscopeextended.usercontact':
                 
-                if (Folder::exists(JPATH_ROOT.'/media/cache/com_trombinoscopecontactspro')) {
+                if (is_dir(JPATH_ROOT.'/media/cache/com_trombinoscopecontactspro')) {
                     $paths[] = '/media/cache/com_trombinoscopecontactspro';
                 }
                 
-                if (Folder::exists(JPATH_ROOT.'/media/cache/mod_trombinoscopecontacts')) {
+                if (is_dir(JPATH_ROOT.'/media/cache/mod_trombinoscopecontacts')) {
                     $paths[] = '/media/cache/mod_trombinoscopecontacts';
                 }
                 
-                if (Folder::exists(JPATH_ROOT.'/images/thumbnails/tc')) {
+                if (is_dir(JPATH_ROOT.'/images/thumbnails/tc')) {
                     $paths[] = '/images/thumbnails/tc';
                 }
                 
-                if (Folder::exists(JPATH_ROOT.'/images/thumbnails/tcp')) {
+                if (is_dir(JPATH_ROOT.'/images/thumbnails/tcp')) {
                     $paths[] = '/images/thumbnails/tcp';
                 }
                 
@@ -593,19 +593,19 @@ final class SYWAutoReset extends CMSPlugin //implements SubscriberInterface
             case 'com_weblinks.weblink':
             case 'com_weblinklogospro.weblink':
                 
-                if (Folder::exists(JPATH_ROOT.'/media/cache/com_weblinklogospro')) {
+                if (is_dir(JPATH_ROOT.'/media/cache/com_weblinklogospro')) {
                     $paths[] = '/media/cache/com_weblinklogospro';
                 }
                 
-                if (Folder::exists(JPATH_ROOT.'/media/cache/mod_weblinklogos')) {
+                if (is_dir(JPATH_ROOT.'/media/cache/mod_weblinklogos')) {
                     $paths[] = '/media/cache/mod_weblinklogos';
                 }
                 
-                if (Folder::exists(JPATH_ROOT.'/images/thumbnails/wl')) {
+                if (is_dir(JPATH_ROOT.'/images/thumbnails/wl')) {
                     $paths[] = '/images/thumbnails/wl';
                 }
                 
-                if (Folder::exists(JPATH_ROOT.'/images/thumbnails/wlp')) {
+                if (is_dir(JPATH_ROOT.'/images/thumbnails/wlp')) {
                     $paths[] = '/images/thumbnails/wlp';
                 }
                 

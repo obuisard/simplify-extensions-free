@@ -7,7 +7,6 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Language\Text;
@@ -51,11 +50,11 @@ class PlgSystemSYWAutoResetInstallerScript extends InstallerScript
 		    return false;
 		}
 
-		if (!Folder::exists(JPATH_ROOT.'/modules/mod_latestnewsenhanced')
-			//&& !Folder::exists(JPATH_ROOT.'/modules/mod_trulyresponsiveslides')
-			//&& !Folder::exists(JPATH_ROOT.'/modules/mod_trulyresponsiveslider')
-		    && !Folder::exists(JPATH_ROOT.'/modules/mod_trombinoscope')
-		    && !Folder::exists(JPATH_ROOT.'/modules/mod_weblinklogo')) {
+		if (!is_dir(JPATH_ROOT.'/modules/mod_latestnewsenhanced')
+			//&& !is_dir(JPATH_ROOT.'/modules/mod_trulyresponsiveslides')
+			//&& !is_dir(JPATH_ROOT.'/modules/mod_trulyresponsiveslider')
+		    && !is_dir(JPATH_ROOT.'/modules/mod_trombinoscope')
+		    && !is_dir(JPATH_ROOT.'/modules/mod_weblinklogo')) {
 
 			Factory::getApplication()->enqueueMessage(Text::_('PLG_SYSTEM_SYWAUTORESET_MISSINGEXTENSION'), 'warning');
 			return false;
