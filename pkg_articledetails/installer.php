@@ -7,8 +7,6 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Installer\InstallerAdapter;
@@ -16,6 +14,8 @@ use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Language\Text;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 
 /**
  * Script file of the Article Details package
@@ -26,12 +26,12 @@ class Pkg_ArticleDetailsInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.4.0';
+	protected $minimumLibrary = '2.7.1';
 
 	/**
 	 * Available languages
 	 */
-	protected $availableLanguages = array('de-DE', 'en-GB', 'es-ES', 'fa-IR', 'fi-FI', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sl-SI', 'tr-TR');
+	protected $availableLanguages = array('de-DE', 'en-GB', 'es-ES', 'fa-IR', 'fi-FI', 'fr-FR', 'it-IT', 'nl-NL', 'pt-BR', 'ru-RU', 'sl-SI', 'sv-SE', 'tr-TR');
 
 	/**
 	 * Extensions library link for download
@@ -131,7 +131,7 @@ class Pkg_ArticleDetailsInstallerScript extends InstallerScript
 
 			// update warning
 
-		    echo '<p><a class="btn btn-primary" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_ARTICLEDETAILS_BUTTON_UPDATENOTES') . '</a></p>';
+		    echo '<p><a class="btn btn-dark text-light" href="' . $this->changelogLink . '" target="_blank">' . Text::_('PKG_ARTICLEDETAILS_BUTTON_UPDATENOTES') . '</a></p>';
 
 			// remove old cached headers which may interfere with fixes, updates or new additions
 
@@ -178,7 +178,7 @@ class Pkg_ArticleDetailsInstallerScript extends InstallerScript
 	    
 	    foreach ($folders as $folder) {
 	        $path .= '/' . $folder;
-	        if (!Folder::exists($path)) {
+	        if (!is_dir($path)) {
 	            if (Folder::create($path)) {
 	            } else {
 	                return false;
@@ -191,7 +191,7 @@ class Pkg_ArticleDetailsInstallerScript extends InstallerScript
 	
 	private function moveFile($file, $source, $destination, $minified_version = '')
 	{
-	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	    if (is_file(JPATH_SITE . $source . '/' . $file)) {
 	        if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
 	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_ARTICLEDETAILS_ERROR_CANNOTMOVEFILE', $file), 'warning');
 	        }
@@ -199,10 +199,18 @@ class Pkg_ArticleDetailsInstallerScript extends InstallerScript
 	    
 	    if ($minified_version) {
 	        $file_name = File::stripExt($file);
-	        $file_extension = File::getExt($file);
+	        
+	        if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+	            // Joomla 5 and 6
+	            $file_extension = \Joomla\Filesystem\File::getExt($file);
+	        } else {
+	            // Joomla 4 fallback
+	            $file_extension = \Joomla\CMS\Filesystem\File::getExt($file);
+	        }
+	        
 	        $file = $file_name . $minified_version . '.' . $file_extension;
 	        
-	        if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	        if (is_file(JPATH_SITE . $source . '/' . $file)) {
 	            if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
 	                Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_ARTICLEDETAILS_ERROR_CANNOTMOVEFILE', $file), 'warning');
 	            }
@@ -212,7 +220,7 @@ class Pkg_ArticleDetailsInstallerScript extends InstallerScript
 	
 	private function copyFile($file, $source, $destination)
 	{
-	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	    if (is_file(JPATH_SITE . $source . '/' . $file)) {
 	        if (!$this->isFolderReady($destination) || !File::copy(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
 	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_ARTICLEDETAILS_ERROR_CANNOTMOVEFILE', $file), 'warning');
 	        }
@@ -352,6 +360,11 @@ class Pkg_ArticleDetailsInstallerScript extends InstallerScript
 	    
 	    $tmpInstaller = new Installer();
 	    
+	    // Joomla 6+ requires the database to be set explicitly
+	    if (method_exists($tmpInstaller, 'setDatabase')) {
+	        $tmpInstaller->setDatabase(Factory::getDbo());
+	    }
+	    
 	    if ($installation_type === 'install') {
 	        return $tmpInstaller->install($package['dir']);
 	    } else {
@@ -364,7 +377,7 @@ class Pkg_ArticleDetailsInstallerScript extends InstallerScript
 	 */
 	private function installOrUpdateLibrary($installer)
 	{	    
-	    if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
+	    if (!is_dir(JPATH_ROOT . '/libraries/syw') || !is_dir(JPATH_ROOT . '/plugins/system/syw')) {
 	        
 	        if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
 	            Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');

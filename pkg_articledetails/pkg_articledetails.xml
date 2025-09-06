@@ -9,7 +9,7 @@
 	<url>https://simplifyyourweb.com/</url>
 	<packager>Olivier Buisard</packager>
  	<packagerurl>https://simplifyyourweb.com/</packagerurl>
-	<version>6.3.2</version>
+	<version>6.4.0</version>
 	<changelogurl>https://updates.simplifyyourweb.com/free/articledetails/changelog.xml</changelogurl>
 	<description>PKG_ARTICLEDETAILS_XML_DESCRIPTION</description>
 	<blockChildUninstall>true</blockChildUninstall>
@@ -28,6 +28,7 @@
 		<language tag="pt-PT">language/pt-PT/pt-PT.pkg_articledetails.sys.ini</language>
 		<language tag="ru-RU">language/ru-RU/ru-RU.pkg_articledetails.sys.ini</language>
 		<language tag="sl-SI">language/sl-SI/sl-SI.pkg_articledetails.sys.ini</language>
+		<language tag="sv-SE">language/sv-SE/sv-SE.pkg_articledetails.sys.ini</language>
 		<language tag="tr-TR">language/tr-TR/tr-TR.pkg_articledetails.sys.ini</language>
 	</languages>
  	<files folder="packages">
