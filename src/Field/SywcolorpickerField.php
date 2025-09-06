@@ -107,7 +107,7 @@ class SywcolorpickerField extends FormField
 		$global_value = ''; //Text::_('JNONE');
 		
 		if ($this->use_global) {
-			$component  = Factory::getApplication()->input->getCmd('option');
+			$component  = Factory::getApplication()->getInput()->getCmd('option');
 			if ($component == 'com_menus') { // we are in the context of a menu item
 				$uri = new Uri($this->form->getData()->get('link'));
 				$component = $uri->getVar('option', 'com_menus');
