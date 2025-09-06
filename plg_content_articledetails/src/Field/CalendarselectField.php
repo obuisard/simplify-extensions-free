@@ -9,10 +9,9 @@ namespace SYW\Plugin\Content\ArticleDetails\Field;
 defined( '_JEXEC' ) or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\Folder;
 use SYW\Library\Field\DynamicsingleselectField;
 
 class CalendarselectField extends DynamicsingleselectField
@@ -49,11 +48,11 @@ class CalendarselectField extends DynamicsingleselectField
 			}
 
 			$image_hover = '';
-			if (File::exists(JPATH_ROOT . $imagepath . '/' . $option . '_hover.png')) {
+			if (is_file(JPATH_ROOT . $imagepath . '/' . $option . '_hover.png')) {
 				$image_hover = Uri::root(true) . $imagepath . '/' . $option . '_hover.png';
 			}
 
-			if (File::exists(JPATH_ROOT.$path.'/'.$option.'/style.css.php')) {
+			if (is_file(JPATH_ROOT.$path.'/'.$option.'/style.css.php')) {
 				$options[] = array($option, $translated_option, $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover);
 			} else {
 				$options_disabled[] = array($option, $translated_option . ' (Pro)', $description, Uri::root(true) . $imagepath . '/' . $option . '.png', $image_hover, 'disabled');

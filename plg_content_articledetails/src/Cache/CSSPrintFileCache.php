@@ -9,7 +9,6 @@ namespace SYW\Plugin\Content\ArticleDetails\Cache;
 // no direct access
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Filesystem\File;
 use SYW\Library\HeaderFilesCache;
 
 class CSSPrintFileCache extends HeaderFilesCache
@@ -74,7 +73,7 @@ class CSSPrintFileCache extends HeaderFilesCache
 
 		include JPATH_ROOT . '/media/plg_content_articledetails/styles/print.css.php';
 		if ($calendar) {
-			if (File::exists(JPATH_ROOT . '/media/plg_content_articledetails/styles/calendars/' . $calendar . '/print.css.php')) {
+			if (is_file(JPATH_ROOT . '/media/plg_content_articledetails/styles/calendars/' . $calendar . '/print.css.php')) {
 				include JPATH_ROOT . '/media/plg_content_articledetails/styles/calendars/' . $calendar . '/print.css.php';
 			}
 		}

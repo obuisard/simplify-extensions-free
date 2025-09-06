@@ -10,7 +10,6 @@ defined( '_JEXEC' ) or die;
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Form\Field\GroupedlistField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -52,7 +51,7 @@ class HeadselectField extends GroupedlistField
 
 		$customfields = array();
 
-		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields')) {
+		if (is_dir(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields')) {
 			// get the custom fields
 			if (ComponentHelper::getParams('com_content')->get('custom_fields_enable', '1')) {
 				$customfields['com_content'] = self::getCoreFields(array('media', 'calendar', 'sywicon'));

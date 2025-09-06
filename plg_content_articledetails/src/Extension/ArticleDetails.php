@@ -9,7 +9,6 @@ namespace SYW\Plugin\Content\ArticleDetails\Extension;
 use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Associations;
@@ -619,7 +618,7 @@ final class ArticleDetails extends CMSPlugin
             
             if (!empty($contact)) {
                 $row->contactid = $contact->contactid;
-                if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_trombinoscopeextended') && ComponentHelper::isEnabled('com_trombinoscopeextended' && PluginHelper::isEnabled('content', 'tcpcontact'))) {
+                if (is_dir(JPATH_ADMINISTRATOR . '/components/com_trombinoscopeextended') && ComponentHelper::isEnabled('com_trombinoscopeextended' && PluginHelper::isEnabled('content', 'tcpcontact'))) {
                     
                     $plugin = PluginHelper::getPlugin('content', 'tcpcontact');
                     $params_plugin = new Registry($plugin->params);

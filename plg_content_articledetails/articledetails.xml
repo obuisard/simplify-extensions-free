@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>	
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>6.3.2</version>
+	<version>6.4.0</version>
 	<description>PLG_CONTENT_ARTICLEDETAILS_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Plugin\Content\ArticleDetails</namespace>
 	
@@ -48,6 +48,8 @@
 	   <language tag="ru-RU">language/ru-RU/ru-RU.plg_content_articledetails.sys.ini</language>
 	   <language tag="sl-SI">language/sl-SI/sl-SI.plg_content_articledetails.ini</language>
 	   <language tag="sl-SI">language/sl-SI/sl-SI.plg_content_articledetails.sys.ini</language>
+	   <language tag="sv-SE">language/sv-SE/sv-SE.plg_content_articledetails.ini</language>
+	   <language tag="sv-SE">language/sv-SE/sv-SE.plg_content_articledetails.sys.ini</language>
 	   <language tag="tr-TR">language/tr-TR/tr-TR.plg_content_articledetails.ini</language>
 	   <language tag="tr-TR">language/tr-TR/tr-TR.plg_content_articledetails.sys.ini</language>
 	</languages>

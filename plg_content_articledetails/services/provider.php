@@ -30,7 +30,7 @@ return new class () implements ServiceProviderInterface {
 
                 $plugin = new ArticleDetails(
                     $dispatcher,
-                    (array) PluginHelper::getPlugin('content', 'articledetails'),
+                    (array) PluginHelper::getPlugin('content', 'articledetails')
                 );
 
                 //$plugin->setApplication(Factory::getApplication());

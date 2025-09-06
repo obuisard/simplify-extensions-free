@@ -10,7 +10,6 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Date\Date;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Multilanguage;
@@ -19,6 +18,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Content\Site\Helper\RouteHelper as ContentRouteHelper;
 use Joomla\Component\Tags\Site\Helper\RouteHelper as TagsRouteHelper;
+use Joomla\Database\ParameterType;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Registry\Registry;
 use SYW\Library\Fonts as SYWFonts;
@@ -320,7 +320,7 @@ class Helper
 
 						$info_block .= '</span>';
 
-						if ($view == 'article' && $item->state == 1 && !$app->input->getBool('print')) {
+						if ($view == 'article' && $item->state == 1 && !$app->getInput()->getBool('print')) {
 							
 							$uri = clone Uri::getInstance();
 							$uri->setVar('hitcount', '0');
@@ -366,14 +366,14 @@ class Helper
 						$author = $item->created_by_alias ? $item->created_by_alias : $item->author;
 
 						if ($value['info'] == 'author') {
-							if (isset($item->contact_link) && !empty($item->contact_link) && $item_params->get('link_author') && !$app->input->getBool('print')) { // 'contact_link' comes from contact plugin
+							if (isset($item->contact_link) && !empty($item->contact_link) && $item_params->get('link_author') && !$app->getInput()->getBool('print')) { // 'contact_link' comes from contact plugin
 								$info_block .= HTMLHelper::_('link', $item->contact_link, $author);
 							} else {
 								$info_block .= $author;
 							}
 						} else { // author links to Community Builder
-							if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler') && ComponentHelper::isEnabled('com_comprofiler')) {
-							    if ($item_params->get('link_author') && Factory::getUser()->id != 0 && !$app->input->getBool('print')) {
+							if (is_dir(JPATH_ADMINISTRATOR . '/components/com_comprofiler') && ComponentHelper::isEnabled('com_comprofiler')) {
+							    if ($item_params->get('link_author') && Factory::getUser()->id != 0 && !$app->getInput()->getBool('print')) {
 									$info_block .= HTMLHelper::_('link', 'index.php?option=com_comprofiler&task=userprofile&user='.$item->created_by, $author);
 								} else {
 									$info_block .= $author;
@@ -421,7 +421,7 @@ class Helper
 
 									$info_block .= self::getPreData($params->get('prepend_keywords', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_KEYWORD'), $params->get('show_icon_keywords', 0), 'tag', $params->get('icon_keywords', ''));
 
-									if ($value['info'] == 'keywordssearch' && !$app->input->getBool('print')) {
+									if ($value['info'] == 'keywordssearch' && !$app->getInput()->getBool('print')) {
 
 										// Find the menu item for the search
 										$menu  = $app->getMenu();
@@ -433,7 +433,7 @@ class Helper
 
 										$info_block .= '<a class="detail_data" href="'.Route::_(Uri::base().'index.php?option=com_search&searchword='.$keyword.'&searchphrase=all'.$searchUriAddition).'">'.$keyword.'</a>';
 
-									} else if ($value['info'] == 'keywordsfinder' && !$app->input->getBool('print')) {
+									} else if ($value['info'] == 'keywordsfinder' && !$app->getInput()->getBool('print')) {
 
 										// Find the menu item for the search
 										$menu  = $app->getMenu();
@@ -480,7 +480,7 @@ class Helper
 							foreach ($keywords as $i => $keyword) {
 								if (!empty($keyword)) {
 
-									if ($value['info'] == 'keywordssearch' && !$app->input->getBool('print')) {
+									if ($value['info'] == 'keywordssearch' && !$app->getInput()->getBool('print')) {
 
 										// Find the menu item for the search
 										$menu  = $app->getMenu();
@@ -492,7 +492,7 @@ class Helper
 
 										$keyword = '<a href="'.Route::_(Uri::base().'index.php?option=com_search&searchword='.$keyword.'&searchphrase=all'.$searchUriAddition).'">'.$keyword.'</a>';
 
-									} else if ($value['info'] == 'keywordsfinder' && !$app->input->getBool('print')) {
+									} else if ($value['info'] == 'keywordsfinder' && !$app->getInput()->getBool('print')) {
 
 										// Find the menu item for the search
 										$menu  = $app->getMenu();
@@ -544,7 +544,7 @@ class Helper
 
 						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_PARENTCATEGORY'), $value['show_icon'], $icon_default, $value['icon']);
 
-						if ($item_params->get('link_parent_category') && !$app->input->getBool('print')) {
+						if ($item_params->get('link_parent_category') && !$app->getInput()->getBool('print')) {
 							if ($view == 'article') {
 								if (!empty($item->parent_slug)) {
 									$info_block .= '<a class="detail_data" href="'.Route::_(ContentRouteHelper::getCategoryRoute($item->parent_slug)).'">'.$item->parent_title.'</a>';
@@ -593,7 +593,7 @@ class Helper
 
 						$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_CATEGORY'), $value['show_icon'], $icon_default, $value['icon']);
 
-						if ($item_params->get('link_category') && !$app->input->getBool('print')) {
+						if ($item_params->get('link_category') && !$app->getInput()->getBool('print')) {
 							if ($view == 'article') {
 								if (!empty($item->catslug)) {
 									$info_block .= '<a class="detail_data" href="'.Route::_(ContentRouteHelper::getCategoryRoute($item->catslug)).'">'.$item->category_title.'</a>';
@@ -639,7 +639,7 @@ class Helper
 						$info_block .= '<span class="detail_data">';
 
 						if (($item_params->get('show_parent_category') || $force_show) && $item->parent_id != 1) { // do not show any parent info if the parent is root
-							if ($item_params->get('link_parent_category') && !$app->input->getBool('print')) {
+							if ($item_params->get('link_parent_category') && !$app->getInput()->getBool('print')) {
 								if ($view == 'article') {
 									if (!empty($item->parent_slug)) {
 										$info_block .= '<a href="'.Route::_(ContentRouteHelper::getCategoryRoute($item->parent_slug)).'">'.$item->parent_title.'</a>';
@@ -669,7 +669,7 @@ class Helper
 						}
 
 						//if ($item_params->get('show_category')) {
-						if ($item_params->get('link_category') && !$app->input->getBool('print')) {
+						if ($item_params->get('link_category') && !$app->getInput()->getBool('print')) {
 							if ($view == 'article') {
 								if (!empty($item->catslug)) {
 									$info_block .= '<a href="'.Route::_(ContentRouteHelper::getCategoryRoute($item->catslug)).'">'.$item->category_title.'</a>';
@@ -985,7 +985,7 @@ class Helper
 
 									$info_block .= self::getPreData($params->get('prepend_links', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $params->get('show_icon_links', 0), 'link', $params->get('icon_links', ''));
 
-									if (!$app->input->getBool('print')) {
+									if (!$app->getInput()->getBool('print')) {
 										$info_block .= self::getATagLinks($urls->urla, $urls->urlatext, $targeta, false, '600', '500', 'detail_data');
 									} else {
 										$info_block .= '<span class="detail_data">';
@@ -1001,7 +1001,7 @@ class Helper
 										}
 									}
 
-									if (!$app->input->getBool('print')) {
+									if (!$app->getInput()->getBool('print')) {
 										$info_block .= '</a>';
 									} else {
 										$info_block .= '</span>';
@@ -1025,7 +1025,7 @@ class Helper
 
 									$info_block .= self::getPreData($params->get('prepend_links', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $params->get('show_icon_links', 0), 'link', $params->get('icon_links', ''));
 
-									if (!$app->input->getBool('print')) {
+									if (!$app->getInput()->getBool('print')) {
 										$info_block .= self::getATagLinks($urls->urlb, $urls->urlbtext, $targetb, false, '600', '500', 'detail_data');
 									} else {
 										$info_block .= '<span class="detail_data">';
@@ -1041,7 +1041,7 @@ class Helper
 										}
 									}
 
-									if (!$app->input->getBool('print')) {
+									if (!$app->getInput()->getBool('print')) {
 										$info_block .= '</a>';
 									} else {
 										$info_block .= '</span>';
@@ -1065,7 +1065,7 @@ class Helper
 
 									$info_block .= self::getPreData($params->get('prepend_links', ''), Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $params->get('show_icon_links', 0), 'link', $params->get('icon_links', ''));
 
-									if (!$app->input->getBool('print')) {
+									if (!$app->getInput()->getBool('print')) {
 										$info_block .= self::getATagLinks($urls->urlc, $urls->urlctext, $targetc, false, '600', '500', 'detail_data');
 									} else {
 										$info_block .= '<span class="detail_data">';
@@ -1081,7 +1081,7 @@ class Helper
 										}
 									}
 
-									if (!$app->input->getBool('print')) {
+									if (!$app->getInput()->getBool('print')) {
 										$info_block .= '</a>';
 									} else {
 										$info_block .= '</span>';
@@ -1108,7 +1108,7 @@ class Helper
 
 								$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $value['show_icon'], 'link', $value['icon']);
 
-								if (!$app->input->getBool('print')) {
+								if (!$app->getInput()->getBool('print')) {
 									$info_block .= self::getATagLinks($urls->urla, $urls->urlatext, $targeta, false, '600', '500', 'detail_data');
 								} else {
 									$info_block .= '<span class="detail_data">';
@@ -1124,7 +1124,7 @@ class Helper
 									}
 								}
 
-								if (!$app->input->getBool('print')) {
+								if (!$app->getInput()->getBool('print')) {
 									$info_block .= '</a>';
 								} else {
 									$info_block .= '</span>';
@@ -1144,7 +1144,7 @@ class Helper
 
 								$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $value['show_icon'], 'link', $value['icon']);
 
-								if (!$app->input->getBool('print')) {
+								if (!$app->getInput()->getBool('print')) {
 									$info_block .= self::getATagLinks($urls->urlb, $urls->urlbtext, $targetb, false, '600', '500', 'detail_data');
 								} else {
 									$info_block .= '<span class="detail_data">';
@@ -1160,7 +1160,7 @@ class Helper
 									}
 								}
 
-								if (!$app->input->getBool('print')) {
+								if (!$app->getInput()->getBool('print')) {
 									$info_block .= '</a>';
 								} else {
 									$info_block .= '</span>';
@@ -1179,7 +1179,7 @@ class Helper
 
 								$info_block .= self::getPreData($value['prepend'], Text::_('PLG_CONTENT_ARTICLEDETAILS_PREPEND_LINK'), $value['show_icon'], 'link', $value['icon']);
 
-								if (!$app->input->getBool('print')) {
+								if (!$app->getInput()->getBool('print')) {
 									$info_block .= self::getATagLinks($urls->urlc, $urls->urlctext, $targetc, false, '600', '500', 'detail_data');
 								} else {
 									$info_block .= '<span class="detail_data">';
@@ -1195,7 +1195,7 @@ class Helper
 									}
 								}
 
-								if (!$app->input->getBool('print')) {
+								if (!$app->getInput()->getBool('print')) {
 									$info_block .= '</a>';
 								} else {
 									$info_block .= '</span>';
@@ -1269,7 +1269,7 @@ class Helper
 										$tag_class_attribute = ' '.trim($params->get('tag_classes'));
 									}
 
-									if ($value['info'] == 'linkedtags' && !$app->input->getBool('print')) {
+									if ($value['info'] == 'linkedtags' && !$app->getInput()->getBool('print')) {
 										$info_block .= '<a href="'.Route::_(TagsRouteHelper::getTagRoute($tag->id . ':' . $tag->alias)).'" class="detail_data'.$tag_class_attribute.'">'.$tag->title.'</a>';
 									} else {
 										$info_block .= '<span class="detail_data'.$tag_class_attribute.'">'.$tag->title.'</span>';
@@ -1311,7 +1311,7 @@ class Helper
 									if ($value['info'] == 'tags') {
 										$info_block .= $tag->title;
 									} else {
-										if (!$app->input->getBool('print')) {
+										if (!$app->getInput()->getBool('print')) {
 											$info_block .= '<a href="'.Route::_(TagsRouteHelper::getTagRoute($tag->id . ':' . $tag->alias)).'">';
 											$info_block .= $tag->title;
 											$info_block .= '</a>';
@@ -1338,7 +1338,7 @@ class Helper
 				break;
 
 				case 'share':
-					if (!empty($item->link) && !$app->input->getBool('print')) {
+					if (!empty($item->link) && !$app->getInput()->getBool('print')) {
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
 						}
@@ -1407,7 +1407,7 @@ class Helper
 
 				case 'email':
 
-				    if ($item->link && !$app->input->getBool('print')) {
+				    if ($item->link && !$app->getInput()->getBool('print')) {
 
 						if ($has_info_from_previous_detail) {
 							$info_block .= '<span class="delimiter">'.$separator.'</span>';
@@ -1453,7 +1453,7 @@ class Helper
 
 				case 'print':
 
-					if (isset($item->slug) && !$app->input->getBool('print')) {
+					if (isset($item->slug) && !$app->getInput()->getBool('print')) {
 						// only article and blog views get slug property
 
 						if ($has_info_from_previous_detail) {
@@ -1471,7 +1471,7 @@ class Helper
 						} else {
 							$url  = ContentRouteHelper::getArticleRoute($item->slug, $item->catid);
 						}
-						$url .= '&tmpl=component&print=1&layout=default&page=' . @ $app->input->request->limitstart;
+						$url .= '&tmpl=component&print=1&layout=default&page=' . @ $app->getInput()->get('request')->limitstart;
 
 						$status = 'status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no';
 
@@ -1768,7 +1768,10 @@ class Helper
 
 	static function compare_tags_by_name($tag1, $tag2)
 	{
-		return strcmp($tag1->title, $tag2->title);
+	    $title_1 = $tag1->title ?? '';
+	    $title_2 = $tag2->title ?? '';
+	    
+	    return strcmp($title_1, $title_2);
 	}
 
 	static function compare_tags_by_console($tag1, $tag2)
