@@ -8,7 +8,6 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
@@ -96,7 +95,7 @@ if ($load_bootstrap) {
 		<?php endif; ?>
 		<?php if ($animation) : ?>
 			<?php if ($pagination && ($pagination_position_type == 'above' || $pagination_position_type == 'around')) : ?>
-				<?php if (File::exists(dirname(__FILE__).'/pagination/'.$animation.'.php')) : ?>
+				<?php if (is_file(dirname(__FILE__).'/pagination/'.$animation.'.php')) : ?>
 					<?php $pagination_position = $pagination_position_top; ?>
 					<?php include 'pagination/'.$animation.'.php'; ?>
 					<div class="clearfix"></div>
@@ -172,8 +171,8 @@ if ($load_bootstrap) {
 					$css_item = '';
 
 					// check if the link is the same of the article activaly shown
-					if ($app->input->get('option') === 'com_content' && $app->input->get('view') === 'article') {
-						$current_id = $app->input->getInt('id');
+					if ($app->getInput()->get('option') === 'com_content' && $app->getInput()->get('view') === 'article') {
+					    $current_id = $app->getInput()->getInt('id');
 						if ($current_id == $item->id) {
 							$css_item .= ' active';
 						}
@@ -439,7 +438,7 @@ if ($load_bootstrap) {
 		</ul>
 		<?php if ($animation) : ?>
 			<?php if ($pagination && ($pagination_position_type == 'below' || $pagination_position_type == 'around')) : ?>
-				<?php if (File::exists(dirname(__FILE__).'/pagination/'.$animation.'.php')) : ?>
+				<?php if (is_file(dirname(__FILE__).'/pagination/'.$animation.'.php')) : ?>
 					<div class="clearfix"></div>
 					<?php $pagination_position = $pagination_position_bottom; ?>
 					<?php include 'pagination/'.$animation.'.php'; ?>

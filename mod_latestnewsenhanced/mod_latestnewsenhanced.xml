@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>7.3.2</version>
+	<version>7.3.3</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -348,7 +348,7 @@
 					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_EXAMPLE_RELATIVEDATEEXAMPLE3" style="example" showon="use_range:1" />
 				</fieldset>
 
-				<fieldset name="selection_exin" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONINEX_FIELDSET_LABEL">
+				<fieldset name="selection_exin" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONINEX_FIELDSET_LABEL" addfieldprefix="Joomla\Component\Content\Administrator\Field">
 
 					<field name="ex_current_item" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDECURRENTITEM_LABEL"
@@ -356,14 +356,48 @@
 						<option value="0">JNO</option>
 						<option value="1">JYES</option>
 					</field>
-					
-					<field name="ex" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDE_LABEL" 
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDE_DESC" />
-						
-					<field name="in" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47"
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ONLYIDS_LABEL" 
-						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ONLYIDS_DESC" />
+	
+					<field
+						name="ex_articles"
+						type="subform"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDE_DESC"
+						multiple="true"
+						buttons="add,remove"
+						>
+						<form>
+							<field
+								name="id"
+								type="modal_article"
+								label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SELECT_ARTICLE_LABEL"
+								select="true"
+								new="false"
+								edit="false"
+								clear="true"
+							/>
+						</form>
+					</field>
+	
+					<field
+						name="in_articles"
+						type="subform"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ONLYIDS_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ONLYIDS_DESC"
+						multiple="true"
+						buttons="add,remove"
+						>
+						<form>
+							<field
+								name="id"
+								type="modal_article"
+								label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SELECT_ARTICLE_LABEL"
+								select="true"
+								new="false"
+								edit="false"
+								clear="true"
+							/>
+						</form>
+					</field>
 						
 					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
 						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_UNAUTHORIZED_LABEL" 
@@ -450,8 +484,7 @@
 				<fieldset name="layout_general" label="MOD_LATESTNEWSENHANCEDEXTENDED_LAYOUT_LABEL">
 				
 					<field name="layout" type="modulelayout" class="custom-select" 
-						label="MOD_LATESTNEWSENHANCEDEXTENDED_MODULELAYOUT_LABEL"
-						description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_MODULELAYOUT_LABEL" />
 						
 					<field type="overridestest" extension="mod_latestnewsenhanced" include_layouts="false" />
 	

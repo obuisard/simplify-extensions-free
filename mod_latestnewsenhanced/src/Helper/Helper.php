@@ -9,12 +9,12 @@ namespace SYW\Module\LatestNewsEnhanced\Site\Helper;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Date\Date;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\Filesystem\File;
 use Joomla\Registry\Registry;
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Libraries as SYWLibraries;
@@ -323,8 +323,17 @@ class Helper
 
 		$url_array = explode("?", $imagesrc);
 		$imagesrc = $url_array[0];
-
-		$imageext = strtolower(File::getExt($imagesrc));
+		
+		if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+		    // Joomla 5 and 6
+		    $imageext = \Joomla\Filesystem\File::getExt($imagesrc);
+		} else {
+		    // Joomla 4 fallback
+		    $imageext = \Joomla\CMS\Filesystem\File::getExt($imagesrc);
+		}
+		
+		$imageext = strtolower($imageext);
+		
 		$original_imageext = $imageext;
 
 		if (!in_array($imageext, self::$image_extension_types)) {
@@ -1262,8 +1271,8 @@ class Helper
 			$prefix = 'substitute';
 		}
 
-		if (File::exists(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/' . $prefix . '_styles-min.css')) {
-		    if (JDEBUG && File::exists(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/' . $prefix . '_styles.css')) {
+		if (is_file(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/' . $prefix . '_styles-min.css')) {
+		    if (JDEBUG && is_file(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/' . $prefix . '_styles.css')) {
 		        $wam->registerAndUseStyle('lne.' . $prefix . '_styles', 'mod_latestnewsenhanced/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
 		    } else {
 		        $wam->registerAndUseStyle('lne.' . $prefix . '_styles', 'mod_latestnewsenhanced/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);

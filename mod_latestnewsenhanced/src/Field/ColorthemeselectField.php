@@ -9,10 +9,9 @@ namespace SYW\Module\LatestNewsEnhanced\Site\Field;
 defined( '_JEXEC' ) or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\Folder;
 use SYW\Library\Field\DynamicsingleselectField;
 
 class ColorthemeselectField extends DynamicsingleselectField
@@ -35,7 +34,7 @@ class ColorthemeselectField extends DynamicsingleselectField
 
 		foreach ($optionsArray as $option) {
 			
-			if (!File::exists(JPATH_ROOT . $imagepath . '/' . $option . '.png')) {
+			if (!is_file(JPATH_ROOT . $imagepath . '/' . $option . '.png')) {
 				continue;
 			}
 

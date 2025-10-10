@@ -8,12 +8,12 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\File;
 use SYW\Library\Fonts as SYWFonts;
 use SYW\Library\Stylesheets as SYWStylesheets;
 use SYW\Library\Utilities as SYWUtilities;
@@ -657,16 +657,16 @@ if (empty($list)) { // $list can be an empty array
         }
     } else {
         // remove animation.js if it exists
-        if (File::exists(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/animation_' . $module->id . '.js')) {
+        if (is_file(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/animation_' . $module->id . '.js')) {
             File::delete(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/animation_' . $module->id . '.js');
         }
     }
 
-    if (File::exists(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/substitute_styles.css') || File::exists(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/substitute_styles-min.css')) {
+    if (is_file(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/substitute_styles.css') || is_file(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/substitute_styles-min.css')) {
         LNEHelper::loadUserStylesheet(true);
 
         // remove style.css if it exists
-        if (File::exists(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/style_' . $module->id . '.css')) {
+        if (is_file(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/style_' . $module->id . '.css')) {
             File::delete(JPATH_SITE . '/media/cache/mod_latestnewsenhanced/style_' . $module->id . '.css');
         }
     } else {
@@ -704,7 +704,7 @@ if (empty($list)) { // $list can be an empty array
 
         LNEHelper::loadCommonStylesheet();
 
-        if (File::exists(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/common_user_styles.css') || File::exists(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/common_user_styles-min.css')) {
+        if (is_file(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/common_user_styles.css') || is_file(JPATH_ROOT . '/media/mod_latestnewsenhanced/css/common_user_styles-min.css')) {
             LNEHelper::loadUserStylesheet();
         }
     }

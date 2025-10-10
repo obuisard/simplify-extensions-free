@@ -101,7 +101,7 @@ class ContentHelper
 
 		$nowDate = $db->quote(Factory::getDate()->toSql());
 
-		$jinput = $app->input;
+		$jinput = $app->getInput();
 		$option = $jinput->get('option');
 		$view = $jinput->get('view');
 
@@ -206,7 +206,7 @@ class ContentHelper
 		$subquery1 = ' CASE WHEN ';
 		$subquery1 .= $query->charLength('a.alias');
 		$subquery1 .= ' THEN ';
-		$a_id = $query->castAsChar('a.id');
+		$a_id = $query->castAs('CHAR', 'a.id');
 		$subquery1 .= $query->concatenate(array($a_id, 'a.alias'), ':');
 		$subquery1 .= ' ELSE ';
 		$subquery1 .= $a_id.' END AS slug';
@@ -214,7 +214,7 @@ class ContentHelper
 		$subquery2 = ' CASE WHEN ';
 		$subquery2 .= $query->charLength('c.alias');
 		$subquery2 .= ' THEN ';
-		$c_id = $query->castAsChar('c.id');
+		$c_id = $query->castAs('CHAR', 'c.id');
 		$subquery2 .= $query->concatenate(array($c_id, 'c.alias'), ':');
 		$subquery2 .= ' ELSE ';
 		$subquery2 .= $c_id.' END AS cat_slug';
@@ -1034,29 +1034,42 @@ class ContentHelper
 
 		// include only
 
-		$articles_to_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
+		$articles_to_include = [];
+		
+		foreach (ArrayHelper::fromObject($params->get('in_articles', '')) as $article) {
+		    if (empty($article['id'])) {
+		        continue;
+		    }
+		    $articles_to_include[] = (int) $article['id'];
+		}
+		
 		if (!empty($articles_to_include)) {
-		    $articles_to_include = ArrayHelper::toInteger($articles_to_include);
 		    $query->whereIn($db->quoteName('a.id'), $articles_to_include);
 		}
 
 		// exclude
-
-		$articles_to_exclude = array_filter(explode(',', trim($params->get('ex', ''), ' ,')));
-
-		$item_on_page_id = '';
+		
+		$articles_to_exclude = [];
+		
+		foreach (ArrayHelper::fromObject($params->get('ex_articles', '')) as $article) {
+		    if (empty($article['id'])) {
+		        continue;
+		    }
+		    $articles_to_exclude[] = (int) $article['id'];
+		}
+		
+		$item_on_page_id = 0;
 		if ($params->get('ex_current_item', 0) && $option === 'com_content' && $view === 'article') {
-			$temp = $jinput->getString('id');
-			$temp = explode(':', $temp);
-			$item_on_page_id = $temp[0];
+		    $temp = $jinput->getString('id');
+		    $temp = explode(':', $temp);
+		    $item_on_page_id = (int) $temp[0];
 		}
-
-		if ($item_on_page_id) { // do not show the current article in the list
-			$articles_to_exclude[] = $item_on_page_id;
-		}
+		
+		if ($item_on_page_id > 0 && !in_array($item_on_page_id, $articles_to_exclude)) { // do not show the current article in the list
+		    $articles_to_exclude[] = $item_on_page_id;
+		}		
 
 		if (!empty($articles_to_exclude)) {
-		    $articles_to_exclude = ArrayHelper::toInteger($articles_to_exclude);
 		    $query->whereNotIn($db->quoteName('a.id'), $articles_to_exclude);
 		}
 
@@ -1468,7 +1481,7 @@ class ContentHelper
 			if ($show_image) {
 
 			    $image_to_attach = '';
-			    $image_alt = $item->title;
+			    $image_alt = htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8');
 				$image_width = 0;
 				$image_height = 0;
 

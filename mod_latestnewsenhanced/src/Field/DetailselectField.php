@@ -9,7 +9,6 @@ namespace SYW\Module\LatestNewsEnhanced\Site\Field;
 defined( '_JEXEC' ) or die;
 
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Form\Field\GroupedlistField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -68,7 +67,7 @@ class DetailselectField extends GroupedlistField
 
 		// get Joomla! fields
 		// test the fields folder first to avoid message warning that the component is missing
-		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams('com_content')->get('custom_fields_enable', '1')) {
+		if (is_dir(JPATH_ADMINISTRATOR . '/components/com_fields') && ComponentHelper::isEnabled('com_fields') && ComponentHelper::getParams('com_content')->get('custom_fields_enable', '1')) {
 
 			$fields = self::getCoreFields();
 
