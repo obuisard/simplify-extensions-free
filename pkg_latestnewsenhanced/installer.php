@@ -6,8 +6,6 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
@@ -15,6 +13,8 @@ use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\CMS\Installer\InstallerScript;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 
 /**
  * Script file for the packaged Latest News Enhanced module
@@ -25,7 +25,7 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
     /*
      * Minimum extensions library version required
      */
-    protected $minimumLibrary = '2.6.2';
+    protected $minimumLibrary = '2.7.1';
 
     /**
      * Available languages
@@ -171,7 +171,7 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
             // +++ Migration Joomla 3 to Joomla 4
 
             // the old folders have not been removed on update so safe to do it here
-            if (Folder::exists(JPATH_SITE . '/modules/mod_latestnewsenhanced/images')) {
+            if (is_dir(JPATH_SITE . '/modules/mod_latestnewsenhanced/images')) {
 
                 // move user files (substitutes)
 
@@ -263,6 +263,39 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
                     }
                 }
             }
+            
+            // New in/ex UX
+            if (!isset($instance_params['ex_articles'])) {
+                $instance_params['ex_articles'] = [];
+                if (isset($instance_params['ex']) && $instance_params['ex'] !== '') {
+                    $articles_to_exclude = array_filter(explode(',', trim($instance_params['ex'], ' ,')));
+                    if (!empty($articles_to_exclude)) {
+                        $values = [];
+                        foreach($articles_to_exclude as $key => $article_id) {
+                            $values['ex_articles' . $key] = ['id' => (string) $article_id];
+                        }
+                        $instance_params['ex_articles'] = json_encode($values);
+                    }
+                }
+                
+                $changes_made = true;
+            }
+            
+            if (!isset($instance_params['in_articles'])) {
+                $instance_params['in_articles'] = [];
+                if (isset($instance_params['in']) && $instance_params['in'] !== '') {
+                    $articles_to_include = array_filter(explode(',', trim($instance_params['in'], ' ,')));
+                    if (!empty($articles_to_include)) {
+                        $values = [];
+                        foreach($articles_to_include as $key => $article_id) {
+                            $values['in_articles' . $key] = ['id' => (string) $article_id];
+                        }
+                        $instance_params['in_articles'] = json_encode($values);
+                    }
+                }
+                
+                $changes_made = true;                
+            }
 
             if ($changes_made) {
 
@@ -292,7 +325,7 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 
         foreach ($folders as $folder) {
             $path .= '/' . $folder;
-            if (!Folder::exists($path)) {
+            if (!is_dir($path)) {
                 if (Folder::create($path)) {
                 } else {
                     return false;
@@ -305,7 +338,7 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 
     private function moveFile($file, $source, $destination, $minified_version = '')
     {
-        if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+        if (is_file(JPATH_SITE . $source . '/' . $file)) {
             if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
                 Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_ERROR_CANNOTMOVEFILE', $file), 'warning');
             }
@@ -313,10 +346,18 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 
         if ($minified_version) {
             $file_name = File::stripExt($file);
-            $file_extension = File::getExt($file);
+            
+            if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+                // Joomla 5 and 6
+                $file_extension = \Joomla\Filesystem\File::getExt($file);
+            } else {
+                // Joomla 4 fallback
+                $file_extension = \Joomla\CMS\Filesystem\File::getExt($file);
+            }
+            
             $file = $file_name . $minified_version . '.' . $file_extension;
 
-            if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+            if (is_file(JPATH_SITE . $source . '/' . $file)) {
                 if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
                     Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_ERROR_CANNOTMOVEFILE', $file), 'warning');
                 }
@@ -326,7 +367,7 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
 
     private function copyFile($file, $source, $destination)
     {
-        if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+        if (is_file(JPATH_SITE . $source . '/' . $file)) {
             if (!$this->isFolderReady($destination) || !File::copy(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
                 Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_LATESTNEWSENHANCED_WARNING_COULDNOTCOPYFILE', $file), 'warning');
             }
@@ -488,6 +529,11 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
         }
 
         $tmpInstaller = new Installer();
+        
+        // Joomla 6+ requires the database to be set explicitly
+        if (method_exists($tmpInstaller, 'setDatabase')) {
+            $tmpInstaller->setDatabase(Factory::getDbo());
+        }
 
         if ($installation_type === 'install') {
             return $tmpInstaller->install($package['dir']);
@@ -501,7 +547,7 @@ class Pkg_LatestNewsEnhancedInstallerScript extends InstallerScript
      */
     private function installOrUpdateLibrary($installer)
     {
-        if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
+        if (!is_dir(JPATH_ROOT . '/libraries/syw') || !is_dir(JPATH_ROOT . '/plugins/system/syw')) {
 
             if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
                 Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED') . '<br /><a href="' . $this->libraryDownloadLink . '" target="_blank">' . Text::_('SYWLIBRARY_DOWNLOAD') .
