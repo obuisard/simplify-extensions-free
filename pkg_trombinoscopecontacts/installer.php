@@ -539,6 +539,11 @@ class Pkg_TrombinoscopeInstallerScript extends InstallerScript
 	    
 	    $tmpInstaller = new Installer();
 	    
+	    // Joomla 6+ requires the database to be set explicitly
+	    if (method_exists($tmpInstaller, 'setDatabase')) {
+	        $tmpInstaller->setDatabase(Factory::getDbo());
+	    }
+	    
 	    if ($installation_type === 'install') {
 	        return $tmpInstaller->install($package['dir']);
 	    } else {
