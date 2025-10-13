@@ -243,8 +243,8 @@ abstract class Helper
 	public static function getContacts($params, $module)
 	{
 		$app = Factory::getApplication();
-		$option = $app->input->get('option', '');
-		$view = $app->input->get('view', '');
+		$option = $app->getInput()->get('option', '');
+		$view = $app->getInput()->get('view', '');
 
 		if (!$params->get('show_on_contact_page', 1)) {
 			if ($option === 'com_contact' && $view === 'contact') {
@@ -275,9 +275,9 @@ abstract class Helper
 		        if ($option === 'com_content' && ($view === 'article' || $view === 'form')) {
 		            $article_id = 0;
 		            if ($view === 'form') {
-		                $article_id = $app->input->getString('a_id');
+		                $article_id = $app->getInput()->getString('a_id');
 		            } else {
-		                $temp = $app->input->getString('id');
+		                $temp = $app->getInput()->getString('id');
 		                $temp = explode(':', $temp);
 		                $article_id = $temp[0];
 		            }
@@ -325,7 +325,7 @@ abstract class Helper
 
 				$item_on_page_id = '';
 				if (($option == 'com_contact' || $option == 'com_trombinoscopeextended') && $view == 'contact') {
-					$temp = $app->input->getString('id');
+					$temp = $app->getInput()->getString('id');
 					$temp = explode(':', $temp);
 					$item_on_page_id = $temp[0];
 				}
@@ -419,7 +419,7 @@ abstract class Helper
 				}
 
 				if ($get_the_tags) {
-					$temp = $app->input->getString('id'); // may return an array!!!
+					$temp = $app->getInput()->getString('id'); // may return an array!!!
 					
 					if (!is_string($temp)) {
                         return null;
@@ -507,7 +507,7 @@ abstract class Helper
 		$subquery1 = ' CASE WHEN ';
 		$subquery1 .= $query->charLength('cd.alias');
 		$subquery1 .= ' THEN ';
-		$cd_id = $query->castAsChar('cd.id');
+		$cd_id = $query->castAs('CHAR', 'cd.id');
 		$subquery1 .= $query->concatenate(array($cd_id, 'cd.alias'), ':');
 		$subquery1 .= ' ELSE ';
 		$subquery1 .= $cd_id.' END AS slug';
@@ -515,7 +515,7 @@ abstract class Helper
 		$subquery2 = ' CASE WHEN ';
 		$subquery2 .= $query->charLength('cc.alias');
 		$subquery2 .= ' THEN ';
-		$cc_id = $query->castAsChar('cc.id');
+		$cc_id = $query->castAs('CHAR', 'cc.id');
 		$subquery2 .= $query->concatenate(array($cc_id, 'cc.alias'), ':');
 		$subquery2 .= ' ELSE ';
 		$subquery2 .= $cc_id.' END AS catslug';
