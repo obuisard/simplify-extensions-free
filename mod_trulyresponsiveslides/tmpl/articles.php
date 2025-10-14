@@ -9,7 +9,6 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
@@ -73,7 +72,7 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
 				continue;
 			}
 
-			if (substr_count($image_fulltext_path, 'http') <= 0 && !File::exists($image_fulltext_path)) {
+			if (substr_count($image_fulltext_path, 'http') <= 0 && !is_file($image_fulltext_path)) {
 				// error: file does not exist
 				$errors[] = array(Text::sprintf('MOD_TRULYRESPONSIVESLIDER_ERROR_FILEDOESNOTEXIST', $image_fulltext_path, $item->title), 'error');
 				continue;

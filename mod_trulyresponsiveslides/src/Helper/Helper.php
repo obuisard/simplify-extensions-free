@@ -9,10 +9,10 @@ namespace SYW\Module\TrulyResponsiveSlides\Site\Helper;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\File;
 use SYW\Library\Cache as SYWCache;
 use SYW\Library\Fields as SYWFields;
 use SYW\Library\Image as SYWImage;
@@ -91,8 +91,15 @@ class Helper
         $list_images_array = array();
 
         foreach ($image_list as $image_item) {
-
-            $imageext = strtolower(File::getExt($image_item));
+            if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+                // Joomla 5 and 6
+                $imageext = \Joomla\Filesystem\File::getExt($image_item);
+            } else {
+                // Joomla 4 fallback
+                $imageext = \Joomla\CMS\Filesystem\File::getExt($image_item);
+            }
+            
+            $imageext = strtolower($imageext);
 
             switch ($image_mime_type) {
                 case 'image/jpg': $imageext = 'jpg'; break;
@@ -188,8 +195,15 @@ class Helper
             }
 
             foreach ($image_list as $image_item) {
-
-                $imageext = strtolower(File::getExt($image_item));
+                if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+                    // Joomla 5 and 6
+                    $imageext = \Joomla\Filesystem\File::getExt($image_item);
+                } else {
+                    // Joomla 4 fallback
+                    $imageext = \Joomla\CMS\Filesystem\File::getExt($image_item);
+                }
+                
+                $imageext = strtolower($imageext);
                 $original_imageext = $imageext;
 
                 switch ($image_mime_type) {
@@ -321,8 +335,15 @@ class Helper
             }
 
             foreach($image_list as $image_item) {
-
-                $imageext = strtolower(File::getExt($image_item));
+                if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+                    // Joomla 5 and 6
+                    $imageext = \Joomla\Filesystem\File::getExt($image_item);
+                } else {
+                    // Joomla 4 fallback
+                    $imageext = \Joomla\CMS\Filesystem\File::getExt($image_item);
+                }
+                
+                $imageext = strtolower($imageext);
                 $original_imageext = $imageext;
 
                 switch ($thumbnail_mime_type) {
@@ -500,7 +521,16 @@ class Helper
             }
 
             $thumbnail_filename = basename($item);
-            if (strtolower(File::getExt($thumbnail_filename)) === 'webp' || strtolower(File::getExt($thumbnail_filename)) === 'avif') {
+            
+            if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+                // Joomla 5 and 6
+                $thumbnail_file_extension = \Joomla\Filesystem\File::getExt($thumbnail_filename);
+            } else {
+                // Joomla 4 fallback
+                $thumbnail_file_extension = \Joomla\CMS\Filesystem\File::getExt($thumbnail_filename);
+            }
+            
+            if (strtolower($thumbnail_file_extension) === 'webp' || strtolower($thumbnail_file_extension) === 'avif') {
                 // we can't have a <picture> tag in the data-thumb attribute, therefore the fallback is used always
                 $thumbnail_filename = File::stripExt($thumbnail_filename) . '.' . $params->get('fallback_imagetype', 'png');
             }
@@ -563,7 +593,7 @@ class Helper
 
         $extraclass_outside_caption = '';
         if ($params->get('out_caption_class', '')) {
-            $extraclass_outside_caption = ' '.trim($params->get('out_caption_class'));
+            $extraclass_outside_caption = ' '.trim($params->get('out_caption_class', ''));
         }
 
         $html .= '<div id="out_captions_'.$id_suffix.'">';

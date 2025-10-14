@@ -37,7 +37,7 @@ class ArticlesHelper
 		$subquery1 = ' CASE WHEN ';
 		$subquery1 .= $query->charLength('a.alias');
 		$subquery1 .= ' THEN ';
-		$a_id = $query->castAsChar('a.id');
+		$a_id = $query->castAs('CHAR', 'a.id');
 		$subquery1 .= $query->concatenate(array($a_id, 'a.alias'), ':');
 		$subquery1 .= ' ELSE ';
 		$subquery1 .= $a_id.' END AS slug';
@@ -45,7 +45,7 @@ class ArticlesHelper
 		$subquery2 = ' CASE WHEN ';
 		$subquery2 .= $query->charLength('c.alias');
 		$subquery2 .= ' THEN ';
-		$c_id = $query->castAsChar('c.id');
+		$c_id = $query->castAs('CHAR', 'c.id');
 		$subquery2 .= $query->concatenate(array($c_id, 'c.alias'), ':');
 		$subquery2 .= ' ELSE ';
 		$subquery2 .= $c_id.' END AS cat_slug';

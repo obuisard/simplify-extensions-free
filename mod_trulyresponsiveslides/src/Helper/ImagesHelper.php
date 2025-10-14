@@ -6,10 +6,9 @@
 
 namespace SYW\Module\TrulyResponsiveSlides\Site\Helper;
 
-defined('_JEXEC') or die;
+use Joomla\Filesystem\Folder;
 
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
+defined('_JEXEC') or die;
 
 class ImagesHelper
 {
@@ -27,7 +26,16 @@ class ImagesHelper
 
 		$images = Folder::files($directory);
 		foreach($images as $image) {
-			$extension = strtolower(File::getExt($image));
+			if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+			    // Joomla 5 and 6
+			    $extension = \Joomla\Filesystem\File::getExt($image);
+			} else {
+			    // Joomla 4 fallback
+			    $extension = \Joomla\CMS\Filesystem\File::getExt($image);
+			}
+			
+			$extension = strtolower($extension);
+			
 			if ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png' || $extension == 'webp' || $extension == 'avif') {
 				$list[] = $image;
 			}

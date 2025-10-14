@@ -97,7 +97,7 @@ class CSSFileCache extends HeaderFilesCache
 		$arrows_c = trim($params->get('arrow_c', '#000000'));
 		$variables[] = 'arrows_c';
 
-		$arrows_bgc = trim($params->get('arrow_bgc', '')) != '' ? trim($params->get('arrow_bgc')) : '';
+		$arrows_bgc = trim($params->get('arrow_bgc', '')) != '' ? trim($params->get('arrow_bgc', '')) : '';
 		$variables[] = 'arrows_bgc';
 
 		$arrows_bgr = $params->get('arrow_bgr', 20);
