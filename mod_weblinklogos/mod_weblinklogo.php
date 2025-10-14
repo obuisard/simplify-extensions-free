@@ -8,9 +8,9 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\File;
 use SYW\Library\Cache as SYWCache;
 use SYW\Library\Fonts as SYWFonts;
 use SYW\Library\Libraries as SYWLibraries;
@@ -298,18 +298,18 @@ if ($carousel_configuration != 'none') {
 	}
 } else {
 	// remove animation.js if it exists
-	if (File::exists(JPATH_SITE . '/media/cache/mod_weblinklogos/animation_' . $module->id . $rtl_suffix . '.js')) {
+	if (is_file(JPATH_SITE . '/media/cache/mod_weblinklogos/animation_' . $module->id . $rtl_suffix . '.js')) {
 		File::delete(JPATH_SITE . '/media/cache/mod_weblinklogos/animation_' . $module->id . $rtl_suffix . '.js');
 	}
 }
 
 // style
 
-if (File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/substitute_styles.css') || File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/substitute_styles-min.css')) {
+if (is_file(JPATH_ROOT.'/media/mod_weblinklogos/css/substitute_styles.css') || is_file(JPATH_ROOT.'/media/mod_weblinklogos/css/substitute_styles-min.css')) {
 	Helper::loadUserStylesheet(true);
 
 	// remove style.css if it exists
-	if (File::exists(JPATH_SITE . '/media/cache/mod_weblinklogos/style_'.$module->id.'.css')) {
+	if (is_file(JPATH_SITE . '/media/cache/mod_weblinklogos/style_'.$module->id.'.css')) {
 		File::delete(JPATH_SITE . '/media/cache/mod_weblinklogos/style_'.$module->id.'.css');
 	}
 } else {
@@ -331,7 +331,7 @@ if (File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/substitute_styles.css')
 
 	Helper::loadCommonStylesheet();
 
-	if (File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/common_user_styles.css') || File::exists(JPATH_ROOT.'/media/mod_weblinklogos/css/common_user_styles-min.css')) {
+	if (is_file(JPATH_ROOT.'/media/mod_weblinklogos/css/common_user_styles.css') || is_file(JPATH_ROOT.'/media/mod_weblinklogos/css/common_user_styles-min.css')) {
 		Helper::loadUserStylesheet();
 	}
 }

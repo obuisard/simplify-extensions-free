@@ -11,7 +11,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Language\Multilanguage;
@@ -22,6 +21,7 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Filesystem\File;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 use SYW\Library\Image as SYWImage;
@@ -63,7 +63,7 @@ class Helper
 		$db = Factory::getDbo();
 		$app = Factory::getApplication();
 
-		$jinput = $app->input;
+		$jinput = $app->getInput();
 		$option = $jinput->get('option');
 		$view = $jinput->get('view');
 
@@ -105,7 +105,7 @@ class Helper
 		$case_when1 = ' CASE WHEN ';
 		$case_when1 .= $query->charLength('a.alias', '!=', '0');
 		$case_when1 .= ' THEN ';
-		$a_id = $query->castAsChar('a.id');
+		$a_id = $query->castAs('CHAR', 'a.id');
 		$case_when1 .= $query->concatenate(array($a_id, 'a.alias'), ':');
 		$case_when1 .= ' ELSE ';
 		$case_when1 .= $a_id . ' END AS slug';
@@ -113,7 +113,7 @@ class Helper
 		$case_when2 = ' CASE WHEN ';
 		$case_when2 .= $query->charLength('c.alias', '!=', '0');
 		$case_when2 .= ' THEN ';
-		$c_id = $query->castAsChar('c.id');
+		$c_id = $query->castAs('CHAR', 'c.id');
 		$case_when2 .= $query->concatenate(array($c_id, 'c.alias'), ':');
 		$case_when2 .= ' ELSE ';
 		$case_when2 .= $c_id . ' END AS catslug';
@@ -644,7 +644,15 @@ class Helper
 		$url_array = explode("?", $imagesrc);
 		$imagesrc = $url_array[0];
 
-		$imageext = strtolower(File::getExt($imagesrc));
+		if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+		    // Joomla 5 and 6
+		    $imageext = \Joomla\Filesystem\File::getExt($imagesrc);
+		} else {
+		    // Joomla 4 fallback
+		    $imageext = \Joomla\CMS\Filesystem\File::getExt($imagesrc);
+		}
+		
+		$imageext = strtolower($imageext);
 		$original_imageext = $imageext;
 
 		if (!in_array($imageext, self::$image_extension_types)) {
