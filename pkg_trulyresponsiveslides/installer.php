@@ -8,14 +8,14 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\CMS\Installer\InstallerScript;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 
 /**
  * Script file for the packaged Truly Responsive Slides module
@@ -25,7 +25,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.6.2';
+	protected $minimumLibrary = '2.7.1';
 
 	/**
 	 * Available languages
@@ -154,7 +154,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 // 			if ($defaultemplate) {
 // 				$overrides_path = JPATH_ROOT.'/templates/'.$defaultemplate.'/html/';
 
-// 				if (Folder::exists($overrides_path.'mod_trulyresponsiveslides')) {
+// 				if (is_dir($overrides_path.'mod_trulyresponsiveslides')) {
 // 					Factory::getApplication()->enqueueMessage(Text::_('PKG_TRULYRESPONSIVESLIDES_WARNING_OVERRIDES'), 'warning');
 // 				}
 // 			}
@@ -210,7 +210,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 
 	    foreach ($folders as $folder) {
 	        $path .= '/' . $folder;
-	        if (!Folder::exists($path)) {
+	        if (!is_dir($path)) {
 	            if (Folder::create($path)) {
 	            } else {
 	                return false;
@@ -223,7 +223,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 
 	private function moveFile($file, $source, $destination, $minified_version = '')
 	{
-	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	    if (is_file(JPATH_SITE . $source . '/' . $file)) {
 	        if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
 	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
 	        }
@@ -231,10 +231,18 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 
 	    if ($minified_version) {
 	        $file_name = File::stripExt($file);
-	        $file_extension = File::getExt($file);
+	        
+	        if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
+	            // Joomla 5 and 6
+	            $file_extension = \Joomla\Filesystem\File::getExt($file);
+	        } else {
+	            // Joomla 4 fallback
+	            $file_extension = \Joomla\CMS\Filesystem\File::getExt($file);
+	        }
+	        
 	        $file = $file_name . $minified_version . '.' . $file_extension;
 
-	        if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	        if (is_file(JPATH_SITE . $source . '/' . $file)) {
 	            if (!$this->isFolderReady($destination) || !File::move(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
 	                Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
 	            }
@@ -244,7 +252,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 
 	private function copyFile($file, $source, $destination)
 	{
-	    if (File::exists(JPATH_SITE . $source . '/' . $file)) {
+	    if (is_file(JPATH_SITE . $source . '/' . $file)) {
 	        if (!$this->isFolderReady($destination) || !File::copy(JPATH_SITE . $source . '/' . $file, JPATH_SITE . $destination . '/' . $file)) {
 	            Factory::getApplication()->enqueueMessage(Text::sprintf('PKG_TRULYRESPONSIVESLIDES_ERROR_CANNOTMOVEFILE', $file), 'warning');
 	        }
@@ -407,6 +415,11 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	    }
 
 	    $tmpInstaller = new Installer();
+	    
+	    // Joomla 6+ requires the database to be set explicitly
+	    if (method_exists($tmpInstaller, 'setDatabase')) {
+	        $tmpInstaller->setDatabase(Factory::getDbo());
+	    }
 
 	    if ($installation_type === 'install') {
 	        return $tmpInstaller->install($package['dir']);
@@ -420,7 +433,7 @@ class Pkg_TrulyResponsiveSlidesInstallerScript extends InstallerScript
 	 */
 	private function installOrUpdateLibrary($installer)
 	{
-		if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
+		if (!is_dir(JPATH_ROOT . '/libraries/syw') || !is_dir(JPATH_ROOT . '/plugins/system/syw')) {
 
 		    if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
 		        Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');
