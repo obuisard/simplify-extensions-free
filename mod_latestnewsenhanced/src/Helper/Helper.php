@@ -15,6 +15,7 @@ use Joomla\CMS\Log\Log;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\Filesystem\File;
+use Joomla\Filesystem\Exception\FilesystemException;
 use Joomla\Registry\Registry;
 use SYW\Library\Image as SYWImage;
 use SYW\Library\Libraries as SYWLibraries;
@@ -482,7 +483,11 @@ class Helper
 			}
 
 			foreach ($filenames as $filename) {
-				File::delete($filename); // returns false if deleting failed - won't log to avoid making the log file huge
+			    try {
+			        File::delete($filename); // returns false if deleting failed - won't log to avoid making the log file huge
+			    } catch (FilesystemException $e) {
+			        //Log::add('LatestNewsEnhanced Helper:clearThumbnails() - Error deleting file '.$filename, Log::ERROR, 'syw');
+			    }
 			}
 
 			return true;
@@ -692,7 +697,7 @@ class Helper
 
 						$details = array();
 						$details['info'] = $information_bloc->info;
-						$details['prepend'] = $information_bloc->prepend;
+						$details['prepend'] = Text::_($information_bloc->prepend);
 						$details['show_icons'] = $information_bloc->show_icons == 1 ? true : false;
 						$details['icon'] = $information_bloc->icon;
 						$details['extra_classes'] = isset($information_bloc->extra_classes) ? trim($information_bloc->extra_classes) : '';

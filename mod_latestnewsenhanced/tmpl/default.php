@@ -393,7 +393,7 @@ if ($load_bootstrap) {
 								<?php endif; ?>
 
 								<?php if ($item->text) : ?>
-									<div class="newsintro">
+									<<?php echo $text_html_tag; ?> class="newsintro">
 										<?php echo $item->text; ?>
 										<?php if ($append_readmore && $link_label_item && $item->cropped) : ?>
 											<?php if ($item->link) : ?>
@@ -402,7 +402,7 @@ if ($load_bootstrap) {
 												</a>
 											<?php endif; ?>
 										<?php endif; ?>
-									</div>
+									</<?php echo $text_html_tag; ?>>
 								<?php endif; ?>
 
 								<?php if (!empty($info_block) && $info_block_placement == 2) : ?>

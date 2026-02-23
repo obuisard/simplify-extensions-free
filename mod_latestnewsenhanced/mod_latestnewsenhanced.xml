@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>7.3.3</version>
+	<version>7.4.0</version>
 	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
 	
@@ -169,6 +169,13 @@
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGSFILTER_DESC">
 						<option value="0">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EXCLUS</option>
 						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INCLUS</option>
+					</field>
+					
+					<field name="tags_ex_untagged" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="datasource:articles[AND]tags_inex:0" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGS_UNTAGGED_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGS_UNTAGGED_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
 					</field>
 					
 					<field name="tags" type="tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select" showon="datasource:articles" 
@@ -728,6 +735,14 @@
 						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_WRAPTEXT_DESC">
 						<option value="0">JNO</option>
 						<option value="1">JYES</option>
+					</field>	
+				
+					<field name="text_tag" type="list" default="div" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TEXTTAG_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TEXTTAG_DESC">
+						<option value="div">div</option>									
+						<option value="blockquote">blockquote</option>				
+						<option value="pre">pre</option>
 					</field>
 				</fieldset>
 				

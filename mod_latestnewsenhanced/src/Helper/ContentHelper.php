@@ -581,28 +581,51 @@ class ContentHelper
 			$tags_to_match = implode(',', $tags);
 
 			$query->select('COUNT(' . $db->quoteName('tags.id') . ') AS tags_count');
-			$query->join('INNER', $db->quoteName('#__contentitem_tag_map', 'm'), $db->quoteName('m.content_item_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('m.type_alias') . ' = ' . $db->quote('com_content.article'));
-			$query->join('INNER', $db->quoteName('#__tags', 'tags'), $db->quoteName('m.tag_id') . ' = ' . $db->quoteName('tags.id'));
-			$query->whereIn($db->quoteName('tags.access'), $view_levels);
-			$query->where($db->quoteName('tags.published') . ' = 1');
+			
+			// When excluding tags AND the parameter 'tags_ex_untagged' is enabled, use LEFT JOIN to include articles without any tags
+			// When including tags OR parameter is disabled (default), use INNER JOIN (current behavior)
+			$include_untagged = $params->get('tags_ex_untagged', 0); // Default 0 for backward compatibility
+			$join_type = ($params->get('tags_inex', 1) || !$include_untagged) ? 'INNER' : 'LEFT';
+			
+			$query->join($join_type, $db->quoteName('#__contentitem_tag_map', 'm'), $db->quoteName('m.content_item_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('m.type_alias') . ' = ' . $db->quote('com_content.article'));
+			$query->join($join_type, $db->quoteName('#__tags', 'tags'), $db->quoteName('m.tag_id') . ' = ' . $db->quoteName('tags.id'));
+			
+			// Adjust WHERE clauses based on JOIN type
+			if ($join_type === 'LEFT') {
+				$query->where('(' . $db->quoteName('tags.access') . ' IS NULL OR ' . $db->quoteName('tags.access') . ' IN (' . implode(',', $view_levels) . '))');
+				$query->where('(' . $db->quoteName('tags.published') . ' IS NULL OR ' . $db->quoteName('tags.published') . ' = 1)');
+			} else {
+				$query->whereIn($db->quoteName('tags.access'), $view_levels);
+				$query->where($db->quoteName('tags.published') . ' = 1');
+			}
 
 			// keep all items with tags to be handled outside the query (when exclude all)
 			if (!$params->get('tags_inex', 1) && $params->get('tags_match', 'any') == 'all') {
 				// keep all tags
 			} else {
-				$test_type = $params->get('tags_inex', 1) ? 'IN' : 'NOT IN';
-				$query->where($db->quoteName('tags.id') . ' ' . $test_type . ' (' . $tags_to_match . ')');
+				if ($params->get('tags_inex', 1)) {
+					// INCLUDE tags: only articles with these specific tags
+					$query->where($db->quoteName('tags.id') . ' IN (' . $tags_to_match . ')');
+				} else {
+					// EXCLUDE tags
+					if ($include_untagged) {
+						// New behavior: also include articles that don't have these tags OR have no tags at all
+						$query->where('(' . $db->quoteName('tags.id') . ' IS NULL OR ' . $db->quoteName('tags.id') . ' NOT IN (' . $tags_to_match . '))');
+					} else {
+						// Current behavior (backward compatible): only exclude among tagged articles
+						$query->where($db->quoteName('tags.id') . ' NOT IN (' . $tags_to_match . ')');
+					}
+				}
 			}
 
 			if (!$params->get('tags_inex', 1) && $params->get('tags_match', 'any') == 'all') {
 				// handled outside the query
 			} else {
 				if (!$params->get('tags_inex', 1)) { // EXCLUDE TAGS
-					$query->select('tags_per_items.tag_count_per_item');
-
+					
 				    $subquery = $db->getQuery(true);
 
-					// subquery gets all the tags for all items
+					// subquery gets all the tags for all items that have tags
 					$subquery->select($db->quoteName('mm.content_item_id', 'content_id'));
 					$subquery->select('COUNT(' . $db->quoteName('tt.id') . ') AS tag_count_per_item');
 					$subquery->from($db->quoteName('#__contentitem_tag_map', 'mm'));
@@ -612,10 +635,25 @@ class ContentHelper
 					$subquery->where($db->quoteName('mm.type_alias') . ' = ' . $db->quote('com_content.article'));
 					$subquery->group($db->quoteName('content_id'));
 
-					$query->join('INNER', '(' . (string) $subquery . ') AS tags_per_items', $db->quoteName('tags_per_items.content_id') . ' = ' . $db->quoteName('a.id'));
-
-					// we keep items that have the same amount of tags before and after removals
-					$query->having('COUNT(' . $db->quoteName('tags.id') . ') = ' . $db->quoteName('tags_per_items.tag_count_per_item'));
+					if ($include_untagged) {
+						// New behavior: LEFT JOIN to include articles without tags
+						$query->join('LEFT', '(' . (string) $subquery . ') AS tags_per_items', $db->quoteName('tags_per_items.content_id') . ' = ' . $db->quoteName('a.id'));
+						
+						// Select with COALESCE to handle NULL values
+						$query->select('COALESCE(' . $db->quoteName('tags_per_items.tag_count_per_item') . ', 0) AS tag_count_per_item');
+						
+						// Keep items that either have no tags or same count before/after exclusion
+						$query->having('(tag_count_per_item = 0) OR (COUNT(' . $db->quoteName('tags.id') . ') = tag_count_per_item)');
+					} else {
+						// Current behavior: INNER JOIN (only tagged articles)
+						$query->join('INNER', '(' . (string) $subquery . ') AS tags_per_items', $db->quoteName('tags_per_items.content_id') . ' = ' . $db->quoteName('a.id'));
+						
+						// Select the tag count
+						$query->select($db->quoteName('tags_per_items.tag_count_per_item') . ' AS tag_count_per_item');
+						
+						// Keep items that have the same amount of tags before and after removals
+						$query->having('COUNT(' . $db->quoteName('tags.id') . ') = tag_count_per_item');
+					}
 				} else { // INCLUDE TAGS
 					if ($params->get('tags_match', 'any') == 'all') {
 						$query->having('COUNT(' . $db->quoteName('tags.id') . ') = ' . count($tags));
@@ -1018,7 +1056,24 @@ class ContentHelper
 			case 'title_asc': $ordering[] = $db->quoteName('a.title') . ' ASC'; break;
 			case 'title_dsc': $ordering[] = $db->quoteName('a.title') . ' DESC'; break;
 			case 'manual':
-				$articles_to_include = array_filter(explode(',', trim($params->get('in', ''), ' ,')));
+				// Try new format first (in_articles)
+				$articles_to_include = [];
+				$in_articles_param = $params->get('in_articles', '');
+				if (!empty($in_articles_param)) {
+				    foreach (ArrayHelper::fromObject($in_articles_param) as $article) {
+				        if (!empty($article['id'])) {
+				            $articles_to_include[] = (int) $article['id'];
+				        }
+				    }
+				} else {
+				    // Fallback to old format (in) for backward compatibility with cached parameters
+				    $old_in_param = $params->get('in', '');
+				    if (!empty($old_in_param)) {
+				        $articles_to_include = array_filter(explode(',', trim($old_in_param, ' ,')));
+				        $articles_to_include = ArrayHelper::toInteger($articles_to_include);
+				    }
+				}
+				
 				if (!empty($articles_to_include)) {
 					$manual_ordering = 'CASE a.id';
 					foreach ($articles_to_include as $key => $id) {
@@ -1036,11 +1091,22 @@ class ContentHelper
 
 		$articles_to_include = [];
 		
-		foreach (ArrayHelper::fromObject($params->get('in_articles', '')) as $article) {
-		    if (empty($article['id'])) {
-		        continue;
+		// Try new format first (in_articles)
+		$in_articles_param = $params->get('in_articles', '');
+		if (!empty($in_articles_param)) {
+		    foreach (ArrayHelper::fromObject($in_articles_param) as $article) {
+		        if (empty($article['id'])) {
+		            continue;
+		        }
+		        $articles_to_include[] = (int) $article['id'];
 		    }
-		    $articles_to_include[] = (int) $article['id'];
+		} else {
+		    // Fallback to old format (in) for backward compatibility with cached parameters
+		    $old_in_param = $params->get('in', '');
+		    if (!empty($old_in_param)) {
+		        $articles_to_include = array_filter(explode(',', trim($old_in_param, ' ,')));
+		        $articles_to_include = ArrayHelper::toInteger($articles_to_include);
+		    }
 		}
 		
 		if (!empty($articles_to_include)) {
@@ -1051,11 +1117,22 @@ class ContentHelper
 		
 		$articles_to_exclude = [];
 		
-		foreach (ArrayHelper::fromObject($params->get('ex_articles', '')) as $article) {
-		    if (empty($article['id'])) {
-		        continue;
+		// Try new format first (ex_articles)
+		$ex_articles_param = $params->get('ex_articles', '');
+		if (!empty($ex_articles_param)) {
+		    foreach (ArrayHelper::fromObject($ex_articles_param) as $article) {
+		        if (empty($article['id'])) {
+		            continue;
+		        }
+		        $articles_to_exclude[] = (int) $article['id'];
 		    }
-		    $articles_to_exclude[] = (int) $article['id'];
+		} else {
+		    // Fallback to old format (ex) for backward compatibility with cached parameters
+		    $old_ex_param = $params->get('ex', '');
+		    if (!empty($old_ex_param)) {
+		        $articles_to_exclude = array_filter(explode(',', trim($old_ex_param, ' ,')));
+		        $articles_to_exclude = ArrayHelper::toInteger($articles_to_exclude);
+		    }
 		}
 		
 		$item_on_page_id = 0;

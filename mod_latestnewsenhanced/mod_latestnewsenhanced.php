@@ -108,6 +108,7 @@ if (empty($list)) { // $list can be an empty array
     }
 
     $text_align = $params->get('text_align', 'r');
+    $text_html_tag = $params->get('text_tag', 'div');
     $title_before_head = $params->get('title_before_head', false);
     $title_html_tag = $params->get('title_tag', '4');
     $title_class = trim($params->get('title_class', ''));
