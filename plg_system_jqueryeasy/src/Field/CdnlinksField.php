@@ -85,7 +85,7 @@ class CdnlinksField extends FormField
 	{
 		$html = '';
 
-		$lang = Factory::getLanguage();
+		$lang = Factory::getApplication()->getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 
 		HTMLHelper::_('stylesheet', 'syw/fonts.min.css', ['version' => 'auto', 'relative' => true]);

@@ -251,22 +251,22 @@ final class JQueryEasy extends CMSPlugin implements SubscriberInterface
         
         if ($pagescan === 0 || $pagescan === 2) { // API or API + body
             
-            $scripts = Factory::getDocument()->_scripts;
+            $scripts = $this->app->getDocument()->_scripts;
             
             //var_dump($scripts);
             
-            $script_declarations = Factory::getDocument()->_script; // array of script declarations
+            $script_declarations = $this->app->getDocument()->_script; // array of script declarations
             if (!isset($script_declarations['text/javascript'])) {
                 $script_declarations['text/javascript'] = array(); // no longer a string!
             }
             
             //var_dump($script_declarations['text/javascript']);
             
-            $styles = Factory::getDocument()->_styleSheets;
+            $styles = $this->app->getDocument()->_styleSheets;
             
             //var_dump($styles);
             
-            $style_declarations = Factory::getDocument()->_style; // array of style declarations
+            $style_declarations = $this->app->getDocument()->_style; // array of style declarations
             if (!isset($style_declarations['text/css'])) {
                 $style_declarations['text/css'] = array(); // no longer a string!
             }
@@ -460,28 +460,28 @@ final class JQueryEasy extends CMSPlugin implements SubscriberInterface
             
             // put back the API generated scripts and styles
             
-            Factory::getDocument()->_scripts = array_merge($new_scripts, $scripts);
-            //var_dump(Factory::getDocument()->_scripts);
+            $this->app->getDocument()->_scripts = array_merge($new_scripts, $scripts);
+            //var_dump($this->app->getDocument()->_scripts);
             
             if (!empty($script_declarations['text/javascript'])) {
                 
-                Factory::getDocument()->_script['text/javascript'] = $script_declarations['text/javascript'];
+                $this->app->getDocument()->_script['text/javascript'] = $script_declarations['text/javascript'];
                 
-                //var_dump(Factory::getDocument()->_script['text/javascript']);
+                //var_dump($this->app->getDocument()->_script['text/javascript']);
             } else {
                 // after removal of scripts, we may end up with nothing
-                if (isset(Factory::getDocument()->_script['text/javascript'])) {
-                    unset(Factory::getDocument()->_script['text/javascript']);
+                if (isset($this->app->getDocument()->_script['text/javascript'])) {
+                    unset($this->app->getDocument()->_script['text/javascript']);
                 }
             }
             
-            Factory::getDocument()->_styleSheets = array_merge($new_styles, $styles);
-            //var_dump(Factory::getDocument()->_styleSheets);
+            $this->app->getDocument()->_styleSheets = array_merge($new_styles, $styles);
+            //var_dump($this->app->getDocument()->_styleSheets);
             
             if (!empty($style_declarations['text/css'])) {
-                Factory::getDocument()->_style['text/css'] = $style_declarations['text/css'];
+                $this->app->getDocument()->_style['text/css'] = $style_declarations['text/css'];
                 
-                //var_dump(Factory::getDocument()->_style['text/css']);
+                //var_dump($this->app->getDocument()->_style['text/css']);
             }
         }
         
@@ -1146,7 +1146,7 @@ final class JQueryEasy extends CMSPlugin implements SubscriberInterface
         }
 
         // enable the plugin for HTML pages only
-        if (Factory::getDocument()->getType() !== 'html') {
+        if ($this->app->getDocument()->getType() !== 'html') {
             return false;
         }
         
@@ -1190,12 +1190,12 @@ final class JQueryEasy extends CMSPlugin implements SubscriberInterface
                 
                 if ((int)$components_inex === 1) { // include : use the plugin if on extension's page
                     
-                    if (!in_array($this->app->input->get('option', ''), $components)) {
+                    if (!in_array($this->app->getInput()->get('option', ''), $components)) {
                         return false;
                     }
                 } else { // exclude : plugin is excluded if on extension's page
                     
-                    if (in_array($this->app->input->get('option', ''), $components)) {
+                    if (in_array($this->app->getInput()->get('option', ''), $components)) {
                         return false;
                     }
                 }

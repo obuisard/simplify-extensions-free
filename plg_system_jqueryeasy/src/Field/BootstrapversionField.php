@@ -26,11 +26,13 @@ class BootstrapversionField extends FormField
 	{
 		$html = '';
 
-		$lang = Factory::getLanguage();
+		$lang = Factory::getApplication()->getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
+		$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
+		
 		try {
-    		$asset = Factory::getDocument()->getWebAssetManager()->getAsset('script', 'bootstrap.es5');
+		    $asset = $wa->getAsset('script', 'bootstrap.es5');
     		$version = $asset->getVersion();
 		} catch (UnknownAssetException $e) {
 		    $version = 'none';
@@ -49,7 +51,7 @@ class BootstrapversionField extends FormField
 		$url = 'https://api.cdnjs.com/libraries/twitter-bootstrap?fields=version';
 		$div = 'bootstrapversion';
 
-		Factory::getDocument()->addScriptDeclaration('
+		$wa->addInlineScript('
 			document.addEventListener("readystatechange", function(event) {
 				if (event.target.readyState == "complete") {
 					var request = new XMLHttpRequest();

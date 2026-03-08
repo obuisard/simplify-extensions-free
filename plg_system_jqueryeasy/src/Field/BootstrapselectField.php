@@ -21,7 +21,7 @@ class BootstrapselectField extends ListField
 	{
 		$options = array();
 
-		$lang = Factory::getLanguage();
+		$lang = Factory::getApplication()->getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
 		if (Factory::getApplication()->getDocument()->getWebAssetManager()->assetExists('script', 'bootstrap.es5')) {

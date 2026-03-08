@@ -26,11 +26,13 @@ class JqueryversionField extends FormField
 	{
 		$html = '';
 
-		$lang = Factory::getLanguage();
+		$lang = Factory::getApplication()->getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
+		$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
+		
 		try {
-    		$asset = Factory::getDocument()->getWebAssetManager()->getAsset('script', 'jquery');
+		    $asset = $wa->getAsset('script', 'jquery');
     		$version = $asset->getVersion();
 		} catch (UnknownAssetException $e) {
 		    $version = 'none';
@@ -49,7 +51,7 @@ class JqueryversionField extends FormField
 		$url = 'https://api.cdnjs.com/libraries/jquery?fields=version';
 		$div = 'jqueryversion';
 
-		Factory::getDocument()->addScriptDeclaration('
+		$wa->addInlineScript('
 			document.addEventListener("readystatechange", function(event) {
 				if (event.target.readyState == "complete") {
 					var request = new XMLHttpRequest();

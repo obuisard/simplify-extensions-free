@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later</license>
 	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
 	<authorUrl>https://simplifyyourweb.com</authorUrl>
-	<version>5.3.2</version>
+	<version>5.4.0</version>
 	<description>PLG_SYSTEM_JQUERYEASY_XML_DESCRIPTION</description>
 	<namespace path="src">SYW\Plugin\System\JQueryEasy</namespace>
 	
@@ -250,6 +250,7 @@
 									
 					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY2" showon="jqueryinpage:1,2[AND]jqueryversion:2.0,2.1,2.2,3.0,3.1,3.2,3.3,3.4,3.5,3.6,3.7" />
 					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY3" showon="jqueryinpage:1,2[AND]jqueryversion:3.0,3.1,3.2,3.3,3.4,3.5,3.6,3.7" />
+					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERY4" showon="jqueryinpage:1,2[AND]jqueryversion:4.0" />
 						
 					<field name="localversion" type="text" default="" size="50" showon="jqueryinpage:1,2[AND]jqueryversion:local" class="input-xxlarge" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALVERSION_LABEL" 
@@ -270,14 +271,15 @@
 		            	<option value="none">JNONE</option>
 					</field>
 					
-					<field name="migratesubversion" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinpage:1,2[AND]migrateversion:3.0.0,3.1,3.2,3.3,3.4" 
+					<field name="migratesubversion" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinpage:1,2[AND]migrateversion:3.0,3.1,3.2,3.3,3.4,3.5,3.6,4.0" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_MIGRATESUBVERSION_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_MIGRATESUBVERSION_DESC" />
 					
-					<field type="cdnlinks" library="migrate" showon="jqueryinpage:1,2[AND]migrateversion:1.2.1,1.3.0,1.4.1,3.0.0,3.1,3.2,3.3,3.4" />
+					<field type="cdnlinks" library="migrate" showon="jqueryinpage:1,2[AND]migrateversion:1.2.1,1.3.0,1.4.1,3.0,3.1,3.2,3.3,3.4,3.5,3.6,4.0" />
 					
 					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERYMIGRATE" showon="jqueryinpage:1,2[AND]migrateversion:1.4.1" />
-					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERYMIGRATE3" showon="jqueryinpage:1,2[AND]migrateversion:3.0.0,3.1,3.2,3.3,3.4" />
+					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERYMIGRATE3" showon="jqueryinpage:1,2[AND]migrateversion:3.0,3.1,3.2,3.3,3.4,3.5,3.6" />
+					<field type="message" style="warning" text="PLG_SYSTEM_JQUERYEASY_WARNING_JQUERYMIGRATE4" showon="jqueryinpage:1,2[AND]migrateversion:4.0" />
 						
 					<field name="localpathmigrate" type="text" default="" size="50" showon="jqueryinpage:1,2[AND]migrateversion:local" class="input-xxlarge" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALPATHMIGRATE_LABEL" 
@@ -294,6 +296,7 @@
 		            	label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUIVERSION_LABEL" 
 		            	description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUIVERSION_DESC">
 		                <option value="local">PLG_SYSTEM_JQUERYEASY_VALUE_CUSTOMLOCAL</option>
+	            		<option value="1.14">1.14.x</option>
 	            		<option value="1.13">1.13.x</option>
 		            	<option value="1.12">1.12.x</option>
 		            	<option value="1.11">1.11.x</option>
@@ -303,11 +306,11 @@
 		                <option value="1.7">PLG_SYSTEM_JQUERYEASY_VALUE_LATESTUI17</option>
 		            </field>
 		            
-		            <field name="jqueryuisubversion" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinpage:2[AND]jqueryuiversion:1.7,1.8,1.9,1.10,1.11,1.12,1.13" 
+		            <field name="jqueryuisubversion" type="sywprefixedtext" prefix="x.x." default="" size="2" showon="jqueryinpage:2[AND]jqueryuiversion:1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUISUBVERSION_LABEL" 
 						description="PLG_SYSTEM_JQUERYEASY_FIELD_JQUERYUISUBVERSION_DESC" />
 						
-					<field type="cdnlinks" library="jqueryui" showon="jqueryinpage:2[AND]jqueryuiversion:1.7,1.8,1.9,1.10,1.11,1.12,1.13" />
+					<field type="cdnlinks" library="jqueryui" showon="jqueryinpage:2[AND]jqueryuiversion:1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14" />
 					
 		            <field name="localuiversion" type="text" default="" size="50" showon="jqueryinpage:2[AND]jqueryuiversion:local" class="input-xxlarge" 
 						label="PLG_SYSTEM_JQUERYEASY_FIELD_LOCALUIVERSION_LABEL" 

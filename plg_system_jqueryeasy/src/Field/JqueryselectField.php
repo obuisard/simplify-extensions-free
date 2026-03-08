@@ -21,7 +21,7 @@ class JqueryselectField extends ListField
 	{
 		$options = array();
 
-		$lang = Factory::getLanguage();
+		$lang = Factory::getApplication()->getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 		
 		if (Factory::getApplication()->getDocument()->getWebAssetManager()->assetExists('script', 'jquery')) {
@@ -29,6 +29,8 @@ class JqueryselectField extends ListField
 		}
 		$options[] = HTMLHelper::_('select.option', 'local', Text::_('PLG_SYSTEM_JQUERYEASY_VALUE_LOCAL'), 'value', 'text', $disable = false);
 		
+		$options[] = HTMLHelper::_('select.option', '4.0#slim', '4.0.x slim (Pro)', 'value', 'text', $disable = true);
+		$options[] = HTMLHelper::_('select.option', '4.0', '4.0.x', 'value', 'text', $disable = false);
 		$options[] = HTMLHelper::_('select.option', '3.7#slim', '3.7.x slim (Pro)', 'value', 'text', $disable = true);
 		$options[] = HTMLHelper::_('select.option', '3.7', '3.7.x', 'value', 'text', $disable = false);
 		$options[] = HTMLHelper::_('select.option', '3.6#slim', '3.6.x slim (Pro)', 'value', 'text', $disable = true);

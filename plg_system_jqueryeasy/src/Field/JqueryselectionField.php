@@ -21,7 +21,7 @@ class JqueryselectionField extends DynamicsingleselectField
 	{
 		$options = array();
 
-		$lang = Factory::getLanguage();
+		$lang = Factory::getApplication()->getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
 
 		$path = URI::root(true) . '/media/plg_system_jqueryeasy/images';

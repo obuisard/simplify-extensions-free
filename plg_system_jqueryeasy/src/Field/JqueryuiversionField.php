@@ -25,8 +25,10 @@ class JqueryuiversionField extends FormField
 	{
 		$html = '';
 
-		$lang = Factory::getLanguage();
+		$lang = Factory::getApplication()->getLanguage();
 		$lang->load('plg_system_jqueryeasy.sys', JPATH_SITE);
+		
+		$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 		$html .= '<div class="jqueryuiversion alert alert-info" style="margin: 0">';
 		$html .= '<span>'.Text::sprintf('PLG_SYSTEM_JQUERYEASY_FIELD_JOOMLAISNOTPACKAGEDWITH_LABEL', 'jQuery UI').'</span>';
@@ -35,7 +37,7 @@ class JqueryuiversionField extends FormField
 		$url = 'https://api.cdnjs.com/libraries/jqueryui?fields=version';
 		$div = 'jqueryuiversion';
 
-		Factory::getDocument()->addScriptDeclaration('
+		$wa->addInlineScript('
 			document.addEventListener("readystatechange", function(event) {
 				if (event.target.readyState == "complete") {
 					var request = new XMLHttpRequest();

@@ -9,7 +9,6 @@ namespace SYW\Plugin\System\JQueryEasy\Helper;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
@@ -169,7 +168,7 @@ class JQueryEasyHelper
         $first_pos = (strpos($path, '*') === 0) ? true: false;
         $last_pos = (strrpos($path, '*') === (strlen($path) - 1)) ? true: false;
 
-        if (Factory::getConfig()->get('unicodeslugs') == 1) {
+        if (Factory::getApplication->getConfig()->get('unicodeslugs') == 1) {
             $url = urldecode($url);
         }
 
@@ -583,7 +582,7 @@ class JQueryEasyHelper
             if ($jQueryVersion == 'local') {
                 $localVersionPath = trim($params->get('localversion'.$suffix, ''));
                 if ($localVersionPath) {
-                    if (File::exists(JPATH_ROOT.$localVersionPath)) {
+                    if (is_file(JPATH_ROOT.$localVersionPath)) {
                         return ltrim($localVersionPath, "/");
                     } else {
                         self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
@@ -630,7 +629,7 @@ class JQueryEasyHelper
                     if ($migrateVersion == 'local') {
                         $localPathMigrate = trim($params->get('localpathmigrate'.$suffix, ''));
                         if ($localPathMigrate) {
-                            if (File::exists(JPATH_ROOT.$localPathMigrate)) {
+                            if (is_file(JPATH_ROOT.$localPathMigrate)) {
                                 return ltrim($localPathMigrate, "/");
                             } else {
                                 self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localPathMigrate);
@@ -674,7 +673,7 @@ class JQueryEasyHelper
         if ($jQueryUIVersion == 'local') {
             $localVersionPath = trim($params->get('localuiversion'.$suffix, ''));
             if ($localVersionPath) {
-                if (File::exists(JPATH_ROOT.$localVersionPath)) {
+                if (is_file(JPATH_ROOT.$localVersionPath)) {
                     return ltrim($localVersionPath, "/");
                 } else {
                     self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
@@ -711,7 +710,7 @@ class JQueryEasyHelper
             if ($jQueryUITheme == 'custom' || $jQueryUIVersion == 'local') {
                 $localVersionPath = trim($params->get('jqueryuithemecustom'.$suffix, ''));
                 if ($localVersionPath) {
-                    if (File::exists(JPATH_ROOT.$localVersionPath)) {
+                    if (is_file(JPATH_ROOT.$localVersionPath)) {
                         return ltrim($localVersionPath, "/");
                     } else {
                         self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
@@ -787,7 +786,7 @@ class JQueryEasyHelper
 
                         foreach ($localVersionPaths as $key => $localVersionPath) {
 
-                            if (File::exists(JPATH_ROOT.$localVersionPath)) {
+                            if (is_file(JPATH_ROOT.$localVersionPath)) {
                                 $paths['local' . $key] = ltrim($localVersionPath, "/");
                             } else {
                                 self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
@@ -858,7 +857,7 @@ class JQueryEasyHelper
                         $localVersionPaths = array_map('trim', (array) explode("\n", $localVersionPaths));
 
                         foreach ($localVersionPaths as $key => $localVersionPath) {
-                            if (File::exists(JPATH_ROOT.$localVersionPath)) {
+                            if (is_file(JPATH_ROOT.$localVersionPath)) {
                                 $paths['local' . $key] = ltrim($localVersionPath, "/");
                             } else {
                                 self::report($verbose, 'error', 'PLG_SYSTEM_JQUERYEASY_VERBOSE_COULDNOTFINDFILE', JPATH_ROOT.$localVersionPath);
