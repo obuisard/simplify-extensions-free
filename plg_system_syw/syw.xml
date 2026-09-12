@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="plugin" group="system" method="upgrade">
+	<name>PLG_SYSTEM_SYW</name>
+	<author>Olivier Buisard</author>
+	<creationDate>03/24/2018</creationDate>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
+	<version>2.7.1</version>
+	<description>PLG_SYSTEM_SYW_XML_DESCRIPTION</description>
+	<namespace path="src">SYW\Plugin\System\SYW</namespace>
+	
+	<files>
+		<folder plugin="syw">services</folder>
+		<folder>src</folder>
+		<filename>license.txt</filename>
+	</files>
+	
+	<languages>		
+<!-- 		<language tag="bg-BG">language/bg-BG/bg-BG.plg_system_syw.sys.ini</language>	 -->
+<!-- 		<language tag="cs-CZ">language/cs-CZ/cs-CZ.plg_system_syw.sys.ini</language> -->
+ 		<language tag="da-DK">language/da-DK/da-DK.plg_system_syw.ini</language>
+ 		<language tag="da-DK">language/da-DK/da-DK.plg_system_syw.sys.ini</language>
+		<language tag="de-DE">language/de-DE/de-DE.plg_system_syw.ini</language>
+		<language tag="de-DE">language/de-DE/de-DE.plg_system_syw.sys.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.plg_system_syw.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.plg_system_syw.sys.ini</language>
+		<language tag="en-US">language/en-US/en-US.plg_system_syw.ini</language>
+		<language tag="en-US">language/en-US/en-US.plg_system_syw.sys.ini</language>
+<!-- 		<language tag="es-ES">language/es-ES/es-ES.plg_system_syw.sys.ini</language> -->
+<!-- 		<language tag="fa-IR">language/fa-IR/fa-IR.plg_system_syw.sys.ini</language> -->
+<!-- 		<language tag="fi-FI">language/fi-FI/fi-FI.plg_system_syw.sys.ini</language> -->
+		<language tag="fr-FR">language/fr-FR/fr-FR.plg_system_syw.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.plg_system_syw.sys.ini</language>
+<!-- 		<language tag="hu-HU">language/hu-HU/hu-HU.plg_system_syw.sys.ini</language> -->
+		<language tag="it-IT">language/it-IT/it-IT.plg_system_syw.ini</language>
+		<language tag="it-IT">language/it-IT/it-IT.plg_system_syw.sys.ini</language>
+<!-- 		<language tag="ja-JP">language/ja-JP/ja-JP.plg_system_syw.sys.ini</language> -->
+		<language tag="nl-NL">language/nl-NL/nl-NL.plg_system_syw.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.plg_system_syw.sys.ini</language>
+<!-- 		<language tag="pl-PL">language/pl-PL/pl-PL.plg_system_syw.sys.ini</language> -->
+<!-- 		<language tag="pt-BR">language/pt-BR/pt-BR.plg_system_syw.sys.ini</language> -->
+<!-- 		<language tag="ru-RU">language/ru-RU/ru-RU.plg_system_syw.sys.ini</language> -->
+		<language tag="sl-SI">language/sl-SI/sl-SI.plg_system_syw.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.plg_system_syw.sys.ini</language>
+		<language tag="sv-SE">language/sv-SE/sv-SE.plg_system_syw.ini</language>
+		<language tag="sv-SE">language/sv-SE/sv-SE.plg_system_syw.sys.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.plg_system_syw.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.plg_system_syw.sys.ini</language>
+	</languages>
+	
+	<config>
+		<fields name="params">
+			<fieldset name="basic" addfieldprefix="SYW\Library\Field">
+				<field type="extensionversion" extension="plg_system_syw" />
+				<field type="extensionauthor" />
+				<field type="extensionconnect" />
+
+				<field type="imagelibrarytest" checkall="true" />
+				
+				<field name="image_library" type="imagelibraryselect" default="none" 
+					label="PLG_SYSTEM_SYW_FIELD_IMAGELIBRARY_LABEL" 
+					description="PLG_SYSTEM_SYW_FIELD_IMAGELIBRARY_DESC">
+					<option value="none">JNONE</option>
+				</field>
+
+				<field name="lazy_stylesheets" type="list" default="0" 
+					label="PLG_SYSTEM_SYW_FIELD_LAZYLOADSTYLESHEETS_LABEL" 
+					description="PLG_SYSTEM_SYW_FIELD_LAZYLOADSTYLESHEETS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+					<option value="2">PLG_SYSTEM_SYW_VALUE_ADDSUPPORT</option>
+				</field>
+
+				<field name="webfont_service" type="list" default="google" 
+					label="PLG_SYSTEM_SYW_FIELD_WEBFONTSERVICE_LABEL" 
+					description="PLG_SYSTEM_SYW_FIELD_WEBFONTSERVICE_DESC">
+					<option value="google">fonts.google.com</option>
+					<option value="bunny">fonts.bunny.net</option>
+				</field>
+			</fieldset>
+		</fields>
+   </config>
+</extension>
