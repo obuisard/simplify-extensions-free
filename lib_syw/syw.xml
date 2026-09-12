@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="library" method="upgrade">
+	<name>SimplifyYourWeb Extensions Library</name>
+	<libraryname>syw</libraryname>
+	<author>Olivier Buisard</author>
+	<creationDate>01/21/2018</creationDate>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
+	<version>2.7.1</version>
+	<description>LIB_SYW_XML_DESCRIPTION</description>
+	<packager>SimplifyYourWeb</packager>
+	<packagerurl>https://simplifyyourweb.com</packagerurl>
+	<namespace path="src">SYW\Library</namespace>
+	<media folder="media" destination="syw">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>		
+	</media>
+	<files>
+		<folder>src</folder>
+	</files>
+	<languages>
+		<language tag="bg-BG">language/bg-BG/bg-BG.lib_syw.sys.ini</language>
+		<language tag="cs-CZ">language/cs-CZ/cs-CZ.lib_syw.sys.ini</language>
+		<language tag="da-DK">language/da-DK/da-DK.lib_syw.sys.ini</language>
+		<language tag="de-DE">language/de-DE/de-DE.lib_syw.sys.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.lib_syw.sys.ini</language>
+		<language tag="en-US">language/en-US/en-US.lib_syw.sys.ini</language>
+		<language tag="es-ES">language/es-ES/es-ES.lib_syw.sys.ini</language>
+		<language tag="fa-IR">language/fa-IR/fa-IR.lib_syw.sys.ini</language>
+		<language tag="fi-FI">language/fi-FI/fi-FI.lib_syw.sys.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.lib_syw.sys.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.lib_syw.sys.ini</language>
+		<language tag="hu-HU">language/hu-HU/hu-HU.lib_syw.sys.ini</language>
+		<language tag="it-IT">language/it-IT/it-IT.lib_syw.sys.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.lib_syw.sys.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.lib_syw.sys.ini</language>
+		<language tag="pt-BR">language/pt-BR/pt-BR.lib_syw.sys.ini</language>
+		<language tag="pt-PT">language/pt-PT/pt-PT.lib_syw.sys.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.lib_syw.sys.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.lib_syw.sys.ini</language>
+		<language tag="sv-SE">language/sv-SE/sv-SE.lib_syw.sys.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.lib_syw.sys.ini</language>
+	</languages>
+</extension>
