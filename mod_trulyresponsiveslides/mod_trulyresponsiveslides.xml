@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+	<name>MOD_TRULYRESPONSIVESLIDES</name>
+	<author>Olivier Buisard</author>
+	<creationDate>09/13/2016</creationDate>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
+	<version>2.8.1</version>
+	<description>MOD_TRULYRESPONSIVESLIDES_XML_DESCRIPTION</description>
+	<namespace path="src">SYW\Module\TrulyResponsiveSlides</namespace>
+	
+	<media folder="media" destination="mod_trulyresponsiveslides">
+		<folder>images</folder>
+		<folder>css</folder>
+		<folder>js</folder>	
+		<folder>styles</folder>	
+	</media>
+	
+	<files>
+		<filename module="mod_trulyresponsiveslides">mod_trulyresponsiveslides.php</filename>
+		<filename>license.txt</filename>
+		<folder>forms</folder>
+		<folder>layouts</folder>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+	</files>
+	
+	<languages>
+		<language tag="de-DE">language/de-DE/de-DE.mod_trulyresponsiveslides.ini</language>
+		<language tag="de-DE">language/de-DE/de-DE.mod_trulyresponsiveslides.sys.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.mod_trulyresponsiveslides.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.mod_trulyresponsiveslides.sys.ini</language>
+		<language tag="fa-IR">language/fa-IR/fa-IR.mod_trulyresponsiveslides.ini</language>
+		<language tag="fa-IR">language/fa-IR/fa-IR.mod_trulyresponsiveslides.sys.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.mod_trulyresponsiveslides.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.mod_trulyresponsiveslides.sys.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.mod_trulyresponsiveslides.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.mod_trulyresponsiveslides.sys.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.mod_trulyresponsiveslides.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.mod_trulyresponsiveslides.sys.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.mod_trulyresponsiveslides.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.mod_trulyresponsiveslides.sys.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.mod_trulyresponsiveslides.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.mod_trulyresponsiveslides.sys.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.mod_trulyresponsiveslides.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.mod_trulyresponsiveslides.sys.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.mod_trulyresponsiveslides.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.mod_trulyresponsiveslides.sys.ini</language>
+	</languages>
+	
+	<config>
+		<fields name="params" addfieldprefix="SYW\Module\TrulyResponsiveSlides\Site\Field">
+			
+			<fieldset name="basic" label="MOD_TRULYRESPONSIVESLIDER_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
+								
+				<field type="extensionversion" extension="mod_trulyresponsiveslides" />
+				<field type="extensionauthor" />
+				<field type="extensionconnect" />
+				<field type="extensiontranslators" translators="MOD_TRULYRESPONSIVESLIDES_TRANSLATORS" />
+				
+				<field type="extensionlinks" 
+					translate="https://simplifyyourweb.com/translators"	
+					quickstart="https://simplifyyourweb.com/documentation/truly-responsive-slides/quickstart-guide" 
+					onlinedoc="https://simplifyyourweb.com/documentation/truly-responsive-slides"
+					forum="https://simplifyyourweb.com/forum/truly-responsive-slides" 
+					support="https://simplifyyourweb.com/support"
+					report="https://simplifyyourweb.com/support" 
+					demo="https://demo4.simplifyyourweb.com/truly-responsive-slides" 
+					review="https://extensions.joomla.org/extensions/extension/photos-a-images/slideshow/truly-responsive-slides" 
+					donate="https://simplifyyourweb.com/free-products/truly-responsive-slides" />
+					
+				<field type="sywextensionpresencetest" title="Truly Responsive Slides Pro" message="MOD_TRULYRESPONSIVESLIDES_INFO_PROVERSION" 
+					extensiontype="component" extensionelement="com_trulyresponsiveslidespro"
+					imagesrc="media/mod_trulyresponsiveslides/images/logo_pro.png"
+					downloadlink="https://simplifyyourweb.com/downloads/truly-responsive-slides-pro" downloadtext="MOD_TRULYRESPONSIVESLIDES_INFO_PROVERSIONDOWLOAD" />
+								
+<!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
+			</fieldset>
+			
+			<fieldset name="datasource" label="MOD_TRULYRESPONSIVESLIDER_DATASOURCE_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_DATASOURCE_FIELDSET_DESC">
+			
+				<fieldset name="datasource_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/data-source" />
+				</fieldset>
+			
+				<fieldset name="datasource_general" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONSOURCE_FIELDSET_LABEL">
+				
+					<field name="layout" type="datasourceselect" default="articles"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_LAYOUT_LABEL"
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_LAYOUT_DESC">
+						<option value="images">MOD_TRULYRESPONSIVESLIDER_VALUE_IMAGES</option>				
+						<option value="articles">MOD_TRULYRESPONSIVESLIDER_VALUE_ARTICLES</option>
+					</field>
+				
+					<field name="images_folder" type="text" default="/" filter="string" showon="layout:images" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGES_FOLDER_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGES_FOLDER_DESC" />
+						
+					<field name="alts" type="textarea" cols="40" rows="5" default="" filter="raw" showon="layout:images" 
+		            	label="MOD_TRULYRESPONSIVESLIDER_FIELD_ALTS_LABEL" 
+		            	description="MOD_TRULYRESPONSIVESLIDER_FIELD_ALTS_DESC" />
+		            	
+		            <field name="captions" type="textarea" cols="40" rows="5" default="" filter="raw" showon="layout:images" 
+		            	label="MOD_TRULYRESPONSIVESLIDER_FIELD_CAPTIONS_LABEL" 
+		            	description="MOD_TRULYRESPONSIVESLIDER_FIELD_CAPTIONS_DESC" />
+		            
+		            <field name="images_sort" type="radio" default="string" layout="joomla.form.field.radio.switcher" showon="layout:images" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGESSORT_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGESSORT_DESC">
+	                    <option value="string">MOD_TRULYRESPONSIVESLIDER_VALUE_STRING</option>
+	                    <option value="date">MOD_TRULYRESPONSIVESLIDER_VALUE_DATE</option>
+	                </field>
+	            </fieldset>                
+					
+				<fieldset name="datasource_categories" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONCATEGORIES_FIELDSET_LABEL">
+				
+					<field name="cat_id" type="category" extension="com_content" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select" showon="layout:articles" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CATEGORY_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CATEGORY_DESC">
+						<option value="">JOPTION_ALL_CATEGORIES</option>
+					</field>
+								
+					<field name="includesubcategories" type="list" default="all" showon="layout:articles" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDESUBCATEGORIES_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDESUBCATEGORIES_DESC">					
+						<option value="no">JNO</option>
+						<option value="onelevel">MOD_TRULYRESPONSIVESLIDER_VALUE_ONELEVEL</option>
+						<option value="all">MOD_TRULYRESPONSIVESLIDER_VALUE_ALLLEVELS</option>
+					</field>				
+	            </fieldset>                
+					
+				<fieldset name="datasource_tags" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONTAGS_FIELDSET_LABEL">	
+					
+					<field name="tags" type="tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select" showon="layout:articles" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TAGS_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TAGS_DESC">
+						<option value="all">MOD_TRULYRESPONSIVESLIDER_VALUE_ALLTAGS</option>
+					</field>
+					
+					<field name="tags_match" type="radio" default="any" layout="joomla.form.field.radio.switcher" showon="layout:articles" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TAGSMATCH_LABEL"
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TAGSMATCH_DESC">
+						<option value="all">JALL</option>
+						<option value="any">MOD_TRULYRESPONSIVESLIDER_VALUE_ANY</option>
+					</field>
+	            </fieldset>
+				
+				<fieldset name="datasource_cfields" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONCUSTOMFIELDS_FIELDSET_LABEL">
+					
+					<field name="customfieldsfilter" type="subform" formsource="modules/mod_trulyresponsiveslides/forms/fields/customfieldsfilter.xml" multiple="true" showon="layout:articles"
+						default="{'field':'none','inex':'1','values':''}"
+	   					label="MOD_TRULYRESPONSIVESLIDER_FIELD_CUSTOMFIELDSFILTER_LABEL" 
+	   					description="MOD_TRULYRESPONSIVESLIDER_FIELD_CUSTOMFIELDSFILTER_DESC" />
+				</fieldset>
+					
+				<fieldset name="datasource_exin" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONINEX_FIELDSET_LABEL">
+					
+					<field name="ex" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_EXCLUDE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_EXCLUDE_DESC" />
+					
+					<field name="in" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" showon="layout:articles" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_INCLUDE_DESC" />
+	            </fieldset>
+					
+				<fieldset name="datasource_featured" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONFEATURED_FIELDSET_LABEL">
+				  	
+					<field name="show_f" type="list" default="" showon="layout:articles" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_FEATURED_LABEL"
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_FEATURED_DESC">
+						<option value="0">JNO</option>
+						<option value="">JYES</option>
+						<option value="1">MOD_TRULYRESPONSIVESLIDER_VALUE_ONLYSHOWFEATURED</option>
+						<option value="2">MOD_TRULYRESPONSIVESLIDER_VALUE_SHOWFIRST</option>
+					</field>
+	            </fieldset>                 
+					
+				<fieldset name="datasource_order" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONORDER_FIELDSET_LABEL">
+											
+					<field name="cat_order" type="list" default="" showon="layout:articles" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CATORDER_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CATORDER_DESC">	
+						<option value="">MOD_TRULYRESPONSIVESLIDER_VALUE_NONE</option>				
+						<option value="o_asc">MOD_TRULYRESPONSIVESLIDER_VALUE_ORDERASC</option>
+						<option value="o_dsc">MOD_TRULYRESPONSIVESLIDER_VALUE_ORDERDESC</option>
+					</field>
+					
+					<field name="order" type="list" default="o_asc" showon="layout:articles" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ORDERING_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ORDERING_DESC">
+						<option value="o_dsc">MOD_TRULYRESPONSIVESLIDER_VALUE_ORDERDESC</option>
+						<option value="o_asc">MOD_TRULYRESPONSIVESLIDER_VALUE_ORDERASC</option>
+						<option value="c_dsc">MOD_TRULYRESPONSIVESLIDER_VALUE_CREATEDDESC</option>
+						<option value="c_asc">MOD_TRULYRESPONSIVESLIDER_VALUE_CREATEDASC</option>
+						<option value="m_dsc">MOD_TRULYRESPONSIVESLIDER_VALUE_MODIFIEDDESC</option>
+						<option value="m_asc">MOD_TRULYRESPONSIVESLIDER_VALUE_MODIFIEDASC</option>
+						<option value="p_dsc">MOD_TRULYRESPONSIVESLIDER_VALUE_PUBLISHEDDESC</option>
+						<option value="p_asc">MOD_TRULYRESPONSIVESLIDER_VALUE_PUBLISHEDASC</option>
+						<option value="mc_dsc">MOD_TRULYRESPONSIVESLIDER_VALUE_TOUCHEDDESC</option>
+						<option value="mc_asc">MOD_TRULYRESPONSIVESLIDER_VALUE_TOUCHEDASC</option>					
+						<option value="random">MOD_TRULYRESPONSIVESLIDER_VALUE_RANDOM</option>
+						<option value="hit">MOD_TRULYRESPONSIVESLIDER_VALUE_HIT</option>
+						<option value="title_dsc">MOD_TRULYRESPONSIVESLIDER_VALUE_TITLEDESC</option>
+						<option value="title_asc">MOD_TRULYRESPONSIVESLIDER_VALUE_TITLEASC</option>
+				  	</field>
+	            </fieldset>
+				
+				<fieldset name="datasource_language" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONLANGUAGE_FIELDSET_LABEL">
+				
+					<field name="filter_lang" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="layout:articles" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_FILTERLANGUAGE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_FILTERLANGUAGE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+					
+				<fieldset name="datasource_count" label="MOD_TRULYRESPONSIVESLIDER_SELECTIONCOUNT_FIELDSET_LABEL">
+					
+					<field name="count" type="sywverbosetext" default="" filter="string" size="4" showon="layout:articles" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_COUNT_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_COUNT_DESC" />
+				</fieldset>
+			</fieldset>	
+			
+			<fieldset name="slider" label="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_DESC">
+
+				<fieldset name="slider_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/slider" />
+				</fieldset>
+					
+				<fieldset name="slider_general" label="MOD_TRULYRESPONSIVESLIDER_SLIDER_FIELDSET_LABEL">
+				
+					<field name="animation" type="sliderselect" default="basic" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ANIMATION_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ANIMATION_DESC" />
+				
+					<field name="max_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_MAX_WIDTH_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_MAX_WIDTH_DESC" />	
+						
+					<field name="border_w" type="sywverbosetext" default="4" filter="integer" size="4" maxlength="3" unit="px" icon="SYWicon-swap-horiz" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_BORDERWIDTH_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_BORDERWIDTH_DESC" />
+						
+					<field name="dot_navigation" type="list" default="under" showon="animation:basic" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_DOTNAVIGATION_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_DOTNAVIGATION_DESC">				
+						<option value="none">JNONE</option>
+						<option value="under">MOD_TRULYRESPONSIVESLIDER_VALUE_UNDER</option>
+						<option value="ontop">MOD_TRULYRESPONSIVESLIDER_VALUE_ONTOP</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="slider_arrows" label="MOD_TRULYRESPONSIVESLIDER_ARROWS_LABEL">
+				 
+					 <field name="arrow_c" type="sywcolorpicker" default="#000000" icon="text" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_COLOR_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_COLOR_DESC" />
+					 
+					 <field name="arrow_bgc" type="sywcolorpicker" transparency="true" icon="fill" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_BGCOLOR_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_BGCOLOR_DESC" />
+					 
+					 <field name="arrow_bgr" type="sywverbosetext" default="20" filter="integer" size="4" maxlength="2" min="0" max="20" unit="px" icon="SYWicon-check-box-outline-blank" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_BGRADIUS_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_BGRADIUS_DESC" />
+						
+					<field name="arrow_shadow" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-layers" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_SHADOWWIDTH_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ARROW_SHADOWWIDTH_DESC" />
+						
+					<field type="previewarrow" label="MOD_TRULYRESPONSIVESLIDER_PREVIEW_LABEL" />
+				</fieldset>
+				
+				<fieldset name="slider_thumbnails" label="MOD_TRULYRESPONSIVESLIDER_THUMBNAILS_LABEL">
+				
+					<field name="thumb_w" type="sywverbosetext" default="80" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="animation!:basic" 
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBNAIL_WIDTH_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBNAIL_WIDTH_DESC" />
+					
+					<field name="thumb_h" type="sywverbosetext" default="60" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="animation!:basic" 
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBNAIL_HEIGHT_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBNAIL_HEIGHT_DESC" />
+					
+					<field name="crop_pic" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="animation!:basic"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CROPPICTURE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CROPPICTURE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="thumb_mime_type" type="imagetypeselect" default="original" showon="animation!:basic" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBNAILMIMETYPE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBNAILMIMETYPE_DESC">
+						<option value="original">MOD_TRULYRESPONSIVESLIDER_VALUE_SAMEASORIGINAL</option>
+					</field>
+				
+					<field name="quality_jpg" type="sywverbosetext" default="75" filter="integer" size="8" maxlength="3" min="0" max="100" showon="animation!:basic"  
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYJPG_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYJPG_DESC" />
+					
+					<field name="quality_png" type="sywverbosetext" default="3" filter="integer" size="8" maxlength="1" min="0" max="9" showon="animation!:basic"  
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYPNG_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYPNG_DESC" />
+					
+					<field name="quality_webp" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" showon="animation!:basic"  
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYWEBP_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYWEBP_DESC" />
+						
+					<field name="quality_avif" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" showon="animation!:basic"  
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYAVIF_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYAVIF_DESC" />			
+				
+				</fieldset>
+			</fieldset>	
+			
+			<fieldset name="slide" label="MOD_TRULYRESPONSIVESLIDER_SLIDE_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_IMAGE_SLIDE_DESC">
+
+				<fieldset name="slide_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/slides" />
+				</fieldset>
+			
+				<fieldset name="slide_caption" label="MOD_TRULYRESPONSIVESLIDER_CAPTION_LABEL">
+					
+					<field name="caption_top" type="sywverbosetext" default="7" filter="integer" size="4" maxlength="2" unit="%" icon="SYWicon-keyboard-arrow-up"
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CAPTIONTOP_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CAPTIONTOP_DESC" />	
+						
+					<field name="caption_right" type="sywverbosetext" default="7" filter="integer" size="4" maxlength="2" unit="%" icon="SYWicon-keyboard-arrow-right"
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CAPTIONRIGHT_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CAPTIONRIGHT_DESC" />	
+						
+					<field name="caption_bottom" type="sywverbosetext" default="7" filter="integer" size="4" maxlength="2" unit="%" icon="SYWicon-keyboard-arrow-down"
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CAPTIONBOTTOM_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CAPTIONBOTTOM_DESC" />	
+						
+					<field name="caption_left" type="sywverbosetext" default="7" filter="integer" size="4" maxlength="2" unit="%" icon="SYWicon-keyboard-arrow-left"
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CAPTIONLEFT_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CAPTIONLEFT_DESC" />
+						
+					<field name="text_padding" type="sywverbosetext" default="1" filter="integer" size="4" maxlength="2" unit="%" icon="SYWicon-settings-overscan" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TEXTPADDING_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TEXTPADDING_DESC" />
+						
+					<field name="bg_opacity" type="sywverbosetext" default="60" filter="integer" size="4" maxlength="3" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_BGOPACITY_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_BGOPACITY_DESC" />
+						
+					<field name="opacity_color" type="sywcolorpicker" default="#000000"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_OPACITYCOLOR_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_OPACITYCOLOR_DESC" />
+						
+					<field name="default_position" type="positionselect" default="s" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_DEFAULTPOSITION_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_DEFAULTPOSITION_DESC" />
+					
+					<field name="cat_tag" type="list" default="3" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CATEGORYTAG_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CATEGORYTAG_DESC">
+						<option value="1">h1</option>									
+						<option value="2">h2</option>				
+						<option value="3">h3</option>				
+						<option value="4">h4</option>				
+						<option value="5">h5</option>				
+						<option value="6">h6</option>
+					</field>
+					
+					<field name="title_tag" type="list" default="2" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TITLETAG_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TITLETAG_DESC">
+						<option value="1">h1</option>									
+						<option value="2">h2</option>				
+						<option value="3">h3</option>				
+						<option value="4">h4</option>				
+						<option value="5">h5</option>				
+						<option value="6">h6</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="slide_mobile" label="MOD_TRULYRESPONSIVESLIDER_MOBILE_LABEL">
+					
+					<field name="out_captions" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_OUTCAPTIONS_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_OUTCAPTIONS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="out_caption_class" type="text" default="" filter="string" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_OUTCAPTIONCLASS_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_OUTCAPTIONCLASS_DESC" />
+				</fieldset>
+				
+				<fieldset name="slide_background" label="MOD_TRULYRESPONSIVESLIDER_BACKGROUNDIMAGE_LABEL">
+				
+					<field name="default_bg" type="media" default=""
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_DEFAULTBGIMAGE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_DEFAULTBGIMAGE_DESC" />
+						
+					<field name="img_bg" type="bgimageselect" default="default" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_BGIMAGE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_BGIMAGE_DESC">
+						<option value="default">JDEFAULT</option>
+					</field>
+					
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDER_MESSAGE_IMAGESIZE" style="warning" />
+				
+					<field name="img_w" type="sywverbosetext" default="900" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGE_WIDTH_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGE_WIDTH_DESC" />
+						
+					<field name="img_h" type="sywverbosetext" default="600" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" 
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGE_HEIGHT_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGE_HEIGHT_DESC" />
+				
+					<field name="image_mime_type" type="imagetypeselect" default="original" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEMIMETYPE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEMIMETYPE_DESC">
+						<option value="original">MOD_TRULYRESPONSIVESLIDER_VALUE_SAMEASORIGINAL</option>
+					</field>
+				
+					<field name="qualitybg_jpg" type="sywverbosetext" default="75" filter="integer" size="8" maxlength="3" min="0" max="100"  
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYJPG_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYJPG_DESC" />
+						
+					<field name="qualitybg_png" type="sywverbosetext" default="3" filter="integer" size="8" maxlength="1" min="0" max="9"  
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYPNG_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYPNG_DESC" />
+						
+					<field name="qualitybg_webp" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100"  
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYWEBP_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYWEBP_DESC" />
+						
+					<field name="qualitybg_avif" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100"  
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYAVIF_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_IMAGEQUALITYAVIF_DESC" />
+				</fieldset>
+				
+				<fieldset name="slide_breakpoints" label="MOD_TRULYRESPONSIVESLIDER_RESPONSIVEIMAGES_LABEL">
+					
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"  
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_BREAKPOINTS_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_BREAKPOINTS_DESC" />
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="tooltips" label="MOD_TRULYRESPONSIVESLIDES_TOOLTIPS_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_TOOLTIPS_FIELDSET_DESC">
+
+				<fieldset name="tooltips_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/tooltips" />
+				</fieldset>
+				
+				<fieldset name="tooltips_target" label="MOD_TRULYRESPONSIVESLIDER_TOOLTIPTARGET_LABEL">
+			
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETICON_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETICON_DESC" />
+						
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETICONSIZE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETICONSIZE_DESC" />	
+						
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETCOLOR_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETCOLOR_DESC" />						
+						
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETBGCOLOR_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETBGCOLOR_DESC" />	
+						
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETRADIUS_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETRADIUS_DESC" />	
+						
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETSHADOWWIDTH_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETSHADOWWIDTH_DESC" />		
+						
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETPULSE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TARGETPULSE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="tooltips_tooltip" label="MOD_TRULYRESPONSIVESLIDER_TOOLTIP_LABEL">
+				
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TOOLTIPCOLOR_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TOOLTIPCOLOR_DESC" />						
+						
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TOOLTIPBGCOLOR_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TOOLTIPBGCOLOR_DESC" />
+						
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDES_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TOOLTIPSEPARATOR_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TOOLTIPSEPARATOR_DESC" />
+				</fieldset>
+			</fieldset>
+						
+			<fieldset name="animation" label="MOD_TRULYRESPONSIVESLIDER_ANIMATION_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_ANIMATION_FIELDSET_DESC">
+
+				<fieldset name="animation_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/transitions" />
+				</fieldset>
+				
+				<fieldset name="animation_transition" label="MOD_TRULYRESPONSIVESLIDER_ANIMATION_FIELDSET_LABEL">
+				
+					<field name="type" type="transitionselect" default="fade" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_TYPE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_TYPE_DESC" />
+				
+<!-- 				<field name="direction" type="radio" default="horizontal" layout="joomla.form.field.radio.switcher"  -->
+<!-- 					label="MOD_TRULYRESPONSIVESLIDER_FIELD_DIRECTION_LABEL"  -->
+<!-- 					description="MOD_TRULYRESPONSIVESLIDER_FIELD_DIRECTION_DESC"> -->
+<!-- 					<option value="horizontal">MOD_TRULYRESPONSIVESLIDER_HORIZONTAL</option> -->
+<!-- 					<option value="vertical">MOD_TRULYRESPONSIVESLIDER_VERTICAL</option> -->
+<!-- 				</field> -->
+				
+					<field name="autostart" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_AUTOSTART_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_AUTOSTART_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+
+					<field name="pauseonslide" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_PAUSEONSLIDE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_PAUSEONSLIDE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="loop" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_LOOP_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_LOOP_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="speed" type="sywverbosetext" default="1000" filter="integer" size="4" unit="ms" icon="SYWicon-timer" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_SPEED_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_SPEED_DESC" />
+										
+					<field name="interval" type="sywverbosetext" default="6000" filter="integer"  size="4" unit="ms" icon="SYWicon-timer"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_INTERVAL_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_INTERVAL_DESC" />
+				</fieldset>
+			</fieldset>
+					
+			<fieldset name="advanced_all" label="MOD_TRULYRESPONSIVESLIDER_ADVANCED_FIELDSET_LABEL" description="MOD_TRULYRESPONSIVESLIDER_ADVANCED_FIELDSET_DESC">
+
+				<fieldset name="advanced_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/truly-responsive-slides/the-list-of-options/advanced" />
+				</fieldset>
+				
+				<fieldset name="advanced_general" label="MOD_TRULYRESPONSIVESLIDER_ADVANCED_FIELDSET_LABEL">
+				
+					<field name="site_mode" type="list" default="dev" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_SITEMODE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_SITEMODE_DESC">
+						<option value="dev">MOD_TRULYRESPONSIVESLIDER_VALUE_TESTMODE</option>
+						<option value="prod">MOD_TRULYRESPONSIVESLIDER_VALUE_PRODUCTIONMODE</option>
+						<option value="adv">MOD_TRULYRESPONSIVESLIDER_VALUE_ADVANCEDMODE</option>
+					</field>				
+					
+		            <field name="bootstrap_version" type="list" default="joomla" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_COMPATIBILITYBOOTSTRAP_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_COMPATIBILITYBOOTSTRAP_DESC">
+						<option value="0">JNONE</option>
+						<option value="joomla">Joomla</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</field>
+			
+					<field name="show_errors" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_SHOWERRORS_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_SHOWERRORS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="popup_x" type="sywverbosetext" default="600" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_POPUPX_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_POPUPX_DESC" />
+						
+					<field name="popup_y" type="sywverbosetext" default="480" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" 
+						parentclass="span-3-inline"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_POPUPY_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_POPUPY_DESC" />
+				</fieldset>
+				
+				<fieldset name="advanced_pictures" label="MOD_TRULYRESPONSIVESLIDER_PICTURES_LABEL">
+						
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDER_INFO_CLEARCACHE" style="info" showon="site_mode:adv" />
+						
+					<field name="clear_cache" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CLEARCACHE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CLEARCACHE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="thumb_path" type="list" default="images" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBPATH_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_THUMBPATH_DESC">
+						<option value="default">MOD_TRULYRESPONSIVESLIDER_VALUE_TEMPFOLDER</option>
+						<option value="images">MOD_TRULYRESPONSIVESLIDER_VALUE_IMAGESDIRECTORY</option>
+						<option value="cache">MOD_TRULYRESPONSIVESLIDER_VALUE_CACHEDIRECTORY</option>
+					</field>
+				
+					<field type="imagelibrarytest" />
+				
+					<field name="fallback_imagetype" type="list" default="png" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_FALLBACKIMAGETYPE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_FALLBACKIMAGETYPE_DESC">
+						<option value="png">.png</option>
+						<option value="jpg">.jpg</option>
+					</field>				
+				</fieldset>
+						
+				<fieldset name="advanced_headers" label="MOD_TRULYRESPONSIVESLIDER_HEADERFILES_LABEL">				
+				
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDER_FIELD_LAZYLOADSTYLESHEETS_TXT" style="fieldneutral" badge="MOD_TRULYRESPONSIVESLIDER_FIELD_LAZYLOADSTYLESHEETS_BADGE" badgetype="light"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_LAZYLOADSTYLESHEETS_LABEL" />	            
+				
+					<field name="style_overrides" type="editor" rows="10" default="" editor="codemirror|none" filter="raw" buttons="false" syntax="css" 
+		            	label="MOD_TRULYRESPONSIVESLIDER_FIELD_STYLEOVERRIDES_LABEL" 
+		            	description="MOD_TRULYRESPONSIVESLIDER_FIELD_STYLEOVERRIDES_DESC" />
+		            	
+		            <field type="message" text="MOD_TRULYRESPONSIVESLIDER_EXAMPLE_EXTRACSS" style="example" label="MOD_TRULYRESPONSIVESLIDER_EXAMPLE_EXTRACSS_LABEL" />
+								
+					<field name="inline_scripts" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_INLINESCRIPTS_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_INLINESCRIPTS_DESC">
+	                    <option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="remote_libraries" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_REMOTELIBRARIES_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_REMOTELIBRARIES_DESC">
+	                    <option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field type="message" text="MOD_TRULYRESPONSIVESLIDER_INFO_CLEARHEADERFILESCACHE" style="info" showon="site_mode:adv" />
+					
+					<field name="clear_header_files_cache" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_CLEARHEADERFILESCACHE_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_CLEARHEADERFILESCACHE_DESC">
+	                    <option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="advanced_prepost" label="MOD_TRULYRESPONSIVESLIDER_ADVANCEDPREPOST_FIELDSET_LABEL">		
+					<field name="pretext" type="editor" rows="5" filter="safehtml" buttons="false" syntax="html"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_PRETEXT_LABEL"
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_PRETEXT_DESC" />
+						
+					<field name="posttext" type="editor" rows="5" filter="safehtml" buttons="false" syntax="html"
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_POSTTEXT_LABEL"
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_POSTTEXT_DESC" />
+						
+						
+					<field name="allow_plugins_prepost" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_ALLOWPLUGINSPREPOST_LABEL" 
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_ALLOWPLUGINSPREPOST_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="advanced" label="MOD_TRULYRESPONSIVESLIDER_MODULE_LABEL">
+				
+					<field name="show_on_mobile" type="list" default="1" 
+						label="MOD_TRULYRESPONSIVESLIDER_FIELD_SHOWONMOBILE_LABEL"
+						description="MOD_TRULYRESPONSIVESLIDER_FIELD_SHOWONMOBILE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+						<option value="2">MOD_TRULYRESPONSIVESLIDER_VALUE_ONLY</option>
+					</field>
+			                
+					<field name="moduleclass_sfx" type="text"
+						label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" />
+						
+					<field name="cache" type="list" default="0" 
+						label="COM_MODULES_FIELD_CACHING_LABEL">
+						<option value="1">JGLOBAL_USE_GLOBAL</option>
+						<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+					</field>
+					
+					<field name="cache_time" type="sywverbosetext" default="900" size="4" unit="ms" icon="SYWicon-timer" 
+						label="COM_MODULES_FIELD_CACHE_TIME_LABEL" />
+						
+					<field name="cachemode" type="hidden" default="static">
+						<option value="static"></option>
+					</field>
+				</fieldset>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
