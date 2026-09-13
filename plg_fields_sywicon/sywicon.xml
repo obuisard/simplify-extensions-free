@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="plugin" group="fields" method="upgrade">
+	<name>plg_fields_sywicon</name>	
+	<author>Olivier Buisard</author>
+	<creationDate>06/15/2017</creationDate>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
+	<version>2.0.0</version>
+	<description>PLG_FIELDS_SYWICON_XML_DESCRIPTION</description>
+	<changelogurl>https://updates.simplifyyourweb.com/free/sywicon/changelog.xml</changelogurl>
+	
+	<scriptfile>installer.php</scriptfile>
+	
+	<variant>free</variant>
+	
+	<media folder="media" destination="plg_fields_sywicon">
+		<filename>index.html</filename>
+		<folder>images</folder>
+	</media>
+	
+	<files>
+		<filename plugin="sywicon">sywicon.php</filename>
+		<filename>index.html</filename>
+		<filename>license.txt</filename>
+		<folder>params</folder>
+		<folder>tmpl</folder>
+	</files>
+	
+	<languages>
+		<language tag="en-GB">language/en-GB/en-GB.plg_fields_sywicon.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.plg_fields_sywicon.sys.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.plg_fields_sywicon.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.plg_fields_sywicon.sys.ini</language>
+	</languages>
+	
+	<config>
+		<fields name="params" addfieldprefix="SYW\Library\Field">
+			<fieldset name="basic">
+				<field type="extensionversion" version="2.0.0" />
+				<field type="extensionauthor" />
+				<field type="extensionconnect" />
+			</fieldset>
+		</fields>
+	</config>
+	<updateservers>
+		<server type="extension" priority="1" name="SYW icon field auto updater">https://updates.simplifyyourweb.com/free/sywicon/sywicon-update.xml</server>
+	</updateservers>
+</extension>
