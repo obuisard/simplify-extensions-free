@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="package" method="upgrade">
+	<name>PKG_JQUERYEASY</name>
+	<author>Olivier Buisard</author>
+	<creationDate>09/18/2021</creationDate>
+	<packagename>jqueryeasy</packagename>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<url>https://simplifyyourweb.com/</url>
+	<packager>Olivier Buisard</packager>
+ 	<packagerurl>https://simplifyyourweb.com/</packagerurl>
+	<version>5.4.0</version>
+	<changelogurl>https://updates.simplifyyourweb.com/free/jqueryeasy/changelog.xml</changelogurl>
+	<description>PKG_JQUERYEASY_XML_DESCRIPTION</description>
+	<blockChildUninstall>true</blockChildUninstall>
+	<scriptfile>installer.php</scriptfile>	
+	<variant>free</variant>	
+	<languages>		
+		<language tag="bg-BG">language/bg-BG/bg-BG.pkg_jqueryeasy.sys.ini</language>
+	  	<language tag="de-DE">language/de-DE/de-DE.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="en-GB">language/en-GB/en-GB.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="en-US">language/en-US/en-US.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="es-CO">language/es-CO/es-CO.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="es-ES">language/es-ES/es-ES.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="fr-FR">language/fr-FR/fr-FR.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="it-IT">language/it-IT/it-IT.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="nl-NL">language/nl-NL/nl-NL.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="pt-BR">language/pt-BR/pt-BR.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="ru-RU">language/ru-RU/ru-RU.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="sv-SE">language/sv-SE/sv-SE.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="tr-TR">language/tr-TR/tr-TR.pkg_jqueryeasy.sys.ini</language>
+	   	<language tag="uk-UA">language/uk-UA/uk-UA.pkg_jqueryeasy.sys.ini</language>
+	</languages>
+ 	<files folder="packages">
+		<file type="plugin" id="jqueryeasy" group="system">plg_system_jqueryeasy.zip</file>
+	</files>	
+	<updateservers>
+		<server type="extension" priority="1" name="jQuery Easy updater">https://updates.simplifyyourweb.com/free/jqueryeasy/jqueryeasy-pkg-update.xml</server>
+	</updateservers>
+</extension>
