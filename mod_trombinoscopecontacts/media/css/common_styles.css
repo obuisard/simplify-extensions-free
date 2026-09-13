@@ -1,0 +1,537 @@
+.te {
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+}
+
+.te .personlist {
+	overflow: hidden;
+	text-align: center;
+}
+
+	.te .groupheader,
+	.te .heading-group {
+		display: inline-block;
+	    width: 100%;
+		text-align: left;
+	}
+	
+	html[dir="rtl"] .te .groupheader,
+	html[dir="rtl"] .te .heading-group {
+		text-align: right;
+	}
+	
+	.te .groupheader .header,
+	.te .heading-group .heading {
+		border-bottom: 1px solid #eee;
+		padding-bottom : 10px;
+	}
+	
+	.te .contactgroup { /* keep for backward compatibility */
+		overflow: hidden;
+		text-align: center;
+		width: 100%;
+	}
+	
+	.te .contactgroup .person {
+		white-space: normal;
+	}
+
+	.te .person {
+		overflow: hidden;
+		position: relative; 
+		display: inline-block;		
+		vertical-align: top;
+		z-index: 0; /* to avoid template issues */
+	}
+	
+	.te .shell,
+	.te .outerperson {
+		position: relative;
+		overflow: hidden;
+	}
+	
+		.te .iconlinks,
+		.te .vcard {
+			z-index: 50;
+			overflow: hidden;
+		}
+		
+		.te .vcard {
+			margin: 2px;
+		}
+		
+			.te .iconlinks ul {
+				list-style: none;
+				margin: 0;	
+				padding: 0;
+				text-align: center;
+			}
+			
+				.te .iconlinks ul li {
+					list-style: none;
+					margin: 2px;
+					padding: 0; /* to avoid template overrides */
+					line-height: normal;
+				}
+				
+					.te .iconlinks a,
+					.te .vcard a {
+						text-decoration: none;
+						display: inline-block;
+					}
+					
+					.te .iconlinks a:hover,
+					.te .vcard a:hover {
+						opacity: .5;
+					}
+					
+						.te .iconlinks .icon,
+						.te .vcard .icon {
+							line-height: 1em;
+							height: 1em;
+							display: inline-block;
+							vertical-align: middle;
+							box-sizing: initial;
+						}
+						
+						.te .iconlinks .iconbg .icon,
+						.te .vcard .iconbg .icon {
+							padding: 0.3em;
+						}
+						
+						.te .iconlinks span,
+						.te .vcard span {
+							display: none;
+						}
+	
+		.te .personinfo .tags .icon {
+			margin: 0;
+			padding: 0;
+			color: inherit;
+			font-size: 1em; /* keeps size of text in label */ 
+		}
+
+		.te .innerperson {
+			overflow: hidden;
+			position: relative;
+			text-align: left;
+		}		
+		
+			.te .featured .feature {
+				display: none;
+				line-height: 1em;
+			}
+			
+			.te .featured.picture_left .picture_veil .feature,
+			.te .featured.picture_right .picture_veil .feature,
+			.te .featured.picture_top .picture_veil .feature,
+			.te .featured.text_only .text_veil .feature {
+				display: inline-block;
+			}		
+			
+				.te .featured .feature .icon {
+					display: inline-block;
+    				overflow: hidden;
+    				padding: 0.2em;	
+    				margin: 0;
+    				vertical-align: middle;
+    			}	
+	
+			.te .personpicture {
+    			overflow: hidden;
+    			position: relative;
+				z-index: 25;
+			}
+			
+				.te .individualbg {
+					position: absolute;
+	    			max-height: 100%;
+	    			width: 100%;
+	    			max-width: 100%;
+	    			overflow: hidden;
+				}
+			
+						.te .innerindividualbg img {
+							width: 100%;
+						}		
+			
+			.te .picture_left .personpicture {
+				float: left;
+			}
+			
+			.te .picture_right .personpicture {
+				float: right;
+			}
+			
+			.te .picture_top .personpicture  {
+				margin-left: auto;
+				margin-right: auto;
+			}
+			
+			.te .text_only .personpicture  {
+				display: none;
+			}
+			
+				.te .nopicture {
+					display: inline-block;
+					height: 100%;
+					width: 100%;
+				}
+				
+				.te .picture {
+	    			text-align: center;
+	    			position: relative;
+					box-sizing: unset;
+				}
+			
+					.te .picture_veil {
+		    			position: relative;
+		    			z-index: 200;
+					}
+					
+					.te .picture a {
+		    			display: inline-block;
+		    			height: 100%;
+		    			width: 100%;
+					}
+					
+					.te .picture img {
+						max-width: 100%;
+						height: auto;
+						max-height: 100%;
+					}
+			
+			.te .personinfo {
+    			position: relative;
+				float: none;
+			}
+			
+			html[dir="rtl"] .te .personinfo {
+			    text-align: right;
+			}
+			
+			.te .picture_left .personinfo {
+				clear: right;
+			}
+			
+			.te .picture_right .personinfo {
+				clear: left;
+			}
+			
+				.te .text_veil {
+					position: relative;
+	    			z-index: 200;
+				}
+				
+				.te .personinfo .category {
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+				
+				.te .personinfo .personlinks {
+					margin-top: 10px;
+					overflow: hidden;
+				}
+				
+					.te .personlink {
+						display: inline;
+						margin-right: 3px;
+					}				
+				
+						.te .personlink a {
+							display: inline-block;
+						}
+				
+				.te .personfield.nowrap {
+					overflow: hidden; /* so it does not bleed over the picture */
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+				
+				.te .personfield.wrap.alignself,
+				.te .personfield.beneath {
+					display: -webkit-box; display: -moz-box; display: -webkit-flex; display: -ms-flexbox; display: flex;
+					-webkit-align-items: baseline; -moz-box-align: baseline; -ms-flex-align: baseline; align-items: baseline;
+				}
+				
+				.te .personfield.beneath {
+					-webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column;
+				}
+
+				.te .personfield.nowrap.fieldaddress,
+				.te .personfield.nowrap.fieldformattedaddress,
+				.te .personfield.nowrap.fieldmisc,
+				.te .personfield.nowrap.fieldsummary {
+					display: -webkit-box; display: -moz-box; display: -webkit-flex; display: -ms-flexbox; display: flex;
+					-webkit-align-items: baseline; -moz-box-align: baseline; -ms-flex-align: baseline; align-items: baseline;
+				}
+				
+					.te .personinfo .icon {
+						line-height: 1em;
+						display: inline-block;
+						margin: 1px 6px 1px 0;
+			    		vertical-align: middle;
+					}
+					
+					.te .personinfo .nowrap .noicon,
+					.te .personinfo .wrap.alignself .noicon {
+						line-height: 1em;
+						width: 1em;
+						display: inline-block;
+						margin: 1px 6px 1px 0;
+					}
+					
+					.te .personinfo .wrap.alignself .icon,
+					.te .personinfo .wrap.alignself .noicon {
+						-webkit-box-flex: 0;
+						-ms-flex: 0 0 auto;
+						flex: 0 0 auto;
+					}
+					
+					html[dir="rtl"] .te .personinfo .icon,
+					html[dir="rtl"] .te .personinfo .noicon {
+						margin: 1px 0 1px 6px;
+					}
+					
+					.te .personinfo .iconbg .icon {
+						padding: 4px;
+					}
+
+					.te .personinfo .iconbg .noicon {
+						padding: 0 4px;
+					}
+				
+					.te .fieldlabel {
+						display: inline-block;
+						vertical-align: middle;
+						margin: 1px 6px 1px 0;
+					}
+					
+					html[dir="rtl"] .te .fieldlabel {
+						margin: 1px 0 1px 6px;
+					}
+					
+					.te .wrap.alignself .fieldlabel {
+						-webkit-box-flex: 0;
+						-ms-flex: 0 0 auto;
+						flex: 0 0 auto;
+					}
+					
+					.te .nowrap.beneath .fieldlabel {
+						overflow: hidden;
+                    	text-overflow: ellipsis;
+	                    max-width: 100%;
+					}
+					
+					.te .lblbg .fieldlabel {
+						padding: 2px 4px;
+						-webkit-box-sizing: border-box;
+						-moz-box-sizing: border-box;
+						box-sizing: border-box;
+					}
+
+					.te .lblbg .nolabel {
+						padding: 0;
+					}
+					
+					.te .fieldvalue {
+						vertical-align: middle;
+					}
+				
+					.te .personfield.wrap .fieldvalue {
+						word-break: break-word;
+					}
+					
+					.te .personfield.wrap.breakall .fieldvalue {
+						word-break: break-all;
+					}
+					
+					.te .personfield.nowrap.beneath .fieldvalue {
+						overflow: hidden;
+                    	text-overflow: ellipsis;
+                    	max-width: 100%;
+					}
+				
+					.te .personfield.nowrap.fieldaddress .fieldvalue,
+					.te .personfield.nowrap.fieldformattedaddress .fieldvalue,
+					.te .personfield.nowrap.fieldmisc .fieldvalue,
+					.te .personfield.nowrap.fieldsummary .fieldvalue {
+						-webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto;
+					}
+					
+					.te .personfield.nowrap.fieldaddress .fieldvalue,
+					.te .personfield.nowrap.fieldformattedaddress .fieldvalue {
+						overflow: hidden;
+                    	text-overflow: ellipsis;
+					}
+                    
+                    .te .personfield.fieldmisc .fieldvalue,
+					.te .personfield.fieldsummary .fieldvalue {
+						white-space: normal; /* always */
+					}
+
+						.te .personfield.fieldmisc .fieldvalue p {	
+							margin: 0;				
+						}
+
+					.te .personfield.fieldtwitter .fieldvalue:before {
+						content: '@';
+					}
+			
+				.te .picture_top .personinfo .fieldname,
+				.te .picture_top .personinfo .category,
+				.te .picture_top .personinfo .tags,
+				.te .ghost_picture_top .personinfo .fieldname,
+				.te .ghost_picture_top .personinfo .category,
+				.te .ghost_picture_top .personinfo .tags {
+					text-align: center;
+				}
+
+				.te .picture_top .wrap.alignself.fieldname,
+				.te .ghost_picture_top .wrap.alignself.fieldname {
+					-webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+				}
+				
+				.te .picture_top .beneath.fieldname,
+				.te .ghost_picture_top .beneath.fieldname {
+					-webkit-box-align: center; -ms-flex-align: center; align-items: center;
+				}
+					
+					.te .picture_top .beneath.fieldname .fieldlabel,
+					.te .ghost_picture_top .beneath.fieldname .fieldlabel,
+					.te .picture_top .personinfo .beneath.fieldname .icon,
+					.te .ghost_picture_top .personinfo .beneath.fieldname .icon {
+						margin: 1px 0;
+					}
+							
+					.te .picture_top .fieldname .nolabel,
+					.te .ghost_picture_top .fieldname .nolabel,
+					.te .picture_top .personinfo .fieldname .noicon,
+					.te .ghost_picture_top .personinfo .fieldname .noicon {
+						display: none;
+					}
+
+/* label links */
+
+.te .label span,
+.te .label .icon {
+	vertical-align: middle;
+}
+
+.te .label a,
+.te .label a:hover,
+.te .label a:focus {
+	color: #fff;
+}
+
+/* social icons */
+
+.te .social .SYWicon-twitter {
+	color: #02B0E8 !important;
+}
+
+.te .social .iconbg .SYWicon-twitter {
+	background-color: #02B0E8 !important;
+	color: #FFF !important;
+}
+
+.te .social .SYWicon-facebook {
+	color: #3B5998 !important;
+}
+
+.te .social .iconbg .SYWicon-facebook {
+	background-color: #3B5998 !important;
+	color: #FFF !important;
+}
+
+.te .social .SYWicon-linkedin {
+	color: #0077B6 !important;
+}
+
+.te .social .iconbg .SYWicon-linkedin {
+	background-color: #0077B6 !important;
+	color: #FFF !important;
+}
+
+.te .social .SYWicon-googleplus {
+	color: #BE2933 !important;
+}
+
+.te .social .iconbg .SYWicon-googleplus {
+	background-color: #BE2933 !important;
+	color: #FFF !important;
+}
+
+.te .social .SYWicon-instagram {
+	color: #BBAA7C !important;
+}
+
+.te .social .iconbg .SYWicon-instagram {
+	background-color: #BBAA7C !important;
+	color: #FFF !important;
+}
+
+.te .social .SYWicon-tumblr {
+	color: #2C4762 !important;
+}
+
+.te .social .iconbg .SYWicon-tumblr {
+	background-color: #2C4762 !important;
+	color: #FFF !important;
+}
+
+.te .social .SYWicon-pinterest {
+	color: #EB5655 !important;
+}
+
+.te .social .iconbg .SYWicon-pinterest {
+	background-color: #EB5655 !important;
+	color: #FFF !important;
+}
+
+.te .social .SYWicon-youtube {
+	color: #C4302A !important;
+}
+
+.te .social .iconbg .SYWicon-youtube {
+	background-color: #C4302A !important;
+	color: #FFF !important;
+}
+
+.te .social .SYWicon-vimeo {
+	color: #46B5FE !important;
+}
+
+.te .social .iconbg .SYWicon-vimeo {
+	background-color: #46B5FE !important;
+	color: #FFF !important;
+}
+
+.te .social .SYWicon-skype {
+	color: #28B0EE !important;
+}
+
+.te .social .iconbg .SYWicon-skype {
+	background-color: #28B0EE !important;
+	color: #FFF !important;
+}
+
+.te .social .SYWicon-wordpress {
+	color: #737C81 !important;
+}
+
+.te .social .iconbg .SYWicon-wordpress {
+	background-color: #737C81 !important;
+	color: #FFF !important;
+}
+
+.te .social .SYWicon-blogspot {
+	color: #FC9C38 !important;
+}
+
+.te .social .iconbg .SYWicon-blogspot {
+	background-color: #FC9C38 !important;
+	color: #FFF !important;
+}

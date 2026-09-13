@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<field name="lf" type="linkfieldselect" default="none" 
+		label="MOD_TROMBINOSCOPE_FIELD_LINKFIELD_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_LINKFIELD_DESC">
+		<option value="none">JNONE</option>
+	</field>
+	
+	<field name="lf_icon" type="sywuniversaliconpicker" iconsets="syw" bcmode="true" default="" showon="lf!:none"
+		label="MOD_TROMBINOSCOPE_FIELD_ICONLINKFIELD_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_ICONLINKFIELD_DESC" />	
+		
+	<field name="lf_access" type="accesslevel" default="1" showon="lf!:none"
+		label="MOD_TROMBINOSCOPE_FIELD_ACCESSLINKFIELD_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_ACCESSLINKFIELD_DESC" />
+</form>

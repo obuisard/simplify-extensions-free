@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<field name="f" type="fieldselect" default="none"
+		label="MOD_TROMBINOSCOPE_FIELD_FIELD_LABEL"
+		description="MOD_TROMBINOSCOPE_FIELD_FIELD_DESC">
+		<option value="none">JNONE</option>
+	</field>
+	
+	<field name="s_f_lbl" type="list" default="0" showon="f!:none[AND]f!:empty"
+		label="MOD_TROMBINOSCOPE_FIELD_SHOWFIELDLABEL_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_SHOWFIELDLABEL_DESC">
+		<option value="0">MOD_TROMBINOSCOPE_VALUE_NOTHING</option>
+		<option value="1">MOD_TROMBINOSCOPE_VALUE_LABEL</option>
+		<option value="2">MOD_TROMBINOSCOPE_VALUE_ICON</option>
+	</field>
+	
+	<!-- always show labels because they are used for tooltips -->
+	<field name="f_lbl" type="text" default="" showon="f!:none[AND]f!:empty"
+		label="MOD_TROMBINOSCOPE_FIELD_LABELFIELD_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_LABELFIELD_DESC" />
+			
+	<field name="f_icon" type="sywuniversaliconpicker" iconsets="syw" bcmode="true" default="" showon="s_f_lbl:2[AND]f!:none[AND]f!:empty" 
+		label="MOD_TROMBINOSCOPE_FIELD_ICONFIELD_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_ICONFIELD_DESC" />	
+						
+	<field name="f_tooltip" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="f!:none[AND]f!:empty" 
+		label="MOD_TROMBINOSCOPE_FIELD_SHOWTOOLTIP_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_SHOWTOOLTIP_DESC">
+		<option value="0">JNO</option>
+		<option value="1">JYES</option>
+	</field>
+	
+	<field name="f_one_line" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="f!:none[AND]f!:empty" 
+		label="MOD_TROMBINOSCOPE_FIELD_FORCEONELINE_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_FORCEONELINE_DESC">
+        <option value="0">JNO</option>
+		<option value="1">JYES</option>
+	</field>
+								
+	<field name="f_access" type="accesslevel" default="1" showon="f!:none[AND]f!:empty" 
+		label="MOD_TROMBINOSCOPE_FIELD_ACCESSFIELD_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_ACCESSFIELD_DESC" />
+		
+	<field name="f_classes" type="text" default="" showon="f!:none[AND]f!:empty"
+		label="MOD_TROMBINOSCOPE_FIELD_EXTRACLASSES_LABEL" 
+		description="MOD_TROMBINOSCOPE_FIELD_EXTRACLASSES_DESC" />
+</form>
