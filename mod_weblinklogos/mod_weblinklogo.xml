@@ -1,0 +1,917 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+	<name>MOD_WEBLINKLOGO</name>
+	<author>Olivier Buisard</author>
+	<creationDate>02/25/2014</creationDate>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
+	<version>4.8.4</version>
+	<description>MOD_WEBLINKLOGO_XML_DESCRIPTION</description>
+	<namespace path="src">SYW\Module\WeblinkLogos</namespace>
+	
+	<media folder="media" destination="mod_weblinklogos">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>styles</folder>
+	</media>
+	
+	<files>
+		<filename module="mod_weblinklogo">mod_weblinklogo.php</filename>
+		<filename>license.txt</filename>
+		<folder>forms</folder>
+		<folder>layouts</folder>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+	</files>
+	
+	<languages>
+		<language tag="de-DE">language/de-DE/de-DE.mod_weblinklogo.ini</language>
+		<language tag="de-DE">language/de-DE/de-DE.mod_weblinklogo.sys.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.mod_weblinklogo.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.mod_weblinklogo.sys.ini</language>
+		<language tag="fa-IR">language/fa-IR/fa-IR.mod_weblinklogo.ini</language>
+		<language tag="fa-IR">language/fa-IR/fa-IR.mod_weblinklogo.sys.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.mod_weblinklogo.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.mod_weblinklogo.sys.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.mod_weblinklogo.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.mod_weblinklogo.sys.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.mod_weblinklogo.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.mod_weblinklogo.sys.ini</language>
+		<language tag="pt-BR">language/pt-BR/pt-BR.mod_weblinklogo.ini</language>
+		<language tag="pt-BR">language/pt-BR/pt-BR.mod_weblinklogo.sys.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.mod_weblinklogo.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.mod_weblinklogo.sys.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.mod_weblinklogo.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.mod_weblinklogo.sys.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.mod_weblinklogo.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.mod_weblinklogo.sys.ini</language>
+	</languages>
+	
+	<config>
+		<fields name="params" addfieldprefix="SYW\Module\WeblinkLogos\Site\Field">
+			<fieldset name="basic" label="MOD_WEBLINKLOGO_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
+							
+				<field type="extensionversion" extension="mod_weblinklogo" />
+				<field type="extensionauthor" />
+				<field type="extensionconnect" />
+				<field type="extensiontranslators" translators="MOD_WEBLINKLOGO_TRANSLATORS" />
+				
+				<field type="extensionlinks" 
+					translate="https://simplifyyourweb.com/translators" 
+					quickstart="https://simplifyyourweb.com/documentation/weblink-logos/quickstart-guide" 
+					onlinedoc="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos" 
+					forum="https://simplifyyourweb.com/forum/weblink-logos" 
+					support="https://simplifyyourweb.com/support" 
+					report="https://simplifyyourweb.com/support" 
+					demo="https://demo4.simplifyyourweb.com/weblink-logos" 
+					review="http://extensions.joomla.org/extensions/extension/directory-a-documentation/weblinks/weblink-logos" 
+					donate="https://simplifyyourweb.com/free-products/weblink-logos" />
+									
+				<field type="sywextensionpresencetest" title="Weblinks" message="MOD_WEBLINKLOGO_INFO_WEBLINKSCOMPONENT" alertlevel="warning" 
+					extensiontype="component" extensionelement="com_weblinks"
+					imagesrc="media/mod_weblinklogos/images/logo_weblinks.png"
+					downloadlink="http://extensions.joomla.org/extensions/extension/official-extensions/weblinks" />	
+				
+				<field type="sywextensionpresencetest" title="Weblink Logos Pro" message="MOD_WEBLINKLOGO_INFO_PROVERSION"
+					extensiontype="component" extensionelement="com_weblinklogospro"
+					imagesrc="media/mod_weblinklogos/images/logo_pro.png"
+					downloadlink="https://simplifyyourweb.com/downloads/weblink-logos-pro" downloadtext="MOD_WEBLINKLOGO_INFO_PROVERSIONDOWLOAD" />
+
+<!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
+			</fieldset>
+			
+			<fieldset name="selection" label="MOD_WEBLINKLOGO_BASIC_FIELDSET_LABEL" description="MOD_WEBLINKLOGO_BASIC_FIELDSET_DESC">
+			
+				<fieldset name="selection_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos/filtering" />
+				</fieldset>
+			
+				<fieldset name="selection_source" label="MOD_WEBLINKLOGO_SELECTIONSOURCE_FIELDSET_LABEL">
+
+					<field name="related" type="list" default="0" 
+						label="MOD_WEBLINKLOGO_FIELD_RELATED_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_RELATED_DESC">
+						<option value="0">JNO</option>	
+	<!-- 					<option value="1">MOD_WEBLINKLOGO_RELATEDBYKEY</option> -->
+	<!-- 					<option value="2">MOD_WEBLINKLOGO_RELATEDBYTAG</option> -->
+						<option value="3">MOD_WEBLINKLOGO_RELATEDANYBYTAG</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="selection_categories" label="MOD_WEBLINKLOGO_SELECTIONCATEGORIES_FIELDSET_LABEL">
+				
+					<field name="cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
+						label="MOD_WEBLINKLOGO_FIELD_CATEGORYFILTER_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_CATEGORYFILTER_DESC">
+						<option value="0">MOD_WEBLINKLOGO_VALUE_EXCLUS</option>
+						<option value="1">MOD_WEBLINKLOGO_VALUE_INCLUS</option>
+					</field>
+				
+					<field name="category" type="category" extension="com_weblinks" multiple="true" size="5" default="all" layout="joomla.form.field.list-fancy-select"
+						label="MOD_WEBLINKLOGO_FIELD_CATEGORY_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CATEGORY_DESC">
+						<option value="all">JOPTION_ALL_CATEGORIES</option>
+					</field>
+					
+					<field name="includesubcategories" type="list" default="no" 
+						label="MOD_WEBLINKLOGO_FIELD_INCLUDESUBCATEGORIES_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_INCLUDESUBCATEGORIES_DESC">					
+						<option value="no">JNO</option>
+						<option value="onelevel">MOD_WEBLINKLOGO_VALUE_LEVEL</option>
+						<option value="all">MOD_WEBLINKLOGO_VALUE_ALLLEVELS</option>
+					</field>
+					
+					<field name="levelsubcategories" type="sywverbosetext" default="1" filter="integer" size="4" showon="includesubcategories:onelevel" 
+						label="MOD_WEBLINKLOGO_FIELD_SUBCATEGORYLEVELS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_SUBCATEGORYLEVELS_DESC" />				
+				
+					<field name="cat_order" type="list" default="" 
+						label="MOD_WEBLINKLOGO_FIELD_CATORDER_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CATORDER_DESC">	
+						<option value="">JNONE</option>				
+						<option value="o_asc">MOD_WEBLINKLOGO_VALUE_ORDERASC</option>
+						<option value="o_dsc">MOD_WEBLINKLOGO_VALUE_ORDERDESC</option>
+						<option value="n_asc">MOD_WEBLINKLOGO_VALUE_BYNAMEASC</option>
+						<option value="n_dsc">MOD_WEBLINKLOGO_VALUE_BYNAMEDESC</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="selection_tags" label="MOD_WEBLINKLOGO_SELECTIONTAGS_FIELDSET_LABEL">
+				
+					<field name="tags_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
+						label="MOD_WEBLINKLOGO_FIELD_TAGSFILTER_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_TAGSFILTER_DESC">
+						<option value="0">MOD_WEBLINKLOGO_VALUE_EXCLUS</option>
+						<option value="1">MOD_WEBLINKLOGO_VALUE_INCLUS</option>
+					</field>
+					
+					<field name="tags" type="tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select"
+						label="MOD_WEBLINKLOGO_FIELD_TAGS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_TAGS_DESC">
+						<option value="all">MOD_WEBLINKLOGO_VALUE_ALLTAGS</option>
+					</field>			
+				
+					<field name="include_tag_children" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_TAGSCHILDREN_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_TAGSCHILDREN_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="tags_match" type="radio" default="any" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_TAGSMATCH_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_TAGSMATCH_DESC">
+						<option value="all">JALL</option>
+						<option value="any">MOD_WEBLINKLOGO_FIELD_VALUE_ANY</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="selection_cfields" label="MOD_WEBLINKLOGO_SELECTIONCUSTOMFIELDS_FIELDSET_LABEL">
+					
+					<field name="customfieldsfilter" type="subform" formsource="modules/mod_weblinklogo/forms/fields/customfieldsfilter.xml" multiple="true" 
+						default="{'field':'none','inex':'1','values':''}"
+	   					label="MOD_WEBLINKLOGO_FIELD_CUSTOMFIELDSFILTER_LABEL" 
+	   					description="MOD_WEBLINKLOGO_FIELD_CUSTOMFIELDSFILTER_DESC" />
+				</fieldset>
+
+				<fieldset name="selection_exin" label="MOD_WEBLINKLOGO_SELECTIONINEX_FIELDSET_LABEL">
+			
+					<field name="ex" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47" 
+						label="MOD_WEBLINKLOGO_FIELD_EXCLUDE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_EXCLUDE_DESC" />
+						
+					<field name="in" type="sywverbosetext" default="" filter="string" translateHint="false" hint="20,34,47"
+						label="MOD_WEBLINKLOGO_FIELD_ONLYIDS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ONLYIDS_DESC" />
+				</fieldset>
+				
+				<fieldset name="selection_order" label="MOD_WEBLINKLOGO_SELECTIONORDER_FIELDSET_LABEL">
+					
+					<field name="ordering" type="list" default="" 
+						label="MOD_WEBLINKLOGO_FIELD_ORDERING_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_ORDERING_DESC">
+						<option value="">JNONE</option>
+						<option value="title">JGLOBAL_TITLE</option>
+						<option value="order">MOD_WEBLINKLOGO_FIELD_VALUE_ORDER</option>
+						<option value="created">MOD_WEBLINKLOGO_FIELD_VALUE_CREATED</option>
+						<option value="modified">MOD_WEBLINKLOGO_FIELD_VALUE_MODIFIED</option>
+						<option value="published">MOD_WEBLINKLOGO_FIELD_VALUE_PUBLISHED</option>
+						<option value="random">MOD_WEBLINKLOGO_FIELD_VALUE_RANDOM</option>
+						<option value="hits">MOD_WEBLINKLOGO_FIELD_VALUE_HITS</option>
+						<option value="manual">MOD_WEBLINKLOGO_FIELD_VALUE_MANUAL</option>
+					</field>
+					
+					<field name="direction" type="list" default="asc" showon="ordering!:,random,manual" 
+						label="MOD_WEBLINKLOGO_FIELD_ORDERDIRECTION_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_ORDERDIRECTION_DESC">
+						<option value="asc">MOD_WEBLINKLOGO_FIELD_VALUE_ASCENDING</option>
+						<option value="desc">MOD_WEBLINKLOGO_FIELD_VALUE_DESCENDING</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="selection_language" label="MOD_WEBLINKLOGO_SELECTIONLANGUAGE_FIELDSET_LABEL">
+				
+					<field name="filter_lang" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_FILTERLANGUAGE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_FILTERLANGUAGE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+					
+				<fieldset name="selection_count" label="MOD_WEBLINKLOGO_SELECTIONCOUNT_FIELDSET_LABEL">
+					
+					<field name="count" type="sywverbosetext" default="" size="4" 
+						label="MOD_WEBLINKLOGO_FIELD_COUNT_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_COUNT_DESC" />	
+						
+					<field name="startat" type="sywverbosetext" default="1" filter="integer" size="4" 
+						label="MOD_WEBLINKLOGO_FIELD_STARTAT_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_STARTAT_DESC" />
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="configuration" label="MOD_WEBLINKLOGO_CONFIGURATION_FIELDSET_LABEL" description="MOD_WEBLINKLOGO_CONFIGURATION_FIELDSET_DESC">
+			
+				<fieldset name="configuration_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos/layout" />
+				</fieldset>
+			
+				<fieldset name="layout_overall" label="MOD_WEBLINKLOGO_OVERALL_TITLE">
+			
+					<field name="logos_layout" type="radio" default="grid" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_LAYOUT_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_LAYOUT_DESC">					
+						<option value="grid">MOD_WEBLINKLOGO_FIELD_VALUE_GRID</option>
+						<option value="list">MOD_WEBLINKLOGO_FIELD_VALUE_LIST</option>
+					</field>
+			
+					<field name="items_align" type="sywspacingselect" default="c" showon="logos_layout:grid"
+						label="MOD_WEBLINKLOGO_FIELD_ITEMSALIGNMENT_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ITEMSALIGNMENT_DESC" />
+					
+					<field name="items_valign" type="sywalignmentselect" default="fs" removevalues="s" showon="logos_layout:grid"
+						label="MOD_WEBLINKLOGO_FIELD_ITEMSVALIGNMENT_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ITEMSVALIGNMENT_DESC" />
+					
+					<field name="items_valign_list" type="sywalignmentselect" direction="vertical" default="s" showon="logos_layout:list"
+						label="MOD_WEBLINKLOGO_FIELD_ITEMSVALIGNMENT_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ITEMSVALIGNMENT_DESC" />
+					
+					<field type="message" text="MOD_WEBLINKLOGO_WARNING_ALIGNMENTFORANIMATIONS" style="warning" />
+				
+					<field name="layout" type="modulelayout" class="form-select" 
+						label="JFIELD_ALT_LAYOUT_LABEL"
+						description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+						
+					<field type="overridestest" extension="mod_weblinklogo" parent_extension="com_weblinklogospro" />
+				</fieldset>
+				
+				<fieldset name="layout_footnote" label="MOD_WEBLINKLOGO_FOOTNOTE_TITLE">
+				
+					<field name="footnote" type="text" default="" class="input-xxlarge" 
+						label="MOD_WEBLINKLOGO_FIELD_FOOTNOTE_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_FOOTNOTE_DESC" />
+						
+					<field type="message" style="example" text="MOD_WEBLINKLOGO_EXAMPLE_FOOTNOTE" />
+				</fieldset>				
+				
+				<fieldset name="layout_item" label="MOD_WEBLINKLOGO_ITEM_TITLE">
+				
+					<field name="overall_width" type="sywverbosetext" default="" filter="string" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						label="MOD_WEBLINKLOGO_FIELD_OVERALLWIDTH_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_OVERALLWIDTH_DESC" />
+					
+					<field name="force_width" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_FORCEWIDTH_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_FORCEWIDTH_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="margin_top" type="sywverbosetext" default="5" filter="integer" size="4" unit="px" icon="SYWicon-keyboard-arrow-up" 
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_MARGINTOP_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_MARGINTOP_DESC" />
+					
+					<field name="margin_right" type="sywverbosetext" default="5" filter="integer" size="4" unit="px" icon="SYWicon-keyboard-arrow-right" 
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_MARGINRIGHT_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_MARGINRIGHT_DESC" />
+					
+					<field name="margin_bottom" type="sywverbosetext" default="5" filter="integer" size="4" unit="px" icon="SYWicon-keyboard-arrow-down" 
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_MARGINBOTTOM_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_MARGINBOTTOM_DESC" />				
+					
+					<field name="margin_left" type="sywverbosetext" default="5" filter="integer" size="4" unit="px" icon="SYWicon-keyboard-arrow-left" 
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_MARGINLEFT_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_MARGINLEFT_DESC" />	
+				</fieldset>			
+				
+				<fieldset name="layout_logo" label="MOD_WEBLINKLOGO_LOGO_TITLE">
+				
+					<field name="logo_tooltip" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_LOGOTOOLTIP_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_LOGOTOOLTIP_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
+				
+<!-- 				<field name="descriptionspacer0" type="spacer" hr="true" /> -->
+					
+					<field name="caption" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_CAPTION_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_CAPTION_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
+				
+					<field name="caption_classes" type="sywverbosetext" default="" filter="string" translateHint="false" hint="label label-info" showon="caption:1" 
+						label="MOD_WEBLINKLOGO_FIELD_CAPTIONCLASSES_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CAPTIONCLASSES_DESC" />
+				</fieldset>						
+				
+				<fieldset name="layout_text" label="MOD_WEBLINKLOGO_TEXT_TITLE">
+				
+					<field name="content_align" type="list" default="center" showon="logos_layout:grid" 
+						label="MOD_WEBLINKLOGO_FIELD_CONTENTALIGN_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CONTENTALIGN_DESC">
+						<option value="left">MOD_WEBLINKLOGO_FIELD_VALUE_LEFT</option>									
+						<option value="center">MOD_WEBLINKLOGO_FIELD_VALUE_CENTER</option>				
+						<option value="right">MOD_WEBLINKLOGO_FIELD_VALUE_RIGHT</option>
+					</field>
+					
+					<field name="content_valign" type="list" default="top" showon="logos_layout:list" 
+						label="MOD_WEBLINKLOGO_FIELD_CONTENTALIGN_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CONTENTALIGN_DESC">
+						<option value="top">MOD_WEBLINKLOGO_FIELD_VALUE_TOP</option>									
+						<option value="middle">MOD_WEBLINKLOGO_FIELD_VALUE_MIDDLE</option>				
+						<option value="bottom">MOD_WEBLINKLOGO_FIELD_VALUE_BOTTOM</option>
+					</field>
+				
+					<field name="content_spacing" type="sywverbosetext" default="10" filter="integer" size="4" unit="px" icon="SYWicon-space_bar" 
+						label="MOD_WEBLINKLOGO_FIELD_CONTENTSPACING_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CONTENTSPACING_DESC" />
+				
+					<field name="text_wrap" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="logos_layout:list" 
+						label="MOD_WEBLINKLOGO_FIELD_WRAPTEXT_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_WRAPTEXT_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>						
+				
+				<fieldset name="layout_title" label="MOD_WEBLINKLOGO_LAYOUTTITLE_FIELDSET_LABEL">	
+				
+					<field name="title" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_TITLE_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_TITLE_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>	
+					
+					<field name="title_tag" type="list" default="4" showon="title:1" 
+						label="MOD_WEBLINKLOGO_FIELD_TITLETAG_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_TITLETAG_DESC">
+						<option value="1">h1</option>									
+						<option value="2">h2</option>				
+						<option value="3">h3</option>				
+						<option value="4">h4</option>				
+						<option value="5">h5</option>				
+						<option value="6">h6</option>
+					</field>
+					
+					<field name="link_title" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="title:1" 
+						label="MOD_WEBLINKLOGO_FIELD_LINKTITLE_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_LINKTITLE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>					
+				
+				<fieldset name="layout_hits" label="MOD_WEBLINKLOGO_LAYOUTHITS_FIELDSET_LABEL">	
+				
+					<field name="hits" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_HITS_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_HITS_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
+					
+					<field name="hits_classes" type="sywverbosetext" default="" filter="string" translateHint="false" hint="label label-info" showon="hits:1" 
+						label="MOD_WEBLINKLOGO_FIELD_HITSCLASSES_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_HITSCLASSES_DESC" />
+					
+					<field name="separator" type="text" default="" showon="hits:1" 
+						label="MOD_WEBLINKLOGO_FIELD_SEPARATOR_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_SEPARATOR_DESC" />	
+					
+					<field name="hit_feedback" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_HITSFEEDBACK_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_HITSFEEDBACK_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>					
+				
+				<fieldset name="layout_description" label="MOD_WEBLINKLOGO_LAYOUTDESCRIPTION_FIELDSET_LABEL">
+				
+					<field name="description" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_DESCRIPTION_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_DESCRIPTION_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
+													
+					<field name="l_count" type="sywverbosetext" default="" filter="string" size="4" showon="description:1" 
+						label="MOD_WEBLINKLOGO_FIELD_LETTERCOUNT_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_LETTERCOUNT_DESC" />
+						
+					<field name="trunc_l_w" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="description:1" 
+						label="MOD_WEBLINKLOGO_FIELD_TRUNCATELASTWORD_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_TRUNCATELASTWORD_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+							
+					<field name="strip_tags" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="description:1" 
+						label="MOD_WEBLINKLOGO_FIELD_STRIPTAGS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_STRIPTAGS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="keep_tags" type="sywverbosetext" default="" filter="raw" translateHint="false" hint="&lt;p&gt;&lt;a&gt;&lt;br&gt;" showon="description:1" 
+						label="MOD_WEBLINKLOGO_FIELD_KEEPTAGS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_KEEPTAGS_DESC" />
+						
+					<field name="trigger_events" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="description:1" 
+						label="MOD_WEBLINKLOGO_FIELD_TRIGGEREVENTS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_TRIGGEREVENTS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="description_tag" type="list" default="none" showon="description:1" 
+						label="MOD_WEBLINKLOGO_FIELD_DESCRIPTIONTAG_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_DESCRIPTIONTAG_DESC">
+						<option value="none">JNONE</option>								
+						<option value="div">div</option>							
+						<option value="p">p</option>
+						<option value="span">span</option>
+						<option value="q">q</option>
+						<option value="dfn">dfn</option>
+					</field>
+				</fieldset>
+			</fieldset>
+		
+			<fieldset name="themes" label="MOD_WEBLINKLOGO_THEMES_FIELDSET_LABEL" description="MOD_WEBLINKLOGO_THEMES_FIELDSET_DESC">
+			
+				<fieldset name="themes_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos/theming" />
+				</fieldset>
+				
+				<fieldset name="themes_all" label="MOD_WEBLINKLOGO_THEMES_FIELDSET_LABEL">
+				
+					<field name="overallbgcolor" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="MOD_WEBLINKLOGO_FIELD_OVERALLBGCOLOR_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_OVERALLBGCOLOR_DESC" />
+					
+					<field name="fontsize" type="sywverbosetextunits" default="90" size="4" maxlength="3" units="px,%" defaultunit="%" icon="SYWicon-format-size" 
+						label="MOD_WEBLINKLOGO_FIELD_FONTSIZE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_FONTSIZE_DESC" />
+						
+					<field name="card_shadow" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_CARDSHADOW_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CARDSHADOW_DESC">
+	                    <option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="card_r" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-rounded_corner" 
+						label="MOD_WEBLINKLOGO_FIELD_CARDRADIUS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CARDRADIUS_DESC" />
+						
+					<field name="card_border_w" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-line_weight" 
+						label="MOD_WEBLINKLOGO_FIELD_CARDBORDERWIDTH_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CARDBORDERWIDTH_DESC" />
+						
+					<field name="card_border_c" type="sywcolorpicker" default="#ffffff" icon="text" 
+						label="MOD_WEBLINKLOGO_FIELD_CARDBORDERCOLOR_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CARDBORDERCOLOR_DESC" />
+					
+					<field name="styles" type="editor" rows="10" default="" editor="codemirror|none" filter="raw" buttons="false" syntax="css"
+		            	label="MOD_WEBLINKLOGO_FIELD_STYLES_LABEL" 
+		            	description="MOD_WEBLINKLOGO_FIELD_STYLES_DESC" />
+	
+		            <field type="message" text="MOD_WEBLINKLOGO_EXAMPLE_EXTRACSS" style="example" />
+		    	</fieldset>
+			</fieldset>
+			
+			<fieldset name="links" label="MOD_WEBLINKLOGO_LINKS_FIELDSET_LABEL" description="MOD_WEBLINKLOGO_LINKS_FIELDSET_DESC">
+			
+				<fieldset name="links_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos/links" />
+				</fieldset>
+				
+				<fieldset name="links_all" label="MOD_WEBLINKLOGO_LINKS_FIELDSET_LABEL">
+				
+					<field name="target" type="list" default="1"
+						label="MOD_WEBLINKLOGO_FIELD_TARGET_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_TARGET_DESC">
+						<option value="link">MOD_WEBLINKLOGO_FIELD_VALUE_WEBLINK</option>
+						<option value="0">JBROWSERTARGET_PARENT</option>
+						<option value="1">JBROWSERTARGET_NEW</option>
+						<option value="2">JBROWSERTARGET_POPUP</option>
+						<option value="3">JBROWSERTARGET_MODAL</option>
+					</field>
+					
+					<field name="popup_x" type="sywverbosetext" default="600" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="target:link,2,3" 
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_POPUPX_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_POPUPX_DESC" />
+						
+					<field name="popup_y" type="sywverbosetext" default="400" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="target:link,2,3" 
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_POPUPY_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_POPUPY_DESC" />
+					
+					<field name="follow" type="radio" default="nofollow" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_FOLLOW_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_FOLLOW_DESC">
+						<option value="follow">MOD_WEBLINKLOGO_FIELD_VALUE_FOLLOW</option>
+						<option value="nofollow">MOD_WEBLINKLOGO_FIELD_VALUE_NOFOLLOW</option>
+					</field>
+	
+					<field name="count_clicks" type="list" default="0" 
+						label="MOD_WEBLINKLOGO_FIELD_COUNTCLICKS_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_COUNTCLICKS_DESC">
+						<option value="link">MOD_WEBLINKLOGO_FIELD_VALUE_WEBLINK</option>
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="logo" label="MOD_WEBLINKLOGO_LOGO_FIELDSET_LABEL" description="MOD_WEBLINKLOGO_LOGO_FIELDSET_DESC">
+			
+				<fieldset name="logo_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos/logos" />
+				</fieldset>
+			
+				<fieldset name="logo_all" label="MOD_WEBLINKLOGO_LOGO_FIELDSET_LABEL">
+					
+					<field name="d_logo" type="media" default="" 
+						label="MOD_WEBLINKLOGO_FIELD_DEFAULTLOGO_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_DEFAULTLOGO_DESC" />			
+									
+					<field name="width" type="sywverbosetext" default="120" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_WIDTH_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_WIDTH_DESC" />
+						
+					<field name="height" type="sywverbosetext" default="40" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" 
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_HEIGHT_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_HEIGHT_DESC" />
+						
+					<field name="restrict_width" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_RESTRICTWIDTHTOIMAGE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_RESTRICTWIDTHTOIMAGE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="center_vertically" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="restrict_width:0" 
+						label="MOD_WEBLINKLOGO_FIELD_CENTERVERTICALLY_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CENTERVERTICALLY_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+						
+					<field name="logobgcolor" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="MOD_WEBLINKLOGO_FIELD_LOGOBGCOLOR_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_LOGOBGCOLOR_DESC" />
+							  	
+					<field type="message" text="MOD_WEBLINKLOGO_INFO_CSS3ANIMATIONS" style="warning" />
+					
+					<field name="hover_type" type="sywtransitionpicker" default="none" transitiongroups="2d" icon="SYWicon-layers" 
+						label="MOD_WEBLINKLOGO_FIELD_HOVERTYPE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_HOVERTYPE_DESC" />
+					
+					<field name="opacity" type="sywverbosetext" default="1" filter="float" size="8" maxlength="3" min="0" max="1" icon="SYWicon-opacity" 
+						label="MOD_WEBLINKLOGO_FIELD_IMAGEOPACITY_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_IMAGEOPACITY_DESC" />
+					
+					<field name="filter" type="sywimagefilterpicker" cssfilters="true" default="none" 
+						label="MOD_WEBLINKLOGO_FIELD_IMAGEFILTER_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_IMAGEFILTER_DESC" />
+					
+					<field name="filter_hover" type="sywimagefilterpicker" cssfilters="true" default="none" 
+						label="MOD_WEBLINKLOGO_FIELD_IMAGEFILTERHOVER_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_IMAGEFILTERHOVER_DESC" />
+					
+					<field name="create_highres" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_CREATEHIGHRES_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CREATEHIGHRES_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+
+					<field name="thumb_mime_type" type="imagetypeselect" default="" 
+						label="MOD_WEBLINKLOGO_FIELD_THUMBNAILMIMETYPE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_THUMBNAILMIMETYPE_DESC">
+						<option value="">MOD_WEBLINKLOGO_VALUE_SAMEASORIGINAL</option>
+					</field>
+				
+					<field name="quality_jpg" type="sywverbosetext" default="75" filter="integer" size="8" maxlength="3" min="0" max="100"   
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYJPG_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYJPG_DESC" />
+						
+					<field name="quality_png" type="sywverbosetext" default="3" filter="integer" size="8" maxlength="1" min="0" max="9"   
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYPNG_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYPNG_DESC" />
+						
+					<field name="quality_webp" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100"   
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYWEBP_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYWEBP_DESC" />
+						
+					<field name="quality_avif" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100"   
+						parentclass="span-3-inline"
+						label="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYAVIF_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_IMAGEQUALITYAVIF_DESC" />		
+							  	
+					<field type="imagelibrarytest" />
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="carousel" label="MOD_WEBLINKLOGO_CAROUSEL_FIELDSET_LABEL" description="MOD_WEBLINKLOGO_CAROUSEL_FIELDSET_DESC">
+			
+				<fieldset name="carousel_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos/carousel" />
+				</fieldset>
+			
+				<fieldset name="carousel_all" label="MOD_WEBLINKLOGO_CAROUSEL_FIELDSET_LABEL">
+								
+<!-- 				<field type="message" text="MOD_WEBLINKLOGO_INFO_JQUERY" style="warning" /> -->
+				
+					<field name="carousel_config" type="list" default="none" 
+						label="MOD_WEBLINKLOGO_FIELD_ANIMATIONCONFIGURATION_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ANIMATIONCONFIGURATION_DESC">
+						<option value="none">JNONE</option>
+						<option value="v">MOD_WEBLINKLOGO_VALUE_VERTICAL</option>
+						<option value="h">MOD_WEBLINKLOGO_VALUE_HORIZONTAL</option>
+					</field>
+						
+					<field name="visible_items" type="sywverbosetext" default="1" filter="integer" size="4" icon="SYWicon-visibility" showon="carousel_config:v,h" 
+						label="MOD_WEBLINKLOGO_FIELD_VISIBLEITEMS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_VISIBLEITEMS_DESC" />
+					
+<!-- 				<field type="message" text="MOD_WEBLINKLOGO_INFO_VISIBLEITEMS" style="warning" label="MOD_WEBLINKLOGO_FIELD_VISIBLEITEMS_LABEL" /> -->
+				
+					<field name="moveatonce" type="radio" default="all" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
+						label="MOD_WEBLINKLOGO_FIELD_MOVEATONCE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_MOVEATONCE_DESC">
+	                    <option value="one">MOD_WEBLINKLOGO_VALUE_ONEATATIME</option>
+	                    <option value="all">MOD_WEBLINKLOGO_VALUE_ALLVISIBLE</option>
+	                </field>
+	                
+	                <field name="arrows" type="list" default="none" showon="carousel_config:v,h" 
+						label="MOD_WEBLINKLOGO_FIELD_ARROWS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ARROWS_DESC">
+	                    <option value="none">JNONE</option>
+	                    <option value="around">MOD_WEBLINKLOGO_VALUE_AROUND</option>
+	                    <option value="under">MOD_WEBLINKLOGO_VALUE_UNDER</option>
+	                    <!-- <option value="title">MOD_WEBLINKLOGO_VALUE_MODULETITLE</option> -->
+	                </field>
+	                
+	                <field name="arrowstyle" type="radio" default="" layout="joomla.form.field.radio.switcher" showon="arrows:around,under[AND]carousel_config:v,h" 
+						label="MOD_WEBLINKLOGO_FIELD_ARROWSTYLE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ARROWSTYLE_DESC">
+	                    <option value="">JDEFAULT</option>
+	                    <option value="pagination">Bootstrap</option>
+	                </field>
+	                
+	                <field name="arrowsize_bootstrap" type="list" default="" showon="arrows:around,under[AND]carousel_config:v,h[AND]arrowstyle:pagination" 
+						label="MOD_WEBLINKLOGO_FIELD_BOOTSTRAPSIZE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_BOOTSTRAPSIZE_DESC">
+						<option value="">JDEFAULT</option>
+						<option value="small">MOD_WEBLINKLOGO_VALUE_SMALL</option>
+						<option value="mini">MOD_WEBLINKLOGO_VALUE_MINI</option>
+					</field>
+	                
+	                <field name="arrowsize" type="sywverbosetext" default="1" filter="float" size="4" maxlength="5" unit="em" icon="SYWicon-format-size" showon="arrows:around,under[AND]carousel_config:v,h" 
+						label="MOD_WEBLINKLOGO_FIELD_ARROWSIZE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ARROWSIZE_DESC" />
+						
+					<field name="arrowoffset" type="sywverbosetext" default="0" filter="integer" size="4" unit="px" icon="SYWicon-settings-ethernet" showon="arrows:around,under[AND]carousel_config:v,h" 
+						label="MOD_WEBLINKLOGO_FIELD_ARROWSOFFSET_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ARROWSOFFSET_DESC" />					
+						
+					<field name="includepages" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
+						label="MOD_WEBLINKLOGO_FIELD_INCLUDEPAGES_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_INCLUDEPAGES_DESC">
+						<option value="0">JNO</option>	
+						<option value="1">JYES</option>
+					</field>					
+	
+					<field name="auto" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
+						label="MOD_WEBLINKLOGO_FIELD_AUTO_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_AUTO_DESC">
+	                    <option value="0">JNO</option>
+	                    <option value="1">JYES</option>
+	                </field>	
+	                		
+					<field name="speed" type="sywverbosetext" default="1000" filter="integer" size="4" unit="ms" icon="SYWicon-timer" showon="carousel_config:v,h" 
+						label="MOD_WEBLINKLOGO_FIELD_SPEED_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_SPEED_DESC" />
+										
+					<field name="interval" type="sywverbosetext" default="3000" filter="integer" size="4" unit="ms" icon="SYWicon-timer" showon="carousel_config:v,h" 
+						label="MOD_WEBLINKLOGO_FIELD_INTERVAL_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_INTERVAL_DESC" />              
+	                
+	                <field name="restart_on_refresh" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="carousel_config:v,h" 
+						label="MOD_WEBLINKLOGO_FIELD_RESTARTONREFRESH_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_RESTARTONREFRESH_DESC">
+	                    <option value="0">JNO</option>
+	                    <option value="1">JYES</option>
+	                </field>
+	        	</fieldset>
+			</fieldset>
+			
+			<fieldset name="advanced_all" label="MOD_WEBLINKLOGO_ADVANCED_FIELDSET_LABEL" description="MOD_WEBLINKLOGO_ADVANCED_FIELDSET_DESC">
+			
+				<fieldset name="advanced_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/weblink-logos/module-weblink-logos/advanced" />
+				</fieldset>
+	            
+	            <fieldset name="advanced_general" label="MOD_WEBLINKLOGO_ADVANCED_FIELDSET_LABEL">
+	            
+<!-- 		            <field type="message" text="MOD_WEBLINKLOGO_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"  -->
+<!-- 						label="MOD_WEBLINKLOGO_FIELD_LAYOUTSUFFIX_LABEL"  -->
+<!-- 						description="MOD_WEBLINKLOGO_FIELD_LAYOUTSUFFIX_DESC" /> -->
+	            
+		            <field name="site_mode" type="list" default="dev" 
+						label="MOD_WEBLINKLOGO_FIELD_SITEMODE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_SITEMODE_DESC">
+						<option value="dev">MOD_WEBLINKLOGO_VALUE_TESTMODE</option>
+						<option value="prod">MOD_WEBLINKLOGO_VALUE_PRODUCTIONMODE</option>
+						<option value="adv">MOD_WEBLINKLOGO_VALUE_ADVANCEDMODE</option>
+					</field>
+					
+		            <field name="bootstrap_version" type="list" default="joomla" 
+						label="MOD_WEBLINKLOGO_FIELD_COMPATIBILITYBOOTSTRAP_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_COMPATIBILITYBOOTSTRAP_DESC">
+						<option value="0">JNONE</option>
+						<option value="joomla">Joomla</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</field>
+		            
+		            <field name="show_errors" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
+						label="MOD_WEBLINKLOGO_FIELD_SHOWERRORS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_SHOWERRORS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="remove_whitespaces" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
+						label="MOD_WEBLINKLOGO_FIELD_REMOVEWHITESPACES_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_REMOVEWHITESPACES_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				
+<!-- 				<field name="load_icon_font" type="radio" default="1" layout="joomla.form.field.radio.switcher"  -->
+<!-- 					label="MOD_WEBLINKLOGO_FIELD_LOADICONFONT_LABEL" -->
+<!-- 					description="MOD_WEBLINKLOGO_FIELD_LOADICONFONT_DESC"> -->
+<!-- 					<option value="0">JNO</option> -->
+<!-- 					<option value="1">JYES</option> -->
+<!-- 				</field>	 -->
+				</fieldset>
+				
+				<fieldset name="advanced_pictures" label="MOD_WEBLINKLOGO_PICTURES_LABEL">
+								
+					<field type="message" text="MOD_WEBLINKLOGO_INFO_CLEARCACHE" style="info" showon="site_mode:adv" />
+						
+					<field name="clear_cache" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
+						label="MOD_WEBLINKLOGO_FIELD_CLEARCACHE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CLEARCACHE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="unique_files" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_UNIQUEFILES_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_UNIQUEFILES_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="thumb_path" type="list" default="images" 
+						label="MOD_WEBLINKLOGO_FIELD_THUMBPATH_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_THUMBPATH_DESC">
+						<option value="default">MOD_WEBLINKLOGO_VALUE_TEMPFOLDER</option>
+						<option value="images">MOD_WEBLINKLOGO_VALUE_IMAGESDIRECTORY</option>
+						<option value="cache">MOD_WEBLINKLOGO_VALUE_CACHEDIRECTORY</option>
+					</field>
+					
+					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" message="MOD_WEBLINKLOGO_INFO_AUTORESETPLUGIN" 
+						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset"
+						imagesrc="media/mod_weblinklogos/images/logo_autoreset_small.png"
+						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" />	
+				</fieldset>
+						
+				<fieldset name="advanced_headers" label="MOD_WEBLINKLOGO_STYLESHEETSANDSCRIPTS_LABEL">
+
+					<field type="message" text="MOD_WEBLINKLOGO_FIELD_LAZYLOADSTYLESHEETS_TXT" style="fieldneutral" badge="MOD_WEBLINKLOGO_FIELD_LAZYLOADSTYLESHEETS_BADGE" badgetype="light"
+						label="MOD_WEBLINKLOGO_FIELD_LAZYLOADSTYLESHEETS_LABEL" />
+	            
+		            <field name="inline_scripts" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_INLINESCRIPTS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_INLINESCRIPTS_DESC">
+	                    <option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="remote_libraries" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_REMOTELIBRARIES_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_REMOTELIBRARIES_DESC">
+	                    <option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+								
+					<field type="message" text="MOD_WEBLINKLOGO_INFO_CLEARHEADERFILESCACHE" style="info" showon="site_mode:adv" />
+					
+					<field name="clear_header_files_cache" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
+						label="MOD_WEBLINKLOGO_FIELD_CLEARHEADERFILESCACHE_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_CLEARHEADERFILESCACHE_DESC">
+	                    <option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="advanced_prepost" label="MOD_WEBLINKLOGO_ADVANCEDPREPOST_FIELDSET_LABEL">
+					
+					<field name="pretext" type="editor" rows="5" editor="codemirror|none" filter="safehtml" buttons="false" syntax="html"
+						label="MOD_WEBLINKLOGO_FIELD_PRETEXT_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_PRETEXT_DESC" />
+						
+					<field name="posttext" type="editor" rows="5" editor="codemirror|none" filter="safehtml" buttons="false" syntax="html"
+						label="MOD_WEBLINKLOGO_FIELD_POSTTEXT_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_POSTTEXT_DESC" />
+						
+					<field name="allow_plugins" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_WEBLINKLOGO_FIELD_ALLOWPLUGINS_LABEL" 
+						description="MOD_WEBLINKLOGO_FIELD_ALLOWPLUGINS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+						
+				<fieldset name="advanced" label="MOD_WEBLINKLOGO_MODULE_LABEL">
+				
+					<field name="show_on_mobile" type="list" default="1" 
+						label="MOD_WEBLINKLOGO_FIELD_SHOWONMOBILE_LABEL"
+						description="MOD_WEBLINKLOGO_FIELD_SHOWONMOBILE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+						<option value="2">MOD_WEBLINKLOGO_VALUE_ONLY</option>
+					</field>
+					
+					<field name="moduleclass_sfx" type="text"
+						label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" />
+						
+					<field name="cache" type="list" default="1"
+						label="COM_MODULES_FIELD_CACHING_LABEL">
+						<option value="1">JGLOBAL_USE_GLOBAL</option>
+						<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+					</field>
+					
+					<field name="cache_time" type="sywverbosetext" default="900" size="4" unit="ms" icon="SYWicon-timer" 
+						label="COM_MODULES_FIELD_CACHE_TIME_LABEL" />
+						
+					<field name="cachemode" type="hidden" default="static">
+						<option value="static"></option>
+					</field>
+				</fieldset>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
