@@ -1,0 +1,204 @@
+.lnee.newslist {
+	position: relative;
+}
+
+	.lnee ul.latestnews-items {
+		list-style: none;
+	    position: relative;
+	    margin: 0;
+	    padding: 0;
+	    overflow: hidden;
+	    
+	    /* remove extra gaps between inline blocks */
+	    font-size: 0;
+	    letter-spacing: -1px; /* only for Safari */
+	}
+	
+	.lnee ul.latestnews-items.altered {
+		text-align: inherit;
+	}
+	
+	.lnee ul.latestnews-items li.latestnews-item {
+		list-style: none; /* To avoid possible template overrides */
+	    padding: 0; /* To avoid possible template overrides */
+	    background-image: none !important; /* To avoid possible template overrides */
+		
+		letter-spacing: normal;		
+		line-height: inherit;
+	    vertical-align: top;
+		display: inline-block;	    
+	    margin-bottom: 5px;
+	    text-align: initial;
+	}
+	
+	.lnee ul.latestnews-items li.latestnews-item.shadow {
+		box-shadow: none !important /* BS5 side effect */
+	}
+	
+		.lnee .news,
+			.lnee .innernews {
+				overflow: hidden;
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+			}
+		
+			.lnee .even { /* to override third-party styles */
+				border-bottom: none;
+				background: none;
+				padding: 0;
+			}
+			
+			.lnee .odd { /* to override third-party styles */
+				border-bottom: none;
+				background: none;
+				padding: 0;
+			}
+
+				.lnee .newshead,
+				.lnee .newsinfo {
+					-webkit-box-sizing: border-box;
+					-moz-box-sizing: border-box;
+					box-sizing: border-box;
+				}
+
+					.lnee .newstitle {
+						margin: 0;
+						word-wrap: break-word;
+						line-height: initial;
+					}
+					
+					.lnee .newstitle,
+					.lnee .head_left .newstitle {
+						text-align: left;
+					}
+					
+					html[dir="rtl"] .lnee .newstitle,
+					html[dir="rtl"] .lnee .head_left .newstitle {
+						text-align: right;
+					}
+					
+					.lnee .head_right .newstitle {
+						text-align: right;
+					}
+					
+					.lnee .newsintro,
+					.lnee .head_left .newsintro {
+						text-align: left;
+					}
+					
+					html[dir="rtl"] .lnee .newsintro,
+					html[dir="rtl"] .lnee .head_left .newsintro {
+						text-align: right;
+					}
+					
+					.lnee .head_right .newsintro {
+						text-align: right;
+					}
+					
+					.lnee .newsextra,
+					.lnee .head_left .newsextra {
+						text-align: left;
+					}
+					
+					html[dir="rtl"] .lnee .newsextra,
+					html[dir="rtl"] .lnee .head_left .newsextra {
+						text-align: right;
+					}
+					
+					.lnee .head_right .newsextra {
+						text-align: right;
+					}
+					
+						.lnee .newsextra .delimiter {
+							white-space: pre-wrap;
+						}
+					
+						.lnee .newsextra .detail_icon {
+						    font-size: 1em;
+						    padding-right: 3px;
+						}
+						
+						html[dir="rtl"] .lnee .newsextra .detail_icon {
+							padding-left: 3px;
+							padding-right: 0;
+						}
+						
+						.lnee .newsextra a .detail_icon {
+						    color: inherit;
+						}
+						
+						.lnee .newsextra .detail_rating .detail_data .detail_icon {
+							font-size: 1.2em;
+						}
+					
+.lnee ul.latestnews-items li p.link {
+	margin-top: 5px;
+}
+
+.lnee .linkleft {
+	text-align: left !important;
+}
+
+.lnee .linkcenter,
+.lnee .linkjustify {
+	text-align: center !important;
+}
+
+.lnee .linkright {
+	text-align: right !important;
+}
+
+.lnee .link,
+.lnee .catlink {
+	text-align: left;
+}
+
+.lnee .head_right .link,
+.lnee .head_right .catlink,
+html[dir="rtl"] .lnee .link,
+html[dir="rtl"] .lnee .catlink,
+html[dir="rtl"] .lnee .head_right .link,
+html[dir="rtl"] .lnee .head_right .catlink {
+	text-align: right;
+}
+
+.lnee.vertical .catlink.emptyspace {
+	display: none;
+}
+
+.lnee.horizontal .catlink.emptyspace {
+	visibility: hidden; /* to keep the space */
+}
+	
+.lnee .onecatlink.first,
+.lnee .readalllink.first {
+	margin-bottom: 5px;
+}	
+
+.lnee .onecatlink.last,
+.lnee .readalllink.last {
+	margin-top: 5px;
+}
+
+.lnee .clearfix {
+	float: none;
+	clear: both;
+}
+
+.lnee ul.latestnews-items li p + p {
+	text-indent: 0 !important;
+}
+
+.lnee ul.latestnews-items li p,
+.lnee dl.item_details,
+.lnee dd.newsextra {
+	margin: 0;
+	padding: 0;
+}
+
+.lnee dl.item_details > dt { 
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+}

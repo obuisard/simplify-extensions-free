@@ -1,0 +1,1914 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+	<name>MOD_LATESTNEWSENHANCED</name>
+	<author>Olivier Buisard</author>
+	<creationDate>10/15/2015</creationDate>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
+	<version>7.4.0</version>
+	<description>MOD_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
+	<namespace path="src">SYW\Module\LatestNewsEnhanced</namespace>
+	
+	<media folder="media" destination="mod_latestnewsenhanced">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>scripts</folder>
+		<folder>styles</folder>
+	</media>
+	
+	<files>
+		<filename module="mod_latestnewsenhanced">mod_latestnewsenhanced.php</filename>
+		<filename>license.txt</filename>
+		<folder>forms</folder>
+		<folder>layouts</folder>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+	</files>
+	
+	<languages>
+		<language tag="da-DK">language/da-DK/da-DK.mod_latestnewsenhanced.ini</language>
+		<language tag="da-DK">language/da-DK/da-DK.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="de-DE">language/de-DE/de-DE.mod_latestnewsenhanced.ini</language>
+		<language tag="de-DE">language/de-DE/de-DE.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.mod_latestnewsenhanced.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="es-ES">language/es-ES/es-ES.mod_latestnewsenhanced.ini</language>
+		<language tag="es-ES">language/es-ES/es-ES.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="fi-FI">language/fi-FI/fi-FI.mod_latestnewsenhanced.ini</language>
+		<language tag="fi-FI">language/fi-FI/fi-FI.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.mod_latestnewsenhanced.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="hu-HU">language/hu-HU/hu-HU.mod_latestnewsenhanced.ini</language>
+		<language tag="hu-HU">language/hu-HU/hu-HU.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="it-IT">language/it-IT/it-IT.mod_latestnewsenhanced.ini</language>
+		<language tag="it-IT">language/it-IT/it-IT.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.mod_latestnewsenhanced.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.mod_latestnewsenhanced.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.mod_latestnewsenhanced.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="pt-BR">language/pt-BR/pt-BR.mod_latestnewsenhanced.ini</language>
+		<language tag="pt-BR">language/pt-BR/pt-BR.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="pt-PT">language/pt-PT/pt-PT.mod_latestnewsenhanced.ini</language>
+		<language tag="pt-PT">language/pt-PT/pt-PT.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.mod_latestnewsenhanced.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.mod_latestnewsenhanced.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="sv-SE">language/sv-SE/sv-SE.mod_latestnewsenhanced.ini</language>
+		<language tag="sv-SE">language/sv-SE/sv-SE.mod_latestnewsenhanced.sys.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.mod_latestnewsenhanced.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.mod_latestnewsenhanced.sys.ini</language>
+	</languages>
+	
+	<config>
+		<fields name="params" addfieldprefix="SYW\Module\LatestNewsEnhanced\Site\Field">
+			
+			<fieldset name="basic" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
+							
+				<field type="extensionversion" extension="mod_latestnewsenhanced" />
+				<field type="extensionauthor" />
+				<field type="extensionconnect" />
+				<field type="extensiontranslators" translators="MOD_LATESTNEWSENHANCED_TRANSLATORS" />
+				
+				<field type="extensionlinks" 
+					translate="https://simplifyyourweb.com/translators"
+					onlinedoc="https://simplifyyourweb.com/documentation/latest-news"
+					quickstart="https://simplifyyourweb.com/documentation/latest-news/quickstart-guide"
+					forum="https://simplifyyourweb.com/forum/16-latest-news-enhanced"
+					report="https://simplifyyourweb.com/support"
+					support="https://simplifyyourweb.com/support"
+					demo="https://demo4.simplifyyourweb.com/latest-news-enhanced"
+					review="http://extensions.joomla.org/extensions/extension/news-display/articles-display/latest-news-enhanced"
+					donate="https://simplifyyourweb.com/free-products/latest-news-enhanced" />
+
+				<field type="sywextensionpresencetest" title="Latest News Enhanced Pro" message="MOD_LATESTNEWSENHANCED_INFO_PROVERSION" 
+					extensiontype="component" extensionelement="com_latestnewsenhancedpro"
+					imagesrc="media/mod_latestnewsenhanced/images/logo_pro.png"
+					downloadlink="https://simplifyyourweb.com/downloads/latest-news-enhanced-pro" downloadtext="MOD_LATESTNEWSENHANCED_INFO_PROVERSIONDOWLOAD" />
+				
+<!-- 				<field type="sywlibtest" minversion="2.0.0" downloadlink="https://simplifyyourweb.com/downloads/syw-extension-library" /> -->
+			</fieldset>
+			
+			<fieldset name="selection" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTION_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTION_FIELDSET_DESC">
+
+				<fieldset name="selection_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/selection" />
+				</fieldset>
+								
+				<fieldset name="selection_source" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONSOURCE_FIELDSET_LABEL">
+				
+					<field name="datasource" type="datasourceselect" default="articles"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DATASOURCE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DATASOURCE_DESC">	
+						<option value="articles">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ARTICLES</option>
+					</field>
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREDATASOURCEINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>
+				
+				<fieldset name="selection_dynamic" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONDYNAMIC_FIELDSET_LABEL">
+					 
+					<field name="related" type="relatedselect" default="0" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_RELATEDARTICLES_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_RELATEDARTICLES_DESC">
+						<option value="0">JNO</option>	
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_RELATEDBYKEY</option>
+						<option value="2">MOD_LATESTNEWSENHANCEDEXTENDED_RELATEDBYTAG</option>
+						<option value="3">MOD_LATESTNEWSENHANCEDEXTENDED_RELATEDANYBYTAG</option>	
+					</field>
+				</fieldset>
+								
+				<fieldset name="selection_categories" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONCATEGORIES_FIELDSET_LABEL">
+				
+					<field name="cat_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CATEGORYFILTER_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CATEGORYFILTER_DESC">
+						<option value="0">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EXCLUS</option>
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INCLUS</option>
+					</field>
+					
+					<field name="catid" type="category" extension="com_content" multiple="true" size="5" default="all" layout="joomla.form.field.list-fancy-select" showon="datasource:articles" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CATEGORY_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CATEGORY_DESC">
+						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
+						<option value="all">JOPTION_ALL_CATEGORIES</option>
+					</field>
+								
+					<field name="includesubcategories" type="list" default="no" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INCLUDESUBCATEGORIES_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INCLUDESUBCATEGORIES_DESC">					
+						<option value="no">JNO</option>
+						<option value="onelevel">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LEVEL</option>
+						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLLEVELS</option>
+					</field>
+	
+					<field name="levelsubcategories" type="sywverbosetext" default="1" filter="integer" size="4" showon="includesubcategories:onelevel" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SUBCATEGORYLEVELS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SUBCATEGORYLEVELS_DESC" />
+						
+					<field name="cat_order" type="list" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CATORDER_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CATORDER_DESC">	
+						<option value="">JNONE</option>				
+						<option value="o_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ORDERASC</option>
+						<option value="o_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ORDERDESC</option>
+						<option value="t_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TITLEASC</option>
+						<option value="t_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TITLEDESC</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="selection_tags" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONTAGS_FIELDSET_LABEL">
+				
+					<field name="tags_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGSFILTER_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGSFILTER_DESC">
+						<option value="0">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EXCLUS</option>
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INCLUS</option>
+					</field>
+					
+					<field name="tags_ex_untagged" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="datasource:articles[AND]tags_inex:0" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGS_UNTAGGED_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGS_UNTAGGED_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="tags" type="tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select" showon="datasource:articles" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGS_DESC">
+						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLTAGS</option>
+					</field>
+					
+					<field name="include_tag_children" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="datasource:articles" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGSCHILDREN_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGSCHILDREN_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="tags_match" type="radio" default="any" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGSMATCH_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGSMATCH_DESC">
+						<option value="all">JALL</option>
+						<option value="any">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ANY</option>
+					</field>
+
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="tags_match:any" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ANYMIN_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ANYMIN_DESC" />
+						
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="tags_match:any" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ANYMAX_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ANYMAX_DESC" />
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGORDER_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TAGORDER_DESC" />
+				</fieldset>
+				
+				<fieldset name="selection_cfields" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONCUSTOMFIELDS_FIELDSET_LABEL">
+					
+					<field name="customfieldsfilter" type="subform" formsource="modules/mod_latestnewsenhanced/forms/fields/customfieldsfilter.xml" multiple="true" showon="datasource:articles"
+						default="{'field':'none','inex':'1','values':''}"
+	   					label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CUSTOMFIELDSFILTER_LABEL" 
+	   					description="MOD_LATESTNEWSENHANCEDEXTENDED_CUSTOMFIELDSFILTER_DESC" />
+				</fieldset>
+				
+				<fieldset name="selection_keywords" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONKEYWORDS_FIELDSET_LABEL">
+					
+					<field name="keys" type="text" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_METAKEYS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_METAKEYS_DESC" />
+				</fieldset>
+				
+				<fieldset name="selection_authors" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONAUTHORS_FIELDSET_LABEL">
+
+					<field name="author_match" type="list" default="0" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORMATCH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORMATCH_DESC">
+						<option value="0">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CREATEDBY</option>
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CREATEDBY_AND_CREATEDBYALIAS</option>
+						<option value="2">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CREATEDBY_OR_CREATEDBYALIAS</option>
+					</field>
+
+				  	<field name="author_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYFILTER_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYFILTER_DESC">
+						<option value="0">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EXCLUS</option>
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INCLUS</option>
+					</field>
+	
+					<field name="created_by" type="authorselect" multiple="true" size="5" default="all" layout="joomla.form.field.list-fancy-select" showon="datasource:articles" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBY_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBY_DESC">
+						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LOGGEDUSER</option>
+						<option value="realauto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
+						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLCREATEDBY</option>
+					</field>
+
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_CREATEDBY_NORESULTS" style="warning" showon="datasource:articles[AND]author_inex:0[AND]created_by:all" />
+
+					<field name="author_alias_inex" type="radio" layout="joomla.form.field.radio.switcher" default="1" showon="author_match:1,2"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIASFILTER_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIASFILTER_DESC">
+						<option value="0">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EXCLUS</option>
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INCLUS</option>
+					</field>
+	
+					<field name="created_by_alias" type="authoraliasselect" multiple="true" size="5" layout="joomla.form.field.list-fancy-select" showon="author_match:1,2[AND]datasource:articles" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIAS_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEDBYALIAS_DESC">
+						<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
+						<option value="all">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALLCREATEDBYALIAS</option>
+					</field>
+
+					<field name="show_a" type="list" default="alias" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORNAME_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORNAME_DESC">
+						<option value="full">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FULL</option>
+						<option value="alias">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALIAS</option>
+						<option value="user">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_USER</option>
+					</field>
+					
+					<field name="author_order" type="list" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORORDER_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTHORORDER_DESC">	
+						<option value="">JNONE</option>				
+						<option value="selec_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALPHABETICAL_ASC</option>
+						<option value="selec_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALPHABETICAL_DESC</option>
+					</field>
+				</fieldset>
+			  	
+				<fieldset name="selection_dates" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONDATES_FIELDSET_LABEL">
+								
+					<field name="post_d" type="dateselect" default="published" 
+			           	label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSTDATE_LABEL" 
+			           	description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSTDATE_DESC">
+						<option value="created">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CREATED</option>
+						<option value="published">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PUBLISHED</option>
+						<option value="modified">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MODIFIED</option>
+						<option value="finished">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FINISHED</option>
+						<option value="fin_pen">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FINISHEDWITHPENDING</option>
+						<option value="pending">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PENDING</option>
+					</field>
+					
+					<field name="when_no_date" type="list" default="0" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_WHENNODATE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_WHENNODATE_DESC">
+						<option value="0">JHIDE</option>
+						<option value="3">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_KEEPINPLACE</option>
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHOWBEFORE</option>
+						<option value="2">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHOWAFTER</option>
+					</field>
+					
+					<field name="use_range" type="list" default="0" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_USERANGE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_USERANGE_DESC">
+						<option value="0">JNONE</option>
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RELATIVEDATE</option>
+						<option value="2">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DATERANGE</option>
+					</field>
+	
+					<field name="start_date_range" type="calendar" format="%Y-%m-%d %H:%M:%S" size="22" filter="user_utc" showon="use_range:2"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STARTDATE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STARTDATE_DESC" />
+	
+					<field name="end_date_range" type="calendar" format="%Y-%m-%d %H:%M:%S" size="22" filter="user_utc" showon="use_range:2"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ENDDATE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ENDDATE_DESC" />
+	
+					<field name="range_to" type="list" default="week" showon="use_range:1" 
+			           	label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_RANGEFROM_LABEL" 
+			           	description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_RANGEFROM_DESC">
+						<option value="now">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_NOWRANGE</option>
+						<option value="day">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DAYRANGE</option>
+						<option value="week">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_WEEKRANGE</option>
+						<option value="month">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MONTHRANGE</option>
+						<option value="year">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_YEARRANGE</option>
+					</field>	
+						
+					<field name="spread_to" type="sywverbosetext" default="1" filter="integer" size="4" showon="use_range:1[AND]range_to:day,week,month,year" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPREADFROM_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPREADFROM_DESC" />
+						
+					<field name="range_from" type="list" default="now" showon="use_range:1" 
+			           	label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_RANGETO_LABEL" 
+			           	description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_RANGETO_DESC">
+						<option value="now">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_NOWRANGE</option>
+						<option value="day">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DAYRANGE</option>
+						<option value="week">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_WEEKRANGE</option>
+						<option value="month">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MONTHRANGE</option>
+						<option value="year">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_YEARRANGE</option>
+					</field>	
+						
+					<field name="spread_from" type="sywverbosetext" default="1" filter="integer" size="4" showon="use_range:1[AND]range_from:day,week,month,year" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPREADTO_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPREADTO_DESC" />
+						
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_EXAMPLE_RELATIVEDATEEXAMPLE1" style="example" showon="use_range:1" />
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_EXAMPLE_RELATIVEDATEEXAMPLE2" style="example" showon="use_range:1" />
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_EXAMPLE_RELATIVEDATEEXAMPLE3" style="example" showon="use_range:1" />
+				</fieldset>
+
+				<fieldset name="selection_exin" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONINEX_FIELDSET_LABEL" addfieldprefix="Joomla\Component\Content\Administrator\Field">
+
+					<field name="ex_current_item" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDECURRENTITEM_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDECURRENTITEM_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+	
+					<field
+						name="ex_articles"
+						type="subform"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_EXCLUDE_DESC"
+						multiple="true"
+						buttons="add,remove"
+						>
+						<form>
+							<field
+								name="id"
+								type="modal_article"
+								label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SELECT_ARTICLE_LABEL"
+								select="true"
+								new="false"
+								edit="false"
+								clear="true"
+							/>
+						</form>
+					</field>
+	
+					<field
+						name="in_articles"
+						type="subform"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ONLYIDS_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ONLYIDS_DESC"
+						multiple="true"
+						buttons="add,remove"
+						>
+						<form>
+							<field
+								name="id"
+								type="modal_article"
+								label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SELECT_ARTICLE_LABEL"
+								select="true"
+								new="false"
+								edit="false"
+								clear="true"
+							/>
+						</form>
+					</field>
+						
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_UNAUTHORIZED_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_UNAUTHORIZED_DESC" />
+				</fieldset>
+				
+				<fieldset name="selection_featured" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONFEATURED_FIELDSET_LABEL">
+					
+					<field name="show_f" type="list" default="3"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FEATURED_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FEATURED_DESC">
+						<option value="0">JNO</option>
+						<option value="3">JYES</option>
+						<option value="2">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHOWFIRST</option>
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ONLYSHOWFEATURED</option>
+					</field>
+				</fieldset>	
+				
+				<fieldset name="selection_order" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONORDER_FIELDSET_LABEL">
+							
+					<field name="order" type="listfree" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ORDERING_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ORDERING_DESC">
+						<option value="">JNONE</option>
+						<option value="o_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ORDERDESC</option>
+						<option value="o_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ORDERASC</option>
+						<option value="c_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CREATEDDESC</option>
+						<option value="c_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CREATEDASC</option>
+						<option value="p_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PUBLISHEDDESC</option>
+						<option value="p_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PUBLISHEDASC</option>
+						<option value="m_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MODIFIEDDESC</option>
+						<option value="m_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MODIFIEDASC</option>
+						<option value="f_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FINISHINGDESC</option>
+						<option value="f_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FINISHINGASC</option>
+						<option value="mc_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TOUCHEDDESC</option>
+						<option value="mc_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TOUCHEDASC</option>
+						<option value="cfield_dsc" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CUSTOMFIELDDATEDESC</option>
+						<option value="cfield_asc" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CUSTOMFIELDDATEASC</option>
+						<option value="title_dsc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TITLEDESC</option>
+						<option value="title_asc">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TITLEASC</option>
+						<option value="random">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RANDOM</option>
+						<option value="hit">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_HIT</option>
+						<option value="manual">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MANUAL</option>
+				  	</field>
+				</fieldset>
+				
+				<fieldset name="selection_language" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONLANGUAGE_FIELDSET_LABEL">
+			  	
+					<field name="filter_lang" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FILTERLANGUAGE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FILTERLANGUAGE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+					
+				<fieldset name="selection_count" label="MOD_LATESTNEWSENHANCEDEXTENDED_SELECTIONCOUNT_FIELDSET_LABEL">
+			  	
+					<field name="count" type="sywverbosetext" default="" filter="string" size="4" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COUNT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COUNT_DESC" />
+	
+				  	<field name="count_for" type="list" default="articles"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COUNTFOR_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COUNTFOR_DESC">
+						<option value="articles">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TOARTICLES</option>
+						<option value="catid">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PERCATEGORY</option>
+						<option value="author">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PERAUTHOR</option>
+					</field>
+						
+					<field name="startat" type="sywverbosetext" default="1" filter="integer" size="4" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STARTAT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STARTAT_DESC" />
+				</fieldset>
+			</fieldset>		
+					
+			<fieldset name="configuration" label="MOD_LATESTNEWSENHANCEDEXTENDED_CONFIGURATION_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_CONFIGURATION_FIELDSET_DESC">		
+					
+				<fieldset name="configuration_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/layout" />
+				</fieldset>
+
+				<fieldset name="layout_general" label="MOD_LATESTNEWSENHANCEDEXTENDED_LAYOUT_LABEL">
+				
+					<field name="layout" type="modulelayout" class="custom-select" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_MODULELAYOUT_LABEL" />
+						
+					<field type="overridestest" extension="mod_latestnewsenhanced" include_layouts="false" />
+	
+					<field name="nodatamessage" type="text" default="" filter="string" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_NODATAMESSAGE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_NODATAMESSAGE_DESC" />
+					
+					<field name="align" type="sywlayoutselect" default="h"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAYOUT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAYOUT_DESC" />
+				
+					<field name="items_align" type="sywspacingselect" default="c" showon="align:h" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSALIGNMENT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSALIGNMENT_DESC" />	
+					
+					<field name="items_valign_h" type="sywalignmentselect" default="fs" showon="align:h"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSVALIGNMENT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSVALIGNMENT_DESC" />
+				
+					<field name="items_valign_v" type="sywalignmentselect" direction="vertical" default="c" removevalues="s" showon="align:v"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSVALIGNMENT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSVALIGNMENT_DESC" />
+					
+					<field name="item_spacebetween" type="sywverbosetext" default="0" size="4" unit="px" filter="integer" icon="SYWicon-swap-horiz" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEBETWEENITEMS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEBETWEENITEMS_DESC" />
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_OVERALLSIZES" style="warning" />
+				
+					<field name="items_w" type="sywverbosetext" default="" filter="string" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMS_WIDTH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMS_WIDTH_DESC" />				
+									
+					<field name="items_h" type="sywverbosetext" default="" filter="string" size="4" unit="px" icon="SYWicon-swap-vert" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMS_HEIGHT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMS_HEIGHT_DESC" />
+				</fieldset>
+				
+				<fieldset name="layout_leading" label="MOD_LATESTNEWSENHANCEDEXTENDED_LAYOUTLEADING_FIELDSET_LABEL">
+				
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_USELEADING_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_USELEADING_DESC" />
+				</fieldset>
+					
+				<fieldset name="layout_allitems" label="MOD_LATESTNEWSENHANCEDEXTENDED_ITEM_LABEL">
+				
+					<field name="item_w" type="sywverbosetext" default="100" filter="integer" size="4" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEM_WIDTH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEM_WIDTH_DESC" />
+						
+					<field name="item_w_u" type="radio" default="percent" layout="joomla.form.field.radio.switcher" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEM_WIDTH_UNIT_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEM_WIDTH_UNIT_DESC">
+						<option value="px">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PIXELS</option>
+						<option value="percent">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PERCENTAGE</option>
+					</field>
+					
+					<field name="min_item_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MIN_ITEM_WIDTH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MIN_ITEM_WIDTH_DESC" />
+								
+					<field name="max_item_w" type="sywverbosetext" default="" size="4" unit="px" icon="SYWicon-swap-horiz" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MAX_ITEM_WIDTH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MAX_ITEM_WIDTH_DESC" />
+				</fieldset>
+					
+				<fieldset name="layout_head" label="MOD_LATESTNEWSENHANCEDEXTENDED_HEAD_LABEL">
+					
+					<field name="head_type" type="headselect" default="none" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEADTYPE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEADTYPE_DESC">
+						<option value="none">JNONE</option>
+					</field>
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="head_type:image,allimagesasc,allimagesdesc" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEARCHFULLTEXT_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEARCHFULLTEXT_DESC" />
+					
+					<field name="head_w" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,categoryimage,calendar" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_WIDTH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_WIDTH_DESC" />
+						
+					<field name="head_h" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,categoryimage,calendar" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_HEIGHT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEAD_HEIGHT_DESC" />
+						
+					<field name="maintain_height" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,categoryimage" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MAINTAINHEIGHT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MAINTAINHEIGHT_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+						
+					<field name="keep_image_space" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="head_type:image,imageintro,imagefull,allimagesasc,allimagesdesc,categoryimage,calendar" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_KEEPSPACE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_KEEPSPACE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+							
+					<field name="text_align" type="list" default="r" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TEXTALIGNMENT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TEXTALIGNMENT_DESC">
+						<option value="l">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALIGNRIGHT</option>
+						<option value="r">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALIGNLEFT</option>
+						<option value="lr">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALTERNATERL</option>
+						<option value="rl">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALTERNATELR</option>
+						<option value="t">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALIGNBOTTOM</option>
+						<option value="b">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALIGNTOP</option>
+						<option value="tb">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALTERNATEBT</option>
+						<option value="bt">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ALTERNATETB</option>
+					</field>
+			
+					<field name="head_align" type="list" default="" showon="text_align:t,b,tb,bt"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALIGNMENT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HEADALIGN_DESC">
+						<option value="">JDEFAULT</option>
+						<option value="left">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LEFT</option>
+						<option value="right">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RIGHT</option>
+						<option value="center">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CENTER</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="layout_body" label="MOD_LATESTNEWSENHANCEDEXTENDED_BODY_LABEL">
+			
+					<field name="content_align" type="list" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALIGNMENT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CONTENTALIGN_DESC">
+						<option value="">JDEFAULT</option>
+						<option value="left">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LEFT</option>
+						<option value="right">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RIGHT</option>
+						<option value="center">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CENTER</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="layout_title" label="MOD_LATESTNEWSENHANCEDEXTENDED_TITLE_LABEL">
+
+					<field name="title_type" type="titleselect" default="title" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TITLETYPE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TITLETYPE_DESC">
+						<option value="title">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TITLE</option>
+					</field>
+	
+					<field name="letter_count_title" type="sywverbosetext" default="" filter="string" size="4" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LETTERCOUNTTITLE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LETTERCOUNTTITLE_DESC" />
+					
+					<field name="trunc_l_w_title" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TRUNCATELASTWORD_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TRUNCATELASTWORD_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>					
+						
+					<field name="force_one_line" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FORCEONELINE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FORCEONELINE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				
+					<field name="title_tag" type="list" default="4" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TITLETAG_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TITLETAG_DESC">
+						<option value="1">h1</option>									
+						<option value="2">h2</option>				
+						<option value="3">h3</option>				
+						<option value="4">h4</option>				
+						<option value="5">h5</option>				
+						<option value="6">h6</option>
+					</field>
+					
+					<field name="title_before_head" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TITLEBEFOREHEAD_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TITLEBEFOREHEAD_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+
+				<fieldset name="layout_text" label="MOD_LATESTNEWSENHANCEDEXTENDED_TEXT_LABEL">
+				
+					<field name="text" type="textselect" default="intro" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TEXT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TEXT_DESC">
+						<option value="intro">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INTROTEXT</option>
+						<option value="intrometa">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INTROMETADESC</option>
+						<option value="meta">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_METADESC</option>
+						<option value="metaintro">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_METADESCINTRO</option>
+						<option value="full">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FULLTEXT</option>
+					</field>
+
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWUNAUTHORIZEDTEXT_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWUNAUTHORIZEDTEXT_DESC" />
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_UNAUTHORIZEDTEXT_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_UNAUTHORIZEDTEXT_DESC" />
+	
+					<field name="l_count" type="sywverbosetext" default="" filter="string" size="4" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LETTERCOUNT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LETTERCOUNT_DESC" />					
+						
+					<field name="trunc_l_w" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TRUNCATELASTWORD_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TRUNCATELASTWORD_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+							
+					<field name="strip_tags" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STRIPTAGS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STRIPTAGS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="keep_tags" type="sywverbosetext" default="" filter="raw" translateHint="false" hint="&lt;p&gt;&lt;a&gt;&lt;br&gt;" showon="strip_tags:1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_KEEPTAGS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_KEEPTAGS_DESC" />
+						
+					<field name="trigger_events" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TRIGGEREVENTS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TRIGGEREVENTS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+	
+					<field name="wrap" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_WRAPTEXT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_WRAPTEXT_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>	
+				
+					<field name="text_tag" type="list" default="div" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TEXTTAG_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TEXTTAG_DESC">
+						<option value="div">div</option>									
+						<option value="blockquote">blockquote</option>				
+						<option value="pre">pre</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="layout_linking" label="MOD_LATESTNEWSENHANCEDEXTENDED_LINKING_LABEL">
+				
+					<field name="what_to_link" type="checkboxes" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_WHATTOLINK_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_WHATTOLINK_DESC">
+						<option value="title">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TITLE</option>
+						<option value="head">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_HEAD</option>
+						<option value="label">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_READMORELINK</option>
+						<option value="append">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_APPENDEDLINK</option>
+					</field>
+					
+					<field name="link_to" type="linkselect" default="item" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTONEWS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTONEWS_DESC">
+						<option value="item">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ITEM</option>
+						<option value="urla" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLA</option>
+						<option value="urlb" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLB</option>
+						<option value="urlc" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_URLC</option>
+					</field>				
+					
+					<field name="link_target" type="listfree" default="default" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTARGET_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTARGET_DESC">
+<!-- 					<option value="default">JDEFAULT</option> -->
+						<option value="same">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SAMEWINDOW</option>
+						<option value="new">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_NEWWINDOW</option>
+						<option value="modal">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MODAL</option>
+						<option value="popup">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_POPUP</option>
+						<option value="inline" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INLINE</option>
+					</field>
+
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOITEMBYDEFAULT_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOITEMBYDEFAULT_DESC" />
+	
+					<field name="popup_x" type="sywverbosetext" default="600" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="link_to:modal" 
+		    			parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POPUPX_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POPUPX_DESC" />
+						
+					<field name="popup_y" type="sywverbosetext" default="500" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="link_to:modal" 
+		    			parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POPUPY_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POPUPY_DESC" />
+					
+					<field name="follow" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FOLLOW_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FOLLOW_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="readmore_tooltip" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOOLTIP_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOOLTIP_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
+	
+					<field name="allow_edit" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWEDIT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWEDIT_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="layout_readmore" label="MOD_LATESTNEWSENHANCEDEXTENDED_READMORE_LABEL">	
+									
+					<field name="readmore_always_show" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READMOREALWAYSSHOW_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READMOREALWAYSSHOW_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+						
+					<field name="link" type="text" default="" filter="string" hint="MOD_LATESTNEWSENHANCEDEXTENDED_READMORE_HINT"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINK_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINK_DESC" />	
+						
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_UNAUTHORIZEDLINK_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_UNAUTHORIZEDLINK_DESC" />
+				
+					<field name="readmore_align" type="list" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALIGNMENT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLEALIGN_DESC">
+						<option value="">JDEFAULT</option>
+						<option value="left">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LEFT</option>
+						<option value="right">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RIGHT</option>
+						<option value="center">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CENTER</option>
+						<option value="justify">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FULLWIDTH</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="layout_categories" label="MOD_LATESTNEWSENHANCEDEXTENDED_CATEGORIES_LABEL">
+									
+					<field name="pos_cat" type="checkboxesfree" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITIONCATEGORY_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITIONCATEGORY_DESC">
+						<option value="first">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FIRST</option>
+						<option value="title">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_BEFORETITLE</option>
+						<option value="last">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LAST</option>
+						<option value="picture" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_OVERPICTURE</option>
+					</field>
+									
+					<field name="link_cat_to" type="list" default="none" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOCATEGORY_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOCATEGORY_DESC">
+						<option value="none">JNONE</option>
+						<option value="standard">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_STANDARDCATEGORY</option>
+					</field>				
+								
+					<field name="cat_link" type="text" default="" filter="string" hint="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READMORECATEGORY_HINT" showon="link_cat_to:standard" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CATLINK_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CATLINK_DESC" />
+	
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="link_cat_to:standard" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_UNAUTHORIZEDCATLINK_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_UNAUTHORIZEDCATLINK_DESC" />
+						
+					<field name="cat_tooltip" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="link_cat_to:standard" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOOLTIP_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOOLTIP_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
+
+					<field name="cat_readmore_align" type="list" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALIGNMENT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CATEGORYALIGN_DESC">
+						<option value="">JDEFAULT</option>
+						<option value="left">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LEFT</option>
+						<option value="right">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RIGHT</option>
+						<option value="center">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CENTER</option>
+						<option value="justify">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FULLWIDTH</option>
+					</field>
+					
+					<field name="consol_cat" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CONSOLIDATECATEGORY_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CONSOLIDATECATEGORY_DESC">
+						<option value="0">JNO</option>	
+						<option value="1">JYES</option>
+					</field>
+					
+					<!-- warning categories must be ordered if more than one involved -->
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_ORDERCATEGORIES" style="warning" showon="consol_cat:1" />
+					
+					<field name="show_cat_description" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="consol_cat:1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWCATEGORYDESCRIPTION_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWCATEGORYDESCRIPTION_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
+					
+					<!-- warning description only when one category -->
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_CATEGORYDESCRIPTION" style="warning" showon="consol_cat:1" />
+					
+					<field name="show_article_count" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="consol_cat:1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWARTICLECOUNT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWARTICLECOUNT_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="layout_readall" label="MOD_LATESTNEWSENHANCEDEXTENDED_READALL_LABEL">
+				
+					<field name="readall_link" type="menuitem" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READALLLINK_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READALLLINK_DESC">
+						<option	value="">JNONE</option>
+						<option	value="extern">MOD_LATESTNEWSENHANCEDEXTENDED_EXTERNALLINK</option>
+					</field>
+					
+					<field name="readall_external_url" type="url" default="" filter="string" showon="readall_link:extern" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READALLEXTERNALURL_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READALLEXTERNALURL_DESC" />
+					
+					<field name="readall_pos" type="list" default="last" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITIONREADALL_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITIONREADALL_DESC">
+						<option value="first">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FIRST</option>
+						<option value="last">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LAST</option>
+					</field>
+						
+					<field name="readall_link_lbl" type="text" default="" filter="string" hint="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READALL_HINT" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READALLLINKLABEL_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_READALLLINKLABEL_DESC" />					
+	
+					<field name="readall_tooltip" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOOLTIP_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKTOOLTIP_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
+				
+					<field name="readall_align" type="list" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALIGNMENT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLEALIGN_DESC">
+						<option value="">JDEFAULT</option>
+						<option value="left">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LEFT</option>
+						<option value="right">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RIGHT</option>
+						<option value="center">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CENTER</option>
+						<option value="justify">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_FULLWIDTH</option>
+					</field>
+				</fieldset>
+			</fieldset>
+		
+			<fieldset name="themes" label="MOD_LATESTNEWSENHANCEDEXTENDED_THEMES_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_THEMES_FIELDSET_DESC">	
+					
+				<fieldset name="themes_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/theming" />
+				</fieldset>
+					
+				<fieldset name="themes_theme" label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STYLE_LABEL">
+				
+					<field name="overall_style" type="styleselect" default="original" disabledtitle="MOD_LATESTNEWSENHANCED_MESSAGE_STYLEONLYAVAILABLEINCOMMERCIALVERSION" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STYLE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STYLE_DESC" />
+	
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" />
+
+					<field name="color_theme" type="colorthemeselect" default="" imagebgcolor="#fff"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLORTHEME_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLORTHEME_DESC" />
+	
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>
+
+				<fieldset name="themes_content" label="MOD_LATESTNEWSENHANCEDEXTENDED_THEMEBODY_FIELDSET_LABEL">
+					
+					<field name="bgcolor" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR_DESC" />
+				
+					<field name="item_border_w" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-line_weight" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERWIDTH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMBORDERWIDTH_DESC" />
+
+					<field name="item_border_r" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-rounded_corner" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERRADIUS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMBORDERRADIUS_DESC" />
+				
+					<field name="item_border_c" type="sywcolorpicker" default="" transparency="true" icon="outline" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERCOLOR_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMBORDERCOLOR_DESC" />	
+					
+					<field name="item_shadow" type="sywshadowselect" default="none"	
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHADOW_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSHADOW_DESC" />	
+					
+					<field name="d_to_b" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-swap-horiz" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DISTANCETOBORDER_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DISTANCETOBORDER_DESC" />
+					
+					<field name="item_color" type="sywcolorpicker" transparency="true" default="" icon="text" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMFONTCOLOR_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMFONTCOLOR_DESC" />
+					
+					<field name="item_l_color" type="sywcolorpicker" transparency="true" default="" icon="text" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMLINKFONTCOLOR_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMLINKFONTCOLOR_DESC" />
+					
+					<field name="item_l_color_h" type="sywcolorpicker" transparency="true" default="" icon="text" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMLINKFONTHOVERCOLOR_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMLINKFONTHOVERCOLOR_DESC" />
+				
+					<field name="f_r_body" type="sywverbosetext" default="14" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-format-size" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTSIZEREFERENCEBODY_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTSIZEREFERENCEBODY_DESC" />
+				</fieldset>
+				
+				<fieldset name="themes_head" label="MOD_LATESTNEWSENHANCEDEXTENDED_HEAD_LABEL">
+				
+					<field name="space_head" type="sywverbosetext" default="" size="4" maxlength="2" unit="px" icon="SYWicon-swap-horiz" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEAROUND_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEAROUNDHEAD_DESC" />					
+				</fieldset>
+				
+				<fieldset name="themes_body" label="MOD_LATESTNEWSENHANCEDEXTENDED_BODY_LABEL">
+					
+					<field name="space_body" type="sywverbosetext" default="" size="4" maxlength="2" unit="px" icon="SYWicon-swap-horiz" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEAROUND_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPACEAROUNDBODY_DESC" />
+					
+					<field name="title_class" type="text" default="" filter="string" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TITLECLASSES_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TITLECLASSES_DESC" />
+				</fieldset>
+				
+				<fieldset name="themes_information" label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_LABEL">
+					
+					<field name="details_font" type="sywfontpicker" webfonts="true" default=""
+	                    label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTDETAILS_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTDETAILS_DESC" />
+					
+					<field name="details_fontsize" type="sywverbosetext" default="80" filter="integer" size="4" maxlength="3" unit="%" icon="SYWicon-format-size" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSFONTSIZE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSFONTSIZE_DESC" />
+					
+					<field name="details_line_spacing" type="sywverbosetextunits" default="" size="4" units="px,em" defaultunit="px" icon="SYWicon-format-line-spacing" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSLINESPACING_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSLINESPACING_DESC" />
+					
+					<field name="details_color" type="sywcolorpicker" transparency="true" default="" icon="text" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSCOLOR_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSCOLOR_DESC" />
+						
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSCOLOROVERHEAD_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DETAILSCOLOROVERHEAD_DESC" />
+					
+					<field name="iconscolor" type="sywcolorpicker" transparency="true" default="" icon="fill" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ICONSCOLOR_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ICONSCOLOR_DESC" />
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ICONSCOLOROVERHEAD_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ICONSCOLOROVERHEAD_DESC" />
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMPROVECONTRAST_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMPROVECONTRAST_DESC" />
+				</fieldset>	
+				
+				<fieldset name="themes_readmore" label="MOD_LATESTNEWSENHANCEDEXTENDED_READMORE_LABEL">
+								
+					<field name="readmore_style" type="radio" default="" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLE_DESC">
+	                    <option value="">JDEFAULT</option>
+	                    <option value="bootstrap">Bootstrap</option>
+	                </field>
+						
+					<field name="readmore_type" type="list" default="btn-default" showon="readmore_style:bootstrap" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLETYPE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLETYPE_DESC">
+						<option value="btn-default">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DEFAULTBUTTON</option>
+						<option value="btn-primary">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PRIMARYBUTTON</option>
+						<option value="btn-info">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INFOBUTTON</option>
+						<option value="btn-inverse">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INVERSEBUTTON</option>
+						<option value="btn-link">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINK</option>
+					</field>
+					
+					<field name="readmore_size" type="list" default="" showon="readmore_style:bootstrap" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLESIZE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLESIZE_DESC">
+						<option value="">JDEFAULT</option>
+						<option value="small">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SMALL</option>
+						<option value="mini">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MINI</option>
+					</field>
+					
+					<field name="readmore_classes" type="text" default="" filter="string" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKCLASSES_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKCLASSES_DESC" />
+				</fieldset>	
+				
+				<fieldset name="themes_categories" label="MOD_LATESTNEWSENHANCEDEXTENDED_CATEGORIES_LABEL">
+				
+					<field name="cat_readmore_style" type="radio" default="" layout="joomla.form.field.radio.switcher" showon="link_cat_to:standard" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLE_DESC">
+	                    <option value="">JDEFAULT</option>
+	                    <option value="bootstrap">Bootstrap</option>
+	                </field>
+	
+					<field name="cat_readmore_type" type="list" default="btn-default" showon="link_cat_to:standard[AND]cat_readmore_style:bootstrap" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLETYPE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLETYPE_DESC">
+						<option value="btn-default">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DEFAULTBUTTON</option>
+						<option value="btn-primary">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PRIMARYBUTTON</option>
+						<option value="btn-info">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INFOBUTTON</option>
+						<option value="btn-inverse">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INVERSEBUTTON</option>
+						<option value="btn-link">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINK</option>
+					</field>
+					
+					<field name="cat_readmore_size" type="list" default="" showon="link_cat_to:standard[AND]cat_readmore_style:bootstrap" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLESIZE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLESIZE_DESC">
+						<option value="">JDEFAULT</option>
+						<option value="small">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SMALL</option>
+						<option value="mini">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MINI</option>
+					</field>
+					
+					<field name="cat_readmore_classes" type="text" default="" filter="string" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKCLASSES_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKCLASSES_DESC" />
+				</fieldset>	
+				
+				<fieldset name="themes_readall" label="MOD_LATESTNEWSENHANCEDEXTENDED_READALL_LABEL">
+					
+					<field name="readall_style" type="radio" default="" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLE_DESC">
+	                    <option value="">JDEFAULT</option>
+	                    <option value="bootstrap">Bootstrap</option>
+	                </field>
+						
+					<field name="readall_type" type="list" default="btn-default" showon="readall_style:bootstrap" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLETYPE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLETYPE_DESC">
+						<option value="btn-default">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DEFAULTBUTTON</option>
+						<option value="btn-primary">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PRIMARYBUTTON</option>
+						<option value="btn-info">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INFOBUTTON</option>
+						<option value="btn-inverse">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INVERSEBUTTON</option>
+						<option value="btn-link">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LINK</option>
+					</field>
+					
+					<field name="readall_size" type="list" default="" showon="readall_style:bootstrap" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLESIZE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKSTYLESIZE_DESC">
+						<option value="">JDEFAULT</option>
+						<option value="small">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SMALL</option>
+						<option value="mini">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MINI</option>
+					</field>
+					
+					<field name="readall_classes" type="text" default="" filter="string" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKCLASSES_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LINKCLASSES_DESC" />
+				</fieldset>
+				
+				<fieldset name="themes_otheroverrides" label="MOD_LATESTNEWSENHANCEDEXTENDED_OTHEROVERRIDES_LABEL">
+
+					<field name="style_overrides" type="editor" rows="10" default="" editor="codemirror|none" filter="raw" buttons="false" syntax="css" 
+		            	label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STYLEOVERRIDES_LABEL" 
+		            	description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STYLEOVERRIDES_DESC" />
+		            	
+		            <field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_EXAMPLE_EXTRACSS" style="example" /> 
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="image" label="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGE_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGE_FIELDSET_DESC">
+			
+				<fieldset name="image_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/head-image" />
+				</fieldset>
+						
+				<fieldset name="image_general" label="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGE_FIELDSET_LABEL">
+				
+					<field name="default_pic" type="media" default=""
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DEFAULTPICTURE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DEFAULTPICTURE_DESC" />						
+						
+					<field name="default_cat_pic" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DEFAULTCATPICTURE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DEFAULTCATPICTURE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+						
+					<field name="imagebgcolor" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEBGCOLOR_DESC" />
+					
+					<field name="border_w" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-line_weight" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERWIDTH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICBORDERWIDTH_DESC" />
+	
+					<field name="border_r_pic" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-rounded_corner" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERRADIUS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICBORDERRADIUS_DESC" />
+					
+					<field name="border_c_pic" type="sywcolorpicker" default="#ffffff" icon="outline" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERCOLOR_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICBORDERCOLOR_DESC" />
+					
+					<field name="sh_w_pic" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-layers" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHADOWWIDTH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICSHADOWWIDTH_DESC" />	
+						
+					<field name="sh_type" type="listfree" default="s" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHADOWTYPE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHADOWTYPE_DESC">					
+						<option value="s">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHADOW_SIMPLE</option>
+						<option value="v" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHADOW_V</option>
+						<option value="vl" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHADOW_VLEFT</option>
+						<option value="vr" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SHADOW_VRIGHT</option>
+					</field>
+					
+					<field name="hover_effect" type="sywtransitionpicker" default="none" transitiongroups="2d" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_HOVEREFFECT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PICHOVEREFFECT_DESC" />
+				</fieldset>
+				
+				<fieldset name="image_thumbnail" label="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGETHUMBNAIL_FIELDSET_LABEL">
+					
+					<field name="create_thumb" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATETHUMBNAILS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATETHUMBNAILS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field type="imagelibrarytest" showon="create_thumb:1" />
+
+					<field name="thumb_mime_type" type="imagetypeselect" default="" showon="create_thumb:1"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_THUMBNAILMIMETYPE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_THUMBNAILMIMETYPE_DESC">
+						<option value="">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SAMEASORIGINAL</option>
+					</field>
+					
+					<field name="crop_pic" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="create_thumb:1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CROPPICTURE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CROPPICTURE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>				
+								
+					<field name="filter_original" type="sywimagefilterpicker" cssfilters="true" gdfilters="false" default="none" showon="create_thumb:0" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEFILTER_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEFILTERORIGINAL_DESC" />
+					
+					<field name="filter" type="sywimagefilterpicker" cssfilters="true" default="none" showon="create_thumb:1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEFILTER_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEFILTER_DESC" />
+					
+					<field name="quality_jpg" type="sywverbosetext" default="75" filter="integer" size="8" maxlength="3" min="0" max="100" showon="create_thumb:1" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYJPG_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYJPG_DESC" />
+						
+					<field name="quality_png" type="sywverbosetext" default="3" filter="integer" size="8" maxlength="1" min="0" max="9" showon="create_thumb:1" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYPNG_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYPNG_DESC" />
+				
+					<field name="quality_webp" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" showon="create_thumb:1" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYWEBP_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYWEBP_DESC" />
+						
+					<field name="quality_avif" type="sywverbosetext" default="80" filter="integer" size="8" maxlength="3" min="0" max="100" showon="create_thumb:1" 
+						parentclass="span-3-inline"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYAVIF_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEQUALITYAVIF_DESC" />
+				</fieldset>
+				
+				<fieldset name="image_advanced" label="MOD_LATESTNEWSENHANCEDEXTENDED_IMAGEADVANCED_FIELDSET_LABEL">
+				
+					<field name="original_alt" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ORIGINALALT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ORIGINALALT_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+							  
+					<field type="phpsettingtest" setting="allow_url_fopen" message="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWURLFOPENTEST_LABEL" showon="create_thumb:1" />
+					
+					<field name="allow_remote" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="create_thumb:1"  
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWREMOTE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWREMOTE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				
+					<field name="create_highres" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEHIGHRES_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CREATEHIGHRES_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="lazyload" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOAD_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOAD_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+						
+					<field name="image_attributes" type="textarea" default="" filter="string" class="input-xxlarge" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEATTRIBUTES_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_IMAGEATTRIBUTES_DESC" />
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="icon" label="MOD_LATESTNEWSENHANCED_ICON_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_ICON_FIELDSET_DESC">
+			
+				<fieldset name="icon_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/head-icon" />
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_REQUIREMENTSFORICONHEAD" style="warning" />
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>	
+			</fieldset>
+			
+			<fieldset name="calendar" label="MOD_LATESTNEWSENHANCEDEXTENDED_CALENDAR_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_CALENDAR_FIELDSET_DESC">				
+				
+				<fieldset name="calendar_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/head-calendar" />
+				</fieldset>
+				
+				<fieldset name="calendar_content" label="MOD_LATESTNEWSENHANCEDEXTENDED_CONTENT_LABEL">
+				
+					<field name="pos_1" type="list" default="w" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITION1_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITION1_DESC">
+						<option value="none">JNONE</option>
+						<option value="e">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EMPTY</option>
+						<option value="w">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_WEEKDAY</option>
+						<option value="d">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DAY</option>
+						<option value="m">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MONTH</option>
+						<option value="y">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_YEAR</option>
+						<option value="t">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TIME</option>
+					</field>
+					<field name="pos_2" type="list" default="d" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITION2_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITION2_DESC">
+						<option value="none">JNONE</option>
+						<option value="e">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EMPTY</option>
+						<option value="w">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_WEEKDAY</option>
+						<option value="d">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DAY</option>
+						<option value="m">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MONTH</option>
+						<option value="y">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_YEAR</option>
+						<option value="t">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TIME</option>
+					</field>
+					<field name="pos_3" type="list" default="m" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITION3_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITION3_DESC">
+						<option value="none">JNONE</option>
+						<option value="e">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EMPTY</option>
+						<option value="w">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_WEEKDAY</option>
+						<option value="d">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DAY</option>
+						<option value="m">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MONTH</option>
+						<option value="y">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_YEAR</option>
+						<option value="t">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TIME</option>
+					</field>
+					<field name="pos_4" type="list" default="y" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITION4_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITION4_DESC">
+						<option value="none">JNONE</option>
+						<option value="e">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EMPTY</option>
+						<option value="w">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_WEEKDAY</option>
+						<option value="d">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DAY</option>
+						<option value="m">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MONTH</option>
+						<option value="y">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_YEAR</option>
+						<option value="t">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TIME</option>
+					</field>
+					<field name="pos_5" type="list" default="t" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITION5_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITION5_DESC">
+						<option value="none">JNONE</option>
+						<option value="e">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EMPTY</option>
+						<option value="w">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_WEEKDAY</option>
+						<option value="d">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DAY</option>
+						<option value="m">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MONTH</option>
+						<option value="y">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_YEAR</option>
+						<option value="t">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TIME</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="calendar_format" label="MOD_LATESTNEWSENHANCEDEXTENDED_FORMAT_LABEL">
+				
+					<field name="fmt_w" type="list" default="D" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_WEEKDAYFORMAT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_WEEKDAYFORMAT_DESC">
+						<option value="l">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_WEEKDAYFORMAT_L</option>
+						<option value="D">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_WEEKDAYFORMAT_D</option>
+					</field>
+					<field name="fmt_m" type="list" default="M" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MONTHFORMAT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MONTHFORMAT_DESC">
+						<option value="F">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MONTHFORMAT_F</option>
+						<option value="M">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MONTHFORMAT_M</option>
+						<option value="m">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MONTHFORMAT_MM</option>
+						<option value="n">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MONTHFORMAT_N</option>
+					</field>
+					<field name="fmt_d" type="list" default="d" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DAYFORMAT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DAYFORMAT_DESC">
+						<option value="d">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DAYFORMAT_D</option>
+						<option value="j">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DAYFORMAT_J</option>
+					</field>
+						
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_CALENDARTIMEFORMATINFO" style="info" />				
+				</fieldset>
+				
+				<fieldset name="calendar_style" label="MOD_LATESTNEWSENHANCEDEXTENDED_STYLE_LABEL">
+				
+					<field name="cal_style" type="calendarselect" default="original" disabledtitle="MOD_LATESTNEWSENHANCED_MESSAGE_CALENDARONLYAVAILABLEINCOMMERCIALVERSION" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STYLE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STYLE_DESC" />
+	
+	<!-- 				<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREOPTIONSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
+	
+					<field name="cal_bg" type="media" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CALENDARBACKGROUND_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CALENDARBACKGROUND_DESC" />
+					
+					<field name="border_w_cal" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-line_weight" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CALBORDERWIDTH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CALBORDERWIDTH_DESC" />
+						
+					<field name="border_r" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-rounded_corner" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERRADIUS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BORDERRADIUS_DESC" />	
+						
+					<field name="border_c_cal" type="sywcolorpicker" default="#000000" icon="outline" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CALBORDERCOLOR_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CALBORDERCOLOR_DESC" />
+					
+					<field name="sh_w" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-layers" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHADOWWIDTH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHADOWWIDTH_DESC" />	
+						
+					<field name="fontcalendar" type="sywfontpicker" webfonts="true" default=""
+	                    label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTCALENDAR_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTCALENDAR_DESC" />
+						
+					<field name="f_r" type="sywverbosetext" default="14" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-format-size" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTSIZEREFERENCE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FONTSIZEREFERENCE_DESC" />
+				</fieldset>
+						
+				<fieldset name="calendar_style_top" label="MOD_LATESTNEWSENHANCEDEXTENDED_CALENDARTOPCOLORS_LABEL">
+					
+					<field name="c2" type="sywcolorpicker" default="#494949" icon="text" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR2_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR2_DESC" />	
+					<field name="bgc21" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR21_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR21_DESC" />	
+					<field name="bgc22" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR22_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR22_DESC" />
+				</fieldset>
+						
+				<fieldset name="calendar_style_overal" label="MOD_LATESTNEWSENHANCEDEXTENDED_CALENDARCOLORS_LABEL">			
+					
+					<field name="c1" type="sywcolorpicker" default="#3D3D3D" icon="text" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR1_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR1_DESC" />
+					<field name="bgc11" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR11_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR11_DESC" />	
+					<field name="bgc12" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR12_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR12_DESC" />
+				</fieldset>
+						
+				<fieldset name="calendar_style_bottom" label="MOD_LATESTNEWSENHANCEDEXTENDED_CALENDARBOTTOMCOLORS_LABEL">
+				
+					<field name="c3" type="sywcolorpicker" default="#494949" icon="text" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR3_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COLOR3_DESC" />	
+					<field name="bgc31" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR31_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR31_DESC" />	
+					<field name="bgc32" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR32_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_BGCOLOR32_DESC" />
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="video" label="MOD_LATESTNEWSENHANCED_VIDEO_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_VIDEO_FIELDSET_DESC">
+			
+				<fieldset name="video_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/head-video" />
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_WARNING_REQUIREMENTSFORVIDEOHEAD" style="warning" />
+															
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="details" label="MOD_LATESTNEWSENHANCEDEXTENDED_DETAILS_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_DETAILS_FIELDSET_DESC">		 
+				
+				<fieldset name="details_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/information" />
+				</fieldset>
+				
+				<fieldset name="details_information" label="MOD_LATESTNEWSENHANCEDEXTENDED_DETAILS_FIELDSET_LABEL">
+				
+					<field name="separator" type="text" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEPARATOR_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SEPARATOR_DESC" />
+					
+					<field name="ad_place" type="list" default="1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INFORMATIONPOSITION_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INFORMATIONPOSITION_DESC">
+						<option value="0">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_BEFORETITLE</option>
+						<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AFTERTITLE</option>
+						<option value="3">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_BEFORETEXT</option>
+						<option value="2">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AFTERTEXT</option>
+					</field>				
+				
+					<field name="information_blocks" type="subform" formsource="modules/mod_latestnewsenhanced/forms/fields/information.xml" multiple="true" max="5"
+						default="{'show_icons':'0','icon':'','prepend':'','info':'none','extra_classes':'','new_line':'0','access':'1'}"
+	   					label="MOD_LATESTNEWSENHANCEDEXTENDED_INFORMATION_LABEL" 
+	   					description="MOD_LATESTNEWSENHANCEDEXTENDED_MOREINFORMATIONBLOCS_DESC" />					
+				
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_MOREFIELDSINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>		
+
+				<fieldset name="details_date" label="MOD_LATESTNEWSENHANCEDEXTENDED_DATETIME_LABEL">
+				
+					<field name="d_format" type="sywverbosetext" default="d F Y" filter="raw" translateHint="false" hint="d F Y" help="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_DATEFORMATINFO" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DATEFORMAT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DATEFORMAT_DESC" />
+					
+					<field name="t_format" type="sywverbosetext" default="H:i" filter="raw" translateHint="false" hint="H:i" help="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_DATEFORMATINFO" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TIMEFORMAT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_TIMEFORMAT_DESC" />				
+				</fieldset>
+					
+				<fieldset name="details_rating" label="MOD_LATESTNEWSENHANCEDEXTENDED_SPECIFICS_RATINGVOTE_LABEL">
+				
+					<field name="show_rating" type="list" default="text" 
+			           	label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWRATING_LABEL" 
+			           	description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWRATING_DESC">
+						<option value="text">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TEXT</option>
+						<option value="stars">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_STARS</option>
+					</field>
+					
+					<field name="star_color" type="sywcolorpicker" default="#000000" icon="fill" showon="show_rating:stars" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STARSCOLOR_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_STARSCOLOR_DESC" />				
+				</fieldset>
+				
+				<fieldset name="details_tags" label="MOD_LATESTNEWSENHANCEDEXTENDED_SPECIFICS_TAGS_LABEL">
+				
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>
+				
+				<fieldset name="details_links" label="MOD_LATESTNEWSENHANCEDEXTENDED_SPECIFICS_LINKS_LABEL">
+				
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>
+				
+				<fieldset name="details_sharing" label="MOD_LATESTNEWSENHANCEDEXTENDED_SHARING_LABEL">
+
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="animate" label="MOD_LATESTNEWSENHANCEDEXTENDED_ANIMATE_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_ANIMATE_FIELDSET_DESC">
+			
+				<fieldset name="animate_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/animation-pagination" />
+				</fieldset>
+					
+				<fieldset name="animation_visible" label="MOD_LATESTNEWSENHANCEDEXTENDED_ANIMATEVISIBLE_FIELDSET_LABEL">
+							
+					<field name="visible_items" type="sywverbosetext" default="1" filter="integer" size="4" icon="SYWicon-visibility" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSPERSLIDE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ITEMSPERSLIDE_DESC" />
+				</fieldset>
+
+				<fieldset name="animation_animation" label="MOD_LATESTNEWSENHANCEDEXTENDED_ANIMATION_LABEL">
+				
+					<field name="anim" type="animationselect" default="" disabledtitle="MOD_LATESTNEWSENHANCED_MESSAGE_ANIMATIONONLYAVAILABLEINCOMMERCIALVERSION" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ANIMATION_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ANIMATION_DESC" />
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />	
+				
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DIRECTION_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_DIRECTION_DESC" />
+	
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTO_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AUTO_DESC" />
+	
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPEED_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SPEED_DESC" />
+	
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INTERVAL_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INTERVAL_DESC" />
+	
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MOVE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MOVE_DESC" />	
+	
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_RESTARTONREFRESH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_RESTARTONREFRESH_DESC" />  
+				</fieldset>			
+				
+				<fieldset name="animation_pagination" label="MOD_LATESTNEWSENHANCEDEXTENDED_PAGINATION_LABEL">
+				
+					<field name="pagination" type="list" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PAGINATION_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PAGINATION_DESC">
+						<option value="">JNONE</option>
+						<option value="pn">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PREVNEXT</option>
+						<option value="p">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PAGER</option>
+						<option value="s">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_DOTS</option>
+						<option value="ppn">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PREVPAGERNEXT</option>
+						<option value="psn">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PREVDOTSNEXT</option>
+					</field>
+					
+					<!-- <field type="subtitle" title="MOD_LATESTNEWSENHANCEDEXTENDED_PARAMETERS_LABEL" /> -->
+	                
+	                <field name="pagination_pos" type="listfree" default="below"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITIONPAGINATION_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSITIONPAGINATION_DESC">
+	                    <option value="below">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_BELOWITEMS</option>
+	                    <option value="above">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ABOVEITEMS</option>
+	                    <option value="around">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AROUNDITEMS</option>
+	                    <option value="title" disabled="true">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_WITHTITLE</option>
+	                </field>
+	                 
+	                <field name="pagination_align" type="list" default="center" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALIGNPAGINATION_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALIGNPAGINATION_DESC">
+	                    <option value="left">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LEFT</option>
+	                    <option value="center">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CENTER</option>
+	                    <option value="right">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_RIGHT</option>
+	                </field>
+	                
+	                <field name="pagination_style" type="radio" default="" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PAGINATIONSTYLE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PAGINATIONSTYLE_DESC">
+	                    <option value="">JDEFAULT</option>
+	                    <option value="pagination">Bootstrap</option>
+	                </field>
+	                
+	                <field name="pagination_size" type="list" default="" showon="pagination_style:pagination" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PAGINATIONSIZE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PAGINATIONSIZE_DESC">
+						<option value="">JDEFAULT</option>
+						<option value="small">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SMALL</option>
+						<option value="mini">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_MINI</option>
+	<!-- 					<option value="specific">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_SPECIFIC</option> -->
+					</field>
+	                
+	                <field name="pagination_specific_size" type="sywverbosetext" default="1" filter="float" size="4" unit="em" icon="SYWicon-format-size" showon="pagination_style:" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PAGINATIONSPECIFICSIZE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PAGINATIONSPECIFICSIZE_DESC" />
+						
+					<field name="pagination_offset" type="sywverbosetext" default="0" filter="integer" size="4" unit="px" icon="SYWicon-settings-ethernet" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PAGINATIONOFFSET_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PAGINATIONOFFSET_DESC" />
+					
+					<field name="prev_type" type="list" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PREVTYPE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PREVTYPE_DESC">
+						<option value="">&lt;</option>
+						<option value="prev">JPREV</option>
+						<option value="label">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LABEL</option>
+					</field>				
+					
+					<field name="label_prev" type="text" default="" filter="raw" showon="prev_type:label" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LABELPREV_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LABELPREV_DESC" />
+						
+					<field name="next_type" type="list" default="" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_NEXTTYPE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_NEXTTYPE_DESC">
+						<option value="">&gt;</option>
+						<option value="next">JNEXT</option>
+						<option value="label">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_LABEL</option>
+					</field>					
+					
+					<field name="label_next" type="text" default="" filter="raw" showon="next_type:label" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LABELNEXT_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LABELNEXT_DESC" />	
+						
+					<field name="num_links" type="sywverbosetext" default="5" filter="integer" size="4" showon="pagination:p,s,ppn,psn"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_NUMLINKS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_NUMLINKS_DESC" />
+	
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MODULETITLE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_MODULETITLE_DESC" />
+				</fieldset>
+			</fieldset>
+
+			<fieldset name="advanced_all" label="MOD_LATESTNEWSENHANCEDEXTENDED_ADVANCED_FIELDSET_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_ADVANCED_FIELDSET_DESC">
+			
+				<fieldset name="advanced_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/latest-news/the-list-of-options/advanced" />
+				</fieldset>
+				
+				<fieldset name="advanced_general" label="MOD_LATESTNEWSENHANCEDEXTENDED_ADVANCED_FIELDSET_LABEL">
+				
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAYOUTSUFFIX_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAYOUTSUFFIX_DESC" />
+					
+					<field name="site_mode" type="list" default="dev" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SITEMODE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SITEMODE_DESC">
+						<option value="dev">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TESTMODE</option>
+						<option value="prod">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_PRODUCTIONMODE</option>
+						<option value="adv">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ADVANCEDMODE</option>
+					</field>
+	
+					<field name="bootstrap_version" type="list" default="joomla" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COMPATIBILITYBOOTSTRAP_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_COMPATIBILITYBOOTSTRAP_DESC">
+						<option value="0">JNONE</option>
+						<option value="joomla">Joomla</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</field>
+	                
+					<field name="show_errors" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="site_mode:adv"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWERRORS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWERRORS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="remove_whitespaces" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_REMOVEWHITESPACES_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_REMOVEWHITESPACES_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				
+					<field name="load_icon_font" type="radio" default="1" layout="joomla.form.field.radio.switcher"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LOADICONFONT_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LOADICONFONT_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+			
+					<field name="load_fontawesome" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LOADFONTAWESOME_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LOADFONTAWESOME_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="force_itemid" type="menuitem" default="" published="1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FORCEITEMID_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FORCEITEMID_DESC">
+						<option	value="">JNONE</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="advanced_pictures" label="MOD_LATESTNEWSENHANCEDEXTENDED_PICTURES_LABEL">
+				
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_CLEARCACHE" style="info" showon="site_mode:adv" />
+						
+					<field name="clear_cache" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CLEARCACHE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CLEARCACHE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+									
+					<field name="thumb_path" type="list" default="cache" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_THUMBPATH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_THUMBPATH_DESC">
+						<option value="default">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_TEMPFOLDER</option>
+						<option value="images">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_IMAGESDIRECTORY</option>
+						<option value="cache">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_CACHEDIRECTORY</option>
+					</field>
+					
+					<field type="sywextensionpresencetest" title="Auto Clear Cached Image" message="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_AUTORESETPLUGIN" 
+						extensiontype="plugin" extensionfolder="system" extensionelement="sywautoreset"
+						imagesrc="media/mod_latestnewsenhanced/images/logo_autoreset_small.png"
+						downloadlink="https://simplifyyourweb.com/free-products/auto-clear-cached-image" />
+						
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SIZETHRESHOLD_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SIZETHRESHOLD_DESC" />
+				</fieldset>
+						
+				<fieldset name="advanced_headers" label="MOD_LATESTNEWSENHANCEDEXTENDED_STYLESHEETSANDSCRIPTS_LABEL">
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOADSTYLESHEETS_TXT" style="fieldneutral" badge="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOADSTYLESHEETS_BADGE" badgetype="light"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_LAZYLOADSTYLESHEETS_LABEL" />
+
+		            <field name="inline_scripts" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INLINESCRIPTS_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_INLINESCRIPTS_DESC">
+	                    <option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+								
+					<field name="remote_libraries" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_REMOTELIBRARIES_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_REMOTELIBRARIES_DESC">
+	                    <option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+								
+					<field type="message" text="MOD_LATESTNEWSENHANCEDEXTENDED_INFO_CLEARCSSCACHE" style="info" showon="site_mode:adv" />
+	
+					<field name="clear_css_cache" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CLEARCSSCACHE_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_CLEARCSSCACHE_DESC">
+	                    <option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="advanced_paragraph" label="MOD_LATESTNEWSENHANCEDEXTENDED_PARAGRAPHFUNCTIONALITY_LABEL" description="MOD_LATESTNEWSENHANCEDEXTENDED_MESSAGE_PARAGRAPHFUNCTIONALITY">
+					
+					<field type="message" text="MOD_LATESTNEWSENHANCED_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AFTERPARAGRAPH_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_AFTERPARAGRAPH_DESC" />
+				</fieldset>
+				
+				<fieldset name="advanced_prepost" label="MOD_LATESTNEWSENHANCEDEXTENDED_ADVANCEDPREPOST_FIELDSET_LABEL">
+					
+					<field name="pretext" type="editor" rows="5" editor="codemirror|none" filter="raw" buttons="false" syntax="html"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PRETEXT_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_PRETEXT_DESC" />
+						
+					<field name="posttext" type="editor" rows="5" editor="codemirror|none" filter="raw" buttons="false" syntax="html"
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSTTEXT_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_POSTTEXT_DESC" />
+	
+					<field name="allow_plugins_prepost" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWPLUGINSPREPOST_LABEL" 
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_ALLOWPLUGINSPREPOST_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="advanced" label="MOD_LATESTNEWSENHANCEDEXTENDED_MODULE_LABEL">
+					
+					<field name="show_on_mobile" type="list" default="1" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONMOBILE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONMOBILE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+						<option value="2">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_ONLY</option>
+					</field>
+					
+					<field name="show_on_item_page" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONITEMPAGE_LABEL"
+						description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_SHOWONITEMPAGE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+						
+					<field name="moduleclass_sfx" type="text" default="" filter="string"
+						label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" />
+						
+					<field name="cache" type="list" default="1" 
+						label="COM_MODULES_FIELD_CACHING_LABEL">
+						<option value="1">JGLOBAL_USE_GLOBAL</option>
+						<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+					</field>
+					
+					<field name="cache_time" type="sywverbosetext" default="900" filter="integer" size="4" unit="ms" icon="SYWicon-timer" 
+						label="COM_MODULES_FIELD_CACHE_TIME_LABEL" />
+						
+					<field name="cachemode" type="hidden" default="static">
+						<option value="static"></option>
+					</field>
+				</fieldset>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

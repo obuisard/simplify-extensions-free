@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>	
+	<field name="field" type="customfieldslist" default="none" context="com_content.article" allowed_types="list,checkboxes,radio,sql"
+		label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FILTERFIELD_LABEL" 
+		description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FILTERFIELD_DESC">
+		<option value="none">JNONE</option>
+	</field>
+	
+	<field name="inex" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="field!:none"
+		label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FILTERFIELDINCLUDEEXCLUDE_LABEL" 
+		description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FILTERFIELDINCLUDEEXCLUDE_DESC">
+		<option value="0">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_EXCLUS</option>	
+		<option value="1">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_INCLUS</option>
+	</field>
+	
+	<field name="values" type="text" default="" showon="field!:none"
+		label="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FILTERFIELDVALUES_LABEL" 
+		description="MOD_LATESTNEWSENHANCEDEXTENDED_FIELD_FILTERFIELDVALUES_DESC" />
+</form>
