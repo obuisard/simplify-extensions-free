@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="package" method="upgrade">
+	<name>PKG_WEBLINKLOGOS</name>
+	<author>Olivier Buisard</author>
+	<creationDate>07/14/2016</creationDate>
+	<packagename>weblinklogos</packagename>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<url>https://simplifyyourweb.com/</url>
+	<packager>Olivier Buisard</packager>
+ 	<packagerurl>https://simplifyyourweb.com/</packagerurl>
+	<version>4.8.4</version>
+	<changelogurl>https://updates.simplifyyourweb.com/free/weblinklogos/changelog.xml</changelogurl>
+	<description>PKG_WEBLINKLOGOS_XML_DESCRIPTION</description>
+	<blockChildUninstall>true</blockChildUninstall>	
+	<scriptfile>installer.php</scriptfile>	
+	<variant>free</variant>	
+	<languages folder="language">
+		<language tag="de-DE">de-DE/de-DE.pkg_weblinklogos.sys.ini</language>
+		<language tag="en-GB">en-GB/en-GB.pkg_weblinklogos.sys.ini</language>
+		<language tag="fa-IR">fa-IR/fa-IR.pkg_weblinklogos.sys.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.pkg_weblinklogos.sys.ini</language>
+		<language tag="nl-NL">nl-NL/nl-NL.pkg_weblinklogos.sys.ini</language>
+		<language tag="pl-PL">pl-PL/pl-PL.pkg_weblinklogos.sys.ini</language>
+		<language tag="pt-BR">pt-BR/pt-BR.pkg_weblinklogos.sys.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.pkg_weblinklogos.sys.ini</language>
+		<language tag="sl-SI">sl-SI/sl-SI.pkg_weblinklogos.sys.ini</language>
+		<language tag="tr-TR">tr-TR/tr-TR.pkg_weblinklogos.sys.ini</language>
+	</languages>
+ 	<files folder="packages">
+		<file type="module" id="mod_weblinklogo" client="site">mod_weblinklogo.zip</file>
+	</files>
+	<updateservers>
+		<server type="extension" priority="1" name="Weblink Logos auto updater">https://updates.simplifyyourweb.com/free/weblinklogos/weblinklogos-pkg-update.xml</server>
+	</updateservers>
+</extension>
