@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+<!-- 	<field type="subtitle" title="PLG_CONTENT_ARTICLEDETAILSPROFILES_INFORMATION_LABEL" /> -->
+				
+	<field name="show_icons" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="info!:none"
+		label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWICONS_LABEL" 
+		description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWICONS_DESC">
+		<option value="0">JNO</option>	
+		<option value="1">JYES</option>
+	</field>
+	
+	<field name="icon" type="hidden" default="" />
+	
+	<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="show_icons:1[AND]info!:none" 
+		label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONFIELD_LABEL" 
+		description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONFIELD_DESC" />
+		
+	<field name="prepend" type="text" default="" showon="info!:none" 
+		label="PLG_CONTENT_ARTICLEDETAILS_FIELD_PREPEND_LABEL" 
+		description="PLG_CONTENT_ARTICLEDETAILS_FIELD_PREPEND_DESC" />
+		
+	<field name="info" type="detailselect" default="none"
+		label="PLG_CONTENT_ARTICLEDETAILS_FIELD_INFO_LABEL" 
+		description="PLG_CONTENT_ARTICLEDETAILS_FIELD_INFO_DESC">
+		<option value="none">JNONE</option>
+	</field>
+	
+	<field name="append" type="hidden" default="" />
+	
+	<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="info!:none" 
+		label="PLG_CONTENT_ARTICLEDETAILS_FIELD_APPEND_LABEL" 
+		description="PLG_CONTENT_ARTICLEDETAILS_FIELD_APPEND_DESC" />
+	
+	<field name="extra_classes" type="text" default="" showon="info!:none" 
+		label="PLG_CONTENT_ARTICLEDETAILS_FIELD_EXTRACLASSES_LABEL" 
+		description="PLG_CONTENT_ARTICLEDETAILS_FIELD_EXTRACLASSES_DESC" />
+	
+	<field name="new_line" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="info!:none" 
+		label="PLG_CONTENT_ARTICLEDETAILS_FIELD_NEWLINE_LABEL" 
+		description="PLG_CONTENT_ARTICLEDETAILS_FIELD_NEWLINE_DESC">
+		<option value="0">JNO</option>	
+		<option value="1">JYES</option>
+	</field>
+		
+	<field name="showing_in" type="list" default="" showon="info!:none" 
+		label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWINGIN_LABEL" 
+		description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWINGIN_DESC">
+		<option value="">PLG_CONTENT_ARTICLEDETAILS_VALUE_BOTH</option>
+		<option value="1">PLG_CONTENT_ARTICLEDETAILS_VALUE_LIST</option>
+		<option value="2">PLG_CONTENT_ARTICLEDETAILS_VALUE_ITEM</option>
+	</field>
+	
+	<field name="access" type="hidden" default="1" />
+	
+	<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="info!:none" 
+		label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ACCESSFIELD_LABEL" 
+		description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ACCESSFIELD_DESC" />
+</form>

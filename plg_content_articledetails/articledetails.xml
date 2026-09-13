@@ -1,0 +1,894 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="content" method="upgrade">
+	<name>PLG_CONTENT_ARTICLEDETAILS</name>
+	<author>Olivier Buisard</author>
+	<creationDate>09/24/2015</creationDate>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>	
+	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
+	<version>6.4.0</version>
+	<description>PLG_CONTENT_ARTICLEDETAILS_XML_DESCRIPTION</description>
+	<namespace path="src">SYW\Plugin\Content\ArticleDetails</namespace>
+	
+	<media folder="media" destination="plg_content_articledetails">
+		<folder>images</folder>
+		<folder>styles</folder>
+	</media>
+	
+	<files>
+		<folder plugin="articledetails">services</folder>
+		<folder>forms</folder>
+		<folder>src</folder>
+		<filename>license.txt</filename>
+	</files>
+	
+	<languages>
+	   <language tag="de-DE">language/de-DE/de-DE.plg_content_articledetails.ini</language>
+	   <language tag="de-DE">language/de-DE/de-DE.plg_content_articledetails.sys.ini</language>
+	   <language tag="en-GB">language/en-GB/en-GB.plg_content_articledetails.ini</language>
+	   <language tag="en-GB">language/en-GB/en-GB.plg_content_articledetails.sys.ini</language>
+	   <language tag="fa-IR">language/fa-IR/fa-IR.plg_content_articledetails.ini</language>
+	   <language tag="fa-IR">language/fa-IR/fa-IR.plg_content_articledetails.sys.ini</language>
+	   <language tag="fi-FI">language/fi-FI/fi-FI.plg_content_articledetails.ini</language>
+	   <language tag="fi-FI">language/fi-FI/fi-FI.plg_content_articledetails.sys.ini</language>
+	   <language tag="fr-FR">language/fr-FR/fr-FR.plg_content_articledetails.ini</language>
+	   <language tag="fr-FR">language/fr-FR/fr-FR.plg_content_articledetails.sys.ini</language>
+	   <language tag="es-ES">language/es-ES/es-ES.plg_content_articledetails.ini</language>
+	   <language tag="es-ES">language/es-ES/es-ES.plg_content_articledetails.sys.ini</language>
+	   <language tag="it-IT">language/it-IT/it-IT.plg_content_articledetails.ini</language>
+	   <language tag="it-IT">language/it-IT/it-IT.plg_content_articledetails.sys.ini</language>
+	   <language tag="nl-NL">language/nl-NL/nl-NL.plg_content_articledetails.ini</language>
+	   <language tag="nl-NL">language/nl-NL/nl-NL.plg_content_articledetails.sys.ini</language>
+	   <language tag="pt-BR">language/pt-BR/pt-BR.plg_content_articledetails.ini</language>
+	   <language tag="pt-BR">language/pt-BR/pt-BR.plg_content_articledetails.sys.ini</language>
+	   <language tag="pt-PT">language/pt-PT/pt-PT.plg_content_articledetails.ini</language>
+	   <language tag="pt-PT">language/pt-PT/pt-PT.plg_content_articledetails.sys.ini</language>
+	   <language tag="ru-RU">language/ru-RU/ru-RU.plg_content_articledetails.ini</language>
+	   <language tag="ru-RU">language/ru-RU/ru-RU.plg_content_articledetails.sys.ini</language>
+	   <language tag="sl-SI">language/sl-SI/sl-SI.plg_content_articledetails.ini</language>
+	   <language tag="sl-SI">language/sl-SI/sl-SI.plg_content_articledetails.sys.ini</language>
+	   <language tag="sv-SE">language/sv-SE/sv-SE.plg_content_articledetails.ini</language>
+	   <language tag="sv-SE">language/sv-SE/sv-SE.plg_content_articledetails.sys.ini</language>
+	   <language tag="tr-TR">language/tr-TR/tr-TR.plg_content_articledetails.ini</language>
+	   <language tag="tr-TR">language/tr-TR/tr-TR.plg_content_articledetails.sys.ini</language>
+	</languages>
+	
+	<config>
+		<fields name="params" addfieldprefix="SYW\Plugin\Content\ArticleDetails\Field">
+		
+			<fieldset name="basic" label="PLG_CONTENT_ARTICLEDETAILS_INFORMATION_FIELDSET_LABEL" addfieldprefix="SYW\Library\Field">
+				
+				<field type="extensionversion" extension="plg_content_articledetails" />
+				<field type="extensionauthor" />
+				<field type="extensionconnect" />
+				<field type="extensiontranslators" translators="PLG_CONTENT_ARTICLEDETAILS_TRANSLATORS" />
+				
+				<field type="extensionlinks" 
+					translate="https://simplifyyourweb.com/translators"
+					onlinedoc="https://simplifyyourweb.com/documentation/article-details"
+					forum="https://simplifyyourweb.com/forum/20-article-details"		
+					report="https://simplifyyourweb.com/support"	
+					support="https://simplifyyourweb.com/support"
+					demo="https://demo4.simplifyyourweb.com/article-details" 
+					donate="https://simplifyyourweb.com/free-products/article-details"
+					review="http://extensions.joomla.org/extensions/extension/news-display/content-infos/article-details" />
+			
+				<field type="sywextensionpresencetest" title="Article Details Profiles" message="PLG_CONTENT_ARTICLEDETAILS_INFO_PROVERSION" 
+					extensiontype="component" extensionelement="com_articledetailsprofiles"
+					imagesrc="media/plg_content_articledetails/images/logo_pro.png"
+					downloadlink="https://simplifyyourweb.com/downloads/article-details-profiles" downloadtext="PLG_CONTENT_ARTICLEDETAILS_INFO_PROVERSIONDOWLOAD" />		
+	        </fieldset>
+			
+			<fieldset name="selection" label="PLG_CONTENT_ARTICLEDETAILS_SELECTION_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_SELECTION_FIELDSET_DESC">
+			
+				<fieldset name="selection_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/selection" />
+				</fieldset>
+				
+				<fieldset name="selection_basic" label="PLG_CONTENT_ARTICLEDETAILS_SELECTION_FIELDSET_LABEL">
+				
+					<field name="catid" type="category" extension="com_content" multiple="true" size="5" default="all" layout="joomla.form.field.list-fancy-select" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_CATEGORY_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_CATEGORY_DESC">
+						<option value="none">JNONE</option>
+						<option value="all">JOPTION_ALL_CATEGORIES</option>
+					</field>
+					
+					<field name="includesubcategories" type="list" default="no" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_INCLUDESUBCATEGORIES_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_INCLUDESUBCATEGORIES_DESC">					
+						<option value="no">JNO</option>
+						<option value="onelevel">PLG_CONTENT_ARTICLEDETAILS_VALUE_ONELEVEL</option>
+						<option value="all">PLG_CONTENT_ARTICLEDETAILS_VALUE_ALLLEVELS</option>
+					</field>
+					
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_INFO_SYNTAX" style="info" />
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="categorylayout" label="PLG_CONTENT_ARTICLEDETAILS_CATEGORYLAYOUT_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_CATEGORYLAYOUT_FIELDSET_DESC">
+
+				<fieldset name="categorylayout_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/category-layout" />
+				</fieldset>
+				
+				<fieldset name="categorylayout_listview" label="PLG_CONTENT_ARTICLEDETAILS_CATEGORYLAYOUT_FIELDSET_LABEL">
+				
+					<field name="disable_in_list_views" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ENABLEINLISTVIEWS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ENABLEINLISTVIEWS_DESC">
+						<option value="0">JNO</option>	
+						<option value="1">JYES</option>
+					</field>
+					
+<!-- 					<field name="layoutspacer1" type="spacer" hr="true" showon="disable_in_list_views:0" /> -->
+					
+					<field name="lists_head_type" type="headselect" default="none" showon="disable_in_list_views:0" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADTYPELISTS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADTYPELISTS_DESC">
+						<option value="none">JNONE</option>
+					</field>
+					
+<!-- 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_MOREELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" showon="disable_in_list_views:0" /> -->
+					
+					<field name="lists_head_w" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="lists_head_type:calendar[AND]disable_in_list_views:0" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEAD_WIDTH_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEAD_WIDTH_DESC" />
+					
+<!-- 				<field name="lists_head_h" type="sywverbosetext" default="80" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="lists_head_type:calendar"  -->
+<!-- 					label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEAD_HEIGHT_LABEL"  -->
+<!-- 					description="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEAD_HEIGHT_DESC" /> -->
+
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="disable_in_list_views:0" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADPOSITION_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADPOSITION_DESC" />
+	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="disable_in_list_views:0" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_VERTICALALIGN_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_VERTICALALIGN_DESC" />
+						
+<!-- 					<field name="layoutspacer2" type="spacer" hr="true" showon="disable_in_list_views:0" /> -->
+					
+					<field name="lists_align_details" type="list" default="left" showon="disable_in_list_views:0" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ALIGNDETAILS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ALIGNDETAILS_DESC">
+						<option value="left">PLG_CONTENT_ARTICLEDETAILS_VALUE_LEFT</option>
+						<option value="center">PLG_CONTENT_ARTICLEDETAILS_VALUE_CENTER</option>	
+						<option value="right">PLG_CONTENT_ARTICLEDETAILS_VALUE_RIGHT</option>
+					</field>
+				</fieldset>
+					
+				<fieldset name="categorylayout_listviewmobile" label="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL">
+	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="disable_in_list_views:0" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_CENTERINTROIMAGE_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_CENTERINTROIMAGE_DESC" />
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="articlelayout" label="PLG_CONTENT_ARTICLEDETAILS_ARTICLELAYOUT_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_ARTICLELAYOUT_FIELDSET_DESC">
+								
+				<fieldset name="articlelayout_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/layout" />
+				</fieldset>
+				
+				<fieldset name="articlelayout_articleviewheader" label="PLG_CONTENT_ARTICLEDETAILS_HEADER_LABEL">
+					
+					<field name="head_type" type="headselect" default="none" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADTYPE_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADTYPE_DESC">
+						<option value="none">JNONE</option>
+					</field>
+					
+<!-- 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_MOREELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
+					
+					<field name="head_w" type="sywverbosetext" default="64" filter="integer" size="4" unit="px" icon="SYWicon-swap-horiz" showon="head_type:calendar" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEAD_WIDTH_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEAD_WIDTH_DESC" />
+						
+	<!-- 				<field name="head_h" type="sywverbosetext" default="80" filter="integer" size="4" unit="px" icon="SYWicon-swap-vert" showon="head_type:calendar"  -->
+	<!-- 					label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEAD_HEIGHT_LABEL"  -->
+	<!-- 					description="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEAD_HEIGHT_DESC" /> -->
+	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADPOSITION_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADPOSITION_DESC" />
+	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_VERTICALALIGN_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_VERTICALALIGN_DESC" />
+						
+<!-- 					<field name="layoutspacer3" type="spacer" hr="true" /> -->
+									
+					<field name="align_details" type="list" default="left" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ALIGNDETAILS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ALIGNDETAILS_DESC">
+						<option value="left">PLG_CONTENT_ARTICLEDETAILS_VALUE_LEFT</option>
+						<option value="center">PLG_CONTENT_ARTICLEDETAILS_VALUE_CENTER</option>	
+						<option value="right">PLG_CONTENT_ARTICLEDETAILS_VALUE_RIGHT</option>
+					</field>
+				</fieldset>
+						
+				<fieldset name="articlelayout_articleviewfooter" label="PLG_CONTENT_ARTICLEDETAILS_FOOTER_LABEL">	
+					
+					<field name="footer_head_type" type="headselect" default="none" location="footer" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADTYPE_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_HEADTYPE_DESC">
+						<option value="none">JNONE</option>
+					</field>
+					
+<!-- 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_MOREELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" /> -->
+	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_VERTICALALIGN_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_VERTICALALIGN_DESC" />
+					
+<!-- 					<field name="layoutspacer4" type="spacer" hr="true" /> -->
+					
+					<field name="footer_align_details" type="list" default="left" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ALIGNDETAILS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ALIGNDETAILS_DESC">
+						<option value="left">PLG_CONTENT_ARTICLEDETAILS_VALUE_LEFT</option>
+						<option value="center">PLG_CONTENT_ARTICLEDETAILS_VALUE_CENTER</option>	
+						<option value="right">PLG_CONTENT_ARTICLEDETAILS_VALUE_RIGHT</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="articlelayout_articleviewfootermobile" label="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL">
+					
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_CENTERFULLIMAGE_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_CENTERFULLIMAGE_DESC" />
+				</fieldset>
+			</fieldset>
+		   
+			<fieldset name="image_header" label="PLG_CONTENT_ARTICLEDETAILS_IMAGEHEADER_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_IMAGEHEADER_FIELDSET_DESC">					
+
+				<fieldset name="image_header_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/image" />
+					
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="image_footer" label="PLG_CONTENT_ARTICLEDETAILS_IMAGEFOOTER_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_IMAGEFOOTER_FIELDSET_DESC">					
+
+				<fieldset name="image_footer_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/image" />
+					
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>		   		
+			</fieldset>
+			
+			<fieldset name="icon" label="PLG_CONTENT_ARTICLEDETAILS_ICON_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_ICON_FIELDSET_DESC">					
+
+				<fieldset name="icon_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/icon" />
+					
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_WARNING_REQUIREMENTSFORICONHEAD" style="warning" />
+					
+		   			<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>				
+			</fieldset>
+		   
+			<fieldset name="calendar" label="PLG_CONTENT_ARTICLEDETAILS_CALENDAR_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_CALENDAR_FIELDSET_DESC">				
+
+				<fieldset name="calendar_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/calendar" />
+				</fieldset>
+
+				<fieldset name="calendar_date" label="PLG_CONTENT_ARTICLEDETAILS_CALENDAR_FIELDSET_LABEL">
+		            <field name="post_d" type="list" default="published" 
+			           	label="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSTDATE_LABEL" 
+			           	description="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSTDATE_DESC">
+						<option value="created">PLG_CONTENT_ARTICLEDETAILS_VALUE_CREATED</option>
+						<option value="published">PLG_CONTENT_ARTICLEDETAILS_VALUE_PUBLISHED</option>
+						<option value="modified">PLG_CONTENT_ARTICLEDETAILS_VALUE_MODIFIED</option>
+						<option value="finished">PLG_CONTENT_ARTICLEDETAILS_VALUE_FINISHED</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="calendar_content" label="PLG_CONTENT_ARTICLEDETAILS_CONTENT_LABEL">
+				
+					<field name="pos_1" type="list" default="w" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSITION1_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSITION1_DESC">
+						<option value="none">JNONE</option>
+						<option value="e">PLG_CONTENT_ARTICLEDETAILS_VALUE_EMPTY</option>
+						<option value="w">PLG_CONTENT_ARTICLEDETAILS_VALUE_WEEKDAY</option>
+						<option value="d">PLG_CONTENT_ARTICLEDETAILS_VALUE_DAY</option>
+						<option value="m">PLG_CONTENT_ARTICLEDETAILS_VALUE_MONTH</option>
+						<option value="y">PLG_CONTENT_ARTICLEDETAILS_VALUE_YEAR</option>
+						<option value="t">PLG_CONTENT_ARTICLEDETAILS_VALUE_TIME</option>
+					</field>
+					<field name="pos_2" type="list" default="d" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSITION2_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSITION2_DESC">
+						<option value="none">JNONE</option>
+						<option value="e">PLG_CONTENT_ARTICLEDETAILS_VALUE_EMPTY</option>
+						<option value="w">PLG_CONTENT_ARTICLEDETAILS_VALUE_WEEKDAY</option>
+						<option value="d">PLG_CONTENT_ARTICLEDETAILS_VALUE_DAY</option>
+						<option value="m">PLG_CONTENT_ARTICLEDETAILS_VALUE_MONTH</option>
+						<option value="y">PLG_CONTENT_ARTICLEDETAILS_VALUE_YEAR</option>
+						<option value="t">PLG_CONTENT_ARTICLEDETAILS_VALUE_TIME</option>
+					</field>
+					<field name="pos_3" type="list" default="m" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSITION3_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSITION3_DESC">
+						<option value="none">JNONE</option>
+						<option value="e">PLG_CONTENT_ARTICLEDETAILS_VALUE_EMPTY</option>
+						<option value="w">PLG_CONTENT_ARTICLEDETAILS_VALUE_WEEKDAY</option>
+						<option value="d">PLG_CONTENT_ARTICLEDETAILS_VALUE_DAY</option>
+						<option value="m">PLG_CONTENT_ARTICLEDETAILS_VALUE_MONTH</option>
+						<option value="y">PLG_CONTENT_ARTICLEDETAILS_VALUE_YEAR</option>
+						<option value="t">PLG_CONTENT_ARTICLEDETAILS_VALUE_TIME</option>
+					</field>
+					<field name="pos_4" type="list" default="y" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSITION4_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSITION4_DESC">
+						<option value="none">JNONE</option>
+						<option value="e">PLG_CONTENT_ARTICLEDETAILS_VALUE_EMPTY</option>
+						<option value="w">PLG_CONTENT_ARTICLEDETAILS_VALUE_WEEKDAY</option>
+						<option value="d">PLG_CONTENT_ARTICLEDETAILS_VALUE_DAY</option>
+						<option value="m">PLG_CONTENT_ARTICLEDETAILS_VALUE_MONTH</option>
+						<option value="y">PLG_CONTENT_ARTICLEDETAILS_VALUE_YEAR</option>
+						<option value="t">PLG_CONTENT_ARTICLEDETAILS_VALUE_TIME</option>
+					</field>
+					<field name="pos_5" type="list" default="t" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSITION5_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_POSITION5_DESC">
+						<option value="none">JNONE</option>
+						<option value="e">PLG_CONTENT_ARTICLEDETAILS_VALUE_EMPTY</option>
+						<option value="w">PLG_CONTENT_ARTICLEDETAILS_VALUE_WEEKDAY</option>
+						<option value="d">PLG_CONTENT_ARTICLEDETAILS_VALUE_DAY</option>
+						<option value="m">PLG_CONTENT_ARTICLEDETAILS_VALUE_MONTH</option>
+						<option value="y">PLG_CONTENT_ARTICLEDETAILS_VALUE_YEAR</option>
+						<option value="t">PLG_CONTENT_ARTICLEDETAILS_VALUE_TIME</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="calendar_format" label="PLG_CONTENT_ARTICLEDETAILS_FORMAT_LABEL">
+				
+					<field name="fmt_w" type="list" default="D" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_WEEKDAYFORMAT_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_WEEKDAYFORMAT_DESC">
+						<option value="l">PLG_CONTENT_ARTICLEDETAILS_VALUE_WEEKDAYFORMAT_L</option>
+						<option value="D">PLG_CONTENT_ARTICLEDETAILS_VALUE_WEEKDAYFORMAT_D</option>
+					</field>
+					<field name="fmt_m" type="list" default="M" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_MONTHFORMAT_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_MONTHFORMAT_DESC">
+						<option value="F">PLG_CONTENT_ARTICLEDETAILS_VALUE_MONTHFORMAT_F</option>
+						<option value="M">PLG_CONTENT_ARTICLEDETAILS_VALUE_MONTHFORMAT_M</option>
+						<option value="m">PLG_CONTENT_ARTICLEDETAILS_VALUE_MONTHFORMAT_MM</option>
+						<option value="n">PLG_CONTENT_ARTICLEDETAILS_VALUE_MONTHFORMAT_N</option>
+					</field>
+					<field name="fmt_d" type="list" default="d" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_DAYFORMAT_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_DAYFORMAT_DESC">
+						<option value="d">PLG_CONTENT_ARTICLEDETAILS_VALUE_DAYFORMAT_D</option>
+						<option value="j">PLG_CONTENT_ARTICLEDETAILS_VALUE_DAYFORMAT_J</option>
+					</field>
+	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_INFO_CALENDARTIMEFORMATINFO" style="info" />
+				</fieldset>				
+				
+				<fieldset name="calendar_style" label="PLG_CONTENT_ARTICLEDETAILS_STYLE_LABEL">
+					
+					<field name="cal_style" type="calendarselect" default="original" disabledtitle="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_OPTIONONLYAVAILABLEINCOMMERCIALVERSION"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_STYLE_LABEL"
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_STYLE_DESC" />
+					
+<!-- 					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_MOREELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" />				 -->				
+						
+					<field name="border_w" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-border-outer" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_BORDERWIDTH_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BORDERWIDTH_DESC" />
+						
+					<field name="border_r" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-rounded_corner" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_BORDERRADIUS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BORDERRADIUS_DESC" />	
+						
+					<field name="border_c" type="sywcolorpicker" default="#000000" icon="outline" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_BORDERCOLOR_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BORDERCOLOR_DESC" />
+					
+					<field name="sh_w" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-layers" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHADOWWIDTH_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHADOWWIDTH_DESC" />	
+						
+					<field name="fontcalendar" type="sywfontpicker" webfonts="true" default=""
+	                    label="PLG_CONTENT_ARTICLEDETAILS_FIELD_FONTCALENDAR_LABEL"
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_FONTCALENDAR_DESC" />
+						
+					<field name="f_r" type="sywverbosetext" default="14" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-format-size"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_FONTSIZEREFERENCE_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_FONTSIZEREFERENCE_DESC" />
+				</fieldset>
+				
+				<fieldset name="calendar_style_top" label="PLG_CONTENT_ARTICLEDETAILS_CALENDARTOPCOLORS_LABEL">
+					
+					<field name="c2" type="sywcolorpicker" default="#494949" icon="text" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_COLOR2_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_COLOR2_DESC" />	
+					<field name="bgc21" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR21_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR21_DESC" />	
+					<field name="bgc22" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR22_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR22_DESC" />
+				</fieldset>
+						
+				<fieldset name="calendar_style_overal" label="PLG_CONTENT_ARTICLEDETAILS_CALENDARCOLORS_LABEL">
+						
+					<field name="c1" type="sywcolorpicker" default="#3D3D3D" icon="text" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_COLOR1_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_COLOR1_DESC" />
+					<field name="bgc11" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR11_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR11_DESC" />	
+					<field name="bgc12" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR12_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR12_DESC" />
+				</fieldset>
+						
+				<fieldset name="calendar_style_bottom" label="PLG_CONTENT_ARTICLEDETAILS_CALENDARBOTTOMCOLORS_LABEL">
+					
+					<field name="c3" type="sywcolorpicker" default="#494949" icon="text" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_COLOR3_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_COLOR3_DESC" />	
+					<field name="bgc31" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR31_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR31_DESC" />	
+					<field name="bgc32" type="sywcolorpicker" default="" transparency="true" icon="fill" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR32_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BGCOLOR32_DESC" />
+				</fieldset>
+			</fieldset>	
+			
+			<fieldset name="header" label="PLG_CONTENT_ARTICLEDETAILS_HEADERDETAILS_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_HEADER_FIELDSET_DESC">
+
+				<fieldset name="header_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/header" />
+				</fieldset>
+					
+				<fieldset name="header_publish" label="PLG_CONTENT_ARTICLEDETAILS_HEADER_FIELDSET_LABEL">
+					<field name="show_pub_status" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWPUBLICATIONSTATUS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWPUBLICATIONSTATUS_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>	
+					</field>
+				</fieldset>
+									
+				<fieldset name="header_title" label="PLG_CONTENT_ARTICLEDETAILS_ARTICLETITLE_LABEL">
+					
+					<field name="t_tag" type="list" default="2" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_TITLETAG_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_TITLETAG_DESC">
+						<option value="1">h1</option>									
+						<option value="2">h2</option>				
+						<option value="3">h3</option>				
+						<option value="4">h4</option>				
+						<option value="5">h5</option>				
+						<option value="6">h6</option>
+					</field>
+				</fieldset>
+					
+				<fieldset name="header_before_title" label="PLG_CONTENT_ARTICLEDETAILS_VALUE_BEFORETITLE">
+					
+					<field name="before_title_information_blocks" type="subform" formsource="plugins/content/articledetails/forms/fields/information_views.xml" multiple="true" max="3"
+						default="{'show_icons':'0','icon':'','prepend':'','append':'','info':'none','extra_classes':'','new_line':'0','showing_in':'','access':'1'}"
+	   					label="PLG_CONTENT_ARTICLEDETAILS_INFORMATION_LABEL" 
+	   					description="PLG_CONTENT_ARTICLEDETAILS_MOREINFORMATIONBLOCS_DESC" />
+				
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_UNLIMITEDELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" />					
+				</fieldset>
+				
+				<fieldset name="header_after_title" label="PLG_CONTENT_ARTICLEDETAILS_VALUE_AFTERTITLE">							
+					
+					<field name="after_title_information_blocks" type="subform" formsource="plugins/content/articledetails/forms/fields/information_views.xml" multiple="true" max="9"
+						default="{'show_icons':'0','icon':'','prepend':'','append':'','info':'none','extra_classes':'','new_line':'0','showing_in':'','access':'1'}"
+	   					label="PLG_CONTENT_ARTICLEDETAILS_INFORMATION_LABEL" 
+	   					description="PLG_CONTENT_ARTICLEDETAILS_MOREINFORMATIONBLOCS_DESC" />
+	   					
+	   				<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_UNLIMITEDELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" />				
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="footer" label="PLG_CONTENT_ARTICLEDETAILS_FOOTERDETAILS_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_FOOTER_FIELDSET_DESC">
+
+				<fieldset name="footer_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/footer" />
+				</fieldset>
+				
+				<fieldset name="footer_after_article" label="PLG_CONTENT_ARTICLEDETAILS_VALUE_AFTERARTICLE">
+					
+					<field name="footer_information_blocks" type="subform" formsource="plugins/content/articledetails/forms/fields/information.xml" multiple="true" max="3"
+						default="{'show_icons':'0','icon':'','prepend':'','append':'','info':'none','extra_classes':'','new_line':'0','showing_in':'2','access':'1'}"
+		   				label="PLG_CONTENT_ARTICLEDETAILS_INFORMATION_LABEL" 
+		   				description="PLG_CONTENT_ARTICLEDETAILS_MOREINFORMATIONBLOCS_DESC" />
+		   				
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_UNLIMITEDELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" />
+		   		</fieldset>
+			</fieldset>
+			
+			<fieldset name="detail_settings" label="PLG_CONTENT_ARTICLEDETAILS_DETAILSETTINGS_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_DETAILS_FIELDSET_DESC">
+
+				<fieldset name="details_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/details" />
+				</fieldset>
+				
+				<fieldset name="details_all" label="PLG_CONTENT_ARTICLEDETAILS_GENERAL_LABEL">
+				
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_WARNING_INFORMATIONCONDITIONSTOSHOW" style="warning" />
+
+					<field name="force_show" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_FORCEDETAILSTOSHOW_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_FORCEDETAILSTOSHOW_DESC">
+						<option value="0">JNO</option>	
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="details_date" label="PLG_CONTENT_ARTICLEDETAILS_DATETIME_LABEL">
+				
+					<field name="show_d" type="list" default="date" 
+			           	label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWDATE_LABEL" 
+			           	description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWDATE_DESC">
+						<option value="date">PLG_CONTENT_ARTICLEDETAILS_VALUE_DATE</option>
+						<option value="ago">PLG_CONTENT_ARTICLEDETAILS_VALUE_AGO</option>
+						<option value="agomhd">PLG_CONTENT_ARTICLEDETAILS_VALUE_AGOMHD</option>
+						<option value="agohm">PLG_CONTENT_ARTICLEDETAILS_VALUE_AGOHM</option>
+					</field>
+									
+					<field name="d_format" type="sywverbosetext" default="d F Y" filter="raw" translateHint="false" hint="d F Y" help="PLG_CONTENT_ARTICLEDETAILS_INFO_FORMATINFO" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_DATEFORMAT_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_DATEFORMAT_DESC" />
+
+					<field name="t_format" type="sywverbosetext" default="H:i" filter="raw" translateHint="false" hint="H:i" help="PLG_CONTENT_ARTICLEDETAILS_INFO_FORMATINFO" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_TIMEFORMAT_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_TIMEFORMAT_DESC" />
+				</fieldset>
+				
+				<fieldset name="details_rating" label="PLG_CONTENT_ARTICLEDETAILS_RATINGVOTE_LABEL">
+				
+					<field name="show_rating" type="list" default="text" 
+			           	label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWRATING_LABEL" 
+			           	description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWRATING_DESC">
+						<option value="text">PLG_CONTENT_ARTICLEDETAILS_VALUE_TEXT</option>
+						<option value="stars">PLG_CONTENT_ARTICLEDETAILS_VALUE_STARS</option>
+					</field>
+					
+					<field name="star_color" type="sywcolorpicker" default="#000000" icon="text" showon="show_rating:stars" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_STARSCOLOR_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_STARSCOLOR_DESC" />
+				</fieldset>
+				
+				<fieldset name="details_keywords" label="PLG_CONTENT_ARTICLEDETAILS_SPECIFICS_KEYWORDS_LABEL">
+				
+					<field name="distinct_keywords" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_DISTINCTKEYWORDS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_DISTINCTKEYWORDS_DESC">
+						<option value="0">JNO</option>	
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="show_icon_keywords" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="distinct_keywords:1" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWICONS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWICONS_DESC">
+						<option value="0">JNO</option>	
+						<option value="1">JYES</option>
+					</field>
+	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="distinct_keywords:1[AND]show_icon_keywords:1" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONFIELD_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONFIELD_DESC" />
+							
+					<field name="prepend_keywords" type="text" default="" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_PREPEND_LABEL" showon="distinct_keywords:1" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_PREPEND_DESC" />
+				</fieldset>
+				
+				<fieldset name="details_tags" label="PLG_CONTENT_ARTICLEDETAILS_SPECIFICS_TAGS_LABEL">
+				
+					<field name="order_tags" type="list" default="none" 
+			           	label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ORDERTAGS_LABEL" 
+			           	description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ORDERTAGS_DESC">
+			           	<option value="none">JNONE</option>
+						<option value="console">PLG_CONTENT_ARTICLEDETAILS_VALUE_CONSOLE</option>
+						<option value="alpha">PLG_CONTENT_ARTICLEDETAILS_VALUE_ALPHABETICAL</option>
+					</field>
+					
+					<field name="hide_tags" type="tags" contenttype="com_content.article" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_HIDETAGS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_HIDETAGS_DESC">
+					</field>
+					
+					<field name="distinct_tags" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_DISTINCTTAGS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_DISTINCTTAGS_DESC">
+						<option value="0">JNO</option>	
+						<option value="1">JYES</option>
+					</field>
+					
+					<field name="show_icon_tags" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="distinct_tags:1" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWICONS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWICONS_DESC">
+						<option value="0">JNO</option>	
+						<option value="1">JYES</option>
+					</field>
+					
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="distinct_tags:1[AND]show_icon_tags:1" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONFIELD_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONFIELD_DESC" />
+							
+					<field name="prepend_tags" type="text" default="" showon="distinct_tags:1" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_PREPEND_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_PREPEND_DESC" />
+					
+					<field name="bootstrap_tags" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="distinct_tags:1" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_USETAGCLASSES_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_USETAGCLASSES_DESC">
+						<option value="0">JNO</option>	
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="details_links" label="PLG_CONTENT_ARTICLEDETAILS_SPECIFICS_LINKS_LABEL">
+				
+					<field name="show_icon_links" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWICONS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWICONS_DESC">
+						<option value="0">JNO</option>	
+						<option value="1">JYES</option>
+					</field>
+					
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" showon="show_icon_links:1" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONFIELD_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONFIELD_DESC" />
+							
+					<field name="prepend_links" type="text" default="" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_PREPEND_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_PREPEND_DESC" />
+					
+					<field name="protocol" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_PROTOCOL_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_PROTOCOL_DESC">
+						<option value="0">JHIDE</option>
+						<option value="1">JSHOW</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="details_sharing" label="PLG_CONTENT_ARTICLEDETAILS_SHARING_LABEL">
+				
+					<field name="share_color" type="list" default="none" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHARECOLOR_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHARECOLOR_DESC">
+						<option value="none">JNONE</option>
+						<option value="bg">PLG_CONTENT_ARTICLEDETAILS_VALUE_BACKGROUNDCOLOR</option>
+						<option value="icon">PLG_CONTENT_ARTICLEDETAILS_VALUE_ICON</option>
+					</field>
+					
+					<field name="share_r" type="sywverbosetext" default="0" filter="integer" size="4" maxlength="2" unit="px" icon="SYWicon-rounded_corner" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHARERADIUS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHARERADIUS_DESC" />
+						
+					<field name="share_classes" type="text" default="" filter="string" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHARECLASSES_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHARECLASSES_DESC" />
+					
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_UNLIMITEDELEMENTSINCOMMERCIALVERSION" style="neutral" label="Pro" />
+					
+					<field name="social_networks" type="subform" formsource="plugins/content/articledetails/forms/fields/social_network.xml" multiple="true" max="6"
+						default="{'social_network':'none','other_network':'','network_color':''}"
+		   				label="PLG_CONTENT_ARTICLEDETAILS_SOCIALNETWORK_LABEL" 
+		   				description="PLG_CONTENT_ARTICLEDETAILS_MORESOCIALNETWORKS_DESC" />
+					
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_FIXEDFOOTER_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_FIXEDFOOTER_DESC" />
+				</fieldset>
+			</fieldset>
+			
+			<fieldset name="original_details" label="PLG_CONTENT_ARTICLEDETAILS_ORIGINALDETAILS_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_ORIGINALDETAILS_FIELDSET_DESC">
+			
+				<fieldset name="original_details_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/original-details" />
+				</fieldset>
+
+				<fieldset name="original_elementsoverrides" label="PLG_CONTENT_ARTICLEDETAILS_ELEMENTSOVERRIDES_LABEL">
+	            
+		            <field name="autohide_title" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_AUTOHIDETITLE_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_AUTOHIDETITLE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+		            <field name="title_element" type="text" default="" filter="raw" class="input-xxlarge" showon="autohide_title:0"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_TITLEOVERRIDES_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_TITLEOVERRIDES_DESC" />
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_EXAMPLE_TITLEOVERRIDES" style="example" showon="autohide_title:0" />
+						
+					<field name="info_element" type="text" default=".article-info" filter="raw" class="input-xxlarge"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_INFOOVERRIDES_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_INFOOVERRIDES_DESC" />
+					
+					<field name="links_element" type="text" default="" filter="raw" class="input-xxlarge"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_LINKSOVERRIDES_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_LINKSOVERRIDES_DESC" />
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_EXAMPLE_LINKSOVERRIDES" style="example" />
+					
+					<field name="images_element" type="text" default="" filter="raw" class="input-xxlarge"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_IMAGESOVERRIDES_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_IMAGESOVERRIDES_DESC" />	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_EXAMPLE_IMAGESOVERRIDES" style="example" />
+		            
+		            <field name="autohide_tags" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_AUTOHIDETAGS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_AUTOHIDETAGS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+					
+		            <field name="tags_element" type="text" default="" filter="raw" class="input-xxlarge" showon="autohide_tags:0"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_TAGSOVERRIDES_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_TAGSOVERRIDES_DESC" />	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_EXAMPLE_TAGSOVERRIDES" style="example" showon="autohide_tags:0" />		
+					
+					<field name="icons_element" type="text" default="" filter="raw" class="input-xxlarge"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONSOVERRIDES_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONSOVERRIDES_DESC" />	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_EXAMPLE_ICONSOVERRIDES" style="example" />	
+					
+					<field name="fields_element" type="text" default="" filter="raw" class="input-xxlarge"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_FIELDSOVERRIDES_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_FIELDSOVERRIDES_DESC" />	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_EXAMPLE_FIELDSOVERRIDES" style="example" />
+					
+					<field name="autohide_vote" type="radio" default="0" layout="joomla.form.field.radio.switcher" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_AUTOHIDEVOTE_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_AUTOHIDEVOTE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>			
+			</fieldset>
+			
+			<fieldset name="styles" label="PLG_CONTENT_ARTICLEDETAILS_STYLES_FIELDSET_LABEL" description="PLG_CONTENT_ARTICLEDETAILS_STYLES_FIELDSET_DESC">
+
+				<fieldset name="styles_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/styles" />
+				</fieldset>
+					
+				<fieldset name="details_styles"	label="PLG_CONTENT_ARTICLEDETAILS_DETAILSSTYLES_FIELDSET_LABEL">
+						
+					<field name="fontdetails" type="sywfontpicker" webfonts="true" default=""
+	                    label="PLG_CONTENT_ARTICLEDETAILS_FIELD_FONTDETAILS_LABEL"
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_FONTDETAILS_DESC" />
+											
+					<field name="d_fs" type="sywverbosetext" default="80" filter="integer" size="4" maxlength="3" unit="%" icon="SYWicon-format-size" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_DETAILSFONTSIZE_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_DETAILSFONTSIZE_DESC" />
+						
+					<field name="details_line_spacing" type="sywverbosetextunits" default="" size="4" units="px,em" defaultunit="px" icon="SYWicon-format-line-spacing"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_DETAILSLINESPACING_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_DETAILSLINESPACING_DESC" />
+					
+					<field name="details_color" type="sywcolorpicker" default="#000000" icon="text" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_DETAILSSCOLOR_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_DETAILSCOLOR_DESC" />
+					
+					<field name="separator" type="text" default="" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SEPARATOR_LABEL"
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SEPARATOR_DESC" />
+					
+					<field name="iconscolor" type="sywcolorpicker" default="#000000" icon="text" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONSCOLOR_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_ICONSCOLOR_DESC" />
+				</fieldset>
+				
+				<fieldset name="styles_overrides" label="PLG_CONTENT_ARTICLEDETAILS_STYLEOVERRIDES_LABEL">
+				
+					<field name="style_overrides" type="editor" rows="10" default="" editor="codemirror|none" filter="raw" buttons="false" syntax="css"
+		            	label="PLG_CONTENT_ARTICLEDETAILS_FIELD_STYLEOVERRIDES_LABEL" 
+		            	description="PLG_CONTENT_ARTICLEDETAILS_FIELD_STYLEOVERRIDES_DESC" />
+		            <field type="message" text="PLG_CONTENT_ARTICLEDETAILS_EXAMPLE_EXTRACSS" style="example" label="PLG_CONTENT_ARTICLEDETAILS_EXAMPLE_EXTRACSS_LABEL" />
+		            
+		            <field name="print_overrides" type="editor" rows="10" default="" editor="codemirror|none" filter="raw" buttons="false" syntax="css"
+		            	label="PLG_CONTENT_ARTICLEDETAILS_FIELD_PRINTOVERRIDES_LABEL" 
+		            	description="PLG_CONTENT_ARTICLEDETAILS_FIELD_PRINTOVERRIDES_DESC" />
+		        </fieldset>			
+			</fieldset>
+			
+			<fieldset name="advanced" description="PLG_CONTENT_ARTICLEDETAILS_ADVANCED_FIELDSET_DESC">
+
+				<fieldset name="advanced_info" label="LIB_SYW_EXTENSIONLINK_DOC_LABEL">
+
+					<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation/article-details/the-list-of-options/advanced" />
+				</fieldset>
+				
+				<fieldset name="advanced_general" label="PLG_CONTENT_ARTICLEDETAILS_ADVANCED_FIELDSET_LABEL">
+				
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_LAYOUTSUFFIX_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_LAYOUTSUFFIX_DESC" />
+					
+					<field name="site_mode" type="list" default="dev" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SITEMODE_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SITEMODE_DESC">
+						<option value="dev">PLG_CONTENT_ARTICLEDETAILS_VALUE_TESTMODE</option>
+						<option value="prod">PLG_CONTENT_ARTICLEDETAILS_VALUE_PRODUCTIONMODE</option>
+						<option value="adv">PLG_CONTENT_ARTICLEDETAILS_VALUE_ADVANCEDMODE</option>
+					</field>
+	
+					<field name="bootstrap_version" type="list" default="joomla" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_COMPATIBILITYBOOTSTRAP_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_COMPATIBILITYBOOTSTRAP_DESC">
+						<option value="0">JNONE</option>
+						<option value="joomla">Joomla</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</field>
+					
+					<field name="show_errors" type="radio" default="0" layout="joomla.form.field.radio.switcher" showon="site_mode:adv"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWERRORS_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_SHOWERRORS_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+	
+					<field name="load_icon_font" type="radio" default="1" layout="joomla.form.field.radio.switcher" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_LOADICONFONT_LABEL"
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_LOADICONFONT_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="advanced_pictures" label="PLG_CONTENT_ARTICLEDETAILS_PICTURES_LABEL">
+	
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" style="neutral" label="Pro" />
+				</fieldset>
+						
+				<fieldset name="advanced_headers" label="PLG_CONTENT_ARTICLEDETAILS_HEADERFILES_LABEL">
+							
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_FIELD_LAZYLOADSTYLESHEETS_TXT" style="fieldneutral" badge="PLG_CONTENT_ARTICLEDETAILS_FIELD_LAZYLOADSTYLESHEETS_BADGE" badgetype="light"
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_LAZYLOADSTYLESHEETS_LABEL" />
+
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_INFO_CLEARHEADERFILESCACHE" style="info" showon="site_mode:adv" />
+				
+					<field name="clear_header_files_cache" type="radio" default="1" layout="joomla.form.field.radio.switcher" showon="site_mode:adv" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_CLEARHEADERFILESCACHE_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_CLEARHEADERFILESCACHE_DESC">
+	                    <option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fieldset>
+				
+				<fieldset name="advanced_mobile" label="PLG_CONTENT_ARTICLEDETAILS_MOBILE_LABEL">
+
+					<field type="message" text="PLG_CONTENT_ARTICLEDETAILS_MESSAGE_ONLYAVAILABLEINCOMMERCIALVERSION" badge="Pro" style="fieldneutral" 
+						label="PLG_CONTENT_ARTICLEDETAILS_FIELD_BREAKPOINT_LABEL" 
+						description="PLG_CONTENT_ARTICLEDETAILS_FIELD_BREAKPOINT_DESC" />
+				</fieldset>
+			</fieldset>
+   		</fields>
+   </config>
+</extension>
