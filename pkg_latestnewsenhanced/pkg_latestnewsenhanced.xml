@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="package" method="upgrade">
+	<name>PKG_LATESTNEWSENHANCED</name>
+	<author>Olivier Buisard</author>
+	<creationDate>10/07/2016</creationDate>
+	<packagename>latestnewsenhanced</packagename>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<url>https://simplifyyourweb.com</url>
+	<packager>Olivier Buisard</packager>
+ 	<packagerurl>https://simplifyyourweb.com</packagerurl>
+	<version>7.4.0</version>
+	<changelogurl>https://updates.simplifyyourweb.com/free/latestnewsenhanced/changelog.xml</changelogurl>
+	<description>PKG_LATESTNEWSENHANCED_XML_DESCRIPTION</description>
+	<blockChildUninstall>true</blockChildUninstall>
+	<scriptfile>installer.php</scriptfile>
+	<variant>free</variant>
+	<languages>
+		<language tag="da-DK">language/da-DK/da-DK.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="de-DE">language/de-DE/de-DE.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="es-ES">language/es-ES/es-ES.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="fi-FI">language/fi-FI/fi-FI.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="hu-HU">language/hu-HU/hu-HU.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="it-IT">language/it-IT/it-IT.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="ja-JP">language/ja-JP/ja-JP.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="nl-NL">language/nl-NL/nl-NL.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="pt-BR">language/pt-BR/pt-BR.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="pt-PT">language/pt-PT/pt-PT.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="sl-SI">language/sl-SI/sl-SI.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="sv-SE">language/sv-SE/sv-SE.pkg_latestnewsenhanced.sys.ini</language>
+		<language tag="tr-TR">language/tr-TR/tr-TR.pkg_latestnewsenhanced.sys.ini</language>
+	</languages>
+ 	<files folder="packages">
+		<file type="module" id="mod_latestnewsenhanced" client="site">mod_latestnewsenhanced.zip</file>
+	</files>
+	<updateservers>
+		<server type="extension" priority="1" name="Latest News Enhanced updater">https://updates.simplifyyourweb.com/free/latestnewsenhanced/latestnewsenhanced-pkg-v4-update.xml</server>
+	</updateservers>
+</extension>
