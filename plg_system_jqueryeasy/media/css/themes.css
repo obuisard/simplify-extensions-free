@@ -1,0 +1,27 @@
+#themes {
+	max-height: 230px;
+	overflow-y: auto;
+	padding: 10px;
+}
+
+.theme {
+	float: left;
+	text-align: center;
+	width: 95px;
+	height: 105px;
+	display: block;
+	position: relative;
+	margin-bottom: 10px;
+}
+
+.theme a + a {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	font-size: .9em;
+}
+
+.theme > a:first-child::before {
+	content: '';
+}
