@@ -1,0 +1,92 @@
+/*
+ * @copyright	Copyright (C) 2011 Simplify Your Web, Inc. All rights reserved.
+ * @license		GNU General Public License version 3 or later; see LICENSE.txt
+ */
+ 
+.colorpicker {
+	display: flex;
+}
+
+colour-picker {
+	display: block;
+	position: relative;
+	flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+}
+
+colour-picker input {
+	padding-left: 40px !important;
+	min-width: inherit;
+}
+
+[dir=rtl] colour-picker input {
+	padding-right: 40px !important;
+	padding-left: 1rem !important;
+	direction: ltr; /* fix issues wrong position of # */
+	text-align: right; /* fix */
+}
+
+[dir=rtl] colour-picker .IroSlider {
+	margin-right: 12px;
+	margin-left: 0 !important;
+}
+
+.input-group .input-group-text + colour-picker input {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+[dir=rtl] .input-group .input-group-text + colour-picker input {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	border-top-left-radius: inherit;
+	border-bottom-left-radius: inherit;
+}
+
+.input-group colour-picker:not(:last-child) input {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+[dir=rtl] .input-group colour-picker:not(:last-child) input {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	border-top-right-radius: inherit;
+	border-bottom-right-radius: inherit;
+}
+
+colour-picker .panel {
+	background: #fff;
+	border: 1px solid #ccc;
+	box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+	box-sizing: content-box;
+	display: none;
+	padding: .5rem;
+	position: absolute;
+	top: auto;
+	width: 190px;
+	z-index: 99999
+}
+
+colour-picker .panel.is-open {
+	display: block
+}
+
+colour-swatch {
+	background-image: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg"> <path opacity=".2" fill-rule="evenodd" clip-rule="evenodd" d="M0 0H3V3H0V0ZM6 3H3V6H0V9H3V12H0V15H3V12H6V15H9V12H12V15H15V12H12V9H15V6H12V3H15V0H12V3H9V0H6V3ZM6 6V3H9V6H6ZM6 9H3V6H6V9ZM9 9V6H12V9H9ZM9 9H6V12H9V9Z" fill="currentColor" /></svg>');
+	background-blend-mode: difference;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	cursor: text;
+	display: inline-block;
+	height: 28px;
+	inset-inline-start: 6px;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 28px;
+	z-index: 2
+}

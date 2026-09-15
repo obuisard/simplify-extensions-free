@@ -1,0 +1,175 @@
+{ 
+	"prefix" : "icon-",
+	"groups" : {
+		"communications" : 
+		[ 
+			"mail",
+			"mail-2"
+		
+		],
+		"equipment" :
+		[ 
+			"screen",
+			"tablet",
+			"mobile"
+		
+		],
+		"transportation" : 
+		[
+		],
+		"location" : 
+		[
+			"home",
+			"location"
+		
+		],
+		"social" : 
+		[
+			"user",
+			"comment",
+			"comments-2",
+			"star-empty",
+			"star-2",
+			"star",
+			"thumbs-up",
+			"thumbs-down",
+			"quote",
+			"quote-2",
+			"vcard",
+			"address",
+			"users",
+			"briefcase",
+			"phone",
+			"phone-2",
+			"heart",
+			"smiley-happy",
+			"smiley-happy-2",
+			"smiley-sad",
+			"smiley-sad-2",
+			"smiley-neutral",
+			"smiley-neutral-2"
+		
+		],
+		"agenda" : 
+		[
+			"calendar",
+			"calendar-2"
+		
+		],
+		"finances" : 
+		[
+			"credit",
+			"credit-2",			
+			"cart",
+			"basket"	
+		],
+		"files" : 
+		[		
+			"file",
+			"folder-open",
+			"folder-close",
+			"unarchive",
+			"archive",
+			"download",
+			"upload"
+		],
+		"systems" : 
+		[
+			"tools",
+			"cogs",
+			"options",
+			"equalizer",
+			"wrench",
+			"database"
+		
+		],
+		"accessibility" : 
+		[
+		
+		],
+		"media" : 
+		[
+			"picture",
+			"pictures",
+			"camera",
+			"play",
+			"music",
+			"camera-2"
+		
+		],
+		"design" : 
+		[
+			"edit",
+			"pencil-2",
+			"brush",
+			"eye",
+			"wand",
+			"color-palette",
+			"scissors"
+		
+		],
+		"other" : 
+		[ 
+			"lock",
+			"list",
+			"power-cord",
+			"cube",
+			"puzzle",
+			"flag",
+			"help",
+			"support",
+			"warning",
+			"ok",
+			"cancel",
+			"minus",
+			"trash",
+			"box-add",
+			"box-remove",
+			"search",
+			"filter",
+			"grid-view",
+			"grid-view-2",
+			"menu",
+			"remove",
+			"plus-2",
+			"minus-2",
+			"key",
+			"zoom-in",
+			"zoom-out",
+			"expand",
+			"contract",
+			"expand-2",
+			"contract-2",
+			"health",
+			"refresh",
+			"clock",
+			"compass",
+			"feed",
+			"flag-2",
+			"pin",
+			"lamp",
+			"chart",
+			"bars",
+			"pie",
+			"dashboard",
+			"lightning",
+			"move",
+			"loop",
+			"shuffle",
+			"printer",
+			"broadcast",
+			"bookmark",
+			"out-2",
+			"joomla",
+			"link",
+			"tag",
+			"tag-2",
+			"tags",
+			"tags-2",
+			"unlock",
+			"book",
+			"calendar-3",
+			"shield"
+		]
+	}
+}

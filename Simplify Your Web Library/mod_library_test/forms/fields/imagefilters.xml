@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<field name="filter" type="sywimagefilterpicker" gdfilters="false" cssfilters="true" default="none"
+		label="Image Filter" 
+		description="The image filter" />
+</form>

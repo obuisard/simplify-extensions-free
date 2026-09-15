@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+	<name>MOD_LIBRARY_TEST</name>
+	<author>Olivier Buisard</author>
+	<creationDate>03/16/2018</creationDate>
+	<copyright>Copyright (C) 2011 Simplify Your Web. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later</license>
+	<authorEmail>olivier.buisard@simplifyyourweb.com</authorEmail>
+	<authorUrl>https://simplifyyourweb.com</authorUrl>
+	<version>2.7.0</version>
+	<description>MOD_LIBRARY_TEST_XML_DESCRIPTION</description>
+	<media folder="media" destination="mod_library_test">
+		<folder>fonts</folder>
+		<folder>images</folder>
+	</media>
+	<files>
+		<filename module="mod_library_test">mod_library_test.php</filename>
+		<filename>license.txt</filename>
+		<folder>forms</folder>
+		<folder>tmpl</folder>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB/en-GB.mod_library_test.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.mod_library_test.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params" addfieldprefix="SYW\Library\Field">
+			<fieldset name="basic">
+			
+				<!-- ExtensionAuthor -->
+				<field type="extensionauthor" />
+				
+				<!-- ExtensionConnect -->
+				<field type="extensionconnect" />
+				
+				<!-- ExtensionLink -->
+				<field type="extensionlink" linktype="onlinedoc" link="https://simplifyyourweb.com/documentation" />
+				<field type="extensionlinks" onlinedoc="https://simplifyyourweb.com/documentation" translate="https://simplifyyourweb.com/documentation" />
+				
+				<!-- ExtensionTranslators -->
+				<field type="extensiontranslators" translators="MOD_LIBRARY_TEST_TRANSLATORS" />
+				
+				<!-- ExtensionVersion -->
+				<field type="extensionversion" version="2.3.0" description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				<field type="extensionversion" extension="mod_library_test" description="mod_library_test" />
+				<field type="extensionversion" extension="plg_system_syw" description="plg_system_syw" />
+				<field type="extensionversion" extension="com_banners" description="com_banners" />
+				<field type="extensionversion" extension="tpl_cassiopeia" description="tpl_cassiopeia" />
+			</fieldset>
+			
+			<!-- Info -->
+			<fieldset name="info" label="MOD_LIBRARY_TEST_INFO_FIELDSET_LABEL">				
+								
+				<!-- SYWOnlineHelp -->
+				<field type="sywonlinehelp" url="https://simplifyyourweb.com/documentation" class="alert alert-info"
+					sywdescription="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+								
+				<!-- ImageLink -->
+				<field type="imagelink" title="joomla"  
+	            	text="MOD_LIBRARY_TEST_XML_DESCRIPTION" 
+	            	link="https://joomla.org" 
+	            	imagesrc="images/joomla_black.png" />
+				
+				<!-- Message -->
+				<field type="message" text="MOD_LIBRARY_TEST_XML_DESCRIPTION" style="example" />
+				
+				<!-- Or -->
+				<field type="or" />
+				
+				<!-- Title -->
+				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" />
+				
+				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" icon="help" />
+				
+				<field type="title" color="#fc930a" title="MOD_LIBRARY_TEST" imagesrc="../media/syw/images/filters/original.jpg" />
+				
+				<!-- SubTitle -->	
+				<field type="subtitle" color="#fc930a" title="MOD_LIBRARY_TEST" />
+				
+				<field type="subtitle" color="#fc930a" />
+	            	
+				<!-- ImageRadio -->
+				<field name="imageradio" type="imageradio" default="value1" 
+					label="Image Radio" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="value1" imagesrc="images/joomla_black.png">MOD_LIBRARY_TEST_VALUE1</option>
+					<option value="value2" imagesrc="images/joomla_black.png">MOD_LIBRARY_TEST_VALUE2</option>
+				</field>
+				
+				<field name="iconradio" type="imageradio" default="value1" 
+					label="Icon Radio" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="value1" icon="SYWicon-help">MOD_LIBRARY_TEST_VALUE1</option>
+					<option value="value2" icon="SYWicon-facebook">MOD_LIBRARY_TEST_VALUE2</option>
+				</field>
+				
+				<!-- SYWImageFile -->	
+				<!-- Note: the preview won't work -->			
+				<field name="image" type="sywimagefile" accept=".gif,.jpg,.png,.webp" showpreview="true" showname="true" 
+					label="Image File" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
+				<!-- SYWImageFilePreview -->
+				<field name="image2" id="image2" type="sywimagefilepreview" accept=".gif,.jpg,.png,.webp" showpreview="true" showname="true" 
+					label="Image File Preview" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />				
+				
+				<!-- SYWImagePreview -->
+				<field name="preview" id="preview" type="sywimagepreview" path="images/joomla_black.png" relativepath="false" showname="true" 
+					label="Image Preview" />
+					
+				<!-- SYWPrefixedText -->
+				<field name="facebook" type="sywprefixedtext" default="" size="10" prefix="facebook/profile/" postfix="/com" icon="SYWicon-facebook" 
+					label="Prefixed" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
+				<!-- SYWVerboseText -->
+				<field name="text" type="sywverbosetext" default="900" filter="integer" size="4" unit="ms" icon="SYWicon-timer" help="This is the help"
+					label="Text" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWVerboseText pre/post -->
+				<field name="text_prefix" type="sywverbosetext" default="" filter="string" size="10" prefix="facebook/profile/" postfix="/com" icon="SYWicon-facebook" 
+					label="Text pre/post" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
+				<!-- SYWVerboseText range -->
+				<field name="text_range" type="sywverbosetext" default="" filter="integer" min="600" max="900" unit="ms" icon="SYWicon-timer" 
+					label="Text range" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWVerboseTextUnits -->
+				<field name="textunits" type="sywverbosetextunits" default="" size="4" units="px,em" defaultunit="px" icon="SYWicon-timer" 
+					label="Text units" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- Tags -->
+				<field name="tags" type="tags" multiple="true" size="5" default="" layout="joomla.form.field.list-fancy-select"
+					label="Tags" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="all">JALL</option>
+				</field>
+				
+				<!-- Views -->	
+				<field name="views" type="views" option="com_content" view="article" multiple="false" size="1" default="auto" 
+					label="Views" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="auto">JGLOBAL_AUTO</option>
+				</field>			
+			</fieldset>
+			
+			<!-- Pickers -->
+			<fieldset name="pickers" label="MOD_LIBRARY_TEST_PICKERS_FIELDSET_LABEL">
+			
+				<!-- Article -->
+<!-- 				<field name="article_id" type="article" default="" -->
+<!-- 					label="Article Id" -->
+<!-- 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" /> -->
+				
+				<!-- Contact -->
+<!-- 				<field name="contact_id" type="contact" default=""  -->
+<!-- 					label="Contact Id"  -->
+<!-- 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />				 -->
+							
+				<!-- SYWColorPicker -->
+				<field name="colorpicker5" type="sywcolorpicker" default="#ffffff"
+					label="Color" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+			
+				<field name="colorpicker2" type="sywcolorpicker" default="#29c81233" format="hex8" icon="outline"
+					label="Color" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
+
+				<field name="colorpicker" type="sywcolorpicker" default="" transparency="true" format="rgba" icon="fill" 
+					label="Color" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<field name="colorpicker3" type="sywcolorpicker" default="transparent" global="true" keywords="transparent,currentcolor,inherit,initial"
+					label="Color" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<field name="colorpicker4" type="sywcolorpicker" default="hsl(86, 92%, 32%)" global="true" format="hsl" 
+					label="Color" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWFontPicker -->
+				<field name="font" type="sywfontpicker" webfonts="true" default=""
+                    label="Font"
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWFontWeightPicker -->
+				<field name="fontweight" type="sywfontweightpicker" multiple="true" layout="joomla.form.field.list-fancy-select"
+                    label="Font Weights"
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<field name="font2" type="sywfontpicker" webfonts="true" default="" global="true"
+                    label="Font"
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+
+				<field name="fontweight2" type="sywfontweightpicker" multiple="true" layout="joomla.form.field.list-fancy-select"
+                    label="Font Weights"
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
+				<!-- SYWIconPicker -->
+				<field name="icon" type="sywiconpicker" default="" buttonrole="clear" 
+					label="Icon" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<field name="icon2" type="sywiconpicker" default="" editable="true"
+					label="Icon" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWUniversalIconPicker -->
+				<field name="iconuniv" type="sywuniversaliconpicker" default="" iconsets="syw,icomoon"
+					label="Icon Universal" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWUniversalIconPicker -->
+				<field name="iconuniv2" type="sywuniversaliconpicker" default="" iconsets="syw,icomoon"
+					icons="fas fa-bell,SYWicon-print,icon-mail"
+					label="Icon Universal" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWUniversalIconPicker -->
+				<field name="iconuniv3" type="sywuniversaliconpicker" default="" iconsets="syw,icomoon"
+					icongroups="accessibility,social"
+					label="Icon Universal" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
+					
+				<!-- SYWUniversalIconPicker -->
+				<field name="iconuniv4" type="sywuniversaliconpicker" default="" 
+					label="Icon Universal" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />					
+				
+				<!-- SYWTransitionPicker -->
+				<field name="hovereffect" type="sywtransitionpicker" default="none" transitiongroups="2d" 
+					label="Effect" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<field name="hovereffect2" type="sywtransitionpicker" default="none" icon="SYWicon-layers" sampleicon="SYWicon-layers" global="true"
+					label="Effect" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />			
+			</fieldset>
+			
+			<!-- Tests -->
+			<fieldset name="tests" label="MOD_LIBRARY_TEST_TESTS_FIELDSET_LABEL">
+			
+				<!-- DemoTest -->
+				<field type="demotest" demo_folder="libraries/syw" />
+			
+				<!-- GDTest -->
+				<field type="gdtest" />
+				
+				<!-- OverrideTest -->
+				<field type="overridestest" extension="mod_library_test" />
+				
+				<!-- PHPExtensionTest -->
+				<field type="phpextensiontest" extension="curl" />
+				
+				<!-- PHPSettingTest -->
+				<field type="phpsettingtest" setting="allow_url_fopen" />
+				
+			</fieldset>
+			
+			<!-- DynamicSingleSelect -->
+			<fieldset name="dynamicselect" label="MOD_LIBRARY_TEST_DYNAMICSELECT_FIELDSET_LABEL">
+			
+				<!-- DynamicSingleSelect -->
+				<field name="raw_picker" type="dynamicsingleselect" default="" noelement="true"
+					label="Raw" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="fs">LIB_SYW_ALIGN_VALUE_START</option>
+					<option value="c">LIB_SYW_ALIGN_VALUE_CENTER</option>
+					<option value="fe">LIB_SYW_ALIGN_VALUE_END</option>
+				</field>
+			
+				<!-- SYWLoaderPicker -->
+				<field name="loader" type="sywloaderpicker" default="default" imagebgcolor="#ccc"
+					label="Loader" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />				
+					
+				<!-- SYWShadowSelect -->
+				<field name="shadow" type="sywshadowselect" default="none" 
+					label="Shadow" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
+				<!-- SYWLayoutSelect -->
+				<field name="layout" type="sywlayoutselect" default="h" 
+					label="Layout" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWSpacingSelect -->	
+				<field name="spacing" type="sywspacingselect" default="c" 
+						label="Spacing" 
+						description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWAlignmentSelect row -->
+				<field name="align_row" type="sywalignmentselect" default="fs" global="true"
+					label="Alignment (row)" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+				
+				<!-- SYWAlignmentSelect col -->
+				<field name="items_col" type="sywalignmentselect" direction="vertical" default="s" 
+					label="Alignment (col)" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWImageFilterPicker -->
+				<field name="filter" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a" global="true"
+					label="Image Filter (GD)" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<!-- SYWImageFilterPicker -->
+				<field name="filter2" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a" cssfilters="true" gdfilters="false" 
+					label="Image Filter (CSS)" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
+					
+				<!-- SYWImageFilterPicker -->
+				<field name="filter3" type="sywimagefilterpicker" default="none" selectedcolor="#fc930a" extended="true" cssfilters="true" gdfilters="true" 
+					label="Image Filter" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />
+					
+				<field name="image_filters" type="subform" formsource="modules/mod_library_test/forms/fields/imagefilters.xml" multiple="true" max="2"
+					default="{'filter':'none'}"
+	   				label="Filters" 
+	   				description="MOD_LIBRARY_TEST_XML_DESCRIPTION" />	
+			
+			</fieldset>
+			
+			<!-- SYWCardinalText -->
+			<fieldset name="sywcardinaltext" label="MOD_LIBRARY_TEST_SYWCARDINALTEXT_FIELDSET_LABEL">
+			
+				<field name="borders" type="sywcardinaltext" default="1" filter="integer" size="3" unit="px" icons="SYWicon-border-top,SYWicon-border-right,SYWicon-border-bottom,SYWicon-border-left" 
+					label="Borders" tooltips="JHELP"
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" help="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+				</field>
+				
+				<field name="corners" type="sywcardinaltext" default="1" filter="integer" size="3" unit="px" icons="SYWicon-rounded_corner" 
+					label="Corner Radius" tooltips="MONDAY,TUESDAY,THURSDAY,FRIDAY" layout="corners"
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" help="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+				</field>
+				
+			</fieldset>
+			
+			<!-- Custom fields -->
+			<fieldset name="customfields" label="MOD_LIBRARY_TEST_CUSTOMFIELDS_FIELDSET_LABEL">
+			
+				<!-- CustomFieldGroupsList -->				
+				<field name="customfieldgroup" type="customfieldgroupslist" multiple="false" default="" 
+					label="Contact Groups" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="">JNONE</option>
+				</field>
+						
+				<field name="customfieldgroup2" type="customfieldgroupslist" multiple="false" default="" context="com_content.article" 
+					label="Article Groups" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="">JNONE</option>
+				</field>
+				
+				<!-- CustomFieldsList -->				
+				<field name="customfield" type="customfieldslist" multiple="false" default="" 
+					label="Contact Fields" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="">JNONE</option>
+				</field>
+				
+				<field name="customfield2" type="customfieldslist" multiple="false" default="" context="com_content.article" 
+					label="Article Fields" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="">JNONE</option>
+				</field>
+			
+			</fieldset>
+			
+			<!-- K2 -->
+			<fieldset name="k2" label="MOD_LIBRARY_TEST_K2_FIELDSET_LABEL">
+			
+				<!-- K2Category -->
+				<field name="k2catid" type="k2category" multiple="true" size="5" default="all" 
+					label="Category" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="auto">MOD_LATESTNEWSENHANCEDEXTENDED_VALUE_AUTO</option>
+					<option value="all">JOPTION_ALL_CATEGORIES</option>
+				</field>
+				
+				<!-- to use in a K2 environment -->
+				<!-- K2Item -->				
+<!-- 				<field name="k2item_id" type="k2item"  -->
+<!-- 					label="Item Id" -->
+<!-- 					description="MOD_LIBRARY_TEST_XML_DESCRIPTION" /> -->
+				
+				<!-- K2Message -->				
+				<field type="k2message" text="MOD_LIBRARY_TEST_K2MISSING" when_missing="true" style="warning" />
+								
+				<field type="k2message" text="MOD_LIBRARY_TEST_K2PRESENT" when_missing="false" style="info" />
+				
+				<!-- K2Tags -->
+				<field name="k2tags" type="k2tags" multiple="true" size="5" default="" 
+					label="Tags" 
+					description="MOD_LIBRARY_TEST_XML_DESCRIPTION">
+					<option value="all">JALL</option>
+				</field>
+				
+			</fieldset>
+		</fields>
+	</config>
+</extension>
