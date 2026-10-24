@@ -209,17 +209,17 @@ if ($remove_whitespaces) {
         					<?php echo '<h' . $header_html_tag . ' class="heading">'; ?>
         						<?php if ($heading_link) : ?>
         							<a href="<?php echo $heading_link; ?>">
-        								<span><?php echo $header ?></span>
+        								<span><?php echo htmlspecialchars($header, ENT_QUOTES, 'UTF-8'); ?></span>
         							</a>
         						<?php else : ?>
-        							<span><?php echo $header ?></span>
+        							<span><?php echo htmlspecialchars($header, ENT_QUOTES, 'UTF-8'); ?></span>
         						<?php endif; ?>
         					<?php echo '</h' . $header_html_tag . '>'; ?>
         				<?php endif; ?>
         				<?php if ($show_alphabet_header) : ?>
         					<?php if ($header_alpha) : ?>
         						<?php echo '<h' . $subheader_html_tag . ' class="sub-heading">'; ?>
-        							<span><?php echo $header_alpha ?></span>
+        							<span><?php echo htmlspecialchars($header_alpha, ENT_QUOTES, 'UTF-8'); ?></span>
         						<?php echo '</h' . $subheader_html_tag . '>'; ?>
         					<?php endif; ?>
         				<?php endif; ?>
@@ -229,7 +229,7 @@ if ($remove_whitespaces) {
     			<?php if ($header_alpha) : ?>
     				<div class="heading-group">
     					<?php echo '<h' . $header_html_tag . ' class="heading">'; ?>
-    						<span><?php echo $header_alpha ?></span>
+    						<span><?php echo htmlspecialchars($header_alpha, ENT_QUOTES, 'UTF-8'); ?></span>
     					<?php echo '</h' . $header_html_tag . '>'; ?>
     				</div>
     			<?php endif; ?>
@@ -326,10 +326,10 @@ if ($remove_whitespaces) {
     								<div class="category">
     									<?php if ($link_category) : ?>
     										<a href="<?php echo $link_category; ?>" class="hasTooltip" title="<?php echo Text::_('JCATEGORY'); ?>">
-    											<span><?php echo $item->category; ?></span>
+    											<span><?php echo htmlspecialchars($item->category, ENT_QUOTES, 'UTF-8'); ?></span>
     										</a>
     									<?php else : ?>
-    										<span><?php echo $item->category; ?></span>
+    										<span><?php echo htmlspecialchars($item->category, ENT_QUOTES, 'UTF-8'); ?></span>
     									<?php endif; ?>
     								</div>
     							<?php endif; ?>
@@ -357,9 +357,9 @@ if ($remove_whitespaces) {
     							<?php
         							$title_attribute = Helper::getTitleAttribute($name_label, $name_tooltip);
         							if ($link_name && $link) {
-        							    $name_value = '<a href="'.$link.'"'.$link_attributes.$title_attribute.Helper::getClassAttribute($name_tooltip, $link_classes.' fieldvalue').' aria-label="'.$name_label.'"><span>'.$formatted_name.'</span></a>';
+        							    $name_value = '<a href="'.$link.'"'.$link_attributes.$title_attribute.Helper::getClassAttribute($name_tooltip, $link_classes.' fieldvalue').' aria-label="'.$name_label.'"><span>'.htmlspecialchars($formatted_name, ENT_QUOTES, 'UTF-8').'</span></a>';
         							} else {
-        							    $name_value = '<span class="fieldvalue'.Helper::getTooltipClass($name_tooltip).'" aria-label="'.$name_label.'"'.$title_attribute.'>'.$formatted_name.'</span>';
+        							    $name_value = '<span class="fieldvalue'.Helper::getTooltipClass($name_tooltip).'" aria-label="'.$name_label.'"'.$title_attribute.'>'.htmlspecialchars($formatted_name, ENT_QUOTES, 'UTF-8').'</span>';
         							}
     							?>
     							<?php echo Helper::renderName($params, $name_value, $extraclassesfields); ?>
