@@ -11,53 +11,37 @@ use SYW\Library\Utilities as SYWUtilities;
 
 $value = $field->value;
 
-if ($value == '')
-{
+if ($value == '') {
 	return;
 }
 
-if ($field->fieldparams->get('universal', 0))
-{
+if ($field->fieldparams->get('universal', 0)) {
 	$value = SYWUtilities::getIconFullName($value); // backward compatibility with old picker
 
-	if (strpos($value, 'SYWicon-') !== false)
-	{
+	if (strpos($value, 'SYWicon-') !== false) {
 		SYWFonts::loadIconFont();
-	}
-	else if (strpos($value, 'icon-') !== false || strpos($value, 'fa-') !== false)
-	{
+	} else if (strpos($value, 'icon-') !== false || strpos($value, 'fa-') !== false) {
 		SYWFonts::loadIconFont('fontawesome'); // icomoon is supported through the fontawesome asset
 	}
-}
-else
-{
+} else {
 	$contains_prefix = false;
 
-	if (strpos($value, 'SYWicon-') !== false)
-	{
+	if (strpos($value, 'SYWicon-') !== false) {
 		SYWFonts::loadIconFont();
 		$contains_prefix = true;
-	}
-	else if (strpos($value, 'icon-') !== false || strpos($value, 'fa-') !== false)
-	{
+	} else if (strpos($value, 'icon-') !== false || strpos($value, 'fa-') !== false) {
 		SYWFonts::loadIconFont('fontawesome'); // icomoon is supported through the fontawesome asset
 		$contains_prefix = true;
 	}
 
 	// old picker values
 
-	if (!$contains_prefix)
-	{
-		if (strpos($value, 'icomoon') !== false)
-		{
+	if (!$contains_prefix) {
+		if (strpos($value, 'icomoon') !== false) {
 			$value = str_replace('icomoon-', 'icon-', $value);
-
 			SYWFonts::loadIconFont('fontawesome'); // icomoon is supported through the fontawesome asset
-		}
-		else
-		{
+		} else {
 			$value = 'SYWicon-' . $value;
-
 			SYWFonts::loadIconFont();
 		}
 	}
