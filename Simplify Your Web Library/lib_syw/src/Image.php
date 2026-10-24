@@ -297,26 +297,32 @@ class Image
             
             // check if $from_path is url, make sure it goes thru
             if (substr_count($from_path, 'http') > 0) {
-                
+
                 // HTTPS is only supported when the openssl extension is enabled
                 // in order to minimize errors, we can replace the https:// with http://
                 $from_path = str_replace('https://', 'http://', $from_path);
-                
+
+                if (!$this->is_safe_remote_url($from_path)) {
+                    return null;
+                }
+
                 if (!$this->file_is_valid($from_path)) {
                     return null;
                 }
-                
+
                 $this->image_path_remote = true;
-            }            
-            
+            } else if (!$this->is_safe_local_path($from_path)) {
+                return null;
+            }
+
             $mime_type = $this->get_image_mime_type($from_path);
             if (!$mime_type) {
                 return null;
             }
-            
+
             $this->image_mimetype = $mime_type;
             $this->image_path = $from_path;
-                
+
             return $this->image_library->createImageFromPath($this->image_mimetype, $from_path, $width, $height);
 	        
 	    } elseif ($from_path) { // create image with dimensions of imported picture
@@ -339,26 +345,32 @@ class Image
             
             // check if $from_path is url, make sure it goes thru
             if (substr_count($from_path, 'http') > 0) {
-                
+
                 // HTTPS is only supported when the openssl extension is enabled
                 // in order to minimize errors, we can replace the https:// with http://
                 $from_path = str_replace('https://', 'http://', $from_path);
-                
+
+                if (!$this->is_safe_remote_url($from_path)) {
+                    return null;
+                }
+
                 if (!$this->file_is_valid($from_path)) {
                     $this->image =  null;
                 }
-                
+
                 $this->image_path_remote = true;
+            } else if (!$this->is_safe_local_path($from_path)) {
+                return null;
             }
-            
+
             $mime_type = $this->get_image_mime_type($from_path);
             if (!$mime_type) {
                 return null;
             }
-            
+
             $this->image_mimetype = $mime_type;
             $this->image_path = $from_path;
-                
+
             return $this->image_library->createImageFromPath($this->image_mimetype, $from_path);
             
 	    } elseif (empty($from_path) && $width > 0 && $height > 0) { // create blank image with required dimensions
@@ -403,11 +415,78 @@ class Image
 	}
 	
 	/**
-	 * Check if a file is valid
-	 * 
+	 * Check that a local (non-URL) path stays within the Joomla root, to prevent path traversal
+	 * (ex: '../../../../etc/something.jpg') from reaching the filesystem/mime-sniffing calls below
+	 *
+	 * @param string $path
 	 * @return boolean
 	 */
-	protected function file_is_valid($path) 
+	protected function is_safe_local_path($path)
+	{
+	    if ($path === '' || strpos($path, "\0") !== false) {
+	        return false;
+	    }
+
+	    $base_real = realpath(JPATH_ROOT);
+	    if ($base_real === false) {
+	        return false;
+	    }
+
+	    $real_path = realpath(JPATH_ROOT . '/' . ltrim($path, '/'));
+	    if ($real_path === false) {
+	        return false; // non-existent file: let the usual "file not found" handling apply
+	    }
+
+	    return $real_path === $base_real || strpos($real_path, $base_real . DIRECTORY_SEPARATOR) === 0;
+	}
+
+	/**
+	 * Check that a remote image URL is safe to fetch, to prevent SSRF
+	 * (only http/https, and the resolved host(s) must not be a private/loopback/link-local/reserved address,
+	 * which blocks access to internal services and cloud metadata endpoints such as 169.254.169.254)
+	 *
+	 * @param string $url
+	 * @return boolean
+	 */
+	protected function is_safe_remote_url($url)
+	{
+	    $parts = @parse_url($url);
+
+	    if ($parts === false || empty($parts['host']) || empty($parts['scheme'])) {
+	        return false;
+	    }
+
+	    $scheme = strtolower($parts['scheme']);
+	    if ($scheme !== 'http' && $scheme !== 'https') {
+	        return false;
+	    }
+
+	    $host = trim($parts['host'], '[]'); // strip IPv6 brackets, if any
+
+	    if (filter_var($host, FILTER_VALIDATE_IP)) {
+	        $ips = [$host];
+	    } else {
+	        $ips = @gethostbynamel($host);
+	        if (empty($ips)) {
+	            return false; // could not resolve - fail closed
+	        }
+	    }
+
+	    foreach ($ips as $ip) {
+	        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
+	            return false;
+	        }
+	    }
+
+	    return true;
+	}
+
+	/**
+	 * Check if a file is valid
+	 *
+	 * @return boolean
+	 */
+	protected function file_is_valid($path)
 	{
 	    $is_valid = true;
 	    
