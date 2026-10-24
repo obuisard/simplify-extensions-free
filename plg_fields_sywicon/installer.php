@@ -7,7 +7,6 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerHelper;
@@ -23,7 +22,7 @@ class plgfieldssywiconInstallerScript extends InstallerScript
 	/*
 	 * Minimum extensions library version required
 	 */
-	protected $minimumLibrary = '2.2.1';
+	protected $minimumLibrary = '2.4.0';
 	/**
 	 * Extensions library link for download
 	 */
@@ -102,11 +101,9 @@ class plgfieldssywiconInstallerScript extends InstallerScript
 			return true;
 		}
 
-		echo '<p style="margin: 10px 0 20px 0">';
 		//echo HTMLHelper::image('plg_fields_sywicon/logo.png', 'SYW Icon', null, true);
 		echo '<span class="badge bg-dark">'.Text::sprintf('PLG_FIELDS_SYWICON_VERSION', $this->release).'</span>';
 		echo '<br /><br />Olivier Buisard @ <a href="https://simplifyyourweb.com" target="_blank">Simplify Your Web</a>';
-		echo '</p>';
 
 		$this->enableExtension('plugin', 'sywicon', 'fields');
 
@@ -166,6 +163,11 @@ class plgfieldssywiconInstallerScript extends InstallerScript
 
         $tmpInstaller = new Installer();
 
+        // Joomla 6+ requires the database to be set explicitly
+        if (method_exists($tmpInstaller, 'setDatabase')) {
+            $tmpInstaller->setDatabase(Factory::getDbo());
+        }
+
         if ($installation_type === 'install') {
             return $tmpInstaller->install($package['dir']);
         } else {
@@ -178,7 +180,7 @@ class plgfieldssywiconInstallerScript extends InstallerScript
 	 */
 	private function installOrUpdateLibrary($installer)
 	{
-	    if (!Folder::exists(JPATH_ROOT . '/libraries/syw') || !Folder::exists(JPATH_ROOT . '/plugins/system/syw')) {
+	    if (!is_dir(JPATH_ROOT . '/libraries/syw') || !is_dir(JPATH_ROOT . '/plugins/system/syw')) {
 
 	        if (!$this->installOrUpdatePackage($installer, 'pkg_sywlibrary')) {
 	            Factory::getApplication()->enqueueMessage(Text::_('SYWLIBRARY_INSTALLFAILED').'<br /><a href="'.$this->libraryDownloadLink.'" target="_blank">'.Text::_('SYWLIBRARY_DOWNLOAD').'</a>', 'error');

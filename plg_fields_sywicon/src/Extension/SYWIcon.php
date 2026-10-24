@@ -4,76 +4,71 @@
  * @license		GNU General Public License version 3 or later; see LICENSE.txt
 */
 
-defined('_JEXEC') or die;
+namespace SYW\Plugin\Fields\SYWIcon\Extension;
 
+use DOMElement;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Form\FormHelper;
+use Joomla\Component\Fields\Administrator\Plugin\FieldsPlugin;
+
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Fields SYWIcon Plugin
  *
  * @since  3.7.0
  */
-class PlgFieldsSYWIcon extends \Joomla\Component\Fields\Administrator\Plugin\FieldsPlugin
+final class SYWIcon extends FieldsPlugin
 {
 	/**
 	 * Transforms the field into a DOM XML element and appends it as a child on the given parent.
 	 *
-	 * @param   stdClass    $field   The field.
+	 * @param   \stdClass    $field   The field.
 	 * @param   DOMElement  $parent  The field node parent.
 	 * @param   Form       $form    The form.
 	 *
 	 * @return  DOMElement
-	 *
-	 * @since   3.7.0
 	 */
 	public function onCustomFieldsPrepareDom($field, DOMElement $parent, Form $form)
 	{
 		$fieldNode = parent::onCustomFieldsPrepareDom($field, $parent, $form);
 
-		if (!$fieldNode)
-		{
+		if (!$fieldNode) {
 			return $fieldNode;
 		}
 
 		FormHelper::addFieldPrefix('SYW\Library\Field');
 
-		if ($field->fieldparams->get('universal', 0))
-		{
+		if ($field->fieldparams->get('universal', 0)) {
 			$fieldNode->setAttribute('type', 'sywuniversaliconpicker');
 
 			$sets = array();
 
-			if ($field->fieldparams->get('icon_syw', 0))
-			{
+			if ($field->fieldparams->get('icon_syw', 0)) {
 				$sets[] = 'syw';
 			}
 
-			if ($field->fieldparams->get('icon_icomoon', 0))
-			{
+			if ($field->fieldparams->get('icon_icomoon', 0)) {
 				$sets[] = 'icomoon';
 			}
 
-			if (!empty($sets))
-			{
+			if (!empty($sets)) {
 				$fieldNode->setAttribute('iconsets', implode(',', $sets));
 			}
 
 			$fieldNode->setAttribute('bcmode', 'true');
 			$fieldNode->setAttribute('buttonrole', 'clear');
-		}
-		else
-		{
+		} else {
 			$fieldNode->setAttribute('type', 'sywiconpicker');
 			$fieldNode->setAttribute('buttonrole', 'clear');
 
-			if ($field->fieldparams->get('icon_editable', 0))
-			{
+			if ($field->fieldparams->get('icon_editable', 0)) {
 			    $fieldNode->setAttribute('editable', 'true');
 			}
 
-			if ($field->fieldparams->get('icon_icomoon', 0))
-			{
+			if ($field->fieldparams->get('icon_icomoon', 0)) {
 			    $fieldNode->setAttribute('icomoon', 'true');
 			}
 		}
