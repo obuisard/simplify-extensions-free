@@ -43,10 +43,10 @@ $popup_height = $displayData['popup_height'] ?? 0;
     <h<?php echo $title_html_tag; ?> class="newstitle<?php echo $title_class; ?>">
     <?php if ($link_title && $link) : ?>
         <?php echo Helper::getHtmlATag($displayData['module'], $item, $follow, $link_tooltip, $popup_width, $popup_height); ?>
-            <span><?php echo $item->title; ?></span>
+            <span><?php echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8'); ?></span>
         </a>
     <?php else : ?>
-        <span><?php echo $item->title; ?></span>
+        <span><?php echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8'); ?></span>
     <?php endif; ?>
     <?php if ($link_edit) : ?>
         <?php if ($checked_out > 0 && $checked_out != $user_id) : ?>

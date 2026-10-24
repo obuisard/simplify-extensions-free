@@ -79,10 +79,10 @@ if ($remove_whitespaces) {
         									switch ($item->target)
         									{
         										case 1:	// open in a new window
-        										    echo '<a href="'. $item->link .'" target="_blank" rel="'.$params->get('follow', 'nofollow').'">'.$item->title.'</a>';
+        										    echo '<a href="'. $item->link .'" target="_blank" rel="'.$params->get('follow', 'nofollow').'">'.htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8').'</a>';
         											break;
         										case 2: // open in a popup window
-        										    echo '<a href="#" onclick="window.open(\''. $item->link .'\', \'\', \'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width='.$popup_width.',height='.$popup_height.'\'); return false">'.$item->title.'</a>';
+        										    echo '<a href="#" onclick="window.open(\''. $item->link .'\', \'\', \'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width='.$popup_width.',height='.$popup_height.'\'); return false">'.htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8').'</a>';
         											break;
         										case 3: // open in a modal window
         										    $modal_needed = true;
@@ -90,14 +90,14 @@ if ($remove_whitespaces) {
         										    if ($bootstrap_version > 0) {
         										    	$link_attributes .= ' data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'toggle="modal" data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'target="#wlpmodal_'.$module->id.'"';
         										    }
-        										    echo '<a href="'.$item->link.'" class="wlpmodal_'.$module->id.'"' . $link_attributes . '>'.$item->title.'</a>';
+        										    echo '<a href="'.$item->link.'" class="wlpmodal_'.$module->id.'"' . $link_attributes . '>'.htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8').'</a>';
         											break;
         										default: // open in parent window
-        										    echo '<a href="'. $item->link .'" rel="'.$params->get('follow', 'nofollow').'">'.$item->title.'</a>';
+        										    echo '<a href="'. $item->link .'" rel="'.$params->get('follow', 'nofollow').'">'.htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8').'</a>';
         									}
         								?>
 									<?php else : ?>
-										<?php echo $item->title; ?>
+										<?php echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8'); ?>
 									<?php endif; ?>
 									</h<?php echo $title_html_tag; ?>>
 								<?php endif; ?>

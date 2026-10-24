@@ -63,4 +63,4 @@ else
 	}
 }
 
-echo '<i class="' . $value . '"></i>';
+echo '<i class="' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '"></i>';
