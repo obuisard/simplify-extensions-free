@@ -260,7 +260,7 @@ abstract class Helper
 
 		// contact selection
 		$selection = $params->get('selection', 'categories');
-		
+
 		$user = $app->getIdentity();
 		$view_levels = $user->getAuthorisedViewLevels();
 
@@ -288,9 +288,9 @@ abstract class Helper
 		            $query->from($db->quoteName('#__content'));
 		            $query->where($db->quoteName('id') . ' = :articleId');
 		            $query->bind(':articleId', $article_id, ParameterType::INTEGER);
-		            
+
 		            $db->setQuery($query);
-		            
+
 		            try {
 		                $result = (int)$db->loadResult();
 		                if ($result > 0) {
@@ -306,7 +306,7 @@ abstract class Helper
 		            return null;
 		        }
 		    }
-			
+
 			// related to logged user
 			if ($selection == 'user') {
 				if ($user->id > 0) {
@@ -315,7 +315,7 @@ abstract class Helper
 					return null;
 				}
 			}
-			
+
 			// metakeys filtering
 
 			//$metakeys = array();
@@ -420,11 +420,11 @@ abstract class Helper
 
 				if ($get_the_tags) {
 					$temp = $app->getInput()->getString('id'); // may return an array!!!
-					
+
 					if (!is_string($temp)) {
                         return null;
                     }
-					
+
 					$temp = explode(':', $temp);
 					$item_on_page_id = $temp[0];
 
@@ -625,14 +625,14 @@ abstract class Helper
 
 			if (!empty($metakeys)) {
 				$concat_string = $query->concatenate(array('","', ' REPLACE(cd.metakey, ", ", ",")', ' ","')); // remove single space after commas in keywords
-				
+
 				//$query->where('('.$concat_string.' LIKE "%'.implode('%" OR '.$concat_string.' LIKE "%', $metakeys).'%")');
-				
+
 				$query_meta_array = array();
 				foreach ($metakeys as $key) {
 				    $query_meta_array[] = $concat_string . ' LIKE ' . $db->quote('%' . $db->escape($key, true) . '%');
 				}
-				
+
 				$query->where('(' . implode(' OR ', $query_meta_array) . ')');
 			}
 
@@ -657,7 +657,7 @@ abstract class Helper
 					}
 				} else {
 					$query->select('tags_per_items.tag_count_per_item');
-					
+
 					$subquery = $db->getQuery(true);
 
 					// subquery gets all the tags for all items - VERY INNEFICIENT
@@ -1157,8 +1157,8 @@ abstract class Helper
 					case 'ss' :
 						return array('address', 'suburb', 'state');
 				}
-			default: 
-			    
+			default:
+
 			    // PRO version only
 			    return '';
 		}
@@ -1377,7 +1377,7 @@ abstract class Helper
 	public static function getTitleAttribute($title, $show_tooltip = false)
 	{
 		if ($show_tooltip) {
-			return ' title="' . $title . '"';
+			return ' title="' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '"';
 		}
 
 		return '';
@@ -1592,9 +1592,9 @@ abstract class Helper
 			case 'empty' :
 				$class = 'empty';
 				break;
-				
+
 			case 'cat' : // category
-			    $value = empty($item->category) ? '' : trim($item->category);			    
+			    $value = empty($item->category) ? '' : trim($item->category);
 			    $class = 'fieldcategory';
 			    if ($value) {
 			        $label = empty($fieldlabel) ? Text::_('MOD_TROMBINOSCOPE_LABEL_CATEGORY') : $fieldlabel;
@@ -1738,7 +1738,7 @@ abstract class Helper
 				if ($value) {
 					$value_is_link = true;
 					//$show_link = true;
-					
+
 					$value = rtrim($value, '/');
 
 					if (!Uri::isInternal($value)) {
@@ -1776,11 +1776,11 @@ abstract class Helper
 				if ($address) {
 					$address .= "\n";
 				}
-				
+
 				$item->suburb = empty($item->suburb) ? '' : trim($item->suburb);
 				$item->state = empty($item->state) ? '' : trim($item->state);
 				$item->postcode = empty($item->postcode) ? '' : trim($item->postcode);
-				
+
 				switch ($params->get('a_fmt', 'ssz')) {
 					case 'ssz' :
 						$value = $address . $item->suburb . ($item->state ? ', ' . $item->state : '') . ' ' . $item->postcode;
@@ -1893,14 +1893,14 @@ abstract class Helper
 					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-calendar';
 				}
 				break;
-				
+
 			case 'date_m' : // date modified - if null, use created
-				
+
 				$date_modified = $item->modified;
 				if ($date_modified == Factory::getDbo()->getNullDate()) {
 					$date_modified = $item->created;
 				}
-				
+
 				$value = HTMLHelper::_('date', $date_modified, $params->get('d_format', 'd F Y'));
 				$class = 'fieldmodified';
 				if ($value) {
@@ -1908,7 +1908,7 @@ abstract class Helper
 					$icon_class = !empty($fieldicon) ? $fieldicon : 'SYWicon-calendar';
 				}
 				break;
-				
+
 			case 'hits' : // hits
 				$value = $item->hits;
 				$class = 'fieldhits';
@@ -1923,9 +1923,9 @@ abstract class Helper
 				$value = trim($item_params->get('link' . str_replace('_sw', '', $info_details['name']), ''));
 				$class = 'fieldlink' . str_replace('_sw', '', $info_details['name']);
 				if ($value) {
-					
+
 					$value = rtrim($value, '/');
-					
+
 					if (!$params->get('protocol', true)) {
 						$substitute_value = self::remove_protocol($value);
 					}
@@ -2005,7 +2005,7 @@ abstract class Helper
 	}
 
 	protected static $social_networks_labels = array('facebook' => 'Facebook', 'linkedin' => 'LinkedIn', 'twitter' => 'Twitter', 'plus.google' => 'Google+', 'instagram' => 'Instagram', 'tumblr' => 'Tumblr', 'pinterest' => 'Pinterest', 'youtube' => 'YouTube', 'vimeo' => 'Vimeo', 'wordpress' => 'Wordpress', 'skype' => 'Skype', 'blogspot' => 'Blogger');
-	
+
 	/**
 	 * Get the default label for a link
 	 *
@@ -2046,9 +2046,9 @@ abstract class Helper
 
 	/**
 	 * Get the default class icon for a link
-	 * 
+	 *
 	 * @param string $link
-	 * 
+	 *
 	 * @return string the icon class
 	 */
 	public static function getIconForLink($link)
@@ -2084,7 +2084,7 @@ abstract class Helper
 		if (!extension_loaded('gd') && !extension_loaded('imagick')) {
 			return $imagesrc; // return the original
 		}
-		
+
 		if (class_exists('\Joomla\Filesystem\File') && method_exists('\Joomla\Filesystem\File', 'getExt')) {
 		    // Joomla 5 and 6
 		    $imageext = \Joomla\Filesystem\File::getExt($imagesrc);
@@ -2092,7 +2092,7 @@ abstract class Helper
 		    // Joomla 4 fallback
 		    $imageext = \Joomla\CMS\Filesystem\File::getExt($imagesrc);
 		}
-		
+
 		$original_imageext = $imageext;
 
 		switch ($thumbnail_mime_type) {
@@ -2609,32 +2609,32 @@ abstract class Helper
 	public static function loadCommonStylesheet()
 	{
 		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
-		
+
 		$wam->registerAndUseStyle('tc.common_styles', 'mod_trombinoscopecontacts/common_styles.min.css', ['relative' => true, 'version' => 'auto']);
 	}
 
-	/**
-	 * Load user stylesheet to all module instances
-	 * if the file has 'substitute' in the name, it will replace all module styles
-	 */
-	public static function loadUserStylesheet($styles_substitute = false)
-	{
-		$wam = Factory::getApplication()->getDocument()->getWebAssetManager();
+    /**
+     * Load user stylesheet to all module instances
+     * if the file has 'substitute' in the name, it will replace all module styles
+     */
+    public static function loadUserStylesheet($styles_substitute = false)
+    {
+        $wam = Factory::getApplication()->getDocument()->getWebAssetManager();
 
-		$prefix = 'common_user';
-		if ($styles_substitute) {
-			$prefix = 'substitute';
-		}
+        $prefix = 'common_user';
+        if ($styles_substitute) {
+            $prefix = 'substitute';
+        }
 
-		if (is_file(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css')) {
-			if (JDEBUG && is_file(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles.css')) {
-				$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
-			} else {
-				$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
-			}
-		} else {
-			$wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles.min.css', ['relative' => true, 'version' => 'auto']);
-		}
-	}
+        if (is_file(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles-min.css')) {
+            if (JDEBUG && is_file(JPATH_ROOT . '/media/mod_trombinoscopecontacts/css/' . $prefix . '_styles.css')) {
+                $wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles.css', ['relative' => true, 'version' => 'auto']);
+            } else {
+                $wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles-min.css', ['relative' => true, 'version' => 'auto']);
+            }
+        } else {
+            $wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles.min.css', ['relative' => true, 'version' => 'auto']);
+        }
+    }
 
 }
