@@ -590,6 +590,8 @@ class Utilities
 	{
 		$html = '';
 
+		$alt = htmlspecialchars($alt, ENT_QUOTES, 'UTF-8');
+
 		$extensions_needing_fallbacks = array('webp', 'avif');
 		$mime_types = array('jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif', 'webp' => 'image/webp', 'avif' => 'image/avif');
 		$possible_fallback_extensions = array('png', 'jpg');

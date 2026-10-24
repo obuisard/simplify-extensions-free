@@ -140,12 +140,12 @@ use SYW\Module\TrulyResponsiveSlides\Site\Helper\Helper;
 
             if (($itemparams->get("show_category") == '' && $globalparams->get('show_category')) || $itemparams->get("show_category") == 1) {
                 $category_html_tag = $params->get('cat_tag', '3');
-                $caption_category = '<h'.$category_html_tag.' class="caption_category">'.$item->category_title.'</h'.$category_html_tag.'>';
+                $caption_category = '<h'.$category_html_tag.' class="caption_category">'.htmlspecialchars($item->category_title, ENT_QUOTES, 'UTF-8').'</h'.$category_html_tag.'>';
             }
 
             if (($itemparams->get("show_title") == '' && $globalparams->get('show_title')) || $itemparams->get("show_title") == 1) {
                 $title_html_tag = $params->get('title_tag', '2');
-                $caption_title = '<h'.$title_html_tag.' class="caption_title">'.$item->title.'</h'.$title_html_tag.'>';
+                $caption_title = '<h'.$title_html_tag.' class="caption_title">'.htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8').'</h'.$title_html_tag.'>';
             }
 
             /* caption, position */

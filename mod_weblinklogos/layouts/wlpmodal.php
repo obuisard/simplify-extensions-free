@@ -40,7 +40,7 @@ if ($bootstrap_version > 0) {
 	<div id="<?php echo $selector; ?>" class="puremodal" role="dialog" aria-hidden="true">
 		<div class="puremodal-content" aria-modal="true" aria-labelledby="<?php echo $selector; ?>Label">
 			<div class="puremodal-header">
-				<h3 id="<?php echo $selector; ?>Label" class="puremodal-title"><?php echo $title; ?></h3>
+				<h3 id="<?php echo $selector; ?>Label" class="puremodal-title"><?php echo $this->escape($title); ?></h3>
 			</div>
 			<div class="puremodal-body">
 				<iframe class="iframe" height="<?php echo $height; ?>"></iframe>
@@ -55,7 +55,7 @@ if ($bootstrap_version > 0) {
 	<div id="<?php echo $selector; ?>" data-backdrop="false" data-keyboard="true" data-remote="true" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="<?php echo $selector; ?>Label" aria-hidden="true">
     	<div class="modal-header">
     		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    		<h3 id="<?php echo $selector; ?>Label" class="modal-title"><?php echo $title; ?></h3>
+    		<h3 id="<?php echo $selector; ?>Label" class="modal-title"><?php echo $this->escape($title); ?></h3>
     	</div>
     	<div class="modal-body">
     		<iframe class="iframe" height="<?php echo $height; ?>" style="display: block; width: 100%; border: 0; max-height: none; overflow: auto"></iframe>
@@ -72,14 +72,14 @@ if ($bootstrap_version > 0) {
             	<div class="modal-header">
             		<?php if ($bootstrap_version == 3) : ?>
             			<button type="button" class="close" data-dismiss="modal" aria-label="<?php echo Text::_('MOD_WEBLINKLOGO_CLOSE'); ?>"><span aria-hidden="true">&times;</span></button>
-            			<h4 id="<?php echo $selector; ?>Label" class="modal-title"><?php echo $title; ?></h4>
+            			<h4 id="<?php echo $selector; ?>Label" class="modal-title"><?php echo $this->escape($title); ?></h4>
             		<?php endif; ?>
             		<?php if ($bootstrap_version == 4) : ?>
-            			<h5 id="<?php echo $selector; ?>Label" class="modal-title"><?php echo $title; ?></h5>
+            			<h5 id="<?php echo $selector; ?>Label" class="modal-title"><?php echo $this->escape($title); ?></h5>
             			<button type="button" class="close" data-dismiss="modal" aria-label="<?php echo Text::_('MOD_WEBLINKLOGO_CLOSE'); ?>"><span aria-hidden="true">&times;</span></button>
             		<?php endif; ?>
             		<?php if ($bootstrap_version == 5) : ?>
-            			<h5 id="<?php echo $selector; ?>Label" class="modal-title"><?php echo $title; ?></h5>
+            			<h5 id="<?php echo $selector; ?>Label" class="modal-title"><?php echo $this->escape($title); ?></h5>
             			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?php echo Text::_('MOD_WEBLINKLOGO_CLOSE'); ?>"></button>
             		<?php endif; ?>
             	</div>

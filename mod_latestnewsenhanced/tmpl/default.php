@@ -245,13 +245,13 @@ if ($load_bootstrap) {
 										<?php if ($link_title) : ?>
 											<?php if ($item->link) : ?>
 												<?php echo LNEHelper::getHtmlATag($module, $item, $follow, $link_tooltip, $popup_width, $popup_height); ?>
-													<span><?php echo $item->title; ?></span>
+													<span><?php echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8'); ?></span>
 												</a>
 											<?php else : ?>
-												<span><?php echo $item->title; ?></span>
+												<span><?php echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8'); ?></span>
 											<?php endif; ?>
 										<?php else : ?>
-											<span><?php echo $item->title; ?></span>
+											<span><?php echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8'); ?></span>
 										<?php endif; ?>
 										<?php if (isset($item->link_edit)) : ?>
 											<?php if ($item->checked_out > 0 && $item->checked_out != Factory::getUser()->get('id')) : ?>
@@ -357,13 +357,13 @@ if ($load_bootstrap) {
 										<?php if ($link_title) : ?>
 											<?php if ($item->link) : ?>
 												<?php echo LNEHelper::getHtmlATag($module, $item, $follow, $link_tooltip, $popup_width, $popup_height); ?>
-													<span><?php echo $item->title; ?></span>
+													<span><?php echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8'); ?></span>
 												</a>
 											<?php else : ?>
-												<span><?php echo $item->title; ?></span>
+												<span><?php echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8'); ?></span>
 											<?php endif; ?>
 										<?php else : ?>
-											<span><?php echo $item->title; ?></span>
+											<span><?php echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8'); ?></span>
 										<?php endif; ?>
 										<?php if (isset($item->link_edit)) : ?>
 											<?php if ($item->checked_out > 0 && $item->checked_out != Factory::getUser()->get('id')) : ?>
