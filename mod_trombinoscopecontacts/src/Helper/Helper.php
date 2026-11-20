@@ -240,6 +240,108 @@ abstract class Helper
 		return false;
 	}
 
+	/**
+	 * Derives the per-card display settings from the module params.
+	 *
+	 * Used by the 'card' layout when it is rendered outside of the normal
+	 * Dispatcher flow (i.e. from the Ajax search, which has no Dispatcher to
+	 * compute these once for the whole list). The normal list rendering
+	 * already has these as local variables (computed by the Dispatcher) and
+	 * passes them to the layout directly instead of calling this.
+	 *
+	 * @return array
+	 */
+	public static function getCardSettings($params)
+	{
+		$contact_link = $params->get('l_to_c', 'none');
+		$link_access = $params->get('link_access', '1');
+		$generic_link = $params->get('generic_l', '');
+		$link_label = $params->get('l_lbl', '');
+
+		$link_picture = $params->get('link_pic', true);
+
+		$picture_hover_type = $params->get('pic_hover_type', 'none');
+		if ($picture_hover_type != 'none') {
+			$picture_hover_type = 'hvr-'.$picture_hover_type;
+		}
+
+		$link_name = $params->get('link_name', true);
+		if ($contact_link !== 'none' && empty($link_label) && !$link_picture) {
+			$link_name = true;
+		}
+
+		$show_category = false;
+		$link_to_category = false;
+		switch ($params->get('s_cat', 'sl')) {
+			case 's': $show_category = true; break;
+			case 'sl': $show_category = true; $link_to_category = true; break;
+			case 'sv': $show_category = true; break;
+			default: break;
+		}
+
+		$show_tags = false;
+		$link_to_tags = false;
+		switch ($params->get('s_tag', 'h')) {
+			case 's': $show_tags = true; break;
+			case 'sl': $show_tags = true; $link_to_tags = true; break;
+			case 'sv': $show_tags = true; break;
+			default: break;
+		}
+
+		$extraclassesfields = ($params->get('ifont_bgc', '') && $params->get('ifont_bgc', '') != 'transparent') ? 'iconbg' : 'iconnobg';
+		$extraclassesfields .= ($params->get('lbl_bgc', '') && $params->get('lbl_bgc', '') != 'transparent') ? ' lblbg' : ' lblnobg';
+
+		$extraclasseslinkfields = ($params->get('ifont_bgc_links', '') && $params->get('ifont_bgc_links', '') != 'transparent') ? 'iconbg' : 'iconnobg';
+
+		return array(
+			'format_style' => $params->get('name_fmt', 'none'),
+			'uppercase' => $params->get('name_upper', 0),
+
+			'contact_link' => $contact_link,
+			'link_access' => $link_access,
+			'generic_link' => $generic_link,
+			'link_label' => $link_label,
+
+			'bootstrap_version' => self::getBootstrapVersion($params),
+			'show_errors' => self::isShowErrors($params),
+
+			'name_label' => trim($params->get('name_lbl', '')) == '' ? Text::_('MOD_TROMBINOSCOPE_LABEL_NAME') : trim($params->get('name_lbl', '')),
+			'name_tooltip' => $params->get('name_tooltip', true),
+			'link_name' => $link_name,
+
+			'show_picture' => self::isShowPicture($params),
+			'link_picture' => $link_picture,
+			'picture_hover_type' => $picture_hover_type,
+			'picture_tooltip' => $params->get('pic_tooltip', true),
+			'keep_picture_space' => $params->get('k_pic_s', true),
+			'photo_align' => $params->get('pic_a'),
+			'crop_picture' => self::isCropPicture($params),
+			'picture_width' => self::getPictureWidth($params),
+			'picture_height' => self::getPictureHeight($params),
+			'create_highres_images' => self::isCreateHighResolutionPicture($params),
+
+			'show_vcard' => $params->get('s_v', false),
+			'vcard_icon' => $params->get('v_icon', 'SYWicon-vcard'),
+
+			'show_featured' => $params->get('s_f', false),
+			'featured_icon' => SYWUtilities::getIconFullName($params->get('f_icon', 'SYWicon-star')),
+
+			'style_social_icons' => $params->get('social_styling', false),
+
+			'show_category' => $show_category,
+			'link_to_category' => $link_to_category,
+
+			'show_tags' => $show_tags,
+			'link_to_tags' => $link_to_tags,
+
+			'requested_links' => self::getRequestedLinks($params),
+			'requested_infos' => self::getRequestedInfos($params),
+
+			'extraclassesfields' => $extraclassesfields,
+			'extraclasseslinkfields' => $extraclasseslinkfields,
+		);
+	}
+
 	public static function getContacts($params, $module)
 	{
 		$app = Factory::getApplication();
@@ -619,6 +721,15 @@ abstract class Helper
 			if (!empty($contact_ids_exclude)) {
 			    $contact_ids_exclude = ArrayHelper::toInteger($contact_ids_exclude);
 			    $query->whereNotIn($db->quoteName('cd.id'), $contact_ids_exclude);
+			}
+
+			// search filter (name only, used by the Ajax search)
+
+			$search_filter = trim($params->get('search_filter', ''));
+			if ($search_filter !== '') {
+				$search_filter_pattern = '%' . $search_filter . '%';
+				$query->where($db->quoteName('cd.name') . ' LIKE :searchFilter');
+				$query->bind(':searchFilter', $search_filter_pattern);
 			}
 
 			// filter by metakeys
@@ -2635,6 +2746,46 @@ abstract class Helper
         } else {
             $wam->registerAndUseStyle('tc.' . $prefix . '_styles', 'mod_trombinoscopecontacts/' . $prefix . '_styles.min.css', ['relative' => true, 'version' => 'auto']);
         }
+    }
+
+    /**
+     * Initialize Ajax functionality for the module
+     *
+     * @param Registry $params Module parameters
+     * @param object $module Module object
+     * @return void
+     */
+    public static function initializeAjax($params, $module)
+    {
+        if (!$params->get('enable_ajax', false)) {
+            return;
+        }
+
+        $wa = Factory::getApplication()->getDocument()->getWebAssetManager();
+
+        // Register and use the Ajax JavaScript; it auto-instantiates itself
+        // on DOMContentLoaded for every [data-trombinoscope-ajax] element.
+        $wa->registerAndUseScript('trombinoscope.ajax', 'mod_trombinoscopecontacts/trombinoscope-ajax.js', ['relative' => true, 'version' => 'auto'], ['defer' => true]);
+    }
+
+    /**
+     * Get Ajax search form HTML
+     *
+     * @param Registry $params Module parameters
+     * @param object $module Module object
+     * @return string
+     */
+    public static function getAjaxSearchForm($params, $module)
+    {
+        if (!$params->get('enable_ajax', false)) {
+            return '';
+        }
+
+        $html = '<div class="trombinoscope-search-form">';
+        $html .= '<input type="text" class="form-control contact-search" placeholder="' . Text::_('MOD_TROMBINOSCOPE_SEARCH_PLACEHOLDER') . '" />';
+        $html .= '</div>';
+
+        return $html;
     }
 
 }
