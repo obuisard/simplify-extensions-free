@@ -11,12 +11,11 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Contact\Site\Helper\RouteHelper as ContactRouteHelper;
-use Joomla\Component\Tags\Site\Helper\RouteHelper as TagsRouteHelper;
-use Joomla\Registry\Registry;
 use SYW\Library\Libraries as SYWLIbraries;
 use SYW\Library\Utilities as SYWUtilities;
-use SYW\Library\Version as SYWVersion;
 use SYW\Module\TrombinoscopeContacts\Site\Helper\Helper;
 
 if ($load_bootstrap) {
@@ -31,13 +30,35 @@ if ($show_heading) {
 	$header_alpha = '';
 }
 
-$modal_needed = false;
+$modal_needed = ($contact_link == 'popup');
+
+$card_layout = new FileLayout('card', JPATH_ROOT.'/modules/mod_trombinoscope/layouts');
+
+// Ajax search ($ajax_enabled already computed by the Dispatcher)
+
+if ($ajax_enabled) {
+	Helper::initializeAjax($params, $module);
+
+	$ajax_data = json_encode([
+		'moduleId' => $module->id,
+		'baseUrl' => Uri::base(),
+		'token' => Session::getFormToken(),
+		'container' => '#te_' . $class_suffix,
+		'loadingClass' => 'loading',
+	]);
+}
 
 if ($remove_whitespaces) {
 	ob_start(function($buffer) { return preg_replace('/\s+/', ' ', $buffer); });
 }
 ?>
-<div id="te_<?php echo $class_suffix; ?>" class="te te_<?php echo $class_suffix; ?><?php echo $arrow_class; ?><?php echo $isMobile ? ' mobile' : ''; ?>">
+<div id="te_<?php echo $class_suffix; ?>" class="te te_<?php echo $class_suffix; ?><?php echo $arrow_class; ?><?php echo $isMobile ? ' mobile' : ''; ?>"<?php echo $ajax_enabled ? ' data-trombinoscope-ajax=\'' . $ajax_data . '\'' : ''; ?>>
+
+	<?php if ($ajax_enabled) : ?>
+        <div class="trombinoscope-search-form">
+            <input type="text" class="form-control contact-search" placeholder="<?php echo Text::_('MOD_TROMBINOSCOPE_SEARCH_PLACEHOLDER'); ?>" />
+        </div>
+	<?php endif; ?>
 
 	<?php if (trim($params->get('pretext', ''))) : ?>
 		<div class="pretext">
@@ -56,7 +77,7 @@ if ($remove_whitespaces) {
 		  	<?php echo Text::_('MOD_TROMBINOSCOPE_MESSAGE_ORDERFORCATEGORYHEADER'); ?>
 		</div>
 	<?php endif; ?>
-	
+
 	<?php if (in_array($order, array('oa', 'od', 'random', 'manual', 'c_asc', 'c_dsc', 'mc_asc', 'mc_dsc', 'hit')) && $show_alphabet_header) : ?>
 		<div class="alert <?php echo SYWUtilities::getBootstrapProperty('alert-warning', $bootstrap_version); ?>">
 		  	<?php echo Text::_('MOD_TROMBINOSCOPE_MESSAGE_ORDERFORALPHAHEADER'); ?>
@@ -78,6 +99,10 @@ if ($remove_whitespaces) {
 
 	<div class="personlist">
 
+		<?php if (empty($list) && $ajax_enabled) : ?>
+			<div class="no-contacts"><?php echo Text::_('MOD_TROMBINOSCOPE_TYPE_TO_SEARCH'); ?></div>
+		<?php endif; ?>
+
 		<?php foreach ($list as $i => $item) : ?>
 
 			<?php
@@ -93,7 +118,7 @@ if ($remove_whitespaces) {
 			        	$i_header = 0;
 			    	}
 				}
-			
+
 				// alpha header
 				if ($show_alphabet_header) {
 			    	switch ($order) {
@@ -117,89 +142,12 @@ if ($remove_whitespaces) {
 			    	}
 				}
 
-				// Convert parameter fields to objects.
-				$itemparams = new Registry();
-				$itemparams->loadString($item->params);
-
-				// name format
-				$formatted_name = Helper::getFormattedName($item->name, $format_style, $uppercase);
-
-				// link
-				$link = '';
-				$link_attributes = '';
-				$link_classes = '';
-				if (in_array($link_access, $groups)) {
-				    switch ($contact_link) {
-				        case 'standard' :
-				        	$link = Route::_(ContactRouteHelper::getContactRoute($item->slug, $item->catid, $item->language));
-				            break;
-				        case 'popup' :
-				        	$link = Route::_(ContactRouteHelper::getContactRoute($item->slug, $item->catid, $item->language) . '&tmpl=component');
-				            $link_attributes = ' onclick="return false;" data-modaltitle="'.htmlspecialchars($formatted_name, ENT_COMPAT, 'UTF-8').'"';
-				            if ($bootstrap_version > 0) {
-				            	$link_attributes .= ' data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'toggle="modal" data-' . ($bootstrap_version >= 5 ? 'bs-' : '') . 'target="#tcpmodal_'.$module->id.'"';
-				            }
-				            $link_classes = 'tcpmodal_'.$module->id;
-				            $modal_needed = true;
-				            break;
-				        case 'linka' : $link_attributes = ' target="_blank"'; case 'linka_sw' : $link = $itemparams->get('linka'); break;
-				        case 'linkb' : $link_attributes = ' target="_blank"'; case 'linkb_sw' : $link = $itemparams->get('linkb');	break;
-				        case 'linkc' : $link_attributes = ' target="_blank"'; case 'linkc_sw' : $link = $itemparams->get('linkc');	break;
-				        case 'linkd' : $link_attributes = ' target="_blank"'; case 'linkd_sw' : $link = $itemparams->get('linkd');	break;
-				        case 'linke' : $link_attributes = ' target="_blank"'; case 'linke_sw' : $link = $itemparams->get('linke');	break;
-				        case 'generic' : $link_attributes = ' target="_blank"'; case 'generic_sw' : $link = $generic_link; break;
-				        default: $link = '';
-				    }
-				}
-
-				// category links
-				$link_category = '';
+				// category heading link
 				$heading_link = '';
-
-				if ($link_to_category) {
-					$link_category = Route::_(ContactRouteHelper::getCategoryRoute($item->catid, $item->language));
-				}
 
 				if ($link_to_category_header) {
 					$heading_link = Route::_(ContactRouteHelper::getCategoryRoute($item->catid, $item->language));
 				}
-
-				$extraclasses = " personid-".$item->id." catid-".$item->catid;
-
-				if (isset($item->tags)) {
-					foreach ($item->tags as $tag) {
-						$extraclasses .= " tag-".$tag->id;
-					}
-				}
-
-				$extraclasses .= ($i_header % 2) ? " even" : " odd";
-
-				if ($item->featured && $show_featured) {
-					$extraclasses .= " featured";
-				}
-
-				if ($style_social_icons) {
-					$extraclasses .= " social";
-				}
-
-				if (!$show_picture) {
-					$extraclasses .= " text_only";
-				} else {
-					$extraclasses .= " ";
-					if (!$keep_picture_space && empty($item->image)) {
-						$extraclasses .= "text_only ghost_";
-					}
-					switch ($photo_align) {
-						case 'l': $extraclasses .= "picture_left"; break;
-						case 'r': $extraclasses .= "picture_right"; break;
-						case 't': $extraclasses .= "picture_top"; break;
-						case 'lr': $extraclasses .= ($i_header % 2) ? "picture_right" : "picture_left"; break;
-						case 'rl': $extraclasses .= ($i_header % 2) ? "picture_left" : "picture_right"; break;
-						default : $extraclasses .= "picture_left";
-					}
-				}
-				
-				$i_header++;
 			?>
 
 			<?php if ($show_category_header) : ?>
@@ -235,160 +183,52 @@ if ($remove_whitespaces) {
     			<?php endif; ?>
     		<?php endif; ?>
 
-			<div class="person<?php echo $extraclasses ?>">
-				<?php if ($carousel_configuration != 'none') : ?><div class="shell_animate"><?php endif; ?>
-				<div class="shell">
-    				<div class="outerperson">
+			<?php
+				echo $card_layout->render(array(
+					'item' => $item,
+					'params' => $params,
+					'module' => $module,
+					'groups' => $groups,
+					'i_header' => $i_header,
+					'carousel_configuration' => $carousel_configuration,
+					'format_style' => $format_style,
+					'uppercase' => $uppercase,
+					'contact_link' => $contact_link,
+					'link_access' => $link_access,
+					'generic_link' => $generic_link,
+					'link_label' => $link_label,
+					'bootstrap_version' => $bootstrap_version,
+					'show_errors' => $show_errors,
+					'name_label' => $name_label,
+					'name_tooltip' => $name_tooltip,
+					'link_name' => $link_name,
+					'show_picture' => $show_picture,
+					'link_picture' => $link_picture,
+					'picture_hover_type' => $picture_hover_type,
+					'picture_tooltip' => $picture_tooltip,
+					'keep_picture_space' => $keep_picture_space,
+					'photo_align' => $photo_align,
+					'crop_picture' => $crop_picture,
+					'picture_width' => $picture_width,
+					'picture_height' => $picture_height,
+					'create_highres_images' => $create_highres_images,
+					'show_vcard' => $show_vcard,
+					'vcard_icon' => $vcard_icon,
+					'show_featured' => $show_featured,
+					'featured_icon' => $featured_icon,
+					'style_social_icons' => $style_social_icons,
+					'show_category' => $show_category,
+					'link_to_category' => $link_to_category,
+					'show_tags' => $show_tags,
+					'link_to_tags' => $link_to_tags,
+					'requested_links' => $requested_links,
+					'requested_infos' => $requested_infos,
+					'extraclassesfields' => $extraclassesfields,
+					'extraclasseslinkfields' => $extraclasseslinkfields,
+				));
 
-    					<?php if ($show_errors && !empty($item->error)) : ?>
-    						<div class="alert <?php echo SYWUtilities::getBootstrapProperty('alert-error', $bootstrap_version); ?>">
-                    			<ul>
-                    			<?php foreach ($item->error as $error) : ?>
-                    		  		<li><?php echo $error; ?></li>
-    							<?php endforeach; ?>
-    							</ul>
-                    		</div>
-    					<?php endif; ?>
-
-    					<?php if ($requested_links) : ?>
-    						<?php $links_output = ''; ?>
-    						<?php foreach ($requested_links as $index => $requested_link) : ?>
-    							<?php $links_output .= Helper::renderLink($params, $item, $index, $requested_link, $extraclasseslinkfields); ?>
-    						<?php endforeach; ?>
-    						<?php if ($links_output) : ?>
-        						<div class="iconlinks">
-        							<ul><?php echo $links_output; ?></ul>
-        						</div>
-    						<?php endif; ?>
-    					<?php endif; ?>
-
-    					<?php if ($show_vcard) : ?>
-    						<div class="vcard">
-    							<a href="<?php echo Route::_(ContactRouteHelper::getContactRoute($item->slug, $item->catid, $item->language) . '&format=vcf'); ?>" class="hasTooltip<?php echo $extraclasseslinkfields ? ' ' . $extraclasseslinkfields : ''; ?>" aria-label="<?php echo Text::_('MOD_TROMBINOSCOPE_VCARD');?>" title="<?php echo Text::_('MOD_TROMBINOSCOPE_DOWNLOAD_VCARD');?>">
-    								<i class="icon <?php echo $vcard_icon; ?>" aria-hidden="true"></i><span><?php echo Text::_('MOD_TROMBINOSCOPE_VCARD'); ?></span>
-    							</a>
-    						</div>
-    					<?php endif; ?>
-
-    					<div class="innerperson">
-    						<div class="personpicture">
-
-    							<?php if (isset($item->individual_bg) && $item->individual_bg) : ?>
-    								<div class="individualbg">
-    									<div class="innerindividualbg">
-    										<?php echo SYWUtilities::getImageElement($item->individual_bg, $item->individual_bg_alt, null, ($carousel_configuration != 'none') ? false : true, $create_highres_images, null, true, SYWVersion::getMediaVersion('mod_trombinoscope_' . $module->id)); ?>
-    									</div>
-    								</div>
-    							<?php endif; ?>
-
-    							<?php if ($picture_hover_type != 'none' && $link_picture && $link) : ?>
-    								<div class="picture_animate <?php echo $picture_hover_type; ?>">
-    							<?php endif; ?>
-
-    							<div class="picture">
-
-    								<div class="picture_veil">
-    									<?php if ($item->featured && $show_featured) : ?>
-    										<div class="feature">
-    											<i class="icon <?php echo $featured_icon; ?>" aria-hidden="true"></i>
-    										</div>
-    									<?php endif; ?>
-    								</div>
-    								<?php if ($link_picture && $link) : ?>
-    									<a href="<?php echo $link; ?>"<?php echo $link_attributes; ?><?php echo Helper::getTitleAttribute($formatted_name, $picture_tooltip) ?><?php echo Helper::getClassAttribute($picture_tooltip, $link_classes); ?>>
-    								<?php endif; ?>
-    								<?php if ($item->image) : ?>
-    									<?php echo SYWUtilities::getImageElement($item->image, $formatted_name, $crop_picture ? array('width' => $picture_width, 'height' => $picture_height) : array(), ($carousel_configuration != 'none') ? false : true, $create_highres_images, null, true, SYWVersion::getMediaVersion('mod_trombinoscope_' . $module->id)); ?>
-    								<?php else : ?>
-    									<span class="nopicture">&nbsp;</span>
-    								<?php endif; ?>
-    								<?php if ($link_picture && $link) : ?>
-    									</a>
-    								<?php endif; ?>
-
-    							</div>
-
-    							<?php if ($picture_hover_type != 'none' && $link_picture && $link) : ?>
-    								</div>
-    							<?php endif; ?>
-    						</div>
-
-    						<div class="personinfo">
-    							<div class="text_veil">
-    								<?php if ($item->featured && $show_featured) : ?>
-    									<div class="feature">
-    										<i class="icon <?php echo $featured_icon; ?>" aria-hidden="true"></i>
-    									</div>
-    								<?php endif; ?>
-    							</div>
-
-    							<?php if ($show_category) : ?>
-    								<div class="category">
-    									<?php if ($link_category) : ?>
-    										<a href="<?php echo $link_category; ?>" class="hasTooltip" title="<?php echo Text::_('JCATEGORY'); ?>">
-    											<span><?php echo htmlspecialchars($item->category, ENT_QUOTES, 'UTF-8'); ?></span>
-    										</a>
-    									<?php else : ?>
-    										<span><?php echo htmlspecialchars($item->category, ENT_QUOTES, 'UTF-8'); ?></span>
-    									<?php endif; ?>
-    								</div>
-    							<?php endif; ?>
-
-    							<?php if ($show_tags) : ?>
-    								<?php if (isset($item->tags)) : ?>
-    									<div class="tags">
-    										<?php $layout = new FileLayout('tcptag', JPATH_ROOT.'/modules/mod_trombinoscope/layouts'); // no overrides possible ?>
-    										<?php foreach ($item->tags as $tag) :  ?>
-    											<?php
-    												$data = array('tag' => $tag);
-    												if ($link_to_tags) {
-    													$data['link'] = Route::_(TagsRouteHelper::getTagRoute($tag->id . ':' . $tag->alias));
-    												}
-    												$data['bootstrap_version'] = $bootstrap_version;
-    												$data['load_bootstrap'] = $load_bootstrap;
-
-    												echo $layout->render($data);
-    											?>
-    										<?php endforeach; ?>
-    									</div>
-    								<?php endif; ?>
-    							<?php endif; ?>
-
-    							<?php
-        							$title_attribute = Helper::getTitleAttribute($name_label, $name_tooltip);
-        							if ($link_name && $link) {
-        							    $name_value = '<a href="'.$link.'"'.$link_attributes.$title_attribute.Helper::getClassAttribute($name_tooltip, $link_classes.' fieldvalue').' aria-label="'.$name_label.'"><span>'.htmlspecialchars($formatted_name, ENT_QUOTES, 'UTF-8').'</span></a>';
-        							} else {
-        							    $name_value = '<span class="fieldvalue'.Helper::getTooltipClass($name_tooltip).'" aria-label="'.$name_label.'"'.$title_attribute.'>'.htmlspecialchars($formatted_name, ENT_QUOTES, 'UTF-8').'</span>';
-        							}
-    							?>
-    							<?php echo Helper::renderName($params, $name_value, $extraclassesfields); ?>
-
-    							<?php if ($requested_infos) : ?>
-        							<?php foreach ($requested_infos as $index => $requested_info) : ?>
-        								<?php echo Helper::renderInfo($params, $item, $index, $requested_info, $extraclassesfields); ?>
-        							<?php endforeach; ?>
-        						<?php endif; ?>
-
-    							<?php if ($link_label && $link) : ?>
-    								<div class="personlinks">
-    									<div class="personlink go">
-    										<a href="<?php echo $link; ?>"<?php echo $link_attributes; ?><?php echo Helper::getClassAttribute(false, $link_classes); ?>>
-    											<?php if (Factory::getDocument()->getDirection() == 'rtl') : ?>
-    												<i class="icon SYWicon-arrow-left" aria-hidden="true"></i><span><?php echo $link_label; ?></span>
-    											<?php else : ?>
-    												<i class="icon SYWicon-arrow-right" aria-hidden="true"></i><span><?php echo $link_label; ?></span>
-    											<?php endif; ?>
-    										</a>
-    									</div>
-        							</div>
-    							<?php endif; ?>
-    						</div>
-						</div>
-					</div>
-				</div>
-				<?php if ($carousel_configuration != 'none') : ?></div><?php endif; ?>
-			</div>
+				$i_header++;
+			?>
 		<?php endforeach; ?>
 	</div>
 
