@@ -2768,24 +2768,4 @@ abstract class Helper
         $wa->registerAndUseScript('trombinoscope.ajax', 'mod_trombinoscopecontacts/trombinoscope-ajax.js', ['relative' => true, 'version' => 'auto'], ['defer' => true]);
     }
 
-    /**
-     * Get Ajax search form HTML
-     *
-     * @param Registry $params Module parameters
-     * @param object $module Module object
-     * @return string
-     */
-    public static function getAjaxSearchForm($params, $module)
-    {
-        if (!$params->get('enable_ajax', false)) {
-            return '';
-        }
-
-        $html = '<div class="trombinoscope-search-form">';
-        $html .= '<input type="text" class="form-control contact-search" placeholder="' . Text::_('MOD_TROMBINOSCOPE_SEARCH_PLACEHOLDER') . '" />';
-        $html .= '</div>';
-
-        return $html;
-    }
-
 }
