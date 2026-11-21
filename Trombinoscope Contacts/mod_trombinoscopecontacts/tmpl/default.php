@@ -106,7 +106,7 @@ if ($remove_whitespaces) {
 		<?php foreach ($list as $i => $item) : ?>
 
 			<?php
-				// header
+                // category header
 				if ($show_category_header) {
 			    	$header = $item->category;
 			    	if ($previous_header == $header) {
@@ -119,7 +119,7 @@ if ($remove_whitespaces) {
 			    	}
 				}
 
-				// alpha header
+                // alphabet header
 				if ($show_alphabet_header) {
 			    	switch ($order) {
 			        	case 'na' : case 'nd' : $header_alpha = ucfirst($item->name[0]); break;

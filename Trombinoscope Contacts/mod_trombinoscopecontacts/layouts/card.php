@@ -37,6 +37,7 @@ extract($displayData);
  * @var \stdClass            $module
  * @var array                $groups
  * @var int                  $i_header
+ * @var string               $carousel_configuration
  * @var string               $format_style
  * @var bool                 $uppercase
  * @var string               $contact_link
@@ -126,7 +127,7 @@ if (in_array($link_access, $groups)) {
     }
 }
 
-// category link
+// Category link
 $link_category = '';
 if ($link_to_category) {
     $link_category = Route::_(ContactRouteHelper::getCategoryRoute($item->catid, $item->language));
